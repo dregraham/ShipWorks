@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.UI
 
         public void LoadState()
         {
-            //throw new NotImplementedException();
+            // Panel doesn't have any extra state
         }
 
         public Task ReloadContent()
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.UI
 
         public void SaveState()
         {
-            //throw new NotImplementedException();
+            // Panel doesn't have any extra state
         }
 
         public Task UpdateContent()
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.UI
 
         public void UpdateStoreDependentUI()
         {
-            //throw new NotImplementedException();
+            // There is no store dependent ui
         }
 
         private async void HandleCreateLabelMessage(CreateLabelMessage message)

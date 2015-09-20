@@ -114,11 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMockExtensions.cs" />
-    <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShipmentViewModelTest.cs" />
-    <Compile Include="ShippingPanelShipmentLoaderTest.cs" />
-    <Compile Include="ShippingPanelViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -156,7 +152,9 @@
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Carriers\FedEx\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
