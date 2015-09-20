@@ -1992,7 +1992,7 @@ namespace ShipWorks.Shipping
                     _e.Result = ShippingManager.GetRates(shipment);
 
                     // Just in case it used to have an error remove it
-                    ErrorManager.Remove(shipment.ShipmentID);
+                    ErrorManager?.Remove(shipment.ShipmentID);
                 }
                 catch (InvalidRateGroupShippingException ex)
                 {

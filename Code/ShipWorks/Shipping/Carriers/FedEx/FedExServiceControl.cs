@@ -23,6 +23,7 @@ using ShipWorks.Stores;
 using ShipWorks.Data.Controls;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Settings;
+using Autofac;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -239,8 +240,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnChangeService);
 
-            service.DataSource = ShipmentTypeManager.GetType(ShipmentTypeCode).BuildServiceTypeDictionary(LoadedShipments)
-                .Select(entry => new KeyValuePair<FedExServiceType, string>((FedExServiceType)entry.Key, entry.Value)).ToList();
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                service.DataSource = lifetimeScope.ResolveKeyed<IShipmentServicesBuilder>(ShipmentTypeCode.FedEx)
+                    .BuildServiceTypeDictionary(LoadedShipments)
+                    .Select(entry => new KeyValuePair<FedExServiceType, string>((FedExServiceType)entry.Key, entry.Value)).ToList();
+            }
 
             UpdatePackagingChoices(allServicesSame ? serviceType.Value : (FedExServiceType?) null);
             UpdatePayorChoices(anyGround, anyInternational);
@@ -264,7 +269,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Enable the COD editing ui if any shipments have COD enabled
             EnableCodUI(anyCodEnabled);
             
-
             // Load the COD values and update the COD Tax UI
             codOrigin.LoadShipments(LoadedShipments, s => new PersonAdapter(s.FedEx, "Cod"));
             EnableCodTaxId(anyCodEnabled && codOrigin.SelectedOrigin == ShipmentOriginSource.Other);

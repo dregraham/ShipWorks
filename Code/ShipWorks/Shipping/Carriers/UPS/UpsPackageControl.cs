@@ -100,7 +100,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             packagingType.DisplayMember = "Value";
             packagingType.ValueMember = "Key";
 
-            packagingType.DataSource = ShipmentTypeManager.GetType(shipmentTypeCode);
+            //TODO: This is a temporary crash fix that should be removed when we implement the package builder classes
+            packagingType.DataSource = ShipmentTypeManager.GetType(shipmentTypeCode)
+                .BuildPackageTypeDictionary(new List<ShipmentEntity>())
+                .ToList();
         }
 
         /// <summary>

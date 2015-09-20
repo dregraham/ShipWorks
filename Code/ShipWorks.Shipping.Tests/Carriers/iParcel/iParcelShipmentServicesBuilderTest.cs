@@ -7,18 +7,8 @@ using ShipWorks.Shipping.Settings;
 using System;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Tests.Carriers.FedEx
+namespace ShipWorks.Shipping.Tests.Carriers.iParcel
 {
-    public static class ShippingAutoMockExtensions
-    {
-        public static void WithShipmentType<T>(this AutoMock mock, Action<Mock<T>> shipmentTypeConfiguration) where T : ShipmentType
-        {
-            var shipmentTypeMock = mock.MockRepository.Create<T>();
-            shipmentTypeConfiguration(shipmentTypeMock);
-            mock.Provide(shipmentTypeMock.Object);
-        }
-    }
-
     public class iParcelShipmentServicesBuilderTest
     {
         [Fact]

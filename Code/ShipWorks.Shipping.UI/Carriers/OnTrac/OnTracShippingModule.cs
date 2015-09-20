@@ -10,6 +10,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<OnTracShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.OnTrac);
 
             builder.RegisterType<OnTracShipmentServicesBuilder>()

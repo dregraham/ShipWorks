@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 
 namespace ShipWorks.Shipping.Carriers.Ups
@@ -12,15 +13,20 @@ namespace ShipWorks.Shipping.Carriers.Ups
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<UpsOltShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.UpsOnLineTools);
 
             builder.RegisterType<WorldShipShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.UpsWorldShip);
             
             builder.RegisterType<UpsShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsOnLineTools)
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsWorldShip)
                 .SingleInstance();
+
+            builder.RegisterType<UpsServiceManagerFactory>()
+                .AsImplementedInterfaces();
         }
     }
 }

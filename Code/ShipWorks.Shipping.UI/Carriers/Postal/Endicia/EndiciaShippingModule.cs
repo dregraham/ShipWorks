@@ -11,6 +11,7 @@ namespace ShipWorks.Shipping.Carriers.Endicia
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<EndiciaShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Endicia);
 
             builder.RegisterType<EndiciaShipmentServicesBuilder>()

@@ -11,9 +11,10 @@ namespace ShipWorks.Shipping.Carriers.WebTools
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<PostalWebShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.PostalWebTools);
 
-            builder.RegisterType<WebToolsShipmentServicesBuilder>()
+            builder.RegisterType<PostalWebShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.PostalWebTools)
                 .SingleInstance();
         }

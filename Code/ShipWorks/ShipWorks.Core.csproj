@@ -1131,6 +1131,8 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\IShipmentProcessor.cs" />
+    <Compile Include="Shipping\IShipmentServicesBuilder.cs" />
+    <Compile Include="Shipping\IShipmentServicesBuilderFactory.cs" />
     <Compile Include="Shipping\IShipmentTypeFactory.cs" />
     <Compile Include="Shipping\IShippingErrorManager.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />
@@ -1599,7 +1601,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StoreIcons.resx</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Api\ICarrierServiceManagerFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\IUpsServiceManagerFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventsDescription.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypesExtension.cs" />

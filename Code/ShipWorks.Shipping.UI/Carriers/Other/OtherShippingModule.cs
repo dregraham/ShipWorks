@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<OtherShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Other);
 
             builder.RegisterType<OtherServiceControl>()

@@ -9,6 +9,8 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
+using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -165,9 +167,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             if (anyDomestic)
             {
-                Dictionary<int, string> availableServices = (new OnTracShipmentType()).BuildServiceTypeDictionary(shipments);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    Dictionary<int, string> availableServices = lifetimeScope.ResolveKeyed<IShipmentServicesBuilder>(ShipmentTypeCode.OnTrac)
+                        .BuildServiceTypeDictionary(shipments);
 
-                service.BindToEnumAndPreserveSelection<OnTracServiceType>(x=>availableServices.ContainsKey((int) x));
+                    service.BindToEnumAndPreserveSelection<OnTracServiceType>(x => availableServices.ContainsKey((int)x));
+                }
             }
             else
             {

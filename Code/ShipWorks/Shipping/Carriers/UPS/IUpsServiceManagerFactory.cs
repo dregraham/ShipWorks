@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS;
+﻿using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Api
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// A factory interface for creating ICarrierServiceManager objects.
     /// </summary>
-    public interface ICarrierServiceManagerFactory
+    public interface IUpsServiceManagerFactory
     {
         /// <summary>
         /// Creates the an ICarrierServiceManager appropriate for the given shipment.

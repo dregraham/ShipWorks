@@ -15,6 +15,7 @@ namespace ShipWorks.Shipping.UI.Carriers.None
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<NoneShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.None);
 
             builder.RegisterType<NoneServiceControl>()

@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 try
                 {
                     // Use the service manager to try to identify the service by the transit code
-                    ICarrierServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
+                    IUpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
                     IUpsServiceManager serviceManager = serviceManagerFactory.Create(shipment);
                     UpsServiceType service = serviceManager.GetServiceByTransitCode(serviceCode, shipment.AdjustedShipCountryCode()).UpsServiceType;
 

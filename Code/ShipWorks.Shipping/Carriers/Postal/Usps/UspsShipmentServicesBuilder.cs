@@ -1,14 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
-    public class UspsShipmentServicesBuilder : IShipmentServicesBuilder
+    /// <summary>
+    /// Service type builder for Usps shipments
+    /// </summary>
+    public class UspsShipmentServicesBuilder : PostalShipmentServicesBuilder
     {
-        public Dictionary<int, string> BuildServiceTypeDictionary(IEnumerable<ShipmentEntity> shipments)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public UspsShipmentServicesBuilder(UspsShipmentType shipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository) :
+            base(shipmentType, excludedServiceTypeRepository)
         {
-            throw new NotImplementedException();
+
         }
     }
 }

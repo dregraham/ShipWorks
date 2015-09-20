@@ -13,13 +13,18 @@ namespace ShipWorks.Shipping.Carriers.Express1
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<Express1UspsShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Express1Usps);
 
             builder.RegisterType<Express1EndiciaShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Express1Endicia);
 
-            builder.RegisterType<Express1ShipmentServicesBuilder>()
+            builder.RegisterType<Express1UspsShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Express1Usps)
+                .SingleInstance();
+
+            builder.RegisterType<Express1EndiciaShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Express1Endicia)
                 .SingleInstance();
         }

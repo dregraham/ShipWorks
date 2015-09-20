@@ -9,6 +9,8 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -140,10 +142,16 @@ namespace ShipWorks.Shipping.Carriers.Postal
             service.SelectedIndexChanged -= new EventHandler(OnServiceChanged);
             confirmation.SelectedIndexChanged -= OnConfirmationChanged;
 
-            Dictionary<int, string> services = ShipmentTypeManager.GetType(ShipmentTypeCode).BuildServiceTypeDictionary(LoadedShipments);
-            // Bind the drop down to the international services
-            service.DataSource = ActiveEnumerationBindingSource
-                .Create(services.Select(type => new KeyValuePair<string, PostalServiceType>(type.Value, (PostalServiceType) type.Key)).ToList());
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                Dictionary<int, string> services = lifetimeScope.Resolve<IShipmentServicesBuilderFactory>()
+                    .Get(ShipmentTypeCode)
+                    .BuildServiceTypeDictionary(LoadedShipments);
+
+                // Bind the drop down to the international services
+                service.DataSource = ActiveEnumerationBindingSource
+                    .Create(services.Select(type => new KeyValuePair<string, PostalServiceType>(type.Value, (PostalServiceType)type.Key)).ToList());
+            }
            
             service.DisplayMember = "Key";
             service.ValueMember = "Value";

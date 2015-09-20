@@ -131,20 +131,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
-        /// </summary>
-        public override Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository)
-        {
-            return GetAvailableServiceTypes(excludedServiceTypeRepository)
-                .Cast<OnTracServiceType>()
-                .Union(shipments.Select(x => x.OnTrac)
-                    .Where(x => x != null)
-                    .Select(x => (OnTracServiceType)x.Service))
-                .Where(x => x != OnTracServiceType.None)
-                .ToDictionary(serviceType => (int) serviceType, serviceType => EnumHelper.GetDescription(serviceType));
-        }
-
-        /// <summary>
         /// Gets the Package types that are available for this shipment type
         /// </summary>
         /// <param name="repository">The repository from which the Package types are fetched.</param>

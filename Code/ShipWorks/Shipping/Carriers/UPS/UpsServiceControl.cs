@@ -28,6 +28,8 @@ using ShipWorks.Editions;
 using ShipWorks.Stores;
 using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -201,8 +203,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnChangeService);
 
-            service.DataSource = ShipmentTypeManager.GetType(ShipmentTypeCode).BuildServiceTypeDictionary(LoadedShipments)
-                .Select(entry => new KeyValuePair<string, UpsServiceType>(entry.Value, (UpsServiceType)entry.Key)).ToList();
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                service.DataSource = lifetimeScope.ResolveKeyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsOnLineTools)
+                    .BuildServiceTypeDictionary(LoadedShipments)
+                    .Select(entry => new KeyValuePair<string, UpsServiceType>(entry.Value, (UpsServiceType)entry.Key)).ToList();
+            }
             
             // Make it visible if any of them have saturday dates
             saturdayDelivery.Visible = anySaturday;

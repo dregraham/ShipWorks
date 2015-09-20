@@ -10,6 +10,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<BestRateShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.BestRate);
         }
     }

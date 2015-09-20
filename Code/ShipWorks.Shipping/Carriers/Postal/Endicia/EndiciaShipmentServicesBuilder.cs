@@ -1,14 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
-    public class EndiciaShipmentServicesBuilder : IShipmentServicesBuilder
+    /// <summary>
+    /// Service type builder for Endicia shipments
+    /// </summary>
+    public class EndiciaShipmentServicesBuilder : PostalShipmentServicesBuilder
     {
-        public Dictionary<int, string> BuildServiceTypeDictionary(IEnumerable<ShipmentEntity> shipments)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public EndiciaShipmentServicesBuilder(EndiciaShipmentType shipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository) :
+            base(shipmentType, excludedServiceTypeRepository)
         {
-            throw new NotImplementedException();
+
         }
     }
 }

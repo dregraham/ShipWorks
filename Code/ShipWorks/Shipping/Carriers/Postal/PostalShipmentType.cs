@@ -82,58 +82,58 @@ namespace ShipWorks.Shipping.Carriers.Postal
             return allServiceTypes.Except(GetExcludedServiceTypes(repository));
         }
 
-        /// <summary>
-        /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
-        /// </summary>
-        public override Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository)
-        {
-            List<ShipmentEntity> overriddenShipments = shipments.Select(ShippingManager.GetOverriddenStoreShipment).ToList();
+        ///// <summary>
+        ///// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
+        ///// </summary>
+        //public override Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository)
+        //{
+        //    List<ShipmentEntity> overriddenShipments = shipments.Select(ShippingManager.GetOverriddenStoreShipment).ToList();
 
-            bool allInternational = overriddenShipments.None(s => s.ShipPerson.IsDomesticCountry());
-            bool allDomestic = overriddenShipments.All(s => s.ShipPerson.IsDomesticCountry());
+        //    bool allInternational = overriddenShipments.None(s => s.ShipPerson.IsDomesticCountry());
+        //    bool allDomestic = overriddenShipments.All(s => s.ShipPerson.IsDomesticCountry());
 
-            List<PostalServiceType> availableServices = GetAvailableServiceTypes(excludedServiceTypeRepository).Select(s => (PostalServiceType)s).ToList();
+        //    List<PostalServiceType> availableServices = GetAvailableServiceTypes(excludedServiceTypeRepository).Select(s => (PostalServiceType)s).ToList();
 
-            // If they are all international we can load up all the international services
-            if (allInternational)
-            {
-                // We need to build the list of international services to use as the data source taking into account only the available 
-                // service types as well as the service type that the shipment is already configured with
-                List<PostalServiceType> allInternationalServices = PostalUtility.GetInternationalServices(ShipmentTypeCode);
-                List<PostalServiceType> internationalServicesToLoad = allInternationalServices.Intersect(availableServices).ToList();
-                if (shipments.Any())
-                {
-                    // Always include the service type that the shipment is currently configured in the 
-                    // event the shipment was configured prior to a service being excluded
-                    internationalServicesToLoad = internationalServicesToLoad.Union(allInternationalServices.Intersect(new List<PostalServiceType> { (PostalServiceType)shipments.First().Postal.Service })).ToList();
-                }
+        //    // If they are all international we can load up all the international services
+        //    if (allInternational)
+        //    {
+        //        // We need to build the list of international services to use as the data source taking into account only the available 
+        //        // service types as well as the service type that the shipment is already configured with
+        //        List<PostalServiceType> allInternationalServices = PostalUtility.GetInternationalServices(ShipmentTypeCode);
+        //        List<PostalServiceType> internationalServicesToLoad = allInternationalServices.Intersect(availableServices).ToList();
+        //        if (shipments.Any())
+        //        {
+        //            // Always include the service type that the shipment is currently configured in the 
+        //            // event the shipment was configured prior to a service being excluded
+        //            internationalServicesToLoad = internationalServicesToLoad.Union(allInternationalServices.Intersect(new List<PostalServiceType> { (PostalServiceType)shipments.First().Postal.Service })).ToList();
+        //        }
 
-                // Bind the drop down to the international services
-                return internationalServicesToLoad.ToDictionary(s => (int) s, PostalUtility.GetPostalServiceTypeDescription);
-            }
-            // If they are all domestic we can load up all the domestic services
-            else if (allDomestic)
-            {
-                // We need to build the list of domestic services to use as the data source taking into account only the available 
-                // service types as well as the service type that the shipment is already configured with
-                List<PostalServiceType> allDomesticServices = PostalUtility.GetDomesticServices(ShipmentTypeCode);
-                List<PostalServiceType> domesticServicesToLoad = allDomesticServices.Intersect(availableServices).ToList();
-                if (shipments.Any())
-                {
-                    // Always include the service type that the shipment is currently configured in the 
-                    // event the shipment was configured prior to a service being excluded
-                    domesticServicesToLoad = domesticServicesToLoad.Union(allDomesticServices.Intersect(new List<PostalServiceType> { (PostalServiceType)shipments.First().Postal.Service })).ToList();
-                }
+        //        // Bind the drop down to the international services
+        //        return internationalServicesToLoad.ToDictionary(s => (int) s, PostalUtility.GetPostalServiceTypeDescription);
+        //    }
+        //    // If they are all domestic we can load up all the domestic services
+        //    else if (allDomestic)
+        //    {
+        //        // We need to build the list of domestic services to use as the data source taking into account only the available 
+        //        // service types as well as the service type that the shipment is already configured with
+        //        List<PostalServiceType> allDomesticServices = PostalUtility.GetDomesticServices(ShipmentTypeCode);
+        //        List<PostalServiceType> domesticServicesToLoad = allDomesticServices.Intersect(availableServices).ToList();
+        //        if (shipments.Any())
+        //        {
+        //            // Always include the service type that the shipment is currently configured in the 
+        //            // event the shipment was configured prior to a service being excluded
+        //            domesticServicesToLoad = domesticServicesToLoad.Union(allDomesticServices.Intersect(new List<PostalServiceType> { (PostalServiceType)shipments.First().Postal.Service })).ToList();
+        //        }
 
-                return domesticServicesToLoad.ToDictionary(s => (int) s, PostalUtility.GetPostalServiceTypeDescription);
+        //        return domesticServicesToLoad.ToDictionary(s => (int) s, PostalUtility.GetPostalServiceTypeDescription);
 
-            }
-            else
-            {
-                // Otherwise there is nothing to choose from
-                return new Dictionary<int, string>();
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        // Otherwise there is nothing to choose from
+        //        return new Dictionary<int, string>();
+        //    }
+        //}
 
         /// <summary>
         /// Gets the package types that have been available for this shipment type

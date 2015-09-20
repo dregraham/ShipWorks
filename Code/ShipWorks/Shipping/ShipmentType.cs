@@ -401,17 +401,17 @@ namespace ShipWorks.Shipping
             return Enumerable.Empty<int>();
         }
 
-        /// <summary>
-        /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
-        /// </summary>
-        public virtual Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository) 
-            => new Dictionary<int, string>();
+        ///// <summary>
+        ///// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
+        ///// </summary>
+        //public virtual Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository) 
+        //    => new Dictionary<int, string>();
 
-        /// <summary>
-        /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
-        /// </summary>
-        public Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments)
-            => BuildServiceTypeDictionary(shipments, new ExcludedServiceTypeRepository());
+        ///// <summary>
+        ///// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
+        ///// </summary>
+        //public Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments)
+        //    => BuildServiceTypeDictionary(shipments, new ExcludedServiceTypeRepository());
 
         /// <summary>
         /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have 

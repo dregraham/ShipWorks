@@ -11,6 +11,7 @@ namespace ShipWorks.Shipping.Carriers.Usps
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<UspsShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Usps);
 
             builder.RegisterType<UspsShipmentServicesBuilder>()

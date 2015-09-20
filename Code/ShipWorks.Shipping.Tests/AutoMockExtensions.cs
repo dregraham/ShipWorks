@@ -33,5 +33,15 @@ namespace ShipWorks.Shipping.Tests
                 .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
                 .Returns(shipmentTypeMock.Object);
         }
+
+        /// <summary>
+        /// Configure a shipment type that will be injected directly; not through a factory
+        /// </summary>
+        public static void WithShipmentType<T>(this AutoMock mock, Action<Mock<T>> shipmentTypeConfiguration) where T : ShipmentType
+        {
+            var shipmentTypeMock = mock.MockRepository.Create<T>();
+            shipmentTypeConfiguration(shipmentTypeMock);
+            mock.Provide(shipmentTypeMock.Object);
+        }
     }
 }

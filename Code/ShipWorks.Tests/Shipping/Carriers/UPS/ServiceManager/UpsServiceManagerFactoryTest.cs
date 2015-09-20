@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
             puertoRicoServiceManager.Setup(m => m.CountryCode).Returns("PR");
             
 
-            testObject = new UpsServiceManagerFactory(new List<IUpsServiceManager> { canadaServiceManager.Object, unitedStatesServiceManager.Object, puertoRicoServiceManager.Object });
+            testObject = UpsServiceManagerFactory.CreateForTesting(new List<IUpsServiceManager> { canadaServiceManager.Object, unitedStatesServiceManager.Object, puertoRicoServiceManager.Object });
         }
 
         [Fact]
