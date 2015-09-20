@@ -36,8 +36,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     Inspector = new FedExShipmentType().CertificateInspector,
                     ForceVersionCapture = false,
                     LabelRepository = new FedExLabelRepository(),
-                    RequestFactory = new FedExRequestFactory(new FedExSettingsRepository()),
-                    SettingsRepository = new FedExSettingsRepository(),
+                    RequestFactory = new FedExRequestFactory(settingsRepository),
+                    SettingsRepository = settingsRepository,
                     Log = LogManager.GetLogger(typeof(FedExShippingClerk)),
                     ExcludedServiceTypeRepository = new ExcludedServiceTypeRepository()
                 };
