@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Services.Protocols;
@@ -483,7 +482,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
             address.Country = person.AdjustedCountryCode(ShipmentTypeCode.Usps);
 
-            using (SwsimV49 webService = CreateWebService("CleanseAddress"))
+            using (SwsimV49 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
             {
                 bool addressMatch;
                 bool cityStateZipOk;
@@ -494,9 +493,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 StatusCodes statusCodes;
             	RateV18[] rates;
                 string badAddressMessage = null;
-
-                webService.OnlyLogOnMagicKeys = true;
-
+                
                 try
                 {
                     using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))

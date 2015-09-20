@@ -1148,6 +1148,7 @@
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
+    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -10379,6 +10380,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.3.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.3.4.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
