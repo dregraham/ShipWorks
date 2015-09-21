@@ -484,12 +484,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             using (SwsimV49 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
             {
-                bool addressMatch;
-                bool cityStateZipOk;
-                ResidentialDeliveryIndicatorType residentialIndicator;
-                bool? isPoBox;
+                bool addressMatch = false;
+                bool cityStateZipOk = false;
+                ResidentialDeliveryIndicatorType residentialIndicator = ResidentialDeliveryIndicatorType.Unknown;
+                bool? isPoBox = null;
                 bool isPoBoxSpecified;
-                Address[] candidates;
+                Address[] candidates = null;
                 StatusCodes statusCodes;
             	RateV18[] rates;
                 string badAddressMessage = null;
@@ -498,7 +498,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 {
                     using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
                     {
-                        webService.CleanseAddress(
+                        ActionRetry.ExecuteWithRetry<InvalidOperationException>(3, () => webService.CleanseAddress(
                             GetCredentials(account, true),
                             ref address,
                             null, // from zip code.  Sending the from zip code makes the call take longer and we don't use the extra that is returned. 
@@ -509,7 +509,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                             out isPoBoxSpecified,
                             out candidates,
                             out statusCodes,
-                            out rates);
+                            out rates));
                     }
                 }
                 catch (SoapException ex)
@@ -1402,6 +1402,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 log.ErrorFormat("Failed connecting to USPS.  Account: {0}, Error Code: '{1}', Exception Message: {2}", account.UspsAccountID, UspsApiException.GetErrorCode(ex), ex.Message);
 
                 throw new UspsApiException(ex);
+            }
+            catch (InvalidOperationException ex)
+            {
+                // We had a client that was seeing this exception, so rather than crash, we should fail the operation and 
+                if (ex.Message.Contains("Response is not well-formed XML"))
+                {
+                    throw new UspsException(ex.Message, ex);
+                }
+
+                throw;
             }
             catch (Exception ex)
             {
