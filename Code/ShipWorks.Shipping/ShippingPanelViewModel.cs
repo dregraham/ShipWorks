@@ -189,16 +189,19 @@ namespace ShipWorks.Shipping
         /// </summary>
         public void Save()
         {
-            ShipmentType shipmentType = shipmentTypeFactory.Get(loadedShipment.Shipment);
-            shipmentType.UpdateDynamicShipmentData(loadedShipment.Shipment);
-            shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
+            if (!loadedShipment.Shipment.Processed)
+            {
+                ShipmentType shipmentType = shipmentTypeFactory.Get(loadedShipment.Shipment);
+                shipmentType.UpdateDynamicShipmentData(loadedShipment.Shipment);
+                shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
 
-            loadedShipment.Shipment.ShipmentTypeCode = SelectedShipmentType;
-            Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
-            Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
-            ShipmentViewModel.Save(loadedShipment.Shipment);
+                loadedShipment.Shipment.ShipmentTypeCode = SelectedShipmentType;
+                Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
+                Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
+                ShipmentViewModel.Save(loadedShipment.Shipment);
 
-            customsManager.EnsureCustomsLoaded(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current);
+                customsManager.EnsureCustomsLoaded(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current);
+            }
         }
 
         /// <summary>
