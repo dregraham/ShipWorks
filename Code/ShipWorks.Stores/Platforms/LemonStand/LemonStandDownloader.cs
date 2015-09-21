@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -21,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     {
         private readonly ILemonStandWebClient client;
         private readonly ISqlAdapterRetry sqlAdapter;
-        private const int itemsPerPage = 250;
+        private const int itemsPerPage = 50;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LemonStandDownloader"/> class.
@@ -63,6 +64,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 bool allOrdersRetrieved = false;
                 int currentPage = 1;
 
+                DateTime startDateTime = GetDownloadStartingPoint();
+                string start = ToLemonStandDate(startDateTime);
+
                 // LemonStand does not return any information about number of pages, but by default returns 250 items per page
                 // So we get first 250 and if there are in fact 250 items, then get the next page
                 while (!allOrdersRetrieved)
@@ -74,7 +78,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     }
 
                     // Get orders from LemonStand 
-                    JToken result = client.GetOrders(currentPage);
+                    JToken result = client.GetOrders(currentPage, start);
 
                     // Get JSON result objects into a list
                     IList<JToken> orders = result["data"].Children().ToList();
@@ -233,6 +237,37 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             return result.ToUniversalTime();
         }
 
+        public static string ToLemonStandDate(DateTime utcDateTime)
+        {
+            // LemonStand date format - 2014-06-02T12:08:24-0700
+            DateTimeOffset time = utcDateTime;
+            time = time.ToOffset(TimeSpan.FromHours(-7));
+            
+            return time.ToString("yyyy-MM-ddTHH:mm:sszzz");
+        }
+
+        /// <summary>
+        /// Gets the download starting point.
+        /// </summary>
+        /// <returns>A DateTime object.</returns>
+        private DateTime GetDownloadStartingPoint()
+        {
+            // We're going to have our starting point default to either the initial download days setting or a year back
+            int previousDaysToDownload = Store.InitialDownloadDays.HasValue ? Store.InitialDownloadDays.Value : 365;
+            DateTime startingPoint = DateTime.UtcNow.AddDays(-1 * previousDaysToDownload);
+
+            DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
+            if (lastModifiedDate.HasValue)
+            {
+                // We have a record of the last order date in the system, so
+                // we're going to add a second to that value (to prevent
+                // downloading a duplicate order) and use that as the starting point
+                startingPoint = lastModifiedDate.Value.AddSeconds(1);
+            }
+
+            return startingPoint;
+        }
+
         /// <summary>
         /// Loads Shipping and Billing address into the order entity
         /// </summary>
@@ -338,6 +373,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             item.UnitPrice = Convert.ToDecimal(product.BasePrice);
             item.Quantity = int.Parse(product.Quantity);
             item.Thumbnail = product.Thumbnail;
+            
+        }
+
+        private void LoadItemAttributes(IList<JToken> jsonAttributes, LemonStandItem product)
+        {
+            
         }
     }
 }

@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     LemonStandWebClient client = new LemonStandWebClient(lemonStandStore);
                     //Check to see if we have access to LemonStand with the new creds
                     //Ask for some orders
-                    client.GetOrders(1);
+                    client.GetOrders(1, DateTime.UtcNow.ToString());
 
                     return true;
                 }

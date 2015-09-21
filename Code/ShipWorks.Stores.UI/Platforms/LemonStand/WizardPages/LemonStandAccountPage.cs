@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -47,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
                 LemonStandWebClient client = new LemonStandWebClient(store);
                 //Check to see if we have access to LemonStand with the new creds
                 //Ask for some orders
-                client.GetOrders(1);
+                client.GetOrders(1, DateTime.UtcNow.ToString());
             }
             catch (LemonStandException ex)
             {

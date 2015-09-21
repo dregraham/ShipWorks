@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
             missingDataOrder = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandOrderWithMissingData.js");
             missingItems = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.OrderMissingItems.js");
 
-            webClient.Setup(w => w.GetOrders(1)).Returns(JObject.Parse(lemonStandOrders));
+            webClient.Setup(w => w.GetOrders(1, DateTime.UtcNow.ToString())).Returns(JObject.Parse(lemonStandOrders));
             webClient.Setup(w => w.GetShipment("36")).Returns(JObject.Parse(invoice));
             webClient.Setup(w => w.GetShippingAddress("36")).Returns(JObject.Parse(shipment));
             webClient.Setup(w => w.GetBillingAddress("34")).Returns(JObject.Parse(customer));

@@ -14,6 +14,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         //LemonStand API endpoint
         private static string lemonStandEndpoint;
         private static string accessToken;
+        private const int itemsPerPage = 50;
         
         /// <summary>
         ///     Constructor
@@ -32,9 +33,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         ///     Get all orders from LemonStand
         /// </summary>
         /// <returns>Orders in Json</returns>
-        public JToken GetOrders(int page)
+        public JToken GetOrders(int page, string start)
         {
-            return ProcessRequest(CreateGetRequest("orders?sort=updated_at&order=desc&embed=invoices,customer,items&page=" + page), "GetOrders");
+            return ProcessRequest(CreateGetRequest("orders?updated_at_min=" + start + "&sort=updated_at&order=desc&embed=invoices,customer,items&limit="+ itemsPerPage + "&page=" + page), "GetOrders");
         }
 
         /// <summary>
@@ -84,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Product in Json</returns>
         public JToken GetProduct(string productId)
         {
-            return ProcessRequest(CreateGetRequest("product/" + productId + "?embed=images"), "GetProduct");
+            return ProcessRequest(CreateGetRequest("product/" + productId + "?embed=images,attributes"), "GetProduct");
         }
 
         /// <summary>

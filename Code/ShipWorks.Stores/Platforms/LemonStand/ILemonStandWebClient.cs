@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     {
         JToken GetBillingAddress(string customerId);
         JToken GetOrderInvoice(string orderId);
-        JToken GetOrders(int page);
+        JToken GetOrders(int page, string start);
         JToken GetProduct(string productId);
         JToken GetShipment(string invoiceId);
         JToken GetShippingAddress(string shipmentId);
