@@ -1,7 +1,6 @@
 ﻿using System;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.UI;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -123,7 +122,7 @@ namespace ShipWorks.Shipping
 
         public AddressViewModel Destination { get; }
 
-        public ShipmentViewModel ShipmentViewModel { get; }
+        public ShipmentViewModel ShipmentViewModel { get; set; }
 
         /// <summary>
         /// Save the current shipment to the database

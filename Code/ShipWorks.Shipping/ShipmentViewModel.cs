@@ -1,15 +1,13 @@
-﻿using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI.Controls.Design;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.UI
+namespace ShipWorks.Shipping
 {
     /// <summary>
     /// View model for use by ShipmentControl

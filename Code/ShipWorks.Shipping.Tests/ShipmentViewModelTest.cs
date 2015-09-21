@@ -1,5 +1,4 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.UI;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests
