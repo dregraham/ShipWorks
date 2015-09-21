@@ -1136,6 +1136,7 @@
     <Compile Include="Shipping\IShipmentTypeFactory.cs" />
     <Compile Include="Shipping\IShippingErrorManager.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />
+    <Compile Include="Shipping\SelectedRateChangedMessage.cs" />
     <Compile Include="Shipping\ShipmentChangedMessage.cs" />
     <Compile Include="Shipping\OpenShippingDialogMessage.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />

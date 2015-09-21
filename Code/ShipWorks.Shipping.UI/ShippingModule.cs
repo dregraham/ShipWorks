@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Core.ApplicationCode;
+using ShipWorks.Shipping.Rating;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -75,6 +76,10 @@ namespace ShipWorks.Shipping.UI
                 .SingleInstance();
 
             builder.RegisterType<ShipmentServicesBuilderFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<RateSelectionFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

@@ -10,6 +10,8 @@ using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Threading.Tasks;
+using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Shipping.UI
@@ -143,6 +145,15 @@ namespace ShipWorks.Shipping.UI
 
             rateControl.Initialize(new FootnoteParameters(() => viewModel.RefreshRates(false), () => viewModel.Store));
 
+            rateControl.RateSelected += OnRateControlRateSelected;
+        }
+
+        /// <summary>
+        /// Event handler for rate selection chaning on the rate control
+        /// </summary>
+        private void OnRateControlRateSelected(object sender, RateSelectedEventArgs e)
+        {
+            viewModel.SelectedRateResult = e.Rate;
         }
 
         /// <summary>

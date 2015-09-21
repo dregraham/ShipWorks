@@ -50,6 +50,7 @@ namespace ShipWorks.Shipping
         private bool actionLinkVisible;
         private bool showAllRates;
         private bool showSpinner;
+        private RateResult selectedRateResult;
         public StoreEntity store;
         private RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
         private string errorMessage = string.Empty;
@@ -138,6 +139,21 @@ namespace ShipWorks.Shipping
             set
             {
                 handler.Set(nameof(ShowSpinner), ref showSpinner, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets/Sets whether to show the spinner
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public RateResult SelectedRateResult
+        {
+            get { return selectedRateResult; }
+            set
+            {
+                handler.Set(nameof(SelectedRateResult), ref selectedRateResult, value);
+
+                messenger.Send(new SelectedRateChangedMessage(this, selectedRateResult));
             }
         }
 

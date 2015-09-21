@@ -225,7 +225,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Updates the services.
         /// </summary>
-        private void UpdateServices() => ShipmentViewModel.RefreshShipmentTypes(loadedShipment.Shipment);
+        private void UpdateServices() => ShipmentViewModel.RefreshServiceTypes(loadedShipment.Shipment);
 
         /// <summary>
         /// Updates the packages.

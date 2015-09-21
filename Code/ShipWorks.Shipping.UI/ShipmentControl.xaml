@@ -36,7 +36,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}">Service:</TextBlock>
-            <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Services}" SelectedValuePath="Key" DisplayMemberPath="Value"/>
+            <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Services}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding ServiceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource GridLabel}">Ship date:</TextBlock>
             <DatePicker Grid.Row="1" Grid.Column="1" Width="125" HorizontalAlignment="Left" Margin="4 0 0 0" SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

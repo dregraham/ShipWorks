@@ -132,12 +132,16 @@
     <Compile Include="Carriers\Postal\Usps\UspsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentServicesBuilder.cs" />
+    <Compile Include="Rating\IRateSelection.cs" />
     <Compile Include="IShipmentLoader.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="ILoader.cs" />
     <Compile Include="IShippingPanelConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RatingPanelViewModel.cs" />
+    <Compile Include="Rating\IRateSelectionFactory.cs" />
+    <Compile Include="Rating\RateSelection.cs" />
+    <Compile Include="Rating\RateSelectionFactory.cs" />
+    <Compile Include="Rating\RatingPanelViewModel.cs" />
     <Compile Include="ShipmentAddressValidator.cs" />
     <Compile Include="ShipmentServicesBuilderFactory.cs" />
     <Compile Include="ShipmentTypeFactory.cs" />
