@@ -18,7 +18,6 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Filters;
-using ShipWorks.Stores.Platforms.LemonStand.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 
@@ -125,27 +124,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
             return new OnlineUpdateShipmentUpdateActionControl(typeof (LemonStandShipmentUploadTask));
-        }
-
-        /// <summary>
-        ///     Create the user control used in the Store Manager window.
-        /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl()
-        {
-            LemonStandAccountSettingsControl settingsControl = new LemonStandAccountSettingsControl();
-
-            return settingsControl;
-        }
-
-        /// <summary>
-        ///     Create the Wizard pages used in the setup wizard to configure the store.
-        /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
-        {
-            return new List<WizardPage>
-            {
-                new LemonStandAccountPage()
-            };
         }
 
         /// <summary>

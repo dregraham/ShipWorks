@@ -489,10 +489,6 @@
     <Compile Include="Stores\Etsy\EtsyOnlineUpdaterTest.cs" />
     <Compile Include="Stores\GenericStore\IdentifierTests.cs" />
     <Compile Include="Stores\GenericStore\SchemaValidationTests.cs" />
-    <Compile Include="Stores\LemonStand\FakeLemonStandDownloader.cs" />
-    <Compile Include="Stores\LemonStand\LemonStandDownloaderTest.cs" />
-    <Compile Include="Stores\LemonStand\LemonStandStoreTypeTest.cs" />
-    <Compile Include="Stores\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Stores\Newegg\CancellationRequestTest.cs" />
     <Compile Include="Stores\Newegg\CheckCredentialsRequestTest.cs" />
     <Compile Include="Stores\Newegg\CheckCredentialsResponseSerializerTest.cs" />
@@ -619,17 +615,6 @@
     <Content Include="Shipping\Carriers\Postal\Endicia\BestRate\Endicia_GetBestRates_DoesNotIncludeTypes.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Stores\LemonStand\Artifacts\CustomerMissingBillingAddress.js" />
-    <EmbeddedResource Include="Stores\LemonStand\Artifacts\OrderMissingItems.js" />
-    <EmbeddedResource Include="Stores\LemonStand\Artifacts\ShipmentMissingShippingAddress.js" />
-    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandOrderWithMissingData.js" />
-    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandOrderWithBadOrderStatusAndItemQuantity.js" />
-    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandInvoiceJson.js" />
-    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandProductJson.js" />
-    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandCustomerJson.js" />
-    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandShipmentJson.js" />
-    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandSingleOrderJson.js" />
-    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandJsonOrderResponse.js" />
     <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadedWithEmptyInvoice.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

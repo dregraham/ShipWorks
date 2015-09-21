@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ShipWorks.Data.Connection
 {
     /// <summary>
     /// Exception thrown when an entity could not be saved due to a FK constraint
     /// </summary>
-    class SqlForeignKeyException : Exception
+    public class SqlForeignKeyException : Exception
     {
         public SqlForeignKeyException()
         {
