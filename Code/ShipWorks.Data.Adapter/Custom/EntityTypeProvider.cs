@@ -189,7 +189,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "ExcludedPackageTypeEntity": return EntityType.ExcludedPackageTypeEntity;
 				case "LemonStandStoreEntity": return EntityType.LemonStandStoreEntity;
 				case "LemonStandOrderEntity": return EntityType.LemonStandOrderEntity;
-			}
+				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));
 		}
