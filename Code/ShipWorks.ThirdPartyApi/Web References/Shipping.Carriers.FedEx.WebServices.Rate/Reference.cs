@@ -618,6 +618,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         PAYOR_LIST_SHIPMENT,
         
         /// <remarks/>
+        PAYOR_RETAIL_PACKAGE,
+        
+        /// <remarks/>
         PREFERRED_ACCOUNT_PACKAGE,
         
         /// <remarks/>
