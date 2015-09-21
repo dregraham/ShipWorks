@@ -19,7 +19,7 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static void ExecuteWithRetry<TException>(int retries, Action method) where TException : Exception
         {
-            int retryCounter = retries - 1;
+            int retryCounter = retries;
 
             while (retryCounter >= 0)
             {

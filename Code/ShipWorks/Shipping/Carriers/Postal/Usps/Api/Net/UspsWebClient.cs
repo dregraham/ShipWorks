@@ -498,7 +498,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 {
                     using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
                     {
-                        ActionRetry.ExecuteWithRetry<InvalidOperationException>(3, () => webService.CleanseAddress(
+                        ActionRetry.ExecuteWithRetry<InvalidOperationException>(2, () => webService.CleanseAddress(
                             GetCredentials(account, true),
                             ref address,
                             null, // from zip code.  Sending the from zip code makes the call take longer and we don't use the extra that is returned. 
