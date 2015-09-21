@@ -32,7 +32,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.EmailOutboundRelation] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderPaymentDetail] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.DownloadDetail] = 9;
-            tableBitCount[(int) FilterNodeColumnMaskTable.AmazonOrder] = 5;
+            tableBitCount[(int) FilterNodeColumnMaskTable.AmazonOrder] = 7;
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrder] = 10;
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrderItem] = 10;
             tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrder] = 24;
@@ -41,7 +41,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderMotionOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.PayPalOrder] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.ProStoresOrder] = 4;
-            tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 21;
+            tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 22;
             tableBitCount[(int) FilterNodeColumnMaskTable.UpsShipment] = 51;
             tableBitCount[(int) FilterNodeColumnMaskTable.FedExShipment] = 149;
             tableBitCount[(int) FilterNodeColumnMaskTable.CommerceInterfaceOrder] = 2;

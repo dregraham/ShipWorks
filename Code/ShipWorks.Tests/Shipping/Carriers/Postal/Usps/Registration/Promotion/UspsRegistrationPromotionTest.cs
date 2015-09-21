@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
 {
-    [TestClass]
     public class UspsRegistrationPromotionTest
     {
         private readonly UspsIntuishipRegistrationPromotion testObject;
@@ -18,12 +17,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
             testObject = new UspsIntuishipRegistrationPromotion();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetPromoCode_ReturnsShipWorks3_WhenRegistrationTypeIsExpedited_Test()
         {
             string promo = testObject.GetPromoCode();
 
-            Assert.AreEqual("ShipWorks3", promo);
+            Assert.Equal("ShipWorks3", promo);
         }
     }
 }

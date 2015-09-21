@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using ShipWorks.Shipping.Settings;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
@@ -49,9 +51,12 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnShippingSettings(object sender, EventArgs e)
         {
-            using (ShippingSettingsDlg dlg = new ShippingSettingsDlg())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                using (ShippingSettingsDlg dlg = new ShippingSettingsDlg(lifetimeScope))
+                {
+                    dlg.ShowDialog(this);
+                }
             }
         }
     }

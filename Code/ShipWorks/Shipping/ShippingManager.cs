@@ -60,6 +60,7 @@ using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.ShipSense.Hashing;
+using Autofac;
 
 namespace ShipWorks.Shipping
 {
@@ -949,7 +950,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Processes the shipment.
         /// </summary>
-        public static void ProcessShipment(long shipmentID, Dictionary<long, Exception> licenseCheckCache, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        public static void ProcessShipment(long shipmentID, Dictionary<long, Exception> licenseCheckCache, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
         {
             log.InfoFormat("Shipment {0}  - Process Start", shipmentID);
 
@@ -985,7 +986,7 @@ namespace ShipWorks.Shipping
 
                     // Get the ShipmentType instance
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-                    List<ShipmentEntity> shipmentsToTryToProcess = shipmentType.PreProcess(shipment, counterRatesProcessing, selectedRate);
+                    List<ShipmentEntity> shipmentsToTryToProcess = shipmentType.PreProcess(shipment, counterRatesProcessing, selectedRate, lifetimeScope);
 
                     // A null value returned from the pre-process method means the user has opted to not continue 
                     // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted

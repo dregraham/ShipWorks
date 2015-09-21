@@ -1,5 +1,5 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators
 {
-    [TestClass]
     public class FedExSmartPostCloseEntityManipulatorTest
     {
         private FedExSmartPostCloseEntityManipulator testObject;
@@ -22,8 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         private FedExAccountEntity account;
         private FedExEndOfDayCloseEntity closeEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExSmartPostCloseEntityManipulatorTest()
         {
             account = new FedExAccountEntity { AccountNumber = "12345", FedExAccountID = 1001 };
             closeEntity = new FedExEndOfDayCloseEntity();
@@ -42,52 +40,47 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
             testObject = new FedExSmartPostCloseEntityManipulator(closeRepository.Object);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Manipulate_ThrowsArgumentNullException_WhenCloseEntityIsNull_Test()
         {
             closeEntity = null;
 
-            testObject.Manipulate(carrierResponse.Object, closeEntity);
-
-            Assert.IsNotNull(closeEntity);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(carrierResponse.Object, closeEntity));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FedExException))]
+        [Fact]
         public void Manipulate_ThrowsFedExException_WhenCarrierAccountIsNotFedEx_Test()
         {
             carrierRequest.Setup(r => r.CarrierAccountEntity).Returns(new UpsAccountEntity());
 
-            testObject.Manipulate(carrierResponse.Object, closeEntity);
+            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierResponse.Object, closeEntity));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FedExException))]
+        [Fact]
         public void Manipulate_ThrowsFedExException_WhenCarrierAccountIsNull_Test()
         {
             carrierRequest.Setup(r => r.CarrierAccountEntity).Returns<IEntity2>(null);
 
-            testObject.Manipulate(carrierResponse.Object, closeEntity);
+            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierResponse.Object, closeEntity));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsFedExAccountId_Test()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
 
-            Assert.AreEqual(account.FedExAccountID, closeEntity.FedExAccountID);
+            Assert.Equal(account.FedExAccountID, closeEntity.FedExAccountID);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsAccountNumber_Test()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
 
-            Assert.AreEqual(account.AccountNumber, closeEntity.AccountNumber);
+            Assert.Equal(account.AccountNumber, closeEntity.AccountNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsCloseDate_Test()
         {
             DateTime utcStart = DateTime.UtcNow;
@@ -96,19 +89,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
 
             // Verify that the date assigned to the close date falls between the time the test started
             // and the after manipulate was completed
-            Assert.IsTrue(utcStart.Ticks <= closeEntity.CloseDate.Ticks);
-            Assert.IsTrue(closeEntity.CloseDate.Ticks <= DateTime.UtcNow.Ticks);
+            Assert.True(utcStart.Ticks <= closeEntity.CloseDate.Ticks);
+            Assert.True(closeEntity.CloseDate.Ticks <= DateTime.UtcNow.Ticks);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_IsSmartPostIsTrue_Test()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
 
-            Assert.IsTrue(closeEntity.IsSmartPost);
+            Assert.True(closeEntity.IsSmartPost);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToRepositoryWhenToSave_Test()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);

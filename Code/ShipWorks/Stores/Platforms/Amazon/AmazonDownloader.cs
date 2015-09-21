@@ -15,6 +15,7 @@ using System.Xml.XPath;
 using System.Xml;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {

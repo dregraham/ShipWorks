@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -15,7 +15,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
 {
-    [TestClass]
     public class Express1UspsShipmentTypeTest
     {
         private Express1UspsShipmentType testObject;
@@ -23,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
         private List<PostalServicePackagingCombination> allCombinations = new List<PostalServicePackagingCombination>();
         private List<PostalServicePackagingCombination> adultSignatureCombinationsAllowed = new List<PostalServicePackagingCombination>();
 
-        [TestInitialize]
-        public void Initialize()
+        public Express1UspsShipmentTypeTest()
         {
             testObject = new Express1UspsShipmentType();
 
@@ -33,32 +31,35 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
             LoadAllPostalServicePackageTypes();
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRequred_IsReturned_WhenUspsShipmentTypeAndUsingAllowedCombinations()
         {
             foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
             {
-                Assert.IsTrue(testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRequired), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
+                Assert.Contains(PostalConfirmationType.AdultSignatureRequired, testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType));
+                //Assert.True(testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRequired), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRestricted_IsReturned_WhenUspsShipmentTypeAndUsingAllowedCombinations()
         {
             foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
             {
-                Assert.IsTrue(testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRestricted), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
+                Assert.Contains(PostalConfirmationType.AdultSignatureRestricted, testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType));
+                //Assert.True(testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRestricted), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRequred_IsNotReturned_WhenUspsShipmentTypeAndUsingCombinationsThatAreNotAllowed()
         {
             foreach (PostalServicePackagingCombination combo in allCombinations.Except(adultSignatureCombinationsAllowed))
             {
                 List<PostalConfirmationType> returnedConfirmationTypes = testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType);
 
-                Assert.IsTrue(returnedConfirmationTypes.All(ct => ct != PostalConfirmationType.AdultSignatureRequired), "AdultSignatureRequired should not have been returned for {0}, {1}.", combo.ServiceType, combo.PackagingType);
+                Assert.DoesNotContain(PostalConfirmationType.AdultSignatureRequired, returnedConfirmationTypes);
+                //Assert.True(returnedConfirmationTypes.All(ct => ct != PostalConfirmationType.AdultSignatureRequired), "AdultSignatureRequired should not have been returned for {0}, {1}.", combo.ServiceType, combo.PackagingType);
             }
         }
 

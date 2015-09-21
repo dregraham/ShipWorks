@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,7 +16,6 @@ using ILog = log4net.ILog;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 {
-    [TestClass]
     public class OnTracRateRequestTest
     {
         Mock<IHttpResponseReader> mockedHttpResponseReader;
@@ -31,8 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 
         OnTracRates testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public OnTracRateRequestTest()
         {
             //Setup mock object that holds response from request
             mockedHttpResponseReader = new Mock<IHttpResponseReader>();
@@ -75,23 +73,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             };
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_RatesRetrieved_ValidResponse_Test()
         {
             var rateGroup = RunSuccessfullGetRates();
 
-            Assert.AreEqual(OnTracServiceType.Ground, (OnTracServiceType)rateGroup.Rates.First().Tag);
+            Assert.Equal(OnTracServiceType.Ground, (OnTracServiceType)rateGroup.Rates.First().Tag);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_RateIsNotIncluded_WhenServiceTypeHasBeenExcluded()
         {
             var rateGroup = RunSuccessfullGetRates(OnTracShipmentType.ServiceTypes.Where(x => x != OnTracServiceType.Ground));
 
-            Assert.AreEqual(0, rateGroup.Rates.Count);
+            Assert.Equal(0, rateGroup.Rates.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_ResponseLogged_ValidResponse_Test()
         {
             RunSuccessfullGetRates();
@@ -99,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             mockedLogger.Verify(x => x.LogResponse(It.IsAny<string>()));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_RequestLogged_ValidResponse_Test()
         {
             RunSuccessfullGetRates();
@@ -107,22 +105,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             mockedLogger.Verify(x => x.LogRequest(It.IsAny<HttpRequestSubmitter>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_UrlInCorrectFormat_ValidResponse_Test()
         {
             RunSuccessfullGetRates();
 
-            Assert.IsTrue(
+            Assert.True(
                 mockedSubmitter.Object.Uri.ToString().EndsWith(
                     "/OnTracServices.svc/v2/42/rates?pw=testpass&packages=uid;90210;63102;True;10;False;450;15;1X2X3;"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_RequestUsedGetMethod_ValidResponse_Test()
         {
             RunSuccessfullGetRates();
 
-            Assert.AreEqual(HttpVerb.Get, mockedSubmitter.Object.Verb);
+            Assert.Equal(HttpVerb.Get, mockedSubmitter.Object.Verb);
         }
 
         RateGroup RunSuccessfullGetRates(IEnumerable<OnTracServiceType> availableServiceTypes = null)
@@ -154,7 +152,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             return rateGroup;
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_RequestedWeightIsZero_PackageTypeIsLetter()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
@@ -185,14 +183,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 
             RateGroup rateGroup = testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
 
-            Assert.IsTrue(
+            Assert.True(
                 mockedSubmitter.Object.Uri.ToString().EndsWith(
                     "/OnTracServices.svc/v2/42/rates?pw=testpass&packages=uid;90210;63102;True;10;False;450;0;0X0X0;"));
 
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(OnTracApiErrorException))]
+        [Fact]
         public void GetRates_ThrowsOnTracException_WhenErrorInShipment_Test()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
@@ -219,11 +216,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
+            Assert.Throws<OnTracApiErrorException>(() => testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(OnTracException))]
+        [Fact]
         public void GetRates_ThrowsOnTracException_WhenNoShipmentReturned_Test()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
@@ -237,11 +233,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
+            Assert.Throws<OnTracException>(() => testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(OnTracApiErrorException))]
+        [Fact]
         public void GetRates_ThrowsOnTracException_WhenRequestErrorReturned_Test()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
@@ -254,10 +249,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
+            Assert.Throws<OnTracApiErrorException>(() => testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_LogsUnknownRateType_WhenUnknownRateTypeReturned_Test()
         {
             RateShipmentList rateShipmentList = new RateShipmentList

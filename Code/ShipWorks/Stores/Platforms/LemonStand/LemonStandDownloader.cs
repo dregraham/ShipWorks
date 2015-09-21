@@ -10,6 +10,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {

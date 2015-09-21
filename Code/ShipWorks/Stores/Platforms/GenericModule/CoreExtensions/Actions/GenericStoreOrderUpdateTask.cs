@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Actions
     /// <summary>
     /// Task editor for updating a Generic Store's online order with a status code
     /// </summary>
-    [ActionTask("Update online status", "GenericStoreOrderUpdate", ActionTaskCategory.UpdateOnline)]
+    [ActionTask("Update store status", "GenericStoreOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class GenericStoreOrderUpdateTask : StoreInstanceTaskBase
     {
         string comment = "{//ServiceUsed} - {//TrackingNumber}";

@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
 {
-    [TestClass]
     public class FedExSubscriptionResponseTest
     {
         private FedExSubscriptionResponse testObject;
@@ -18,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
 
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExSubscriptionResponseTest()
         {
             nativeResponse = new SubscriptionReply()
             {
@@ -35,41 +33,39 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             testObject = new FedExSubscriptionResponse(nativeResponse, carrierRequest.Object);
         }
 
-        [TestMethod]
-        [ExpectedException((typeof(FedExApiCarrierException)))]
+        [Fact]
         public void Process_ThrowsFedExApiException_WhenSeverityIsError_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
-            nativeResponse.Notifications = new Notification[] {new Notification {Message = "message"}};
-            
-            testObject.Process();
+            nativeResponse.Notifications = new Notification[] { new Notification { Message = "message" } };
+
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
-        [TestMethod]
-        [ExpectedException((typeof(FedExApiCarrierException)))]
+        [Fact]
         public void Process_ThrowsFedExApiException_WhenSeverityIsFailure_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
             nativeResponse.Notifications = new Notification[] { new Notification { Message = "message" } };
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_GetsAccountFromRequest_Test()
         {
             testObject.Process();
 
-            carrierRequest.Verify(r =>r.CarrierAccountEntity, Times.Once());
+            carrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_SetsMeterNumberOfAccountFromRequest_Test()
         {
             testObject.Process();
 
             FedExAccountEntity requestAccount = carrierRequest.Object.CarrierAccountEntity as FedExAccountEntity;
-            Assert.AreEqual(nativeResponse.MeterDetail.MeterNumber, requestAccount.MeterNumber);
+            Assert.Equal(nativeResponse.MeterDetail.MeterNumber, requestAccount.MeterNumber);
         }
     }
 }

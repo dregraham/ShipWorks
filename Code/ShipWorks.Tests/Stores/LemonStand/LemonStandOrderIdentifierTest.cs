@@ -1,55 +1,51 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.LemonStand;
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.LemonStand
 {
-    [TestClass]
     public class LemonStandOrderIdentifierTest
     {
         Mock<OrderEntity> order = new Mock<OrderEntity>();
         Mock<LemonStandOrderEntity> lemonStandOrder = new Mock<LemonStandOrderEntity>(); 
         private LemonStandOrderIdentifier testObject;
 
-        [TestMethod]
+        [Fact]
         public void ToString_ReturnsCorrectString_WhenGivenValidOrderID_Test()
         {
             testObject = new LemonStandOrderIdentifier("1");
 
-            Assert.AreEqual("LemonStandStoreOrderID:1", testObject.ToString());
+            Assert.Equal("LemonStandStoreOrderID:1", testObject.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void ToString_ReturnsWithoutException_WhenLemonStandOrderIDIsNull_Test1()
         {
             testObject = new LemonStandOrderIdentifier(null);
             testObject.ToString();
         }
-
-        [ExpectedException(typeof(InvalidOperationException))]
-        [TestMethod]
+        
+        [Fact]
         public void ApplyTo_ThrowsInvalidOperationException_WhenGivenNonLemonStandOrderEntity_Test()
         {
             testObject = new LemonStandOrderIdentifier("1");
-            testObject.ApplyTo(order.Object);
+            Assert.Throws<InvalidOperationException>(() => testObject.ApplyTo(order.Object));
         }
-
-        [ExpectedException(typeof(InvalidOperationException))]
-        [TestMethod]
+        
+        [Fact]
         public void ApplyTo_ThrowsInvalidOperationException_WhenPassedNullOrderEntity_Test()
         {
             testObject = new LemonStandOrderIdentifier("1");
-            testObject.ApplyTo((LemonStandOrderEntity) null);
+            Assert.Throws<InvalidOperationException>(() => testObject.ApplyTo((LemonStandOrderEntity) null));
         }
-
-        [ExpectedException(typeof(ArgumentNullException))]
-        [TestMethod]
+        
+        [Fact]
         public void ApplyTo_ThrowsArgumentNullException_WhenPassedNullDownloadDetailEntity_Test()
         {
             testObject = new LemonStandOrderIdentifier("1");
-            testObject.ApplyTo((DownloadDetailEntity) null);
+            Assert.Throws<ArgumentNullException>(() => testObject.ApplyTo((DownloadDetailEntity) null));
         }
     }
 }

@@ -21,7 +21,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     public class BigCommerceWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceWebClient));
-        static readonly LruCache<int, BigCommerceProductImage> productImageCache = new LruCache<int, BigCommerceProductImage>(1000);
         readonly List<BigCommerceOrderStatus> bigCommerceOrderStatuses;
         readonly string apiUserName;
         readonly string apiToken;
@@ -716,6 +715,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Get the order products from BigCommerce for this order
             order.OrderProducts = GetOrderProducts(order);
 
+            // Get the store specific product image cache
+            LruCache<int, BigCommerceProductImage> productImageCache = BigCommerceProductImageCache.GetStoreProductImageCache(apiUserName, apiUrl, apiToken);
+
             foreach (BigCommerceProduct product in order.OrderProducts)
             {
                 // See if we've already downloaded this product's image
@@ -814,8 +816,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 BigCommerceWebClientOrderSearchCriteria orderSearchCriteria = new BigCommerceWebClientOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType.CreatedDate, 
                     DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow, 
-                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow, 
-                    BigCommerceConstants.OrdersPageSize, 1);
+                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow)
+                    { 
+                        PageSize = BigCommerceConstants.OrdersPageSize, 
+                        Page = 1
+                    };
                 
                 GetOrderCount(orderSearchCriteria);
             }

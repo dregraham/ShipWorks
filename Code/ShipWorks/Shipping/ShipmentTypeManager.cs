@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -67,10 +69,10 @@ namespace ShipWorks.Shipping
                 }
 
                 // Sort based on the shipment type name
-                shipmentTypes.Sort(new Comparison<ShipmentType>(delegate(ShipmentType left, ShipmentType right)
+                shipmentTypes.Sort(delegate(ShipmentType left, ShipmentType right)
                 {
                     return GetSortValue(left.ShipmentTypeCode).CompareTo(GetSortValue(right.ShipmentTypeCode));
-                }));
+                });
 
                 return shipmentTypes;
             }
@@ -101,6 +103,14 @@ namespace ShipWorks.Shipping
         /// Get the ShipmentType based on the given type code
         /// </summary>
         public static ShipmentType GetType(ShipmentTypeCode typeCode)
+        {
+            return GetType(typeCode, IoC.UnsafeGlobalLifetimeScope);
+        }
+
+        /// <summary>
+        /// Get the ShipmentType based on the given type code
+        /// </summary>
+        public static ShipmentType GetType(ShipmentTypeCode typeCode, ILifetimeScope lifetimeScope)
         {
             switch (typeCode)
             {
@@ -142,6 +152,11 @@ namespace ShipWorks.Shipping
 
                 case ShipmentTypeCode.Usps:
                     return new UspsShipmentType();
+            }
+
+            if (lifetimeScope.IsRegisteredWithKey<ShipmentType>(typeCode))
+            {
+                return lifetimeScope.ResolveKeyed<ShipmentType>(typeCode);
             }
 
             throw new InvalidOperationException("Invalid shipment type.");
@@ -199,7 +214,6 @@ namespace ShipWorks.Shipping
         public static bool IsBestRate(ShipmentTypeCode shipmentTypeCode)
         {
             return shipmentTypeCode == ShipmentTypeCode.BestRate;
-
         }
 
         /// <summary>
@@ -303,6 +317,5 @@ namespace ShipWorks.Shipping
 
             return PostalUtility.UspsConsolidatorTypes.Contains(service);
         }
-
    }
 }

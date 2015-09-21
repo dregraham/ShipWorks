@@ -500,6 +500,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("IsPrime", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("EarliestExpectedDeliveryDate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("LatestExpectedDeliveryDate", fieldHashtable);
 		}
 		#endregion
 
@@ -615,6 +621,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)AmazonOrderFieldIndex.IsPrime, true); }
 			set	{ SetValue((int)AmazonOrderFieldIndex.IsPrime, value); }
+		}
+
+		/// <summary> The EarliestExpectedDeliveryDate property of the Entity AmazonOrder<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonOrder"."EarliestExpectedDeliveryDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> EarliestExpectedDeliveryDate
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)AmazonOrderFieldIndex.EarliestExpectedDeliveryDate, false); }
+			set	{ SetValue((int)AmazonOrderFieldIndex.EarliestExpectedDeliveryDate, value); }
+		}
+
+		/// <summary> The LatestExpectedDeliveryDate property of the Entity AmazonOrder<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonOrder"."LatestExpectedDeliveryDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> LatestExpectedDeliveryDate
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)AmazonOrderFieldIndex.LatestExpectedDeliveryDate, false); }
+			set	{ SetValue((int)AmazonOrderFieldIndex.LatestExpectedDeliveryDate, value); }
 		}
 
 

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -14,7 +14,6 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
-    [TestClass]
     public class UspsExpress1RateConsolidatorTest
     {
         UspsExpress1RateConsolidator consolidator;
@@ -22,52 +21,51 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         Image Express1Logo;
         Image UspsLogo;
 
-        [TestInitialize]
-        public void Setup()
+        public UspsExpress1RateConsolidatorTest()
         {
             consolidator = new UspsExpress1RateConsolidator();
             Express1Logo = new Bitmap(1, 1);
             UspsLogo = new Bitmap(1, 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void Conslidate_DoesNotThrow_WhenExpress1ApiThrows()
         {
             consolidator.Consolidate(CreateEmptyRateGroup(), CreateTaskThatThrows<Exception>());
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsOnlyUspsRates_WhenExpress1ApiThrows()
         {
             RateGroup rates = consolidator.Consolidate(CreatePopulatedRateGroup(), CreateTaskThatThrows<Exception>());
             foreach (RateResult rate in rates.Rates)
             {
-                Assert.AreEqual(ShipmentTypeCode.Usps, rate.ShipmentType);
+                Assert.Equal(ShipmentTypeCode.Usps, rate.ShipmentType);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_AddsErrorFooter_WhenExpress1ApiThrows()
         {
             RateGroup rates = consolidator.Consolidate(CreatePopulatedRateGroup(), CreateTaskThatThrows<Exception>());
-            Assert.IsTrue(rates.FootnoteFactories.OfType<ExceptionsRateFootnoteFactory>().Any(), "None of the footnotes are exceptions");
+            Assert.True(rates.FootnoteFactories.OfType<ExceptionsRateFootnoteFactory>().Any(), "None of the footnotes are exceptions");
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsOnlyUspsRates_WhenExpress1RatesAreEmpty()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
             RateGroup rateResults = consolidator.Consolidate(rateGroup, CreateTaskThatReturns(new List<RateResult>()));
 
-            Assert.AreEqual(rateGroup.Rates.Count, rateResults.Rates.Count);
+            Assert.Equal(rateGroup.Rates.Count, rateResults.Rates.Count);
 
             foreach (RateResult rate in rateGroup.Rates)
             {
-                Assert.IsNotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
+                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsOnlyUspsRates_WhenNoExpress1RatesMatchServiceType()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -75,15 +73,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateGroup rateResults = consolidator.Consolidate(rateGroup, task);
 
-            Assert.AreEqual(rateGroup.Rates.Count, rateResults.Rates.Count);
+            Assert.Equal(rateGroup.Rates.Count, rateResults.Rates.Count);
 
             foreach (RateResult rate in rateGroup.Rates)
             {
-                Assert.IsNotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
+                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsOnlyUspsRates_WhenExpress1RatesMatchButAreMoreExpensive()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -95,15 +93,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateGroup rateResults = consolidator.Consolidate(rateGroup, task);
 
-            Assert.AreEqual(rateGroup.Rates.Count, rateResults.Rates.Count);
+            Assert.Equal(rateGroup.Rates.Count, rateResults.Rates.Count);
 
             foreach (RateResult rate in rateGroup.Rates)
             {
-                Assert.IsNotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
+                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsOnlyUspsRates_WhenExpress1RatesMatchAndAreEqual()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -115,15 +113,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateGroup rateResults = consolidator.Consolidate(rateGroup, task);
 
-            Assert.AreEqual(rateGroup.Rates.Count, rateResults.Rates.Count);
+            Assert.Equal(rateGroup.Rates.Count, rateResults.Rates.Count);
 
             foreach (RateResult rate in rateGroup.Rates)
             {
-                Assert.IsNotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
+                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsMergedRates_WhenExpress1RatesMatchAndAreLess()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -135,19 +133,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateGroup rateResults = consolidator.Consolidate(rateGroup, task);
 
-            Assert.AreEqual(rateGroup.Rates.Count, rateResults.Rates.Count);
+            Assert.Equal(rateGroup.Rates.Count, rateResults.Rates.Count);
 
             foreach (RateResult rate in rateResults.Rates.Where(x => x.Tag != null && x.Selectable))
             {
                 PostalRateSelection tag = rate.Tag as PostalRateSelection;
                 ShipmentTypeCode expectedType = tag.ServiceType == PostalServiceType.PriorityMail ? ShipmentTypeCode.Express1Usps : ShipmentTypeCode.Usps;
 
-                Assert.AreEqual(expectedType, 
-                    rate.ShipmentType, string.Format("{0} rate should be {1}", tag.ServiceType, expectedType));
+                Assert.Equal(expectedType, rate.ShipmentType);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsExpress1Icon_WhenAllExpress1ConfirmationMatchAndAreLess()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -162,10 +159,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateResult priorityRateHeader = rateResults.Rates.Single(rate => rate.Selectable == false && (rate.Tag as PostalRateSelection).ServiceType == PostalServiceType.PriorityMail);
 
-            Assert.AreEqual(Express1Logo, priorityRateHeader.ProviderLogo);
+            Assert.Equal(Express1Logo, priorityRateHeader.ProviderLogo);
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsUspsIcon_WhenAllExpress1ConfirmationMatchAndAreSame()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -180,10 +177,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateResult priorityRateHeader = rateResults.Rates.Single(rate => rate.Selectable == false && (rate.Tag as PostalRateSelection).ServiceType == PostalServiceType.PriorityMail);
 
-            Assert.AreEqual(UspsLogo, priorityRateHeader.ProviderLogo);
+            Assert.Equal(UspsLogo, priorityRateHeader.ProviderLogo);
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsUspsIcon_WhenOneExpress1ConfirmationMatchIsLess()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -198,7 +195,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateResult priorityRateHeader = rateResults.Rates.Single(rate => rate.Selectable == false && (rate.Tag as PostalRateSelection).ServiceType == PostalServiceType.PriorityMail);
 
-            Assert.AreEqual(UspsLogo, priorityRateHeader.ProviderLogo);
+            Assert.Equal(UspsLogo, priorityRateHeader.ProviderLogo);
         }
 
         /// <summary>

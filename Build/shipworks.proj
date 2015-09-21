@@ -7,7 +7,6 @@
 
     <ShipWorksSolution>..\ShipWorks.sln</ShipWorksSolution>
     <ShipWorksProject>..\Code\ShipWorks\ShipWorks.csproj</ShipWorksProject>
-    <NativeProject>..\Code\ShipWorks.Native\Native.vcxproj</NativeProject>
 
     <!--Build output-->
     <ArtifactDirectory>..\Artifacts</ArtifactDirectory>
@@ -87,7 +86,7 @@
     <CompileDependsOn>
       CleanAll;
       CompileSolution;
-      CompileNative;
+      CopyToLatest;
     </CompileDependsOn>
   </PropertyGroup>
   <Target Name="Compile"
@@ -129,18 +128,6 @@
 			Targets="Clean">
     </MSBuild>
 
-    <!-- Clean each of the native projects -->
-    <MSBuild
-			Projects="$(NativeProject)"
-			Properties="Configuration=$(Configuration);Platform=Win32;"
-			Targets="Clean">
-    </MSBuild>
-    <MSBuild
-			Projects="$(NativeProject)"
-			Properties="Configuration=$(Configuration);Platform=x64;"
-			Targets="Clean">
-    </MSBuild>
-
   </Target>
 
   <!-- Compile the ShipWorks project -->
@@ -159,29 +146,13 @@
 
   </Target>
 
-  <!-- Compile the Native projects -->
-  <Target Name="CompileNative">
-
-    <MSBuild
-			Projects="$(NativeProject)"
-			Properties="Configuration=$(Configuration);Platform=Win32"
-			Targets="Build">
-    </MSBuild>
-
-    <MSBuild
-			Projects="$(NativeProject)"
-			Properties="Configuration=$(Configuration);Platform=x64"
-			Targets="Build">
-    </MSBuild>
-
-  </Target>
-
   <!-- Copy all the files to the Latest directory -->
   <Target Name="CopyToLatest" >
 
     <!-- Copy the native files -->
-    <Copy SourceFiles="..\Code\ShipWorks.Native\x64\$(Configuration)\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\x64" />
-    <Copy SourceFiles="..\Code\ShipWorks.Native\Win32\$(Configuration)\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\Win32" />
+    <Copy SourceFiles="..\Components\x64\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\x64" />
+    <Copy SourceFiles="..\Components\Win32\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\Win32" />
+    <Copy SourceFiles="..\Components\x64\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)" />
 
   </Target>
 
@@ -281,6 +252,7 @@
       StrongName;
       SignAssemblies;
       InnoSetup;
+      Wait;
       SignInstaller;
     </CreateInstallerDependsOn>
   </PropertyGroup>
@@ -324,6 +296,9 @@
     <ObfuscationExcludedAssemblies Include="Common.Logging.Log4Net1213, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" />
     <ObfuscationExcludedAssemblies Include="Quartz, Version=2.3.2.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4" />
     <ObfuscationExcludedAssemblies Include="NAudio, Version=1.6.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <ObfuscationExcludedAssemblies Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da" />
+    <ObfuscationExcludedAssemblies Include="Autofac.Extras.Attributed, Version=3.3.0.213, Culture=neutral, PublicKeyToken=17863af14b0044da" />
+    <ObfuscationExcludedAssemblies Include="Autofac.Integration.Mef, Version=3.0.3.0, Culture=neutral, PublicKeyToken=17863af14b0044da" />
   </ItemGroup>
   <ItemGroup>
     <ObfuscationExcludedRegEx Include="^(Triggers|UserDefinedFunctions|StoredProcedures)::.+" />
@@ -472,6 +447,13 @@
 
     <Message Text="Signing installers: @(Installers->'%(Filename)', ', ')" />
     <Exec Command='$(SignCommand) "%(Installers.FullPath)"' />
+  </Target>
+
+  <!-- Sign the assemblies with authenticode -->
+  <Target Name="Wait" >
+
+    <Message Text="Waiting for installer executables to be freed up" />
+    <Exec Command='ping 127.0.0.1 -n 6 > nul' />
   </Target>
 
   <!-- Packages up and archives the results of the build -->

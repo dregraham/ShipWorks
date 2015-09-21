@@ -235,7 +235,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             endicia.EndiciaAccountID = Accounts.Count > 0 ? Accounts[0].EndiciaAccountID : 0;
             endicia.StealthPostage = true;
-            endicia.NoPostage = false;
             endicia.ReferenceID = "{//Order/Number}";
             endicia.ScanBasedReturn = false;
         }
@@ -255,7 +254,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.EndiciaAccountID, endiciaShipment, EndiciaShipmentFields.EndiciaAccountID);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.StealthPostage, endiciaShipment, EndiciaShipmentFields.StealthPostage);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.NoPostage, endiciaShipment, EndiciaShipmentFields.NoPostage);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ReferenceID, endiciaShipment, EndiciaShipmentFields.ReferenceID);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ScanBasedReturn, endiciaShipment, EndiciaShipmentFields.ScanBasedReturn);
             }
@@ -605,7 +603,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new EndiciaShipmentProcessingSynchronizer();
         }
@@ -888,22 +886,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
-
-            fields.AddRange
-            (
-                new List<IEntityField2>()
+            get
+            {
+                if (ratingField != null)
                 {
-                    shipment.Postal.Endicia.Fields[EndiciaShipmentFields.EndiciaAccountID.FieldIndex],
-                    shipment.Postal.Endicia.Fields[EndiciaShipmentFields.OriginalEndiciaAccountID.FieldIndex],
-                    shipment.Postal.Fields[PostalShipmentFields.SortType.FieldIndex],
-                    shipment.Postal.Fields[PostalShipmentFields.EntryFacility.FieldIndex],
+                    return ratingField;
                 }
-            );
 
-            return fields;
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(EndiciaShipmentFields.EndiciaAccountID);
+                ratingField.ShipmentFields.Add(EndiciaShipmentFields.OriginalEndiciaAccountID);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.SortType);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.EntryFacility);
+
+                return ratingField;
+            }
         }
 
         /// <summary>

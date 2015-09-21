@@ -2,13 +2,12 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation;
 using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation.Response;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
-    [TestClass]
     public class CheckCredentialsResponseSerializerTest
     {
         private string successfulResponseXml;
@@ -17,8 +16,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
         private CheckCredentialsResponseSerializer serializer;
 
-        [TestInitialize]
-        public void Initialize()
+        public CheckCredentialsResponseSerializerTest()
         {
             serializer = new CheckCredentialsResponseSerializer();
 
@@ -51,34 +49,32 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_ReturnsCheckCredentialResult_WhenSucessfulResponse_Test()
         {
             object result = serializer.Deserialize(successfulResponseXml);
 
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(CheckCredentialsResult));
+            Assert.NotNull(result);
+            Assert.IsAssignableFrom<CheckCredentialsResult>(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_CheckCredentialResultIsSuccessful_WhenSucessfulResponse_Test()
         {
             CheckCredentialsResult result = serializer.Deserialize(successfulResponseXml) as CheckCredentialsResult;
-            Assert.IsTrue(result.IsSuccessful);
+            Assert.True(result.IsSuccessful);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public void Deserialize_ThrowsInvalidOperationException_WhenInvalidSellerId_Test()
         {
-            object result = serializer.Deserialize(invalidSellerIdXml);
+            Assert.Throws<InvalidOperationException>(() => serializer.Deserialize(invalidSellerIdXml));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public void Deserialize_ThrowsInvalidOperationException_WhenInvalidSecretKey_Test()
         {
-            object result = serializer.Deserialize(invalidSecretKeyXml);
+            Assert.Throws<InvalidOperationException>(() => serializer.Deserialize(invalidSecretKeyXml));
         }
 
     }

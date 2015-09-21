@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -13,7 +13,6 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
-    [TestClass]
     public class UspsRateGroupConsolidatorTest
     {
         ExceptionsRateFootnoteFactory exceptionFootnoteFactory1;
@@ -33,8 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
         UspsShipmentType uspsShipmentType;
 
-        [TestInitialize]
-        public void Initialize()
+        public UspsRateGroupConsolidatorTest()
         {
             exceptionFootnoteFactory1 = new ExceptionsRateFootnoteFactory(uspsShipmentType, new Exception());
             exceptionFootnoteFactory2 = new ExceptionsRateFootnoteFactory(uspsShipmentType, new Exception());
@@ -83,35 +81,35 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             testObject = new UspsRateGroupConsolidator();
         }
 
-        [TestMethod]
+        [Fact]
         public void ServiceMatches_ReturnsTrue_ConfirmationAndServiceTypeMatch_Test()
         {
             RateResult rate1 = new RateResult("Rate 3", "1", 100, new UspsPostalRateSelection(PostalServiceType.MediaMail, PostalConfirmationType.Delivery, account1));
             RateResult rate2 = new RateResult("Rate 3", "1", 100, new UspsPostalRateSelection(PostalServiceType.MediaMail, PostalConfirmationType.Delivery, account1));
 
-            Assert.IsTrue(testObject.ServiceMatches(rate1, rate2), "The services match but ServiceMatches returned false");
+            Assert.True(testObject.ServiceMatches(rate1, rate2), "The services match but ServiceMatches returned false");
         }
 
-        [TestMethod]
+        [Fact]
         public void ServiceMatches_ReturnsFalse_ServiceTypeDoesNotMatch_Test()
         {
             RateResult rate1 = new RateResult("Rate 3", "1", 100, new UspsPostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.Delivery, account1));
             RateResult rate2 = new RateResult("Rate 3", "1", 100, new UspsPostalRateSelection(PostalServiceType.MediaMail, PostalConfirmationType.Delivery, account1));
 
-            Assert.IsFalse(testObject.ServiceMatches(rate1, rate2), "The services don't match but ServiceMatches returned true");
+            Assert.False(testObject.ServiceMatches(rate1, rate2), "The services don't match but ServiceMatches returned true");
         }
 
-        [TestMethod]
+        [Fact]
         public void ServiceMatches_ReturnsFalse_ConfirmationTypeDoesNotMatch_Test()
         {
             RateResult rate1 = new RateResult("Rate 3", "1", 100, new UspsPostalRateSelection(PostalServiceType.MediaMail, PostalConfirmationType.Delivery, account1));
             RateResult rate2 = new RateResult("Rate 3", "1", 100, new UspsPostalRateSelection(PostalServiceType.MediaMail, PostalConfirmationType.Signature, account1));
 
-            Assert.IsFalse(testObject.ServiceMatches(rate1, rate2), "The services don't match but ServiceMatches returned true");
+            Assert.False(testObject.ServiceMatches(rate1, rate2), "The services don't match but ServiceMatches returned true");
         }
 
         
-        [TestMethod]
+        [Fact]
         public void Consolidation_NonSelectableComesBeforeAddons_Test()
         {
             RateGroup consolidatedRates = testObject.Consolidate(rateResults);
@@ -119,12 +117,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             RateResult header = FindByServiceAndConfirmationResult(consolidatedRates.Rates, PostalServiceType.FirstClass, PostalConfirmationType.None);
             RateResult addon = FindByServiceAndConfirmationResult(consolidatedRates.Rates, PostalServiceType.FirstClass, PostalConfirmationType.Signature);
             
-            Assert.IsFalse(header.Selectable);
-            Assert.IsTrue(addon.Selectable);
-            Assert.IsTrue(consolidatedRates.Rates.IndexOf(header) < consolidatedRates.Rates.IndexOf(addon));
+            Assert.False(header.Selectable);
+            Assert.True(addon.Selectable);
+            Assert.True(consolidatedRates.Rates.IndexOf(header) < consolidatedRates.Rates.IndexOf(addon));
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_MatchingRateAccountsConsolidated_Test()
         {
             RateGroup consolidatedRates = testObject.Consolidate(rateResults);
@@ -133,12 +131,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             List<UspsAccountEntity> accounts = GetTag(resultToTest).Accounts;
 
-            Assert.AreEqual(2, accounts.Count);
-            Assert.IsTrue(accounts.Contains(account1));
-            Assert.IsTrue(accounts.Contains(account2));
+            Assert.Equal(2, accounts.Count);
+            Assert.True(accounts.Contains(account1));
+            Assert.True(accounts.Contains(account2));
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_BothAddonsIncludedFromDifferentRateGroup_Test()
         {
             RateGroup consolidatedRates = testObject.Consolidate(rateResults);
@@ -146,11 +144,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             RateResult fromGroup1 = FindByServiceAndConfirmationResult(consolidatedRates.Rates, PostalServiceType.ExpressMail, PostalConfirmationType.Delivery);
             RateResult fromGroup2 = FindByServiceAndConfirmationResult(consolidatedRates.Rates, PostalServiceType.ExpressMail, PostalConfirmationType.Signature);
 
-            Assert.IsNotNull(fromGroup1, "Rate from group 1 not included in consolidatedRates");
-            Assert.IsNotNull(fromGroup2, "Rate from group 2 not included in consolidatedRates");
+            Assert.NotNull(fromGroup1);
+            Assert.NotNull(fromGroup2);
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_CheaperRateFromGroup1Chosen_Test()
         {
             RateGroup consolidatedRates = testObject.Consolidate(rateResults);
@@ -159,11 +157,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             List<UspsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
 
-            Assert.AreEqual(account1, includedAccounts.Single(a => true));
-            Assert.AreEqual(10, includedRate.Amount);
+            Assert.Equal(account1, includedAccounts.Single(a => true));
+            Assert.Equal(10, includedRate.Amount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_CheaperRateFromGroup2Chosen_Test()
         {
             RateGroup consolidatedRates = testObject.Consolidate(rateResults);
@@ -172,21 +170,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             List<UspsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
 
-            Assert.AreEqual(account2, includedAccounts.Single(a => true));
-            Assert.AreEqual(19, includedRate.Amount);
+            Assert.Equal(account2, includedAccounts.Single(a => true));
+            Assert.Equal(19, includedRate.Amount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_FooterFromOneRateGroupReturned_FooterIsNotOfTypeUspsRatePromotionFootnote_Test()
         {
             rateGroup1.AddFootnoteFactory(exceptionFootnoteFactory1);
 
             RateGroup consolidatedRates = testObject.Consolidate(rateResults);
 
-            Assert.IsTrue(consolidatedRates.FootnoteFactories.Contains(exceptionFootnoteFactory1));
+            Assert.True(consolidatedRates.FootnoteFactories.Contains(exceptionFootnoteFactory1));
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_FooterFromOneRateGroupReturned_OneExceptionFooterInEachGroup_Test()
         {
             rateGroup1.AddFootnoteFactory(exceptionFootnoteFactory1);
@@ -195,10 +193,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             RateGroup consolidatedRates = testObject.Consolidate(rateResults);
 
             // It can contain only 1
-            Assert.IsTrue(consolidatedRates.FootnoteFactories.Contains(exceptionFootnoteFactory1) ^ consolidatedRates.FootnoteFactories.Contains(exceptionFootnoteFactory2));
+            Assert.True(consolidatedRates.FootnoteFactories.Contains(exceptionFootnoteFactory1) ^ consolidatedRates.FootnoteFactories.Contains(exceptionFootnoteFactory2));
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_FooterFromOneRateGroupReturned_OneUspsRatePromotionFootNoteInEachGroup_Test()
         {
             rateGroup1.AddFootnoteFactory(uspsRatePromotionFootnote1);
@@ -207,10 +205,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             RateGroup consolidatedRates = testObject.Consolidate(rateResults);
 
             // It can contain only 1
-            Assert.IsTrue(consolidatedRates.FootnoteFactories.Contains(uspsRatePromotionFootnote1) ^ consolidatedRates.FootnoteFactories.Contains(uspsRatePromotionFootnote2));
+            Assert.True(consolidatedRates.FootnoteFactories.Contains(uspsRatePromotionFootnote1) ^ consolidatedRates.FootnoteFactories.Contains(uspsRatePromotionFootnote2));
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_NoFooterReturned_UspsRatePromotionFactoryInOneGroupAndNotOther_Test()
         {
             rateGroup1.AddFootnoteFactory(uspsRatePromotionFootnote1);
@@ -218,7 +216,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             RateGroup consolidatedRates = testObject.Consolidate(rateResults);
 
             // If not in both, don't keep any UspsRatePromotionFactory
-            Assert.IsFalse(consolidatedRates.FootnoteFactories.Any());
+            Assert.False(consolidatedRates.FootnoteFactories.Any());
         }
 
 

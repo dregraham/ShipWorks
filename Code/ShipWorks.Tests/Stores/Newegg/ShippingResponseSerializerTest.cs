@@ -4,14 +4,13 @@ using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
-    [TestClass]
     public class ShippingResponseSerializerTest
     {
         private string successfulResponseXml;
@@ -19,8 +18,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
         private ShippingResponseSerializer serializer;
 
-        [TestInitialize]
-        public void Initialize()
+        public ShippingResponseSerializerTest()
         {
             serializer = new ShippingResponseSerializer();
 
@@ -50,129 +48,128 @@ namespace ShipWorks.Tests.Stores.Newegg
             return xml;
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public void Deserialize_ThrowsInvalidOperationException_WhenDeserializingErrorResponseXml_Test()
         {
-            serializer.Deserialize(errorResponseXml);
+            Assert.Throws<InvalidOperationException>(() => serializer.Deserialize(errorResponseXml));
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_ReturnsShippingResult_WhenDeserializingSuccessfulResponseXml_Test()
         {
             object result = serializer.Deserialize(successfulResponseXml);
 
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(ShippingResult));
+            Assert.NotNull(result);
+            Assert.IsAssignableFrom<ShippingResult>(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_ShippingResultContainsPackageSummary_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.IsNotNull(result.PackageSummary);            
+            Assert.NotNull(result.PackageSummary);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_ShippingResultIsSuccessful_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.IsTrue(result.IsSuccessful);
+            Assert.True(result.IsSuccessful);
         }
-        
-        [TestMethod]
+
+        [Fact]
         public void Deserialize_ShippingResultContainsDetail_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.IsNotNull(result.Detail);
+            Assert.NotNull(result.Detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_DetailContainsOrderNumber_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.AreEqual(159243598, result.Detail.OrderNumber);
+            Assert.Equal(159243598, result.Detail.OrderNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_DetailContainsSellerId_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.AreEqual("A006", result.Detail.SellerId);
+            Assert.Equal("A006", result.Detail.SellerId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_DetailContainsOrderStatus_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.AreEqual("Shipped", result.Detail.OrderStatus);
+            Assert.Equal("Shipped", result.Detail.OrderStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_DetailContainsShipment_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.IsNotNull(result.Detail.Shipment);
+            Assert.NotNull(result.Detail.Shipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_ShipmentContainsPackages_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
 
-            Assert.IsNotNull(result.Detail.Shipment.Packages);
-            Assert.AreEqual(1, result.Detail.Shipment.Packages.Count);
+            Assert.NotNull(result.Detail.Shipment.Packages);
+            Assert.Equal(1, result.Detail.Shipment.Packages.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_PackageContainsTrackingNumber_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.AreEqual("lztestA0060001", result.Detail.Shipment.Packages[0].TrackingNumber);
+            Assert.Equal("lztestA0060001", result.Detail.Shipment.Packages[0].TrackingNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_PackageContainsShipDate_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.AreEqual(DateTime.Parse("2012-02-10T15:30:01"), result.Detail.Shipment.Packages[0].ShipDateInPacificStandardTime);
+            Assert.Equal(DateTime.Parse("2012-02-10T15:30:01"), result.Detail.Shipment.Packages[0].ShipDateInPacificStandardTime);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_PackageIsSuccessfullyProcessed_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.IsTrue(result.Detail.Shipment.Packages[0].IsSuccessfullyProcessed);
+            Assert.True(result.Detail.Shipment.Packages[0].IsSuccessfullyProcessed);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_PackageContainsProcessingDescription_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.AreEqual("Success", result.Detail.Shipment.Packages[0].ProcessingDescription);
+            Assert.Equal("Success", result.Detail.Shipment.Packages[0].ProcessingDescription);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_PackageContainsItems_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
 
-            Assert.IsNotNull(result.Detail.Shipment.Packages[0].Items);
-            Assert.AreEqual(1, result.Detail.Shipment.Packages[0].Items.Count);
+            Assert.NotNull(result.Detail.Shipment.Packages[0].Items);
+            Assert.Equal(1, result.Detail.Shipment.Packages[0].Items.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_ItemContainsSellerPartNumber_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.AreEqual("A006ZX-35833", result.Detail.Shipment.Packages[0].Items[0].SellerPartNumber);
+            Assert.Equal("A006ZX-35833", result.Detail.Shipment.Packages[0].Items[0].SellerPartNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_ItemContainsNeweggItemNumber_WhenDeserializingSuccessfulResponseXml_Test()
         {
             ShippingResult result = serializer.Deserialize(successfulResponseXml) as ShippingResult;
-            Assert.AreEqual("9SIA0060845543", result.Detail.Shipment.Packages[0].Items[0].NeweggItemNumber);
+            Assert.Equal("9SIA0060845543", result.Detail.Shipment.Packages[0].Items[0].NeweggItemNumber);
         }
 
     }

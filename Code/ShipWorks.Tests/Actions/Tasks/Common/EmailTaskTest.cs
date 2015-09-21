@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Quartz;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Enums;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
-    [TestClass]
     public class EmailTaskTest
     {
-        [TestMethod]
+        [Fact]
         public void Initialize_DeserializesXmlCorrectly_Test()
         {
             // Create a new purge database task to serialize
@@ -28,10 +27,10 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             EmailTask testObject = new EmailTask();
             testObject.Initialize(serializedObject);
 
-            Assert.AreEqual(true, testObject.DelayDelivery);
-            Assert.AreEqual(6, testObject.DelayQuantity);
-            Assert.AreEqual(new TimeSpan(123456), testObject.DelayTimeOfDay);
-            Assert.AreEqual(EmailDelayType.TimeHours, initialObject.DelayType);
+            Assert.Equal(true, testObject.DelayDelivery);
+            Assert.Equal(6, testObject.DelayQuantity);
+            Assert.Equal(new TimeSpan(123456), testObject.DelayTimeOfDay);
+            Assert.Equal(EmailDelayType.TimeHours, initialObject.DelayType);
         }
     }
 }

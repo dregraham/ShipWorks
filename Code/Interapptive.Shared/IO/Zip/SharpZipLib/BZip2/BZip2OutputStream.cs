@@ -394,7 +394,7 @@ namespace ICSharpCode.SharpZipLib.BZip2
 						WriteRun();
 					}
 
-					currentChar=-1;
+					currentChar = -1;
 					EndBlock();
 					EndCompression();
 					Flush();

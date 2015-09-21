@@ -17,7 +17,7 @@ namespace ShipWorks.Data.Connection
         static readonly ILog log = LogManager.GetLogger(typeof(SingleUserModeScope));
 
         [ThreadStatic]
-        static bool active = false;
+        static bool active;
 
         [ThreadStatic]
         static TimeSpan reconnectTimeout;

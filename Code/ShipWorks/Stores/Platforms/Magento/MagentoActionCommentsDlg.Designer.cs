@@ -112,7 +112,7 @@
             this.Name = "MagentoActionCommentsDlg";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Update Online";
+            this.Text = "Update Store";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);

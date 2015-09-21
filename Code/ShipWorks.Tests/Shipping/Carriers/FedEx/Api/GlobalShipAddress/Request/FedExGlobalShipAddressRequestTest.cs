@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
 {
-    [TestClass]
     public class FedExGlobalShipAddressRequestTest
     {
         private readonly Mock<IFedExServiceGateway> mockService = new Mock<IFedExServiceGateway>();
@@ -20,8 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
         private FedExGlobalShipAddressRequest testObject;
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExGlobalShipAddressRequestTest()
         {
             account = new FedExAccountEntity { AccountNumber = "1234", MeterNumber = "45453" };
 
@@ -46,19 +44,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
             testObject = new FedExGlobalShipAddressRequest(manipulators, new ShipmentEntity(), responseFactory.Object, mockService.Object, account);
         }
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
-            Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
         {
-            Assert.AreEqual(account, testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.Equal(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_ManipulatesManipulators_HasTwoManipulators_Test()
         {
             testObject.Submit();
@@ -67,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
             secondManipulator.Verify(m => m.Manipulate(testObject), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_GatewayCalled_UponSubmit_Test()
         {
             testObject.Submit();

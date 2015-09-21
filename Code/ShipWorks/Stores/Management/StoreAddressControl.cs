@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Management

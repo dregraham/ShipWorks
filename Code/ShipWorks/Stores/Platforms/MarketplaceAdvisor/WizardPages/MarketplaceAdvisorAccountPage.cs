@@ -14,6 +14,7 @@ using Interapptive.Shared.Utility;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WizardPages

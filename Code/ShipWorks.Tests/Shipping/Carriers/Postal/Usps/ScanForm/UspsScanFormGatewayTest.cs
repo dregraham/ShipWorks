@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,16 +10,14 @@ using ShipWorks.Shipping.ScanForms;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 {
-    [TestClass]
     public class UspsScanFormGatewayTest
     {
         private ScanFormBatch scanFormBatch;
         private Mock<IScanFormCarrierAccount> carrierAccount;
-        
+
         private UspsScanFormGateway testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public UspsScanFormGatewayTest()
         {
             carrierAccount = new Mock<IScanFormCarrierAccount>();
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns(new UspsAccountEntity());
@@ -29,18 +27,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
             testObject = new UspsScanFormGateway(new UspsWebClient(UspsResellerType.None));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UspsException))]
+        [Fact]
         public void CreateScanForms_ThrowsUspsException_WhenAccountEntityIsNull_Test()
         {
             // Setup the GetAccountEntity method to return a null value
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns((IEntity2)null);
 
-            testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());
+            Assert.Throws<UspsException>(() => testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>()));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UspsException))]
+        [Fact]
         public void CreateScanForms_ThrowsUspsException_WhenShipmentsContainNonUspsShipment_Test()
         {
             // Create an Endicia shipment to get the gateway to throw an exception
@@ -52,21 +48,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
                 }
             };
 
-            testObject.CreateScanForms(scanFormBatch, shipments);
+            Assert.Throws<UspsException>(() => testObject.CreateScanForms(scanFormBatch, shipments));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UspsException))]
+        [Fact]
         public void CreateScanForms_ThrowsUspsException_WhenShipmentsIsNull_Test()
         {
-            testObject.CreateScanForms(scanFormBatch, null);
+            Assert.Throws<UspsException>(() => testObject.CreateScanForms(scanFormBatch, null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UspsException))]
+        [Fact]
         public void CreateScanForms_ThrowsUspsException_WhenShipmentsIsEmpty_Test()
         {
-            testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());
+            Assert.Throws<UspsException>(() => testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>()));
         }
 
         // Can't effectively unit test the rest of this class since it is calling into 

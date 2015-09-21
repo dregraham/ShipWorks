@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.iParcel;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,409 +19,403 @@ using System.Collections.Generic;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
-	[TestClass]
-	public class iParcelShipmentTypeTest
-	{
-		private iParcelShipmentType testObject;
+    public class iParcelShipmentTypeTest
+    {
+        private iParcelShipmentType testObject;
 
-		private Mock<IiParcelServiceGateway> serviceGateway;
-		private Mock<IiParcelRepository> repository;
+        private Mock<IiParcelServiceGateway> serviceGateway;
+        private Mock<IiParcelRepository> repository;
 
-		private ShipmentEntity shipment;
+        private ShipmentEntity shipment;
 
-		[TestInitialize]
-		public void Initialize()
-		{
+        public iParcelShipmentTypeTest()
+        {
 
-			shipment = new ShipmentEntity
-			{
-				ShipCity = "St. Louis",
-				ShipCompany = "Initech",
-				ShipCountryCode = "US",
-				ShipEmail = "someone@nowhere.com",
-				ShipFirstName = "Peter",
-				ShipLastName = "Gibbons",
-				ShipPhone = "555-555-5555",
-				ShipPostalCode = "63102",
-				ShipStateProvCode = "MO",
-				ShipStreet1 = "1 Main Street",
-				ShipStreet2 = "Suite 500",
+            shipment = new ShipmentEntity
+            {
+                ShipCity = "St. Louis",
+                ShipCompany = "Initech",
+                ShipCountryCode = "US",
+                ShipEmail = "someone@nowhere.com",
+                ShipFirstName = "Peter",
+                ShipLastName = "Gibbons",
+                ShipPhone = "555-555-5555",
+                ShipPostalCode = "63102",
+                ShipStateProvCode = "MO",
+                ShipStreet1 = "1 Main Street",
+                ShipStreet2 = "Suite 500",
 
-				OriginFirstName = "Bill",
-				OriginLastName = "Lumbergh",
-				OriginStreet1 = "500 First Street",
-				OriginStreet2 = "Suite 200",
-				OriginCity = "St. Louis",
-				OriginStateProvCode = "MO",
-				OriginPostalCode = "63102",
-				OriginCountryCode = "US",
+                OriginFirstName = "Bill",
+                OriginLastName = "Lumbergh",
+                OriginStreet1 = "500 First Street",
+                OriginStreet2 = "Suite 200",
+                OriginCity = "St. Louis",
+                OriginStateProvCode = "MO",
+                OriginPostalCode = "63102",
+                OriginCountryCode = "US",
 
-				Order = new OrderEntity { OrderTotal = 100.43M },
+                Order = new OrderEntity { OrderTotal = 100.43M },
 
-                RequestedLabelFormat = (int) ThermalLanguage.None,
+                RequestedLabelFormat = (int)ThermalLanguage.None,
 
-				IParcel = new IParcelShipmentEntity
-				{
-					Reference = "reference-value",
-					Service = (int)iParcelServiceType.Preferred,
-					TrackByEmail = true,
-					TrackBySMS = true
-				}
-			};
+                IParcel = new IParcelShipmentEntity
+                {
+                    Reference = "reference-value",
+                    Service = (int)iParcelServiceType.Preferred,
+                    TrackByEmail = true,
+                    TrackBySMS = true
+                }
+            };
 
-			shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6 });
+            shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6 });
 
-			serviceGateway = new Mock<IiParcelServiceGateway>();
-			serviceGateway.Setup(g => g.SubmitShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(new DataSet());
-			serviceGateway.Setup(g => g.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetDeliveredPackageTrackingInfo());
+            serviceGateway = new Mock<IiParcelServiceGateway>();
+            serviceGateway.Setup(g => g.SubmitShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(new DataSet());
+            serviceGateway.Setup(g => g.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetDeliveredPackageTrackingInfo());
 
-			repository = new Mock<IiParcelRepository>();
-			repository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity());
-			repository.Setup(r => r.GetiParcelAccount(It.IsAny<ShipmentEntity>())).Returns(new IParcelAccountEntity());
-			repository.Setup(r => r.SaveLabel(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
-			repository.Setup(r => r.SaveTrackingInfoToEntity(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
-			repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
+            repository = new Mock<IiParcelRepository>();
+            repository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity());
+            repository.Setup(r => r.GetiParcelAccount(It.IsAny<ShipmentEntity>())).Returns(new IParcelAccountEntity());
+            repository.Setup(r => r.SaveLabel(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
+            repository.Setup(r => r.SaveTrackingInfoToEntity(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
+            repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
 
             Mock<IExcludedServiceTypeRepository> excludedServiceTypeRepository = new Mock<IExcludedServiceTypeRepository>();
             excludedServiceTypeRepository.Setup(x => x.GetExcludedServiceTypes(It.IsAny<ShipmentType>()))
-                .Returns(new List<ExcludedServiceTypeEntity> 
-                { 
+                .Returns(new List<ExcludedServiceTypeEntity>
+                {
                     new ExcludedServiceTypeEntity((int)ShipmentTypeCode.iParcel, (int)iParcelServiceType.Saver)
                 });
-            
+
 
             RateCache.Instance.Clear();
 
-			testObject = new iParcelShipmentType(repository.Object, serviceGateway.Object, excludedServiceTypeRepository.Object);
-		}
-
-        [TestMethod]
-        public void SupportsMultiplePackages_ReturnsTrue_Test()
-        {
-            Assert.IsTrue(testObject.SupportsMultiplePackages);
+            testObject = new iParcelShipmentType(repository.Object, serviceGateway.Object, excludedServiceTypeRepository.Object);
         }
 
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void ProcessShipment_ThrowsArgumentNullException_WhenShipmentEntityIsNull_Test()
-		{
-			testObject.ProcessShipment(null);
-		}
+        [Fact]
+        public void SupportsMultiplePackages_ReturnsTrue_Test()
+        {
+            Assert.True(testObject.SupportsMultiplePackages);
+        }
 
-		[TestMethod]
-		public void ProcessShipment_ThermalTypeIsZPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsZPL_Test()
-		{
-		    shipment.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
+        [Fact]
+        public void ProcessShipment_ThrowsArgumentNullException_WhenShipmentEntityIsNull_Test()
+        {
+            Assert.Throws<ArgumentNullException>(() => testObject.ProcessShipment(null));
+        }
 
-			testObject.ProcessShipment(shipment);
+        [Fact]
+        public void ProcessShipment_ThermalTypeIsZPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsZPL_Test()
+        {
+            shipment.RequestedLabelFormat = (int)ThermalLanguage.ZPL;
 
-            Assert.AreEqual((int) ThermalLanguage.ZPL, shipment.ActualLabelFormat);
-		}
+            testObject.ProcessShipment(shipment);
 
-		[TestMethod]
-		public void ProcessShipment_ThermalTypeIsEPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsEPL_Test()
-		{
-		    shipment.RequestedLabelFormat = (int) ThermalLanguage.EPL;
+            Assert.Equal((int)ThermalLanguage.ZPL, shipment.ActualLabelFormat);
+        }
 
-			testObject.ProcessShipment(shipment);
+        [Fact]
+        public void ProcessShipment_ThermalTypeIsEPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsEPL_Test()
+        {
+            shipment.RequestedLabelFormat = (int)ThermalLanguage.EPL;
 
-            Assert.AreEqual((int)ThermalLanguage.EPL, shipment.ActualLabelFormat);
-		}
+            testObject.ProcessShipment(shipment);
 
-		[TestMethod]
-		public void ProcessShipment_ThermalTypeIsNull_WhenThermalTypeSettingIsFalse_Test()
-		{
-			testObject.ProcessShipment(shipment);
+            Assert.Equal((int)ThermalLanguage.EPL, shipment.ActualLabelFormat);
+        }
 
-            Assert.IsNull(shipment.ActualLabelFormat);
-		}
+        [Fact]
+        public void ProcessShipment_ThermalTypeIsNull_WhenThermalTypeSettingIsFalse_Test()
+        {
+            testObject.ProcessShipment(shipment);
 
-		[TestMethod]
-		public void ProcessShipment_DelegatesToRepositoryForAccount_Test()
-		{
-			testObject.ProcessShipment(shipment);
+            Assert.Null(shipment.ActualLabelFormat);
+        }
 
-			repository.Verify(r => r.GetiParcelAccount(shipment),  Times.Once());
-		}
+        [Fact]
+        public void ProcessShipment_DelegatesToRepositoryForAccount_Test()
+        {
+            testObject.ProcessShipment(shipment);
 
-		[TestMethod]
-		public void ProcessShipment_DelegatesToRepositoryForOrderDetails_Test()
-		{
-			testObject.ProcessShipment(shipment);
+            repository.Verify(r => r.GetiParcelAccount(shipment), Times.Once());
+        }
 
-			repository.Verify(r => r.PopulateOrderDetails(shipment), Times.Once());
-		}
+        [Fact]
+        public void ProcessShipment_DelegatesToRepositoryForOrderDetails_Test()
+        {
+            testObject.ProcessShipment(shipment);
 
-		[TestMethod]
-		public void ProcessShipment_DelegatesToServiceGateway_Test()
-		{
-			testObject.ProcessShipment(shipment);
+            repository.Verify(r => r.PopulateOrderDetails(shipment), Times.Once());
+        }
 
-			serviceGateway.Verify(g => g.SubmitShipment(It.IsAny<iParcelCredentials>(), shipment), Times.Once());
-		}
+        [Fact]
+        public void ProcessShipment_DelegatesToServiceGateway_Test()
+        {
+            testObject.ProcessShipment(shipment);
 
-		[TestMethod]
-		public void ProcessShipment_DelegatesToRepositoryToSaveLabel_Test()
-		{
-			testObject.ProcessShipment(shipment);
+            serviceGateway.Verify(g => g.SubmitShipment(It.IsAny<iParcelCredentials>(), shipment), Times.Once());
+        }
 
-			repository.Verify(r => r.SaveLabel(shipment, It.IsAny<DataSet>()), Times.Once());
-		}
+        [Fact]
+        public void ProcessShipment_DelegatesToRepositoryToSaveLabel_Test()
+        {
+            testObject.ProcessShipment(shipment);
 
-		[TestMethod]
-		public void ProcessShipment_DelegatesToRepositoryToSaveTracking_Test()
-		{
-			testObject.ProcessShipment(shipment);
+            repository.Verify(r => r.SaveLabel(shipment, It.IsAny<DataSet>()), Times.Once());
+        }
 
-			repository.Verify(r => r.SaveTrackingInfoToEntity(shipment, It.IsAny<DataSet>()), Times.Once());
-		}
+        [Fact]
+        public void ProcessShipment_DelegatesToRepositoryToSaveTracking_Test()
+        {
+            testObject.ProcessShipment(shipment);
 
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void TrackShipment_ThrowsArgumentNullException_Test()
-		{
-			testObject.TrackShipment(null);
+            repository.Verify(r => r.SaveTrackingInfoToEntity(shipment, It.IsAny<DataSet>()), Times.Once());
+        }
 
-		}
+        [Fact]
+        public void TrackShipment_ThrowsArgumentNullException_Test()
+        {
+            Assert.Throws<ArgumentNullException>(() => testObject.TrackShipment(null));
 
-		[TestMethod]
-		[ExpectedException(typeof(ShippingException))]
-		public void TrackShipment_ThrowsShippingException_WhenIParcelShipmentIsNull_Test()
-		{
-			shipment = new ShipmentEntity();
-			testObject.TrackShipment(shipment);
-		}
+        }
 
-		[TestMethod]
-		[ExpectedException(typeof(ShippingException))]
-		public void TrackShipment_ThrowsShippingException_WhenIParcelPackageListIsEmpty_Test()
-		{
-			while (shipment.IParcel.Packages.Count > 0)
-			{
-				// remove all the packages from the shipment
-				shipment.IParcel.Packages.RemoveAt(0);
-			}
+        [Fact]
+        public void TrackShipment_ThrowsShippingException_WhenIParcelShipmentIsNull_Test()
+        {
+            shipment = new ShipmentEntity();
+            Assert.Throws<ShippingException>(() => testObject.TrackShipment(shipment));
+        }
 
-			testObject.TrackShipment(shipment);
-		}
+        [Fact]
+        public void TrackShipment_ThrowsShippingException_WhenIParcelPackageListIsEmpty_Test()
+        {
+            while (shipment.IParcel.Packages.Count > 0)
+            {
+                // remove all the packages from the shipment
+                shipment.IParcel.Packages.RemoveAt(0);
+            }
 
-		[TestMethod]
-		public void TrackShipment_DelegatesToRepository_Test()
-		{
-			testObject.TrackShipment(shipment);
-			
-			repository.Verify(r => r.GetiParcelAccount(shipment), Times.Once());
-		}
+            Assert.Throws<ShippingException>(() => testObject.TrackShipment(shipment));
+        }
 
-		[TestMethod]
-		public void TrackShipment_DelegatesToServiceGateway_Test()
-		{
-			testObject.TrackShipment(shipment);
+        [Fact]
+        public void TrackShipment_DelegatesToRepository_Test()
+        {
+            testObject.TrackShipment(shipment);
 
-			serviceGateway.Verify(s => s.TrackShipment(It.IsAny<iParcelCredentials>(), shipment), Times.Once());
-		}
+            repository.Verify(r => r.GetiParcelAccount(shipment), Times.Once());
+        }
 
-		[TestMethod]
-		public void TrackShipment_ExtractsTrackingInfo_ForDeliveredShipment_Test()
-		{
-			TrackingResult trackingResult = testObject.TrackShipment(shipment);
+        [Fact]
+        public void TrackShipment_DelegatesToServiceGateway_Test()
+        {
+            testObject.TrackShipment(shipment);
 
-			Assert.IsTrue(trackingResult.Summary.ToLower().Contains("<b>delivered</b> on 8/23/2004 9:00 pm"));
-		}
+            serviceGateway.Verify(s => s.TrackShipment(It.IsAny<iParcelCredentials>(), shipment), Times.Once());
+        }
 
-		[TestMethod]
-		public void TrackShipment_ExtractsTrackingInfo_ForShipmentNotDelivered_Test()
-		{
-			serviceGateway.Setup(s => s.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUndeliveredPackageTrackingInfo());
+        [Fact]
+        public void TrackShipment_ExtractsTrackingInfo_ForDeliveredShipment_Test()
+        {
+            TrackingResult trackingResult = testObject.TrackShipment(shipment);
 
-			TrackingResult trackingResult = testObject.TrackShipment(shipment);
+            Assert.True(trackingResult.Summary.ToLower().Contains("<b>delivered</b> on 8/23/2004 9:00 pm"));
+        }
 
-			Assert.AreEqual("<b>Package details received electronically from Seller</b>", trackingResult.Summary);
-		}
+        [Fact]
+        public void TrackShipment_ExtractsTrackingInfo_ForShipmentNotDelivered_Test()
+        {
+            serviceGateway.Setup(s => s.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUndeliveredPackageTrackingInfo());
 
-		[TestMethod]
-		public void GetRates_DelegatesToRepositoryForOrderDetails_Test()
-		{
-			serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
+            TrackingResult trackingResult = testObject.TrackShipment(shipment);
 
-			RateGroup rates = testObject.GetRates(shipment);
+            Assert.Equal("<b>Package details received electronically from Seller</b>", trackingResult.Summary);
+        }
 
-			repository.Verify(r => r.PopulateOrderDetails(shipment), Times.Once());
-		}
+        [Fact]
+        public void GetRates_DelegatesToRepositoryForOrderDetails_Test()
+        {
+            serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
 
-		[TestMethod]
-		public void GetRates_DelegatesToRepositoryForAccount_Test()
-		{
-			serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
+            RateGroup rates = testObject.GetRates(shipment);
 
-			RateGroup rates = testObject.GetRates(shipment);
+            repository.Verify(r => r.PopulateOrderDetails(shipment), Times.Once());
+        }
 
-			repository.Verify(r => r.GetiParcelAccount(shipment), Times.Once());
-		}
+        [Fact]
+        public void GetRates_DelegatesToRepositoryForAccount_Test()
+        {
+            serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
 
-		[TestMethod]
-		public void GetRates_DelegatesToServiceGateway_Test()
-		{
-			serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
+            RateGroup rates = testObject.GetRates(shipment);
 
-			RateGroup rates = testObject.GetRates(shipment);
+            repository.Verify(r => r.GetiParcelAccount(shipment), Times.Once());
+        }
 
-			serviceGateway.Verify(s => s.GetRates(It.IsAny<iParcelCredentials>(), shipment), Times.Once());
-		}
+        [Fact]
+        public void GetRates_DelegatesToServiceGateway_Test()
+        {
+            serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
 
-		[TestMethod]
-		public void GetRates_UnsupportedShipments_RateCountIsZero_Test()
-		{
-			serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
+            RateGroup rates = testObject.GetRates(shipment);
 
-			RateGroup rates = testObject.GetRates(shipment);
+            serviceGateway.Verify(s => s.GetRates(It.IsAny<iParcelCredentials>(), shipment), Times.Once());
+        }
 
-			Assert.AreEqual(0, rates.Rates.Count);
-		}
+        [Fact]
+        public void GetRates_UnsupportedShipments_RateCountIsZero_Test()
+        {
+            serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
+
+            RateGroup rates = testObject.GetRates(shipment);
+
+            Assert.Equal(0, rates.Rates.Count);
+        }
 
 
-		[TestMethod]
-		public void GetRates_RateCountIsTwo_Test()
-		{
-			serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetRateResultsInfo());
+        [Fact]
+        public void GetRates_RateCountIsTwo_Test()
+        {
+            serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetRateResultsInfo());
 
-			RateGroup rates = testObject.GetRates(shipment);
+            RateGroup rates = testObject.GetRates(shipment);
 
-			Assert.AreEqual(2, rates.Rates.Count);
-		}
+            Assert.Equal(2, rates.Rates.Count);
+        }
 
-		[TestMethod]
-		public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUS_WithDestinationInUK_Test()
-		{
-			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "UK" };
+        [Fact]
+        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUS_WithDestinationInUK_Test()
+        {
+            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "UK" };
 
-			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
 
-			Assert.IsInstanceOfType(broker, typeof(iParcelBestRateBroker));
-		}
+            Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
+        }
 
-		[TestMethod]
-		public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUS_WithDestinationInUS_Test()
-		{
-			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "US" };
+        [Fact]
+        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUS_WithDestinationInUS_Test()
+        {
+            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "US" };
 
-			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
 
-			Assert.IsInstanceOfType(broker, typeof(NullShippingBroker));
-		}
+            Assert.IsAssignableFrom<NullShippingBroker>(broker);
+        }
 
-		[TestMethod]
-		public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInRU_Test()
-		{
-			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "RU" };
+        [Fact]
+        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInRU_Test()
+        {
+            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "RU" };
 
-			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
 
-			Assert.IsInstanceOfType(broker, typeof(NullShippingBroker));
-		}
+            Assert.IsAssignableFrom<NullShippingBroker>(broker);
+        }
 
-		[TestMethod]
-		public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInUK_Test()
-		{
-			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "UK" };
+        [Fact]
+        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInUK_Test()
+        {
+            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "UK" };
 
-			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
 
-			Assert.IsInstanceOfType(broker, typeof(NullShippingBroker));
-		}
+            Assert.IsAssignableFrom<NullShippingBroker>(broker);
+        }
 
-        [TestMethod]
+        [Fact]
         public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUS_WithDestinationInUS_AndShipmentUsesAccountAddress_Test()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Account, OriginCountryCode = "US", ShipCountryCode = "US" };
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
 
-            Assert.IsInstanceOfType(broker, typeof(NullShippingBroker));
+            Assert.IsAssignableFrom<NullShippingBroker>(broker);
         }
 
-		[TestMethod]
-		public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInRU_AndShipmentUsesAccountAddress_Test()
-		{
-			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "RU" };
+        [Fact]
+        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInRU_AndShipmentUsesAccountAddress_Test()
+        {
+            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "RU" };
 
-			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
 
-			Assert.IsInstanceOfType(broker, typeof(iParcelBestRateBroker));
-		}
+            Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
+        }
 
-		[TestMethod]
-		public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInUK_AndShipmentUsesAccountAddress_Test()
-		{
-			ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "UK" };
+        [Fact]
+        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInUK_AndShipmentUsesAccountAddress_Test()
+        {
+            ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "UK" };
 
-			IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
 
-			Assert.IsInstanceOfType(broker, typeof(iParcelBestRateBroker));
-		}
-
-
+            Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
+        }
 
 
 
 
-		private DataSet GetUndeliveredPackageTrackingInfo()
-		{
-			using (DataSet trackingDataSet = new DataSet())
-			{
-				using (StringReader stringReader = new StringReader(GetUndeliveredPackageTrackingXml()))
-				{
-					trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
-				}
-
-				return trackingDataSet;
-			}
-		}
-
-		private DataSet GetDeliveredPackageTrackingInfo()
-		{
-			using (DataSet trackingDataSet = new DataSet())
-			{
-				using (StringReader stringReader = new StringReader(GetDeliveredPackageTrackingXml()))
-				{
-					trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
-				}
-
-				return trackingDataSet;
-			}
-		}
 
 
-		private DataSet GetRateResultsInfo()
-		{
-			using (DataSet trackingDataSet = new DataSet())
-			{
-				using (StringReader stringReader = new StringReader(GetValidRatesXml()))
-				{
-					trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
-				}
+        private DataSet GetUndeliveredPackageTrackingInfo()
+        {
+            using (DataSet trackingDataSet = new DataSet())
+            {
+                using (StringReader stringReader = new StringReader(GetUndeliveredPackageTrackingXml()))
+                {
+                    trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
+                }
 
-				return trackingDataSet;
-			}
-		}
+                return trackingDataSet;
+            }
+        }
+
+        private DataSet GetDeliveredPackageTrackingInfo()
+        {
+            using (DataSet trackingDataSet = new DataSet())
+            {
+                using (StringReader stringReader = new StringReader(GetDeliveredPackageTrackingXml()))
+                {
+                    trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
+                }
+
+                return trackingDataSet;
+            }
+        }
 
 
-		private DataSet GetUnsuppportedRatesInfo()
-		{
-			using (DataSet trackingDataSet = new DataSet())
-			{
-				using (StringReader stringReader = new StringReader(GetRatesWithUnsupportedServiceTypesXml()))
-				{
-					trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
-				}
+        private DataSet GetRateResultsInfo()
+        {
+            using (DataSet trackingDataSet = new DataSet())
+            {
+                using (StringReader stringReader = new StringReader(GetValidRatesXml()))
+                {
+                    trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
+                }
 
-				return trackingDataSet;
-			}
-		}
+                return trackingDataSet;
+            }
+        }
 
-		private string GetValidRatesXml()
-		{
-			return @"<?xml version=""1.0"" encoding=""utf-8""?>
+
+        private DataSet GetUnsuppportedRatesInfo()
+        {
+            using (DataSet trackingDataSet = new DataSet())
+            {
+                using (StringReader stringReader = new StringReader(GetRatesWithUnsupportedServiceTypesXml()))
+                {
+                    trackingDataSet.ReadXml(stringReader, XmlReadMode.Auto);
+                }
+
+                return trackingDataSet;
+            }
+        }
+
+        private string GetValidRatesXml()
+        {
+            return @"<?xml version=""1.0"" encoding=""utf-8""?>
 <iParcelPackageResponse xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
 	<PackageInfo>
 		<Reference>Order 144</Reference>
@@ -475,11 +469,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 		</PaymentMethods>
 	</PackageInfo>
 </iParcelPackageResponse>";
-		}
+        }
 
-		private string GetRatesWithUnsupportedServiceTypesXml()
-		{
-			return @"<?xml version=""1.0"" encoding=""utf-8""?>
+        private string GetRatesWithUnsupportedServiceTypesXml()
+        {
+            return @"<?xml version=""1.0"" encoding=""utf-8""?>
 <iParcelPackageResponse xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
 	<PackageInfo>
 		<Reference>Order 144</Reference>
@@ -635,11 +629,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 		</PaymentMethods>
 	</PackageInfo>
 </iParcelPackageResponse>";
-		}
+        }
 
-		private string GetUndeliveredPackageTrackingXml()
-		{
-			return @"<iparcelTrackingResponse xmlns="""">
+        private string GetUndeliveredPackageTrackingXml()
+        {
+            return @"<iparcelTrackingResponse xmlns="""">
 						<PackageTrackingInfo>
 							<TrackingNumber>1216156584US</TrackingNumber>
 							<PackageDestinationLocation>
@@ -662,11 +656,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 							</TrackingEventHistory>
 						</PackageTrackingInfo>
 					</iparcelTrackingResponse>";
-		}
+        }
 
-		private string GetDeliveredPackageTrackingXml()
-		{
-			return @"<?xml version=""1.0"" encoding=""utf-8""?>
+        private string GetDeliveredPackageTrackingXml()
+        {
+            return @"<?xml version=""1.0"" encoding=""utf-8""?>
 <iparcelTrackingResponse xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <PackageTrackingInfo>
 	<TrackingNumber>123456789</TrackingNumber>
@@ -767,7 +761,7 @@ PROCESS</EventCodeDesc>
 	</TrackingEventHistory>
   </PackageTrackingInfo>
 </iparcelTrackingResponse>";
-		}
+        }
 
-	}
+    }
 }

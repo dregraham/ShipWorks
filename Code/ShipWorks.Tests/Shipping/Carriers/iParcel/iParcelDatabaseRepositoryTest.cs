@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.iParcel;
 using Moq;
@@ -10,7 +10,6 @@ using System.IO;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
-    [TestClass]
     public class iParcelDatabaseRepositoryTest
     {
         private iParcelDatabaseRepository testObject;
@@ -18,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         private Mock<ILog> logger;
         private ShipmentEntity shipment;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelDatabaseRepositoryTest()
         {
             shipment = new ShipmentEntity
             {
@@ -35,8 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject = new iParcelDatabaseRepository(logger.Object);
         }
 
-        [TestMethod]
-        [Ignore]
+        
         public void SaveLabel_Test()
         {
             // MARKED WITH THE IGNORE ATTRIBTE SINCE THIS ISN'T REALLY A UNIT TEST (DUE
@@ -55,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
 
-        [TestMethod]
+        [Fact]
         public void SaveTrackingInfoToEntity_AssignsTrackingNumber_Test()
         {
             // We can unit test this since the repository is not interacting with an external dependency 
@@ -69,10 +66,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
                 }
             }
 
-            Assert.AreEqual("634986177870945805", shipment.TrackingNumber);
+            Assert.Equal("634986177870945805", shipment.TrackingNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveTrackingInfoToEntity_AssignsParcelNumber_Test()
         {
             // We can unit test this since the repository is not interacting with an external dependency 
@@ -86,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
                 }
             }
 
-            Assert.AreEqual("216062095", shipment.IParcel.Packages[0].ParcelNumber);
+            Assert.Equal("216062095", shipment.IParcel.Packages[0].ParcelNumber);
         }
 
         /// <summary>

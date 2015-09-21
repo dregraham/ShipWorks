@@ -2,133 +2,130 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Insurance.InsureShip;
 
 namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 {
-    [TestClass]
-    public class InsureShipSettingsTest
+    public class InsureShipSettingsTest : IDisposable
     {
         InsureShipSettings testObject = new InsureShipSettings();
         private bool initialUseTestServer;
 
-        [TestInitialize]
-        public void Initialize()
+        public InsureShipSettingsTest()
         {
             initialUseTestServer = testObject.UseTestServer;
         }
-
-        [TestCleanup]
-        public void Cleanup()
+        
+        public void Dispose()
         {
             testObject.UseTestServer = initialUseTestServer;
         }
 
-        [TestMethod]
+        [Fact]
         public void UseTestServer_SavesAsTrue()
         {
             testObject.UseTestServer = false;
             testObject.UseTestServer = true;
 
-            Assert.IsTrue(testObject.UseTestServer);
+            Assert.True(testObject.UseTestServer);
         }
 
-        [TestMethod]
+        [Fact]
         public void UseTestServer_SavesAsFalse()
         {
             testObject.UseTestServer = true;
             testObject.UseTestServer = false;
 
-            Assert.IsFalse(testObject.UseTestServer);
+            Assert.False(testObject.UseTestServer);
         }
 
-        [TestMethod]
+        [Fact]
         public void Username_IsCorrect_WhenUsingTestServer()
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("shipworks", testObject.Username);
+            Assert.Equal("shipworks", testObject.Username);
         }
 
-        [TestMethod]
+        [Fact]
         public void Username_IsCorrect_WhenUsingProductionServer()
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual("shipworks", testObject.Username);
+            Assert.Equal("shipworks", testObject.Username);
         }
 
-        [TestMethod]
+        [Fact]
         public void Password_IsCorrect_WhenUsingTestServer()
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("shipworks123", testObject.Password);
+            Assert.Equal("shipworks123", testObject.Password);
         }
 
-        [TestMethod]
+        [Fact]
         public void Password_IsCorrect_WhenUsingProductionServer()
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual("624c55cb00f588f0fe1a79", testObject.Password);
+            Assert.Equal("624c55cb00f588f0fe1a79", testObject.Password);
         }
 
-        [TestMethod]
+        [Fact]
         public void DistributorID_IsCorrect_WhenUsingTestServer()
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("D00050", testObject.DistributorID);
+            Assert.Equal("D00050", testObject.DistributorID);
         }
 
-        [TestMethod]
+        [Fact]
         public void DistributorID_IsCorrect_WhenUsingProductionServer()
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual("D00050", testObject.DistributorID);
+            Assert.Equal("D00050", testObject.DistributorID);
         }
 
-        [TestMethod]
+        [Fact]
         public void Url_IsCorrect_WhenUsingTestServer()
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("https://int.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
+            Assert.Equal("https://int.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
         }
 
-        [TestMethod]
+        [Fact]
         public void Url_IsCorrect_WhenUsingProductionServer()
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual("https://api2.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
+            Assert.Equal("https://api2.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
         }
 
-        [TestMethod]
+        [Fact]
         public void SubmitClaimDelayTimespan_IsSevenDays_Test()
         {
-            Assert.AreEqual(TimeSpan.FromDays(8).Ticks, testObject.ClaimSubmissionWaitingPeriod.Ticks);
+            Assert.Equal(TimeSpan.FromDays(8).Ticks, testObject.ClaimSubmissionWaitingPeriod.Ticks);
         }
 		
-        [TestMethod]
+        [Fact]
         public void VoidPolicyMaximumAge_IsCorrect_WhenUsingProductionServer()
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
+            Assert.Equal(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
         }
 
-        [TestMethod]
+        [Fact]
         public void VoidPolicyMaximumAge_IsCorrect_WhenUsingTestServer()
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
+            Assert.Equal(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
         }
     }
 }

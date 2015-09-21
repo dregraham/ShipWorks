@@ -15,6 +15,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Templates.Printing;
 using log4net;
+using Autofac;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -33,14 +34,16 @@ namespace ShipWorks.Shipping.Settings
         ShipmentTypeSettingsControl.Page settingsTabPage = ShipmentTypeSettingsControl.Page.Settings;
         private bool usedDisabledGeneralShipRule;
         private MessengerToken uspsAccountCreatedToken;
+        private ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingSettingsDlg()
+        public ShippingSettingsDlg(ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
+            this.lifetimeScope = lifetimeScope;
             WindowStateSaver.Manage(this);
 
             uspsAccountCreatedToken = Messenger.Current.Handle<UspsAccountCreatedMessage>(this, OnUspsAccountCreated);
@@ -117,7 +120,7 @@ namespace ShipWorks.Shipping.Settings
                     ShipmentTypeSettingsControl settingsControl;
                     if (!settingsMap.TryGetValue(shipmentType.ShipmentTypeCode, out settingsControl))
                     {
-                        settingsControl = new ShipmentTypeSettingsControl(shipmentType);
+                        settingsControl = new ShipmentTypeSettingsControl(shipmentType, lifetimeScope);
 
                         // Force creation
                         IntPtr handle = settingsControl.Handle;

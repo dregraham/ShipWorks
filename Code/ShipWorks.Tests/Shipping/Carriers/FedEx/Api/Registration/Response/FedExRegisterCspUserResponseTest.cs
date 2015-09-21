@@ -1,5 +1,5 @@
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
 {
-    [TestClass]
     public class FedExRegisterCspUserResponseTest
     {
         private FedExRegisterCspUserResponse testObject;
@@ -21,8 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
 
         private ShippingSettingsEntity shippingSettings;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRegisterCspUserResponseTest()
         {
             shippingSettings = new ShippingSettingsEntity();
 
@@ -40,38 +38,38 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
                     Password = "password"
                 }
             };
-            
+
             carrierRequest = new Mock<CarrierRequest>(null, null);
-            
+
             testObject = new FedExRegisterCspUserResponse(nativeResponse, carrierRequest.Object, settingsRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_SetsFedExUserName_ToCredentialKey_Test()
         {
             testObject.Process();
 
-            Assert.AreEqual(nativeResponse.Credential.Key, shippingSettings.FedExUsername);
+            Assert.Equal(nativeResponse.Credential.Key, shippingSettings.FedExUsername);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_SetsFedExPassword_Test()
         {
             testObject.Process();
 
             // Just checking that the password was set (i.e. not empty)
-            Assert.IsFalse(string.IsNullOrEmpty(shippingSettings.FedExPassword));
+            Assert.False(string.IsNullOrEmpty(shippingSettings.FedExPassword));
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_EncryptsPassword_Test()
         {
             testObject.Process();
 
-            Assert.AreEqual(SecureText.Encrypt("password", "FedEx"), shippingSettings.FedExPassword);
+            Assert.Equal(SecureText.Encrypt("password", "FedEx"), shippingSettings.FedExPassword);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToRepository_ToGetShippingSettings_Test()
         {
             testObject.Process();
@@ -79,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             settingsRepository.Verify(r => r.GetShippingSettings(), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToRepository_ToSaveShippingSettings_Test()
         {
             testObject.Process();
@@ -88,24 +86,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             settingsRepository.Verify(r => r.SaveShippingSettings(shippingSettings), Times.Once());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FedExApiCarrierException))]
+        [Fact]
         public void Process_ThrowsFedExApiException_WhenReceivingErrorSeverity_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
             nativeResponse.Notifications = new Notification[] { new Notification { Message = "message" } };
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FedExApiCarrierException))]
+        [Fact]
         public void Process_ThrowsFedExApiException_WhenReceivingFailureSeverity_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
-            nativeResponse.Notifications = new Notification[] {new Notification { Message = "message" } };
+            nativeResponse.Notifications = new Notification[] { new Notification { Message = "message" } };
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
     }
 }

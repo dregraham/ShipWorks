@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response
 {
-    [TestClass]
     public class FedExTrackingResponseTest
     {
         private FedExTrackingResponse testObject;
@@ -22,8 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response
         TrackReply nativeResponse = null;
         private ShipmentEntity shipment;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExTrackingResponseTest()
         {
             mockedShipmentManipulator = new Mock<IFedExTrackingResponseManipulator>();
             manipulators = new List<IFedExTrackingResponseManipulator>
@@ -39,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response
                 Notifications = new Notification[]
                 {
                     new Notification {
-                        Code = "0", 
+                        Code = "0",
                         Severity = NotificationSeverityType.SUCCESS
                     }
                 },
@@ -80,32 +78,30 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response
             testObject = new FedExTrackingResponse(manipulators, shipment, nativeResponse, carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Request_ReturnsRequestProvidedToConstructor_Test()
         {
-            Assert.AreEqual(carrierRequest.Object, testObject.Request);
+            Assert.Equal(carrierRequest.Object, testObject.Request);
         }
 
-        [TestMethod]
+        [Fact]
         public void NativeResponse_ReturnsRateReplyProvidedToConstructor_Test()
         {
-            Assert.AreEqual(nativeResponse, testObject.NativeResponse);
+            Assert.Equal(nativeResponse, testObject.NativeResponse);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FedExApiCarrierException))]
+        [Fact]
         public void Process_ThrowsFedExApiException_WhenResponseContainsError_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FedExApiCarrierException))]
+        [Fact]
         public void Process_ThrowsFedExApiException_WhenResponseContainsFailure_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
     }
 }

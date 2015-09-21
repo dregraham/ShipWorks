@@ -1,10 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Nudges.Buttons;
 
 namespace ShipWorks.Tests.ApplicationCore.Nudges
 {
-    [TestClass]
     public class NudgeOptionTest
     {
         private NudgeOption testObject;
@@ -14,49 +13,48 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.None);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_WhenActionTypeIsNone_Test()
         {
             NudgeOptionButton button = testObject.CreateButton();
 
-            Assert.IsInstanceOfType(button, typeof(AcknowledgeNudgeOptionButton));
+            Assert.IsAssignableFrom<AcknowledgeNudgeOptionButton>(button);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_WhenActionTypeIsShutDown_Test()
         {
             testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.Shutdown);
 
             NudgeOptionButton button = testObject.CreateButton();
 
-            Assert.IsInstanceOfType(button, typeof(ShutdownNudgeOptionButton));
+            Assert.IsAssignableFrom<ShutdownNudgeOptionButton>(button);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_WhenActionTypeIsRegisterUspsAccount_Test()
         {
             testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.RegisterUspsAccount);
 
             NudgeOptionButton button = testObject.CreateButton();
 
-            Assert.IsInstanceOfType(button, typeof(RegisterUspsAccountNudgeOptionButton));
+            Assert.IsAssignableFrom<RegisterUspsAccountNudgeOptionButton>(button);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void CreateButton_ThrowsNudgeException_WhenActionTypeIsNotRecognized_Test()
         {
             testObject = new NudgeOption(1, 1, "Test Option", null, (NudgeOptionActionType)900);
-            
-            testObject.CreateButton();
+
+            Assert.Throws<NudgeException>(() => testObject.CreateButton());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButton_SetsButtonTextToOptionText_Test()
         {
             NudgeOptionButton button = testObject.CreateButton();
 
-            Assert.AreEqual(testObject.Text, button.Text);
+            Assert.Equal(testObject.Text, button.Text);
         }
     }
 }

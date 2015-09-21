@@ -2,27 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
 namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 {
-    [TestClass]
     public class ShipSenseOrderItemKeyTest
     {
         private ShipSenseOrderItemKey testObject;
         
-        [TestMethod]
+        [Fact]
         public void IsValid_ReturnsFalse_WhenAllEntriesAreBlank_Test()
         {
             testObject = new ShipSenseOrderItemKey { Quantity = 1 };
             testObject.Add("SKU", string.Empty);
             testObject.Add("Code", string.Empty);
 
-            Assert.IsFalse(testObject.IsValid());
+            Assert.False(testObject.IsValid());
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValid_ReturnsFalse_WhenDuplicateKeyIsAdded_AndAllEntriesAreBlank_Test()
         {
             testObject = new ShipSenseOrderItemKey { Quantity = 1 };
@@ -30,28 +29,28 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             testObject.Add("Code", string.Empty);
             testObject.Add("Code", string.Empty);
 
-            Assert.IsFalse(testObject.IsValid());
+            Assert.False(testObject.IsValid());
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValid_ReturnsFalse_WhenNoEntriesHaveBeenAdded_Test()
         {
             testObject = new ShipSenseOrderItemKey { Quantity = 1 };
 
-            Assert.IsFalse(testObject.IsValid());
+            Assert.False(testObject.IsValid());
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValid_ReturnsTrue_WhenOneEntryValueIsNotBlank_Test()
         {
             testObject = new ShipSenseOrderItemKey { Quantity = 1 };
             testObject.Add("SKU", string.Empty);
             testObject.Add("Code", "123");
 
-            Assert.IsTrue(testObject.IsValid());
+            Assert.True(testObject.IsValid());
         }
 
-        [TestMethod]
+        [Fact]
         public void KeyValue_ContainsAllIdentifierValues_Test()
         {
             testObject = new ShipSenseOrderItemKey { Quantity = 1 };
@@ -60,10 +59,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             string key = testObject.KeyValue;
 
-            Assert.IsTrue(key.Contains("[SKU,ABC]|[Code,123]"));
+            Assert.True(key.Contains("[SKU,ABC]|[Code,123]"));
         }
 
-        [TestMethod]
+        [Fact]
         public void KeyValue_ContainsAllIdentifierValues_WhenOneKeyHasBlankValue_Test()
         {
             testObject = new ShipSenseOrderItemKey { Quantity = 1 };
@@ -72,10 +71,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             string key = testObject.KeyValue;
 
-            Assert.IsTrue(key.Contains("[SKU,]|[Code,123]"));
+            Assert.True(key.Contains("[SKU,]|[Code,123]"));
         }
 
-        [TestMethod]
+        [Fact]
         public void KeyValue_IsDifferent_BetweenTwoItems_AndEachItemIsMissingABlankValue_ButOtherValuesAreIdentical_Test()
         {
             // Proving that there are not any collisions when order items have a missing value for one field, but 
@@ -98,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             string secondKey = testObject.KeyValue;
 
-            Assert.AreNotEqual(firstKey, secondKey);
+            Assert.NotEqual(firstKey, secondKey);
         }
     }
 }

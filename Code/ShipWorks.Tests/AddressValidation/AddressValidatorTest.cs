@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.AddressValidation
 {
-    [TestClass]
     public class AddressValidatorTest
     {
         private AddressValidationResult result1;
@@ -21,8 +20,7 @@ namespace ShipWorks.Tests.AddressValidation
         private AddressValidator testObject;
         private string errorMessage;
 
-        [TestInitialize]
-        public void Initialize()
+        public AddressValidatorTest()
         {
             result1 = new AddressValidationResult
             {
@@ -71,7 +69,7 @@ namespace ShipWorks.Tests.AddressValidation
             testObject = new AddressValidator(webClient.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotCallWebClient_WhenAddressHasBeenValidated()
         {
             EnumHelper.GetEnumList<AddressValidationStatusType>()
@@ -87,7 +85,7 @@ namespace ShipWorks.Tests.AddressValidation
                 });
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_CallsWebClient_IfValidationIsNeeded()
         {
             AddressAdapter address = new AddressAdapter()
@@ -115,49 +113,49 @@ namespace ShipWorks.Tests.AddressValidation
                 )));
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_CallsSave_WithOriginalAddress()
         {
             ValidatedAddressEntity originalAddress = null;
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => originalAddress = x);
 
-            Assert.AreEqual("Street 1", originalAddress.Street1);
-            Assert.AreEqual("Street 2", originalAddress.Street2);
-            Assert.AreEqual("Street 3", originalAddress.Street3);
-            Assert.AreEqual("City", originalAddress.City);
-            Assert.AreEqual("MO", originalAddress.StateProvCode);
-            Assert.AreEqual("63102", originalAddress.PostalCode);
-            Assert.AreEqual("US", originalAddress.CountryCode);
-            Assert.IsTrue(originalAddress.IsOriginal);
+            Assert.Equal("Street 1", originalAddress.Street1);
+            Assert.Equal("Street 2", originalAddress.Street2);
+            Assert.Equal("Street 3", originalAddress.Street3);
+            Assert.Equal("City", originalAddress.City);
+            Assert.Equal("MO", originalAddress.StateProvCode);
+            Assert.Equal("63102", originalAddress.PostalCode);
+            Assert.Equal("US", originalAddress.CountryCode);
+            Assert.True(originalAddress.IsOriginal);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_CallsSave_WithSuggestedAddresses()
         {
             List<ValidatedAddressEntity> suggestedAddresses = null;
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => suggestedAddresses = y.OrderBy(z => z.Street1).ToList());
 
-            Assert.AreEqual(result1.Street1, suggestedAddresses[0].Street1);
-            Assert.AreEqual(result1.Street2, suggestedAddresses[0].Street2);
-            Assert.AreEqual(result1.Street3, suggestedAddresses[0].Street3);
-            Assert.AreEqual(result1.City, suggestedAddresses[0].City);
-            Assert.AreEqual(result1.StateProvCode, suggestedAddresses[0].StateProvCode);
-            Assert.AreEqual(result1.PostalCode, suggestedAddresses[0].PostalCode);
-            Assert.AreEqual(result1.CountryCode, suggestedAddresses[0].CountryCode);
-            Assert.IsFalse(suggestedAddresses[0].IsOriginal);
+            Assert.Equal(result1.Street1, suggestedAddresses[0].Street1);
+            Assert.Equal(result1.Street2, suggestedAddresses[0].Street2);
+            Assert.Equal(result1.Street3, suggestedAddresses[0].Street3);
+            Assert.Equal(result1.City, suggestedAddresses[0].City);
+            Assert.Equal(result1.StateProvCode, suggestedAddresses[0].StateProvCode);
+            Assert.Equal(result1.PostalCode, suggestedAddresses[0].PostalCode);
+            Assert.Equal(result1.CountryCode, suggestedAddresses[0].CountryCode);
+            Assert.False(suggestedAddresses[0].IsOriginal);
 
-            Assert.AreEqual(result2.Street1, suggestedAddresses[1].Street1);
-            Assert.AreEqual(result2.Street2, suggestedAddresses[1].Street2);
-            Assert.AreEqual(result2.Street3, suggestedAddresses[1].Street3);
-            Assert.AreEqual(result2.City, suggestedAddresses[1].City);
-            Assert.AreEqual(result2.StateProvCode, suggestedAddresses[1].StateProvCode);
-            Assert.AreEqual(result2.PostalCode, suggestedAddresses[1].PostalCode);
-            Assert.AreEqual(result2.CountryCode, suggestedAddresses[1].CountryCode);
-            Assert.IsFalse(suggestedAddresses[1].IsOriginal);
+            Assert.Equal(result2.Street1, suggestedAddresses[1].Street1);
+            Assert.Equal(result2.Street2, suggestedAddresses[1].Street2);
+            Assert.Equal(result2.Street3, suggestedAddresses[1].Street3);
+            Assert.Equal(result2.City, suggestedAddresses[1].City);
+            Assert.Equal(result2.StateProvCode, suggestedAddresses[1].StateProvCode);
+            Assert.Equal(result2.PostalCode, suggestedAddresses[1].PostalCode);
+            Assert.Equal(result2.CountryCode, suggestedAddresses[1].CountryCode);
+            Assert.False(suggestedAddresses[1].IsOriginal);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_UpdatesSuggestionCount_WithSuggestedAddresses()
         {
             //ValidatedAddressEntity orderAddress = new ValidatedAddressEntity();
@@ -166,10 +164,10 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(2, sampleOrder.ShipAddressValidationSuggestionCount);
+            Assert.Equal(2, sampleOrder.ShipAddressValidationSuggestionCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsValidationStatusToNotValid_WhenNoResultsAreReturned()
         {
             webClient.Setup(x => x.ValidateAddress(It.IsAny<AddressAdapter>()))
@@ -177,10 +175,10 @@ namespace ShipWorks.Tests.AddressValidation
             
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.BadAddress, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.Equal(AddressValidationStatusType.BadAddress, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsValidationStatusToValid_WhenOneValidIdenticalAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -188,10 +186,10 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.Valid, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.Equal(AddressValidationStatusType.Valid, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotChangeAddress_WhenOneValidIdenticalAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -206,16 +204,16 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual("Street 1", sampleOrder.ShipStreet1);
-            Assert.AreEqual("Street 2", sampleOrder.ShipStreet2);
-            Assert.AreEqual("Street 3", sampleOrder.ShipStreet3);
-            Assert.AreEqual("City", sampleOrder.ShipCity);
-            Assert.AreEqual("MO", sampleOrder.ShipStateProvCode);
-            Assert.AreEqual("63102", sampleOrder.ShipPostalCode);
-            Assert.AreEqual("US", sampleOrder.ShipCountryCode);
+            Assert.Equal("Street 1", sampleOrder.ShipStreet1);
+            Assert.Equal("Street 2", sampleOrder.ShipStreet2);
+            Assert.Equal("Street 3", sampleOrder.ShipStreet3);
+            Assert.Equal("City", sampleOrder.ShipCity);
+            Assert.Equal("MO", sampleOrder.ShipStateProvCode);
+            Assert.Equal("63102", sampleOrder.ShipPostalCode);
+            Assert.Equal("US", sampleOrder.ShipCountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotChangeAddress_WhenAddressShouldBeAdjustedButStoreIsNotSetToApply()
         {
             results.AddressValidationResults.Remove(result2);
@@ -230,16 +228,16 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", false, (x, y) => { });
 
-            Assert.AreEqual("Street 1", sampleOrder.ShipStreet1);
-            Assert.AreEqual("Street 2", sampleOrder.ShipStreet2);
-            Assert.AreEqual("Street 3", sampleOrder.ShipStreet3);
-            Assert.AreEqual("City", sampleOrder.ShipCity);
-            Assert.AreEqual("MO", sampleOrder.ShipStateProvCode);
-            Assert.AreEqual("63102", sampleOrder.ShipPostalCode);
-            Assert.AreEqual("US", sampleOrder.ShipCountryCode);
+            Assert.Equal("Street 1", sampleOrder.ShipStreet1);
+            Assert.Equal("Street 2", sampleOrder.ShipStreet2);
+            Assert.Equal("Street 3", sampleOrder.ShipStreet3);
+            Assert.Equal("City", sampleOrder.ShipCity);
+            Assert.Equal("MO", sampleOrder.ShipStateProvCode);
+            Assert.Equal("63102", sampleOrder.ShipPostalCode);
+            Assert.Equal("US", sampleOrder.ShipCountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsStatusToNeedsAttention_WhenAddressShouldBeAdjustedButStoreIsNotSetToApply()
         {
             results.AddressValidationResults.Remove(result2);
@@ -254,10 +252,10 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", false, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.Equal(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsAddressDetails_WhenAddressShouldBeAdjustedButStoreIsNotSetToApply()
         {
             results.AddressValidationResults.Remove(result2);
@@ -274,13 +272,13 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", false, (x, y) => { });
 
-            Assert.AreEqual(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
-            Assert.AreEqual(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
-            Assert.AreEqual(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
-            Assert.AreEqual(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipUSTerritory);
+            Assert.Equal(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
+            Assert.Equal(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
+            Assert.Equal(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
+            Assert.Equal(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipUSTerritory);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsValidationStatusToAdjusted_WhenOneValidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -289,10 +287,10 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.Fixed, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.Equal(AddressValidationStatusType.Fixed, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_ChangesAddress_WhenOneValidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -307,16 +305,16 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual("Foo 1", sampleOrder.ShipStreet1);
-            Assert.AreEqual("Foo 2", sampleOrder.ShipStreet2);
-            Assert.AreEqual("Foo 3", sampleOrder.ShipStreet3);
-            Assert.AreEqual("Foo City", sampleOrder.ShipCity);
-            Assert.AreEqual("FO", sampleOrder.ShipStateProvCode);
-            Assert.AreEqual("12345", sampleOrder.ShipPostalCode);
-            Assert.AreEqual("BA", sampleOrder.ShipCountryCode);
+            Assert.Equal("Foo 1", sampleOrder.ShipStreet1);
+            Assert.Equal("Foo 2", sampleOrder.ShipStreet2);
+            Assert.Equal("Foo 3", sampleOrder.ShipStreet3);
+            Assert.Equal("Foo City", sampleOrder.ShipCity);
+            Assert.Equal("FO", sampleOrder.ShipStateProvCode);
+            Assert.Equal("12345", sampleOrder.ShipPostalCode);
+            Assert.Equal("BA", sampleOrder.ShipCountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsAddressDetails_WhenOneValidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -333,13 +331,13 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
-            Assert.AreEqual(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
-            Assert.AreEqual(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
-            Assert.AreEqual(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipUSTerritory);
+            Assert.Equal(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
+            Assert.Equal(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
+            Assert.Equal(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
+            Assert.Equal(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipUSTerritory);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotChangeOriginalAddress_WhenOneValidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -356,16 +354,16 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { originalAddress = x; });
 
-            Assert.AreEqual("Street 1", originalAddress.Street1);
-            Assert.AreEqual("Street 2", originalAddress.Street2);
-            Assert.AreEqual("Street 3", originalAddress.Street3);
-            Assert.AreEqual("City", originalAddress.City);
-            Assert.AreEqual("MO", originalAddress.StateProvCode);
-            Assert.AreEqual("63102", originalAddress.PostalCode);
-            Assert.AreEqual("US", originalAddress.CountryCode);
+            Assert.Equal("Street 1", originalAddress.Street1);
+            Assert.Equal("Street 2", originalAddress.Street2);
+            Assert.Equal("Street 3", originalAddress.Street3);
+            Assert.Equal("City", originalAddress.City);
+            Assert.Equal("MO", originalAddress.StateProvCode);
+            Assert.Equal("63102", originalAddress.PostalCode);
+            Assert.Equal("US", originalAddress.CountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsValidationStatusToNeedsAttention_WhenOneInvalidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -373,10 +371,10 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.Equal(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotChangeAddress_WhenOneInvalidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -384,16 +382,16 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual("Street 1", sampleOrder.ShipStreet1);
-            Assert.AreEqual("Street 2", sampleOrder.ShipStreet2);
-            Assert.AreEqual("Street 3", sampleOrder.ShipStreet3);
-            Assert.AreEqual("City", sampleOrder.ShipCity);
-            Assert.AreEqual("MO", sampleOrder.ShipStateProvCode);
-            Assert.AreEqual("63102", sampleOrder.ShipPostalCode);
-            Assert.AreEqual("US", sampleOrder.ShipCountryCode);
+            Assert.Equal("Street 1", sampleOrder.ShipStreet1);
+            Assert.Equal("Street 2", sampleOrder.ShipStreet2);
+            Assert.Equal("Street 3", sampleOrder.ShipStreet3);
+            Assert.Equal("City", sampleOrder.ShipCity);
+            Assert.Equal("MO", sampleOrder.ShipStateProvCode);
+            Assert.Equal("63102", sampleOrder.ShipPostalCode);
+            Assert.Equal("US", sampleOrder.ShipCountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsValidationStatusToNeedsAttention_WhenMultipleInvalidAddressesAreReturned()
         {
             result1.Street1 = "Foo";
@@ -401,10 +399,10 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.Equal(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotChangeAddress_WhenMultipleInvalidAddressesAreReturned()
         {
             result1.Street1 = "Foo";
@@ -412,16 +410,16 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual("Street 1", sampleOrder.ShipStreet1);
-            Assert.AreEqual("Street 2", sampleOrder.ShipStreet2);
-            Assert.AreEqual("Street 3", sampleOrder.ShipStreet3);
-            Assert.AreEqual("City", sampleOrder.ShipCity);
-            Assert.AreEqual("MO", sampleOrder.ShipStateProvCode);
-            Assert.AreEqual("63102", sampleOrder.ShipPostalCode);
-            Assert.AreEqual("US", sampleOrder.ShipCountryCode);
+            Assert.Equal("Street 1", sampleOrder.ShipStreet1);
+            Assert.Equal("Street 2", sampleOrder.ShipStreet2);
+            Assert.Equal("Street 3", sampleOrder.ShipStreet3);
+            Assert.Equal("City", sampleOrder.ShipCity);
+            Assert.Equal("MO", sampleOrder.ShipStateProvCode);
+            Assert.Equal("63102", sampleOrder.ShipPostalCode);
+            Assert.Equal("US", sampleOrder.ShipCountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_OrderStatusIsError_WhenWebClientThrowsAddressValidationException()
         {
             webClient.Setup(x => x.ValidateAddress(It.IsAny<AddressAdapter>()))
@@ -431,10 +429,10 @@ namespace ShipWorks.Tests.AddressValidation
             {
             });
 
-            Assert.AreEqual(AddressValidationStatusType.Error, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.Equal(AddressValidationStatusType.Error, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_StoresValidationError_WhenWebClientThrowsAddressValidationException()
         {
             webClient.Setup(x => x.ValidateAddress(It.IsAny<AddressAdapter>()))
@@ -444,10 +442,10 @@ namespace ShipWorks.Tests.AddressValidation
             {
             });
 
-            Assert.IsTrue(sampleOrder.ShipAddressValidationError.StartsWith("Error communicating with Address Validation Server.", StringComparison.InvariantCulture));
+            Assert.True(sampleOrder.ShipAddressValidationError.StartsWith("Error communicating with Address Validation Server.", StringComparison.InvariantCulture));
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_StoresValidationError_WhenWebClientReturnsErrorMessage()
         {
             errorMessage = "blah";
@@ -457,10 +455,10 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (a, b) => { });
 
-            Assert.AreEqual(errorMessage, sampleOrder.ShipAddressValidationError);
+            Assert.Equal(errorMessage, sampleOrder.ShipAddressValidationError);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsStatusToError_WhenWebClientReturnsErrorMessage()
         {
             errorMessage = "blah";
@@ -470,10 +468,10 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (a, b) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.BadAddress, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.Equal(AddressValidationStatusType.BadAddress, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_UnsetsValidationError_WhenWebClientReturnsErrorMessageThenReturnsNoErrorMessage()
         {
             errorMessage = "blah";
@@ -483,7 +481,7 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (a, b) => { });
 
-            Assert.AreEqual(errorMessage, sampleOrder.ShipAddressValidationError);
+            Assert.Equal(errorMessage, sampleOrder.ShipAddressValidationError);
 
             errorMessage = string.Empty;
             webClient.Setup(x => x.ValidateAddress(It.IsAny<AddressAdapter>()))
@@ -493,7 +491,7 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (a, b) => { });
 
-            Assert.AreEqual(string.Empty, sampleOrder.ShipAddressValidationError);
+            Assert.Equal(string.Empty, sampleOrder.ShipAddressValidationError);
         }
     }
 }

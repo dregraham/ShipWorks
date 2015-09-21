@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Actions.Triggers.Editors;
@@ -13,15 +13,13 @@ using ShipWorks.Tests.Actions.Scheduling.ActionSchedules;
 
 namespace ShipWorks.Tests.Actions.Triggers
 {
-    [TestClass]
     public class ScheduledTriggerTest
     {
         private ScheduledTrigger testObject;
 
         private DateTime testDateTime = DateTime.Now;
 
-        [TestInitialize]
-        public void Initialize()
+        public ScheduledTriggerTest()
         {
             testObject = new ScheduledTrigger()
             {
@@ -33,33 +31,33 @@ namespace ShipWorks.Tests.Actions.Triggers
             };
         }
 
-        [TestMethod]
+        [Fact]
         public void TriggerType_ReturnsScheduled_Test()
         {
-            Assert.AreEqual(ActionTriggerType.Scheduled, testObject.TriggerType);
+            Assert.Equal(ActionTriggerType.Scheduled, testObject.TriggerType);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateEditor_ReturnsScheduledTriggerEditor_Test()
         {
-            Assert.IsInstanceOfType(testObject.CreateEditor(), typeof(ScheduledTriggerEditor));
+            Assert.IsAssignableFrom<ScheduledTriggerEditor>(testObject.CreateEditor());
         }
 
-        [TestMethod]
+        [Fact]
         public void TriggeringEntityType_IsNull_Test()
         {
-            Assert.IsNull(testObject.TriggeringEntityType);
+            Assert.Null(testObject.TriggeringEntityType);
         }
 
-        [TestMethod]
+        [Fact]
         public void Schedule_IsOneTimeActionSchedule_WhenNoSettings_Test()
         {
             testObject = new ScheduledTrigger();
 
-            Assert.IsInstanceOfType(testObject.Schedule, typeof(OneTimeActionSchedule));
+            Assert.IsAssignableFrom<OneTimeActionSchedule>(testObject.Schedule);
         }
 
-        [TestMethod]
+        [Fact]
         public void StartDateTimeInUtc_UsesStartDateFromSettings_WhenXmlSettingsContainsStartDate_Test()
         {
             DateTime testTime = DateTime.Parse("6/8/2013 12:07:00 AM");
@@ -68,10 +66,10 @@ namespace ShipWorks.Tests.Actions.Triggers
 
             testObject = new ScheduledTrigger(xmlSettings);
 
-            Assert.AreEqual(testTime, testObject.Schedule.StartDateTimeInUtc);
+            Assert.Equal(testTime, testObject.Schedule.StartDateTimeInUtc);
         }
 
-        [TestMethod]
+        [Fact]
         public void StartDateTimeInUtc_IsCorrect_WhenSerializedAndDeserailized_Test()
         {
 
@@ -91,10 +89,10 @@ namespace ShipWorks.Tests.Actions.Triggers
 
             ScheduledTrigger deserializedScheduledTrigger = new ScheduledTrigger(xml);
 
-            Assert.AreEqual(testObject.Schedule.StartDateTimeInUtc, deserializedScheduledTrigger.Schedule.StartDateTimeInUtc);
+            Assert.Equal(testObject.Schedule.StartDateTimeInUtc, deserializedScheduledTrigger.Schedule.StartDateTimeInUtc);
         }
 
-        [TestMethod]
+        [Fact]
         public void DeserializeXml_ReturnsDailyActionSchedule_WhenScheduleTypeIsDaily_Test()
         {
             const string xmlSettings = 
@@ -114,10 +112,10 @@ namespace ShipWorks.Tests.Actions.Triggers
 
             testObject.DeserializeXml(xpath);
 
-            Assert.IsInstanceOfType(testObject.Schedule, typeof(DailyActionSchedule));
+            Assert.IsAssignableFrom<DailyActionSchedule>(testObject.Schedule);
         }
 
-        [TestMethod]
+        [Fact]
         public void DeserializeXml_FrequencyInDaysEqualsXmlValue_WhenScheduleTypeIsDaily_Test()
         {
             const string xmlSettings =
@@ -137,7 +135,7 @@ namespace ShipWorks.Tests.Actions.Triggers
 
             testObject.DeserializeXml(xpath);
 
-            Assert.AreEqual(30, ((DailyActionSchedule)testObject.Schedule).FrequencyInDays);
+            Assert.Equal(30, ((DailyActionSchedule)testObject.Schedule).FrequencyInDays);
         }
     }
 }

@@ -1,57 +1,56 @@
 ﻿using ShipWorks.Actions.Triggers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ShipWorks.Tests.Actions.Triggers
 {
-    [TestClass]
     public class ActionTriggerFactoryTest
     {
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsOrderDownloadedTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.OrderDownloaded, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(OrderDownloadedTrigger));
+            Assert.IsAssignableFrom<OrderDownloadedTrigger>(trigger);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsDownloadFinishedTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.DownloadFinished, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(DownloadFinishedTrigger));
+            Assert.IsAssignableFrom<DownloadFinishedTrigger>(trigger);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsShipmentProcessedTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.ShipmentProcessed, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(ShipmentProcessedTrigger));
+            Assert.IsAssignableFrom<ShipmentProcessedTrigger>(trigger);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsShipmentVoidedTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.ShipmentVoided, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(ShipmentVoidedTrigger));
+            Assert.IsAssignableFrom<ShipmentVoidedTrigger>(trigger);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsFilterContentTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.FilterContentChanged, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(FilterContentTrigger));
+            Assert.IsAssignableFrom<FilterContentTrigger>(trigger);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsScheduledTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Scheduled, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(ScheduledTrigger));
+            Assert.IsAssignableFrom<ScheduledTrigger>(trigger);
         }
 
     }

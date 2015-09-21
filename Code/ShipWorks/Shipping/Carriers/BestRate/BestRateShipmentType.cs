@@ -22,6 +22,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
+using Autofac;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -372,7 +373,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             // The synchronizer isn't used in overridden PreProcess method for this shipment type
             return null;
@@ -382,7 +383,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Gets rates and converts shipment to the found best rate type.
         /// </summary>
         /// <returns>This will return the shipping type of the best rate found.</returns>
-        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateAutoSelectedAndProcessed);
 
@@ -655,26 +656,24 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             shipment.RequestedLabelFormat = shipment.BestRate.RequestedLabelFormat;
         }
 
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+            get
+            {
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-            fields.AddRange
-                (
-                    new List<IEntityField2>
-                    {
-                        shipment.BestRate.Fields[BestRateShipmentFields.DimsAddWeight.FieldIndex],
-                        shipment.BestRate.Fields[BestRateShipmentFields.DimsHeight.FieldIndex],
-                        shipment.BestRate.Fields[BestRateShipmentFields.DimsLength.FieldIndex],
-                        shipment.BestRate.Fields[BestRateShipmentFields.DimsWeight.FieldIndex],
-                        shipment.BestRate.Fields[BestRateShipmentFields.DimsWidth.FieldIndex]
-                    }
-                );
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsAddWeight);
+                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsHeight);
+                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsLength);
+                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsWidth);
+                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsWeight);
 
-            return fields;
+                return ratingField;
+            }
         }
 
         /// <summary>

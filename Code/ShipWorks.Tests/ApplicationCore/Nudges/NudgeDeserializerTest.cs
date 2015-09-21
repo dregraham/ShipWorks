@@ -1,193 +1,181 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.ApplicationCore.Nudges;
 
 namespace ShipWorks.Tests.ApplicationCore.Nudges
 {
-    [TestClass]
     public class NudgeDeserializerTest
     {
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingNudgeID_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("NudgeID").Remove();
 
-            NudgeDeserializer.Deserialize(nudgeOptionElement);
+            Assert.Throws<NudgeException>(() => NudgeDeserializer.Deserialize(nudgeOptionElement));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenNudgeIDNotANumber_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("NudgeID").First().SetValue("hi");
-
-            NudgeDeserializer.Deserialize(nudgeOptionElement);
+            
+            Assert.Throws<NudgeException>(() => NudgeDeserializer.Deserialize(nudgeOptionElement));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingNudgeType_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("NudgeType").Remove();
 
-            NudgeDeserializer.Deserialize(nudgeOptionElement);
+            Assert.Throws<NudgeException>(() => NudgeDeserializer.Deserialize(nudgeOptionElement));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentUri_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("ContentUri").Remove();
 
-            NudgeDeserializer.Deserialize(nudgeOptionElement);
+            Assert.Throws<NudgeException>(() => NudgeDeserializer.Deserialize(nudgeOptionElement));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentUriIsInvalid_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("ContentUri").First().SetValue("asdf");
 
-            NudgeDeserializer.Deserialize(nudgeOptionElement);
+            Assert.Throws<NudgeException>(() => NudgeDeserializer.Deserialize(nudgeOptionElement));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensions_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("ContentDimensions").Remove();
 
-            NudgeDeserializer.Deserialize(nudgeOptionElement);
+            Assert.Throws<NudgeException>(() => NudgeDeserializer.Deserialize(nudgeOptionElement));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensionsWidth_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("Width").Remove();
 
-            NudgeDeserializer.Deserialize(nudgeOptionElement);
+            Assert.Throws<NudgeException>(() => NudgeDeserializer.Deserialize(nudgeOptionElement));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensionsHeight_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("Height").Remove();
 
-            NudgeDeserializer.Deserialize(nudgeOptionElement);
+            Assert.Throws<NudgeException>(() => NudgeDeserializer.Deserialize(nudgeOptionElement));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentDimensionsWidthIsInvalid_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("Width").First().SetValue("hi");
 
-            NudgeDeserializer.Deserialize(nudgeOptionElement);
+            Assert.Throws<NudgeException>(() => NudgeDeserializer.Deserialize(nudgeOptionElement));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentDimensionsHeightIsInvalid_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("Height").First().SetValue("hi");
 
-            NudgeDeserializer.Deserialize(nudgeOptionElement);
+            Assert.Throws<NudgeException>(() => NudgeDeserializer.Deserialize(nudgeOptionElement));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
+        [Fact]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingOptions_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("Options").Remove();
 
-            NudgeDeserializer.Deserialize(nudgeOptionElement);
+            Assert.Throws<NudgeException>(() => NudgeDeserializer.Deserialize(nudgeOptionElement));
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeHasCorrectNudgeID_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
 
             Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
 
-            Assert.AreEqual(nudge.NudgeID, int.Parse(GetValue(nudgeElement, "NudgeID")));
+            Assert.Equal(nudge.NudgeID, int.Parse(GetValue(nudgeElement, "NudgeID")));
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeHasCorrectNudgeType_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
 
             Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
 
-            Assert.AreEqual((int)nudge.NudgeType, int.Parse(GetValue(nudgeElement, "NudgeType")));
+            Assert.Equal((int)nudge.NudgeType, int.Parse(GetValue(nudgeElement, "NudgeType")));
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeHasCorrectContentUri_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
 
             Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
 
-            Assert.AreEqual(nudge.ContentUri.AbsoluteUri, GetValue(nudgeElement, "ContentUri"));
+            Assert.Equal(nudge.ContentUri.AbsoluteUri, GetValue(nudgeElement, "ContentUri"));
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeHasCorrectContentDimensions_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
 
             Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
 
-            Assert.AreEqual(nudge.ContentDimensions.Width, int.Parse(GetValue(nudgeElement.Descendants("ContentDimensions").First(), "Width")));
-            Assert.AreEqual(nudge.ContentDimensions.Height, int.Parse(GetValue(nudgeElement.Descendants("ContentDimensions").First(), "Height")));
+            Assert.Equal(nudge.ContentDimensions.Width, int.Parse(GetValue(nudgeElement.Descendants("ContentDimensions").First(), "Width")));
+            Assert.Equal(nudge.ContentDimensions.Height, int.Parse(GetValue(nudgeElement.Descendants("ContentDimensions").First(), "Height")));
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeHasCorrectName_WhenNameIsProvided_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
 
             Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
 
-            Assert.AreEqual(GetValue(nudgeElement, "Name"), nudge.Name);            
+            Assert.Equal(GetValue(nudgeElement, "Name"), nudge.Name);            
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeNameIsEmptyString_WhenNameNodeIsOmittedInXml_Test()
         {
             XElement nudgeElement = XElement.Parse(NudgeXmlWithoutNameNode);
 
             Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
 
-            Assert.AreEqual(string.Empty, nudge.Name);
+            Assert.Equal(string.Empty, nudge.Name);
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeNameIsEmptyString_WhenNameNodeIsEmpty_Test()
         {
             XElement nudgeElement = XElement.Parse(NudgeXmlWithEmptyNameNode);
 
             Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
 
-            Assert.AreEqual(string.Empty, nudge.Name);
+            Assert.Equal(string.Empty, nudge.Name);
         }
         
         /// <summary>

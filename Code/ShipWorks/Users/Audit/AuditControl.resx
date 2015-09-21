@@ -124,8 +124,8 @@
   <data name="buttonSearching.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK7QAA
-        Cu0BAohJwQAAAedJREFUKFMlz+tLUwEABfCze1ftoSFEH6p/oIeE+YoVWdQ2K7SBpaxsrrWgCCMtejKM
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK6wAA
+        CusBgosNWgAAAedJREFUKFMlz+tLUwEABfCze1ftoSFEH6p/oIeE+YoVWdQ2K7SBpaxsrrWgCCMtejKM
         aHdmYndYG1SgaG1hBVpguilZ9tp0rjI1aYkptAZBH4Q+OIPTrT4dOPw4cADre4i2UI3OEa1H5SiwNwIU
         dwM7w0o+g2DulFSG9lPIbwc09vjJ3Vdi6QpPhEsdw16UDf3H5jCE0v7r2uo4xSPRBRjaapFxLCY75RgP
         yXFucUWptw76YOyGWNp7c/HxEaouTBO1k8SmQAPgGFMvOzravMsdo8nzgavPDVNr7fv2d1E4P6XACcL4
@@ -139,13 +139,13 @@
   <data name="buttonSearching.ImageStates.ImageDisabled" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAIAAAAmzuBxAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAALAgAA
-        CwIBm8luNgAAAStJREFUKFNj+I8EXn77M//mu4oz9zsuPj7/6uvffyA5BriC+28+xWy9o7/wrN+GK9bL
-        zxsvuLj08tO/f/9CVXz9+bN2+027iWdWnXv47O2Xcw/fZa+8ajH59J2XX6Eqrj/96jflbN3aa////4GY
-        evTGO7uuE6tOPIGquPDgvXfXof5td/6D7QaCC3ffe7Ufmr3nLlTFjx8/Cmed9qrdf+X+mx+//n75/rtx
-        2WWD3J0X7ryFqnj74XN61z6DpBVm6WtzJ58JqNljmLxy5ubLv3+BXfri7efY+q3akUs7Fh9rmHkyqXln
-        VvuBFTtuAqVBvn3w/EN40TIl5/beJQf//PsFFHr59uOPb7/hocDQMm2bqF7u5Hlbfv7+iRx6CBW3bj1d
-        um7b798ITWjqAPVBKkJeYO+7AAAAAElFTkSuQmCC
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAALAAAA
+        CwAB5DetvwAAAS1JREFUKFNj+I8EXn77M//mu4oz9zsuPj7/6uvffyBBhIr7bz7FbL2jv/Cs34Yr1svP
+        Gy+4uPTy079//0JVfP35s3b7TbuJZ1ade/js7ZdzD99lr7xqMfn0nZdfoSquP/3qN+Vs3dpr////gYgc
+        vfHOruvEqhNPoCouPHjv3XWof9ud/2C7QSJ333u1H5q95y5UxY8fPwpnnfaq3X/l/psfv/5++f67cdll
+        g9ydF+68hap4++Fzetc+g6QVZulrcyefCajZY5i8cubmy79/gV364u3n2Pqt2pFLOxYfa5h5Mql5Z1b7
+        gRU7bgKlgbIMD55/CC9apuTc3rvk4J9/v4BCL99+/PHtN8hkMGBombZNVC938rwtP3//hIqhAoZbt54u
+        Xbft92+EJhTw/z8A9UEqQiovDcwAAAAASUVORK5CYII=
 </value>
   </data>
 </root>

@@ -2,25 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 {
-    [TestClass]
     public class UpsWorldShipBrokerFilterTest
     {
         private UpsWorldShipBrokerFilter testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsWorldShipBrokerFilterTest()
         {
             testObject = new UpsWorldShipBrokerFilter();
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RemovesWorldShipBroker_WhenListContainsUpsBrokerAndWorldShipBroker_Test()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
@@ -31,11 +29,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
 
-            Assert.AreEqual(1, fileredBrokers.Count);
-            Assert.AreEqual(0, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
+            Assert.Equal(1, fileredBrokers.Count);
+            Assert.Equal(0, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_KeepsUpsBroker_WhenListContainsUpsBrokerAndWorldShipBroker_Test()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
@@ -46,11 +44,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
 
-            Assert.AreEqual(1, fileredBrokers.Count);
-            Assert.AreEqual(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
+            Assert.Equal(1, fileredBrokers.Count);
+            Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_DoesNotRemoveWorldShipBroker_WhenListOnlyContainsWorldShipBroker_Test()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
@@ -60,11 +58,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
 
-            Assert.AreEqual(1, fileredBrokers.Count);
-            Assert.AreEqual(1, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
+            Assert.Equal(1, fileredBrokers.Count);
+            Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_KeepsUpsBroker_WhenListOnlyContainsUpsBroker_Test()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
@@ -74,8 +72,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
 
-            Assert.AreEqual(1, fileredBrokers.Count);
-            Assert.AreEqual(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
+            Assert.Equal(1, fileredBrokers.Count);
+            Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
         }
     }
 }

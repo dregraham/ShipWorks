@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.iParcel.Net.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
 {
-    [TestClass]
     public class iParcelTrackRequestTest
     {
         private iParcelTrackRequest testObject;
@@ -20,8 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
         private ShipmentEntity shipment;
         private Mock<IiParcelServiceGateway> gateway;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelTrackRequestTest()
         {
             gateway = new Mock<IiParcelServiceGateway>();
             gateway.Setup(g => g.IsValidUser(It.IsAny<iParcelCredentials>())).Returns(true);
@@ -68,28 +66,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
             testObject = new iParcelTrackRequest(credentials, shipment.IParcel.Packages[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void OperationName_Test()
         {
-            Assert.AreEqual("Track", testObject.OperationName);
+            Assert.Equal("Track", testObject.OperationName);
         }
 
-        [TestMethod]
+        [Fact]
         public void RootElementName_Test()
         {
-            Assert.AreEqual("iparcelTrackingRequest", testObject.RootElementName);
+            Assert.Equal("iparcelTrackingRequest", testObject.RootElementName);
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestElements_ContainOneItems_Test()
         {
-            Assert.AreEqual(1, testObject.RequestElements.Count);
+            Assert.Equal(1, testObject.RequestElements.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestElements_ContainsTrackingNumberElement_Test()
         {
-            Assert.AreEqual(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelTrackingNumberElement)));
+            Assert.Equal(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelTrackingNumberElement)));
         }
     }
 }

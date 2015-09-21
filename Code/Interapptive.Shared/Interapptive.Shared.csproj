@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -45,9 +45,10 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -56,9 +57,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.25.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
@@ -100,7 +101,9 @@
     <Compile Include="AssemblyDateAttribute.cs" />
     <Compile Include="Business\AddressAdapter.cs" />
     <Compile Include="Business\AddressCasing.cs" />
-    <Compile Include="Business\Geography.cs" />
+    <Compile Include="Business\Geography\CountryFlags.cs" />
+    <Compile Include="Business\Geography\CountryList.cs" />
+    <Compile Include="Business\Geography\Geography.cs" />
     <Compile Include="Business\IAddressAdapter.cs" />
     <Compile Include="Business\PersonAdapter.cs" />
     <Compile Include="Business\PersonName.cs" />
@@ -112,6 +115,7 @@
     <Compile Include="Collections\ArrayUtility.cs" />
     <Compile Include="Collections\CollectionChangedEvent.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
+    <Compile Include="InterapptiveOnly.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
     <Compile Include="Collections\LruCache.cs" />
     <Compile Include="Collections\LruCacheItemRemovedEvent.cs" />
@@ -380,6 +384,7 @@
     <Compile Include="Win32\WindowsUtility.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -649,6 +654,10 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
+    <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

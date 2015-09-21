@@ -3,171 +3,171 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Interapptive.Shared.Business.Geography;
+using Xunit;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Business
 {
-    [TestClass]
     public class GeographyTest
     {
-        [TestMethod]
+        [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStates_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("United States"));
+            Assert.Equal("US", Geography.GetCountryCode("United States"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInLowerCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("united states"));
+            Assert.Equal("US", Geography.GetCountryCode("united states"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInUpperCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("UNITED STATES"));
+            Assert.Equal("US", Geography.GetCountryCode("UNITED STATES"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInMixedCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("UnItEd StAtEs"));
+            Assert.Equal("US", Geography.GetCountryCode("UnItEd StAtEs"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUSA_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("USA"));
+            Assert.Equal("US", Geography.GetCountryCode("USA"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUSAInLowerCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("usa"));
+            Assert.Equal("US", Geography.GetCountryCode("usa"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUSAInMixedCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("UsA"));
+            Assert.Equal("US", Geography.GetCountryCode("UsA"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmerica_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("United States of America"));
+            Assert.Equal("US", Geography.GetCountryCode("United States of America"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInLowerCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("united states of america"));
+            Assert.Equal("US", Geography.GetCountryCode("united states of america"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInUpperCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("UNITED STATES OF AMERICA"));
+            Assert.Equal("US", Geography.GetCountryCode("UNITED STATES OF AMERICA"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInMixedCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("uNiTeD StAtEs Of AmErIcA"));
+            Assert.Equal("US", Geography.GetCountryCode("uNiTeD StAtEs Of AmErIcA"));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsUSInternationalTerritory_ReturnsTrue_WhenCountryCodeIsInternationalTerritory()
         {
             AddressAdapter address = new AddressAdapter { CountryCode = "AS" };
             bool result = address.IsUSInternationalTerritory();
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsUSInternationalTerritory_ReturnsTrue_WhenCountryCodeIsUSAndStateIsInternationalTerritory()
         {
             AddressAdapter address = new AddressAdapter { CountryCode = "US", StateProvCode = "AS"};
             bool result = address.IsUSInternationalTerritory();
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsUSInternationalTerritory_ReturnsFalse_WhenCountryCodeIsUSAndStateIsMO()
         {
             AddressAdapter address = new AddressAdapter { CountryCode = "CA", StateProvCode = "MO" };
             bool result = address.IsUSInternationalTerritory();
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsUSInternationalTerritory_ReturnsFalse_WhenCountryCodeIsCanadaAndStateIsInternationalTerritory()
         {
             AddressAdapter address = new AddressAdapter { CountryCode = "CA", StateProvCode = "AS" };
             bool result = address.IsUSInternationalTerritory();
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsUSInternationalTerritory_ReturnsFalse_WhenCountryCodeIsCanadaAndStateIsON()
         {
             AddressAdapter address = new AddressAdapter { CountryCode = "CA", StateProvCode = "ON" };
             bool result = address.IsUSInternationalTerritory();
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetStateProvCode_ReturnsEmptyString_WhenCountryCodeIsGreatBrittain()
         {
             string stateProvince = Geography.GetStateProvCode("something", "GB");
-            Assert.IsTrue(string.IsNullOrEmpty(stateProvince));
+            Assert.True(string.IsNullOrEmpty(stateProvince));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetStateProvCode_ReturnsEmptyString_WhenStateProvinceIsEmptyAndCountryCodeIsGreatBrittain()
         {
             string stateProvince = Geography.GetStateProvCode(string.Empty, "GB");
-            Assert.IsTrue(string.IsNullOrEmpty(stateProvince));
+            Assert.True(string.IsNullOrEmpty(stateProvince));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetStateProvCode_ReturnsPassedInStateProvince_WhenCountryCodeIsUnknown()
         {
             string expected = "something";
             string actual = Geography.GetStateProvCode(expected, "unknown country");
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetStateProvCode_ReturnsMO_WhenStateProvinceIsMissouriAndCountryCodeIsUs()
         {
             string expected = "MO";
             string actual = Geography.GetStateProvCode("Missouri", "US");
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetStateProvCode_ReturnsPassedInStateProvince_WhenCountryCodeIsNotPassedIn()
         {
             string expected = "something";
             string actual = Geography.GetStateProvCode(expected);
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetStateProvCode_ReturnsEmptyString_WhenStateProvinceIsEmptyAndCountryCodeIsNotPassedIn()
         {
             string expected = string.Empty;
             string actual = Geography.GetStateProvCode(string.Empty);
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetStateProvCode_ReturnsMO_WhenStateProvinceIsMissouriAndCountryCodeNotPassedIn()
         {
             string expected = "MO";
             string actual = Geography.GetStateProvCode("Missouri");
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
     }
 }

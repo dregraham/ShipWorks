@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Stores.Platforms.Newegg;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net;
@@ -9,7 +9,6 @@ using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
-    [TestClass]
     public class CancellationRequestTest
     {
         private INeweggRequest successfulRequest;
@@ -24,8 +23,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         private Order orderToCancel;
         private CancelOrderRequest testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public CancellationRequestTest()
         {
             credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
             orderToCancel = new Order { OrderNumber = orderNumberToCancel };
@@ -53,70 +51,43 @@ namespace ShipWorks.Tests.Stores.Newegg
             successfulRequest = new Mocked.MockedNeweggRequest(successResponse);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NeweggException))]        
+        [Fact]
         public void Cancel_ThrowsNeweggException_WhenErrorResponseIsReceived_Test()
         {
-            testObject = new CancelOrderRequest(credentials, failedRequest);            
-            testObject.Cancel(orderToCancel, CancellationReason.OutOfStock);
+            testObject = new CancelOrderRequest(credentials, failedRequest);
+            Assert.Throws<NeweggException>(() => testObject.Cancel(orderToCancel, CancellationReason.OutOfStock));
         }
 
-        [TestMethod]
+        [Fact]
         public void Cancel_ReturnsResultWithOrderNumber_WhenCancellingAnOrder_Test()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
 
             CancellationResult result = testObject.Cancel(orderToCancel, CancellationReason.OutOfStock);
 
-            Assert.AreEqual(orderToCancel.OrderNumber, result.Detail.OrderNumber);
+            Assert.Equal(orderToCancel.OrderNumber, result.Detail.OrderNumber);
         }
 
-
-        [TestMethod]
+        [Fact]
         public void Cancel_ReturnsResultWithVoidStatus_WhenCancellingAnOrder_Test()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
 
             CancellationResult result = testObject.Cancel(orderToCancel, CancellationReason.OutOfStock);
 
-            Assert.AreEqual(expectedCancelledOrderStatus, result.Detail.OrderStatus);
+            Assert.Equal(expectedCancelledOrderStatus, result.Detail.OrderStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Cancel_ReturnsResultWithSellerId_WhenCancellingAnOrder_Test()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
 
             CancellationResult result = testObject.Cancel(orderToCancel, CancellationReason.OutOfStock);
 
-            Assert.AreEqual(expectedCancelledSellerId, result.Detail.SellerId);
+            Assert.Equal(expectedCancelledSellerId, result.Detail.SellerId);
         }
-
-        [TestMethod]
-        [Ignore]
-        public void Cancel_ReturnsCancellationResults_WhenCancellingAnOrderWithNeweggAPI_IntegrationTest()
-        {
-            // We're going to try to bounce the request off of the Newegg API, so setup 
-            // the test object to use a "live" NeweggHttpRequest and an order setup in
-            // our sandbox seller account, and use the sandbox seller account credentials
-            
-            // TODO: Plug in an unshipped order number to test
-            //Order sandboxedOrderToCancel = new Order { OrderNumber = 137956884 };
-            //Credentials credentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0");
-            //testObject = new CancelOrderRequest(credentials, new NeweggHttpRequest());
-
-            //CancellationResult cancellationResult = testObject.Cancel(sandboxedOrderToCancel, CancellationReason.UnableToFulfillOrder);
-
-            //Assert.IsTrue(cancellationResult.IsSuccessful);
-            //Assert.AreEqual(sandboxedOrderToCancel.OrderNumber, cancellationResult.Detail.OrderNumber);
-            //Assert.AreEqual(credentials.SellerId, cancellationResult.Detail.SellerId);
-            //Assert.AreEqual(expectedCancelledOrderStatus, cancellationResult.Detail.OrderStatus);
-            Assert.Inconclusive("Need an unshipped order to run this integration test.");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(NeweggException))]
-        [Ignore]
+        
         public void Cancel_ThrowsNeweggException_WhenCancellingAnInvoicedOrder_WithNeweggAPI_IntegrationTest()
         {
             // We're going to try to bounce the request off of the Newegg API, so setup 
@@ -128,9 +99,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             // This should throw an exception since the order we're trying to cancel has
             // already been invoiced
-            CancellationResult cancellationResult = testObject.Cancel(sandboxedOrderToCancel, CancellationReason.UnableToFulfillOrder);
-
+            Assert.Throws<NeweggException>(() => testObject.Cancel(sandboxedOrderToCancel, CancellationReason.UnableToFulfillOrder));
         }
-
     }
 }

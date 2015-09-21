@@ -1,5 +1,5 @@
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -17,7 +17,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
-    [TestClass]
     public class FedExResponseFactoryTest
     {
         private FedExResponseFactory testObject;
@@ -26,8 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         private Mock<CarrierRequest> carrierRequest;
 
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExResponseFactoryTest()
         {
             carrierRequest = new Mock<CarrierRequest>(null, new ShipmentEntity());
 
@@ -37,240 +35,230 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject = new FedExResponseFactory();
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipResponse_ReturnsFedExShipResponse_Test()
         {
             ICarrierResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity());
-            Assert.IsInstanceOfType(carrierResponse, typeof(FedExShipResponse), "Initialization failed as CreateShipResponse did not return a type of FedExShipResponse.");
+            Assert.IsAssignableFrom<FedExShipResponse>(carrierResponse);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void CreateShipResponse_ThrowsCarrierException_WhenNativeResponseIsNotProcessShipmentReply_Test()
         {
             // Try sending a string as the native response
             const string nativeResponseText = "the native response";
 
-            testObject.CreateShipResponse(nativeResponseText, carrierRequest.Object, new ShipmentEntity());
+            Assert.Throws<CarrierException>(() => testObject.CreateShipResponse(nativeResponseText, carrierRequest.Object, new ShipmentEntity()));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipResponse_PopulatesManipulators_Test()
         {
             // This will obviously need to change as manipulators are added in the factory and also serve as a
             // reminder that to write the tests to ensure the manipulator type is present in the list
             FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
-            Assert.AreEqual(3, carrierResponse.ShipmentManipulators.Count());
+            Assert.Equal(3, carrierResponse.ShipmentManipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipResponse_AddsFedExShipmentTrackingManipulator_Test()
         {
             FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
-            Assert.AreEqual(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentTrackingManipulator)));
+            Assert.Equal(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentTrackingManipulator)));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipResponse_AddsFedExShipmentCodManipulator_Test()
         {
             FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
-            Assert.AreEqual(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentCodManipulator)));
+            Assert.Equal(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentCodManipulator)));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipResponse_AddsFedExShipmentCostManipulator_Test()
         {
             FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
-            Assert.AreEqual(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentCostManipulator)));
+            Assert.Equal(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentCostManipulator)));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipResponse_AddsFedExLabelRepository_Test()
         {
             FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
-            Assert.IsInstanceOfType(carrierResponse.LabelRepository, typeof(FedExLabelRepository));
+            Assert.IsAssignableFrom<FedExLabelRepository>(carrierResponse.LabelRepository);
         }
 
 
         #region CreateGroundResponse Tests
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void CreateGroundCloseResponse_ThrowsCarrierException_WhenResponseIsNull_Test()
         {
             GroundCloseReply closeReply = null;
 
-            testObject.CreateGroundCloseResponse(closeReply, carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.CreateGroundCloseResponse(closeReply, carrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void CreateGroundCloseResponse_ThrowsCarrierException_WhenNativeResponseIsNotGroundCloseReply_Test()
         {
             SmartPostCloseReply smartPostCloseReply = new SmartPostCloseReply();
 
-            testObject.CreateGroundCloseResponse(smartPostCloseReply, carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.CreateGroundCloseResponse(smartPostCloseReply, carrierRequest.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateGroundCloseResponse_IsNotNull_Test()
         {
             ICarrierResponse response = testObject.CreateGroundCloseResponse(new GroundCloseReply(), carrierRequest.Object);
 
-            Assert.IsNotNull(response);
+            Assert.NotNull(response);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateGroundCloseResponse_ReturnsGroundCarrierResponseType_Test()
         {
             ICarrierResponse response = testObject.CreateGroundCloseResponse(new GroundCloseReply(), carrierRequest.Object);
 
-            Assert.IsInstanceOfType(response, typeof (FedExGroundCloseResponse));
+            Assert.IsAssignableFrom<FedExGroundCloseResponse>(response);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateGroundCloseResponse_AddsManipulators_Test()
         {
             FedExGroundCloseResponse response = testObject.CreateGroundCloseResponse(new GroundCloseReply(), carrierRequest.Object) as FedExGroundCloseResponse;
 
-            Assert.AreEqual(1, response.Manipulators.Count());
+            Assert.Equal(1, response.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateGroundCloseResponse_AddsFedExCloseReportManipulator_Test()
         {
             FedExGroundCloseResponse response = testObject.CreateGroundCloseResponse(new GroundCloseReply(), carrierRequest.Object) as FedExGroundCloseResponse;
 
-            Assert.AreEqual(1, response.Manipulators.Count(m => m.GetType() == typeof(FedExGroundCloseReportManipulator)));
+            Assert.Equal(1, response.Manipulators.Count(m => m.GetType() == typeof(FedExGroundCloseReportManipulator)));
         }
 
         #endregion CreateGroundResponse Tests
 
         #region CreateSmartPostResponse Tests
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void CreateSmartPostCloseResponse_ThrowsCarrierException_WhenResponseIsNull_Test()
         {
             SmartPostCloseReply closeReply = null;
 
-            testObject.CreateSmartPostCloseResponse(closeReply, carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.CreateSmartPostCloseResponse(closeReply, carrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void CreateSmartPostCloseResponse_ThrowsCarrierException_WhenNativeResponseIsNotSmartPostCloseReply_Test()
         {
             GroundCloseReply smartPostCloseReply = new GroundCloseReply();
 
-            testObject.CreateSmartPostCloseResponse(smartPostCloseReply, carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.CreateSmartPostCloseResponse(smartPostCloseReply, carrierRequest.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSmartPostCloseResponse_IsNotNull_Test()
         {
             ICarrierResponse response = testObject.CreateSmartPostCloseResponse(new SmartPostCloseReply(), carrierRequest.Object);
 
-            Assert.IsNotNull(response);
+            Assert.NotNull(response);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSmartPostCloseResponse_ReturnsGroundCarrierResponseType_Test()
         {
             ICarrierResponse response = testObject.CreateSmartPostCloseResponse(new SmartPostCloseReply(), carrierRequest.Object);
 
-            Assert.IsInstanceOfType(response, typeof(FedExSmartPostCloseResponse));
+            Assert.IsAssignableFrom<FedExSmartPostCloseResponse>(response);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSmartPostCloseResponse_AddsManipulators_Test()
         {
             FedExSmartPostCloseResponse response = testObject.CreateSmartPostCloseResponse(new SmartPostCloseReply(), carrierRequest.Object) as FedExSmartPostCloseResponse;
 
-            Assert.AreEqual(1, response.Manipulators.Count());
+            Assert.Equal(1, response.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSmartPostCloseResponse_AddsFedExCloseReportManipulator_Test()
         {
             FedExSmartPostCloseResponse response = testObject.CreateSmartPostCloseResponse(new SmartPostCloseReply(), carrierRequest.Object) as FedExSmartPostCloseResponse;
 
-            Assert.AreEqual(1, response.Manipulators.Count(m => m.GetType() == typeof(FedExSmartPostCloseEntityManipulator)));
+            Assert.Equal(1, response.Manipulators.Count(m => m.GetType() == typeof(FedExSmartPostCloseEntityManipulator)));
         }
 
         #endregion CreateSmartPostResponse Tests
 
         #region CreateRegisterCspUserResponse Tests
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void CreateRegisterCspUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseIsNull_Test()
         {
-            testObject.CreateRegisterUserResponse(null, carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.CreateRegisterUserResponse(null, carrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void CreateRegisterCspUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided_Test()
         {
             RegisterWebCspUserRequest invalidType = new RegisterWebCspUserRequest();
-            testObject.CreateRegisterUserResponse(invalidType, carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.CreateRegisterUserResponse(invalidType, carrierRequest.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegisterCspUserResponse_ReturnsFedExRegisterCspUserResponse_Test()
         {
             RegisterWebCspUserReply validType = new RegisterWebCspUserReply();
 
             ICarrierResponse response = testObject.CreateRegisterUserResponse(validType, carrierRequest.Object);
 
-            Assert.IsInstanceOfType(response, typeof (FedExRegisterCspUserResponse));
+            Assert.IsAssignableFrom<FedExRegisterCspUserResponse>(response);
         }
 
         #endregion CreateRegisterCspUserResponse Tests
 
         #region CreateSubscriptionResponse Tests
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void CreateSubscriptionResponse_ThrowsCarrierException_WhenInvalidNativeResponseIsNull_Test()
         {
-            testObject.CreateSubscriptionResponse(null, carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.CreateSubscriptionResponse(null, carrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void CreateSubscriptionResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided_Test()
         {
             RegisterWebCspUserReply invalidType = new RegisterWebCspUserReply();
-            testObject.CreateSubscriptionResponse(invalidType, carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.CreateSubscriptionResponse(invalidType, carrierRequest.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSubscriptionResponse_ReturnsFedExSubscriptionResponse_Test()
         {
             SubscriptionReply validType = new SubscriptionReply();
 
             ICarrierResponse response = testObject.CreateSubscriptionResponse(validType, carrierRequest.Object);
 
-            Assert.IsInstanceOfType(response, typeof(FedExSubscriptionResponse));
+            Assert.IsAssignableFrom<FedExSubscriptionResponse>(response);
         }
 
         #endregion CreateSubscriptionResponse Tests
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void CreateRateResponse_ThrowsCarrierException_WhenNativeResponseIsNotRateReply_Test()
         {
-            testObject.CreateRateResponse(new GroundCloseReply(), carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.CreateRateResponse(new GroundCloseReply(), carrierRequest.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateResponse_ReturnsFedExRateResponse_Test()
         {
             ICarrierResponse response = testObject.CreateRateResponse(new RateReply(), carrierRequest.Object);
 
-            Assert.IsInstanceOfType(response, typeof(FedExRateResponse));
+            Assert.IsAssignableFrom<FedExRateResponse>(response);
         }
     }
 }

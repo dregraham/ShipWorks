@@ -1089,11 +1089,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new ShippingException(ex.Message, ex);
             }
         }
-        
+
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new UpsShipmentProcessingSynchronizer();
         }
@@ -1217,48 +1217,48 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
-
-            fields.AddRange
-                (
-                    new List<IEntityField2>()
-                    {
-                        shipment.Ups.Fields[UpsShipmentFields.UpsAccountID.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.UpsAccountID.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.SaturdayDelivery.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.CodAmount.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.CodEnabled.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.CodPaymentType.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.Service.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.DeliveryConfirmation.FieldIndex]
-                    }
-                );
-
-            // Grab all the fields for all the package in this shipment
-            foreach (UpsPackageEntity package in shipment.Ups.Packages)
+            get
             {
-                fields.Add(package.Fields[UpsPackageFields.PackagingType.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DeclaredValue.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.VerbalConfirmationEnabled.FieldIndex]);
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-                fields.Add(package.Fields[UpsPackageFields.DimsWeight.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DimsLength.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DimsHeight.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DimsWidth.FieldIndex]);
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(UpsShipmentFields.UpsAccountID);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.SaturdayDelivery);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.SaturdayDelivery);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.CodAmount);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.CodEnabled);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.CodPaymentType);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.Service);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.DeliveryConfirmation);
+                ratingField.PackageFields.Add(UpsPackageFields.PackagingType);
+                ratingField.PackageFields.Add(UpsPackageFields.DeclaredValue);
+                ratingField.PackageFields.Add(UpsPackageFields.VerbalConfirmationEnabled);
+                ratingField.PackageFields.Add(UpsPackageFields.DimsWeight);
+                ratingField.PackageFields.Add(UpsPackageFields.DimsLength);
+                ratingField.PackageFields.Add(UpsPackageFields.DimsHeight);
+                ratingField.PackageFields.Add(UpsPackageFields.DimsWidth);
+                ratingField.PackageFields.Add(UpsPackageFields.DryIceEnabled);
+                ratingField.PackageFields.Add(UpsPackageFields.DryIceRegulationSet);
+                ratingField.PackageFields.Add(UpsPackageFields.DryIceWeight);
+                ratingField.PackageFields.Add(UpsPackageFields.DryIceEnabled);
+                ratingField.PackageFields.Add(UpsPackageFields.DryIceIsForMedicalUse);
 
-                fields.Add(package.Fields[UpsPackageFields.DryIceEnabled.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DryIceRegulationSet.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DryIceWeight.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DryIceEnabled.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DryIceIsForMedicalUse.FieldIndex]);
+                return ratingField;
             }
-
-            return fields;
         }
 
-        
+        /// <summary>
+        /// Gets the rating hash based on the shipment's configuration.
+        /// </summary>
+        public override string GetRatingHash(ShipmentEntity shipment)
+        {
+            return RatingFields.GetRatingHash(shipment, shipment.Ups.Packages);
+        }
 
         /// <summary>
         /// Gets a value indicating whether multiple packages are supported by this shipment type.

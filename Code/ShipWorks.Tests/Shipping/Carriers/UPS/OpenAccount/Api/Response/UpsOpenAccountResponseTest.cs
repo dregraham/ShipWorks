@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -16,27 +16,25 @@ using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
 {
-    [TestClass]
     public class UpsOpenAccountResponseTest
     {
         private UpsOpenAccountResponse testObject;
 
         private OpenAccountResponse nativeResponse;
         private Mock<CarrierRequest> carrierRequest;
-        
+
         private List<Mock<ICarrierResponseManipulator>> manipulators;
 
         private UpsAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsOpenAccountResponseTest()
         {
             nativeResponse = BuildOpenAccountResponse(true, "1323223");
 
             account = new UpsAccountEntity()
-                {
-                    AccountNumber = "1323223"
-                };
+            {
+                AccountNumber = "1323223"
+            };
 
             Mock<ICarrierResponseManipulator> manipulator = new Mock<ICarrierResponseManipulator>();
             manipulator.Setup(m => m.Manipulate(It.IsAny<UpsOpenAccountResponse>()));
@@ -70,29 +68,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
                 }
             };
         }
-        
-        [TestMethod]
-        [ExpectedException((typeof(UpsOpenAccountResponseException)))]
+
+        [Fact]
         public void Process_UpsOpenAccountResponseException_WhenResponseStatusIsFailure_Test()
         {
             nativeResponse = BuildOpenAccountResponse(false, "1323223");
             testObject = new UpsOpenAccountResponse(nativeResponse, carrierRequest.Object, manipulators.Select(m => m.Object));
 
-            testObject.Process();
+            Assert.Throws<UpsOpenAccountResponseException>(() => testObject.Process());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToManipulators_WhenThereIsOneManipulator_Test()
         {
             testObject.Process();
 
             foreach (Mock<ICarrierResponseManipulator> manipulator in manipulators)
             {
-                manipulator.Verify(m => m.Manipulate(testObject),Times.Once());
+                manipulator.Verify(m => m.Manipulate(testObject), Times.Once());
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToManipulators_WhenThereAreMultipleManipulators_Test()
         {
             // Add a second manipulator to the list
@@ -103,9 +100,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
 
             testObject = new UpsOpenAccountResponse(nativeResponse, carrierRequest.Object, manipulators.Select(m => m.Object));
             testObject.Process();
-            
+
             // Check that the manipulators in the list were called and that the anotherManipulator was called
-            manipulators.ForEach(manipulator => manipulator.Verify(m=> m.Manipulate(testObject), Times.Once()));
+            manipulators.ForEach(manipulator => manipulator.Verify(m => m.Manipulate(testObject), Times.Once()));
             anotherManipulator.Verify(m => m.Manipulate(testObject), Times.Once());
         }
     }

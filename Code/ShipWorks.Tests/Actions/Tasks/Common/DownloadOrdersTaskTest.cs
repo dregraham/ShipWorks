@@ -1,10 +1,9 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Tasks.Common;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
-    [TestClass]
     public class DownloadOrdersTaskTest
     {
         private readonly DownloadOrdersTask testObject;
@@ -14,13 +13,13 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject = new DownloadOrdersTask();
         }
 
-        [TestMethod]
+        [Fact]
         public void RequiresInput_ReturnsNone_Test()
         {
-            Assert.AreEqual(testObject.InputRequirement, ActionTaskInputRequirement.None);
+            Assert.Equal(testObject.InputRequirement, ActionTaskInputRequirement.None);
         }
 
-        [TestMethod]
+        [Fact]
         public void Initalize_DeserializesXmlTaskSettingsToStoreIDs_Test()
         {
             const string TaskSettings = @"
@@ -35,11 +34,11 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Initialize(TaskSettings);
 
-            Assert.AreEqual(4, testObject.StoreIDs.Count());
-            Assert.AreEqual(12005, testObject.StoreIDs.ElementAt(0));
-            Assert.AreEqual(5005, testObject.StoreIDs.ElementAt(1));
-            Assert.AreEqual(8005, testObject.StoreIDs.ElementAt(2));
-            Assert.AreEqual(11005, testObject.StoreIDs.ElementAt(3));
+            Assert.Equal(4, testObject.StoreIDs.Count());
+            Assert.Equal(12005, testObject.StoreIDs.ElementAt(0));
+            Assert.Equal(5005, testObject.StoreIDs.ElementAt(1));
+            Assert.Equal(8005, testObject.StoreIDs.ElementAt(2));
+            Assert.Equal(11005, testObject.StoreIDs.ElementAt(3));
         }
        
     }

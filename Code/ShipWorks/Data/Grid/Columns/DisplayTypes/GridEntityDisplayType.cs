@@ -28,6 +28,8 @@ using ShipWorks.Stores.Content.Panels;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
+using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -318,9 +320,12 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                             }
                             else
                             {
-                                using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }))
+                                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                                 {
-                                    dlg.ShowDialog(owner);
+                                    using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, lifetimeScope))
+                                    {
+                                        dlg.ShowDialog(owner);
+                                    }
                                 }
                             }
                         }

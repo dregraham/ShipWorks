@@ -2,13 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Stores.Platforms.LemonStand;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
-
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.LemonStand
 {
@@ -16,7 +15,6 @@ namespace ShipWorks.Tests.Stores.LemonStand
     /// Performs unit testing on the LemonStandDownloader class.
     /// This test class actually tests a FakeLemonStandDownloader that mocks the inherited dependencies on InstantiateOrder and SaveDownloadedOrders
     /// </summary>
-    [TestClass]
     public class LemonStandDownloaderTest
     {
         Mock<ILemonStandWebClient> webClient = new Mock<ILemonStandWebClient>();
@@ -33,9 +31,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
         private string missingDataOrder;
         private string missingItems;
         
-       
-        [TestInitialize]
-        public void Initialize()
+        public LemonStandDownloaderTest()
         { 
             lemonStandOrders = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandJsonOrderResponse.js");
             singleOrder = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandSingleOrderJson.js");
@@ -87,110 +83,106 @@ namespace ShipWorks.Tests.Stores.LemonStand
             return testObject;
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDate_ReturnsCorrectDateTimeInUTC_WhenGivenLemonStandTimeFormat_Test()
         {
-            Assert.AreEqual(new DateTimeOffset(2015, 9, 10, 13, 59, 6, new TimeSpan(0, -5, 0, 0)), LemonStandDownloader.GetDate("2015-09-10T13:59:06-05:00"));
+            Assert.Equal(new DateTimeOffset(2015, 9, 10, 13, 59, 6, new TimeSpan(0, -5, 0, 0)), LemonStandDownloader.GetDate("2015-09-10T13:59:06-05:00"));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(LemonStandException))]
+        [Fact]
         public void GetDate_ThrowsLemonStandException_WhenGivenInvalidDate_Test()
         {
-            Assert.AreEqual(DateTime.MinValue.ToUniversalTime(), LemonStandDownloader.GetDate("A Bad Date"));
+            Assert.Throws<LemonStandException>(() => LemonStandDownloader.GetDate("A Bad Date"));
         }
 
-        [TestMethod]
+        [Fact]
         public void PrepareOrders_LoadsIntoLemonStandOrderDto_WhenGivenJsonOrder_Test()
         {
             testObject = SetupPrepareOrderTests();
-            Assert.AreEqual(36, testObject.Order.OrderNumber);
+            Assert.Equal(36, testObject.Order.OrderNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void PrepareOrders_LoadsIntoLemonStandShipmentDto_WhenGivenJsonShipment_Test()
         {
             testObject = SetupPrepareOrderTests();
-            Assert.AreEqual("Priority Mail", testObject.Order.RequestedShipping);
+            Assert.Equal("Priority Mail", testObject.Order.RequestedShipping);
         }
 
-        [TestMethod]
+        [Fact]
         public void PrepareOrders_LoadsIntoLemonStandShippingAddressDto_WhenGivenJsonShipment_Test()
         {
             testObject = SetupPrepareOrderTests();
-            Assert.AreEqual("204 S Friedline Dr", testObject.Order.ShipStreet1);
+            Assert.Equal("204 S Friedline Dr", testObject.Order.ShipStreet1);
         }
 
-        [TestMethod]
+        [Fact]
         public void PrepareOrders_LoadsIntoLemonStandCustomerDto_WhenGivenJsonCustomer_Test()
         {
             testObject = SetupPrepareOrderTests();
-            Assert.AreEqual("Stan", testObject.Order.BillFirstName);
+            Assert.Equal("Stan", testObject.Order.BillFirstName);
         }
 
-        [TestMethod]
+        [Fact]
         public void PrepareOrders_LoadsIntoLemonStandBillingAddressDto_WhenGivenJsonCustomer_Test()
         {
             testObject = SetupPrepareOrderTests();
-            Assert.AreEqual("Carbondale", testObject.Order.BillCity);
+            Assert.Equal("Carbondale", testObject.Order.BillCity);
         }
 
-        [TestMethod]
+        [Fact]
         public void LoadItems_LoadsIntoLemonStandItemDto_WhenGivenJsonItem_Test()
         {
             testObject = SetupPrepareOrderTests();
-            Assert.AreEqual("Baseball cap", testObject.Order.OrderItems.First().Name);
+            Assert.Equal("Baseball cap", testObject.Order.OrderItems.First().Name);
         }
 
-        [TestMethod]
+        [Fact]
         public void PrepareOrders_GetShipmentIsOnlyCalledOnce_WhenGivenSingleJsonOrder_Test()
         {
             SetupPrepareOrderTests();
             webClient.Verify(client => client.GetShipment("36"), Times.Exactly(1));
         }
 
-        [TestMethod]
+        [Fact]
         public void LoadOrder_SqlAdapterIsCalledOnce_WhenOrderIsLoaded_Test()
         {
             testObject = SetupLoadOrderTests();
             adapter.Verify(a => a.ExecuteWithRetry(It.IsAny<Action>()), Times.Exactly(1));
         }
 
-        [TestMethod]
+        [Fact]
         public void LoadOrder_SqlAdapterSavesOrder_WhenGivenJsonOrder_Test()
         {
             testObject = SetupLoadOrderTests();
-            Assert.AreEqual(testObject.SavedOrder, testObject.Order);
+            Assert.Equal(testObject.SavedOrder, testObject.Order);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(LemonStandException))]
+        [Fact]
         public void LoadOrder_ThrowsLemonStandException_WhenItemQuantityIsEmptyInResponse_Test()
         {
             testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
             JObject jsonOrder = JObject.Parse(badDataOrder);
 
-            testObject.Order = testObject.PrepareOrder(jsonOrder);
+            Assert.Throws<LemonStandException>(() => testObject.PrepareOrder(jsonOrder));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(LemonStandException))]
+        [Fact]
         public void LoadOrder_ThrowsLemonStandException_WhenOrderIsMissingOrderNumber_Test()
         {
             testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
             JObject jsonOrder = JObject.Parse(missingDataOrder);
 
-            testObject.Order = testObject.PrepareOrder(jsonOrder);
+            Assert.Throws<LemonStandException>(() => testObject.PrepareOrder(jsonOrder));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(LemonStandException))]
+        [Fact]
         public void LoadItem_ThrowsLemonStandException_WhenItemsAreMissingFromOrderResponse_Test()
         {
             testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
             JObject jsonOrder = JObject.Parse(missingItems);
 
-            testObject.Order = testObject.PrepareOrder(jsonOrder);
+            Assert.Throws<LemonStandException>(() => testObject.PrepareOrder(jsonOrder));
         }
     }
 }

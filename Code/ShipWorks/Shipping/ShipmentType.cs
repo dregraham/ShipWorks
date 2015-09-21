@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Editions;
 using log4net;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -41,6 +44,8 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using System.Security.Cryptography;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
+using Interapptive.Shared.Business.Geography;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping
 {
@@ -233,11 +238,24 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
+        /// null if the shipment type does not require setup
+        /// </summary>
+        /// <remarks>This overload will use the current lifetime scope to resolve the wizard if it is registered.
+        /// If it is not, it will fall back to the other version of this method</remarks>
+        public virtual ShipmentTypeSetupWizardForm CreateSetupWizard(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<ShipmentTypeSetupWizardForm>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode) :
+                CreateSetupWizard();
+        }
+
+        /// <summary>
         /// Creates the UserControl that is used to edit service options for the shipment type
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        public ServiceControlBase CreateServiceControl(RateControl rateControl)
+        public ServiceControlBase CreateServiceControl(RateControl rateControl, ILifetimeScope lifetimeScope)
         {
             ServiceControlBase serviceControlBase = null;
             int retries = 0;
@@ -249,7 +267,10 @@ namespace ShipWorks.Shipping
             {
                 try
                 {
-                    serviceControlBase = InternalCreateServiceControl(rateControl);
+                    serviceControlBase = lifetimeScope.IsRegisteredWithKey<ServiceControlBase>(ShipmentTypeCode) ?
+                        lifetimeScope.ResolveKeyed<ServiceControlBase>(ShipmentTypeCode, TypedParameter.From(rateControl)) : 
+                        InternalCreateServiceControl(rateControl);
+
                     break;
                 }
                 catch (ArgumentException ex)
@@ -284,7 +305,10 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        protected abstract ServiceControlBase InternalCreateServiceControl(RateControl rateControl);
+        protected virtual ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
+        {
+            throw new NotImplementedException("Either override InternalCreateServiceControl or register one with the IoC container");
+        }
 
         /// <summary>
         /// Creates the UserControl taht is used to edit customs options
@@ -308,6 +332,16 @@ namespace ShipWorks.Shipping
         public virtual SettingsControlBase CreateSettingsControl()
         {
             return null;
+        }
+
+        /// <summary>
+        /// Creates the UserControl that is used to edit the defaults\settings for the service
+        /// </summary>
+        public virtual SettingsControlBase CreateSettingsControl(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<SettingsControlBase>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<SettingsControlBase>(ShipmentTypeCode) :
+                CreateSettingsControl();
         }
 
         /// <summary>
@@ -979,47 +1013,51 @@ namespace ShipWorks.Shipping
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
         public abstract IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment);
 
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        protected virtual IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        protected RatingFields ratingField = null;
+        public virtual RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>()
-	        {
-	            shipment.Fields[ShipmentFields.ShipmentType.FieldIndex],
-	            shipment.Fields[ShipmentFields.ContentWeight.FieldIndex],
-	            shipment.Fields[ShipmentFields.TotalWeight.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipmentCost.FieldIndex],
-	            shipment.Fields[ShipmentFields.CustomsValue.FieldIndex],
+            get
+            {
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-                shipment.Fields[ShipmentFields.ShipDate.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipCompany.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStreet1.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStreet2.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStreet3.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipCity.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStateProvCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipPostalCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipCountryCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.ResidentialDetermination.FieldIndex],
-	            shipment.Fields[ShipmentFields.ResidentialResult.FieldIndex],
+                ratingField = new RatingFields();
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentType);
+                ratingField.ShipmentFields.Add(ShipmentFields.ContentWeight);
+                ratingField.ShipmentFields.Add(ShipmentFields.TotalWeight);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentCost);
+                ratingField.ShipmentFields.Add(ShipmentFields.CustomsValue);
 
-	            shipment.Fields[ShipmentFields.OriginOriginID.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginCompany.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStreet1.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStreet2.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStreet3.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginCity.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStateProvCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginPostalCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginCountryCode.FieldIndex],
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipDate);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipCompany);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet1);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet2);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet3);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipCity);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStateProvCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipPostalCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipCountryCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialDetermination);
+                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialResult);
 
-	            shipment.Fields[ShipmentFields.ReturnShipment.FieldIndex],
-	            shipment.Fields[ShipmentFields.Insurance.FieldIndex],
-	            shipment.Fields[ShipmentFields.InsuranceProvider.FieldIndex]
-	        };
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginOriginID);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginCompany);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet1);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet2);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet3);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginCity);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStateProvCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginPostalCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginCountryCode);
+                
+                ratingField.ShipmentFields.Add(ShipmentFields.ReturnShipment);
+                ratingField.ShipmentFields.Add(ShipmentFields.Insurance);
+                ratingField.ShipmentFields.Add(ShipmentFields.InsuranceProvider);
 
-            return fields;
+                return ratingField;
+            }
         }
 
         /// <summary>
@@ -1027,19 +1065,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual string GetRatingHash(ShipmentEntity shipment)
         {
-            StringBuilder valueToBeHashed = new StringBuilder();
-            IEnumerable<IEntityField2> ratingFields = GetRatingFields(shipment);
-
-            foreach (IEntityField2 field in ratingFields)
-            {
-                valueToBeHashed.Append(field.CurrentValue ?? string.Empty);
-            }
-
-            using (SHA256Managed sha256 = new SHA256Managed())
-            {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(valueToBeHashed.ToString()));
-                return Convert.ToBase64String(bytes);
-            }
+            return RatingFields.GetRatingHash(shipment);
         }
 
         /// <summary>
@@ -1100,9 +1126,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <returns>The updates shipment (or shipments) that is ready to be processed. A null value may
         /// be returned to indicate that processing should be halted completely.</returns>
-        public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
         {
-            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
+            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer(lifetimeScope);
             ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
             
             return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
@@ -1115,11 +1141,24 @@ namespace ShipWorks.Shipping
         {
             
         }
+        
+        /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected virtual IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            throw new NotImplementedException("Either override GetProcessingSynchronizer or register one with the IoC container");
+        }
 
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public abstract IShipmentProcessingSynchronizer GetProcessingSynchronizer();
+        public virtual IShipmentProcessingSynchronizer GetProcessingSynchronizer(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<IShipmentProcessingSynchronizer>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode) :
+                GetProcessingSynchronizer();
+        }
 
         /// <summary>
         /// Indicates if customs forms may be required to ship the shipment based on the
