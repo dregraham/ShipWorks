@@ -17,8 +17,6 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShipmentViewModel : INotifyPropertyChanged, INotifyPropertyChanging
     {
-        private readonly IShipmentServicesBuilderFactory shipmentServicesBuilder;
-        private readonly IShipmentPackageBuilderFactory shipmentPackageBuilderFactory;
         private DateTime shipDate;
         private double totalWeight;
         private bool insurance;
@@ -27,6 +25,7 @@ namespace ShipWorks.Shipping
 
         private readonly PropertyChangedHandler handler;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
+        private readonly IShipmentPackageBuilderFactory shipmentPackageBuilderFactory;
 
         private readonly IMessenger messenger;
 
@@ -48,7 +47,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory, IShipmentPackageBuilderFactory shipmentPackageBuilderFactory, IMessenger messenger, IRateSelectionFactory rateSelectionFactory) : this()
+        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilder, IShipmentPackageBuilderFactory shipmentPackageBuilderFactory)
         {
             this.shipmentPackageBuilderFactory = shipmentPackageBuilderFactory;
             this.rateSelectionFactory = rateSelectionFactory;
@@ -123,7 +122,14 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual void RefreshPackageTypes(ShipmentEntity shipment)
         {
-            //TODO: Replace with the package factory that should be coming soon
+            Dictionary<int, string> packageTypes = shipmentPackageBuilderFactory.Get(shipment.ShipmentTypeCode)
+                   .BuildPackageTypeDictionary(new[] { shipment });
+
+            Packages.Clear();
+            foreach (KeyValuePair<int, string> entry in packageTypes)
+            {
+                Packages.Add(entry);
+            }
         }
 
         /// <summary>

@@ -79,6 +79,10 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<ShipmentPackageBuilderFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterType<RateSelectionFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
