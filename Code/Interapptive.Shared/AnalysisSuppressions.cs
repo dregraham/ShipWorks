@@ -3612,3 +3612,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Shared", Scope = "namespace", Target = "Interapptive.Shared.Business.Geography")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Interapptive.Shared.Business.Geography")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Scope = "member", Target = "Interapptive.Shared.Business.Geography.CountryFlags.#GetCountryFlag(System.String)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Scope = "member", Target = "Interapptive.Shared.Utility.ActionRetry.#ExecuteWithRetry`1(System.Int32,System.Action)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Scope = "member", Target = "Interapptive.Shared.Utility.ActionRetry.#ExecuteWithRetry`1(System.Int32,System.Action)")]
