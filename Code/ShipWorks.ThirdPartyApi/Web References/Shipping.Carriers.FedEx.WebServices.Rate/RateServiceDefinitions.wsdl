@@ -3747,6 +3747,7 @@
           <xs:enumeration value="PAYOR_ACCOUNT_SHIPMENT" />
           <xs:enumeration value="PAYOR_LIST_PACKAGE" />
           <xs:enumeration value="PAYOR_LIST_SHIPMENT" />
+          <xs:enumeration value="PAYOR_RETAIL_PACKAGE" />
           <xs:enumeration value="PREFERRED_ACCOUNT_PACKAGE" />
           <xs:enumeration value="PREFERRED_ACCOUNT_SHIPMENT" />
           <xs:enumeration value="PREFERRED_LIST_PACKAGE" />
