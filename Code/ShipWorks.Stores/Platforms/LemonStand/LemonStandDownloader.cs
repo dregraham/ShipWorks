@@ -334,8 +334,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 thumbnail = "http:" + thumbnail;
 
                 product.Thumbnail = thumbnail;
-                    
-                LoadItem(order, product);
+
+                IList<JToken> jsonAttributes = jsonProduct.SelectToken("data.attributes.data").Children().ToList();
+
+                LoadItem(order, product, jsonAttributes);
             }
         }
 
@@ -344,7 +346,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         /// <param name="order">The LemonStand order entity</param>
         /// <param name="product">The LemonStand item DTO</param>
-        private void LoadItem(LemonStandOrderEntity order, LemonStandItem product)
+        private void LoadItem(LemonStandOrderEntity order, LemonStandItem product, IList<JToken> jsonAttributes)
         {
             OrderItemEntity item = InstantiateOrderItem(order);
 
@@ -374,12 +376,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             item.UnitPrice = Convert.ToDecimal(product.BasePrice);
             item.Quantity = int.Parse(product.Quantity);
             item.Thumbnail = product.Thumbnail;
-            
-        }
 
-        private void LoadItemAttributes(IList<JToken> jsonAttributes, LemonStandItem product)
-        {
-            
+            foreach (JToken jsonAttribute in jsonAttributes)
+            {
+                OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                attribute.Name = jsonAttribute.SelectToken("name").ToString();
+                attribute.Description = jsonAttribute.SelectToken("value").ToString();
+                attribute.UnitPrice = 0;
+            }
         }
     }
 }
