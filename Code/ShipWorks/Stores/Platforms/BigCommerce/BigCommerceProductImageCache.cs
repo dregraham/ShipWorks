@@ -10,16 +10,29 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     /// <summary>
     /// Cache mechanism for BigCommerce product images.  Since multiple BC stores can be downloading and product IDs are not unique across stores,
     /// each store needs it's own cache.  This class takes care of creating and getting store specific product image caches.
+    /// 
+    /// DON'T INSTANTIATE THIS CLASS OUTSIDE OF TESTS. USE INSTANCE SINGLETON.
     /// </summary>
-    public static class BigCommerceProductImageCache
+    public class BigCommerceProductImageCache
     {
-        private static Dictionary<string, LruCache<int, BigCommerceProductImage>> storeProductImageCaches = new Dictionary<string, LruCache<int, BigCommerceProductImage>>();
+        private Dictionary<string, LruCache<int, BigCommerceProductImage>> storeProductImageCaches;
+
+        private static readonly Lazy<BigCommerceProductImageCache> instance = 
+            new Lazy<BigCommerceProductImageCache>(() => new BigCommerceProductImageCache());
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BigCommerceProductImageCache"/> class.
+        /// </summary>
+        public BigCommerceProductImageCache()
+        {
+            storeProductImageCaches = new Dictionary<string, LruCache<int, BigCommerceProductImage>>();
+        }
 
         /// <summary>
         /// Gets the cache for specific store.
         /// </summary>
         /// <returns></returns>
-        public static LruCache<int, BigCommerceProductImage> GetStoreProductImageCache(string apiUserName, string apiUrl, string apiToken)
+        public LruCache<int, BigCommerceProductImage> GetStoreProductImageCache(string apiUserName, string apiUrl, string apiToken)
         {
             // Create the key for the store
             string key = string.Format("{0}-{1}-{2}", apiUserName, apiUrl, apiToken);
@@ -35,5 +48,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
             return productImageCache;
         }
+
+        public static BigCommerceProductImageCache Instance => instance.Value;
     }
 }
