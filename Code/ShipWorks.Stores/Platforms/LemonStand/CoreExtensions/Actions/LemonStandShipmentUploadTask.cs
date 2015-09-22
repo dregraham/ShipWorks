@@ -11,7 +11,7 @@ using ShipWorks.Shipping;
 namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
 {
     [ActionTask("Upload shipment details", "LemonStandShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
-    internal class LemonStandShipmentUploadTask : StoreInstanceTaskBase
+    public class LemonStandShipmentUploadTask : StoreInstanceTaskBase
     {
         private const long maxBatchSize = 1000;
 

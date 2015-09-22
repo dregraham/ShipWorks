@@ -26,9 +26,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
 
             LemonStandStoreEntity store = GetStore<LemonStandStoreEntity>();
 
-            store.StoreURL = storeURLTextbox.Text;
+            store.StoreURL = "https://" + storeURLTextbox.Text + ".lemonstand.com";
             store.Token = accessTokenTextbox.Text;
-
             if (storeURLTextbox.Text.Length == 0)
             {
                 MessageHelper.ShowError(this, "Please enter your Store URL");
@@ -64,6 +63,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
         protected virtual void ShowConnectionException(LemonStandException ex)
         {
             MessageHelper.ShowError(this, ex.Message);
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LemonStandAccountPage_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

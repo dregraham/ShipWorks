@@ -35,30 +35,31 @@
             this.label1 = new System.Windows.Forms.Label();
             this.helpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
             this.label3 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // accessTokenTextbox
             // 
             this.accessTokenTextbox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accessTokenTextbox.Location = new System.Drawing.Point(97, 62);
+            this.accessTokenTextbox.Location = new System.Drawing.Point(102, 62);
             this.accessTokenTextbox.Name = "accessTokenTextbox";
-            this.accessTokenTextbox.Size = new System.Drawing.Size(362, 21);
+            this.accessTokenTextbox.Size = new System.Drawing.Size(339, 21);
             this.accessTokenTextbox.TabIndex = 19;
             // 
             // storeURLTextbox
             // 
             this.storeURLTextbox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.storeURLTextbox.Location = new System.Drawing.Point(97, 35);
+            this.storeURLTextbox.Location = new System.Drawing.Point(152, 35);
             this.storeURLTextbox.Name = "storeURLTextbox";
-            this.storeURLTextbox.Size = new System.Drawing.Size(362, 21);
+            this.storeURLTextbox.Size = new System.Drawing.Size(194, 21);
             this.storeURLTextbox.TabIndex = 17;
-            this.storeURLTextbox.Text = "https://<Your Store Here>.lemonstand.com";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(15, 65);
+            this.label4.Location = new System.Drawing.Point(20, 65);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(76, 13);
             this.label4.TabIndex = 18;
@@ -68,7 +69,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(32, 38);
+            this.label2.Location = new System.Drawing.Point(37, 38);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(59, 13);
             this.label2.TabIndex = 16;
@@ -78,11 +79,11 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 9);
+            this.label1.Location = new System.Drawing.Point(20, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(296, 13);
+            this.label1.Size = new System.Drawing.Size(276, 13);
             this.label1.TabIndex = 15;
-            this.label1.Text = "Enter the URL to your store and and your API access token.";
+            this.label1.Text = "Enter the URL to your store and and your access token.";
             // 
             // helpLink
             // 
@@ -90,7 +91,7 @@
             this.helpLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.helpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.helpLink.ForeColor = System.Drawing.Color.Blue;
-            this.helpLink.Location = new System.Drawing.Point(290, 86);
+            this.helpLink.Location = new System.Drawing.Point(295, 86);
             this.helpLink.Name = "helpLink";
             this.helpLink.Size = new System.Drawing.Size(55, 18);
             this.helpLink.TabIndex = 20;
@@ -103,16 +104,36 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(94, 86);
+            this.label3.Location = new System.Drawing.Point(99, 86);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(200, 13);
             this.label3.TabIndex = 21;
             this.label3.Text = "For help adding your LemonStand store,";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(102, 38);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(44, 13);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "https://";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(352, 38);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(89, 13);
+            this.label6.TabIndex = 23;
+            this.label6.Text = ".lemonstand.com";
+            // 
             // LemonStandAccountPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.helpLink);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.accessTokenTextbox);
@@ -122,8 +143,9 @@
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "LemonStandAccountPage";
-            this.Size = new System.Drawing.Size(487, 126);
+            this.Size = new System.Drawing.Size(487, 209);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
+            this.Load += new System.EventHandler(this.LemonStandAccountPage_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,5 +160,7 @@
         private System.Windows.Forms.Label label1;
         private ApplicationCore.Interaction.HelpLink helpLink;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
     }
 }

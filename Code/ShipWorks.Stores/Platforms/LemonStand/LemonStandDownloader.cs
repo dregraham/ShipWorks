@@ -252,6 +252,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>A DateTime object.</returns>
         private DateTime GetDownloadStartingPoint()
         {
+            
             // We're going to have our starting point default to either the initial download days setting or a year back
             int previousDaysToDownload = Store.InitialDownloadDays.HasValue ? Store.InitialDownloadDays.Value : 365;
             DateTime startingPoint = DateTime.UtcNow.AddDays(-1 * previousDaysToDownload);

@@ -396,5 +396,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             return group;
         }
+
+        /// <summary>
+        /// The initial download policy
+        /// </summary>
+        public override InitialDownloadPolicy InitialDownloadPolicy => 
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 7, MaxDaysBack = 30 };
     }
 }
