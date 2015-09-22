@@ -12,6 +12,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
+using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -252,7 +254,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>A DateTime object.</returns>
         private DateTime GetDownloadStartingPoint()
         {
-            
             // We're going to have our starting point default to either the initial download days setting or a year back
             int previousDaysToDownload = Store.InitialDownloadDays.HasValue ? Store.InitialDownloadDays.Value : 365;
             DateTime startingPoint = DateTime.UtcNow.AddDays(-1 * previousDaysToDownload);
@@ -310,34 +311,27 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="order">The LemonStand order entity</param>
         private void LoadItems(JToken jsonOrder, LemonStandOrderEntity order)
         {
+            LemonStandStoreEntity lsStore = (LemonStandStoreEntity)Store;
+            LruCache<int, LemonStandItem> storeProductCache = LemonStandProductCache.GetStoreProductImageCache(lsStore.StoreURL, lsStore.Token);
+
             //List of order items
             IList<JToken> jsonItems = jsonOrder.SelectToken("items.data").Children().ToList();
             foreach (JToken jsonItem in jsonItems)
             {
                 string productID = jsonItem.SelectToken("shop_product_id").ToString();
 
-                JToken jsonProduct = client.GetProduct(productID);
+                LemonStandItem product = storeProductCache[int.Parse(productID)];
 
-                //Deserialize into LemonStand item
-                LemonStandItem product =
-                    JsonConvert.DeserializeObject<LemonStandItem>(jsonProduct.SelectToken("data").ToString());
+                if (product == null)
+                {
+                    product = GetProductFromLemonStand(productID);
+                    // And add it to the cache
+                    storeProductCache[int.Parse(productID)] = product;
+                }
+
                 product.Quantity = jsonItem.SelectToken("quantity").ToString();
-                string thumbnail = jsonProduct.SelectToken("data.images.data")
-                        .Children()
-                        .First()
-                        .SelectToken("thumbnails")
-                        .Children()
-                        .First()
-                        .SelectToken("location")
-                        .ToString();
 
-                thumbnail = "http:" + thumbnail;
-
-                product.Thumbnail = thumbnail;
-
-                IList<JToken> jsonAttributes = jsonProduct.SelectToken("data.attributes.data").Children().ToList();
-
-                LoadItem(order, product, jsonAttributes);
+                LoadItem(order, product);
             }
         }
 
@@ -346,7 +340,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         /// <param name="order">The LemonStand order entity</param>
         /// <param name="product">The LemonStand item DTO</param>
-        private void LoadItem(LemonStandOrderEntity order, LemonStandItem product, IList<JToken> jsonAttributes)
+        private void LoadItem(LemonStandOrderEntity order, LemonStandItem product)
         {
             OrderItemEntity item = InstantiateOrderItem(order);
 
@@ -377,13 +371,47 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             item.Quantity = int.Parse(product.Quantity);
             item.Thumbnail = product.Thumbnail;
 
-            foreach (JToken jsonAttribute in jsonAttributes)
+            foreach (JToken jsonAttribute in product.Attributes)
             {
                 OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
                 attribute.Name = jsonAttribute.SelectToken("name").ToString();
                 attribute.Description = jsonAttribute.SelectToken("value").ToString();
                 attribute.UnitPrice = 0;
             }
+        }
+
+
+        private LemonStandItem GetProductFromLemonStand(string productID)
+        {
+            JToken jsonProduct = client.GetProduct(productID);
+
+            //Deserialize into LemonStand item
+            LemonStandItem product =
+                JsonConvert.DeserializeObject<LemonStandItem>(jsonProduct.SelectToken("data").ToString());
+
+            product.Attributes = jsonProduct.SelectToken("data.attributes.data").Children().ToList();
+
+            // Get the product images from LemonStand
+            List<JToken> productImagesRestResponse = jsonProduct.SelectToken("data.images.data")
+                .Children()
+                .First()
+                .SelectToken("thumbnails")
+                .Children()
+                .ToList();
+
+            // If we received a productImagesRestResponse, process it
+            // If we did not, BigCommerce didn't return any relevant info about the product image, so we don't want to
+            // keep trying to download it, so below we'll just put blank image info into the cached image.
+            if (productImagesRestResponse != null)
+            {
+                JToken image = productImagesRestResponse.FirstOrDefault();
+                if (image != null)
+                {
+                    product.Thumbnail = "http:" + image.SelectToken("location");
+                }
+            }
+
+            return product;
         }
     }
 }

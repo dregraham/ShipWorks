@@ -91,6 +91,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandException.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdater.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifier.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandProductCache.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
