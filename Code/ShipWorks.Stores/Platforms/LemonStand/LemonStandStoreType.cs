@@ -176,7 +176,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns></returns>
         public override OrderItemEntity CreateOrderItemInstance()
         {
-            return new OrderItemEntity();
+            LemonStandOrderItemEntity entity = new LemonStandOrderItemEntity();
+
+            entity.UrlName = "";
+            entity.Cost = "";
+            entity.IsOnSale = "";
+            entity.SalePriceOrDiscount = "";
+            entity.ShortDescription = "";
+
+            return entity;
         }
 
         /// <summary>
@@ -193,6 +201,24 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             ElementOutline outline = container.AddElement("LemonStand");
             outline.AddElement("LemonStandOrderID", () => order.Value.LemonStandOrderID);
         }
+
+        /// <summary>
+        /// Create the customer Order Item Xml for the order item provided
+        /// </summary>
+        public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
+        {
+            var item = new Lazy<LemonStandOrderItemEntity>(() => (LemonStandOrderItemEntity)itemSource());
+
+            ElementOutline outline = container.AddElement("BigCommerce");
+            outline.AddElement("OrderItemID", () => item.Value.OrderItemID);
+            outline.AddElement("UrlName", () => item.Value.UrlName);
+            outline.AddElement("Cost", () => item.Value.Cost);
+            outline.AddElement("IsOnSale", () => item.Value.IsOnSale);
+            outline.AddElement("SalePriceOrDiscount", () => item.Value.SalePriceOrDiscount);
+            outline.AddElement("ShortDescription", () => item.Value.ShortDescription);
+        }
+
+        
 
         /// <summary>
         ///     Creates the OrderIdentifier for locating orders

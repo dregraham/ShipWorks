@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Product in Json</returns>
         public JToken GetProduct(string productId)
         {
-            return ProcessRequest(CreateGetRequest("product/" + productId + "?embed=images,attributes"), "GetProduct");
+            return ProcessRequest(CreateGetRequest("product/" + productId + "?embed=images,categories,attributes"), "GetProduct");
         }
 
         /// <summary>

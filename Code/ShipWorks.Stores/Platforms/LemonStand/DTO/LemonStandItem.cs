@@ -65,6 +65,22 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 
         [JsonProperty("weight")]
         public string Weight { get; set; }
+
+        [JsonProperty("url_name")]
+        public string UrlName { get; set; }
+
+        [JsonProperty("cost")]
+        public string Cost { get; set; }
+
+        [JsonProperty("is_on_sale")]
+        public string IsOnSale { get; set; }
+
+        [JsonProperty("sale_price_or_discount")]
+        public string SalePriceOrDiscount { get; set; }
+
+        [JsonProperty("short_description")]
+        public string ShortDescription { get; set; }
+
         [JsonIgnore]
         public string Thumbnail { get; set; }
         [JsonIgnore]

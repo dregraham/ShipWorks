@@ -26,5 +26,17 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 
         [JsonProperty("shipments")]
         public LemonStandShipment Shipments { get; set; }
+
+        [JsonProperty("total_shipping_quote")]
+        public string TotalShippingQuote { get; set; }
+
+        [JsonProperty("tax_total")]
+        public string TaxTotal { get; set; }
+
+        [JsonProperty("total_discount")]
+        public string TotalDiscount { get; set; }
+
+        [JsonProperty("subtotal")]
+        public string Subtotal { get; set; }
     }
 }

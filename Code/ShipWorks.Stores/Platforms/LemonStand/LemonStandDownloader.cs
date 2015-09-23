@@ -13,6 +13,7 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Quartz.Util;
 using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
@@ -164,7 +165,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 LemonStandOrderEntity order =
                     (LemonStandOrderEntity)InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
-
+                order.LemonStandOrderID = lsOrder.ID;
                 order.OnlineStatus = lsOrder.Status;
 
                 // Only load new orders
@@ -178,6 +179,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     LemonStandInvoice invoice =
                         JsonConvert.DeserializeObject<LemonStandInvoice>(
                             jsonOrder.SelectToken("invoices.data").Children().First().ToString());
+
+                    LoadOrderCharges(order, invoice);
+                    
+
 
                     // Get shipment information and set requested shipping
                     JToken jsonShipment = client.GetShipment(invoice.ID);
@@ -209,7 +214,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     // Load order items
                     LoadItems(jsonOrder, order);
 
-                    order.OrderTotal = decimal.Parse(lsOrder.SubtotalPaid);
+                    order.OrderTotal = decimal.Parse(lsOrder.Total);
                     
                 }
                 return order;
@@ -246,6 +251,39 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             time = time.ToOffset(TimeSpan.FromHours(-7));
             
             return time.ToString("yyyy-MM-ddTHH:mm:sszzz");
+        }
+
+        private void LoadOrderCharge(OrderEntity order, string name, decimal amount)
+        {
+            //InstantiateOrderCharge
+            OrderChargeEntity charge = InstantiateOrderCharge(order);
+
+            charge.Type = name.ToUpperInvariant();
+            charge.Description = name;
+            
+            charge.Amount = amount;
+        }
+
+        private void LoadOrderCharges(OrderEntity order, LemonStandInvoice invoice)
+        {
+            if (invoice.TaxTotal.IsNullOrWhiteSpace())
+            {
+                invoice.TaxTotal = "0";
+            }
+
+            if (invoice.TotalDiscount.IsNullOrWhiteSpace())
+            {
+                invoice.TotalDiscount = "0";
+            }
+
+            if (invoice.TotalShippingQuote.IsNullOrWhiteSpace())
+            {
+                invoice.TotalShippingQuote = "0";
+            }
+
+            LoadOrderCharge(order, "Total Shipping Quote", decimal.Parse(invoice.TotalShippingQuote));
+            LoadOrderCharge(order, "Tax Total", decimal.Parse(invoice.TaxTotal));
+            LoadOrderCharge(order, "Total Discount", decimal.Parse(invoice.TotalDiscount));
         }
 
         /// <summary>
@@ -313,7 +351,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             LemonStandStoreEntity lsStore = (LemonStandStoreEntity)Store;
             LruCache<int, LemonStandItem> storeProductCache = LemonStandProductCache.GetStoreProductImageCache(lsStore.StoreURL, lsStore.Token);
-
+            
             //List of order items
             IList<JToken> jsonItems = jsonOrder.SelectToken("items.data").Children().ToList();
             foreach (JToken jsonItem in jsonItems)
@@ -342,25 +380,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="product">The LemonStand item DTO</param>
         private void LoadItem(LemonStandOrderEntity order, LemonStandItem product)
         {
-            OrderItemEntity item = InstantiateOrderItem(order);
-
-            //"data": [{
-            //    "id": 1,
-            //    "shop_order_id": 1,
-            //    "shop_product_id": 1,
-            //    "shop_tax_class_id": 1,
-            //    "name": "Baseball cap",
-            //    "description": null,
-            //    "quantity": 1,
-            //    "original_price": 39.99,
-            //    "price": 39.99,
-            //    "base_price": 39.99,
-            //    "cost": null,
-            //    "discount": 0,
-            //    "total": 39.99,
-            //    "options": null,
-            //    "extras": null
-            //}]
+            LemonStandOrderItemEntity item = (LemonStandOrderItemEntity) InstantiateOrderItem(order);
 
             item.Description = product.Description;
             item.SKU = product.Sku;
@@ -371,6 +391,23 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             item.Quantity = int.Parse(product.Quantity);
             item.Thumbnail = product.Thumbnail;
 
+            // LemonStand specific item properties
+            item.UrlName = product.UrlName;
+            item.Cost = product.Cost;
+
+            if (product.IsOnSale == "0")
+            {
+                item.IsOnSale = "false";
+            }
+            else
+            {
+                item.IsOnSale = "true";
+            }
+            //item.IsOnSale = product.IsOnSale;
+            item.SalePriceOrDiscount = product.SalePriceOrDiscount;
+            item.ShortDescription = product.ShortDescription;
+            
+            // Load item attributes
             foreach (JToken jsonAttribute in product.Attributes)
             {
                 OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
@@ -379,7 +416,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 attribute.UnitPrice = 0;
             }
         }
-
 
         private LemonStandItem GetProductFromLemonStand(string productID)
         {
