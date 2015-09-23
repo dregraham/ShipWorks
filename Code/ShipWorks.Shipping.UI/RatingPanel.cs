@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.Common.Threading;
+using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -25,7 +26,7 @@ namespace ShipWorks.Shipping.UI
     /// </summary>
     public partial class RatingPanel : UserControl, IDockingPanelContent
     {
-        private RatingPanelViewModel viewModel;
+        private readonly RatingPanelViewModel viewModel;
         private RateGroup rateGroup;
         private bool showAllRates;
         private bool showSpinner;
@@ -38,6 +39,19 @@ namespace ShipWorks.Shipping.UI
         public RatingPanel()
         {
             InitializeComponent();
+
+            if (DesignModeDetector.IsDesignerHosted())
+            {
+                return;
+            }
+
+            viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<RatingPanelViewModel>();
+
+            DataBindings.Add(nameof(RateGroup), viewModel, nameof(viewModel.RateGroup));
+            DataBindings.Add(nameof(ErrorMessage), viewModel, nameof(viewModel.ErrorMessage));
+            DataBindings.Add(nameof(ActionLinkVisible), viewModel, nameof(viewModel.ActionLinkVisible));
+            DataBindings.Add(nameof(ShowAllRates), viewModel, nameof(viewModel.ShowAllRates));
+            DataBindings.Add(nameof(ShowSpinner), viewModel, nameof(viewModel.ShowSpinner));
         }
 
         /// <summary>
@@ -131,14 +145,6 @@ namespace ShipWorks.Shipping.UI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-            viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<RatingPanelViewModel>();
-
-            DataBindings.Add(nameof(RateGroup), viewModel, nameof(viewModel.RateGroup));
-            DataBindings.Add(nameof(ErrorMessage), viewModel, nameof(viewModel.ErrorMessage));
-            DataBindings.Add(nameof(ActionLinkVisible), viewModel, nameof(viewModel.ActionLinkVisible));
-            DataBindings.Add(nameof(ShowAllRates), viewModel, nameof(viewModel.ShowAllRates));
-            DataBindings.Add(nameof(ShowSpinner), viewModel, nameof(viewModel.ShowSpinner));
 
             // Force the rates to be refreshed when the rate control tells us
             rateControl.ReloadRatesRequired += (sender, args) => viewModel.RefreshRates(true);

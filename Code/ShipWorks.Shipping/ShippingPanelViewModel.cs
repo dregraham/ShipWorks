@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public void SaveToDatabase()
         {
-            if (loadedShipment?.Shipment.Processed ?? true)
+            if (loadedShipment?.Shipment?.Processed ?? true)
             {
                 return;
             }

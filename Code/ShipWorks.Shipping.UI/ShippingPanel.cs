@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.Common.Threading;
+using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -19,8 +20,8 @@ namespace ShipWorks.Shipping.UI
     public partial class ShippingPanel : UserControl, IDockingPanelContent
     {
         ShippingPanelControl shipmentPanelControl;
-        ShippingPanelViewModel viewModel;
-        IMessenger messenger;
+        readonly ShippingPanelViewModel viewModel;
+        readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
@@ -28,6 +29,14 @@ namespace ShipWorks.Shipping.UI
         public ShippingPanel()
         {
             InitializeComponent();
+
+            if (DesignModeDetector.IsDesignerHosted())
+            {
+                return;
+            }
+
+            viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<ShippingPanelViewModel>();
+            messenger = IoC.UnsafeGlobalLifetimeScope.Resolve<IMessenger>();
         }
 
         /// <summary>
@@ -36,9 +45,6 @@ namespace ShipWorks.Shipping.UI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-            viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<ShippingPanelViewModel>();
-            messenger = IoC.UnsafeGlobalLifetimeScope.Resolve<IMessenger>();
 
             shipmentPanelControl = new ShippingPanelControl(viewModel);
             shipmentPanelelementHost.Child = shipmentPanelControl;
