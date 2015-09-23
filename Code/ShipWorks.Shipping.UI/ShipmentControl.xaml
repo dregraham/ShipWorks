@@ -4,15 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI"
-             xmlns:tc="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             xmlns:converters="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
+             xmlns:rules="clr-namespace:ShipWorks.Shipping.UI.ValidationRules"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
+                <ResourceDictionary Source="Styles/EmptyButtonStyle.xaml" />
+                <ResourceDictionary Source="Templates/BlinkingRedErrorTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <tc:DoubleToWeightStringConverter x:Key="DoubleToWeightStringConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
@@ -50,9 +51,20 @@
             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource GridLabel}" Width="40">Weight:</TextBlock>
 
             
-            
             <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
-                <TextBox Width="100" Text="{Binding TotalWeight, Mode=TwoWay,Converter={StaticResource DoubleToWeightStringConverter}}"/>
+
+                <TextBox Width="100" Validation.ErrorTemplate="{StaticResource BlinkingRedErrorTemplate}">
+                    <TextBox.Text>
+                        <Binding Path="TotalWeight" Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <rules:WeightValidationRule/>
+                            </Binding.ValidationRules>
+                            <Binding.Converter>
+                                <converters:DoubleToWeightStringConverter/>
+                            </Binding.Converter>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
                 <local:ScaleControl/>
             </StackPanel>
             
@@ -75,8 +87,8 @@
                 Add Weight
             -->
             <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Grid.Column="0" Style="{StaticResource GridLabel}">Add to weight</TextBlock>
-                <CheckBox Grid.Column="1"/>
+                <TextBlock Style="{StaticResource GridLabel}">Add to weight</TextBlock>
+                <CheckBox/>
             </StackPanel>
     
 
@@ -86,13 +98,13 @@
             -->
             <TextBlock Grid.Row="9" Grid.Column="0" Style="{StaticResource GridLabel}" Width="53">Insurance:</TextBlock>
             <StackPanel  Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
-                <CheckBox Grid.Column="0" IsChecked="{Binding Insurance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Column="1"/>
+                <CheckBox IsChecked="{Binding Insurance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock/>
             </StackPanel>
 
             <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Grid.Column="0" Style="{StaticResource GridLabel}">Insured Value:</TextBlock>
-                <TextBox Grid.Column="1" Width="40"/>
+                <TextBlock Style="{StaticResource GridLabel}">Insured Value:</TextBlock>
+                <TextBox Width="40"/>
             </StackPanel>
 
 

@@ -9962,7 +9962,7 @@
     <None Include="Resources\folderclosed_linked_infinity.png" />
     <None Include="Resources\arrow_right_blue.png" />
     <None Include="Resources\funnel_copy2.png" />
-    <None Include="Resources\delete.png" />
+    <Resource Include="Resources\delete.png" />
     <None Include="Resources\branch_element_top.png" />
     <None Include="Resources\branch_element_bottom.png" />
     <EmbeddedResource Include="Filters\Content\ConditionTree.xml" />
@@ -10526,7 +10526,7 @@
     <None Include="Resources\nav_down_green2.png" />
     <None Include="Resources\nav_up_blue.png" />
     <None Include="Resources\nomorerack.png" />
-    <Content Include="Resources\not_available.gif" />
+    <Resource Include="Resources\not_available.gif" />
     <None Include="Resources\OnTracLogo48.jpg" />
     <None Include="Resources\plug.png" />
     <None Include="Resources\satellite_dish_add.png" />

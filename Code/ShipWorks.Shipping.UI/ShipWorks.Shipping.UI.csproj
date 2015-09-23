@@ -190,6 +190,7 @@
     <Compile Include="ShipmentPanelRegistration.cs" />
     <Compile Include="ShippingModule.cs" />
     <Compile Include="StateProvinceConverter.cs" />
+    <Compile Include="ValidationRules\WeightValidationRule.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
@@ -270,6 +271,14 @@
     <Page Include="ScaleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\EmptyButtonStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Templates\BlinkingRedErrorTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ShipmentControl.xaml">
       <SubType>Designer</SubType>

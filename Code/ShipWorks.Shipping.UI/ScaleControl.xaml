@@ -4,25 +4,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI"
-             mc:Ignorable="d">
+             mc:Ignorable="d" 
+             VerticalAlignment="Top">
     <UserControl.Resources>
-        <Style x:Key="EmptyButtonStyle" TargetType="Button">
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/EmptyButtonStyle.xaml" />
+                <ResourceDictionary Source="Templates/BlinkingRedErrorTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <StackPanel Orientation="Horizontal">
         <Button Style="{StaticResource EmptyButtonStyle}">
             <Image Width="15" Source="pack://application:,,,/ShipWorks.Core;component/Resources/weigh.png"/>
         </Button>
-        <Label Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">(12 lb 2 oz)</Label>
+        <Label Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
+            (12 lb 2 oz)
+        </Label>
     </StackPanel>
 </UserControl>
