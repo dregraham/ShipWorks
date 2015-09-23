@@ -357,6 +357,7 @@
     <Compile Include="Shipping\Carriers\FedEx\WebServices\GlobalShipAddress\FedExWebServiceReferenceTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\WebServices\Rate\ReturnedRateTypeTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\WebServices\Ship\FedExWebServiceShipReferenceTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\WebServices\Track\FedExWebServiceTrackReferenceTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelCredentialsTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelDatabaseRepositoryTest.cs" />
