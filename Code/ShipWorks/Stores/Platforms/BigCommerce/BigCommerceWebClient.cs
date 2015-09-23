@@ -716,7 +716,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             order.OrderProducts = GetOrderProducts(order);
 
             // Get the store specific product image cache
-            LruCache<int, BigCommerceProductImage> productImageCache = BigCommerceProductImageCache.GetStoreProductImageCache(apiUserName, apiUrl, apiToken);
+            LruCache<int, BigCommerceProductImage> productImageCache = BigCommerceProductImageCache.Instance.GetStoreProductImageCache(apiUserName, apiUrl, apiToken);
 
             foreach (BigCommerceProduct product in order.OrderProducts)
             {

@@ -1860,10 +1860,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v7.wsdl">
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v9.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v7.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v9.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -1871,10 +1871,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_OpenShip_OpenShipService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v3.wsdl">
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v4.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Close\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v3.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v4.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -1882,10 +1882,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v16.wsdl">
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v18.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Rate\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v16.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v18.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -1893,10 +1893,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Rate_RateService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v6.wsdl">
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v7.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Registration\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v6.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v7.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -1904,10 +1904,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Registration1_RegistrationService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v9.wsdl">
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v10.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Track\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v9.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v10.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -1915,10 +1915,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl">
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -1937,10 +1937,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_WebServices_OpenAccount_OpenAccountService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v15.wsdl">
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v17.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Ship\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v15.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v17.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -1959,10 +1959,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_OnLineTools_WebServices_RegisterMgrAcctService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl">
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -2080,10 +2080,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_AmeriCommerce_WebServices_AmeriCommerceDatabaseIO</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v2.wsdl">
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v2.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

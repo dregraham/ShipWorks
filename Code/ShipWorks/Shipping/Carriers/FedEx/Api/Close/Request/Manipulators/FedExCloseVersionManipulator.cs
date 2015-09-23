@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             return new VersionId
             {
                 ServiceId = "clos",
-                Major = 3,
+                Major = 4,
                 Intermediate = 0,
                 Minor = 0
             };

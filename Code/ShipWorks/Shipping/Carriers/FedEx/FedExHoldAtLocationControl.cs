@@ -292,6 +292,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
             }
 
+            if (contactInfo != null)
+            {
+                // Write the contact phone number
+                if (!string.IsNullOrEmpty(contactInfo.TollFreePhoneNumber))
+                {
+                    formattedLocation.AppendFormat("{0}{1}", Environment.NewLine, contactInfo.TollFreePhoneNumber);
+                }
+                if (!string.IsNullOrEmpty(contactInfo.PhoneNumber))
+                {
+                    formattedLocation.AppendFormat("{0}{1}", Environment.NewLine, contactInfo.PhoneNumber);
+                }
+            }
+
             // The location should be formatted based on the location details now
             return formattedLocation.ToString();
         }

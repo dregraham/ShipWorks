@@ -1,4 +1,3 @@
-
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -1816,7 +1815,10 @@ CREATE TABLE [dbo].[FedExShipment]
 [IntlExportDetailLicenseOrPermitExpirationDate] [datetime] NULL,
 [WeightUnitType] [int] NOT NULL,
 [LinearUnitType] [int] NOT NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[RequestedLabelFormat] [int] NOT NULL,
+[FimsAirWaybill] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReturnsClearance] [bit] NOT NULL CONSTRAINT [DF_FedExShipment_ReturnsClearance] DEFAULT ((0)),
+[MaskedData] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -1860,7 +1862,8 @@ CREATE TABLE [dbo].[FedExProfile]
 [ReturnType] [int] NULL,
 [RmaNumber] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RmaReason] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ReturnSaturdayPickup] [bit] NULL
+[ReturnSaturdayPickup] [bit] NULL,
+[ReturnsClearance] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'
@@ -4614,7 +4617,10 @@ CREATE TABLE [dbo].[ShippingSettings]
 [ShipSenseUniquenessXml] [xml] NOT NULL,
 [ShipSenseProcessedShipmentID] [bigint] NOT NULL,
 [ShipSenseEndShipmentID] [bigint] NOT NULL,
-[AutoCreateShipments] [bit] NOT NULL
+[AutoCreateShipments] [bit] NOT NULL,
+[FedExFimsEnabled] [bit] NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsEnabled] DEFAULT ((0)),
+[FedExFimsUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsUsername] DEFAULT (''),
+[FedExFimsPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsPassword] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'

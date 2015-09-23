@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             FedExAccountEntity account = request.CarrierAccountEntity as FedExAccountEntity; 
-            nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account, FedExSettings);
+            nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account);
         }
 
         /// <summary>

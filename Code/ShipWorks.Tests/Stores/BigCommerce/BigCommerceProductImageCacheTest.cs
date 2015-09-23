@@ -18,13 +18,15 @@ namespace ShipWorks.Tests.Stores.BigCommerce
         [Fact]
         public void EmptyListOfCaches_AddsNewCacheAndReturnsIt_Test()
         {
-            LruCache<int, BigCommerceProductImage> newCache = BigCommerceProductImageCache.GetStoreProductImageCache("x", "x", "x");
+            BigCommerceProductImageCache cache = (new BigCommerceProductImageCache());
+
+            LruCache<int, BigCommerceProductImage> newCache = cache.GetStoreProductImageCache("x", "x", "x");
 
             Assert.Equal(0, newCache.Keys.Count);
 
             newCache[1] = new BigCommerceProductImage() { Image = "1", ProductID = 1, Thumbnail = "1th" };
 
-            LruCache<int, BigCommerceProductImage> secondCache = BigCommerceProductImageCache.GetStoreProductImageCache("x", "x", "x");
+            LruCache<int, BigCommerceProductImage> secondCache = cache.GetStoreProductImageCache("x", "x", "x");
 
             Assert.Equal(1, secondCache.Keys.Count);
         }
@@ -32,8 +34,10 @@ namespace ShipWorks.Tests.Stores.BigCommerce
         [Fact]
         public void TwoStores_GetTheirOwnCache_Test()
         {
-            LruCache<int, BigCommerceProductImage> storeAcache = BigCommerceProductImageCache.GetStoreProductImageCache("x", "x", "x");
-            LruCache<int, BigCommerceProductImage> storeBcache = BigCommerceProductImageCache.GetStoreProductImageCache("yyy", "yyy", "yyy");
+            BigCommerceProductImageCache cache = (new BigCommerceProductImageCache());
+
+            LruCache<int, BigCommerceProductImage> storeAcache = cache.GetStoreProductImageCache("x", "x", "x");
+            LruCache<int, BigCommerceProductImage> storeBcache = cache.GetStoreProductImageCache("yyy", "yyy", "yyy");
 
             storeAcache[1] = new BigCommerceProductImage() { Image = "1", ProductID = 1, Thumbnail = "1th" };
             storeAcache[2] = new BigCommerceProductImage() { Image = "2", ProductID = 2, Thumbnail = "2th" };
@@ -47,8 +51,8 @@ namespace ShipWorks.Tests.Stores.BigCommerce
             storeBcache[5] = new BigCommerceProductImage() { Image = "900", ProductID = 5, Thumbnail = "900th" };
             storeBcache[6] = new BigCommerceProductImage() { Image = "9999", ProductID = 6, Thumbnail = "9999th" };
 
-            storeAcache = BigCommerceProductImageCache.GetStoreProductImageCache("x", "x", "x");
-            storeBcache = BigCommerceProductImageCache.GetStoreProductImageCache("yyy", "yyy", "yyy");
+            storeAcache = cache.GetStoreProductImageCache("x", "x", "x");
+            storeBcache = cache.GetStoreProductImageCache("yyy", "yyy", "yyy");
 
             Assert.Equal("1th", storeAcache[1].Thumbnail);
             Assert.Equal("500th", storeBcache[1].Thumbnail);

@@ -11,7 +11,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
 {
     public class FedExCanadaIntegrationTest : DataDrivenIntegrationTestBase
     {
-        private const string fedExTestAccountNumber = "604601185";
+        private const string fedExTestAccountNumber = "607194785";
         private const bool justLabels = true;
         private readonly ITestOutputHelper output;
 

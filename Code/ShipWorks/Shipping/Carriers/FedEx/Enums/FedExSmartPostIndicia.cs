@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx SmartPost® Bound Printed Matter")]
         BoundPrintedMatter = 2,
 
-        [Description("FedEx SmartPost Presorted Standard")]
+        [Description("FedEx SmartPost Parcel Select Lightweight")]
         PresortedStandard = 3,
 
         [Description("FedEx SmartPost® Returns")]

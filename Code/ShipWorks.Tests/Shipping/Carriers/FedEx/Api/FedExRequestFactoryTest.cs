@@ -614,7 +614,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
-            Assert.Equal(17, request.Manipulators.Count());
+            Assert.Equal(19, request.Manipulators.Count());
         }
 
         [Fact]
@@ -631,7 +631,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), specializedList);
 
-            Assert.Equal(19, request.Manipulators.Count());
+            Assert.Equal(21, request.Manipulators.Count());
         }
 
         [Fact]
@@ -639,7 +639,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), new List<ICarrierRequestManipulator>());
 
-            Assert.Equal(17, request.Manipulators.Count());
+            Assert.Equal(19, request.Manipulators.Count());
         }
 
         [Fact]

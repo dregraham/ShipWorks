@@ -204,14 +204,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void CreateRegisterCspUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided_Test()
         {
-            RegisterWebCspUserRequest invalidType = new RegisterWebCspUserRequest();
+            RegisterWebUserRequest invalidType = new RegisterWebUserRequest();
             Assert.Throws<CarrierException>(() => testObject.CreateRegisterUserResponse(invalidType, carrierRequest.Object));
         }
 
         [Fact]
         public void CreateRegisterCspUserResponse_ReturnsFedExRegisterCspUserResponse_Test()
         {
-            RegisterWebCspUserReply validType = new RegisterWebCspUserReply();
+            RegisterWebUserReply validType = new RegisterWebUserReply();
 
             ICarrierResponse response = testObject.CreateRegisterUserResponse(validType, carrierRequest.Object);
 
@@ -231,7 +231,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void CreateSubscriptionResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided_Test()
         {
-            RegisterWebCspUserReply invalidType = new RegisterWebCspUserReply();
+            RegisterWebUserReply invalidType = new RegisterWebUserReply();
             Assert.Throws<CarrierException>(() => testObject.CreateSubscriptionResponse(invalidType, carrierRequest.Object));
         }
 

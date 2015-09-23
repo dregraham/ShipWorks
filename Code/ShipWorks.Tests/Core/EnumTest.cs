@@ -5,11 +5,19 @@ using System.Reflection;
 using System.Text;
 using Xunit;
 using ShipWorks.Shipping;
+using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Core
 {
     public class EnumTest
     {
+        private readonly ITestOutputHelper output;
+
+        public EnumTest(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+
         [Fact]
         public void Verify_EnumObfuscation_IsSet_Test()
         {
@@ -49,7 +57,7 @@ namespace ShipWorks.Tests.Core
                     }
                 }
             }
-
+            output.WriteLine(missingObfuscationAttribute);
             Assert.Equal(0, missingObfuscationAttribute.Length);
         }
 
@@ -177,6 +185,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Filters.FilterHelper+FilterImageType".ToUpperInvariant(),
                 "ShipWorks.Filters.Management.FilterEditingResult".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExEmailNotificationType".ToUpperInvariant(),
+                "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExMaskedDataType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment.codType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.Postal.Endicia.Account.EndiciaAccountType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaReseller".ToUpperInvariant(),
