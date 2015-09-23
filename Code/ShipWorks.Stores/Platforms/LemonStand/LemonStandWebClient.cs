@@ -11,11 +11,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 {
     public class LemonStandWebClient : ILemonStandWebClient
     {
+        private const int itemsPerPage = 50;
         //LemonStand API endpoint
         private static string lemonStandEndpoint;
         private static string accessToken;
-        private const int itemsPerPage = 50;
-        
+
         /// <summary>
         ///     Constructor
         /// </summary>
@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             if (store == null)
             {
-                throw new ArgumentNullException("store");
+                throw new ArgumentNullException(nameof(store));
             }
             lemonStandEndpoint = store.StoreURL + "/api/v2";
             accessToken = store.Token;
@@ -35,7 +35,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Orders in Json</returns>
         public JToken GetOrders(int page, string start)
         {
-            return ProcessRequest(CreateGetRequest("orders?updated_at_min=" + start + "&sort=updated_at&order=desc&embed=invoices,customer,items&limit="+ itemsPerPage + "&page=" + page), "GetOrders");
+            return
+                ProcessRequest(
+                    CreateGetRequest("orders?updated_at_min=" + start +
+                                     "&sort=updated_at&order=desc&embed=invoices,customer,items&limit=" + itemsPerPage +
+                                     "&page=" + page), "GetOrders");
         }
 
         /// <summary>
@@ -65,7 +69,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Shipping Address in Json</returns>
         public JToken GetShippingAddress(string shipmentId)
         {
-            return ProcessRequest(CreateGetRequest("shipment/" + shipmentId + "?embed=shipping_address"), "GetShippingAddress");
+            return ProcessRequest(CreateGetRequest("shipment/" + shipmentId + "?embed=shipping_address"),
+                "GetShippingAddress");
         }
 
         /// <summary>
@@ -75,7 +80,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Billing Address in Json</returns>
         public JToken GetBillingAddress(string customerId)
         {
-            return ProcessRequest(CreateGetRequest("customer/" + customerId + "?embed=billing_addresses"), "GetBillingAddress");
+            return ProcessRequest(CreateGetRequest("customer/" + customerId + "?embed=billing_addresses"),
+                "GetBillingAddress");
         }
 
         /// <summary>
@@ -85,7 +91,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Product in Json</returns>
         public JToken GetProduct(string productId)
         {
-            return ProcessRequest(CreateGetRequest("product/" + productId + "?embed=images,categories,attributes"), "GetProduct");
+            return ProcessRequest(CreateGetRequest("product/" + productId + "?embed=images,categories,attributes"),
+                "GetProduct");
         }
 
         /// <summary>
@@ -99,14 +106,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             string orderNumber)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            
+
             // LemonStand returns a bad request error if a blank tracking number is uploaded
             if (trackingNumber.IsNullOrWhiteSpace())
             {
                 trackingNumber = "No tracking number was entered";
             }
             parameters.Add("tracking_code", trackingNumber);
-            ProcessRequest(CreatePostRequest("shipment/" + shipmentId + "/trackingcode", parameters), "UploadShipmentDetails");
+            ProcessRequest(CreatePostRequest("shipment/" + shipmentId + "/trackingcode", parameters),
+                "UploadShipmentDetails");
 
             parameters.Clear();
 
@@ -130,7 +138,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Setup a post request
         /// </summary>
-        private static HttpVariableRequestSubmitter CreatePostRequest(string operationName, Dictionary<string, string> parameters)
+        private static HttpVariableRequestSubmitter CreatePostRequest(string operationName,
+            Dictionary<string, string> parameters)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
@@ -149,7 +158,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Setup a patch request
         /// </summary>
-        private static HttpVariableRequestSubmitter CreatePatchRequest(string operationName, Dictionary<string, string> parameters)
+        private static HttpVariableRequestSubmitter CreatePatchRequest(string operationName,
+            Dictionary<string, string> parameters)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);

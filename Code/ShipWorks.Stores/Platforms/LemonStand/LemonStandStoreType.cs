@@ -21,7 +21,6 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Filters;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -37,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         ///     Constructor
         /// </summary>
         public LemonStandStoreType(StoreEntity store)
-            : this(store, LogManager.GetLogger(typeof(LemonStandStoreType)))
+            : this(store, LogManager.GetLogger(typeof (LemonStandStoreType)))
         {
         }
 
@@ -69,6 +68,20 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 return identifier;
             }
         }
+
+        /// <summary>
+        ///     Gets the help URL to use in the account settings.
+        /// </summary>
+        public static Uri AccountSettingsHelpUrl
+        {
+            get { return new Uri("http://support.shipworks.com/support/solutions/articles/4000062623"); }
+        }
+
+        /// <summary>
+        ///     The initial download policy
+        /// </summary>
+        public override InitialDownloadPolicy InitialDownloadPolicy =>
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) {DefaultDaysBack = 7, MaxDaysBack = 30};
 
         /// <summary>
         ///     Create menu commands for upload shipment details
@@ -206,11 +219,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Create the customer Order Item Xml for the order item provided
+        ///     Create the Order Item Xml for the order item provided
         /// </summary>
-        public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
+        public override void GenerateTemplateOrderItemElements(ElementOutline container,
+            Func<OrderItemEntity> itemSource)
         {
-            var item = new Lazy<LemonStandOrderItemEntity>(() => (LemonStandOrderItemEntity)itemSource());
+            var item = new Lazy<LemonStandOrderItemEntity>(() => (LemonStandOrderItemEntity) itemSource());
 
             ElementOutline outline = container.AddElement("BigCommerce");
             outline.AddElement("OrderItemID", () => item.Value.OrderItemID);
@@ -221,8 +235,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             outline.AddElement("ShortDescription", () => item.Value.ShortDescription);
             outline.AddElement("Category", () => item.Value.Category);
         }
-
-        
 
         /// <summary>
         ///     Creates the OrderIdentifier for locating orders
@@ -241,25 +253,17 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Handle a link click for the given field
+        ///     Handle a link click for the given field
         /// </summary>
         public override void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
-            LemonStandStoreEntity store = (LemonStandStoreEntity)Store;
-            string lemonStandUrl =  store.StoreURL + "/product";
-            string itemUrl = ((LemonStandOrderItemEntity)entity).UrlName;
+            LemonStandStoreEntity store = (LemonStandStoreEntity) Store;
+            string lemonStandUrl = store.StoreURL + "/product";
+            string itemUrl = ((LemonStandOrderItemEntity) entity).UrlName;
 
-            string url = string.Format("{0}/{1}", lemonStandUrl, itemUrl);
+            string url = lemonStandUrl + "/" + itemUrl;
 
             WebHelper.OpenUrl(url, owner);
-        }
-
-        /// <summary>
-        /// Gets the help URL to use in the account settings.
-        /// </summary>
-        public static Uri AccountSettingsHelpUrl
-        {
-            get { return new Uri("http://support.shipworks.com/support/solutions/articles/4000062623"); }
         }
 
         /// <summary>
@@ -387,7 +391,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 Name = "Cancelled",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -422,7 +426,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 Name = "Quote",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -440,11 +444,5 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             return group;
         }
-
-        /// <summary>
-        /// The initial download policy
-        /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy => 
-            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 7, MaxDaysBack = 30 };
     }
 }

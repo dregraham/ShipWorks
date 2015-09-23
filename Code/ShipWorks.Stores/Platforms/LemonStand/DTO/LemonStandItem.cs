@@ -2,7 +2,6 @@
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 
 namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 {
@@ -86,6 +85,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 
         [JsonIgnore]
         public string Thumbnail { get; set; }
+
         [JsonIgnore]
         public IList<JToken> Attributes { get; set; }
     }

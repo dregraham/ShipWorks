@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Quartz.Util;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
-using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Collections;
-using Quartz.Util;
-using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -23,12 +21,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     /// </summary>
     public class LemonStandDownloader : StoreDownloader
     {
+        private const int itemsPerPage = 50;
         private readonly ILemonStandWebClient client;
         private readonly ISqlAdapterRetry sqlAdapter;
-        private const int itemsPerPage = 50;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LemonStandDownloader"/> class.
+        ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
         /// </summary>
         /// <param name="store">The store entity</param>
         public LemonStandDownloader(StoreEntity store)
@@ -39,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LemonStandDownloader"/> class.
+        ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
         /// </summary>
         /// <param name="store">The store.</param>
         /// <param name="webClient">The web client.</param>
@@ -70,8 +68,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 DateTime startDateTime = GetDownloadStartingPoint();
                 string start = ToLemonStandDate(startDateTime);
 
-                // LemonStand does not return any information about number of pages, but by default returns 250 items per page
-                // So we get first 250 and if there are in fact 250 items, then get the next page
+                // LemonStand does not return any information about number of pages, so we set the limit to 50 orders per page
+                // We get 50 orders at a time and if there are in fact 50 items, then get the next page
                 while (!allOrdersRetrieved)
                 {
                     // Check for cancellation
@@ -91,6 +89,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     {
                         allOrdersRetrieved = true;
                     }
+
                     currentPage++;
                 }
 
@@ -106,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     }
 
                     // Set the progress detail
-                    Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved+1, expectedCount);
+                    Progress.Detail = "Processing order " + (QuantitySaved+1) + " of " + expectedCount + "...";
                     Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
 
                     LoadOrder(jsonOrder);
@@ -136,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Prepares the order for loading.
+        ///     Prepares the order for loading.
         /// </summary>
         /// <param name="jsonOrder">The json order.</param>
         /// <returns>Order Entity to be saved to database</returns>
@@ -150,21 +149,21 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             //                shipment  billing_address  product 
             //                  /
             //          shipment_address
-            
+
             try
             {
                 if (jsonOrder == null)
                 {
-                    throw new ArgumentNullException("jsonOrder");
+                    throw new ArgumentNullException(nameof(jsonOrder));
                 }
 
                 //Deserialize Json Order into order DTO
                 LemonStandOrder lsOrder = JsonConvert.DeserializeObject<LemonStandOrder>(jsonOrder.ToString());
-                
+
                 int orderID = int.Parse(lsOrder.ID);
 
                 LemonStandOrderEntity order =
-                    (LemonStandOrderEntity)InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
+                    (LemonStandOrderEntity) InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
                 order.LemonStandOrderID = lsOrder.ID;
                 order.OnlineStatus = lsOrder.Status;
 
@@ -181,8 +180,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                             jsonOrder.SelectToken("invoices.data").Children().First().ToString());
 
                     LoadOrderCharges(order, invoice);
-                    
-
 
                     // Get shipment information and set requested shipping
                     JToken jsonShipment = client.GetShipment(invoice.ID);
@@ -200,7 +197,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                     // Get customer information and billing address
                     LemonStandCustomer customer =
-                        JsonConvert.DeserializeObject<LemonStandCustomer>(jsonOrder.SelectToken("customer.data").ToString());
+                        JsonConvert.DeserializeObject<LemonStandCustomer>(
+                            jsonOrder.SelectToken("customer.data").ToString());
                     JToken jsonBillingAddress = client.GetBillingAddress(customer.ID);
                     LemonStandBillingAddress billingAddress =
                         JsonConvert.DeserializeObject<LemonStandBillingAddress>(
@@ -215,7 +213,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     LoadItems(jsonOrder, order);
 
                     order.OrderTotal = decimal.Parse(lsOrder.Total);
-                    
                 }
                 return order;
             }
@@ -240,19 +237,30 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new LemonStandException("Error loading the date");
             }
-            
+
             return result.ToUniversalTime();
         }
 
+        /// <summary>
+        ///     Converts database date format to the LemonStand date format.
+        /// </summary>
+        /// <param name="utcDateTime">The UTC date time.</param>
+        /// <returns></returns>
         public static string ToLemonStandDate(DateTime utcDateTime)
         {
             // LemonStand date format - 2014-06-02T12:08:24-0700
             DateTimeOffset time = utcDateTime;
             time = time.ToOffset(TimeSpan.FromHours(-7));
-            
+
             return time.ToString("yyyy-MM-ddTHH:mm:sszzz");
         }
 
+        /// <summary>
+        ///     Loads an order charge.
+        /// </summary>
+        /// <param name="order">The order.</param>
+        /// <param name="name">The charge name.</param>
+        /// <param name="amount">The charge amount.</param>
         private void LoadOrderCharge(OrderEntity order, string name, decimal amount)
         {
             //InstantiateOrderCharge
@@ -260,10 +268,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             charge.Type = name.ToUpperInvariant();
             charge.Description = name;
-            
             charge.Amount = amount;
         }
 
+        /// <summary>
+        ///     Loads the order charges.
+        /// </summary>
+        /// <param name="order">The order.</param>
+        /// <param name="invoice">The invoice DTO.</param>
         private void LoadOrderCharges(OrderEntity order, LemonStandInvoice invoice)
         {
             if (invoice.TaxTotal.IsNullOrWhiteSpace())
@@ -287,14 +299,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Gets the download starting point.
+        ///     Gets the download starting point.
         /// </summary>
         /// <returns>A DateTime object.</returns>
         private DateTime GetDownloadStartingPoint()
         {
-            // We're going to have our starting point default to either the initial download days setting or a year back
-            int previousDaysToDownload = Store.InitialDownloadDays.HasValue ? Store.InitialDownloadDays.Value : 365;
-            DateTime startingPoint = DateTime.UtcNow.AddDays(-1 * previousDaysToDownload);
+            // We're going to have our starting point default to either the initial download days setting or 30 days back
+            int previousDaysToDownload = Store.InitialDownloadDays ?? 30;
+            DateTime startingPoint = DateTime.UtcNow.AddDays(-1*previousDaysToDownload);
 
             DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
             if (lastModifiedDate.HasValue)
@@ -309,7 +321,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Loads Shipping and Billing address into the order entity
+        ///     Loads Shipping and Billing address into the order entity
         /// </summary>
         /// <param name="order">The LemonStand order entity</param>
         /// <param name="shipAddress">The shippping addres DTO</param>
@@ -349,21 +361,27 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="order">The LemonStand order entity</param>
         private void LoadItems(JToken jsonOrder, LemonStandOrderEntity order)
         {
-            LemonStandStoreEntity lsStore = (LemonStandStoreEntity)Store;
-            LruCache<int, LemonStandItem> storeProductCache = LemonStandProductCache.GetStoreProductImageCache(lsStore.StoreURL, lsStore.Token);
-            
+            LemonStandStoreEntity lsStore = (LemonStandStoreEntity) Store;
+            LruCache<int, LemonStandItem> storeProductCache =
+                LemonStandProductCache.GetStoreProductImageCache(lsStore.StoreURL, lsStore.Token);
+
             //List of order items
             IList<JToken> jsonItems = jsonOrder.SelectToken("items.data").Children().ToList();
+
+            // For each item, use the product ID to see if the item has been saved to the cache
+            // If so, load from the cache. If it is not in the cache, make a request to get the item information from LemonStand
             foreach (JToken jsonItem in jsonItems)
             {
                 string productID = jsonItem.SelectToken("shop_product_id").ToString();
 
+                // Check to see if the item has been cached
                 LemonStandItem product = storeProductCache[int.Parse(productID)];
 
                 if (product == null)
                 {
+                    // Item is not in the cache, so get the information from LemonStand
                     product = GetProductFromLemonStand(productID);
-                    // And add it to the cache
+                    // Since it was not in the cache, let's add it
                     storeProductCache[int.Parse(productID)] = product;
                 }
 
@@ -374,7 +392,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Load an order item
+        ///     Load an order item
         /// </summary>
         /// <param name="order">The LemonStand order entity</param>
         /// <param name="product">The LemonStand item DTO</param>
@@ -395,15 +413,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             item.UrlName = product.UrlName;
             item.Cost = product.Cost;
 
-            if (product.IsOnSale == "0")
-            {
-                item.IsOnSale = "No";
-            }
-            else
-            {
-                item.IsOnSale = "Yes";
-            }
-            //item.IsOnSale = product.IsOnSale;
+            // We want to display "Yes" or "No", instead of 1 or 0
+            item.IsOnSale = product.IsOnSale == "0" ? "No" : "Yes";
             item.SalePriceOrDiscount = product.SalePriceOrDiscount;
             item.ShortDescription = product.ShortDescription;
             item.Category = product.Category;
@@ -418,6 +429,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
         }
 
+        /// <summary>
+        ///     Gets the product information from LemonStand.
+        /// </summary>
+        /// <param name="productID">The product identifier.</param>
+        /// <returns>A populated LemonStandItem DTO</returns>
         private LemonStandItem GetProductFromLemonStand(string productID)
         {
             JToken jsonProduct = client.GetProduct(productID);
@@ -430,19 +446,17 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             product.Category =
                 jsonProduct.SelectToken("data.categories.data").Children().First().SelectToken("name").ToString();
             // Get the product images from LemonStand
-            List<JToken> productImagesRestResponse = jsonProduct.SelectToken("data.images.data")
+            List<JToken> productImagesJson = jsonProduct.SelectToken("data.images.data")
                 .Children()
                 .First()
                 .SelectToken("thumbnails")
                 .Children()
                 .ToList();
 
-            // If we received a productImagesRestResponse, process it
-            // If we did not, BigCommerce didn't return any relevant info about the product image, so we don't want to
-            // keep trying to download it, so below we'll just put blank image info into the cached image.
-            if (productImagesRestResponse != null)
+            // If we received a productImages response, process it
+            if (productImagesJson != null)
             {
-                JToken image = productImagesRestResponse.FirstOrDefault();
+                JToken image = productImagesJson.FirstOrDefault();
                 if (image != null)
                 {
                     product.Thumbnail = "http:" + image.SelectToken("location");

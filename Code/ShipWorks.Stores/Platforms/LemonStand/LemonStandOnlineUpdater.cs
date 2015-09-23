@@ -13,17 +13,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     /// </summary>
     public class LemonStandOnlineUpdater
     {
-        // Logger 
-        private readonly ILog log;
-
         // the store this instance is for
         private readonly ILemonStandWebClient client;
+        // Logger 
+        private readonly ILog log;
 
         /// <summary>
         ///     Constructor
         /// </summary>
         public LemonStandOnlineUpdater(LemonStandStoreEntity store)
-            : this(LogManager.GetLogger(typeof(LemonStandOnlineUpdater)), new LemonStandWebClient(store))
+            : this(LogManager.GetLogger(typeof (LemonStandOnlineUpdater)), new LemonStandWebClient(store))
         {
         }
 
@@ -64,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             if (shipment == null)
             {
-                throw new ArgumentNullException("shipment");
+                throw new ArgumentNullException(nameof(shipment));
             }
             string tracking = shipment.TrackingNumber;
             OrderEntity order = shipment.Order;
