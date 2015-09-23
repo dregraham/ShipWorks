@@ -475,9 +475,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("StoreID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("APIKey", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Token", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -553,17 +550,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)LemonStandStoreFieldIndex.StoreID, true); }
 			set	{ SetValue((int)LemonStandStoreFieldIndex.StoreID, value); }
-		}
-
-		/// <summary> The APIKey property of the Entity LemonStandStore<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "LemonStandStore"."APIKey"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String APIKey
-		{
-			get { return (System.String)GetValue((int)LemonStandStoreFieldIndex.APIKey, true); }
-			set	{ SetValue((int)LemonStandStoreFieldIndex.APIKey, value); }
 		}
 
 		/// <summary> The Token property of the Entity LemonStandStore<br/><br/>

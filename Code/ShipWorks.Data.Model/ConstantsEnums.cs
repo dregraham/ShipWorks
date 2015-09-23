@@ -4808,6 +4808,65 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandOrderItem.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum LemonStandOrderItemFieldIndex:int
+	{
+		///<summary>OrderItemID. Inherited from OrderItem</summary>
+		OrderItemID_OrderItem,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>Name. </summary>
+		Name,
+		///<summary>Code. </summary>
+		Code,
+		///<summary>SKU. </summary>
+		SKU,
+		///<summary>ISBN. </summary>
+		ISBN,
+		///<summary>UPC. </summary>
+		UPC,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>Location. </summary>
+		Location,
+		///<summary>Image. </summary>
+		Image,
+		///<summary>Thumbnail. </summary>
+		Thumbnail,
+		///<summary>UnitPrice. </summary>
+		UnitPrice,
+		///<summary>UnitCost. </summary>
+		UnitCost,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>Quantity. </summary>
+		Quantity,
+		///<summary>LocalStatus. </summary>
+		LocalStatus,
+		///<summary>IsManual. </summary>
+		IsManual,
+		///<summary>OrderItemID. </summary>
+		OrderItemID,
+		///<summary>UrlName. </summary>
+		UrlName,
+		///<summary>Cost. </summary>
+		Cost,
+		///<summary>IsOnSale. </summary>
+		IsOnSale,
+		///<summary>SalePriceOrDiscount. </summary>
+		SalePriceOrDiscount,
+		///<summary>ShortDescription. </summary>
+		ShortDescription,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandStore.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -4875,8 +4934,6 @@ namespace ShipWorks.Data.Model
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
-		///<summary>APIKey. </summary>
-		APIKey,
 		///<summary>Token. </summary>
 		Token,
 		///<summary>StoreURL. </summary>
@@ -10835,6 +10892,8 @@ namespace ShipWorks.Data.Model
 		LabelSheetEntity,
 		///<summary>LemonStandOrder</summary>
 		LemonStandOrderEntity,
+		///<summary>LemonStandOrderItem</summary>
+		LemonStandOrderItemEntity,
 		///<summary>LemonStandStore</summary>
 		LemonStandStoreEntity,
 		///<summary>MagentoOrder</summary>

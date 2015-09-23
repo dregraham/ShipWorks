@@ -295,6 +295,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.LemonStandOrderEntity:
 					toReturn = this.LemonStandOrder;
 					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandOrderItemEntity:
+					toReturn = this.LemonStandOrderItem;
+					break;
 				case ShipWorks.Data.Model.EntityType.LemonStandStoreEntity:
 					toReturn = this.LemonStandStore;
 					break;
@@ -1041,6 +1044,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<LemonStandOrderEntity> LemonStandOrder
 		{
 			get { return new DataSource2<LemonStandOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting LemonStandOrderItemEntity instances in the database.</summary>
+		public DataSource2<LemonStandOrderItemEntity> LemonStandOrderItem
+		{
+			get { return new DataSource2<LemonStandOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting LemonStandStoreEntity instances in the database.</summary>

@@ -5438,7 +5438,6 @@ GO
 CREATE TABLE [dbo].[LemonStandStore]
 (
 	[StoreID] [bigint] NOT NULL,
-	[APIKey] [varchar](255) NOT NULL,
 	[Token] [varchar](255) NOT NULL,
 	[StoreURL] [varchar](255) NOT NULL,
 )
@@ -5465,6 +5464,29 @@ GO
 ALTER TABLE [dbo].[LemonStandOrder] ADD CONSTRAINT [PK_LemonStandOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
 
+PRINT N'Creating [dbo].[LemonStandOrderItem]'
+GO
+CREATE TABLE [dbo].[LemonStandOrderItem]
+(
+	[OrderItemID] [bigint] NOT NULL,
+	[UrlName] [nvarchar](255) NOT NULL,
+	[Cost] [nvarchar](255) NOT NULL,
+	[IsOnSale] [nvarchar](255) NOT NULL,
+	[SalePriceOrDiscount] [nvarchar](255),
+	[ShortDescription] [nvarchar](255) NOT NULL,
+)
+GO
+PRINT N'Creating primary key [PK_LemonStandOrderItem] on [dbo].[LemonStandOrderItem]'
+GO
+ALTER TABLE [dbo].[LemonStandOrderItem] ADD CONSTRAINT [PK_LemonStandOrderItem] PRIMARY KEY CLUSTERED ([OrderItemID])
+GO
+
+ALTER TABLE [dbo].[LemonStandOrderItem]  WITH CHECK ADD  CONSTRAINT [FK_LemonStandOrderItem_OrderItem] FOREIGN KEY([OrderItemID])
+REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+
+ALTER TABLE [dbo].[LemonStandOrderItem] CHECK CONSTRAINT [FK_LemonStandOrderItem_OrderItem]
+GO
 
 
 

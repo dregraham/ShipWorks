@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((169 + 0));
+			base.InitClass((170 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -134,6 +134,7 @@ namespace ShipWorks.Data.Adapter
 			InitIParcelShipmentEntityMappings();
 			InitLabelSheetEntityMappings();
 			InitLemonStandOrderEntityMappings();
+			InitLemonStandOrderItemEntityMappings();
 			InitLemonStandStoreEntityMappings();
 			InitMagentoOrderEntityMappings();
 			InitMagentoStoreEntityMappings();
@@ -1547,14 +1548,24 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "LemonStandOrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "LemonStandOrderEntity", "LemonStandOrderID", "LemonStandOrderID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
 		}
+		/// <summary>Inits LemonStandOrderItemEntity's mappings</summary>
+		private void InitLemonStandOrderItemEntityMappings()
+		{
+			base.AddElementMapping( "LemonStandOrderItemEntity", "ShipWorksLocal", @"dbo", "LemonStandOrderItem", 6 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "UrlName", "UrlName", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "Cost", "Cost", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "IsOnSale", "IsOnSale", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "SalePriceOrDiscount", "SalePriceOrDiscount", true, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "ShortDescription", "ShortDescription", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 5 );
+		}
 		/// <summary>Inits LemonStandStoreEntity's mappings</summary>
 		private void InitLemonStandStoreEntityMappings()
 		{
-			base.AddElementMapping( "LemonStandStoreEntity", "ShipWorksLocal", @"dbo", "LemonStandStore", 4 );
+			base.AddElementMapping( "LemonStandStoreEntity", "ShipWorksLocal", @"dbo", "LemonStandStore", 3 );
 			base.AddElementFieldMapping( "LemonStandStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "LemonStandStoreEntity", "APIKey", "APIKey", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
-			base.AddElementFieldMapping( "LemonStandStoreEntity", "Token", "Token", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
-			base.AddElementFieldMapping( "LemonStandStoreEntity", "StoreURL", "StoreURL", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "LemonStandStoreEntity", "Token", "Token", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "LemonStandStoreEntity", "StoreURL", "StoreURL", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
 		}
 		/// <summary>Inits MagentoOrderEntity's mappings</summary>
 		private void InitMagentoOrderEntityMappings()

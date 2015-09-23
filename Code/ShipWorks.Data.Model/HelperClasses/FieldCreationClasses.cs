@@ -10244,6 +10244,131 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity LemonStandOrderItemEntity</summary>
+	public partial class LemonStandOrderItemFields
+	{
+		/// <summary>Creates a new LemonStandOrderItemEntity.OrderItemID_OrderItem field instance</summary>
+		public static EntityField2 OrderItemID_OrderItem
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.OrderItemID_OrderItem);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Code);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.ISBN field instance</summary>
+		public static EntityField2 ISBN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.ISBN);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.UPC field instance</summary>
+		public static EntityField2 UPC
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.UPC);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Description);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Location field instance</summary>
+		public static EntityField2 Location
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Location);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Image field instance</summary>
+		public static EntityField2 Image
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Image);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Thumbnail field instance</summary>
+		public static EntityField2 Thumbnail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Thumbnail);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.UnitPrice field instance</summary>
+		public static EntityField2 UnitPrice
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.UnitPrice);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.UnitCost field instance</summary>
+		public static EntityField2 UnitCost
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.UnitCost);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Quantity);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.OrderItemID);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.UrlName field instance</summary>
+		public static EntityField2 UrlName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.UrlName);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Cost field instance</summary>
+		public static EntityField2 Cost
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Cost);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.IsOnSale field instance</summary>
+		public static EntityField2 IsOnSale
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.IsOnSale);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.SalePriceOrDiscount field instance</summary>
+		public static EntityField2 SalePriceOrDiscount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.SalePriceOrDiscount);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.ShortDescription field instance</summary>
+		public static EntityField2 ShortDescription
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.ShortDescription);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity LemonStandStoreEntity</summary>
 	public partial class LemonStandStoreFields
 	{
@@ -10401,11 +10526,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 StoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.StoreID);}
-		}
-		/// <summary>Creates a new LemonStandStoreEntity.APIKey field instance</summary>
-		public static EntityField2 APIKey
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.APIKey);}
 		}
 		/// <summary>Creates a new LemonStandStoreEntity.Token field instance</summary>
 		public static EntityField2 Token
