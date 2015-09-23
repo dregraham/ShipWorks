@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -15,15 +12,10 @@ using ShipWorks.UI.Controls;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Data;
-using ShipWorks.UI;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Stores;
 using ShipWorks.Data.Controls;
-using ShipWorks.ApplicationCore;
- 
+
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     /// <summary>
