@@ -377,7 +377,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             },
 
                         new GridColumnDefinition("{49935375-c8b1-4a54-9f0f-0da023ebb43a}", true,
-                            new GridBooleanDisplayType() { TrueText = "Yes", FalseText = "No" }, "On Sale", "Yes",
+                            new GridTextDisplayType(), "On Sale", "Yes",
                             LemonStandOrderItemFields.IsOnSale)
                             {
                                 StoreTypeCode = StoreTypeCode.LemonStand
@@ -397,6 +397,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                                 StoreTypeCode = StoreTypeCode.LemonStand
                             },
 
+                        new GridColumnDefinition("{967932c3-462e-458a-8f91-294009bff650}", true,
+                            new GridTextDisplayType(), "Category", "Sporting Goods",
+                            LemonStandOrderItemFields.Category)
+                            {
+                                StoreTypeCode = StoreTypeCode.LemonStand
+                            },
+                        
                 #endregion
 
                 new GridColumnDefinition("{5D0135AC-ECE9-47e5-AB02-D91FAF91EA84}", true,

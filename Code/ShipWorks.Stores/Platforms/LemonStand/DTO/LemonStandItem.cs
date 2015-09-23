@@ -82,6 +82,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
         public string ShortDescription { get; set; }
 
         [JsonIgnore]
+        public string Category { get; set; }
+
+        [JsonIgnore]
         public string Thumbnail { get; set; }
         [JsonIgnore]
         public IList<JToken> Attributes { get; set; }

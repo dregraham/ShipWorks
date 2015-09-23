@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
+using Interapptive.Shared.Net;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
@@ -183,6 +185,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             entity.IsOnSale = "";
             entity.SalePriceOrDiscount = "";
             entity.ShortDescription = "";
+            entity.Category = "";
 
             return entity;
         }
@@ -216,6 +219,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             outline.AddElement("IsOnSale", () => item.Value.IsOnSale);
             outline.AddElement("SalePriceOrDiscount", () => item.Value.SalePriceOrDiscount);
             outline.AddElement("ShortDescription", () => item.Value.ShortDescription);
+            outline.AddElement("Category", () => item.Value.Category);
         }
 
         
@@ -234,6 +238,20 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         public override bool GridHyperlinkSupported(EntityField2 field)
         {
             return EntityUtility.IsSameField(field, OrderItemFields.Name);
+        }
+
+        /// <summary>
+        /// Handle a link click for the given field
+        /// </summary>
+        public override void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
+        {
+            LemonStandStoreEntity store = (LemonStandStoreEntity)Store;
+            string lemonStandUrl =  store.StoreURL + "/product";
+            string itemUrl = ((LemonStandOrderItemEntity)entity).UrlName;
+
+            string url = string.Format("{0}/{1}", lemonStandUrl, itemUrl);
+
+            WebHelper.OpenUrl(url, owner);
         }
 
         /// <summary>

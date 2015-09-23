@@ -4861,6 +4861,8 @@ namespace ShipWorks.Data.Model
 		SalePriceOrDiscount,
 		///<summary>ShortDescription. </summary>
 		ShortDescription,
+		///<summary>Category. </summary>
+		Category,
 		/// <summary></summary>
 		AmountOfFields
 	}

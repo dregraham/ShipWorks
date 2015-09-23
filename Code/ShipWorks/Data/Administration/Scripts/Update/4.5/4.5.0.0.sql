@@ -73,6 +73,7 @@ CREATE TABLE [dbo].[LemonStandOrderItem](
 	[IsOnSale] [nvarchar](255) NOT NULL,
 	[SalePriceOrDiscount] [nvarchar](255),
 	[ShortDescription] [nvarchar](255) NOT NULL,
+	[Category] [nvarchar](255) NOT NULL
  CONSTRAINT [PK_LemonStandOrderItem] PRIMARY KEY CLUSTERED 
 (
 	[OrderItemID] ASC

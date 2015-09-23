@@ -10367,6 +10367,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.ShortDescription);}
 		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Category field instance</summary>
+		public static EntityField2 Category
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Category);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity LemonStandStoreEntity</summary>

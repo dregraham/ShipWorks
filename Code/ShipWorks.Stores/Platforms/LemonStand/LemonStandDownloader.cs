@@ -397,16 +397,17 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             if (product.IsOnSale == "0")
             {
-                item.IsOnSale = "false";
+                item.IsOnSale = "No";
             }
             else
             {
-                item.IsOnSale = "true";
+                item.IsOnSale = "Yes";
             }
             //item.IsOnSale = product.IsOnSale;
             item.SalePriceOrDiscount = product.SalePriceOrDiscount;
             item.ShortDescription = product.ShortDescription;
-            
+            item.Category = product.Category;
+
             // Load item attributes
             foreach (JToken jsonAttribute in product.Attributes)
             {
@@ -426,7 +427,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 JsonConvert.DeserializeObject<LemonStandItem>(jsonProduct.SelectToken("data").ToString());
 
             product.Attributes = jsonProduct.SelectToken("data.attributes.data").Children().ToList();
-
+            product.Category =
+                jsonProduct.SelectToken("data.categories.data").Children().First().SelectToken("name").ToString();
             // Get the product images from LemonStand
             List<JToken> productImagesRestResponse = jsonProduct.SelectToken("data.images.data")
                 .Children()

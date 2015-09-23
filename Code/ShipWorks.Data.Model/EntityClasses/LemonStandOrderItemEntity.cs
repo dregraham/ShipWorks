@@ -486,6 +486,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShortDescription", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Category", fieldHashtable);
 		}
 		#endregion
 
@@ -612,6 +615,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)LemonStandOrderItemFieldIndex.ShortDescription, true); }
 			set	{ SetValue((int)LemonStandOrderItemFieldIndex.ShortDescription, value); }
+		}
+
+		/// <summary> The Category property of the Entity LemonStandOrderItem<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "LemonStandOrderItem"."Category"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Category
+		{
+			get { return (System.String)GetValue((int)LemonStandOrderItemFieldIndex.Category, true); }
+			set	{ SetValue((int)LemonStandOrderItemFieldIndex.Category, value); }
 		}
 
 
