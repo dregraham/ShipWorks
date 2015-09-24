@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
@@ -35,8 +34,13 @@ namespace ShipWorks.Shipping.UI.ValidationRules
                 (poundsOzRegex.Match((string) value).Success || ouncesRegex.Match((string) value).Success ||
                  poundsRegex.Match((string) value).Success);
 
+            // Weight is valid, check to see if someone tried to be smart
+            // and enter a negative number 
+            if (result && ((string)value).Contains("-"))
+            {
+                return new ValidationResult(false, "The weight cannot be negative.");
+            }
             return new ValidationResult(result, $"{(string)value}{" is not a valid weight"}");
-            
         }
     }
 }
