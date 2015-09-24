@@ -32,6 +32,7 @@ using Interapptive.Shared.Business;
 using ShipWorks.Data.Caching;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Users.Audit;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -61,7 +62,7 @@ namespace ShipWorks.Stores.Communication
         {
         }
 
-        protected StoreDownloader(StoreEntity store, StoreType storeType)
+        protected StoreDownloader([Obfuscation(Exclude = true)] StoreEntity store, StoreType storeType)
         {
             if (store == null)
             {
