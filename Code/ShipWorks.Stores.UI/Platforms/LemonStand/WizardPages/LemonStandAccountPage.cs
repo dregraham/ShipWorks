@@ -47,7 +47,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
                 LemonStandWebClient client = new LemonStandWebClient(store);
                 //Check to see if we have access to LemonStand with the new creds
                 //Ask for some orders
-                client.GetOrders(1, DateTime.UtcNow.ToString());
+                try
+                {
+                    client.GetOrders(1, DateTime.UtcNow.ToString());
+
+                }
+                catch (Exception)
+                {
+                    MessageHelper.ShowError(this, "Invalid store URL or access token");
+                    e.NextPage = this;
+                }
             }
             catch (LemonStandException ex)
             {
