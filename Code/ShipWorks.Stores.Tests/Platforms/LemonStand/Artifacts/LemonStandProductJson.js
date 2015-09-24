@@ -38,7 +38,7 @@
 		"created_by": null,
 		"updated_by": null,
 		"created_at": "2015-09-02T09:41:05-0700",
-		"updated_at": "2015-09-08T09:42:28-0700",
+		"updated_at": "2015-09-22T11:42:40-0700",
 		"images": {
 		    "data": [{
 		        "id": 1,
@@ -77,7 +77,36 @@
 		        "created_by": null,
 		        "updated_by": null,
 		        "created_at": "2015-09-02T09:41:05-0700",
-		        "updated_at": "2015-09-08T09:42:28-0700"
+		        "updated_at": "2015-09-22T11:42:40-0700"
+		    }]
+		},
+		"categories": {
+		    "data": [{
+		        "id": 1,
+		        "name": "Sporting goods",
+		        "description": null,
+		        "short_description": null,
+		        "title": null,
+		        "url_name": "sporting-goods",
+		        "meta_description": null,
+		        "meta_keywords": null,
+		        "sort_order": null,
+		        "api_code": null,
+		        "is_visible": 1,
+		        "shop_category_id": null,
+		        "created_by": null,
+		        "updated_by": null,
+		        "created_at": "2015-09-02T09:41:05-0700",
+		        "updated_at": "2015-09-02T09:41:05-0700"
+		    }]
+		},
+		"attributes": {
+		    "data": [{
+		        "id": 3,
+		        "product_id": 1,
+		        "sort_order": 1,
+		        "name": "Fabric",
+		        "value": "Cotton"
 		    }]
 		}
 	}

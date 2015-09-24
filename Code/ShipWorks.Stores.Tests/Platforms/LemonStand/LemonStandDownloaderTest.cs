@@ -19,7 +19,8 @@ namespace ShipWorks.Tests.Stores.LemonStand
     {
         Mock<ILemonStandWebClient> webClient = new Mock<ILemonStandWebClient>();
         Mock<ISqlAdapterRetry> adapter = new Mock<ISqlAdapterRetry>();
-        Mock<StoreEntity> store = new Mock<StoreEntity>();
+        LemonStandStoreEntity store = new LemonStandStoreEntity();
+        
         private FakeLemonStandDownloader testObject;
         private string lemonStandOrders;
         private string singleOrder;
@@ -33,15 +34,15 @@ namespace ShipWorks.Tests.Stores.LemonStand
         
         public LemonStandDownloaderTest()
         { 
-            lemonStandOrders = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandJsonOrderResponse.js");
-            singleOrder = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandSingleOrderJson.js");
-            invoice = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandInvoiceJson.js");
-            shipment = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandShipmentJson.js");
-            customer = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandCustomerJson.js");
-            product = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandProductJson.js");
-            badDataOrder = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandOrderWithBadOrderStatusAndItemQuantity.js");
-            missingDataOrder = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandOrderWithMissingData.js");
-            missingItems = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.OrderMissingItems.js");
+            lemonStandOrders = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.LemonStandJsonOrderResponse.js");
+            singleOrder = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.LemonStandSingleOrderJson.js");
+            invoice = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.LemonStandInvoiceJson.js");
+            shipment = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.LemonStandShipmentJson.js");
+            customer = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.LemonStandCustomerJson.js");
+            product = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.LemonStandProductJson.js");
+            badDataOrder = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.LemonStandOrderWithBadOrderStatusAndItemQuantity.js");
+            missingDataOrder = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.LemonStandOrderWithMissingData.js");
+            missingItems = GetEmbeddedResourceJson("ShipWorks.Stores.Tests.Platforms.LemonStand.Artifacts.OrderMissingItems.js");
 
             webClient.Setup(w => w.GetOrders(1, DateTime.UtcNow.ToString())).Returns(JObject.Parse(lemonStandOrders));
             webClient.Setup(w => w.GetShipment("36")).Returns(JObject.Parse(invoice));
@@ -50,6 +51,8 @@ namespace ShipWorks.Tests.Stores.LemonStand
             webClient.Setup(w => w.GetProduct("1")).Returns(JObject.Parse(product));
 
             adapter.Setup(retry => retry.ExecuteWithRetry(It.IsAny<Action>())).Callback((Action x) => x.Invoke());
+
+            store.TypeCode = 68;
         }
 
         private string GetEmbeddedResourceJson(string embeddedResourceName) {
@@ -67,16 +70,16 @@ namespace ShipWorks.Tests.Stores.LemonStand
 
         private FakeLemonStandDownloader SetupPrepareOrderTests()
         {
-            testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
+            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object);
             JObject jsonOrder = JObject.Parse(singleOrder);
             testObject.Order = testObject.PrepareOrder(jsonOrder);
-
+            
             return testObject;
         }
 
         private FakeLemonStandDownloader SetupLoadOrderTests()
         {
-            testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
+            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object);
             JObject jsonOrder = JObject.Parse(singleOrder);
             testObject.LoadOrder(jsonOrder);
 
@@ -161,7 +164,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
         [Fact]
         public void LoadOrder_ThrowsLemonStandException_WhenItemQuantityIsEmptyInResponse_Test()
         {
-            testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
+            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object);
             JObject jsonOrder = JObject.Parse(badDataOrder);
 
             Assert.Throws<LemonStandException>(() => testObject.PrepareOrder(jsonOrder));
@@ -170,7 +173,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
         [Fact]
         public void LoadOrder_ThrowsLemonStandException_WhenOrderIsMissingOrderNumber_Test()
         {
-            testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
+            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object);
             JObject jsonOrder = JObject.Parse(missingDataOrder);
 
             Assert.Throws<LemonStandException>(() => testObject.PrepareOrder(jsonOrder));
@@ -179,7 +182,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
         [Fact]
         public void LoadItem_ThrowsLemonStandException_WhenItemsAreMissingFromOrderResponse_Test()
         {
-            testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
+            testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object);
             JObject jsonOrder = JObject.Parse(missingItems);
 
             Assert.Throws<LemonStandException>(() => testObject.PrepareOrder(jsonOrder));

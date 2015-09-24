@@ -56,23 +56,6 @@ namespace ShipWorks.Tests.Stores.LemonStand
         }
 
         [Fact]
-        public void CreateAccountSettingsControl_ReturnsLemonStandAccountSettingsControl_WhenCalled_Test()
-        {
-            testObject = new LemonStandStoreType(lemonStandStore.Object);
-            Assert.IsAssignableFrom<LemonStandAccountSettingsControl>(testObject.CreateAccountSettingsControl());
-        }
-
-        [Fact]
-        public void CreateAddStoreWizardPages_ReturnsLemonStandAccountPage_WhenCalled_Test()
-        {
-            testObject = new LemonStandStoreType(lemonStandStore.Object);
-
-            var pages = testObject.CreateAddStoreWizardPages();
-            
-            Assert.IsAssignableFrom<LemonStandAccountPage>(pages.First());
-        }
-
-        [Fact]
         public void CreateDownloader_ReturnsLemonStandDownloader_WhenCalled_Test()
         {
             testObject = new LemonStandStoreType(lemonStandStore.Object);

@@ -57,15 +57,19 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Constructor
         /// </summary>
-        protected StoreDownloader(StoreEntity store)
+        protected StoreDownloader(StoreEntity store) : this(store, StoreTypeManager.GetType(store))
+        {
+        }
+
+        protected StoreDownloader(StoreEntity store, StoreType storeType)
         {
             if (store == null)
             {
-                throw new ArgumentNullException("store");
+                throw new ArgumentNullException(nameof(store));
             }
 
             this.store = store;
-            this.storeType = StoreTypeManager.GetType(store);
+            this.storeType = storeType;
         }
 
         /// <summary>

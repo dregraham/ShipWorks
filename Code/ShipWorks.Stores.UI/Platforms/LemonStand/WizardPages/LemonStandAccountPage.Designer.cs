@@ -35,8 +35,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.helpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
             this.label3 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // accessTokenTextbox
@@ -50,9 +48,9 @@
             // storeURLTextbox
             // 
             this.storeURLTextbox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.storeURLTextbox.Location = new System.Drawing.Point(152, 35);
+            this.storeURLTextbox.Location = new System.Drawing.Point(102, 35);
             this.storeURLTextbox.Name = "storeURLTextbox";
-            this.storeURLTextbox.Size = new System.Drawing.Size(194, 21);
+            this.storeURLTextbox.Size = new System.Drawing.Size(339, 21);
             this.storeURLTextbox.TabIndex = 17;
             // 
             // label4
@@ -110,30 +108,10 @@
             this.label3.TabIndex = 21;
             this.label3.Text = "For help adding your LemonStand store,";
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(102, 38);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(44, 13);
-            this.label5.TabIndex = 22;
-            this.label5.Text = "https://";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(352, 38);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(89, 13);
-            this.label6.TabIndex = 23;
-            this.label6.Text = ".lemonstand.com";
-            // 
             // LemonStandAccountPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.helpLink);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.accessTokenTextbox);
@@ -145,7 +123,6 @@
             this.Name = "LemonStandAccountPage";
             this.Size = new System.Drawing.Size(487, 209);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
-            this.Load += new System.EventHandler(this.LemonStandAccountPage_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -160,7 +137,5 @@
         private System.Windows.Forms.Label label1;
         private ApplicationCore.Interaction.HelpLink helpLink;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
     }
 }

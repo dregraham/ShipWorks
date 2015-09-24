@@ -5,7 +5,7 @@ using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Filters
 {
-    [ConditionElement("LemonStand Order #", "LemonStand.OrderID")]
+    [ConditionElement("LemonStand Order ID", "LemonStand.LemonStandOrderID")]
     [ConditionStoreType(StoreTypeCode.LemonStand)]
     internal class LemonStandOrderIdCondition : StringCondition
     {

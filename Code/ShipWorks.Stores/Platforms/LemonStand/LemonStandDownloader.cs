@@ -12,6 +12,7 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
@@ -43,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="webClient">The web client.</param>
         /// <param name="sqlAdapter">The SQL adapter.</param>
         public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter)
-            : base(store)
+            : base(store, new LemonStandStoreType(store))
         {
             client = webClient;
             this.sqlAdapter = sqlAdapter;
