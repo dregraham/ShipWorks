@@ -10,8 +10,6 @@ using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Threading.Tasks;
-using Interapptive.Shared.Messaging;
-using Interapptive.Shared.Messaging;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.UI.Controls.Design;
 

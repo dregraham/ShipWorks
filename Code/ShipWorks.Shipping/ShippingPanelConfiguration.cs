@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Interface for settings needed by the Shipping Panel
     /// </summary>
-    public class ShippingPanelConfigurator : IShippingPanelConfigurator
+    public class ShippingPanelConfiguration : IShippingPanelConfiguration
     {
         /// <summary>
         /// Wraps a call to determine if a user has permission on an entity

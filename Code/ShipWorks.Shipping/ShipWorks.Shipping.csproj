@@ -136,7 +136,7 @@
     <Compile Include="IShipmentLoader.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="ILoader.cs" />
-    <Compile Include="IShippingPanelConfigurator.cs" />
+    <Compile Include="IShippingPanelConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rating\IRateSelectionFactory.cs" />
     <Compile Include="Rating\RateSelection.cs" />
@@ -152,7 +152,7 @@
     <Compile Include="ShippingPanelLoadedShipmentResult.cs" />
     <Compile Include="ShippingPanelShipmentLoader.cs" />
     <Compile Include="ShippingPanelLoadedShipment.cs" />
-    <Compile Include="ShippingPanelConfigurator.cs" />
+    <Compile Include="ShippingPanelConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

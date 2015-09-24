@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Shipping
         private OrderEntity orderEntity;
         private ShipmentEntity shipmentEntity;
 
-        private Mock<IShippingPanelConfigurator> shippingPanelConfigurator;
+        private Mock<IShippingPanelConfiguration> shippingPanelConfigurator;
         private Mock<IShippingManager> shippingManager;
         private Mock<IFilterHelper> filterHelper;
 
@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping
             shipmentEntity = new ShipmentEntity(1031);
             shipmentEntity.Order = orderEntity;
 
-            shippingPanelConfigurator = new Mock<IShippingPanelConfigurator>();
+            shippingPanelConfigurator = new Mock<IShippingPanelConfiguration>();
             shippingPanelConfigurator.Setup(s => s.AutoCreateShipments).Returns(true);
             shippingPanelConfigurator.Setup(s => s.UserHasPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(true);
             shippingPanelConfigurator.Setup(s => s.GetAddressValidation(It.IsAny<ShipmentEntity>())).Returns(true);

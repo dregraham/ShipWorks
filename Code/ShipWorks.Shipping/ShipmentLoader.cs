@@ -16,16 +16,16 @@ namespace ShipWorks.Shipping
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentLoader));
 
-        private readonly IShippingPanelConfigurator shippingPanelConfigurator;
+        private readonly IShippingPanelConfiguration shippingPanelConfiguration;
         private readonly IShippingManager shippingManager;
         private readonly IFilterHelper filterHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentLoader(IShippingPanelConfigurator shippingPanelConfigurator, IShippingManager shippingManager, IFilterHelper filterHelper)
+        public ShipmentLoader(IShippingPanelConfiguration shippingPanelConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper)
         {
-            this.shippingPanelConfigurator = shippingPanelConfigurator;
+            this.shippingPanelConfiguration = shippingPanelConfiguration;
             this.shippingManager = shippingManager;
             this.filterHelper = filterHelper;
         }
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping
             // Execute the work
             try
             {
-                bool createIfNone = shippingPanelConfigurator.AutoCreateShipments && shippingPanelConfigurator.UserHasPermission(PermissionType.ShipmentsCreateEditProcess, orderID);
+                bool createIfNone = shippingPanelConfiguration.AutoCreateShipments && shippingPanelConfiguration.UserHasPermission(PermissionType.ShipmentsCreateEditProcess, orderID);
 
                 List<ShipmentEntity> shipments = shippingManager.GetShipments(orderID, createIfNone);
 
