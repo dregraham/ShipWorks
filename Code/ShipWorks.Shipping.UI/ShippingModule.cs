@@ -71,6 +71,10 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<ExcludedPackageTypeRepository>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterType<CustomsManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

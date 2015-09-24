@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Shipping.Carriers.FedEx;
 
 namespace ShipWorks.Shipping.UI.Carriers.FedEx
@@ -11,11 +12,12 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<FedExShipmentType>()
-                .AsSelf()
+                .FindConstructorsWith(new NonDefaultConstructorFinder())                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.FedEx);
 
             builder.RegisterType<FedExShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.FedEx)
+                .FindConstructorsWith(new NonDefaultConstructorFinder())
                 .SingleInstance();
 
             builder.RegisterType<FedExShipmentPackageBuilder>()
