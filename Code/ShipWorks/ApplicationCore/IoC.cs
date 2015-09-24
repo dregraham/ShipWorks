@@ -12,6 +12,7 @@ using ShipWorks.Stores.Content;
 using System.Linq;
 using System.Reflection;
 using System;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -109,6 +110,10 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<ShippingProfileManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.Register(c => Program.MainForm)
+                .As<Control>()
+                .ExternallyOwned();
 
             builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
 

@@ -130,6 +130,12 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             MainForm = new MainForm();
             MainForm.Load += new EventHandler(OnMainFormLoaded);
 
+            //var builder = new ContainerBuilder();
+            //builder.RegisterInstance(MainForm)
+            //    .As<Control>()
+            //    .ExternallyOwned();
+            //builder.Update((IContainer)IoC.UnsafeGlobalLifetimeScope);
+
             SplashScreen.Status = "Loading ShipWorks...";
             Application.Run(MainForm);
         }

@@ -33,21 +33,22 @@ namespace ShipWorks.Shipping
         private bool cancelProcessing;
         private readonly IShippingErrorManager errorManager;
         private readonly IShippingManager shippingManager;
-        private readonly Control owner;
+        private readonly Func<Control> ownerRetriever;
         private readonly ILifetimeScope lifetimeScope;
         private RateResult chosenRate;
         private int shipmentCount;
         private Action counterRateCarrierConfiguredWhileProcessing;
+        Control owner;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentProcessor(Control owner, IShippingErrorManager errorManager, 
+        public ShipmentProcessor(Func<Control> ownerRetriever, IShippingErrorManager errorManager, 
             ILifetimeScope lifetimeScope, IShippingManager shippingManager)
         {
             this.shippingManager = shippingManager;
             this.errorManager = errorManager;
-            this.owner = owner;
+            this.ownerRetriever = ownerRetriever;
             this.lifetimeScope = lifetimeScope;
         }
         
@@ -65,6 +66,8 @@ namespace ShipWorks.Shipping
         /// <returns></returns>
         public Task<IEnumerable<ShipmentEntity>> Process(IEnumerable<ShipmentEntity> shipments, ICarrierConfigurationShipmentRefresher shipmentRefresher, RateResult chosenRate, Action counterRateCarrierConfiguredWhileProcessing)
         {
+            owner = ownerRetriever();
+
             // Filter out the ones we know to be already processed, or are not ready
             shipments = shipments.Where(s => !s.Processed && s.ShipmentType != (int)ShipmentTypeCode.None);
 

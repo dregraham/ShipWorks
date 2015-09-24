@@ -73,6 +73,7 @@
       <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
@@ -133,6 +134,9 @@
     <Compile Include="Carriers\Postal\Usps\UspsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentServicesBuilder.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Commands\WeakAction.cs" />
+    <Compile Include="Commands\WeakFunc.cs" />
     <Compile Include="Rating\IRateSelection.cs" />
     <Compile Include="IShipmentLoader.cs" />
     <Compile Include="IShipmentPackageBuilder.cs" />

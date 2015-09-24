@@ -8,7 +8,7 @@
              xmlns:shippingcore="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Core"
              xmlns:shipping="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shipping"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shipping:ShippingPanelViewModel}"
-             d:DesignHeight="1304" d:DesignWidth="300"
+             d:DesignHeight="1304" d:DesignWidth="350"
              SnapsToDevicePixels="True">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -18,20 +18,21 @@
             </ResourceDictionary.MergedDictionaries>
             <tc:InvertBooleanConverter x:Key="InvertBooleanConverter" />
             <tc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
+            <Thickness x:Key="SectionMargin" Left="0" Top="6" Right="0" Bottom="0" />
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Gray" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="CornerRadius" Value="2" />
-                <Setter Property="Margin" Value="6,6,6,0" />
+                <Setter Property="Margin" Value="{StaticResource SectionMargin}" />
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" 
                   IsEnabled="{Binding IsProcessed,Converter={StaticResource InvertBooleanConverter}}">
-        <StackPanel>
+        <StackPanel Margin="6,6,6,6">
             <StackPanel Visibility="{Binding LoadResult,Converter={StaticResource VisibleWhenEqualToParameterConverter},ConverterParameter={x:Static shipping:ShippingPanelLoadedShipmentResult.Success}}">
-                <Grid Margin="6,6,6,0">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -70,15 +71,8 @@
                         <local:ShipmentControl />
                     </Expander>
                 </Border>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="75" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="{Binding SupportsMultiplePackages}"></TextBlock>
-
-                    <ComboBox Grid.Column="1" IsEnabled="{Binding SupportsMultiplePackages}" />
+                <Grid Margin="{StaticResource SectionMargin}">
+                    <Button Command="{Binding CreateLabelCommand}">Create Label</Button>
                 </Grid>
             </StackPanel>
             <StackPanel Visibility="{Binding LoadResult,Converter={StaticResource VisibleWhenEqualToParameterConverter},ConverterParameter={x:Static shipping:ShippingPanelLoadedShipmentResult.Multiple}}">

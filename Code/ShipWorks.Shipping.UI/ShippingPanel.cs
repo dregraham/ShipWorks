@@ -91,13 +91,16 @@ namespace ShipWorks.Shipping.UI
 
         private async void HandleCreateLabelMessage(CreateLabelMessage message)
         {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope(ConfigureShippingDialogDependencies))
-            {
-                ShipmentProcessor shipmentProcessor = lifetimeScope.Resolve<ShipmentProcessor>();
-                CarrierConfigurationShipmentRefresher refresher = lifetimeScope.Resolve<CarrierConfigurationShipmentRefresher>();
+            await viewModel.ProcessShipment();
 
-                await viewModel.ProcessShipment(shipmentProcessor, refresher);
-            }
+
+            //using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope(ConfigureShippingDialogDependencies))
+            //{
+            //    ShipmentProcessor shipmentProcessor = lifetimeScope.Resolve<ShipmentProcessor>();
+            //    CarrierConfigurationShipmentRefresher refresher = lifetimeScope.Resolve<CarrierConfigurationShipmentRefresher>();
+
+            //    await viewModel.ProcessShipment(shipmentProcessor, refresher);
+            //}
         }
 
         /// <summary>

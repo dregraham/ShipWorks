@@ -7,7 +7,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Refresh shipments when a carrier is configured for the first time
     /// </summary>
-    public interface ICarrierConfigurationShipmentRefresher
+    public interface ICarrierConfigurationShipmentRefresher : IDisposable
     {
         /// <summary>
         /// Allows a given context to provide a way to retrieve all shipments

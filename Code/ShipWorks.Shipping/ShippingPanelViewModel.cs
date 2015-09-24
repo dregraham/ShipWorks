@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using System.Collections.Generic;
 using ShipWorks.AddressValidation;
+using System.Windows.Input;
+using ShipWorks.Shipping.Commands;
+using Autofac.Features.OwnedInstances;
 
 namespace ShipWorks.Shipping
 {
@@ -28,6 +31,8 @@ namespace ShipWorks.Shipping
         private readonly Func<ShipmentViewModel> shipmentViewModelFactory;
         private readonly IShippingManager shippingManager;
         private readonly ICustomsManager customsManager;
+        private readonly IShipmentProcessor shipmentProcessor;
+        private readonly Func<Owned<ICarrierConfigurationShipmentRefresher>> shipmentRefresherFactory;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -49,21 +54,32 @@ namespace ShipWorks.Shipping
             IShippingManager shippingManager,
             IShipmentTypeFactory shipmentTypeFactory,
             ICustomsManager customsManager,
+            IShipmentProcessor shipmentProcessor,
+            Func<Owned<ICarrierConfigurationShipmentRefresher>> shipmentRefresherFactory,
             Func<ShipmentViewModel> shipmentViewModelFactory) : this()
         {
+            this.shipmentProcessor = shipmentProcessor;
             this.customsManager = customsManager;
             this.shippingManager = shippingManager;
             this.shipmentTypeFactory = shipmentTypeFactory;
-            this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
+            this.shipmentViewModelFactory = shipmentViewModelFactory;
+            this.shipmentRefresherFactory = shipmentRefresherFactory;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             Origin = new AddressViewModel();
             Destination = new AddressViewModel();
 
             ShipmentViewModel = shipmentViewModelFactory();
+
+            CreateLabelCommand = new RelayCommand(async () => await ProcessShipment());
         }
+
+        /// <summary>
+        /// Command to create a label
+        /// </summary>
+        public ICommand CreateLabelCommand { get; }
 
         /// <summary>
         /// Selected shipment type for the current shipment
@@ -176,12 +192,16 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Process the current shipment using the specified processor
         /// </summary>
-        public async Task ProcessShipment(ShipmentProcessor shipmentProcessor, CarrierConfigurationShipmentRefresher refresher)
+        public async Task ProcessShipment()
         {
             Save();
-            IEnumerable<ShipmentEntity> shipments = await shipmentProcessor.Process(new[] { loadedShipment.Shipment }, refresher, null, null);
-            await LoadOrder(loadedShipment.Shipment.OrderID);
-            IsProcessed = shipments?.FirstOrDefault()?.Processed ?? false;
+
+            using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory().Value)
+            {
+                IEnumerable<ShipmentEntity> shipments = await shipmentProcessor.Process(new[] { loadedShipment.Shipment }, refresher, null, null);
+                await LoadOrder(loadedShipment.Shipment.OrderID);
+                IsProcessed = shipments?.FirstOrDefault()?.Processed ?? false;
+            }
         }
 
         /// <summary>
