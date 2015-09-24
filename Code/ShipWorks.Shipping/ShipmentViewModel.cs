@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Messaging;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Rating;
@@ -47,7 +46,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilder, IShipmentPackageBuilderFactory shipmentPackageBuilderFactory)
+        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory, IShipmentPackageBuilderFactory shipmentPackageBuilderFactory, IMessenger messenger, IRateSelectionFactory rateSelectionFactory) : this()
         {
             this.shipmentPackageBuilderFactory = shipmentPackageBuilderFactory;
             this.rateSelectionFactory = rateSelectionFactory;
