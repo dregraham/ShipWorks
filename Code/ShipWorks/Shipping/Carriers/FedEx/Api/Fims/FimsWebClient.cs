@@ -27,6 +27,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         private static readonly XNamespace fimsWebServiceNamespace = "http://www.fimsform.com";
         private static readonly Uri productionUri = new Uri("http://www.fimsform.com/pkgFedex/pkgFormService");
         private static readonly XNamespace soapenv = "http://schemas.xmlsoap.org/soap/envelope/";
+        private static readonly FedExShipmentTokenProcessor tokenProcessor = new FedExShipmentTokenProcessor();
 
         /// <summary>
         /// Ships a FIMS shipment.  
@@ -80,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                 new XElement("labelRequest",
                     new XElement("custCode", fimsShipRequest.Username),
                     new XElement("serviceId", fimsShipRequest.Password),
-                    new XElement("shipperReference", fedExShipment.ReferenceCustomer),
+                    new XElement("shipperReference", tokenProcessor.ProcessTokens(fedExShipment.ReferenceCustomer,shipment)),
                     new XElement("labelType", labelType),
                     new XElement("declaration", declaration),
                     new XElement("shipper",
