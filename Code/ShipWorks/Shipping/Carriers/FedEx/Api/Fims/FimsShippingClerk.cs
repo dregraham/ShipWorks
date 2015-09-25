@@ -69,6 +69,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                 // Make sure it is a valid FedEx FIMS Shipment.
                 ValidateShipment(shipmentEntity);
 
+                // Throw exception if the shipment is configured as a return
+                if (shipmentEntity.ReturnShipment)
+                {
+                    throw new FedExException("The FIMS service does not support returns");
+                }
+
                 // Make sure the FIMS username/password are valid
                 ValidateFedExFimsAccount(settings);
 
