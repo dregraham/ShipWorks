@@ -45,6 +45,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             lemonStandStore.StoreURL = storeURLTextBox.Text;
             lemonStandStore.Token = accessTokenTextBox.Text;
 
+           
+
             // see if we need to test the settings because they changed in some way
             if (ConnectionVerificationNeeded(lemonStandStore))
             {
@@ -55,7 +57,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     LemonStandWebClient client = new LemonStandWebClient(lemonStandStore);
                     //Check to see if we have access to LemonStand with the new creds
                     //Ask for some orders
-                    client.GetOrders(1, DateTime.UtcNow.ToString());
+                    try
+                    {
+                        client.GetOrders(1, DateTime.UtcNow.ToString());
+
+                    }
+                    catch (Exception)
+                    {
+                        MessageHelper.ShowError(this, "Invalid store URL or access token");
+                        return false;
+                    }
 
                     return true;
                 }
