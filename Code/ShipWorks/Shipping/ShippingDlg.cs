@@ -2313,6 +2313,9 @@ namespace ShipWorks.Shipping
             ErrorManager.Clear();
 
             validatedAddressScope.Dispose();
+
+            // If shipments have been removed from the dlg before closing, this may not be an accurate representation of what has changed.
+            loadedShipmentEntities.ForEach(shipment => messenger.Send(new ShipmentChangedMessage(this, shipment)));
         }
 
         /// <summary>
