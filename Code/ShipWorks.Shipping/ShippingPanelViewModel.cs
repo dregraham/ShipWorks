@@ -68,12 +68,12 @@ namespace ShipWorks.Shipping
             this.shipmentRefresherFactory = shipmentRefresherFactory;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
-            Origin = new AddressViewModel();
-            Destination = new AddressViewModel();
+            //Origin = new AddressViewModel();
+            //Destination = new AddressViewModel();
 
-            ShipmentViewModel = shipmentViewModelFactory();
+            //ShipmentViewModel = shipmentViewModelFactory();
 
-            CreateLabelCommand = new RelayCommand(async () => await ProcessShipment());
+            //CreateLabelCommand = new RelayCommand(async () => await ProcessShipment());
         }
 
         /// <summary>
@@ -171,22 +171,22 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            DisableRateCriteriaChanged();
-            DisableNeedToUpdateServices();
-            DisableNeedToUpdatePackages();
+            //DisableRateCriteriaChanged();
+            //DisableNeedToUpdateServices();
+            //DisableNeedToUpdatePackages();
 
             SelectedShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
-            Origin.Load(loadedShipment.Shipment.OriginPerson);
+            //Origin.Load(loadedShipment.Shipment.OriginPerson);
 
-            Destination.Load(loadedShipment.Shipment.ShipPerson);
+            //Destination.Load(loadedShipment.Shipment.ShipPerson);
 
-            ShipmentViewModel.Load(loadedShipment.Shipment);
+            //ShipmentViewModel.Load(loadedShipment.Shipment);
 
             IsProcessed = loadedShipment.Shipment.Processed;
 
-            EnableRateCriteriaChanged();
-            EnableNeedToUpdateServices();
-            EnableNeedToUpdatePackages();
+            //EnableRateCriteriaChanged();
+            //EnableNeedToUpdateServices();
+            //EnableNeedToUpdatePackages();
         }
 
         /// <summary>
@@ -216,9 +216,9 @@ namespace ShipWorks.Shipping
                 shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
 
                 loadedShipment.Shipment.ShipmentTypeCode = SelectedShipmentType;
-                Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
-                Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
-                ShipmentViewModel.Save(loadedShipment.Shipment);
+                //Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
+                //Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
+                //ShipmentViewModel.Save(loadedShipment.Shipment);
 
                 customsManager.EnsureCustomsLoaded(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current);
             }
