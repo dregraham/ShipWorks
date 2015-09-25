@@ -11,6 +11,29 @@ namespace ShipWorks.Shipping.UI.ValueConverters
 {
     public class DoubleToWeightStringConverter : IValueConverter
     {
+        /// <summary>
+        /// Class to convert from double to weight string and back
+        /// based on users preferences
+        /// </summary>
+        public DoubleToWeightStringConverter() : this(new UserSessionWrapper())
+        {
+                
+        }
+
+        /// <summary>
+        /// Class to convert from double to weight string and back
+        /// based on users preferences
+        /// </summary>
+        public DoubleToWeightStringConverter(IUserSession userSession)
+        {
+            // if the user is null use fractional pounds as the default
+            this.weightFormat = userSession.User == null
+                ? WeightDisplayFormat.FractionalPounds
+                : (WeightDisplayFormat) userSession.User.Settings.ShippingWeightFormat;
+        }
+
+        private readonly WeightDisplayFormat weightFormat;
+
         // Match any integer or floating point number
         static string numberRegex = @"-?([0-9]+(\.[0-9]*)?|\.[0-9]+)";
 
@@ -39,11 +62,10 @@ namespace ShipWorks.Shipping.UI.ValueConverters
             {
                 throw new InvalidOperationException("Value is not a double");
             }
-
-            return FormatWeight((double)value, UserSession.User == null ? WeightDisplayFormat.FractionalPounds : (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat);
+            
+            return FormatWeight((double)value, weightFormat);
         }
-
-
+        
         /// <summary>
         /// Convert from weight String (lbs and oz) to Double
         /// </summary>
@@ -51,6 +73,11 @@ namespace ShipWorks.Shipping.UI.ValueConverters
             Justification = "We treat a format exception as just invalid data, so the exception should be eaten")]
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
             try
             {
                 // See if both pounds and ounces are present
@@ -104,7 +131,7 @@ namespace ShipWorks.Shipping.UI.ValueConverters
         /// <summary>
         /// Format the given weight based on the specified display format.
         /// </summary>
-        public static string FormatWeight(double weight, WeightDisplayFormat displayFormat)
+        private static string FormatWeight(double weight, WeightDisplayFormat displayFormat)
         {
             string result;
 

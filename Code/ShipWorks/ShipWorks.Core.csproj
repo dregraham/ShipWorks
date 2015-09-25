@@ -8176,6 +8176,7 @@
     </Compile>
     <Compile Include="Users\Audit\AuditReasonType.cs" />
     <Compile Include="Users\ComputerManager.cs" />
+    <Compile Include="Users\IUserSession.cs" />
     <Compile Include="Users\Security\AddStorePermissionsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -8234,6 +8235,7 @@
     <Compile Include="Users\Logon\UserChangePasswordDlg.Designer.cs">
       <DependentUpon>UserChangePasswordDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Users\UserSessionWrapper.cs" />
     <Compile Include="Users\UserUtility.cs" />
     <Compile Include="ApplicationCore\SplashScreen.cs">
       <SubType>Form</SubType>
