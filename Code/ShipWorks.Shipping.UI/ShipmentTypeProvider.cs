@@ -16,8 +16,8 @@ namespace ShipWorks.Shipping.UI
         private static ShipmentTypeProvider current = DesignModeDetector.IsDesignerHosted() ? 
             null : 
             IoC.UnsafeGlobalLifetimeScope.Resolve<ShipmentTypeProvider>();
-
-        private readonly IShipmentTypeFactory shipmentTypeFactory;
+        
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Get the current instance of the shipment type provider
@@ -27,11 +27,12 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentTypeProvider(IMessenger messenger, IShipmentTypeFactory shipmentTypeFactory)
+        public ShipmentTypeProvider(IMessenger messenger, IShipmentTypeManager shipmentTypeManager)
         {
-            this.shipmentTypeFactory = shipmentTypeFactory;
+            this.shipmentTypeManager = shipmentTypeManager;
+
             messenger.Handle<EnabledCarriersChangedMessage>(this, UpdateAvailableCarriers);
-            Available = new ObservableCollection<ShipmentType>(ShipmentTypeManager.EnabledShipmentTypes);
+            Available = new ObservableCollection<ShipmentTypeCode>(shipmentTypeManager.EnabledShipmentTypes.Select(x => x.ShipmentTypeCode));
         }
 
         /// <summary>
@@ -46,18 +47,18 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Available shipment types
         /// </summary>
-        public ObservableCollection<ShipmentType> Available { get; private set; }
+        public ObservableCollection<ShipmentTypeCode> Available { get; private set; }
 
         /// <summary>
         /// Remove shipment types from the list of available
         /// </summary>
         private void RemoveShipmentTypes(IEnumerable<ShipmentTypeCode> removed)
         {
-            List<ShipmentType> removeItems = Available
-                .Where(x => removed.Contains(x.ShipmentTypeCode))
+            List<ShipmentTypeCode> removeItems = Available
+                .Where(x => removed.Contains(x))
                 .ToList();
 
-            foreach (ShipmentType shipmentType in removeItems)
+            foreach (ShipmentTypeCode shipmentType in removeItems)
             {
                 Available.Remove(shipmentType);
             }
@@ -68,14 +69,12 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         private void AddShipmentTypes(IEnumerable<ShipmentTypeCode> added)
         {
-            List<ShipmentType> addItems = added.Except(Available.Select(x => x.ShipmentTypeCode))
-                .Select(x => shipmentTypeFactory.Get(x))
-                .ToList();
+            List<ShipmentTypeCode> addItems = added.Except(Available).ToList();
 
-            foreach (ShipmentType shipmentType in addItems)
+            foreach (ShipmentTypeCode shipmentType in addItems)
             {
-                int sortValue = ShipmentTypeManager.GetSortValue(shipmentType.ShipmentTypeCode);
-                var insertDetails = Available.Select((x, i) => new { ExistingSortValue = ShipmentTypeManager.GetSortValue(x.ShipmentTypeCode), Index = i })
+                int sortValue = shipmentTypeManager.GetSortValue(shipmentType);
+                var insertDetails = Available.Select((x, i) => new { ExistingSortValue = shipmentTypeManager.GetSortValue(x), Index = i })
                     .SkipWhile(x => x.ExistingSortValue < sortValue)
                     .FirstOrDefault();
 

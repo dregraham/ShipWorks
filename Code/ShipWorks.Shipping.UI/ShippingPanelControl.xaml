@@ -18,6 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
             <tc:InvertBooleanConverter x:Key="InvertBooleanConverter" />
             <tc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
+            <tc:ShipmentTypeListConverter x:Key="ShipmentTypeListConverter" />
             <Thickness x:Key="SectionMargin" Left="0" Top="6" Right="0" Bottom="0" />
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Gray" />
@@ -41,11 +42,18 @@
                     <TextBlock VerticalAlignment="Center" Padding="0,0,6,0">Carrier:</TextBlock>
 
                     <ComboBox Grid.Column="1"
-                          SelectedValuePath="ShipmentTypeCode"
-                          DisplayMemberPath="ShipmentTypeName"
-                          ItemsSource="{Binding Available, Source={x:Static local:ShipmentTypeProvider.Current}}"
-                          SelectedValue="{Binding SelectedShipmentType}"
-                          Text="{Binding ShipmentTypeName}" />
+                          SelectedValuePath="Value"
+                          DisplayMemberPath="Description">
+                        <ComboBox.ItemsSource>
+                            <MultiBinding Converter="{StaticResource ShipmentTypeListConverter}">
+                                <Binding Path="Available" Source="{x:Static local:ShipmentTypeProvider.Current}" />
+                                <Binding Path="InitialShipmentType" Mode="OneWay" />
+                            </MultiBinding>
+                        </ComboBox.ItemsSource>
+                        <ComboBox.SelectedValue>
+                            <Binding Path="SelectedShipmentType" Mode="OneWay"/>
+                        </ComboBox.SelectedValue>
+                    </ComboBox>
                 </Grid>
                 <Border>
                     <Expander Header="From"

@@ -165,6 +165,7 @@
     <Compile Include="Rating\RateSelection.cs" />
     <Compile Include="Rating\RateSelectionFactory.cs" />
     <Compile Include="Rating\RatingPanelViewModel.cs" />
+    <Compile Include="Services\ShipmentTypeManagerWrapper.cs" />
     <Compile Include="ShipmentAddressValidator.cs" />
     <Compile Include="ShipmentPackageBuilderFactory.cs" />
     <Compile Include="ShipmentServicesBuilderFactory.cs" />

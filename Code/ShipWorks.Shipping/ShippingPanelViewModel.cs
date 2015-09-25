@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping
         private ShippingPanelLoadedShipmentResult loadResult;
         private bool supportsMultiplePackages;
         private ShipmentTypeCode selectedShipmentType;
+        private ShipmentTypeCode initialShipmentType;
         private readonly PropertyChangedHandler handler;
         private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
@@ -117,6 +118,16 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Initial shipment type for the current shipment
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ShipmentTypeCode InitialShipmentType
+        {
+            get { return initialShipmentType; }
+            set { handler.Set(nameof(InitialShipmentType), ref initialShipmentType, value); }
+        }
+
+        /// <summary>
         /// Are multiple packages supported
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -187,6 +198,7 @@ namespace ShipWorks.Shipping
             //DisableNeedToUpdateServices();
             //DisableNeedToUpdatePackages();
 
+            InitialShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             SelectedShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             //Origin.Load(loadedShipment.Shipment.OriginPerson);
 

@@ -2,6 +2,7 @@
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Shipping.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -88,6 +89,10 @@ namespace ShipWorks.Shipping.UI
                 .SingleInstance();
 
             builder.RegisterType<RateSelectionFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShipmentTypeManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }
