@@ -79,16 +79,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
                 shipment.CustomsValue = decimal.Parse(CustomsClearanceValueAmount) * shipment.FedEx.Packages.Count; ;
             }
 
-            if (!string.IsNullOrEmpty(CustomsOptionType))
-            {
-                // The only option type is Faulty item so just hard code the type here
-                shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FaultyItem;
-                shipment.FedEx.CustomsOptionsDesription = CustomsOptionDescription;
-            }
-            else
-            {
-                shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.None;
-            }
+            AddCustomsOptions(shipment, CustomsOptionType, CustomsOptionDescription);
         }
 
         /// <summary>

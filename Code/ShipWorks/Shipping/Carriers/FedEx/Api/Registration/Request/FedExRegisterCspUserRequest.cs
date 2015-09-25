@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request
             this.responseFactory = responseFactory;
             this.accountEntity = accountEntity;
 
-            NativeRequest = new RegisterWebCspUserRequest();
+            NativeRequest = new RegisterWebUserRequest();
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request
 
             // The request is ready to be sent to FedEx; we're sure the native request will be a RegisterWebCspUserRequest 
             // (since we assigned it as such in the constructor) so we can safely cast it here
-            RegisterWebCspUserReply nativeResponse = serviceGateway.RegisterCspUser(this.NativeRequest as RegisterWebCspUserRequest);
+            RegisterWebUserReply nativeResponse = serviceGateway.RegisterCspUser(this.NativeRequest as RegisterWebUserRequest);
             return responseFactory.CreateRegisterUserResponse(nativeResponse, this);
         }
     }

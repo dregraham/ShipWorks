@@ -42,52 +42,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private static bool hasDoneVersionCapture;
         private readonly bool forceVersionCapture;
         private readonly ILabelRepository labelRepository;
-
         private readonly IFedExRequestFactory requestFactory;
         private readonly ICarrierSettingsRepository settingsRepository;
         private readonly ICertificateInspector certificateInspector;
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
-
         private readonly ILog log;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class with default
-        /// values for the "live" FedEx settings repository and FedEx request factory.
-        /// </summary>
-        /// <param name="certificateInspector">The certificate inspector.</param>
-        public FedExShippingClerk(ICertificateInspector certificateInspector)
-            : this(new FedExSettingsRepository(), certificateInspector)
-        {
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class.
         /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        /// <param name="certificateInspector">The certificate inspector.</param>
-        public FedExShippingClerk(ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
-            : this(settingsRepository, certificateInspector, new FedExRequestFactory(settingsRepository), LogManager.GetLogger(typeof(FedExShippingClerk)), false, new FedExLabelRepository(), new ExcludedServiceTypeRepository())
+        public FedExShippingClerk(FedExShippingClerkParameters parameters)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class.
-        /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        /// <param name="certificateInspector">The certificate inspector.</param>
-        /// <param name="requestFactory">The request factory.</param>
-        /// <param name="log">The log.</param>
-        /// <param name="forceVersionCapture">if set to <c>true</c> [force version capture] to occur rather than only performing the version capture once.</param>
-        /// <param name="labelRepository">Label repository for clearing old shipment references.</param>
-        public FedExShippingClerk(ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector, IFedExRequestFactory requestFactory, ILog log, bool forceVersionCapture, ILabelRepository labelRepository, IExcludedServiceTypeRepository excludedServiceTypeRepository)
-        {
-            this.settingsRepository = settingsRepository;
-            this.certificateInspector = certificateInspector;
-            this.forceVersionCapture = forceVersionCapture;
-            this.requestFactory = requestFactory;
-            this.log = log;
-            this.labelRepository = labelRepository;
-            this.excludedServiceTypeRepository =  excludedServiceTypeRepository;
+            settingsRepository = parameters.SettingsRepository;
+            certificateInspector = parameters.Inspector;
+            forceVersionCapture = parameters.ForceVersionCapture;
+            requestFactory = parameters.RequestFactory;
+            log = parameters.Log;
+            labelRepository = parameters.LabelRepository;
+            excludedServiceTypeRepository = parameters.ExcludedServiceTypeRepository;
         }
 
         /// <summary>
@@ -199,6 +171,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.FedExGround:
                 case FedExServiceType.GroundHomeDelivery:
                 case FedExServiceType.FedExEuropeFirstInternationalPriority:
+                case FedExServiceType.FedExEconomyCanada:
+                case FedExServiceType.FedExInternationalGround:
                     CleanShipmentForNonFreight(fedExShipmentEntity);
                     CleanShipmentForNonSmartPost(fedExShipmentEntity);
                     break;
@@ -759,7 +733,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 FedExServiceType serviceType;
 
-                serviceType = GetFedExServiceType(rateDetail);
+                serviceType = GetFedExServiceType(rateDetail, shipment);
 
                 int transitDays = 0;
                 DateTime? deliveryDate = null;
@@ -787,25 +761,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // Cost
                 RatedShipmentDetail ratedShipmentDetail = GetRateReplyDetail(rateDetail);
 
-                decimal cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetCharge.Amount;
-                if (shipment.AdjustedOriginCountryCode().ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
-                {
-                    cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Amount;
+                    decimal cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetCharge.Amount;
+                    if (shipment.AdjustedOriginCountryCode().ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
+                    {
+                        cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Amount;
+                    }
+
+                    // Add the shipworks rate object
+                    results.Add(new RateResult(
+                        EnumHelper.GetDescription(serviceType),
+                        transitDays == 0 ? string.Empty : transitDays.ToString(),
+                        cost,
+                        new FedExRateSelection(serviceType))
+                    {
+                        ExpectedDeliveryDate = deliveryDate,
+                        ServiceLevel = GetServiceLevel(serviceType, transitDays),
+                        ShipmentType = ShipmentTypeCode.FedEx,
+                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.FedEx)
+                    });
                 }
 
-                // Add the shipworks rate object
-                results.Add(new RateResult(
-                                EnumHelper.GetDescription(serviceType),
-                                transitDays == 0 ? string.Empty : transitDays.ToString(),
-                                cost,
-                                new FedExRateSelection(serviceType))
-                {
-                    ExpectedDeliveryDate = deliveryDate,
-                    ServiceLevel = GetServiceLevel(serviceType, transitDays),
-                    ShipmentType = ShipmentTypeCode.FedEx,
-                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.FedEx)
-                });
-            }
 
             return results;
         }
@@ -815,6 +790,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         private RatedShipmentDetail GetRateReplyDetail(RateReplyDetail rateDetail)
         {
+            if (rateDetail.ActualRateTypeSpecified)
+            {
+                ReturnedRateType actualRateType = rateDetail.ActualRateType;
+                RatedShipmentDetail actualRate = rateDetail.RatedShipmentDetails.FirstOrDefault(detail => detail.ShipmentRateDetail.RateTypeSpecified && detail.ShipmentRateDetail.RateType == actualRateType);
+                if (actualRate != null)
+                {
+                    return actualRate;
+                }
+            }
+
+            // Not sure if this is required. I suspect there to always be an actual rate and a corresponding ratedShipmentDetail. This
+            // is here if I get confirmation for this from FedEx.
             RatedShipmentDetail ratedShipmentDetail = rateDetail.RatedShipmentDetails.FirstOrDefault(IsPreferredRequestedRateType) ??
                                                         rateDetail.RatedShipmentDetails.FirstOrDefault(IsSecondaryRequestedRateType)??
                                                       rateDetail.RatedShipmentDetails[0];
@@ -834,7 +821,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 detail.ShipmentRateDetail.RateType == preferredRateType;
         }
 
-
         /// <summary>
         /// Is the rated shipment detail a fallback type requested by the customer
         /// </summary>
@@ -847,7 +833,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             return detail.ShipmentRateDetail.RateTypeSpecified &&
                 detail.ShipmentRateDetail.RateType == secondaryRequestedRateType;
         }
-
 
         /// <summary>
         /// Gets the service level.
@@ -873,6 +858,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 case FedExServiceType.FedEx3DayFreight:
                 case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.FedExEconomyCanada:
                     return ServiceLevelType.ThreeDays;
 
                 case FedExServiceType.InternationalEconomy:
@@ -885,6 +871,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.InternationalPriorityFreight:
                 case FedExServiceType.InternationalEconomyFreight:
                 case FedExServiceType.SmartPost:
+                case FedExServiceType.FedExInternationalGround:
                     return ShippingManager.GetServiceLevel(transitDays);
             }
         }
@@ -924,7 +911,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get our own FedExServiceType value for the given rate detail
         /// </summary>
-        private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail)
+        private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail, ShipmentEntity shipment)
         {
             switch (rateDetail.ServiceType)
             {
@@ -955,6 +942,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 case ServiceType.FEDEX_EXPRESS_SAVER:
                 {
+                    // In canada fedex express saver is called FedEx Economy
+                    if (shipment.OriginCountryCode == "CA")
+                    {
+                        return FedExServiceType.FedExEconomyCanada;
+                    }
+
                     return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateExpressSaver : FedExServiceType.FedExExpressSaver;
                 }
 
@@ -964,7 +957,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case ServiceType.FEDEX_1_DAY_FREIGHT: return FedExServiceType.FedEx1DayFreight;
                 case ServiceType.FEDEX_2_DAY_FREIGHT: return FedExServiceType.FedEx2DayFreight;
                 case ServiceType.FEDEX_3_DAY_FREIGHT: return FedExServiceType.FedEx3DayFreight;
-                case ServiceType.FEDEX_GROUND: return FedExServiceType.FedExGround;
+
+                case ServiceType.FEDEX_GROUND:
+                    return ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) ? FedExServiceType.FedExGround : FedExServiceType.FedExInternationalGround;
+                
                 case ServiceType.GROUND_HOME_DELIVERY: return FedExServiceType.GroundHomeDelivery;
                 case ServiceType.INTERNATIONAL_PRIORITY_FREIGHT: return FedExServiceType.InternationalPriorityFreight;
                 case ServiceType.INTERNATIONAL_ECONOMY_FREIGHT: return FedExServiceType.InternationalEconomyFreight;

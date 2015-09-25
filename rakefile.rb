@@ -128,7 +128,7 @@ namespace :build do
 	end
 	
 	desc "Build ShipWorks and generate a public installer"
-	msbuild :public_installer, :versionLabel do |msb, args|
+	msbuild :public_installer, [:versionLabel] => "build:restore" do |msb, args|
 		print "Building an installer for the public release...\r\n\r\n"
 
 		# Default the build label to 0.0.0
@@ -214,20 +214,18 @@ namespace :db do
 		file_path = get_data_path_from_arguments args, full_instance[:instance]
 
 		dropSqlText = "
-			DECLARE @SQL varchar(max)
-
-			-- Build the SQL to kill the all connections to @DatbaseName (Kill 54;Kill 56;...)
-			SELECT @SQL = COALESCE(@SQL,'') + 'Kill ' + Convert(varchar, SPId) + ';'
-			FROM MASTER..SysProcesses
-			WHERE DBId = DB_ID('#{database_name}') AND SPId <> @@SPId
+			USE master;
+			go
+			ALTER DATABASE [{DBNAME}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+			go
+			ALTER DATABASE [{DBNAME}] SET MULTI_USER;
+			go
 			
-			EXEC (@SQL)
-			GO
-
 			-- Now it's safe to drop the database without any open connections
-			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '#{database_name}')
-				DROP DATABASE [#{database_name}] "
+			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '{DBNAME}')
+				DROP DATABASE [{DBNAME}] "
 
+		dropSqlText = dropSqlText.gsub(/{DBNAME}/, database_name)
 		execute_sql full_instance, dropSqlText, "Drop seed database"
 
 		# Use the create database in the ShipWorks project, to guarantee it is the same as the one used 
@@ -301,6 +299,8 @@ namespace :db do
 				# Get the connection string we'll be using from the test config file
 				xml.xpath("//SqlSession/Server/Instance")[0].content = full_instance[:server]
 				xml.xpath("//SqlSession/Server/Database")[0].content = database_name
+				puts "server:   " + full_instance[:server]
+				puts "database: " + database_name
 			end
 		end
 	end

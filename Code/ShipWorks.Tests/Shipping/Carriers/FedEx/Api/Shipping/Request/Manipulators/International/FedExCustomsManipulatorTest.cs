@@ -6,6 +6,7 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -21,6 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private ProcessShipmentRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
         private FedExAccountEntity fedExAccount;
+        private Mock<ICustomsRequired> customsRequired;
 
         public FedExCustomsManipulatorTest()
         {
@@ -60,7 +62,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(fedExAccount);
 
-            testObject = new FedExCustomsManipulator(new FedExSettings(settingsRepository.Object));
+            customsRequired = new Mock<ICustomsRequired>();
+            customsRequired
+                .Setup(c => c.IsCustomsRequired(It.IsAny<ShipmentEntity>()))
+                .Returns(true);
+
+            testObject = new FedExCustomsManipulator(new FedExSettings(settingsRepository.Object), customsRequired.Object);
         }
 
         [Fact]
@@ -112,22 +119,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_CustomsDetailIsNull_WhenShipCountryCodeAndOriginCountryCodeAreUS_Test()
+        public void Manipulate_CustomsDetailIsNull_WhenCustomsNotRequired_Test()
         {
-            shipmentEntity.ShipCountryCode = "US";
-            shipmentEntity.OriginCountryCode = "US";
-
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.Null(nativeRequest.RequestedShipment.CustomsClearanceDetail);
-        }
-
-        [Fact]
-        public void Manipulate_CustomsDetailIsNull_WhenShipCountryCodeAndOriginCountryCodeAreCA_Test()
-        {
-            // Test that "US" isn't hard-coded in the manipulator
-            shipmentEntity.ShipCountryCode = "CA";
-            shipmentEntity.OriginCountryCode = "CA";
+            customsRequired
+                .Setup(c => c.IsCustomsRequired(It.IsAny<ShipmentEntity>()))
+                .Returns(false);
 
             testObject.Manipulate(carrierRequest.Object);
 

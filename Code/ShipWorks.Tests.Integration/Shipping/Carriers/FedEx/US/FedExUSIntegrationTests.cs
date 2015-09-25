@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xunit;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
@@ -10,7 +11,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 {
     public class FedExUSIntegrationTests : DataDrivenIntegrationTestBase
     {
-        private string fedExTestAccountNumber = "604589967"; // "603103343";
+        private string fedExTestAccountNumber = "607253064";
         private const string ecodAccountNumber = "222326460";
         private bool justLabels = false;
         private readonly ITestOutputHelper output;
@@ -32,18 +33,29 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
-                testObject.FedExAccountNumber = fedExTestAccountNumber;
+                // TransactionID 605733 should use ECOD account.
+                List<string> transactionsForEcodAccount = new List<string>()
+                {
+                    "605733",
+                    "605793",
+                    "605797",
+                    "605798"
+                };
+
+                testObject.FedExAccountNumber = transactionsForEcodAccount.Contains(testObject.CustomerTransactionId)
+                    ? ecodAccountNumber : fedExTestAccountNumber;
 
                 testObject.Ship();
             }
         }
+
 
         [ExcelData("DataSources\\FedExAll.xlsx", "Grn Alcohol")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExGroundDomesticAlcohol(DataRow row)
         {
-            fedExTestAccountNumber = "510158040";
+            fedExTestAccountNumber = "607253064";
 
             var testObject = new FedExUSGroundAlcoholFixture();
 
@@ -63,7 +75,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [Trait("Category", "FedEx")]
         public void Ship_FedExExpressInternationalAlcohol(DataRow row)
         {
-            fedExTestAccountNumber = "510158040";
+            fedExTestAccountNumber = "607253064";
 
             var testObject = new FedExUSExpressInternationalFixture();
 
@@ -101,7 +113,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [Trait("Category", "FedEx")]
         public void Ship_FedExExpressDomesticAlcohol(DataRow row)
         {
-            fedExTestAccountNumber = "510158040";
+            fedExTestAccountNumber = "607253064";
 
             var testObject = new FedExPrototypeFixture();
 

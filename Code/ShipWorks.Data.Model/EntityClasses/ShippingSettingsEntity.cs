@@ -575,6 +575,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("AutoCreateShipments", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("FedExFimsEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("FedExFimsUsername", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("FedExFimsPassword", fieldHashtable);
 		}
 		#endregion
 
@@ -1166,6 +1175,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.AutoCreateShipments, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.AutoCreateShipments, value); }
+		}
+
+		/// <summary> The FedExFimsEnabled property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExFimsEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean FedExFimsEnabled
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.FedExFimsEnabled, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.FedExFimsEnabled, value); }
+		}
+
+		/// <summary> The FedExFimsUsername property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExFimsUsername"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String FedExFimsUsername
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.FedExFimsUsername, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.FedExFimsUsername, value); }
+		}
+
+		/// <summary> The FedExFimsPassword property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExFimsPassword"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String FedExFimsPassword
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.FedExFimsPassword, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.FedExFimsPassword, value); }
 		}
 
 

@@ -230,6 +230,9 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceTypeFilterTest.cs" />
     <Compile Include="Interapptive.Shared\Net\CertificateInspectorTest.cs" />
     <Compile Include="Shipping\Carriers\CarrierDescriptionTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExShippingClerkFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShippingClerkTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsFakeWebClientTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateOneRateManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExOneRateManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBrokerTest.cs" />
@@ -352,7 +355,9 @@
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\WebServices\GlobalShipAddress\FedExWebServiceReferenceTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\WebServices\Rate\ReturnedRateTypeTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\WebServices\Ship\FedExWebServiceShipReferenceTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\WebServices\Track\FedExWebServiceTrackReferenceTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelCredentialsTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelDatabaseRepositoryTest.cs" />

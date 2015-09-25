@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Xunit;
 using Moq;
@@ -157,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(settings);
 
-            Assert.Equal(detail.CspCredential.Key, settings.CspCredentialKey);
+            Assert.Equal(detail.ParentCredential.Key, settings.CspCredentialKey);
         }
 
         [Fact]
@@ -170,7 +171,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(settings);
 
-            Assert.Equal(detail.CspCredential.Password, settings.CspCredentialPassword);
+            Assert.Equal(detail.ParentCredential.Password, settings.CspCredentialPassword);
         }
 
         [Fact]
@@ -227,7 +228,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
 
-            Assert.Equal(detail.CspCredential.Key, settings.CspCredentialKey);
+            Assert.Equal(detail.ParentCredential.Key, settings.CspCredentialKey);
         }
 
         [Fact]
@@ -240,7 +241,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
 
-            Assert.Equal(detail.CspCredential.Password, settings.CspCredentialPassword);
+            Assert.Equal(detail.ParentCredential.Password, settings.CspCredentialPassword);
         }
 
         [Fact]
@@ -326,7 +327,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account);
 
             Assert.Equal(account.AccountNumber, detail.AccountNumber);
         }
@@ -339,35 +340,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account);
 
             Assert.Equal(account.MeterNumber, detail.MeterNumber);
-        }
-
-        [Fact]
-        public void CreateShippingClientDetail_UsesClientProductIdFromSettings_Test()
-        {
-            FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
-
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
-            FedExSettings settings = new FedExSettings(settingsRepository.Object);
-
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account, settings);
-
-            Assert.Equal(settings.ClientProductId, detail.ClientProductId);
-        }
-
-        [Fact]
-        public void CreateShippingClientDetail_UsesClientProductVersionFromSettings_Test()
-        {
-            FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
-
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
-            FedExSettings settings = new FedExSettings(settingsRepository.Object);
-
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account, settings);
-
-            Assert.Equal(settings.ClientProductVersion, detail.ClientProductVersion);
         }
 
         #endregion Shipping Client Detail Tests
@@ -383,7 +358,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
 
             Assert.Equal(account.AccountNumber, detail.AccountNumber);
         }
@@ -396,35 +371,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
 
             Assert.Equal(account.MeterNumber, detail.MeterNumber);
-        }
-
-        [Fact]
-        public void CreateRegistrationClientDetail_UsesClientProductIdFromSettings_Test()
-        {
-            FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
-
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
-            FedExSettings settings = new FedExSettings(settingsRepository.Object);
-
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
-
-            Assert.Equal(settings.ClientProductId, detail.ClientProductId);
-        }
-
-        [Fact]
-        public void CreateRegistrationClientDetail_UsesClientProductVersionFromSettings_Test()
-        {
-            FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
-
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
-            FedExSettings settings = new FedExSettings(settingsRepository.Object);
-
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
-
-            Assert.Equal(settings.ClientProductVersion, detail.ClientProductVersion);
         }
 
         #endregion Registration Client Detail Tests

@@ -590,6 +590,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ReturnSaturdayPickup", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ReturnsClearance", fieldHashtable);
 		}
 		#endregion
 
@@ -1081,6 +1084,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.ReturnSaturdayPickup, false); }
 			set	{ SetValue((int)FedExProfileFieldIndex.ReturnSaturdayPickup, value); }
+		}
+
+		/// <summary> The ReturnsClearance property of the Entity FedExProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."ReturnsClearance"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> ReturnsClearance
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.ReturnsClearance, false); }
+			set	{ SetValue((int)FedExProfileFieldIndex.ReturnsClearance, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExProfilePackageEntity' which are related to this entity via a relation of type '1:n'.

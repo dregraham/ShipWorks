@@ -120,6 +120,8 @@ namespace ShipWorks.ApplicationCore.Logging
         OpenSky,
         Choxi,
         InstanteStore,
-        LemonStand
+        LemonStand,
+        [ApiPrivateLogSource]
+        FedExFims
     }
 }

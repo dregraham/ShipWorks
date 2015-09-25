@@ -115,6 +115,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(fedex, FedExProfileFields.ReturnSaturdayPickup, saturdayReturnState, saturdayReturn);
 
             AddValueMapping(fedex, FedExProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);
+            AddValueMapping(fedex, FedExProfileFields.ReturnsClearance, returnsClearanceState, returnsClearance, labelReturnsClearance);
+
 
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderShip, labelEmailSender);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderException);
@@ -362,9 +364,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
 
-                okService =
-                    serviceType == FedExServiceType.GroundHomeDelivery ||
-                    serviceType == FedExServiceType.FedExGround;
+                okService = FedExUtility.IsGroundService(serviceType);
             }
 
             // No packaging selected

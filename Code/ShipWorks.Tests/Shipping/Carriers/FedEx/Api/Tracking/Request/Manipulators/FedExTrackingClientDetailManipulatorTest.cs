@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
@@ -14,8 +13,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
     {
         private FedExTrackingClientDetailManipulator testObject;
 
-        private Mock<ICarrierSettingsRepository> settingsRepository;
-
         private Mock<CarrierRequest> trackingCarrierRequest;
         private TrackRequest nativeRequest;
 
@@ -23,16 +20,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
 
         public FedExTrackingClientDetailManipulatorTest()
         {
-            account = new FedExAccountEntity { AccountNumber = "12345", MeterNumber = "67890" };
-
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(account);
+            account = new FedExAccountEntity {AccountNumber = "12345", MeterNumber = "67890"};
 
             nativeRequest = new TrackRequest { ClientDetail = new ClientDetail() };
             trackingCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
             trackingCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
-
-            testObject = new FedExTrackingClientDetailManipulator(settingsRepository.Object);
+            
+            testObject = new FedExTrackingClientDetailManipulator();
         }
 
         [Fact]

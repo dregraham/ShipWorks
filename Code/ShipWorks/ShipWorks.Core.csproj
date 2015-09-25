@@ -825,6 +825,20 @@
     <Compile Include="Shipping\Carriers\CarrierDescription.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateHoldAtLocationManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateDangerousGoodsManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExShippingClerkFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExShippingClerkParameters.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsFakeWebClient.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsLabelRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShippingClerk.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShipRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShipResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsWebClient.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsLabelRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsShipRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsShipResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsWebClient.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateDryIceManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateCodOptionsManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateOneRateManipulator.cs" />
@@ -835,6 +849,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\OpenShip\FedExOpenShipXmlWriter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Enums\FedExMaskedDataType.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackagePickerControl.cs">
       <SubType>UserControl</SubType>
@@ -842,8 +857,16 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shipping\Carriers\FedEx\FedExServiceTypeChangedMessage.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExTemplateElementGenerator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FimsOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\FedEx\FimsOptionsControl.Designer.cs">
+      <DependentUpon>FimsOptionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\FedEx\ICustomsRequired.cs" />
     <Compile Include="Shipping\Carriers\ICredentialStore.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelServiceTypeServicePickerControl.cs">
@@ -7504,6 +7527,9 @@
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExReturnsControl.resx">
       <DependentUpon>FedExReturnsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\FedEx\FimsOptionsControl.resx">
+      <DependentUpon>FimsOptionsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\iParcel\iParcelAccountEditorDlg.resx">
       <DependentUpon>iParcelAccountEditorDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -8085,6 +8111,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.9.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.1.sql" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.2.sql" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -8347,20 +8374,21 @@
     <EmbeddedResource Include="Data\Import\Xml\Schema\ShipWorksCore.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v2.wsdl" />
+    <EmbeddedResource Include="Resources\Shipping\Fakes\FakeFIMSLabel.pdf" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ASYNCService_v2.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v3.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v4.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CountryService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\LocationsService_v1.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v7.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v9.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\PickupService_v9.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\RateService_v16.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\RateService_v18.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v6.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ReturnTagService_v1.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v15.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v9.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v17.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v10.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\UploadDocumentService_v7.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ValidationAvailabilityAndCommitmentService_v2.wsdl" />
     <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracPickupRequest.xsd">
@@ -10345,13 +10373,17 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.5.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.2.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.4.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

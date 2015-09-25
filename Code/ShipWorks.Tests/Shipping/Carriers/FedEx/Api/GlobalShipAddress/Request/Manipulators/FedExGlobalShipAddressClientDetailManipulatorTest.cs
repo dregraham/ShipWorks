@@ -45,8 +45,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.Equal("ITSW", nativeRequest.ClientDetail.ClientProductId);
-            Assert.Equal("5236", nativeRequest.ClientDetail.ClientProductVersion);
+            Assert.Equal("IEOQ", nativeRequest.ClientDetail.ClientProductId);
+            Assert.Equal("7038", nativeRequest.ClientDetail.ClientProductVersion);
         }
 
         [Fact]
