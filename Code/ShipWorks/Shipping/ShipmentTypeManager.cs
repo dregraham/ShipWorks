@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping
 
             throw new InvalidOperationException($"Invalid shipment type {typeCode}.");
         }
-
+        
         /// <summary>
         /// Get the effective sort value of the given type code.  This provides our custom sorting
         /// </summary>

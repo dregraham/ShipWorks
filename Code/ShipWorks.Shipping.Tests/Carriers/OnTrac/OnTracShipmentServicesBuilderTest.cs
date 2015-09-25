@@ -5,6 +5,7 @@ using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
 {

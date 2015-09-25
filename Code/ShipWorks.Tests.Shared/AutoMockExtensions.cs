@@ -1,9 +1,10 @@
 ﻿using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using System;
 
-namespace ShipWorks.Shipping.Tests
+namespace ShipWorks.Tests.Shared
 {
     /// <summary>
     /// Additional methods for AutoMocks

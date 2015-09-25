@@ -6,6 +6,7 @@ using ShipWorks.Shipping;
 using Xunit;
 using Autofac.Extras.Moq;
 using ShipWorks.Shipping.Tests;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Shipping
 {

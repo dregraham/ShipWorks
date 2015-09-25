@@ -119,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\FedEx\FedExShipmentPackageBuilderTest.cs" />
-    <Compile Include="AutoMockExtensions.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />
@@ -144,6 +143,10 @@
     <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
+      <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
+      <Name>ShipWorks.Tests.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>

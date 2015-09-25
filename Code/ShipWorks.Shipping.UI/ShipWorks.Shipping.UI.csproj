@@ -211,6 +211,8 @@
     <Compile Include="ValueConverters\BooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
+    <Compile Include="ValueConverters\ShipmentTypeListConverter.cs" />
+    <Compile Include="ValueConverters\ShipmentTypeListItem.cs" />
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\DoubleToWeightStringConverter.cs" />
   </ItemGroup>

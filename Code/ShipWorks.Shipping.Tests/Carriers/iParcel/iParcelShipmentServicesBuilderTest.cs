@@ -6,6 +6,7 @@ using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Settings;
 using System;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Shipping.Tests.Carriers.iParcel
 {
