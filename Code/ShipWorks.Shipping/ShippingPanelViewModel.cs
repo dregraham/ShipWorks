@@ -98,8 +98,8 @@ namespace ShipWorks.Shipping
                     }
 
                     SupportsMultiplePackages = shipmentTypeFactory.Get(selectedShipmentType)?.SupportsMultiplePackages ?? false;
-                    UpdateServices();
-                    UpdatePackages();
+                    //UpdateServices();
+                    //UpdatePackages();
                 }
             }
         }
