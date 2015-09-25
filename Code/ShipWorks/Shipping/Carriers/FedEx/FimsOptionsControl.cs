@@ -26,6 +26,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             foreach (ShipmentEntity shipment in shipments)
             {
                 airWaybill.ApplyMultiText(shipment.FedEx.FimsAirWaybill ?? string.Empty);
+                referenceCustomer.ApplyMultiText(shipment.FedEx.ReferenceCustomer ?? string.Empty);
             }
         }
 
@@ -35,6 +36,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         internal void SaveToShipment(ShipmentEntity shipment)
         {
             airWaybill.ReadMultiText(x => shipment.FedEx.FimsAirWaybill = x);
+            referenceCustomer.ReadMultiText(x => shipment.FedEx.ReferenceCustomer = x);
         }
     }
 }
