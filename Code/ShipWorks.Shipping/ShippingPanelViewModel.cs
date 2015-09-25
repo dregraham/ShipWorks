@@ -12,6 +12,7 @@ using ShipWorks.AddressValidation;
 using System.Windows.Input;
 using ShipWorks.Shipping.Commands;
 using Autofac.Features.OwnedInstances;
+using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
 
 namespace ShipWorks.Shipping
 {
@@ -68,7 +69,7 @@ namespace ShipWorks.Shipping
             this.shipmentTypeFactory = shipmentTypeFactory;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
-            
+            messenger.Handle<ShipmentChangedMessage>(this, OnShipmentChanged);
             //Observable.FromEventPattern<PropertyChangedEventArgs>(ShipmentViewModel, "PropertyChanged")
             //    .Where(evt => listenForRateCriteriaChanged)
             //    .Throttle(TimeSpan.FromMilliseconds(2000))
@@ -87,6 +88,22 @@ namespace ShipWorks.Shipping
             //ShipmentViewModel = shipmentViewModelFactory();
 
             //CreateLabelCommand = new RelayCommand(async () => await ProcessShipment());
+        }
+
+        /// <summary>
+        /// Shipments the changed.
+        /// </summary>
+        private void OnShipmentChanged(ShipmentChangedMessage shipmentChangedMessage)
+        {
+            if (shipmentChangedMessage?.Shipment == null || loadedShipment?.Shipment == null)
+            {
+                return;
+            }
+
+            if (shipmentChangedMessage.Shipment.ShipmentID == loadedShipment.Shipment.ShipmentID )
+            {
+                SelectedShipmentType = shipmentChangedMessage.Shipment.ShipmentTypeCode;
+            }
         }
 
         /// <summary>
