@@ -1,23 +1,29 @@
 ﻿using Autofac;
 using Interapptive.Shared.Messaging;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Core.UI;
 using ShipWorks.UI.Controls.Design;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.UI
 {
     /// <summary>
     /// Provide available shipment types to UI controls
     /// </summary>
-    public class ShipmentTypeProvider
+    public class ShipmentTypeProvider : INotifyPropertyChanged
     {
         private static ShipmentTypeProvider current = DesignModeDetector.IsDesignerHosted() ? 
             null : 
             IoC.UnsafeGlobalLifetimeScope.Resolve<ShipmentTypeProvider>();
         
         private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly PropertyChangedHandler handler;
+        private IEnumerable<ShipmentTypeCode> available;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Get the current instance of the shipment type provider
@@ -30,9 +36,19 @@ namespace ShipWorks.Shipping.UI
         public ShipmentTypeProvider(IMessenger messenger, IShipmentTypeManager shipmentTypeManager)
         {
             this.shipmentTypeManager = shipmentTypeManager;
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             messenger.Handle<EnabledCarriersChangedMessage>(this, UpdateAvailableCarriers);
-            Available = new ObservableCollection<ShipmentTypeCode>(shipmentTypeManager.EnabledShipmentTypes.Select(x => x.ShipmentTypeCode));
+            Available = shipmentTypeManager.EnabledShipmentTypes.Select(x => x.ShipmentTypeCode).ToList();
+        }
+
+        /// <summary>
+        /// Available shipment types
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IEnumerable<ShipmentTypeCode> Available {
+            get { return available; }
+            private set { handler.Set(nameof(Available), ref available, value); }
         }
 
         /// <summary>
@@ -40,57 +56,7 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         private void UpdateAvailableCarriers(EnabledCarriersChangedMessage message)
         {
-            RemoveShipmentTypes(message.Removed);
-            AddShipmentTypes(message.Added);
-        }
-
-        /// <summary>
-        /// Available shipment types
-        /// </summary>
-        public ObservableCollection<ShipmentTypeCode> Available { get; private set; }
-
-        /// <summary>
-        /// Remove shipment types from the list of available
-        /// </summary>
-        private void RemoveShipmentTypes(IEnumerable<ShipmentTypeCode> removed)
-        {
-            List<ShipmentTypeCode> removeItems = Available
-                .Where(x => removed.Contains(x))
-                .ToList();
-
-            foreach (ShipmentTypeCode shipmentType in removeItems)
-            {
-                Available.Remove(shipmentType);
-            }
-        }
-
-        /// <summary>
-        /// Add shipment types to the list of available
-        /// </summary>
-        private void AddShipmentTypes(IEnumerable<ShipmentTypeCode> added)
-        {
-            List<ShipmentTypeCode> addItems = added.Except(Available).ToList();
-
-            foreach (ShipmentTypeCode shipmentType in addItems)
-            {
-                int sortValue = shipmentTypeManager.GetSortValue(shipmentType);
-                var insertDetails = Available.Select((x, i) => new { ExistingSortValue = shipmentTypeManager.GetSortValue(x), Index = i })
-                    .SkipWhile(x => x.ExistingSortValue < sortValue)
-                    .FirstOrDefault();
-
-                if (sortValue == 1)
-                {
-                    Available.Insert(0, shipmentType);
-                }
-                else if (insertDetails == null)
-                {
-                    Available.Add(shipmentType);
-                }
-                else
-                {
-                    Available.Insert(insertDetails.Index, shipmentType);
-                }
-            }
+            Available = Available.Concat(message.Added).Except(message.Removed).Distinct().ToList();
         }
     }
 }
