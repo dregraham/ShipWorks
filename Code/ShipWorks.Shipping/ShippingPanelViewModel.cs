@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using ShipWorks.AddressValidation;
 using System.Windows.Input;
 using ShipWorks.Shipping.Commands;
@@ -33,6 +34,8 @@ namespace ShipWorks.Shipping
         private readonly ICustomsManager customsManager;
         private readonly IShipmentProcessor shipmentProcessor;
         private readonly Func<Owned<ICarrierConfigurationShipmentRefresher>> shipmentRefresherFactory;
+
+        private bool listenForRateCriteriaChanged = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -64,6 +67,15 @@ namespace ShipWorks.Shipping
             this.shipmentTypeFactory = shipmentTypeFactory;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
+            
+            //Observable.FromEventPattern<PropertyChangedEventArgs>(ShipmentViewModel, "PropertyChanged")
+            //    .Where(evt => listenForRateCriteriaChanged)
+            //    .Throttle(TimeSpan.FromMilliseconds(2000))
+            //    .Where(evt => IsRatingField(evt.EventArgs.PropertyName))
+            //    .Subscribe(evt => {
+            //        OnRateCriteriaPropertyChanged(null, evt.EventArgs);
+            //    });
+
             this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.shipmentRefresherFactory = shipmentRefresherFactory;
 
@@ -293,46 +305,28 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnRateCriteriaPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            // Save UI values to the shipment so we can send the new values to the rates panel
+            Save();
+
+            messenger.Send(new ShipmentChangedMessage(this, loadedShipment.Shipment));
+        }
+
+        private bool IsRatingField(string propertyname)
+        {
             // Only send the ShipmentChangedMessage message if the field that changed is a rating field.
             ShipmentType shipmentType = shipmentTypeFactory.Get(loadedShipment.Shipment);
 
             // Since we have a generic AddressViewModel whose properties do not match entity feild names,
             // we need to translate the Ship, Origin, and Street properties to know if the changed field
             // is one rating cares about.
-            string name = e.PropertyName;
-            string shipName = string.Format("Ship{0}", e.PropertyName);
-            string origName = string.Format("Origin{0}", e.PropertyName);
+            string name = propertyname;
+            string shipName = string.Format("Ship{0}", name);
+            string origName = string.Format("Origin{0}", name);
 
-            if (shipmentType.RatingFields.FieldsContainName(name) ||
-                shipmentType.RatingFields.FieldsContainName(shipName) ||
-                shipmentType.RatingFields.FieldsContainName(origName) ||
-                name.Equals("Street", StringComparison.InvariantCultureIgnoreCase))
-            {
-                // Save UI values to the shipment so we can send the new values to the rates panel
-                Save();
-
-                messenger.Send(new ShipmentChangedMessage(this, loadedShipment.Shipment));
-            }
-        }
-
-        /// <summary>
-        /// Wire up the rate criteria changed event to the view models.
-        /// </summary>
-        private void EnableRateCriteriaChanged()
-        {
-            Origin.PropertyChanged += OnRateCriteriaPropertyChanged;
-            Destination.PropertyChanged += OnRateCriteriaPropertyChanged;
-            ShipmentViewModel.PropertyChanged += OnRateCriteriaPropertyChanged;
-        }
-
-        /// <summary>
-        /// Remove the rate criteria changed event from the view models.
-        /// </summary>
-        private void DisableRateCriteriaChanged()
-        {
-            Origin.PropertyChanged -= OnRateCriteriaPropertyChanged;
-            Destination.PropertyChanged -= OnRateCriteriaPropertyChanged;
-            ShipmentViewModel.PropertyChanged -= OnRateCriteriaPropertyChanged;
+            return shipmentType.RatingFields.FieldsContainName(name) ||
+                   shipmentType.RatingFields.FieldsContainName(shipName) ||
+                   shipmentType.RatingFields.FieldsContainName(origName) ||
+                   name.Equals("Street", StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
