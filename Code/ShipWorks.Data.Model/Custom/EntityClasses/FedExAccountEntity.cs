@@ -22,5 +22,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// Get the shipment type to which this account applies
         /// </summary>
         public ShipmentTypeCode ShipmentType => ShipmentTypeCode.FedEx;
+
+        /// <summary>
+        /// Applies account to shipment
+        /// </summary>
+        public void ApplyTo(ShipmentEntity shipment) =>
+            shipment.FedEx.FedExAccountID = AccountId;
     }
 }

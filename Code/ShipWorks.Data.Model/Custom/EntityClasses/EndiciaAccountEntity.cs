@@ -24,5 +24,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         /// <remarks>Assume Endicia unless explicitly marked as Express1</remarks>
         public ShipmentTypeCode ShipmentType => EndiciaReseller == 1 ? ShipmentTypeCode.Express1Endicia : ShipmentTypeCode.Endicia;
+
+        /// <summary>
+        /// Applies account to shipment
+        /// </summary>
+        public void ApplyTo(ShipmentEntity shipment) => 
+            shipment.Postal.Endicia.EndiciaAccountID = AccountId;
     }
 }

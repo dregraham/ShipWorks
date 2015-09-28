@@ -1,4 +1,5 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.Custom
@@ -22,5 +23,10 @@ namespace ShipWorks.Data.Model.Custom
         /// Get the shipment type to which this account applies
         /// </summary>
         ShipmentTypeCode ShipmentType { get; }
+
+        /// <summary>
+        /// Apply this account to the shipment.
+        /// </summary>
+        void ApplyTo(ShipmentEntity shipment);
     }
 }

@@ -18,5 +18,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         /// <remarks>Assume Usps unless explicitly marked as Express1</remarks>
         public ShipmentTypeCode ShipmentType => UspsReseller == 1 ? ShipmentTypeCode.Express1Usps : ShipmentTypeCode.Usps;
+
+        /// <summary>
+        /// Applies account to shipment
+        /// </summary>
+        public void ApplyTo(ShipmentEntity shipment) =>
+            shipment.Postal.Usps.UspsAccountID = AccountId;
     }
 }
