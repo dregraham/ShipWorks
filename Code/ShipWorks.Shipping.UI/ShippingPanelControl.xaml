@@ -15,6 +15,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/ShipWorksExpanderStyle.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/GlobalStyle.xaml" />
+                <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <tc:InvertBooleanConverter x:Key="InvertBooleanConverter" />
             <tc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
@@ -60,7 +61,17 @@
                           IsExpanded="{Binding IsOriginExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                           DataContext="{Binding Origin}"
                           Style="{StaticResource ExpanderStyle}">
-                        <local:AddressControl />
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="75" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}">Account:</TextBlock>
+                                <ComboBox Grid.Row="0" Grid.Column="1" Text="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                            <local:AddressControl />
+                        </StackPanel>
                     </Expander>
                 </Border>
                 <Border>
