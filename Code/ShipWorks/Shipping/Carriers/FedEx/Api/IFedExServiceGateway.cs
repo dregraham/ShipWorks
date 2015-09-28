@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="registerRequest">The register request.</param>
         /// <returns>The RegisterWebCspUserReply recevied from FedEx.</returns>
-        RegisterWebCspUserReply RegisterCspUser(RegisterWebCspUserRequest registerRequest);
+        RegisterWebUserReply RegisterCspUser(RegisterWebUserRequest registerRequest);
 
         /// <summary>
         /// Intended to interact with the FedEx API for subscribing a shipper to use the FedEx API.

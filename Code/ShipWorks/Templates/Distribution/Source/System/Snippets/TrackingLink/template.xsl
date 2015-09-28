@@ -42,11 +42,19 @@
 
       </xsl:when>
 
-
       <xsl:when test="ShipmentType = 'FedEx'">
-        <a href="http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers={TrackingNumber}">
-          <xsl:value-of select="TrackingNumber" />
-        </a>
+        <xsl:choose>
+          <xsl:when test="contains(ServiceUsed, 'FIMS')">
+            <a href="http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID={TrackingNumber}">
+              <xsl:value-of select="TrackingNumber" />
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <a href="http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers={TrackingNumber}">
+              <xsl:value-of select="TrackingNumber" />
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
 
       <xsl:otherwise>

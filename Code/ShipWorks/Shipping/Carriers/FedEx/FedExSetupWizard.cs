@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 
@@ -145,6 +146,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
 
+            account.Phone = new string(account.Phone.Where(char.IsDigit).ToArray());
+
             RequiredFieldChecker checker = new RequiredFieldChecker();
             checker.Check("Account", account.AccountNumber);
             checker.Check("Full Name", account.FirstName);
@@ -163,11 +166,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 return;
             }
 
+            if (account.Phone.Length != 10)
+            {
+                e.NextPage = CurrentPage;
+                MessageHelper.ShowError(this, "The phone number must be 10 digits.");
+                return;
+            }
+
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                IShippingClerk clerk = new FedExShippingClerk(new FedExShipmentType().CertificateInspector);
+                IShippingClerk clerk = FedExShippingClerkFactory.CreateShippingClerk(null, new FedExSettingsRepository());
                 clerk.RegisterAccount(account);
 
                 account.Description = FedExAccountManager.GetDefaultDescription(account);

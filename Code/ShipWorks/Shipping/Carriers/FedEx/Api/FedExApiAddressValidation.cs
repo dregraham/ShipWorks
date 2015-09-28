@@ -70,25 +70,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             request.Version = new VersionId
             {
                 ServiceId = "aval",
-                Major = 2,
+                Major = 4,
                 Intermediate = 0,
                 Minor = 0
             };
 
             // Set the single address that we want to validate
-            request.AddressesToValidate = new AddressToValidate[] 
+            request.AddressesToValidate = new [] 
             { 
-                new AddressToValidate()
+                new AddressToValidate
                 {
                     Address = CreateAddress(new PersonAdapter(shipment, "Ship")),
-                    CompanyName = shipment.ShipCompany.Length > 0 ? shipment.ShipCompany : null
+                    Contact = new Contact
+                    {
+                        CompanyName = shipment.ShipCompany.Length > 0 ? shipment.ShipCompany : null
+                    }
                 }
             };
-
-            // We just want to check residential status
-            request.Options = new AddressValidationOptions();
-            request.Options.CheckResidentialStatus = true;
-            request.Options.CheckResidentialStatusSpecified = true;
 
             try
             {
@@ -106,31 +104,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                         throw new FedExException("FedEx returned zero results for residential check.");
                     }
 
-                    if (reply.AddressResults[0] == null || reply.AddressResults[0].ProposedAddressDetails.Length == 0)
+                    if (reply.AddressResults[0] == null)
                     {
                         throw new FedExException("FedEx returned zero details for residential check.");
                     }
 
-                    ProposedAddressDetail detail = reply.AddressResults[0].ProposedAddressDetails[0];
+                    AddressValidationResult detail = reply.AddressResults[0];
 
-                    if (!detail.ResidentialStatusSpecified)
+                    if (!detail.ClassificationSpecified)
                     {
                         throw new FedExException("FedEx did not determine if the address is commercial or residential.");
                     }
 
-                    if (detail.ResidentialStatus == ResidentialStatusType.NOT_APPLICABLE_TO_COUNTRY)
-                    {
-                        throw new FedExException("Residential status is not available for the destination country.");
-                    }
-
-                    if (detail.ResidentialStatus == ResidentialStatusType.INSUFFICIENT_DATA ||
-                        detail.ResidentialStatus == ResidentialStatusType.UNAVAILABLE ||
-                        detail.ResidentialStatus == ResidentialStatusType.UNDETERMINED)
+                    if (detail.Classification == FedExAddressClassificationType.MIXED ||
+                        detail.Classification == FedExAddressClassificationType.UNKNOWN)
                     {
                         throw new FedExException("FedEx was unable to determine if the address is commercial or residential.");
                     }
 
-                    return detail.ResidentialStatus == ResidentialStatusType.RESIDENTIAL;
+                    return detail.Classification == FedExAddressClassificationType.RESIDENTIAL;
                 }
             }
             catch (SoapException ex)
@@ -148,12 +140,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         private static ClientDetail GetClientDetail(FedExAccountEntity account)
         {
-            ClientDetail clientDetail = new ClientDetail();
-
-            clientDetail.AccountNumber = account.AccountNumber;
-            clientDetail.ClientProductId = fedExSettings.ClientProductId;
-            clientDetail.ClientProductVersion = fedExSettings.ClientProductVersion;
-            clientDetail.MeterNumber = account.MeterNumber;
+            ClientDetail clientDetail = new ClientDetail
+            {
+                AccountNumber = account.AccountNumber, 
+                MeterNumber = account.MeterNumber
+            };
 
             return clientDetail;
         }
@@ -164,20 +155,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private static WebAuthenticationDetail GetWebAuthenticationDetail()
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            WebAuthenticationDetail credential = new WebAuthenticationDetail();
-
-            credential.CspCredential = new WebAuthenticationCredential
+            WebAuthenticationDetail credential = new WebAuthenticationDetail
             {
-                Key = fedExSettings.CspCredentialKey,
-                Password = fedExSettings.CspCredentialPassword
+                ParentCredential = new WebAuthenticationCredential
+                {
+                    Key = fedExSettings.CspCredentialKey,
+                    Password = fedExSettings.CspCredentialPassword
+                },
+                UserCredential = new WebAuthenticationCredential
+                {
+                    Key = settings.FedExUsername,
+                    Password = SecureText.Decrypt(settings.FedExPassword, "FedEx")
+                }
             };
 
-            credential.UserCredential = new WebAuthenticationCredential
-            {
-                Key = settings.FedExUsername,
-                Password = SecureText.Decrypt(settings.FedExPassword, "FedEx")
-            };
-            
             return credential;
         }
 

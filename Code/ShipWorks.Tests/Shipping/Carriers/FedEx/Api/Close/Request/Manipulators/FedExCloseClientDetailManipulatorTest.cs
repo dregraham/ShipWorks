@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
@@ -13,8 +12,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
     public class FedExCloseClientDetailManipulatorTest
     {
         private FedExCloseClientDetailManipulator testObject;
-
-        private Mock<ICarrierSettingsRepository> settingsRepository;
 
         private Mock<CarrierRequest> groundCloseCarrierRequest;
         private GroundCloseRequest nativeGroundCloseRequest;
@@ -29,10 +26,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         {
             account = new FedExAccountEntity { AccountNumber = "12345", MeterNumber = "67890" };
 
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(account);
-
-
             nativeGroundCloseRequest = new GroundCloseRequest { ClientDetail = new ClientDetail() };
             groundCloseCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeGroundCloseRequest);
             groundCloseCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
@@ -40,8 +33,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             nativeSmartPostRequest = new SmartPostCloseRequest { ClientDetail = new ClientDetail() };
             smartPostCloseCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeSmartPostRequest);
             smartPostCloseCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
-
-            testObject = new FedExCloseClientDetailManipulator(settingsRepository.Object);
+            
+            testObject = new FedExCloseClientDetailManipulator();
         }
 
         [Fact]

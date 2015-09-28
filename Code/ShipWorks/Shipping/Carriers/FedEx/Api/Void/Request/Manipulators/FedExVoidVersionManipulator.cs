@@ -1,5 +1,6 @@
 using System;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             nativeRequest.Version = new VersionId
             {
                 ServiceId = "ship",
-                Major = 15,
+                Major = int.Parse(FedExSettings.ShipVersionNumber),
                 Intermediate = 0,
                 Minor = 0
             };

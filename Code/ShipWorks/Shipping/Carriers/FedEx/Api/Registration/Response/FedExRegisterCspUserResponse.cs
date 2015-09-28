@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response
 {
     public class FedExRegisterCspUserResponse : ICarrierResponse
     {
-        private readonly RegisterWebCspUserReply nativeResponse;
+        private readonly RegisterWebUserReply nativeResponse;
         private readonly CarrierRequest request;
         private readonly ICarrierSettingsRepository settingsRepository;
 
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response
         /// </summary>
         /// <param name="nativeResponse">The native response.</param>
         /// <param name="request">The request.</param>
-        public FedExRegisterCspUserResponse(RegisterWebCspUserReply nativeResponse, CarrierRequest request)
+        public FedExRegisterCspUserResponse(RegisterWebUserReply nativeResponse, CarrierRequest request)
             : this (nativeResponse, request, new FedExSettingsRepository())
         { }
 
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response
         /// <param name="nativeResponse">The native response.</param>
         /// <param name="request">The request.</param>
         /// <param name="settingsRepository">The settings repository.</param>
-        public FedExRegisterCspUserResponse(RegisterWebCspUserReply nativeResponse, CarrierRequest request, ICarrierSettingsRepository settingsRepository)
+        public FedExRegisterCspUserResponse(RegisterWebUserReply nativeResponse, CarrierRequest request, ICarrierSettingsRepository settingsRepository)
         {
             this.nativeResponse = nativeResponse;
             this.request = request;
@@ -70,8 +70,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response
             // Save the user name and password from the response back to the shipping settings
             ShippingSettingsEntity settings = settingsRepository.GetShippingSettings();
             
-            settings.FedExUsername = nativeResponse.Credential.Key;
-            settings.FedExPassword = SecureText.Encrypt(nativeResponse.Credential.Password, "FedEx");
+            settings.FedExUsername = nativeResponse.UserCredential.Key;
+            settings.FedExPassword = SecureText.Encrypt(nativeResponse.UserCredential.Password, "FedEx");
 
             settingsRepository.SaveShippingSettings(settings);
         }

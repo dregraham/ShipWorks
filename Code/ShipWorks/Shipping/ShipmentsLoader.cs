@@ -105,7 +105,14 @@ namespace ShipWorks.Shipping
                 validateTask = TaskUtility.CompletedTask;
             }
 
-            await TaskEx.WhenAll(loadShipmentsTask, validateTask);
+            try
+            {
+                await TaskEx.WhenAll(loadShipmentsTask, validateTask);
+            }
+            catch(Exception ex)
+            {
+                log.Error(ex);
+            }
             
             progressDlg.CloseForced();
             OnLoadShipmentsCompleted();

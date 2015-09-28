@@ -1,82 +1,51 @@
-﻿Us Exp Dom:
-	323393 added a length/width/height
-	323394 added a length/width/height
-	323402 added a length/width/height
-	323201 account number was missing a 0 in the front.
-
-
+﻿Changes to all:
+Make sure all fields are text
 
 =================================================================================
-CHANGES (US Exp Dom)
+CHANGES (US Grn Dom)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
-       323201			 7			AF		    96802030		Please use shipper account number			6/3/2014			FedEx service indicated original value was an invalid account number
-
-
-In CA Exp Intl, RequestedShipment.ShipTimestamp (column BJ) had invalid dates. I blanked them out.
-
+605634					11		CS			GROUND_HOME_DELIVERY FEDEX_GROUND							7/13/2015				Per FedEx
+	   
 =================================================================================
 CHANGES (US Exp Intl)
 =================================================================================
-[Customer Transaction]  [Row]	[Column]	[Original Value]  [New Value]      [Reason]
- 413229                  44      DJ                            50               FedEx: Weight - weight must be greater than 0 in RequestedPackage 1.
- 413229                  44      K           500               50
- 413229                  44      DK          50                20               FedEx: Girth of package 1 exceeds the max girth for this service/packaging combination.
- 413229                  44      DL          50                20               FedEx: Girth of package 1 exceeds the max girth for this service/packaging combination.
- 413229                  44      DM          50                20               FedEx: Girth of package 1 exceeds the max girth for this service/packaging combination.
- 413230                  54      DN          IN                CM               FedEx: Package 1 weight is inconsistent with dimension units , please use only English or Metric.
- 413210                  50      DN          IN                CM               FedEx: Package 1 weight is inconsistent with dimension units , please use only English or Metric.
- 413223                  38      BB                            1                decimal value (0) is less than minInclusive facet (1) for xs:positiveInteger.
- 413223                  38      BC                            101              decimal value (0) is less than minInclusive facet (1) for xs:positiveInteger.
- 413223                  38      BD                            101              FedEx: Invalid booking confirmation number.
- 413224                  39      BB                            1                decimal value (0) is less than minInclusive facet (1) for xs:positiveInteger.
- 413224                  39      BC                            101              decimal value (0) is less than minInclusive facet (1) for xs:positiveInteger.
- 413224                  39      BD                            101              FedEx: Invalid booking confirmation number.
- 413213                  52      DK          20 Each Package   75 Each package  FedEx: Girth of package 1 is less than the min girth for this service/packaging combination.
- 413213                  52      DL          20 Each Package   75 Each package  FedEx: Girth of package 1 is less than the min girth for this service/packaging combination.
- 413213                  52      DM          20 Each Package   75 Each package  FedEx: Girth of package 1 is less than the min girth for this service/packaging combination.
-
-Us Grn Dom
-	BJ:17 changed to CSP
-
-Grn Alcohol
-	AF:2  changed to SpecialServiceTypes2 to make it uniquely named
-	U:3   changed to 38125
-	U:5   changed to 38125
-
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+ 
 
 
 =================================================================================
 CHANGES (US Exp Dom - Alcohol)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
-		323396			 14		  J					LB				500										6/3/2014			500 and LB values were need to be swapped
-		323396			 14		  K					500				LB										6/3/2014			500 and LB values were need to be swapped
-
-	
+605766					7		BP								9012633035								7/13/2015				Error said missing phone number
 
 
-
-	
 =================================================================================
 CHANGES (US Exp Intl)
 =================================================================================
-[Customer Transaction]  [Row]	[Column]	[Original Value]  [New Value]      [Reason]
- 413139                  22      G           Friday            Wednesday        FedEx: Saturday shipment is not available for friday
- 413235                  59      AO          42080             3/6/2015         Date was in an invalid format
- 413236                  60      AO          42080             3/6/2015         Date was in an invalid format
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+413230					54		L			LB					KG										7/10/2015				Change based on FedEx error
+413299					44		CT			500					10										7/10/2015				Weight error from FedEx
+N/a						N/A		EQ			n/a					n/a										7/14/2015				ETD error was thrown. this overrides and doesn't send ETD when not appropriate
+413235					59		AO			3/17/2015			3/17/2016								7/14/2015				fixed fedex error
+413236					60		AO			3/17/2015			3/17/2016								7/14/2015				fixed fedex error
 
-
+=================================================================================
+CHANGES (CA Exp Intl)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+N/A						N/A		BJ			N/A					Added column permit number				7/13/2015				Needed by FedEx
+N/A						N/A		DB			N/A					Added column phone number				7/13/2015				Needed by FedEx
 
 
 =================================================================================
 CHANGES (CA Exp Dom)
 =================================================================================
-All rows - changed ShipTimestamp from YYYY-MM-DDTHH:MM:SS-SS:SS to empty cell
-
-
-
-=================================================================================
-CHANGES (CA Exp Dom)
-=================================================================================
-All rows - changed ShipTimestamp from YYYY-MM-DDTHH:MM:SS-SS:SS to empty cell
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+SO-1008					13		A			FALSE				TRUE									7/17/2015				Missing from certification
+ES-1009					14		A			FALSE				TRUE									7/17/2015				Missing from certification
+SO-1008					13		J			150					1										7/17/2015				Invalid weight error
+ES-1009					14		J			15					1										7/17/2015				Invalid weight error
+SO-1008					13		AX			155					1										7/17/2015				Invalid weight error
+ES-1009					14		AX			25					1										7/17/2015				Invalid weight error

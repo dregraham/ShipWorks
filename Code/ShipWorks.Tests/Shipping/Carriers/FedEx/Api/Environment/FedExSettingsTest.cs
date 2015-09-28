@@ -55,28 +55,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         public void CspCredentialKey_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("fOilEsjTTKLzuwNi", testObject.CspCredentialKey);
+            Assert.Equal("HmTIi6ILfEtv3p42", testObject.CspCredentialKey);
         }
 
         [Fact]
         public void CspCredentialPassword_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("vyyT54JnUrAVbq0NR8IIcq293", testObject.CspCredentialPassword);
+            Assert.Equal("YcLZTdWF7NALqoCD0szKwVnif", testObject.CspCredentialPassword);
         }
 
         [Fact]
         public void ClientProductionId_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("ITSW", testObject.ClientProductId);
+            Assert.Equal("IEOQ", testObject.ClientProductId);
         }
 
         [Fact]
         public void ClientProductionVersion_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("5236", testObject.ClientProductVersion);
+            Assert.Equal("7038", testObject.ClientProductVersion);
         }
 
         [Fact]

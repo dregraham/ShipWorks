@@ -283,6 +283,11 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         private void ConfigureShippingDialogDependencies(ContainerBuilder builder)
         {
+            //// Error provider needs to be a single instance here 
+            //builder.RegisterType<IShippingErrorManager>()
+            //    .AsImplementedInterfaces()
+            //    .InstancePerLifetimeScope();
+
             builder.RegisterType<ShippingDlg>()
                 .AsSelf()
                 .As<Control>()

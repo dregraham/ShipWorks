@@ -21,7 +21,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     public class BigCommerceWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceWebClient));
-        static readonly LruCache<int, BigCommerceProductImage> productImageCache = new LruCache<int, BigCommerceProductImage>(1000);
         readonly List<BigCommerceOrderStatus> bigCommerceOrderStatuses;
         readonly string apiUserName;
         readonly string apiToken;
@@ -715,6 +714,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         {
             // Get the order products from BigCommerce for this order
             order.OrderProducts = GetOrderProducts(order);
+
+            // Get the store specific product image cache
+            LruCache<int, BigCommerceProductImage> productImageCache = BigCommerceProductImageCache.Instance.GetStoreProductImageCache(apiUserName, apiUrl, apiToken);
 
             foreach (BigCommerceProduct product in order.OrderProducts)
             {

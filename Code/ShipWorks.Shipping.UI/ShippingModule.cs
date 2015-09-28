@@ -59,7 +59,8 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShippingErrorManager>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<CarrierConfigurationShipmentRefresher>()
                 .AsImplementedInterfaces();

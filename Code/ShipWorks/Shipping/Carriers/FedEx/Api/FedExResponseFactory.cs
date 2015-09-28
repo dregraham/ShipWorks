@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <returns>An ICarrierResponse representing the response of a void request.</returns>
         public ICarrierResponse CreateRegisterUserResponse(object nativeResponse, CarrierRequest request)
         {
-            RegisterWebCspUserReply registerReply = nativeResponse as RegisterWebCspUserReply;
+            RegisterWebUserReply registerReply = nativeResponse as RegisterWebUserReply;
             if (registerReply == null)
             {
                 // We can't create a FedExRegisterUserResponse without a RegisterWebCspUserReply type
