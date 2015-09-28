@@ -18,7 +18,7 @@ namespace ShipWorks.Core.Common.Threading
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         /// </summary>
-        public static async Task ExecuteWithRetry<TException>(int retries, Func<Task> method) where TException : Exception
+        public static async Task<TResult> ExecuteWithRetry<TException, TResult>(int retries, Func<Task<TResult>> method) where TException : Exception
         {
             int retryCounter = retries;
 
@@ -26,8 +26,7 @@ namespace ShipWorks.Core.Common.Threading
             {
                 try
                 {
-                    await method();
-                    return;
+                    return await method();
                 }
                 catch (Exception ex)
                 {

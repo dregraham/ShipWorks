@@ -492,31 +492,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                await ActionRetry.ExecuteWithRetry<InvalidOperationException>(3, async () =>
-                {
-                    using (SwsimV49 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
-                    {
-                        using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
-                        {
-                            TaskCompletionSource<CleanseAddressCompletedEventArgs> taskCompletion = new TaskCompletionSource<CleanseAddressCompletedEventArgs>();
-                            
-                            webService.CleanseAddressCompleted += (s, e) =>
-                            {
-                                if (e.Error != null)
-                                {
-                                    taskCompletion.SetException(e.Error);
-                                }
-                                else
-                                {
-                                    taskCompletion.SetResult(e);
-                                }
-                            };
-
-                            webService.CleanseAddressAsync(GetCredentials(account, true), address, null);
-                            result = await taskCompletion.Task;
-                        }
-                    }
-                });
+                result = await ActionRetry.ExecuteWithRetry<InvalidOperationException, CleanseAddressCompletedEventArgs>(2, () => CleanseAddressAsync(account, address));
             }
             catch (AggregateException ex)
             {
@@ -584,6 +560,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 Candidates = result.CandidateAddresses,
                 BadAddressMessage = badAddressMessage
             };
+        }
+
+        /// <summary>
+        /// Cleanse an address asynchronously
+        /// </summary>
+        private Task<CleanseAddressCompletedEventArgs> CleanseAddressAsync(UspsAccountEntity account, Address address)
+        {
+            using (SwsimV49 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
+            {
+                using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
+                {
+                    TaskCompletionSource<CleanseAddressCompletedEventArgs> taskCompletion = new TaskCompletionSource<CleanseAddressCompletedEventArgs>();
+
+                    webService.CleanseAddressCompleted += (s, e) =>
+                    {
+                        if (e.Error != null)
+                        {
+                            taskCompletion.SetException(e.Error);
+                        }
+                        else
+                        {
+                            taskCompletion.SetResult(e);
+                        }
+                    };
+
+                    webService.CleanseAddressAsync(GetCredentials(account, true), address, null);
+                    return taskCompletion.Task;
+                }
+            }
         }
 
         /// <summary>
