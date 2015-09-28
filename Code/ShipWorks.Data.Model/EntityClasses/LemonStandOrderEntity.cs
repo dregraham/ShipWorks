@@ -567,11 +567,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The LemonStandOrderID property of the Entity LemonStandOrder<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "LemonStandOrder"."LemonStandOrderID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String LemonStandOrderID
+		public virtual System.Int64 LemonStandOrderID
 		{
-			get { return (System.String)GetValue((int)LemonStandOrderFieldIndex.LemonStandOrderID, true); }
+			get { return (System.Int64)GetValue((int)LemonStandOrderFieldIndex.LemonStandOrderID, true); }
 			set	{ SetValue((int)LemonStandOrderFieldIndex.LemonStandOrderID, value); }
 		}
 

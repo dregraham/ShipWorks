@@ -555,7 +555,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The Token property of the Entity LemonStandStore<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "LemonStandStore"."Token"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Token
 		{

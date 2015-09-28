@@ -10,12 +10,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     public class LemonStandOrderIdentifier : OrderIdentifier
     {
         // LemonStandStore's Order ID
-        private readonly string lemonStandStoreOrderId;
+        private readonly long lemonStandStoreOrderId;
 
         /// <summary>
         ///     Constructor
         /// </summary>
-        public LemonStandOrderIdentifier(string lemonStandStoreOrderId)
+        public LemonStandOrderIdentifier(long lemonStandStoreOrderId)
         {
             this.lemonStandStoreOrderId = lemonStandStoreOrderId;
         }
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new ArgumentNullException("downloadDetail");
             }
-            downloadDetail.ExtraStringData1 = lemonStandStoreOrderId;
+            downloadDetail.ExtraStringData1 = lemonStandStoreOrderId.ToString();
         }
 
         /// <summary>

@@ -1550,26 +1550,26 @@ namespace ShipWorks.Data.Adapter
 		{
 			base.AddElementMapping( "LemonStandOrderEntity", "ShipWorksLocal", @"dbo", "LemonStandOrder", 2 );
 			base.AddElementFieldMapping( "LemonStandOrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "LemonStandOrderEntity", "LemonStandOrderID", "LemonStandOrderID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "LemonStandOrderEntity", "LemonStandOrderID", "LemonStandOrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 		}
 		/// <summary>Inits LemonStandOrderItemEntity's mappings</summary>
 		private void InitLemonStandOrderItemEntityMappings()
 		{
 			base.AddElementMapping( "LemonStandOrderItemEntity", "ShipWorksLocal", @"dbo", "LemonStandOrderItem", 7 );
 			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "UrlName", "UrlName", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
-			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "Cost", "Cost", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
-			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "IsOnSale", "IsOnSale", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
-			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "SalePriceOrDiscount", "SalePriceOrDiscount", true, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "UrlName", "UrlName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "Cost", "Cost", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 2 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "IsOnSale", "IsOnSale", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "SalePriceOrDiscount", "SalePriceOrDiscount", true, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 4 );
 			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "ShortDescription", "ShortDescription", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 5 );
-			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "Category", "Category", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 6 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "Category", "Category", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 6 );
 		}
 		/// <summary>Inits LemonStandStoreEntity's mappings</summary>
 		private void InitLemonStandStoreEntityMappings()
 		{
 			base.AddElementMapping( "LemonStandStoreEntity", "ShipWorksLocal", @"dbo", "LemonStandStore", 3 );
 			base.AddElementFieldMapping( "LemonStandStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "LemonStandStoreEntity", "Token", "Token", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "LemonStandStoreEntity", "Token", "Token", false, (int)SqlDbType.VarChar, 100, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "LemonStandStoreEntity", "StoreURL", "StoreURL", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
 		}
 		/// <summary>Inits MagentoOrderEntity's mappings</summary>

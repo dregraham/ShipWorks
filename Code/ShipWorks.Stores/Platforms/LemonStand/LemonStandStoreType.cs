@@ -182,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         protected override OrderEntity CreateOrderInstance()
         {
-            return new LemonStandOrderEntity {LemonStandOrderID = string.Empty};
+            return new LemonStandOrderEntity {LemonStandOrderID = 0};
         }
 
         /// <summary>
@@ -194,9 +194,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             LemonStandOrderItemEntity entity = new LemonStandOrderItemEntity();
 
             entity.UrlName = "";
-            entity.Cost = "";
-            entity.IsOnSale = "";
-            entity.SalePriceOrDiscount = "";
+            entity.Cost = 0;
+            entity.IsOnSale = false;
+            entity.SalePriceOrDiscount = 0;
             entity.ShortDescription = "";
             entity.Category = "";
 

@@ -565,7 +565,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The UrlName property of the Entity LemonStandOrderItem<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "LemonStandOrderItem"."UrlName"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String UrlName
 		{
@@ -576,33 +576,33 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The Cost property of the Entity LemonStandOrderItem<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "LemonStandOrderItem"."Cost"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Cost
+		public virtual System.Decimal Cost
 		{
-			get { return (System.String)GetValue((int)LemonStandOrderItemFieldIndex.Cost, true); }
+			get { return (System.Decimal)GetValue((int)LemonStandOrderItemFieldIndex.Cost, true); }
 			set	{ SetValue((int)LemonStandOrderItemFieldIndex.Cost, value); }
 		}
 
 		/// <summary> The IsOnSale property of the Entity LemonStandOrderItem<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "LemonStandOrderItem"."IsOnSale"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String IsOnSale
+		public virtual System.Boolean IsOnSale
 		{
-			get { return (System.String)GetValue((int)LemonStandOrderItemFieldIndex.IsOnSale, true); }
+			get { return (System.Boolean)GetValue((int)LemonStandOrderItemFieldIndex.IsOnSale, true); }
 			set	{ SetValue((int)LemonStandOrderItemFieldIndex.IsOnSale, value); }
 		}
 
 		/// <summary> The SalePriceOrDiscount property of the Entity LemonStandOrderItem<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "LemonStandOrderItem"."SalePriceOrDiscount"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String SalePriceOrDiscount
+		public virtual Nullable<System.Double> SalePriceOrDiscount
 		{
-			get { return (System.String)GetValue((int)LemonStandOrderItemFieldIndex.SalePriceOrDiscount, true); }
+			get { return (Nullable<System.Double>)GetValue((int)LemonStandOrderItemFieldIndex.SalePriceOrDiscount, false); }
 			set	{ SetValue((int)LemonStandOrderItemFieldIndex.SalePriceOrDiscount, value); }
 		}
 
@@ -620,7 +620,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The Category property of the Entity LemonStandOrderItem<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "LemonStandOrderItem"."Category"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Category
 		{

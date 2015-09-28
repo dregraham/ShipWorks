@@ -5444,7 +5444,7 @@ GO
 CREATE TABLE [dbo].[LemonStandStore]
 (
 	[StoreID] [bigint] NOT NULL,
-	[Token] [varchar](255) NOT NULL,
+	[Token] [varchar](100) NOT NULL,
 	[StoreURL] [varchar](255) NOT NULL,
 )
 GO
@@ -5462,7 +5462,7 @@ GO
 CREATE TABLE [dbo].[LemonStandOrder]
 (
 [OrderID] [bigint] NOT NULL,
-[LemonStandOrderID] [nvarchar] (50) NOT NULL
+[LemonStandOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandOrder] on [dbo].[LemonStandOrder]'
@@ -5475,12 +5475,12 @@ GO
 CREATE TABLE [dbo].[LemonStandOrderItem]
 (
 	[OrderItemID] [bigint] NOT NULL,
-	[UrlName] [nvarchar](255) NOT NULL,
-	[Cost] [nvarchar](255) NOT NULL,
-	[IsOnSale] [nvarchar](255) NOT NULL,
-	[SalePriceOrDiscount] [nvarchar](255),
+	[UrlName] [nvarchar](100) NOT NULL,
+	[Cost] [money] NOT NULL,
+	[IsOnSale] [bit] NOT NULL,
+	[SalePriceOrDiscount] [float],
 	[ShortDescription] [nvarchar](255) NOT NULL,
-	[Category] [nvarchar](255) NOT NULL
+	[Category] [nvarchar](100) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandOrderItem] on [dbo].[LemonStandOrderItem]'

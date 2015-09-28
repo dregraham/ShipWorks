@@ -7,7 +7,7 @@ GO
 
 CREATE TABLE [dbo].[LemonStandOrder](
 	[OrderID] [bigint] NOT NULL,
-	[LemonStandOrderID] [nvarchar](50) NOT NULL,
+	[LemonStandOrderID] [bigint] NOT NULL,
  CONSTRAINT [PK_LemonStandOrder] PRIMARY KEY CLUSTERED 
 (
 	[OrderID] ASC
@@ -37,7 +37,7 @@ GO
 
 CREATE TABLE [dbo].[LemonStandStore](
 	[StoreID] [bigint] NOT NULL,
-	[Token] [varchar](255) NOT NULL,
+	[Token] [varchar](100) NOT NULL,
 	[StoreURL] [varchar](255) NOT NULL,
  CONSTRAINT [PK_LemonStandStore] PRIMARY KEY CLUSTERED 
 (
@@ -68,12 +68,12 @@ GO
 
 CREATE TABLE [dbo].[LemonStandOrderItem](
 	[OrderItemID] [bigint] NOT NULL,
-	[UrlName] [nvarchar](255) NOT NULL,
-	[Cost] [nvarchar](255) NOT NULL,
-	[IsOnSale] [nvarchar](255) NOT NULL,
-	[SalePriceOrDiscount] [nvarchar](255),
+	[UrlName] [nvarchar](100) NOT NULL,
+	[Cost] [money] NOT NULL,
+	[IsOnSale] [bit] NOT NULL,
+	[SalePriceOrDiscount] [float],
 	[ShortDescription] [nvarchar](255) NOT NULL,
-	[Category] [nvarchar](255) NOT NULL
+	[Category] [nvarchar](100) NOT NULL
  CONSTRAINT [PK_LemonStandOrderItem] PRIMARY KEY CLUSTERED 
 (
 	[OrderItemID] ASC
