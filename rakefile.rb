@@ -345,9 +345,9 @@ namespace :setup do
 	task :sqlSession, :instancePath, :targetDatabase do |t, args|
 		puts "In sqlSession task"
 		
-		instanceGuid = shipworks_instance_guid
+		instanceGuid = shipworks_instance_guid(args.instancePath)
 		puts "Instance GUID is " + instanceGuid
-		
+				
 		instanceName = "(local)\\Development"
 		if args[:instanceName] != nil and args[:instanceName] != ""
 			# Default the instance name to run on the local machine's Development instance if 
@@ -420,11 +420,19 @@ def replace_instance_guid(app_config_path, instanceGuid)
 	end
 end
 
-def shipworks_instance_guid
+def shipworks_instance_guid(instancePath = "")
 	# Assume we're in the directory containing the ShipWorks solution - we need to get
 	# the registry key name based on the directory to the ShipWorks.exe to figure out
 	# which GUID to use in our path to the SQL session file.
-	app_directory = (Dir.pwd + "/Artifacts/Application").gsub('/', '\\')
+	
+	# Use the instancePath for cases where we need to find the GUID for a specific directory
+	# (such as when configuring the SQL Session file during setup)
+	app_directory = instancePath
+	if (app_directory == "")
+		# No path was provided, so use the current directory
+		app_directory = (Dir.pwd + "/Artifacts/Application").gsub('/', '\\')
+	end
+	
 	puts "Checking for instance GUID for " + app_directory
 	
 	# Read the GUID from the registry, so we know which directory to look in; pass in 
