@@ -325,7 +325,7 @@ namespace :setup do
 	
 		instanceGuid = shipworks_instance_guid
 		
-		if instanceGuid
+		if instanceGuid.nil?
 			# No instance GUID was found in the registry, so we need to create an entry for this path provided
 			instanceGuid = SecureRandom.uuid
 			puts instanceGuid
@@ -428,7 +428,7 @@ def shipworks_instance_guid
 		begin
 			reg[app_directory]
 		rescue
-			SecureRandom.uuid
+			nil
 		end
 	end
 end
