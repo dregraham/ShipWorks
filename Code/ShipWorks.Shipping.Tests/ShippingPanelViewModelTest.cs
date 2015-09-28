@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shipping
             
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
             await testObject.LoadOrder(orderEntity.OrderID);
-            testObject.SelectedShipmentType = ShipmentTypeCode.Other;
+            testObject.ShipmentTypeCode = ShipmentTypeCode.Other;
             
             return testObject;
         }
@@ -173,7 +173,7 @@ namespace ShipWorks.Tests.Shipping
             {
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
 
-                Assert.Equal(ShippingPanelLoadedShipmentResult.Multiple, testObject.LoadResult);
+                Assert.Equal(ShippingPanelLoadedShipmentResult.Multiple, testObject.LoadedShipmentResult);
             }
         }
     }

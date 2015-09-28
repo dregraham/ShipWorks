@@ -47,11 +47,11 @@
                         <ComboBox.ItemsSource>
                             <MultiBinding Converter="{StaticResource ShipmentTypeListConverter}">
                                 <Binding Path="Available" Source="{x:Static local:ShipmentTypeProvider.Current}" />
-                                <Binding Path="InitialShipmentType" Mode="OneWay" />
+                                <Binding Path="InitialShipmentTypeCode" Mode="OneWay" />
                             </MultiBinding>
                         </ComboBox.ItemsSource>
                         <ComboBox.SelectedValue>
-                            <Binding Path="SelectedShipmentType" Mode="OneWay"/>
+                            <Binding Path="ShipmentTypeCode" Mode="TwoWay"/>
                         </ComboBox.SelectedValue>
                     </ComboBox>
                 </Grid>

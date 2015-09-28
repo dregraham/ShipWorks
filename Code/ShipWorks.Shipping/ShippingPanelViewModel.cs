@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging
     {
-        private ShippingPanelLoadedShipmentResult loadResult;
+        private ShippingPanelLoadedShipmentResult loadedShipmentResult;
         private bool supportsMultiplePackages;
         private ShipmentTypeCode selectedShipmentType;
         private ShipmentTypeCode initialShipmentType;
@@ -91,36 +91,20 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Shipments the changed.
-        /// </summary>
-        private void OnShipmentChanged(ShipmentChangedMessage shipmentChangedMessage)
-        {
-            if (shipmentChangedMessage?.Shipment == null || loadedShipment?.Shipment == null)
-            {
-                return;
-            }
-
-            if (shipmentChangedMessage.Shipment.ShipmentID == loadedShipment.Shipment.ShipmentID )
-            {
-                SelectedShipmentType = shipmentChangedMessage.Shipment.ShipmentTypeCode;
-            }
-        }
-
-        /// <summary>
         /// Command to create a label
         /// </summary>
         public ICommand CreateLabelCommand { get; }
 
         /// <summary>
-        /// Selected shipment type for the current shipment
+        /// Selected shipment type code for the current shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShipmentTypeCode SelectedShipmentType
+        public ShipmentTypeCode ShipmentTypeCode
         {
             get { return selectedShipmentType; }
             set
             {
-                if (handler.Set(nameof(SelectedShipmentType), ref selectedShipmentType, value))
+                if (handler.Set(nameof(ShipmentTypeCode), ref selectedShipmentType, value))
                 {
                     if (loadedShipment?.Shipment != null)
                     {
@@ -135,23 +119,23 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Initial shipment type for the current shipment
+        /// Initial shipment type code for the current shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShipmentTypeCode InitialShipmentType
+        public ShipmentTypeCode InitialShipmentTypeCode
         {
             get { return initialShipmentType; }
-            set { handler.Set(nameof(InitialShipmentType), ref initialShipmentType, value); }
+            set { handler.Set(nameof(InitialShipmentTypeCode), ref initialShipmentType, value); }
         }
 
         /// <summary>
-        /// Are multiple packages supported
+        /// The ShippingPanelLoadedShipmentResult for the selected order
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShippingPanelLoadedShipmentResult LoadResult
+        public ShippingPanelLoadedShipmentResult LoadedShipmentResult
         {
-            get { return loadResult; }
-            set { handler.Set(nameof(LoadResult), ref loadResult, value); }
+            get { return loadedShipmentResult; }
+            set { handler.Set(nameof(LoadedShipmentResult), ref loadedShipmentResult, value); }
         }
 
         /// <summary>
@@ -165,7 +149,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Are multiple packages supported
+        /// Is the loaded shipment processed?
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool IsProcessed
@@ -174,10 +158,19 @@ namespace ShipWorks.Shipping
             set { handler.Set(nameof(IsProcessed), ref isProcessed, value); }
         }
 
+        /// <summary>
+        /// The origin address view model.
+        /// </summary>
         public AddressViewModel Origin { get; }
 
+        /// <summary>
+        /// The destination address view model.
+        /// </summary>
         public AddressViewModel Destination { get; }
 
+        /// <summary>
+        /// The Shipment view model.
+        /// </summary>
         public ShipmentViewModel ShipmentViewModel { get; set; }
 
         /// <summary>
@@ -201,7 +194,7 @@ namespace ShipWorks.Shipping
         {
             loadedShipment = await shipmentLoader.LoadAsync(orderID);
 
-            LoadResult = loadedShipment.Result;
+            LoadedShipmentResult = loadedShipment.Result;
 
             if (loadedShipment.Shipment == null)
             {
@@ -215,8 +208,8 @@ namespace ShipWorks.Shipping
             //DisableNeedToUpdateServices();
             //DisableNeedToUpdatePackages();
 
-            InitialShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
-            SelectedShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
+            InitialShipmentTypeCode = loadedShipment.Shipment.ShipmentTypeCode;
+            ShipmentTypeCode = loadedShipment.Shipment.ShipmentTypeCode;
             //Origin.Load(loadedShipment.Shipment.OriginPerson);
 
             //Destination.Load(loadedShipment.Shipment.ShipPerson);
@@ -256,7 +249,7 @@ namespace ShipWorks.Shipping
                 shipmentType.UpdateDynamicShipmentData(loadedShipment.Shipment);
                 shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
 
-                loadedShipment.Shipment.ShipmentTypeCode = SelectedShipmentType;
+                loadedShipment.Shipment.ShipmentTypeCode = ShipmentTypeCode;
                 //Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
                 //Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
                 //ShipmentViewModel.Save(loadedShipment.Shipment);
@@ -340,6 +333,25 @@ namespace ShipWorks.Shipping
             messenger.Send(new ShipmentChangedMessage(this, loadedShipment.Shipment));
         }
 
+        /// <summary>
+        /// Event for updating the view model when a shipment has changed.
+        /// </summary>
+        private void OnShipmentChanged(ShipmentChangedMessage shipmentChangedMessage)
+        {
+            if (shipmentChangedMessage?.Shipment == null || loadedShipment?.Shipment == null)
+            {
+                return;
+            }
+
+            if (shipmentChangedMessage.Shipment.ShipmentID == loadedShipment.Shipment.ShipmentID)
+            {
+                ShipmentTypeCode = shipmentChangedMessage.Shipment.ShipmentTypeCode;
+            }
+        }
+
+        /// <summary>
+        /// Determines if a view model field is used for the shipment's rating criteria.
+        /// </summary>
         private bool IsRatingField(string propertyname)
         {
             // Only send the ShipmentChangedMessage message if the field that changed is a rating field.
