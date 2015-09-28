@@ -239,7 +239,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new LemonStandOrderIdentifier(((LemonStandOrderEntity) order).LemonStandOrderID.ToString());
+            return new LemonStandOrderIdentifier(((LemonStandOrderEntity) order).LemonStandOrderID);
         }
 
         /// <summary>
@@ -266,9 +266,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
         /// <summary>
         ///     Get any filters that should be created as an initial filter set when the store is first created.  If the list is
-        ///     non-empty they will
-        ///     be automatically put in a folder that is filtered on the store... so their is no need to test for that in the
-        ///     generated filter conditions.
+        ///     non-empty they will be automatically put in a folder that is filtered on the store... so there is no need to test 
+        ///     for that in the generated filter conditions.
         /// </summary>
         public override List<FilterEntity> CreateInitialFilters()
         {
@@ -276,7 +275,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 CreateFilterPaid(),
                 CreateFilterShipped(),
-                CreateFilterCancelled(),
+                CreateFilterCancelled()
             };
         }
 

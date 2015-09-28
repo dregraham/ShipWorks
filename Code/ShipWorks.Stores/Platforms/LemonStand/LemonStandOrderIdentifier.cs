@@ -10,14 +10,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     public class LemonStandOrderIdentifier : OrderIdentifier
     {
         // LemonStandStore's Order ID
-        private readonly string lemonStandStoreOrderId;
+        private readonly string lemonStandStoreOrderID;
 
         /// <summary>
         ///     Constructor
         /// </summary>
-        public LemonStandOrderIdentifier(string lemonStandStoreOrderId)
+        public LemonStandOrderIdentifier(string lemonStandStoreOrderID)
         {
-            this.lemonStandStoreOrderId = lemonStandStoreOrderId;
+            this.lemonStandStoreOrderID = lemonStandStoreOrderID;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     "A non LemonStandStore order was passed to the LemonStandStore order identifier.");
             }
 
-            lemonStandStoreOrder.LemonStandOrderID = lemonStandStoreOrderId;
+            lemonStandStoreOrder.LemonStandOrderID = lemonStandStoreOrderID;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new ArgumentNullException("downloadDetail");
             }
-            downloadDetail.ExtraStringData1 = lemonStandStoreOrderId.ToString();
+            downloadDetail.ExtraStringData1 = lemonStandStoreOrderID;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public override string ToString()
         {
-            return string.Format("LemonStandStoreOrderID:{0}", lemonStandStoreOrderId);
+            return string.Format("LemonStandStoreOrderID:{0}", lemonStandStoreOrderID);
         }
     }
 }

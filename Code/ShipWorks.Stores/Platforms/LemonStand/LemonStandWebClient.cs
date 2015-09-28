@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.UI;
 using Newtonsoft.Json.Linq;
 using Quartz.Util;
 using ShipWorks.ApplicationCore.Logging;
@@ -46,53 +45,53 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Gets a single order with invoice information.
         /// </summary>
-        /// <param name="orderId">The LemonStand order ID</param>
-        /// <returns>Order in Json</returns>
-        public JToken GetOrderInvoice(string orderId)
+        /// <param name="orderID">The LemonStand order ID</param>
+        /// <returns>Order invoice in Json</returns>
+        public JToken GetOrderInvoice(string orderID)
         {
-            return ProcessRequest(CreateGetRequest("order/" + orderId + "?embed=invoices"), "GetOrderInvoice");
+            return ProcessRequest(CreateGetRequest("order/" + orderID + "?embed=invoices"), "GetOrderInvoice");
         }
 
         /// <summary>
         ///     Gets the shipment.
         /// </summary>
-        /// <param name="invoiceId">The LemonStand invoice id</param>
+        /// <param name="invoiceID">The LemonStand invoice id</param>
         /// <returns>Shipment in Json</returns>
-        public JToken GetShipment(string invoiceId)
+        public JToken GetShipment(string invoiceID)
         {
-            return ProcessRequest(CreateGetRequest("invoices/" + invoiceId + "?embed=shipments"), "GetShipment");
+            return ProcessRequest(CreateGetRequest("invoices/" + invoiceID + "?embed=shipments"), "GetShipment");
         }
 
         /// <summary>
         ///     Gets the shipping address.
         /// </summary>
-        /// <param name="shipmentId">The LemonStand shipment id</param>
+        /// <param name="shipmentID">The LemonStand shipment id</param>
         /// <returns>Shipping Address in Json</returns>
-        public JToken GetShippingAddress(string shipmentId)
+        public JToken GetShippingAddress(string shipmentID)
         {
-            return ProcessRequest(CreateGetRequest("shipment/" + shipmentId + "?embed=shipping_address"),
+            return ProcessRequest(CreateGetRequest("shipment/" + shipmentID + "?embed=shipping_address"),
                 "GetShippingAddress");
         }
 
         /// <summary>
         ///     Gets the billing address.
         /// </summary>
-        /// <param name="customerId">The LemonStand customer id</param>
+        /// <param name="customerID">The LemonStand customer id</param>
         /// <returns>Billing Address in Json</returns>
-        public JToken GetBillingAddress(string customerId)
+        public JToken GetBillingAddress(string customerID)
         {
-            return ProcessRequest(CreateGetRequest("customer/" + customerId + "?embed=billing_addresses"),
+            return ProcessRequest(CreateGetRequest("customer/" + customerID + "?embed=billing_addresses"),
                 "GetBillingAddress");
         }
 
         /// <summary>
         ///     Gets the product.
         /// </summary>
-        /// <param name="productId">The LemonStand product id</param>
+        /// <param name="productID">The LemonStand product id</param>
         /// <returns>Product in Json</returns>
-        public JToken GetProduct(string productId)
+        public JToken GetProduct(string productID)
         {
-            return ProcessRequest(CreateGetRequest("product/" + productId + "?embed=images,categories,attributes"),
+            return ProcessRequest(CreateGetRequest("product/" + productID + "?embed=images,categories,attributes"),
                 "GetProduct");
         }
 
@@ -100,10 +99,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         ///     Uploads tracking number and order status to LemonStand
         /// </summary>
         /// <param name="trackingNumber">The tracking number.</param>
-        /// <param name="shipmentId">The LemonStand shipment id.</param>
+        /// <param name="shipmentID">The LemonStand shipment id.</param>
         /// <param name="onlineStatus">The online order status.</param>
         /// <param name="orderNumber">The LemonStand order number.</param>
-        public void UploadShipmentDetails(string trackingNumber, string shipmentId, string onlineStatus,
+        public void UploadShipmentDetails(string trackingNumber, string shipmentID, string onlineStatus,
             string orderNumber)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
@@ -116,8 +115,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             parameters.Add("tracking_code", trackingNumber);
             try
             {
-                ProcessRequest(CreatePostRequest("shipment/" + shipmentId + "/trackingcode", parameters),
-                        "UploadShipmentDetails");
+                ProcessRequest(CreatePostRequest("shipment/" + shipmentID + "/trackingcode", parameters),
+                    "UploadShipmentDetails");
 
                 parameters.Clear();
 

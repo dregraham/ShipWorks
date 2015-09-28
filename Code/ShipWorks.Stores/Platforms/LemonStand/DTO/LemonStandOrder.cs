@@ -74,8 +74,5 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 
         [JsonProperty("updated_at")]
         public string UpdatedAt { get; set; }
-
-        [JsonProperty("invoices")]
-        public LemonStandInvoice Invoices { get; set; }
     }
 }

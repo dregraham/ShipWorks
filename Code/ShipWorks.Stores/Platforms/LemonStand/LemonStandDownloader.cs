@@ -12,7 +12,6 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
@@ -106,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     }
 
                     // Set the progress detail
-                    Progress.Detail = "Processing order " + (QuantitySaved+1) + " of " + expectedCount + "...";
+                    Progress.Detail = "Processing order " + (QuantitySaved + 1) + " of " + expectedCount + "...";
                     Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
 
                     LoadOrder(jsonOrder);
@@ -382,12 +381,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 {
                     // Item is not in the cache, so get the information from LemonStand
                     product = GetProductFromLemonStand(productID);
+                    
                     // Since it was not in the cache, let's add it
                     storeProductCache[int.Parse(productID)] = product;
                 }
 
                 product.Quantity = jsonItem.SelectToken("quantity").ToString();
-
+                product.BasePrice = jsonItem.SelectToken("price").ToString();
                 LoadItem(order, product);
             }
         }
@@ -412,11 +412,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             // LemonStand specific item properties
             item.UrlName = product.UrlName;
-            item.UnitCost = (string.IsNullOrWhiteSpace(product.Cost)) ? 0 : Convert.ToDecimal(product.Cost); 
+            item.UnitCost = (string.IsNullOrWhiteSpace(product.Cost)) ? 0 : Convert.ToDecimal(product.Cost);
 
             // We want to display "Yes" or "No", instead of 1 or 0
             item.IsOnSale = product.IsOnSale.Equals("1");
-            item.SalePriceOrDiscount = (string.IsNullOrWhiteSpace(product.SalePriceOrDiscount)) ? 0: double.Parse(product.SalePriceOrDiscount);
+            item.SalePriceOrDiscount = (string.IsNullOrWhiteSpace(product.SalePriceOrDiscount))
+                ? 0
+                : double.Parse(product.SalePriceOrDiscount);
             item.ShortDescription = product.ShortDescription;
             item.Category = product.Category;
 

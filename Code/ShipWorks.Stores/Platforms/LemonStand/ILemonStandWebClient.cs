@@ -4,12 +4,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 {
     public interface ILemonStandWebClient
     {
-        JToken GetBillingAddress(string customerId);
-        JToken GetOrderInvoice(string orderId);
+        JToken GetBillingAddress(string customerID);
+        JToken GetOrderInvoice(string orderID);
         JToken GetOrders(int page, string start);
-        JToken GetProduct(string productId);
-        JToken GetShipment(string invoiceId);
-        JToken GetShippingAddress(string shipmentId);
-        void UploadShipmentDetails(string trackingNumber, string shipmentId, string onlineStatus, string orderNumber);
+        JToken GetProduct(string productID);
+        JToken GetShipment(string invoiceID);
+        JToken GetShippingAddress(string shipmentID);
+        void UploadShipmentDetails(string trackingNumber, string shipmentID, string onlineStatus, string orderNumber);
     }
 }

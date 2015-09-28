@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             // Create the key for the store
             string key = storeUrl + "-" + accessToken;
-            
+
             LruCache<int, LemonStandItem> productCache;
 
             // Try and get an existing cache based on the key.  If one is not found, create a new one and add it to the list of caches.

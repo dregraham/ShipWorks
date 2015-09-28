@@ -48,13 +48,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     continue;
                 }
 
-                OrderEntity order = shipment.Order;
+                LemonStandOrderEntity order = (LemonStandOrderEntity) shipment.Order;
                 if (!order.IsManual)
                 {
-                    string shipmentId = GetShipmentId(shipment);
+                    string shipmentID = GetShipmentID(shipment);
 
-                    client.UploadShipmentDetails(shipment.TrackingNumber, shipmentId, order.OnlineStatus,
-                    order.OrderNumber.ToString());
+                    client.UploadShipmentDetails(shipment.TrackingNumber, shipmentID, order.OnlineStatus,
+                        order.LemonStandOrderID);
                 }
             }
         }
@@ -68,15 +68,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new ArgumentNullException(nameof(shipment));
             }
-            
-            OrderEntity order = shipment.Order;
+
+            LemonStandOrderEntity order = (LemonStandOrderEntity)shipment.Order;
             order.OnlineStatus = "Shipped";
 
             if (!order.IsManual)
             {
-                string shipmentId = GetShipmentId(shipment);
+                string shipmentID = GetShipmentID(shipment);
 
-                client.UploadShipmentDetails(shipment.TrackingNumber, shipmentId, order.OnlineStatus, order.OrderNumber.ToString());
+                client.UploadShipmentDetails(shipment.TrackingNumber, shipmentID, order.OnlineStatus,
+                    order.LemonStandOrderID);
             }
         }
 
@@ -85,21 +86,21 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns>LemonStand API Shipment ID</returns>
-        private string GetShipmentId(ShipmentEntity shipmentEntity)
+        private string GetShipmentID(ShipmentEntity shipmentEntity)
         {
             LemonStandOrderEntity order = (LemonStandOrderEntity) shipmentEntity.Order;
 
-            string orderId = order.OrderNumber.ToString();
+            string orderID = order.OrderNumber.ToString();
             // use order id to get invoice
-            JToken invoice = client.GetOrderInvoice(orderId);
-            string invoiceId = invoice.SelectToken("data.invoices.data").Children().First().SelectToken("id").ToString();
+            JToken invoice = client.GetOrderInvoice(orderID);
+            string invoiceID = invoice.SelectToken("data.invoices.data").Children().First().SelectToken("id").ToString();
 
             // use invoice id to get shipment
-            JToken shipment = client.GetShipment(invoiceId);
-            string shipmentId =
+            JToken shipment = client.GetShipment(invoiceID);
+            string shipmentID =
                 shipment.SelectToken("data.shipments.data").Children().First().SelectToken("id").ToString();
 
-            return shipmentId;
+            return shipmentID;
         }
     }
 }
