@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 
 namespace ShipWorks.Shipping.Carriers.WebTools
@@ -16,6 +17,10 @@ namespace ShipWorks.Shipping.Carriers.WebTools
 
             builder.RegisterType<PostalWebShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.PostalWebTools)
+                .SingleInstance();
+
+            builder.RegisterType<NullAccountRepository>()
+                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.PostalWebTools)
                 .SingleInstance();
         }
     }

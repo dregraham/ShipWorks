@@ -171,6 +171,7 @@
     <Compile Include="ShipmentServicesBuilderFactory.cs" />
     <Compile Include="ShipmentTypeFactory.cs" />
     <Compile Include="ShipmentViewModel.cs" />
+    <Compile Include="ShippingAccountListProvider.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="ShippingPanelViewModel.cs" />
     <Compile Include="ShipmentLoader.cs" />

@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
 
 namespace ShipWorks.Shipping.Carriers
 {
-    public interface ICarrierAccountRepository<T> where T : IEntity2
+    /// <summary>
+    /// Generic implementation of ICarrierAccountRepository
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface ICarrierAccountRepository<T> : ICarrierAccountRetriever<T> where T : ICarrierAccount
     {
-        /// <summary>
-        /// Returns a list of accounts for the carrier.
-        /// </summary>
-        IEnumerable<T> Accounts { get; }
-
         /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>

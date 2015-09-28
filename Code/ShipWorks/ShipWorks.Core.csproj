@@ -884,6 +884,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExTemplateElementGenerator.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountRetriever.cs" />
     <Compile Include="Shipping\Carriers\ICredentialStore.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelServiceTypeServicePickerControl.cs">
@@ -891,6 +892,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
+    <Compile Include="Shipping\Carriers\NullAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackagePickerControl.cs">
       <SubType>UserControl</SubType>
@@ -1653,7 +1655,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypes.cs" />

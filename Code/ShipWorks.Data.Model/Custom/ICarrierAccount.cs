@@ -1,11 +1,12 @@
-﻿using ShipWorks.Shipping;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.Custom
 {
     /// <summary>
     /// Allow carrier accounts to be used interchangably
     /// </summary>
-    public interface ICarrierAccount
+    public interface ICarrierAccount : IEntity2
     {
         /// <summary>
         /// Get the id of the account

@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Editing;
 
@@ -28,6 +30,10 @@ namespace ShipWorks.Shipping.UI.Carriers.None
             builder.RegisterType<NoneShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.None)
                 .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<NullAccountRepository>()
+                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.None)
                 .SingleInstance();
         }
     }

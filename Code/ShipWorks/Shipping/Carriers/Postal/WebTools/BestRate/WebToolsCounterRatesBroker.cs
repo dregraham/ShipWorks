@@ -6,6 +6,7 @@ using Autofac;
 using Interapptive.Shared.Business;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
     /// <summary>
     /// Gets counter rates for USPS
     /// </summary>
-    public class WebToolsCounterRatesBroker : PostalResellerBestRateBroker<NullEntity>
+    public class WebToolsCounterRatesBroker : PostalResellerBestRateBroker<ICarrierAccount>
     {
         private readonly PostalShipmentType actualPostalShipmentType;
 
@@ -30,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// Constructor
         /// </summary>
         public WebToolsCounterRatesBroker(PostalShipmentType actualPostalShipmentType)
-            : this(new PostalWebShipmentType(), new WebToolsAccountRepository())
+            : this(new PostalWebShipmentType(), new NullAccountRepository())
         {
             this.actualPostalShipmentType = actualPostalShipmentType;
         }
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        private WebToolsCounterRatesBroker(PostalWebShipmentType shipmentType, ICarrierAccountRepository<NullEntity> accountRepository) :
+        private WebToolsCounterRatesBroker(PostalWebShipmentType shipmentType, ICarrierAccountRepository<ICarrierAccount> accountRepository) :
             base(shipmentType, accountRepository, "USPS")
         {
 
@@ -151,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// </summary>
         /// <param name="postalShipmentEntity">Postal shipment on which the account id should be set</param>
         /// <param name="account">Account that should be used for this shipment</param>
-        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, NullEntity account)
+        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, ICarrierAccount account)
         {
 
         }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -9,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers
     /// implementations that could be used by other carrier account repositories.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class CarrierAccountRepositoryBase<T> : ICarrierAccountRepository<T> where T : IEntity2
+    public abstract class CarrierAccountRepositoryBase<T> : ICarrierAccountRepository<T> where T : ICarrierAccount
     {
         /// <summary>
         ///  Returns a list of accounts for the carrier.

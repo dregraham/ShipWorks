@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using System;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Properties;
@@ -17,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
     /// Base class for postal reseller brokers, like Usps and Endicia
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class PostalResellerBestRateBroker<T> : BestRateBroker<T> where T : EntityBase2
+    public abstract class PostalResellerBestRateBroker<T> : BestRateBroker<T> where T : ICarrierAccount
     {
         /// <summary>
         /// Constructor

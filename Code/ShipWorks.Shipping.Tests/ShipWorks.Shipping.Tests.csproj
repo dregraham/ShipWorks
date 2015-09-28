@@ -124,6 +124,7 @@
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipmentViewModelTest.cs" />
+    <Compile Include="ShippingAccountListProviderTest.cs" />
     <Compile Include="ShippingPanelShipmentLoaderTest.cs" />
     <Compile Include="ShippingPanelViewModelTest.cs" />
   </ItemGroup>

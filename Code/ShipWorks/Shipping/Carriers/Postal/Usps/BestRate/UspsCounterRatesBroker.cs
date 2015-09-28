@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// </summary>
         /// <param name="postalShipmentEntity"></param>
         /// <param name="account"></param>
-        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, NullEntity account)
+        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, ICarrierAccount account)
         {
             UspsAccountEntity uspsAccount = uspsAccountRepository.Accounts.FirstOrDefault();
 

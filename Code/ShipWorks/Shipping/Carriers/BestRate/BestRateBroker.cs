@@ -6,6 +6,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
@@ -20,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// Defines most of the logic for the carrier specific best rate brokers
     /// </summary>
     /// <typeparam name="TAccount">Type of account</typeparam>
-    public abstract class BestRateBroker<TAccount> : IBestRateShippingBroker where TAccount : EntityBase2
+    public abstract class BestRateBroker<TAccount> : IBestRateShippingBroker where TAccount : ICarrierAccount
     {
         private readonly string carrierDescription;
 
@@ -209,7 +210,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             // Only add the account to the account list if it's not null
             TAccount accountForRating = AccountRepository.Accounts.Count() == 1 ? AccountRepository.Accounts.First() : AccountRepository.DefaultProfileAccount;
-            IEnumerable<TAccount> accounts = accountForRating == null ? new List<TAccount>() : new List<TAccount> { accountForRating };
+            IEnumerable<TAccount> accounts = Object.Equals(accountForRating, default(TAccount)) ? new List<TAccount>() : new List<TAccount> { accountForRating };
 
             // Filter the list to be the default profile account, and that it's other properties are valid
             accounts = accounts.Where(account =>

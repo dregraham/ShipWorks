@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
@@ -32,6 +34,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
 
             builder.RegisterType<OtherProfileControl>()
                 .Keyed<ShippingProfileControlBase>(ShipmentTypeCode.Other);
+
+            builder.RegisterType<NullAccountRepository>()
+                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.Other)
+                .SingleInstance();
         }
     }
 }
