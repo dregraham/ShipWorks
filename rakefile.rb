@@ -428,7 +428,7 @@ def shipworks_instance_guid
 		begin
 			reg[app_directory]
 		rescue
-			nil
+			SecureRandom.uuid
 		end
 	end
 end
