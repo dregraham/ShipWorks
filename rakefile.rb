@@ -324,9 +324,10 @@ namespace :setup do
 	task :registry, :instancePath do |t, args|
 	
 		instanceGuid = shipworks_instance_guid
+		puts instanceGuid
 		
-		if instanceGuid.nil?
-			# No instance GUID was found in the registry, so we need to create an entry for this path provided
+		if (instanceGuid == nil || instanceGuid == "")			
+			# No instance GUID was found in the registry, so we need to create an entry for this path provided			
 			instanceGuid = SecureRandom.uuid
 			puts instanceGuid
 			
@@ -428,6 +429,7 @@ def shipworks_instance_guid
 		begin
 			reg[app_directory]
 		rescue
+			puts "instance guid not found"
 			nil
 		end
 	end
