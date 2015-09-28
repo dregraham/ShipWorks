@@ -343,7 +343,10 @@ namespace :setup do
 	
 	desc "Creates/writes the SQL session file for the given instance to point at the target database provided"
 	task :sqlSession, :instancePath, :targetDatabase do |t, args|
+		puts "In sqlSession task"
+		
 		instanceGuid = shipworks_instance_guid
+		puts "Instance GUID is " + instanceGuid
 		
 		instanceName = "(local)\\Development"
 		if args[:instanceName] != nil and args[:instanceName] != ""
@@ -370,6 +373,7 @@ namespace :setup do
 		boilerPlateXml = boilerPlateXml.gsub(/<Instance>@@INSTANCE_NAME@@<\/Instance>/, '<Instance>' + instanceName + '</Instance>')
 		boilerPlateXml = boilerPlateXml.gsub(/<Database>@@DATABASE_NAME@@<\/Database>/, '<Database>' + args.targetDatabase + '</Database>')
 		
+		puts "Creating ProgramData directories for " + instanceGuid
 		# Make sure the directories are created before writing to the sqlsession file
 		Dir.mkdir("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid) if !Dir.exist?("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid)
 		Dir.mkdir("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings") if !Dir.exist?("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings")
@@ -419,8 +423,9 @@ end
 def shipworks_instance_guid
 	# Assume we're in the directory containing the ShipWorks solution - we need to get
 	# the registry key name based on the directory to the ShipWorks.exe to figure out
-	# which GUID to use in our path to the the SQL session file.
+	# which GUID to use in our path to the SQL session file.
 	app_directory = (Dir.pwd + "/Artifacts/Application").gsub('/', '\\')
+	puts "Checking for instance GUID for " + app_directory
 	
 	# Read the GUID from the registry, so we know which directory to look in; pass in 
 	# 0x100 to read from 64-bit registry otherwise the key will not be found			
@@ -429,7 +434,7 @@ def shipworks_instance_guid
 		begin
 			reg[app_directory]
 		rescue
-			puts "instance guid not found"
+			puts "instance guid not found for " + app_directory
 			nil
 		end
 	end
