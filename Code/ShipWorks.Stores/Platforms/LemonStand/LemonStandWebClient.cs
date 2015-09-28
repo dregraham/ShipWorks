@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using Newtonsoft.Json.Linq;
 using Quartz.Util;
 using ShipWorks.ApplicationCore.Logging;
@@ -39,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 ProcessRequest(
                     CreateGetRequest("orders?updated_at_min=" + start +
                                      "&sort=updated_at&order=desc&embed=invoices,customer,items&limit=" + itemsPerPage +
-                                     "&page=" + page), "GetOrders");
+                                     "&page=" + page + "&is_quote=0"), "GetOrders");
         }
 
         /// <summary>
@@ -113,13 +114,25 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 trackingNumber = "No tracking number was entered";
             }
             parameters.Add("tracking_code", trackingNumber);
-            ProcessRequest(CreatePostRequest("shipment/" + shipmentId + "/trackingcode", parameters),
-                "UploadShipmentDetails");
+            try
+            {
+                ProcessRequest(CreatePostRequest("shipment/" + shipmentId + "/trackingcode", parameters),
+                        "UploadShipmentDetails");
 
-            parameters.Clear();
+                parameters.Clear();
 
-            parameters.Add("status", onlineStatus);
-            ProcessRequest(CreatePatchRequest("order/" + orderNumber, parameters), "UploadShipmentDetails");
+                parameters.Add("status", onlineStatus);
+                ProcessRequest(CreatePatchRequest("order/" + orderNumber, parameters), "UploadShipmentDetails");
+            }
+            catch (LemonStandException ex)
+            {
+                if (ex.Message.Equals("The remote server returned an error: (400) Bad Request."))
+                {
+                    throw new LemonStandException("The status is not a possible option.", ex);
+                }
+
+                throw;
+            }
         }
 
         /// <summary>

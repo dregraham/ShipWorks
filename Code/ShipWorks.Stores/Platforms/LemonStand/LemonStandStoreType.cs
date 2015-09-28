@@ -279,7 +279,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 CreateFilterPaid(),
                 CreateFilterShipped(),
                 CreateFilterCancelled(),
-                CreateFilterQuote()
             };
         }
 
@@ -389,41 +388,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             return new FilterEntity
             {
                 Name = "Cancelled",
-                Definition = definition.GetXml(),
-                IsFolder = false,
-                FilterTarget = (int) FilterTarget.Orders
-            };
-        }
-
-        private FilterEntity CreateFilterQuote()
-        {
-            // [All]
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
-
-            //      [Store] == this store
-            StoreCondition storeCondition = new StoreCondition();
-            storeCondition.Operator = EqualityOperator.Equals;
-            storeCondition.Value = Store.StoreID;
-            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
-
-            // [AND]
-            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
-            ConditionGroupContainer shippedDefinition = new ConditionGroupContainer();
-            definition.RootContainer.SecondGroup = shippedDefinition;
-
-            //      [Any]
-            shippedDefinition.FirstGroup = new ConditionGroup();
-            shippedDefinition.FirstGroup.JoinType = ConditionJoinType.Any;
-
-            OnlineStatusCondition onlineStatus = new OnlineStatusCondition();
-            onlineStatus.Operator = StringOperator.Equals;
-            onlineStatus.TargetValue = "Quote";
-            shippedDefinition.FirstGroup.Conditions.Add(onlineStatus);
-
-            return new FilterEntity
-            {
-                Name = "Quote",
                 Definition = definition.GetXml(),
                 IsFolder = false,
                 FilterTarget = (int) FilterTarget.Orders

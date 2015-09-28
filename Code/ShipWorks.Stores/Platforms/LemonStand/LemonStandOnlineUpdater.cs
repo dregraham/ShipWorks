@@ -49,10 +49,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 }
 
                 OrderEntity order = shipment.Order;
-                string shipmentId = GetShipmentId(shipment);
+                if (!order.IsManual)
+                {
+                    string shipmentId = GetShipmentId(shipment);
 
-                client.UploadShipmentDetails(shipment.TrackingNumber, shipmentId, order.OnlineStatus,
+                    client.UploadShipmentDetails(shipment.TrackingNumber, shipmentId, order.OnlineStatus,
                     order.OrderNumber.ToString());
+                }
             }
         }
 
@@ -65,15 +68,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new ArgumentNullException(nameof(shipment));
             }
-            string tracking = shipment.TrackingNumber;
+            
             OrderEntity order = shipment.Order;
             order.OnlineStatus = "Shipped";
 
-            if (tracking != null)
+            if (!order.IsManual)
             {
                 string shipmentId = GetShipmentId(shipment);
 
-                client.UploadShipmentDetails(tracking, shipmentId, order.OnlineStatus, order.OrderNumber.ToString());
+                client.UploadShipmentDetails(shipment.TrackingNumber, shipmentId, order.OnlineStatus, order.OrderNumber.ToString());
             }
         }
 
