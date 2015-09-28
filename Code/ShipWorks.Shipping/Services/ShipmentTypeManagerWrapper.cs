@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -10,7 +11,12 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get a list of enabled shipment types
         /// </summary>
-        public List<ShipmentType> EnabledShipmentTypes => ShipmentTypeManager.EnabledShipmentTypes;
+        public IEnumerable<ShipmentTypeCode> ShipmentTypeCodes => ShipmentTypeManager.ShipmentTypeCodes;
+
+        /// <summary>
+        /// Get a list of enabled shipment types
+        /// </summary>
+        public IEnumerable<ShipmentTypeCode> EnabledShipmentTypeCodes => ShipmentTypeManager.EnabledShipmentTypeCodes;
 
         /// <summary>
         /// Get the sort value for a given shipment type code

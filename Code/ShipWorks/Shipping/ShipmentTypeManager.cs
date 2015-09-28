@@ -26,63 +26,33 @@ namespace ShipWorks.Shipping
     /// Manages all ShipmentTypes available in ShipWorks
     /// </summary>
     public static class ShipmentTypeManager
-    {        
+    {
         /// <summary>
         /// Returns all shipment types in ShipWorks
         /// </summary>
-        public static List<ShipmentType> ShipmentTypes
-        {
-            get
-            {
-                List<ShipmentType> shipmentTypes = new List<ShipmentType>();
+        public static IEnumerable<ShipmentTypeCode> ShipmentTypeCodes =>
+            Enum.GetValues(typeof(ShipmentTypeCode))
+                .OfType<ShipmentTypeCode>()
+                .Where(IsCarrierAllowed)
+                .OrderBy(x => GetSortValue(x));
 
-                foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof(ShipmentTypeCode)))
-                {
-                    // If the active edition doesn't allow this ShipmentType, skip it
-                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, typeCode).Level == EditionRestrictionLevel.Hidden)
-                    {
-                        continue;
-                    }
-
-                    if (typeCode == ShipmentTypeCode.Express1Usps)
-                    {
-                        // The only time Express1 for USPS should be excluded is when USPS has never been setup but Endicia has been setup
-                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) &&
-                            !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps) && ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia))
-                        {
-                            // USPS has never been setup, so we want to exclude the Express1/USPS type since Endicia IS setup in ShipWorks
-                            continue;
-                        }
-                        
-                    }
-                    else if (typeCode == ShipmentTypeCode.Express1Endicia)
-                    {
-                        // We have an Express1 for Endicia shipment type which should be excluded if Endicia has never been setup
-                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia) && !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia))
-                        {
-                            // The Endicia type has never been setup, so we want to exclude the Express1 for Endicia type
-                            continue;
-                        }
-                    }
-
-                    shipmentTypes.Add(GetType(typeCode));
-                }
-
-                // Sort based on the shipment type name
-                shipmentTypes.Sort(delegate(ShipmentType left, ShipmentType right)
-                {
-                    return GetSortValue(left.ShipmentTypeCode).CompareTo(GetSortValue(right.ShipmentTypeCode));
-                });
-
-                return shipmentTypes;
-            }
-        }
+        /// <summary>
+        /// Returns all shipment types in ShipWorks
+        /// </summary>
+        public static List<ShipmentType> ShipmentTypes =>
+            ShipmentTypeCodes.Select(x => GetType(x)).ToList();
 
         /// <summary>
         /// Gets a list of enabled shipment types
         /// </summary>
         public static List<ShipmentType> EnabledShipmentTypes =>
-            ShipmentTypes.Where(s => ShippingManager.IsShipmentTypeEnabled(s.ShipmentTypeCode)).ToList();
+            ShipmentTypeCodes.Where(s => ShippingManager.IsShipmentTypeEnabled(s)).Select(x => GetType(x)).ToList();
+
+        /// <summary>
+        /// Gets a list of enabled shipment types
+        /// </summary>
+        public static IEnumerable<ShipmentTypeCode> EnabledShipmentTypeCodes =>
+            ShipmentTypeCodes.Where(s => ShippingManager.IsShipmentTypeEnabled(s));
 
         /// <summary>
         /// Get the ShipmentTypeCode instance of the specified ShipmentEntity
@@ -142,7 +112,7 @@ namespace ShipWorks.Shipping
 
             throw new InvalidOperationException($"Invalid shipment type {typeCode}.");
         }
-        
+
         /// <summary>
         /// Get the effective sort value of the given type code.  This provides our custom sorting
         /// </summary>
@@ -268,5 +238,36 @@ namespace ShipWorks.Shipping
 
             return PostalUtility.UspsConsolidatorTypes.Contains(service);
         }
-   }
+
+        private static bool IsCarrierAllowed(ShipmentTypeCode typeCode)
+        {
+            // If the active edition doesn't allow this ShipmentType, skip it
+            if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, typeCode).Level == EditionRestrictionLevel.Hidden)
+            {
+                return false;
+            }
+
+            if (typeCode == ShipmentTypeCode.Express1Usps)
+            {
+                // The only time Express1 for USPS should be excluded is when USPS has never been setup but Endicia has been setup
+                if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) &&
+                    !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps) && ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia))
+                {
+                    // USPS has never been setup, so we want to exclude the Express1/USPS type since Endicia IS setup in ShipWorks
+                    return false;
+                }
+            }
+            else if (typeCode == ShipmentTypeCode.Express1Endicia)
+            {
+                // We have an Express1 for Endicia shipment type which should be excluded if Endicia has never been setup
+                if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia) && !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia))
+                {
+                    // The Endicia type has never been setup, so we want to exclude the Express1 for Endicia type
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
 }

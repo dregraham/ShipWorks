@@ -8,9 +8,14 @@ namespace ShipWorks.Shipping
     public interface IShipmentTypeManager
     {
         /// <summary>
+        /// Get a list of shipment types
+        /// </summary>
+        IEnumerable<ShipmentTypeCode> ShipmentTypeCodes { get; }
+
+        /// <summary>
         /// Get a list of enabled shipment types
         /// </summary>
-        List<ShipmentType> EnabledShipmentTypes { get; }
+        IEnumerable<ShipmentTypeCode> EnabledShipmentTypeCodes { get; }
 
         /// <summary>
         /// Get the sort value for a given shipment type code
