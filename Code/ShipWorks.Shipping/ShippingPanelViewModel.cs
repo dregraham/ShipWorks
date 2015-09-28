@@ -7,12 +7,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using ShipWorks.AddressValidation;
 using System.Windows.Input;
-using ShipWorks.Shipping.Commands;
 using Autofac.Features.OwnedInstances;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
 
 namespace ShipWorks.Shipping
 {
