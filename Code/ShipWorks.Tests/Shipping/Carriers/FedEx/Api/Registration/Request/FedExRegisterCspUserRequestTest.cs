@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
 {
-    [TestClass]
     public class FedExRegisterCspUserRequestTest
     {
         private FedExRegisterCspUserRequest testObject;
@@ -23,18 +22,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
 
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRegisterCspUserRequestTest()
         {
             account = new FedExAccountEntity { AccountNumber = "1234", MeterNumber = "45453" };
 
             fedExService = new Mock<IFedExServiceGateway>();
-            fedExService.Setup(s => s.RegisterCspUser(It.IsAny<RegisterWebCspUserRequest>())).Returns(new RegisterWebCspUserReply());
+            fedExService.Setup(s => s.RegisterCspUser(It.IsAny<RegisterWebUserRequest>())).Returns(new RegisterWebUserReply());
 
             carrierResponse = new Mock<ICarrierResponse>();
 
             responseFactory = new Mock<ICarrierResponseFactory>();
-            responseFactory.Setup(f => f.CreateRegisterUserResponse(It.IsAny<RegisterWebCspUserReply>(), It.IsAny<CarrierRequest>())).Returns(carrierResponse.Object);
+            responseFactory.Setup(f => f.CreateRegisterUserResponse(It.IsAny<RegisterWebUserReply>(), It.IsAny<CarrierRequest>())).Returns(carrierResponse.Object);
 
             firstManipulator = new Mock<ICarrierRequestManipulator>();
             firstManipulator.Setup(m => m.Manipulate(It.IsAny<CarrierRequest>()));
@@ -53,19 +51,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
         }
 
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
-            Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
         {
-            Assert.AreEqual(account, testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.Equal(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToManipulators_Test()
         {
             // No additional setup needed since it was performed in Initialize()
@@ -76,24 +74,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
             secondManipulator.Verify(m => m.Manipulate(testObject), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToFedExService_Test()
         {
             // No additional setup needed since it was performed in Initialize()
             ICarrierResponse response = testObject.Submit();
 
             // Verify that the register method was called using the test object's native request
-            fedExService.Verify(s => s.RegisterCspUser(testObject.NativeRequest as RegisterWebCspUserRequest), Times.Once());
+            fedExService.Verify(s => s.RegisterCspUser(testObject.NativeRequest as RegisterWebUserRequest), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToResponseFactory_WhenCreatingGroundCloseResponse_Test()
         {
             // No additional setup needed since it was performed in Initialize()
             ICarrierResponse response = testObject.Submit();
 
             // Verify the register response is created via the response factory using the test object
-            responseFactory.Verify(f => f.CreateRegisterUserResponse(It.IsAny<RegisterWebCspUserReply>(), testObject), Times.Once());
+            responseFactory.Verify(f => f.CreateRegisterUserResponse(It.IsAny<RegisterWebUserReply>(), testObject), Times.Once());
         }
     }
 }

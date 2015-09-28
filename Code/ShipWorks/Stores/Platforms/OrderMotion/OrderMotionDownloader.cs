@@ -21,6 +21,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Business.Geography;
 using Rebex.Mime.Headers;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion

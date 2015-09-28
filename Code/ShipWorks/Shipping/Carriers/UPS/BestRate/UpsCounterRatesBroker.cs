@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
+using Autofac.Core.Lifetime;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -120,23 +123,26 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </summary>
         private bool DisplaySetupWizard()
         {
-            using (Form setupWizard = ShipmentType.CreateSetupWizard())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                DialogResult result = setupWizard.ShowDialog();
-
-                if (result == DialogResult.OK)
+                using (Form setupWizard = ShipmentType.CreateSetupWizard(lifetimeScope))
                 {
-                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.UpsOnLineTools);
+                    DialogResult result = setupWizard.ShowDialog();
 
-                    // We also want to ensure sure that the provider is no longer excluded in
-                    // the global settings
-                    ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                    settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int)ShipmentType.ShipmentTypeCode).ToArray();
+                    if (result == DialogResult.OK)
+                    {
+                        ShippingSettings.MarkAsConfigured(ShipmentTypeCode.UpsOnLineTools);
 
-                    ShippingSettings.Save(settings);
+                        // We also want to ensure sure that the provider is no longer excluded in
+                        // the global settings
+                        ShippingSettingsEntity settings = ShippingSettings.Fetch();
+                        settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int)ShipmentType.ShipmentTypeCode).ToArray();
+
+                        ShippingSettings.Save(settings);
+                    }
+
+                    return result == DialogResult.OK;
                 }
-
-                return result == DialogResult.OK;
             }
         }
         

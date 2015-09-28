@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Actions.Scheduling;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
@@ -8,10 +8,9 @@ using System.Collections.Generic;
 
 namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 {
-    [TestClass]
     public class MonthlyActionScheduleTests
     {
-        [TestMethod, ExpectedException(typeof(SchedulingException))]
+        [Fact]
         public void DayMode_Validate_AtLeastOneMonthIsRequired()
         {
             var target = new MonthlyActionSchedule
@@ -21,18 +20,10 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 ExecuteOnDay = DayOfWeek.Monday
             };
 
-            try
-            {
-                target.Validate();
-            }
-            catch (SchedulingException ex)
-            {
-                Assert.AreEqual("At least one month must be scheduled.", ex.Message);
-                throw;
-            }
+            Assert.Throws<SchedulingException>(() => target.Validate());
         }
 
-        [TestMethod]
+        [Fact]
         public void DayMode_Validate_SucceedsWhenValid()
         {
             var target = new MonthlyActionSchedule
@@ -47,7 +38,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
 
-        [TestMethod, ExpectedException(typeof(SchedulingException))]
+        [Fact]
         public void DateMode_Validate_AtLeastOneDayIsRequired()
         {
             var target = new MonthlyActionSchedule
@@ -56,18 +47,10 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 ExecuteOnDateMonths = new List<MonthType>() { MonthType.April }
             };
 
-            try
-            {
-                target.Validate();
-            }
-            catch (SchedulingException ex)
-            {
-                Assert.AreEqual("At least one day must be scheduled.", ex.Message);
-                throw;
-            }
+            Assert.Throws<SchedulingException>(() => target.Validate());
         }
 
-        [TestMethod, ExpectedException(typeof(SchedulingException))]
+        [Fact]
         public void DateMode_Validate_AtLeastOneMonthIsRequired()
         {
             var target = new MonthlyActionSchedule
@@ -76,18 +59,10 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 ExecuteOnDates = new List<int> { 5 }
             };
 
-            try
-            {
-                target.Validate();
-            }
-            catch (SchedulingException ex)
-            {
-                Assert.AreEqual("At least one month must be scheduled.", ex.Message);
-                throw;
-            }
+            Assert.Throws<SchedulingException>(() => target.Validate());
         }
 
-        [TestMethod]
+        [Fact]
         public void DateMode_Validate_SucceedsWhenValid()
         {
             var target = new MonthlyActionSchedule

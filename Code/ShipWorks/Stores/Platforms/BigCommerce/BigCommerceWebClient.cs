@@ -716,7 +716,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             order.OrderProducts = GetOrderProducts(order);
 
             // Get the store specific product image cache
-            LruCache<int, BigCommerceProductImage> productImageCache = BigCommerceProductImageCache.GetStoreProductImageCache(apiUserName, apiUrl, apiToken);
+            LruCache<int, BigCommerceProductImage> productImageCache = BigCommerceProductImageCache.Instance.GetStoreProductImageCache(apiUserName, apiUrl, apiToken);
 
             foreach (BigCommerceProduct product in order.OrderProducts)
             {
@@ -816,8 +816,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 BigCommerceWebClientOrderSearchCriteria orderSearchCriteria = new BigCommerceWebClientOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType.CreatedDate, 
                     DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow, 
-                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow, 
-                    BigCommerceConstants.OrdersPageSize, 1);
+                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow)
+                    { 
+                        PageSize = BigCommerceConstants.OrdersPageSize, 
+                        Page = 1
+                    };
                 
                 GetOrderCount(orderSearchCriteria);
             }

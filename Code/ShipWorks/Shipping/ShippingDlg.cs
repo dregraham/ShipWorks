@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
@@ -47,7 +48,6 @@ using ShipWorks.Users.Security;
 using log4net;
 using ShipWorks.Shipping.Policies;
 using Timer = System.Windows.Forms.Timer;
-
 
 namespace ShipWorks.Shipping
 {
@@ -113,20 +113,21 @@ namespace ShipWorks.Shipping
         private bool shipSenseNeedsUpdated = false;
         private readonly CarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
         private MessengerToken uspsAccountConvertedToken;
+        private ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingDlg(List<ShipmentEntity> shipments)
-            : this(shipments, InitialShippingTabDisplay.Shipping)
+        public ShippingDlg(List<ShipmentEntity> shipments, ILifetimeScope lifetimeScope)
+            : this(shipments, InitialShippingTabDisplay.Shipping, lifetimeScope)
         {}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShippingDlg"/> class. This is intended
         /// to be used when a rate has been selected outside of the shipping dialog.
         /// </summary>
-        public ShippingDlg(ShipmentEntity shipment, RateSelectedEventArgs preSelectedRateEventArgs)
-            : this(new List<ShipmentEntity> { shipment }, InitialShippingTabDisplay.Shipping)
+        public ShippingDlg(ShipmentEntity shipment, RateSelectedEventArgs preSelectedRateEventArgs, ILifetimeScope lifetimeScope)
+            : this(new List<ShipmentEntity> { shipment }, InitialShippingTabDisplay.Shipping, lifetimeScope)
         {
             this.preSelectedRateEventArgs = preSelectedRateEventArgs;
         }
@@ -134,10 +135,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingDlg(List<ShipmentEntity> shipments, InitialShippingTabDisplay initialDisplay)
+        public ShippingDlg(List<ShipmentEntity> shipments, InitialShippingTabDisplay initialDisplay, ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
+            this.lifetimeScope = lifetimeScope;
             MethodConditions.EnsureArgumentIsNotNull(shipments, "shipments");
 
             ManageWindowPositioning();
@@ -1126,7 +1128,7 @@ namespace ShipWorks.Shipping
 
             ServiceControlBase newServiceControl = shipmentType == null ? 
                 new MultiSelectServiceControl(rateControl) : 
-                shipmentType.CreateServiceControl(rateControl);
+                shipmentType.CreateServiceControl(rateControl, lifetimeScope);
 
             if (newServiceControl == null)
             {
@@ -1551,10 +1553,10 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnShipmentServiceChanged(object sender, EventArgs e)
         {
+            UpdateCustomsDisplay(uiDisplayedShipments);
+
             if (tabControl.Contains(tabPageCustoms))
             {
-                UpdateCustomsDisplay(uiDisplayedShipments);
-
                 CustomsControl.LoadShipments(uiDisplayedShipments, true);
             }
         }
@@ -2507,7 +2509,7 @@ namespace ShipWorks.Shipping
                         (Func<CounterRatesProcessingArgs, DialogResult>) BestRateCounterRatesProcessing : 
                         CounterRatesProcessing;
 
-                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, ratesProcessing, selectedRate);
+                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, ratesProcessing, selectedRate, lifetimeScope);
 
                     // Clear any previous errors
                     processingErrors.Remove(shipmentID);
@@ -2643,26 +2645,29 @@ namespace ShipWorks.Shipping
                     }
                     else
                     {
-                        using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard())
+                        using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                         {
-                            result = setupWizard.ShowDialog(this);
-
-                            if (result == DialogResult.OK)
+                            using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard(lifetimeScope))
                             {
-                                ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
+                                result = setupWizard.ShowDialog(this);
 
-                                // Make sure we've got the latest data for the shipment since the requested label format may have changed
-                                ShippingManager.RefreshShipment(counterRatesProcessingArgs.Shipment);
+                                if (result == DialogResult.OK)
+                                {
+                                    ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
 
-                                ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
-                                ServiceControl.SaveToShipments();
-                                ServiceControl.LoadAccounts();
-                            }
-                            else
-                            {
-                                // User canceled out of the setup wizard for this batch, so don't show
-                                // any setup wizard for the rest of this batch
-                                cancelProcessing = true;
+                                    // Make sure we've got the latest data for the shipment since the requested label format may have changed
+                                    ShippingManager.RefreshShipment(counterRatesProcessingArgs.Shipment);
+
+                                    ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
+                                    ServiceControl.SaveToShipments();
+                                    ServiceControl.LoadAccounts();
+                                }
+                                else
+                                {
+                                    // User canceled out of the setup wizard for this batch, so don't show
+                                    // any setup wizard for the rest of this batch
+                                    cancelProcessing = true;
+                                }
                             }
                         }
                     }
@@ -2794,9 +2799,12 @@ namespace ShipWorks.Shipping
             // Save changes to the current selection since we reload after getting out of the settings
             SaveChangesToUIDisplayedShipments();
 
-            using (ShippingSettingsDlg dlg = new ShippingSettingsDlg())
+            using (ILifetimeScope settingsLifetimeScope = lifetimeScope.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                using (ShippingSettingsDlg dlg = new ShippingSettingsDlg(settingsLifetimeScope))
+                {
+                    dlg.ShowDialog(this);
+                }
             }
 
             LoadShipmentTypeCombo();

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators
 {
-    [TestClass]
     public class FedExSubscriberManipulatorTest
     {
         private FedExSubscriberManipulator testObject;
@@ -22,8 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         private SubscriptionRequest nativeRequest;
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExSubscriberManipulatorTest()
         {
             account = new FedExAccountEntity
             {
@@ -41,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
             // Nothing is used from the repository; the fedEx settings needs a repo to be created, though
             settingsRepository = new Mock<ICarrierSettingsRepository>();
-            
+
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
             carrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
@@ -49,42 +47,38 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject = new FedExSubscriberManipulator(settingsRepository.Object);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotSubscriptionRequest_Test()
         {
             // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new RegisterWebCspUserRequest());
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new RegisterWebUserRequest());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenAccountIsNull_Test()
         {
             carrierRequest.Setup(r => r.CarrierAccountEntity).Returns<IEntity2>(null);
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_GetsAccountFromRequest_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -92,72 +86,72 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             carrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SubscriberIsNotNull_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.Subscriber);
+            Assert.NotNull(nativeRequest.Subscriber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsSubscriberAccountNumber_WithFedExAccount_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(account.AccountNumber, nativeRequest.Subscriber.AccountNumber);
+            Assert.Equal(account.AccountNumber, nativeRequest.Subscriber.AccountNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsSubscriberAddress_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             // Just make sure this is assigned correctly since it's being populated by a separate class
-            Assert.IsNotNull(nativeRequest.Subscriber.Address);
+            Assert.NotNull(nativeRequest.Subscriber.Address);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsSubscriberContact_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             // Just make sure this is assigned correctly since it's being populated by a separate class
-            Assert.IsNotNull(nativeRequest.Subscriber.Contact);
+            Assert.NotNull(nativeRequest.Subscriber.Contact);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsSubscriberAccountShippingAddress_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             // Just make sure this is assigned correctly since it's being populated by a separate class
-            Assert.IsNotNull(nativeRequest.AccountShippingAddress);
+            Assert.NotNull(nativeRequest.AccountShippingAddress);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsCspSolutionId_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             // Just make sure this is assigned correctly since it's being populated by a separate class
-            Assert.IsFalse(string.IsNullOrEmpty(nativeRequest.CspSolutionId));
+            Assert.False(string.IsNullOrEmpty(nativeRequest.CspSolutionId));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsCspType_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(CspType.CERTIFIED_SOLUTION_PROVIDER, nativeRequest.CspType);
+            Assert.Equal(CspType.CERTIFIED_SOLUTION_PROVIDER, nativeRequest.CspType);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CspTypeSpecifiedIsTrue_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.CspTypeSpecified);
+            Assert.True(nativeRequest.CspTypeSpecified);
         }
     }
 }

@@ -155,10 +155,16 @@ namespace ShipWorks.Data.Utility
         FedExCustomsAESEEI,
         FedExRmaNumber,
         FedExRmaReason,
+        FedExShipmentFimsAirWaybill,
 
         OnTracReference1,
         OnTracReference2,
         OnTracInstructions,
-        OnTracAccountDescription
+        OnTracAccountDescription,
+
+        AmazonShipmentCarrierName,
+        AmazonShipmentShippingServiceName,
+        AmazonShipmentShippingServiceID,
+        AmazonShipmentShippingServiceOfferID,
     }
 }

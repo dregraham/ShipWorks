@@ -22,6 +22,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Platforms.Ebay.Requests;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Ebay.WizardPages

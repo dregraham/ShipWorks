@@ -1,55 +1,53 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.Tests.Shipping.Policies
 {
-    [TestClass]
     public class ShippingPolicyTypeEnumFactoryTest
     {
-        [TestMethod]
+        [Fact]
         public void Create_CreatesRateResultCountPolicy_WithRateResultCountString_WhenShipmentTypeIsBestRate_Test()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.BestRate, "RateResultCount");
 
-            Assert.IsInstanceOfType(policy, typeof(RateResultCountShippingPolicy));
+            Assert.IsAssignableFrom<RateResultCountShippingPolicy>(policy);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_CreatesNullShippingPolicy_WhenShipmentTypeIsNotBestRate_Test()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.Usps, "RateResultCount");
 
-            Assert.IsInstanceOfType(policy, typeof(NonRestrictedRateCountShippingPolicy));
+            Assert.IsAssignableFrom<NonRestrictedRateCountShippingPolicy>(policy);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_CreatesBestRateUpsRestrictionPolicy_WithBestRateUpsRestrictionString_WhenShipmentTypeIsBestRate_Test()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.BestRate, "BestRateUpsRestriction");
 
-            Assert.IsInstanceOfType(policy, typeof(BestRateUpsRestrictionShippingPolicy));
+            Assert.IsAssignableFrom<BestRateUpsRestrictionShippingPolicy>(policy);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_CreatesBestRateUpsRestrictionPolicy_WithBestRateUpsRestrictionString_WhenShipmentTypeIsNotBestRate_Test()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.FedEx, "BestRateUpsRestriction");
 
-            Assert.IsInstanceOfType(policy, typeof(BestRateUpsRestrictionShippingPolicy));
+            Assert.IsAssignableFrom<BestRateUpsRestrictionShippingPolicy>(policy);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public void Create_ThrowsInvalidOperationException_WhenPolicyTypeIsUnknown()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
-            factory.Create(ShipmentTypeCode.UpsOnLineTools, "InvalidPolicy");
+            Assert.Throws<InvalidOperationException>(() => factory.Create(ShipmentTypeCode.UpsOnLineTools, "InvalidPolicy"));
         }
     }
 }

@@ -406,7 +406,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new UspsShipmentProcessingSynchronizer(AccountRepository);
         }
@@ -637,22 +637,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
-
-            fields.AddRange
-            (
-                new List<IEntityField2>()
+            get
+            {
+                if (ratingField != null)
                 {
-                    shipment.Postal.Usps.Fields[UspsShipmentFields.UspsAccountID.FieldIndex],
-                    shipment.Postal.Usps.Fields[UspsShipmentFields.OriginalUspsAccountID.FieldIndex],
-                    shipment.Postal.Usps.Fields[UspsShipmentFields.RateShop.FieldIndex],
-                    shipment.Postal.Fields[PostalShipmentFields.NoPostage.FieldIndex]
+                    return ratingField;
                 }
-            );
 
-            return fields;
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(UspsShipmentFields.UspsAccountID);
+                ratingField.ShipmentFields.Add(UspsShipmentFields.OriginalUspsAccountID);
+                ratingField.ShipmentFields.Add(UspsShipmentFields.RateShop);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.NoPostage);
+
+                return ratingField;
+            }
         }
 
         /// <summary>

@@ -4,6 +4,9 @@
   <Assemblies>
     <Name>Interapptive.Shared</Name>
     <Name>ShipWorks</Name>
+    <Name>ShipWorks.Core</Name>
+    <Name>ShipWorks.Shipping</Name>
+    <Name>ShipWorks.Shipping.UI</Name>
     <Name>ShipWorks.Shared</Name>
     <Name>ShipWorks.SqlServer</Name>
   </Assemblies>

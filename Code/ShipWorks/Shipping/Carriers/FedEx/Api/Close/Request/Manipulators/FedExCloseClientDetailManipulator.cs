@@ -1,8 +1,6 @@
 using System;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
@@ -13,16 +11,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
     public class FedExCloseClientDetailManipulator : ICarrierRequestManipulator
     {
         private bool isSmartPostRequest;
-        private readonly FedExSettings fedExSettings;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExCloseClientDetailManipulator" /> class.
-        /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        public FedExCloseClientDetailManipulator(ICarrierSettingsRepository settingsRepository)
-        {
-            this.fedExSettings = new FedExSettings(settingsRepository);
-        }
 
         /// <summary>
         /// Manipulates the specified request.
@@ -39,13 +27,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             {
                 // We can safely cast this since we've passed validation
                 SmartPostCloseRequest nativeRequest = request.NativeRequest as SmartPostCloseRequest;
-                nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateCloseClientDetail(account, fedExSettings);
+                nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateCloseClientDetail(account);
             }
             else
             {
                 // We can safely cast this since we've passed validation
                 GroundCloseRequest nativeRequest = request.NativeRequest as GroundCloseRequest;
-                nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateCloseClientDetail(account, fedExSettings);
+                nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateCloseClientDetail(account);
             }
         }
 

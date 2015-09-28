@@ -6,6 +6,7 @@ using System.Drawing;
 using System.ComponentModel;
 using Interapptive.Shared;
 using Interapptive.Shared.Win32;
+using System.Reflection;
 
 namespace ShipWorks.UI.Controls
 {
@@ -25,6 +26,7 @@ namespace ShipWorks.UI.Controls
 
         }
 
+        [Obfuscation(Exclude = true)]
         [Category("Appearance")]
         [DefaultValue("")]
         [Description("The prompt text to display when there is nothing in the Text property.")]

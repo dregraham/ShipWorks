@@ -124,13 +124,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             if (merchantID.Text.Trim().Length == 0)
             {
-                MessageHelper.ShowError(this, "Your Merchant ID is required.");
+                MessageHelper.ShowError(this, "Your Seller ID is required.");
                 return false;
             }
 
             if (authToken.Text.Trim().Length == 0)
             {
-                MessageHelper.ShowError(this, "Your MWS Auth Token is required.");
+                MessageHelper.ShowError(this, "Your Auth Token is required.");
                 return false;
             }
 
@@ -199,13 +199,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             if (string.IsNullOrWhiteSpace(merchantID.Text))
             {
-                MessageHelper.ShowMessage(this, "You must enter your Amazon Merchant ID before ShipWorks can find your marketplaces.");
+                MessageHelper.ShowMessage(this, "You must enter your Amazon Seller ID before ShipWorks can find your marketplaces.");
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(authToken.Text))
             {
-                MessageHelper.ShowMessage(this, "You must enter your MWS Auth Token before ShipWorks can find your marketplaces.");
+                MessageHelper.ShowMessage(this, "You must enter your Auth Token before ShipWorks can find your marketplaces.");
                 return;
             }
 
@@ -224,7 +224,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             if (marketplaces.Count == 0)
             {
-                MessageHelper.ShowMessage(this, "No marketplaces were found for the given Merchant ID");
+                MessageHelper.ShowMessage(this, "No marketplaces were found for the given Seller ID");
                 return;
             }
 

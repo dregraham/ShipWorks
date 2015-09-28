@@ -17,6 +17,7 @@ using ShipWorks.UI.Controls;
 using ShipWorks.Data.Utility;
 using Interapptive.Shared.Business;
 using System.ComponentModel.DataAnnotations;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
 
 namespace ShipWorks.Data.Controls

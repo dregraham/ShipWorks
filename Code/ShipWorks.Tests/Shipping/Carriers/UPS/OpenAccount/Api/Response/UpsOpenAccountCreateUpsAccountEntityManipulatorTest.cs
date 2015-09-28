@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -17,7 +17,6 @@ using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
 {
-    [TestClass]
     public class UpsOpenAccountCreateUpsAccountEntityManipulatorTest
     {
         private UpsOpenAccountCreateUpsAccountEntityManipulator testObject;
@@ -28,8 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
         private CodeDescriptionType responseCode;
         private UpsAccountEntity upsAccount;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsOpenAccountCreateUpsAccountEntityManipulatorTest()
         {
             testObject = new UpsOpenAccountCreateUpsAccountEntityManipulator();
 
@@ -37,14 +35,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
 
             openAccountResponse = new OpenAccountResponse()
             {
-                Response = new ResponseType() { ResponseStatus = responseCode , Alert = new CodeDescriptionType[0]}
+                Response = new ResponseType() { ResponseStatus = responseCode, Alert = new CodeDescriptionType[0] }
             };
 
             pickupCode = new CodeOnlyType() { Code = EnumHelper.GetApiValue(UpsPickupOption.DailyOnRoute) };
 
             OpenAccountRequest nativeRequest = new OpenAccountRequest() { PickupInformation = new PickupInformationType() { PickupOption = pickupCode } };
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
-           
+
             upsAccount = new UpsAccountEntity()
             {
                 Street1 = "test street",
@@ -57,62 +55,59 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
                 .Returns(upsAccount);
 
             upsOpenAccountResponse = new UpsOpenAccountResponse(openAccountResponse, carrierRequest.Object, new List<ICarrierResponseManipulator>());
-            
+
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UpsOpenAccountBusinessAddressException))]
+        [Fact]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_ThrowsUpsOpenAccountBusinessAddressException_ResponseContainsBillingCandidate_Test()
         {
             openAccountResponse.BillingAddressCandidate = new AddressKeyCandidateType();
 
-            testObject.Manipulate(upsOpenAccountResponse);
+            Assert.Throws<UpsOpenAccountBusinessAddressException>(() => testObject.Manipulate(upsOpenAccountResponse));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UpsOpenAccountPickupAddressException))]
+        [Fact]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_ThrowsUpsOpenAccountPickupAddressException_ResponseContainsPickupAddressCandidates_Test()
         {
             openAccountResponse.PickupAddressCandidate = new AddressKeyCandidateType();
 
-            testObject.Manipulate(upsOpenAccountResponse);
+            Assert.Throws<UpsOpenAccountPickupAddressException>(() => testObject.Manipulate(upsOpenAccountResponse));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UpsOpenAccountException))]
+        [Fact]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_ThrowsUpsOpenAccountException_ResponseContainsFailedCode_Test()
         {
             responseCode.Code = EnumHelper.GetApiValue(UpsOpenAccountResponseStatusCode.Failed);
 
-            testObject.Manipulate(upsOpenAccountResponse);
+            Assert.Throws<UpsOpenAccountException>(() => testObject.Manipulate(upsOpenAccountResponse));
         }
 
-        [TestMethod]
+        [Fact]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_SetsAccountNumber_Test()
         {
             testObject.Manipulate(upsOpenAccountResponse);
 
-            Assert.AreEqual("42", upsAccount.AccountNumber);
+            Assert.Equal("42", upsAccount.AccountNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_SetsRateTypeToOccasional_PickupOptionIsSmart_Test()
         {
             pickupCode.Code = EnumHelper.GetApiValue(UpsPickupOption.SmartPickup);
 
             testObject.Manipulate(upsOpenAccountResponse);
 
-            Assert.AreEqual((int) UpsRateType.Occasional, upsAccount.RateType);
+            Assert.Equal((int)UpsRateType.Occasional, upsAccount.RateType);
         }
 
-        [TestMethod]
+        [Fact]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_SetsRateTypeToDaily_PickupOptionIsDaily_Test()
         {
             pickupCode.Code = EnumHelper.GetApiValue(UpsPickupOption.RegularDailyPickup);
 
             testObject.Manipulate(upsOpenAccountResponse);
 
-            Assert.AreEqual((int) UpsRateType.DailyPickup, upsAccount.RateType);
+            Assert.Equal((int)UpsRateType.DailyPickup, upsAccount.RateType);
         }
     }
 }

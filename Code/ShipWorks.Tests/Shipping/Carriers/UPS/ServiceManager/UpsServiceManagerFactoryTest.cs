@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.UPS;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
 {
-    [TestClass]
     public class UpsServiceManagerFactoryTest
     {
         private UpsServiceManagerFactory testObject;
@@ -16,8 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
         private Mock<IUpsServiceManager> unitedStatesServiceManager;
         private Mock<IUpsServiceManager> puertoRicoServiceManager;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsServiceManagerFactoryTest()
         {
             canadaServiceManager = new Mock<IUpsServiceManager>();
             canadaServiceManager.Setup(m => m.CountryCode).Returns("CA");
@@ -32,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
             testObject = new UpsServiceManagerFactory(new List<IUpsServiceManager> { canadaServiceManager.Object, unitedStatesServiceManager.Object, puertoRicoServiceManager.Object });
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_UsesServiceManagerCountryCode_ToDetermineServiceManagerToUse_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity {OriginCountryCode = "CA"};
@@ -41,45 +39,45 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
             canadaServiceManager.VerifyGet(m => m.CountryCode, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_ReturnsCanadaServiceManager_WhenOriginCountryCodeIsCA_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "CA" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);
 
-            Assert.AreEqual("CA", serviceManager.CountryCode);
-            Assert.AreEqual(canadaServiceManager.Object, serviceManager);
+            Assert.Equal("CA", serviceManager.CountryCode);
+            Assert.Equal(canadaServiceManager.Object, serviceManager);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_ReturnsPRServiceManager_WhenOriginCountryCodeIsPR_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "PR" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);
 
-            Assert.AreEqual("PR", serviceManager.CountryCode);
-            Assert.AreEqual(puertoRicoServiceManager.Object, serviceManager);
+            Assert.Equal("PR", serviceManager.CountryCode);
+            Assert.Equal(puertoRicoServiceManager.Object, serviceManager);
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Create_ReturnsUnitedStatesServiceManager_WhenOriginCountryCodeIsUS_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "US" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);
 
-            Assert.AreEqual("US", serviceManager.CountryCode);
-            Assert.AreEqual(unitedStatesServiceManager.Object, serviceManager);
+            Assert.Equal("US", serviceManager.CountryCode);
+            Assert.Equal(unitedStatesServiceManager.Object, serviceManager);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_ReturnsUnitedStatesServiceManager_WhenOriginCountryCodeIsNotUS_AndNotCA_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "GB" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);
 
-            Assert.AreEqual("US", serviceManager.CountryCode);
-            Assert.AreEqual(unitedStatesServiceManager.Object, serviceManager);
+            Assert.Equal("US", serviceManager.CountryCode);
+            Assert.Equal(unitedStatesServiceManager.Object, serviceManager);
         }
     }
 }

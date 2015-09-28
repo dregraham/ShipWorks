@@ -16,6 +16,7 @@ using ShipWorks.Stores.Content;
 using System.Diagnostics;
 using ShipWorks.Data.Model.HelperClasses;
 using System.Globalization;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Stores.Platforms.Amazon

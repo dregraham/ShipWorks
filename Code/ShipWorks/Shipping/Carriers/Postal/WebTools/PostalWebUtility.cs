@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Divelements.SandRibbon;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore;

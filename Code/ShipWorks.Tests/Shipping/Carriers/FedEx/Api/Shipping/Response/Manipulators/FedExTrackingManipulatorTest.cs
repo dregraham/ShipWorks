@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
 {
-    [TestClass]
     public class FedExTrackingManipulatorTest
     {
         private FedExShipmentTrackingManipulator testObject;
@@ -18,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         ProcessShipmentReply processShipmentReply;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExTrackingManipulatorTest()
         {
             
 
@@ -33,32 +31,32 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_MasterTrackingNumberAddedToShipment_WhenMasterTrackingIdPresent_Test()
         {
             testObject.Manipulate(fedExShipResponse);
-            Assert.AreEqual(shipmentEntity.TrackingNumber, "MasterTrackingNumber");
+            Assert.Equal(shipmentEntity.TrackingNumber, "MasterTrackingNumber");
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_PackageTrackingNumberAddedToShipment_WhenNoMasterTrackingIdPresent_Test()
         {
             //remove master tracking
             processShipmentReply.CompletedShipmentDetail.MasterTrackingId = null;
             
             testObject.Manipulate(fedExShipResponse);
-            Assert.AreEqual(shipmentEntity.TrackingNumber, "Package1Tracking");
+            Assert.Equal(shipmentEntity.TrackingNumber, "Package1Tracking");
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_PackageTrackingNumberAddedToSecondPackage_WhenSequenceNumberIsTwo_Test()
         {
             processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].SequenceNumber = "2";
 
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.IsNull(fedExShipResponse.Shipment.FedEx.Packages[0].TrackingNumber);           
-            Assert.AreEqual("Package1Tracking", fedExShipResponse.Shipment.FedEx.Packages[1].TrackingNumber);
+            Assert.Null(fedExShipResponse.Shipment.FedEx.Packages[0].TrackingNumber);           
+            Assert.Equal("Package1Tracking", fedExShipResponse.Shipment.FedEx.Packages[1].TrackingNumber);
         }
     }
 }

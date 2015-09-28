@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
-    [TestClass]
     public class FedExRateTotalInsuredValueManipulatorTest
     {
         private FedExRateTotalInsuredValueManipulator testObject;
@@ -22,8 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         private ShipmentEntity shipmentEntity;
         private Mock<ICarrierSettingsRepository> settingsRepository;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRateTotalInsuredValueManipulatorTest()
         {
             // Create a RateRequest type and set the properties the manipulator is interested in
             nativeRequest = new RateRequest()
@@ -52,34 +50,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject = new FedExRateTotalInsuredValueManipulator(new FedExSettings(settingsRepository.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new RateReply());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullRequestedShipment_Test()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
@@ -90,19 +85,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // The requested shipment property should be created now
-            Assert.IsNotNull(nativeRequest.RequestedShipment);
+            Assert.NotNull(nativeRequest.RequestedShipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsCurrencyToUSD_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             Money totalInsuredValue = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalInsuredValue;
-            Assert.AreEqual("USD", totalInsuredValue.Currency);
+            Assert.Equal("USD", totalInsuredValue.Currency);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsAmount_Test()
         {
             // // Add some packages for the sum test
@@ -115,18 +110,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             Money totalInsuredValue = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalInsuredValue;
-            Assert.AreEqual(expectedTotal, totalInsuredValue.Amount);
+            Assert.Equal(expectedTotal, totalInsuredValue.Amount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsAmountSpecified_Test()
         {
             shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.01m });
-            
+
             testObject.Manipulate(carrierRequest.Object);
 
             Money totalInsuredValue = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalInsuredValue;
-            Assert.IsTrue(totalInsuredValue.AmountSpecified);
+            Assert.True(totalInsuredValue.AmountSpecified);
         }
     }
 }

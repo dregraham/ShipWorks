@@ -1,5 +1,5 @@
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -11,12 +11,10 @@ using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.IntegrationTest
 {
-    [TestClass]
     public class GlobalShipAddressIntegrationTest
     {
 
-        [TestMethod]
-        [Ignore]
+        
         public void SearchLocation_ActuallyCallsFedEx_IntegrationTest()
         {
             // MARKED WITH THE IGNORE ATTRIBUTE SINCE THIS IS AN INTEGRATION TEST - WE DON'T WANT THIS TEST
@@ -48,12 +46,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Integrat
 
             FedExGlobalShipAddressResponse fedExGlobalShipAddressResponse = carrierResponse as FedExGlobalShipAddressResponse;
 
-            Assert.IsNotNull(carrierResponse, "Response is null");
+            Assert.NotNull(carrierResponse);
             carrierResponse.Process();
 
-            Assert.IsNotNull(fedExGlobalShipAddressResponse,"Invalid Response...");
+            Assert.NotNull(fedExGlobalShipAddressResponse);
 
-            Assert.AreEqual(1, fedExGlobalShipAddressResponse.DistanceAndLocationDetails.Count(), "Unexpected result from FedEx. This could mean FedEx added a new location near the destination address.");
+            Assert.Equal(1, fedExGlobalShipAddressResponse.DistanceAndLocationDetails.Count());
         }
     }
 }

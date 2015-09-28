@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static FedExAccountEntity GetAccount(long accountID)
         {
-            return Accounts.Where(s => s.FedExAccountID == accountID).FirstOrDefault();
+            return Accounts.FirstOrDefault(s => s.FedExAccountID == accountID);
         }
 
         /// <summary>

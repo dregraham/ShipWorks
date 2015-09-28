@@ -4,21 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel.Net.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
 {
-    [TestClass]
     public class iParcelTrackingNumberElementTest
     {
         private IParcelPackageEntity package;
 
         private iParcelTrackingNumberElement testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelTrackingNumberElementTest()
         {
             package=new IParcelPackageEntity()
             {
@@ -28,20 +26,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
             testObject = new iParcelTrackingNumberElement(package);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_AddsTrackingNumberElement_Test()
         {
             XElement element = testObject.Build();
 
-            Assert.AreEqual("TrackingNumber", element.Name.LocalName);
+            Assert.Equal("TrackingNumber", element.Name.LocalName);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_AddsTrackingNumber_Test()
         {
             XElement element = testObject.Build();
 
-            Assert.AreEqual("42", element.Value);
+            Assert.Equal("42", element.Value);
         }
     }
 }

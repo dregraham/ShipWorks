@@ -59,6 +59,8 @@ using ShipWorks.Properties;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -89,6 +91,7 @@ using SandButton = Divelements.SandRibbon.Button;
 using SandComboBox = Divelements.SandRibbon.ComboBox;
 using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
+using Autofac;
 
 namespace ShipWorks
 {
@@ -3284,9 +3287,12 @@ namespace ShipWorks
         /// </summary>
         private void OnShippingSettings(object sender, EventArgs e)
         {
-            using (ShippingSettingsDlg dlg = new ShippingSettingsDlg())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                using (ShippingSettingsDlg dlg = new ShippingSettingsDlg(lifetimeScope))
+                {
+                    dlg.ShowDialog(this);
+                }
             }
         }
 
@@ -3407,14 +3413,17 @@ namespace ShipWorks
             // The Tag property hold the value of whether to show shipping, tracking, or insurance
             InitialShippingTabDisplay initialDisplay = (InitialShippingTabDisplay) ((ShipmentsLoader) sender).Tag;
 
-            // Show the shipping window.  
-            using (ShippingDlg dlg = new ShippingDlg(e.Shipments, initialDisplay))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                // Show the shipping window.  
+                using (ShippingDlg dlg = new ShippingDlg(e.Shipments, initialDisplay, lifetimeScope))
+                {
+                    dlg.ShowDialog(this);
 
-                // We always check for new server messages after shipping, since if there was a shipping problem
-                // it could be we put out a server message related to it.
-                DashboardManager.DownloadLatestServerMessages();
+                    // We always check for new server messages after shipping, since if there was a shipping problem
+                    // it could be we put out a server message related to it.
+                    DashboardManager.DownloadLatestServerMessages();
+                }
             }
         }
 
@@ -3470,7 +3479,8 @@ namespace ShipWorks
                 Cursor.Current = Cursors.WaitCursor;
 
                 bool anyClosed = false;
-                FedExShippingClerk shippingClerk = new FedExShippingClerk(new FedExShipmentType().CertificateInspector);
+
+                IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, new FedExSettingsRepository());
 
                 // Process all accounts with configured hub ids
                 foreach (FedExAccountEntity account in FedExAccountManager.Accounts.Where(a => XElement.Parse(a.SmartPostHubList).Descendants("HubID").Any()))

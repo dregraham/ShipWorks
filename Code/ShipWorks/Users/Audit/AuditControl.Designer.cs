@@ -16,19 +16,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AuditControl));
             ShipWorks.UI.Controls.SandGrid.WindowsXPShipWorksRenderer windowsXPShipWorksRenderer1 = new ShipWorks.UI.Controls.SandGrid.WindowsXPShipWorksRenderer();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AuditControl));
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.panelSearchButton = new System.Windows.Forms.Panel();
             this.pictureSearchCriteria = new System.Windows.Forms.PictureBox();
             this.labelSearchCriteria = new System.Windows.Forms.Label();
             this.panelSearchControls = new System.Windows.Forms.Panel();
             this.panelDate = new System.Windows.Forms.UserControl();
-            this.userCombo = new ShipWorks.UI.Controls.ImageComboBox();
             this.panelRelatedTo = new System.Windows.Forms.Panel();
-            this.infotipRelatedTo = new ShipWorks.UI.Controls.InfoTip();
-            this.searchBox = new ShipWorks.UI.Controls.Krypton.WatermarkKryptonTextBox();
-            this.buttonSearching = new ComponentFactory.Krypton.Toolkit.ButtonSpecAny();
             this.relatedToBox = new System.Windows.Forms.CheckBox();
             this.panelUserLocked = new System.Windows.Forms.Panel();
             this.computerBox = new System.Windows.Forms.CheckBox();
@@ -40,8 +36,12 @@
             this.dateBox = new System.Windows.Forms.CheckBox();
             this.userBox = new System.Windows.Forms.CheckBox();
             this.entityGrid = new ShipWorks.Data.Grid.Paging.PagedEntityGrid();
+            this.userCombo = new ShipWorks.UI.Controls.ImageComboBox();
+            this.infotipRelatedTo = new ShipWorks.UI.Controls.InfoTip();
+            this.searchBox = new ShipWorks.UI.Controls.Krypton.WatermarkKryptonTextBox();
+            this.buttonSearching = new ComponentFactory.Krypton.Toolkit.ButtonSpecAny();
             this.panelSearchButton.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureSearchCriteria)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureSearchCriteria)).BeginInit();
             this.panelSearchControls.SuspendLayout();
             this.panelRelatedTo.SuspendLayout();
             this.panelUserLocked.SuspendLayout();
@@ -75,7 +75,7 @@
             // labelSearchCriteria
             // 
             this.labelSearchCriteria.AutoSize = true;
-            this.labelSearchCriteria.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelSearchCriteria.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSearchCriteria.Location = new System.Drawing.Point(22, 4);
             this.labelSearchCriteria.Name = "labelSearchCriteria";
             this.labelSearchCriteria.Size = new System.Drawing.Size(91, 13);
@@ -100,29 +100,18 @@
             // 
             // panelDate
             // 
-            this.panelDate.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelDate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelDate.Enabled = false;
             this.panelDate.Location = new System.Drawing.Point(327, 23);
             this.panelDate.Name = "panelDate";
             this.panelDate.Size = new System.Drawing.Size(215, 27);
             this.panelDate.TabIndex = 6;
             // 
-            // userCombo
-            // 
-            this.userCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.userCombo.Enabled = false;
-            this.userCombo.FormattingEnabled = true;
-            this.userCombo.Location = new System.Drawing.Point(111, 1);
-            this.userCombo.Name = "userCombo";
-            this.userCombo.Size = new System.Drawing.Size(121, 21);
-            this.userCombo.TabIndex = 1;
-            this.userCombo.SelectedIndexChanged += new System.EventHandler(this.OnSearchValueChanged);
-            // 
             // panelRelatedTo
             // 
-            this.panelRelatedTo.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelRelatedTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelRelatedTo.Controls.Add(this.infotipRelatedTo);
             this.panelRelatedTo.Controls.Add(this.searchBox);
             this.panelRelatedTo.Controls.Add(this.relatedToBox);
@@ -130,40 +119,6 @@
             this.panelRelatedTo.Name = "panelRelatedTo";
             this.panelRelatedTo.Size = new System.Drawing.Size(299, 24);
             this.panelRelatedTo.TabIndex = 7;
-            // 
-            // infotipRelatedTo
-            // 
-            this.infotipRelatedTo.Caption = "You can enter an order number, customer name, email address, or any data you want" +
-                " to find.";
-            this.infotipRelatedTo.Location = new System.Drawing.Point(226, 4);
-            this.infotipRelatedTo.Name = "infotipRelatedTo";
-            this.infotipRelatedTo.Size = new System.Drawing.Size(12, 12);
-            this.infotipRelatedTo.TabIndex = 21;
-            this.infotipRelatedTo.Title = "Related To";
-            // 
-            // searchBox
-            // 
-            this.searchBox.ButtonSpecs.AddRange(new ComponentFactory.Krypton.Toolkit.ButtonSpecAny[] {
-            this.buttonSearching});
-            this.searchBox.Enabled = false;
-            this.searchBox.Location = new System.Drawing.Point(84, 0);
-            this.searchBox.Name = "searchBox";
-            this.searchBox.Size = new System.Drawing.Size(138, 20);
-            this.searchBox.TabIndex = 1;
-            this.searchBox.WaterColor = System.Drawing.SystemColors.GrayText;
-            this.searchBox.WordWrap = false;
-            this.searchBox.TextChanged += new System.EventHandler(this.OnSearchTextChanged);
-            // 
-            // buttonSearching
-            // 
-            this.buttonSearching.Edge = ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign.Far;
-            this.buttonSearching.Enabled = ComponentFactory.Krypton.Toolkit.ButtonEnabled.False;
-            this.buttonSearching.ExtraText = "";
-            this.buttonSearching.Image = ((System.Drawing.Image) (resources.GetObject("buttonSearching.Image")));
-            this.buttonSearching.ImageStates.ImageDisabled = ((System.Drawing.Image) (resources.GetObject("buttonSearching.ImageStates.ImageDisabled")));
-            this.buttonSearching.Text = "";
-            this.buttonSearching.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.Close;
-            this.buttonSearching.UniqueName = "370ABDC6B9F24E16370ABDC6B9F24E16";
             // 
             // relatedToBox
             // 
@@ -238,7 +193,7 @@
             this.actionCombo.FormattingEnabled = true;
             this.actionCombo.Location = new System.Drawing.Point(332, 1);
             this.actionCombo.Name = "actionCombo";
-            this.actionCombo.Size = new System.Drawing.Size(121, 21);
+            this.actionCombo.Size = new System.Drawing.Size(154, 21);
             this.actionCombo.TabIndex = 4;
             this.actionCombo.SelectedIndexChanged += new System.EventHandler(this.OnSearchValueChanged);
             // 
@@ -293,6 +248,48 @@
             this.entityGrid.TabIndex = 2;
             this.entityGrid.RowActivated += new Divelements.SandGrid.GridRowEventHandler(this.OnRowActivate);
             // 
+            // userCombo
+            // 
+            this.userCombo.Enabled = false;
+            this.userCombo.FormattingEnabled = true;
+            this.userCombo.Location = new System.Drawing.Point(111, 1);
+            this.userCombo.Name = "userCombo";
+            this.userCombo.Size = new System.Drawing.Size(121, 21);
+            this.userCombo.TabIndex = 1;
+            this.userCombo.SelectedIndexChanged += new System.EventHandler(this.OnSearchValueChanged);
+            // 
+            // infotipRelatedTo
+            // 
+            this.infotipRelatedTo.Caption = "You can enter an order number, customer name, email address, or any data you want" +
+    " to find.";
+            this.infotipRelatedTo.Location = new System.Drawing.Point(244, 6);
+            this.infotipRelatedTo.Name = "infotipRelatedTo";
+            this.infotipRelatedTo.Size = new System.Drawing.Size(12, 12);
+            this.infotipRelatedTo.TabIndex = 21;
+            this.infotipRelatedTo.Title = "Related To";
+            // 
+            // searchBox
+            // 
+            this.searchBox.ButtonSpecs.AddRange(new ComponentFactory.Krypton.Toolkit.ButtonSpecAny[] {
+            this.buttonSearching});
+            this.searchBox.Enabled = false;
+            this.searchBox.Location = new System.Drawing.Point(84, 0);
+            this.searchBox.Name = "searchBox";
+            this.searchBox.Size = new System.Drawing.Size(154, 20);
+            this.searchBox.TabIndex = 1;
+            this.searchBox.WaterColor = System.Drawing.SystemColors.GrayText;
+            this.searchBox.WordWrap = false;
+            this.searchBox.TextChanged += new System.EventHandler(this.OnSearchTextChanged);
+            // 
+            // buttonSearching
+            // 
+            this.buttonSearching.Edge = ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign.Far;
+            this.buttonSearching.Enabled = ComponentFactory.Krypton.Toolkit.ButtonEnabled.False;
+            this.buttonSearching.Image = ((System.Drawing.Image)(resources.GetObject("buttonSearching.Image")));
+            this.buttonSearching.ImageStates.ImageDisabled = ((System.Drawing.Image)(resources.GetObject("buttonSearching.ImageStates.ImageDisabled")));
+            this.buttonSearching.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.Close;
+            this.buttonSearching.UniqueName = "370ABDC6B9F24E16370ABDC6B9F24E16";
+            // 
             // AuditControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -300,12 +297,12 @@
             this.Controls.Add(this.entityGrid);
             this.Controls.Add(this.panelSearchControls);
             this.Controls.Add(this.panelSearchButton);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "AuditControl";
             this.Size = new System.Drawing.Size(550, 472);
             this.panelSearchButton.ResumeLayout(false);
             this.panelSearchButton.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureSearchCriteria)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureSearchCriteria)).EndInit();
             this.panelSearchControls.ResumeLayout(false);
             this.panelSearchControls.PerformLayout();
             this.panelRelatedTo.ResumeLayout(false);

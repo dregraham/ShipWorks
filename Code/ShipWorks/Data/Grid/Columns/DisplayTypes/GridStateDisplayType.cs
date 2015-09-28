@@ -5,6 +5,7 @@ using Divelements.SandGrid;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Editors;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 

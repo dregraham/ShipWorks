@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
 {
-    [TestClass]
     public class UpsOpenAccountRequestTest
     {
         private UpsOpenAccountRequest testObject;
@@ -22,8 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
         private Mock<ICarrierRequestManipulator> secondManipulator;
         private List<ICarrierRequestManipulator> requestManipulators;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsOpenAccountRequestTest()
         {
             upsService = new Mock<IUpsServiceGateway>();
             upsService.Setup(s => s.OpenAccount(It.IsAny<OpenAccountRequest>())).Returns(new OpenAccountResponse());
@@ -44,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
             testObject = new UpsOpenAccountRequest(requestManipulators, upsService.Object, responseFactory.Object, new OpenAccountRequest(), new UpsAccountEntity());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_ManipulatorsExecuted()
         {
             ICarrierResponse response = testObject.Submit();
@@ -53,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
             secondManipulator.Verify(m => m.Manipulate(testObject), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToUpsOpenAccountService_Test()
         {
             // No additional setup needed since it was performed in Initialize()
@@ -63,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
             upsService.Verify(s => s.OpenAccount(testObject.NativeRequest as OpenAccountRequest), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToResponseFactory_WhenCreatingResponse_Test()
         {
             // No additional setup needed since it was performed in Initialize()

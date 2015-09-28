@@ -2,13 +2,12 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Nudges.Buttons;
 
 namespace ShipWorks.Tests.ApplicationCore.Nudges
 {
-    [TestClass]
     public class NudgeTest
     {
         private readonly Nudge testObject;
@@ -23,26 +22,26 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             testObject.AddNudgeOption(new NudgeOption(4, 1, "One", testObject, NudgeOptionActionType.None));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButtons_OrdersButtonsByOptionIndex_Test()
         {
             List<NudgeOptionButton> buttons = testObject.CreateButtons();
 
             // Kind of a cheap test for sort order, but we don't have access to the underlying nudge option's index
-            Assert.AreEqual("Zero", buttons[0].Text);
-            Assert.AreEqual("One", buttons[1].Text);
-            Assert.AreEqual("Two", buttons[2].Text);
-            Assert.AreEqual("A really long string for a button", buttons[3].Text);
+            Assert.Equal("Zero", buttons[0].Text);
+            Assert.Equal("One", buttons[1].Text);
+            Assert.Equal("Two", buttons[2].Text);
+            Assert.Equal("A really long string for a button", buttons[3].Text);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButtons_SetsWidthOfButtonsToMatchWidestButton_Test()
         {
             List<NudgeOptionButton> buttons = testObject.CreateButtons();
             
             int maximumWidth = buttons.Max(b => b.Width);
             
-            Assert.IsTrue(buttons.All(b => b.Width == maximumWidth));
+            Assert.True(buttons.All(b => b.Width == maximumWidth));
         }
     }
 }

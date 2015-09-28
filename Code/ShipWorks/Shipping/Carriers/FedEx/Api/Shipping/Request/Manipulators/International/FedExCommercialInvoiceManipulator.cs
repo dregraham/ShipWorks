@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         private static void ConfigureEtd(FedExShipmentEntity fedExShipment, IFedExNativeShipmentRequest nativeRequest)
         {
             // Return if the user chose no commercial invoice or not to file electronically.
-            if (!fedExShipment.CommercialInvoice && !fedExShipment.CommercialInvoiceFileElectronically)
+            if (!fedExShipment.CommercialInvoice || !fedExShipment.CommercialInvoiceFileElectronically)
             {
                 return;
             }

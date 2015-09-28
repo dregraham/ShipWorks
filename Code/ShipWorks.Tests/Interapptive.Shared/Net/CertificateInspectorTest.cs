@@ -2,13 +2,12 @@
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Net
 {
-    [TestClass]
     public class CertificateInspectorTest
     {
         private CertificateInspector testObject;
@@ -20,8 +19,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
         private X509Certificate singleMatchCertificate;
         private X509Certificate multiMatchCertificate;
 
-        [TestInitialize]
-        public void Initialize()
+        public CertificateInspectorTest()
         {
             request = new Mock<ICertificateRequest>();
             request.Setup(r => r.Certificate).Returns(new X509Certificate());
@@ -48,17 +46,17 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
             return new X509Certificate(bytes);
         }
 
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsTrusted_WhenFedExCertificateVerificationDataIsEmpty_Test()
         {
             testObject = new CertificateInspector(string.Empty);
 
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
-            Assert.AreEqual(CertificateSecurityLevel.Spoofed, securityLevel);
+            Assert.Equal(CertificateSecurityLevel.Spoofed, securityLevel);
         }
         
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsNone_WhenCertificateIsNull_Test()
         {
             request.Setup(r => r.Certificate).Returns<X509Certificate>(null);
@@ -66,10 +64,10 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
 
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
-            Assert.AreEqual(CertificateSecurityLevel.None, securityLevel);
+            Assert.Equal(CertificateSecurityLevel.None, securityLevel);
         }
 
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsSpoofed_WhenCertificateSubjectDoesNotMatchExpectedValues_Test()
         {
             request.Setup(r => r.Certificate).Returns(noMatchCertificate);
@@ -77,10 +75,10 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
 
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
-            Assert.AreEqual(CertificateSecurityLevel.Spoofed, securityLevel);
+            Assert.Equal(CertificateSecurityLevel.Spoofed, securityLevel);
         }
 
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsTrusted_WhenCertificateSubjectMatchesAllExpectedValues_WithSingleExpectedValue_Test()
         {
             request.Setup(r => r.Certificate).Returns(singleMatchCertificate);
@@ -88,10 +86,10 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
             testObject = new CertificateInspector(certificateVerificationData);
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
-            Assert.AreEqual(CertificateSecurityLevel.Trusted, securityLevel);
+            Assert.Equal(CertificateSecurityLevel.Trusted, securityLevel);
         }
 
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsTrusted_WhenCertificateSubjectMatchesAllExpectedValues_WithMultipleExpectedValues_Test()
         {
             request.Setup(r => r.Certificate).Returns(multiMatchCertificate);
@@ -99,7 +97,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
             testObject = new CertificateInspector("<Service><Subject><Value>FedEx</Value><Value>banana hammock</Value></Subject></Service>");
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
-            Assert.AreEqual(CertificateSecurityLevel.Trusted, securityLevel);
+            Assert.Equal(CertificateSecurityLevel.Trusted, securityLevel);
         }
     }
 }

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Results>
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///D:/Projects/ShipWorks/ShipWorks3x/Branches/Master/Code/ShipWorks/Shipping/Carriers/FedEx/Api/Wsdl/RegistrationService_v6.wsdl" filename="RegistrationServiceDefinitions.wsdl" />
-  </Results>
-</DiscoveryClientResultsFile>

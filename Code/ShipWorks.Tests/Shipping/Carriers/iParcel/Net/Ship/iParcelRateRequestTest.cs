@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.iParcel.Net.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
 {
-    [TestClass]
     public class iParcelRateRequestTest
     {
         private iParcelRateRequest testObject;
@@ -21,8 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         private ShipmentEntity shipment;
         private Mock<IiParcelServiceGateway> gateway;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelRateRequestTest()
         {
             gateway = new Mock<IiParcelServiceGateway>();
             gateway.Setup(g => g.IsValidUser(It.IsAny<iParcelCredentials>())).Returns(true);
@@ -69,50 +67,50 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             testObject = new iParcelRateRequest(credentials, shipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void OperationName_Test()
         {
-            Assert.AreEqual("SubmitPack", testObject.OperationName);
+            Assert.Equal("SubmitPack", testObject.OperationName);
         }
 
-        [TestMethod]
+        [Fact]
         public void RootElementName_Test()
         {
-            Assert.AreEqual("iparcelPackageUpload", testObject.RootElementName);
+            Assert.Equal("iparcelPackageUpload", testObject.RootElementName);
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestElements_ContainsThreeItems_Test()
         {
-            Assert.AreEqual(3, testObject.RequestElements.Count);
+            Assert.Equal(3, testObject.RequestElements.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestElements_ContainsVersionElement_Test()
         {
-            Assert.AreEqual(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelVersionElement)));
+            Assert.Equal(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelVersionElement)));
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestElements_ContainsShipValidationElement_Test()
         {
-            Assert.AreEqual(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelShipValidationElement)));
+            Assert.Equal(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelShipValidationElement)));
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestElements_ContainsPackageInfoElement_Test()
         {
-            Assert.AreEqual(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelPackageInfoElement)));
+            Assert.Equal(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelPackageInfoElement)));
         }
 
 
-        [TestMethod]
+        [Fact]
         public void ValidationElement_IsConfiguredForRates_Test()
         {
             // Already have a test that there is exactly one element of this type, so we can just grab the first one
             iParcelShipValidationElement validationElement = (iParcelShipValidationElement)testObject.RequestElements.First(e => e.GetType() == typeof(iParcelShipValidationElement));
 
-            Assert.IsTrue(validationElement.UsedForRates);
+            Assert.True(validationElement.UsedForRates);
         }
     }
 }
