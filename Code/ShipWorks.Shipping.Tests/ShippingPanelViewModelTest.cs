@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shipping
             
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
             await testObject.LoadOrder(orderEntity.OrderID);
-            testObject.ShipmentTypeCode = ShipmentTypeCode.Other;
+            testObject.ShipmentType = ShipmentTypeCode.Other;
             
             return testObject;
         }

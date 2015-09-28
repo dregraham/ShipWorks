@@ -51,7 +51,7 @@
                             </MultiBinding>
                         </ComboBox.ItemsSource>
                         <ComboBox.SelectedValue>
-                            <Binding Path="ShipmentTypeCode" Mode="TwoWay"/>
+                            <Binding Path="ShipmentType" Mode="TwoWay"/>
                         </ComboBox.SelectedValue>
                     </ComboBox>
                 </Grid>
