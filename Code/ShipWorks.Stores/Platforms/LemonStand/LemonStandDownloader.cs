@@ -164,8 +164,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 int orderID = int.Parse(lsOrder.ID);
 
                 LemonStandOrderEntity order =
-                    (LemonStandOrderEntity) InstantiateOrder(new LemonStandOrderIdentifier(orderID));
-                order.LemonStandOrderID = long.Parse(lsOrder.ID);
+                    (LemonStandOrderEntity) InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
+                order.LemonStandOrderID = lsOrder.ID;
                 order.OnlineStatus = lsOrder.Status;
 
                 // Only load new orders
@@ -412,7 +412,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             // LemonStand specific item properties
             item.UrlName = product.UrlName;
-            item.Cost = (string.IsNullOrWhiteSpace(product.Cost)) ? 0 : Convert.ToDecimal(product.Cost); 
+            item.UnitCost = (string.IsNullOrWhiteSpace(product.Cost)) ? 0 : Convert.ToDecimal(product.Cost); 
 
             // We want to display "Yes" or "No", instead of 1 or 0
             item.IsOnSale = product.IsOnSale.Equals("1");

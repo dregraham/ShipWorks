@@ -369,15 +369,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                                 StoreTypeCode = StoreTypeCode.LemonStand
                             },
 
-                        new GridColumnDefinition("{d122c7dc-c341-4435-9277-3efe60f083cf}", true,
-                            new GridMoneyDisplayType(), "Cost", 10.00,
-                            LemonStandOrderItemFields.Cost)
-                            {
-                                StoreTypeCode = StoreTypeCode.LemonStand
-                            },
-
                         new GridColumnDefinition("{49935375-c8b1-4a54-9f0f-0da023ebb43a}", true,
-                            new GridTextDisplayType(), "On Sale", "Yes",
+                            new GridBooleanDisplayType() { TrueText = "Yes", FalseText = "No" }, "On Sale", "Yes",
                             LemonStandOrderItemFields.IsOnSale)
                             {
                                 StoreTypeCode = StoreTypeCode.LemonStand

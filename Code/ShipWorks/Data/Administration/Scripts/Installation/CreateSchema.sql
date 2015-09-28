@@ -5462,7 +5462,7 @@ GO
 CREATE TABLE [dbo].[LemonStandOrder]
 (
 [OrderID] [bigint] NOT NULL,
-[LemonStandOrderID] [bigint] NOT NULL
+[LemonStandOrderID] [nvarchar](20) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandOrder] on [dbo].[LemonStandOrder]'
@@ -5476,7 +5476,6 @@ CREATE TABLE [dbo].[LemonStandOrderItem]
 (
 	[OrderItemID] [bigint] NOT NULL,
 	[UrlName] [nvarchar](100) NOT NULL,
-	[Cost] [money] NOT NULL,
 	[IsOnSale] [bit] NOT NULL,
 	[SalePriceOrDiscount] [float],
 	[ShortDescription] [nvarchar](255) NOT NULL,

@@ -476,9 +476,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UrlName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("Cost", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("IsOnSale", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -571,17 +568,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)LemonStandOrderItemFieldIndex.UrlName, true); }
 			set	{ SetValue((int)LemonStandOrderItemFieldIndex.UrlName, value); }
-		}
-
-		/// <summary> The Cost property of the Entity LemonStandOrderItem<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "LemonStandOrderItem"."Cost"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Decimal Cost
-		{
-			get { return (System.Decimal)GetValue((int)LemonStandOrderItemFieldIndex.Cost, true); }
-			set	{ SetValue((int)LemonStandOrderItemFieldIndex.Cost, value); }
 		}
 
 		/// <summary> The IsOnSale property of the Entity LemonStandOrderItem<br/><br/>

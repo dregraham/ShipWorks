@@ -4861,8 +4861,6 @@ namespace ShipWorks.Data.Model
 		OrderItemID,
 		///<summary>UrlName. </summary>
 		UrlName,
-		///<summary>Cost. </summary>
-		Cost,
 		///<summary>IsOnSale. </summary>
 		IsOnSale,
 		///<summary>SalePriceOrDiscount. </summary>

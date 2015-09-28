@@ -1473,14 +1473,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitLemonStandOrderEntityInfos()
 		{
 			base.AddElementFieldInfo("LemonStandOrderEntity", "OrderID", typeof(System.Int64), true, false, false, false,  (int)LemonStandOrderFieldIndex.OrderID, 0, 0, 19);
-			base.AddElementFieldInfo("LemonStandOrderEntity", "LemonStandOrderID", typeof(System.Int64), false, false, false, false,  (int)LemonStandOrderFieldIndex.LemonStandOrderID, 0, 0, 19);
+			base.AddElementFieldInfo("LemonStandOrderEntity", "LemonStandOrderID", typeof(System.String), false, false, false, false,  (int)LemonStandOrderFieldIndex.LemonStandOrderID, 20, 0, 0);
 		}
 		/// <summary>Inits LemonStandOrderItemEntity's FieldInfo objects</summary>
 		private void InitLemonStandOrderItemEntityInfos()
 		{
 			base.AddElementFieldInfo("LemonStandOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)LemonStandOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			base.AddElementFieldInfo("LemonStandOrderItemEntity", "UrlName", typeof(System.String), false, false, false, false,  (int)LemonStandOrderItemFieldIndex.UrlName, 100, 0, 0);
-			base.AddElementFieldInfo("LemonStandOrderItemEntity", "Cost", typeof(System.Decimal), false, false, false, false,  (int)LemonStandOrderItemFieldIndex.Cost, 0, 4, 19);
 			base.AddElementFieldInfo("LemonStandOrderItemEntity", "IsOnSale", typeof(System.Boolean), false, false, false, false,  (int)LemonStandOrderItemFieldIndex.IsOnSale, 0, 0, 0);
 			base.AddElementFieldInfo("LemonStandOrderItemEntity", "SalePriceOrDiscount", typeof(Nullable<System.Double>), false, false, false, true,  (int)LemonStandOrderItemFieldIndex.SalePriceOrDiscount, 0, 0, 38);
 			base.AddElementFieldInfo("LemonStandOrderItemEntity", "ShortDescription", typeof(System.String), false, false, false, false,  (int)LemonStandOrderItemFieldIndex.ShortDescription, 255, 0, 0);

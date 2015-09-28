@@ -10,12 +10,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     public class LemonStandOrderIdentifier : OrderIdentifier
     {
         // LemonStandStore's Order ID
-        private readonly long lemonStandStoreOrderId;
+        private readonly string lemonStandStoreOrderId;
 
         /// <summary>
         ///     Constructor
         /// </summary>
-        public LemonStandOrderIdentifier(long lemonStandStoreOrderId)
+        public LemonStandOrderIdentifier(string lemonStandStoreOrderId)
         {
             this.lemonStandStoreOrderId = lemonStandStoreOrderId;
         }

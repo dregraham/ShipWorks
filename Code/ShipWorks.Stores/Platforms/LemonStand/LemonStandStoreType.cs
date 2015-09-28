@@ -182,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         protected override OrderEntity CreateOrderInstance()
         {
-            return new LemonStandOrderEntity {LemonStandOrderID = 0};
+            return new LemonStandOrderEntity();
         }
 
         /// <summary>
@@ -194,7 +194,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             LemonStandOrderItemEntity entity = new LemonStandOrderItemEntity();
 
             entity.UrlName = "";
-            entity.Cost = 0;
             entity.IsOnSale = false;
             entity.SalePriceOrDiscount = 0;
             entity.ShortDescription = "";
@@ -226,10 +225,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             var item = new Lazy<LemonStandOrderItemEntity>(() => (LemonStandOrderItemEntity) itemSource());
 
-            ElementOutline outline = container.AddElement("BigCommerce");
+            ElementOutline outline = container.AddElement("LemonStand");
             outline.AddElement("OrderItemID", () => item.Value.OrderItemID);
             outline.AddElement("UrlName", () => item.Value.UrlName);
-            outline.AddElement("Cost", () => item.Value.Cost);
             outline.AddElement("IsOnSale", () => item.Value.IsOnSale);
             outline.AddElement("SalePriceOrDiscount", () => item.Value.SalePriceOrDiscount);
             outline.AddElement("ShortDescription", () => item.Value.ShortDescription);
@@ -241,7 +239,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new LemonStandOrderIdentifier(((LemonStandOrderEntity) order).LemonStandOrderID);
+            return new LemonStandOrderIdentifier(((LemonStandOrderEntity) order).LemonStandOrderID.ToString());
         }
 
         /// <summary>
