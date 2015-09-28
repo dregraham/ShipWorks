@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Endicia
                 .SingleInstance();
 
             builder.RegisterType<EndiciaAccountRepository>()
-                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.Endicia)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Endicia)
                 .SingleInstance();
         }
     }

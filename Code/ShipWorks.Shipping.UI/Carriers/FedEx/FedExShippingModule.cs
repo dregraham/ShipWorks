@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
                 .SingleInstance();
 
             builder.RegisterType<FedExAccountRepository>()
-                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.FedEx)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.FedEx)
                 .SingleInstance();
         }
     }

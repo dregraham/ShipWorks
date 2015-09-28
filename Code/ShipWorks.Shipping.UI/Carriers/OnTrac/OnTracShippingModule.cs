@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 .SingleInstance();
 
             builder.RegisterType<OnTracAccountRepository>()
-                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.OnTrac)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.OnTrac)
                 .SingleInstance();
         }
     }

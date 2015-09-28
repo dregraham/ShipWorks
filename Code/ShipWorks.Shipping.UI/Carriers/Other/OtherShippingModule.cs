@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
                 .Keyed<ShippingProfileControlBase>(ShipmentTypeCode.Other);
 
             builder.RegisterType<NullAccountRepository>()
-                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.Other)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Other)
                 .SingleInstance();
         }
     }

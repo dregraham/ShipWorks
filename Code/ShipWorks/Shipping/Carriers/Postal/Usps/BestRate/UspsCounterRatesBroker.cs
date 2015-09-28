@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// </summary>
         /// <param name="postalShipmentEntity"></param>
         /// <param name="account"></param>
-        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, ICarrierAccount account)
+        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, NullEntity account)
         {
             UspsAccountEntity uspsAccount = uspsAccountRepository.Accounts.FirstOrDefault();
 

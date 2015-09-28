@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
     /// <summary>
     /// Gets counter rates for USPS
     /// </summary>
-    public class WebToolsCounterRatesBroker : PostalResellerBestRateBroker<ICarrierAccount>
+    public class WebToolsCounterRatesBroker : PostalResellerBestRateBroker<NullEntity>
     {
         private readonly PostalShipmentType actualPostalShipmentType;
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        private WebToolsCounterRatesBroker(PostalWebShipmentType shipmentType, ICarrierAccountRepository<ICarrierAccount> accountRepository) :
+        private WebToolsCounterRatesBroker(PostalWebShipmentType shipmentType, ICarrierAccountRepository<NullEntity> accountRepository) :
             base(shipmentType, accountRepository, "USPS")
         {
 
@@ -152,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// </summary>
         /// <param name="postalShipmentEntity">Postal shipment on which the account id should be set</param>
         /// <param name="account">Account that should be used for this shipment</param>
-        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, ICarrierAccount account)
+        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, NullEntity account)
         {
 
         }

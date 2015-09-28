@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using System;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Properties;

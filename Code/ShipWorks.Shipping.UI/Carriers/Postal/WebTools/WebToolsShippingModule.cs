@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.WebTools
                 .SingleInstance();
 
             builder.RegisterType<NullAccountRepository>()
-                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.PostalWebTools)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.PostalWebTools)
                 .SingleInstance();
         }
     }

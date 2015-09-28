@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Express1
                 .SingleInstance();
 
             builder.RegisterType<Express1EndiciaAccountRepository>()
-                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.Express1Endicia)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Express1Endicia)
                 .SingleInstance();
         }
     }

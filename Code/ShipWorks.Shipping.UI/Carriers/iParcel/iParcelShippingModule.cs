@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 .SingleInstance();
 
             builder.RegisterType<iParcelAccountRepository>()
-                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.iParcel)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.iParcel)
                 .SingleInstance();
         }
     }

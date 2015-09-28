@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 .Keyed<ShipmentType>(ShipmentTypeCode.BestRate);
 
             builder.RegisterType<NullAccountRepository>()
-                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.BestRate)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.BestRate)
                 .SingleInstance();
         }
     }

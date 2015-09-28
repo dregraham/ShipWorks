@@ -15,8 +15,8 @@ namespace ShipWorks.Shipping.Tests
 {
     public class ShippingAccountListProviderTest
     {
-        private Mock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<ICarrierAccount>>> carrierAccountRepositoryLookup;
-        private Mock<ICarrierAccountRepository<ICarrierAccount>> mockedFedExRepository;
+        private Mock<IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>>> carrierAccountRetrieverLookup;
+        private Mock<ICarrierAccountRetriever<ICarrierAccount>> mockedFedExRepository;
         private Mock<ICarrierAccount> carrierAccount;
         
         public ShippingAccountListProviderTest()
@@ -24,12 +24,12 @@ namespace ShipWorks.Shipping.Tests
             carrierAccount = new Mock<ICarrierAccount>();
             carrierAccount.Setup(a => a.AccountId).Returns(42);
 
-            mockedFedExRepository = new Mock<ICarrierAccountRepository<ICarrierAccount>>();
+            mockedFedExRepository = new Mock<ICarrierAccountRetriever<ICarrierAccount>>();
             mockedFedExRepository.Setup(r => r.Accounts).Returns(() => new[] { carrierAccount.Object });
 
-            carrierAccountRepositoryLookup = new Mock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<ICarrierAccount>>>();
-            carrierAccountRepositoryLookup.Setup(x => x[ShipmentTypeCode.FedEx]).Returns(mockedFedExRepository.Object);
-            carrierAccountRepositoryLookup.Setup(x => x[ShipmentTypeCode.Other]).Returns(new NullAccountRepository());
+            carrierAccountRetrieverLookup = new Mock<IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>>>();
+            carrierAccountRetrieverLookup.Setup(x => x[ShipmentTypeCode.FedEx]).Returns(mockedFedExRepository.Object);
+            carrierAccountRetrieverLookup.Setup(x => x[ShipmentTypeCode.Other]).Returns(new NullAccountRepository());
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Tests
         [Fact]
         public void AvailableAccounts_ContainsCorrectAccounts_WhenShipmentTypeCodeIsSet()
         {
-            var testObject = new ShippingAccountListProvider(carrierAccountRepositoryLookup.Object);
+            var testObject = new ShippingAccountListProvider(carrierAccountRetrieverLookup.Object);
             testObject.ShipmentTypeCode = ShipmentTypeCode.FedEx;
             
             Assert.Same(carrierAccount.Object, testObject.AvailableAccounts.Single());
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Tests
         [Fact]
         public void AvailableAccounts_SameObservableAccount_AfterShipmentTypeChanged()
         {
-            var testObject = new ShippingAccountListProvider(carrierAccountRepositoryLookup.Object);
+            var testObject = new ShippingAccountListProvider(carrierAccountRetrieverLookup.Object);
             var originalAvailableAccounts = testObject.AvailableAccounts;
 
             testObject.ShipmentTypeCode = ShipmentTypeCode.FedEx;

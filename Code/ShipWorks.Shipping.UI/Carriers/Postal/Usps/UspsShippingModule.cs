@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Usps
                 .SingleInstance();
 
             builder.RegisterType<UspsAccountRepository>()
-                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.Usps)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Usps)
                 .SingleInstance();
         }
     }

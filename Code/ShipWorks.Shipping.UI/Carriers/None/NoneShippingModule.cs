@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.UI.Carriers.None
                 .SingleInstance();
 
             builder.RegisterType<NullAccountRepository>()
-                .Keyed<ICarrierAccountRepository<ICarrierAccount>>(ShipmentTypeCode.None)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.None)
                 .SingleInstance();
         }
     }

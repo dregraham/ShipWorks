@@ -14,13 +14,13 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShippingAccountListProvider
     {
-        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<ICarrierAccount>> lookup;
+        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>> lookup;
         private ShipmentTypeCode shipmentTypeCode;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingAccountListProvider(IIndex<ShipmentTypeCode, ICarrierAccountRepository<ICarrierAccount>> lookup)
+        public ShippingAccountListProvider(IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>> lookup)
         {
             this.lookup = lookup;
             AvailableAccounts = new ObservableCollection<ICarrierAccount>();
