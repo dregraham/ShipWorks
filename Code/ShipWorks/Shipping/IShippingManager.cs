@@ -31,6 +31,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Save the shipments to the database
         /// </summary>
+        IDictionary<ShipmentEntity, Exception> SaveShipmentToDatabase(ShipmentEntity shipment, ValidatedAddressScope validatedAddressScope, bool forceSave);
+
+        /// <summary>
+        /// Save the shipments to the database
+        /// </summary>
         IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, ValidatedAddressScope validatedAddressScope, bool forceSave);
 
         /// <summary>

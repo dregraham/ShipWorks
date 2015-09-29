@@ -49,10 +49,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
-        public ShipmentEntity GetShipment(long shipmentID)
-        {
-            return ShippingManager.GetShipment(shipmentID);
-        }
+        public ShipmentEntity GetShipment(long shipmentID) => ShippingManager.GetShipment(shipmentID);
 
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
@@ -71,6 +68,12 @@ namespace ShipWorks.Shipping
         {
             ShippingManager.RemoveShipmentFromRatesCache(shipment);
         }
+
+        /// <summary>
+        /// Save the shipment to the database
+        /// </summary>
+        public IDictionary<ShipmentEntity, Exception> SaveShipmentToDatabase(ShipmentEntity shipment, ValidatedAddressScope validatedAddressScope, bool forceSave) =>
+            SaveShipmentsToDatabase(new[] { shipment }, validatedAddressScope, forceSave);
 
         /// <summary>
         /// Save the shipments to the database

@@ -7,6 +7,8 @@ using Xunit;
 using Autofac.Extras.Moq;
 using ShipWorks.Shipping.Tests;
 using ShipWorks.Tests.Shared;
+using System.Collections.Generic;
+using ShipWorks.AddressValidation;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -269,6 +271,97 @@ namespace ShipWorks.Tests.Shipping
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
 
                 Assert.Equal(ShippingPanelLoadedShipmentResult.Multiple, testObject.LoadedShipmentResult);
+            }
+        }
+
+        [Fact]
+        public async void Save_DoesNotCallSaveToDatabase_WhenShipmentIsProcessed()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                shipmentEntity.Processed = true;
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+
+                testObject.SaveToDatabase();
+
+                mock.Mock<IShippingManager>()
+                    .Verify(x => x.SaveShipmentsToDatabase(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>(), It.IsAny<bool>()), Times.Never);
+            }
+        }
+
+        [Fact]
+        public void Save_DoesNotCallSaveToDatabase_WhenLoadedShipmentIsNull()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
+
+                testObject.SaveToDatabase();
+
+                mock.Mock<IShippingManager>()
+                    .Verify(x => x.SaveShipmentsToDatabase(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>(), It.IsAny<bool>()), Times.Never);
+            }
+        }
+
+        [Fact]
+        public async void Save_DoesNotCallSaveToDatabase_WhenShipmentIsNull()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                shippingPanelLoadedShipment.Shipment = null;
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+
+                testObject.SaveToDatabase();
+
+                mock.Mock<IShippingManager>()
+                    .Verify(x => x.SaveShipmentToDatabase(It.IsAny<ShipmentEntity>(), It.IsAny<ValidatedAddressScope>(), It.IsAny<bool>()), Times.Never);
+            }
+        }
+
+        [Fact]
+        public async void Save_DoesNotUpdateShipment_WhenShipmentIsProcessed()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
+                shipmentEntity.Processed = true;
+
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                testObject.ShipmentType = ShipmentTypeCode.OnTrac;
+
+                testObject.SaveToDatabase();
+
+                Assert.Equal(ShipmentTypeCode.Usps, shipmentEntity.ShipmentTypeCode);
+            }
+        }
+
+        [Fact]
+        public async void Save_UpdatesShipment_WhenShipmentIsNotProcessed()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
+
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                testObject.ShipmentType = ShipmentTypeCode.OnTrac;
+
+                testObject.SaveToDatabase();
+
+                Assert.Equal(ShipmentTypeCode.OnTrac, shipmentEntity.ShipmentTypeCode);
+            }
+        }
+
+        [Fact]
+        public async void Save_CallsSaveToDatabase_WhenShipmentIsNotProcessed()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                
+                testObject.SaveToDatabase();
+
+                mock.Mock<IShippingManager>()
+                    .Verify(x => x.SaveShipmentToDatabase(shipmentEntity, It.IsAny<ValidatedAddressScope>(), false));
             }
         }
     }

@@ -225,7 +225,7 @@ namespace ShipWorks.Shipping
             }
 
             Save();
-            shippingManager.SaveShipmentsToDatabase(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current, false);
+            shippingManager.SaveShipmentToDatabase(loadedShipment.Shipment, ValidatedAddressScope.Current, false);
         }
 
         /// <summary>
