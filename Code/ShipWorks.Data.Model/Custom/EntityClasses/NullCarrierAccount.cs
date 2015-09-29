@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment)
         {
-            // nothing to apply
+            throw new System.NotImplementedException();
         }
     }
 }

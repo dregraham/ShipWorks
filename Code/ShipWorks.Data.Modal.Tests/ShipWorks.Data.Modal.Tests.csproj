@@ -62,6 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Custom\EndicaAccountEntityTest.cs" />
+    <Compile Include="Custom\FedExAccountEntityTest.cs" />
+    <Compile Include="Custom\IParcelAccountEntityTest.cs" />
+    <Compile Include="Custom\NullCarrierAccountTest.cs" />
+    <Compile Include="Custom\OnTracAccountEntityTest.cs" />
+    <Compile Include="Custom\UpsAccountEntityTest.cs" />
+    <Compile Include="Custom\UspsAccountEntityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
