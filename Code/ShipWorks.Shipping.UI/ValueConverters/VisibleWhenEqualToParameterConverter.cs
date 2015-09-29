@@ -2,27 +2,41 @@
 using System;
 using System.Globalization;
 using System.Windows;
-using System.Windows.Data;
 
 namespace ShipWorks.Shipping.UI.ValueConverters
 {
     /// <summary>
     /// Show or hide UI elements based on whether a bound property is equal to the converter parameter
     /// </summary>
-    public class VisibleWhenEqualToParameterConverter : IValueConverter
+    public class VisibleWhenEqualToParameterConverter : ValueEqualToParameterConverter
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public VisibleWhenEqualToParameterConverter() : this(false, DesignModeDetector.IsDesignerHosted())
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public VisibleWhenEqualToParameterConverter(bool invert, bool isDesignMode) : base(invert, isDesignMode)
+        {
+
+        }
+        
         /// <summary>
         /// Return Visible if the bound value is equal to the converter parameter, else collapsed
         /// </summary>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-            DesignModeDetector.IsDesignerHosted() || Equals(value, parameter) ? Visibility.Visible : Visibility.Collapsed;
-
-        /// <summary>
-        /// Converting back does not make sense here
-        /// </summary>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new InvalidOperationException("Cannot convert back");
+            if (targetType != typeof(Visibility))
+            {
+                throw new InvalidOperationException("Destination type of value converter must be Visibility");
+            }
+
+            return (bool)base.Convert(value, typeof(bool), parameter, culture) ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

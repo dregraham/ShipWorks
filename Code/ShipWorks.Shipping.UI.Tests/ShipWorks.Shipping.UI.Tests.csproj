@@ -119,6 +119,7 @@
     <Compile Include="ValidationRules\WeightValidationRuleTest.cs" />
     <Compile Include="ValueConverters\DoubleToWeightStringConverterTest.cs" />
     <Compile Include="ValueConverters\ShipmentTypeListConverterTest.cs" />
+    <Compile Include="ValueConverters\ValueEqualToParameterConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
