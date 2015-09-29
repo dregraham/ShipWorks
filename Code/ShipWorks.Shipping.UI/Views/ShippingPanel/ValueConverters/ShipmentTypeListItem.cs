@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Shipping.UI.ValueConverters
+﻿namespace ShipWorks.Shipping.UI.Views.ShippingPanel.ValueConverters
 {
     /// <summary>
     /// Item to be used in a shipment type list

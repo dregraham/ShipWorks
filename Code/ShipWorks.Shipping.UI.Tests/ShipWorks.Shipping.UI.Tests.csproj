@@ -118,8 +118,9 @@
     <Compile Include="Services\ShipmentTypeProviderTest.cs" />
     <Compile Include="ValidationRules\WeightValidationRuleTest.cs" />
     <Compile Include="ValueConverters\DoubleToWeightStringConverterTest.cs" />
-    <Compile Include="ValueConverters\ShipmentTypeListConverterTest.cs" />
+    <Compile Include="Views\ShippingPanel\ValueConverters\ShipmentTypeListConverterTest.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverterTest.cs" />
+    <Compile Include="Views\ShippingPanel\ValueConverters\ShipmentTypeToOriginAddressesConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

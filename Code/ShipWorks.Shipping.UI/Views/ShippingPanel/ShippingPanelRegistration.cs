@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.UI
     /// <summary>
     /// Register the shipment panel
     /// </summary>
-    public class ShipmentPanelRegistration : IRegisterDockableWindow
+    public class ShippingPanelRegistration : IRegisterDockableWindow
     {
         /// <summary>
         /// Register a panel with the dock manager

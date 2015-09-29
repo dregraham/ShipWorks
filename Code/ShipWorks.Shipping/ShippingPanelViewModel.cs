@@ -25,6 +25,7 @@ namespace ShipWorks.Shipping
         private ShipmentTypeCode initialShipmentTypeCode;
         private string requestedShippingMethod;
         private long originAddressType;
+        private long initialOriginAddressType;
         private readonly PropertyChangedHandler handler;
         private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
@@ -201,13 +202,23 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Is the loaded shipment processed?
+        /// Origin address type that should be used
         /// </summary>
         [Obfuscation(Exclude = true)]
         public long OriginAddressType
         {
             get { return originAddressType; }
             set { handler.Set(nameof(OriginAddressType), ref originAddressType, value); }
+        }
+
+        /// <summary>
+        /// Original origin address type
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public long InitialOriginAddressType
+        {
+            get { return initialOriginAddressType; }
+            set { handler.Set(nameof(InitialOriginAddressType), ref initialOriginAddressType, value); }
         }
 
         /// <summary>
@@ -265,6 +276,7 @@ namespace ShipWorks.Shipping
             InitialShipmentTypeCode = loadedShipment.Shipment.ShipmentTypeCode;
             ShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             OriginAddressType = loadedShipment.Shipment.OriginOriginID;
+            InitialOriginAddressType = loadedShipment.Shipment.OriginOriginID;
 
             //Origin.Load(loadedShipment.Shipment.OriginPerson);
 

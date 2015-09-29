@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI"
              xmlns:tc="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
+             xmlns:vclocal="clr-namespace:ShipWorks.Shipping.UI.Views.ShippingPanel.ValueConverters"
              xmlns:shippingshared="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shared"
              xmlns:shippingcore="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Core"
              xmlns:shipping="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shipping"
@@ -17,13 +18,15 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/ShipWorksExpanderStyle.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/GlobalStyle.xaml" />
-                <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/ServiceControlStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <tc:InvertBooleanConverter x:Key="InvertBoolean" />
             <tc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <tc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
             <tc:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
-            <tc:ShipmentTypeListConverter x:Key="ShipmentTypeList" />
+            <vclocal:ShipmentTypeListConverter x:Key="ShipmentTypeList" />
+            <vclocal:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
+            <vclocal:OriginAddressListConverter x:Key="OriginAddressList" />
             <Thickness x:Key="SectionMargin" Left="0" Top="6" Right="0" Bottom="0" />
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Gray" />
@@ -76,9 +79,15 @@
                     </WrapPanel>
                 </Grid>
                 <Border>
-                    <Expander Header="From"
+                    <Expander
                           IsExpanded="{Binding IsOriginExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                           Style="{StaticResource ExpanderStyle}">
+                        <Expander.Header>
+                            <StackPanel>
+                                <TextBlock>From</TextBlock>
+                                <TextBlock Text="{Binding OriginDescription}" />
+                            </StackPanel>
+                        </Expander.Header>
                         <StackPanel>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -99,11 +108,16 @@
                                 
                                 <TextBlock Grid.Row="1" Grid.Column="0" 
                                            Style="{StaticResource GridLabel}">Origin:</TextBlock>
-                                <ComboBox Grid.Row="1" Grid.Column="1" 
+                                <ComboBox Grid.Row="1" Grid.Column="1"
+                                          DisplayMemberPath="Key"
+                                          SelectedValuePath="Value"
                                           x:Name="OriginDropDown"
                                           SelectedValue="{Binding OriginAddressType}">
                                     <ComboBox.ItemsSource>
-                                        <Binding />
+                                        <MultiBinding Converter="{StaticResource OriginAddressList}">
+                                            <Binding Path="ShipmentType" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
+                                            <Binding Path="InitialOriginAddressType" Mode="OneWay" />
+                                        </MultiBinding>
                                     </ComboBox.ItemsSource>
                                 </ComboBox>
                             </Grid>

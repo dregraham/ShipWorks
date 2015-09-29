@@ -1,4 +1,4 @@
-﻿using ShipWorks.Shipping.UI.ValueConverters;
+﻿using ShipWorks.Shipping.UI.Views.ShippingPanel.ValueConverters;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;

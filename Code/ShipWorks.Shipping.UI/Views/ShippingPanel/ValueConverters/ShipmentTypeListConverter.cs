@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
-namespace ShipWorks.Shipping.UI.ValueConverters
+namespace ShipWorks.Shipping.UI.Views.ShippingPanel.ValueConverters
 {
     /// <summary>
     /// Convert multiple sources of ShipmentTypeCodes to a single list

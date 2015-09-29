@@ -32,29 +32,18 @@ namespace ShipWorks.ApplicationCore
         /// <remarks>This should ONLY be used in situations where a new lifetime scope cannot be created or disposed.
         /// Any dependency resolved through this will NEVER be released, which could cause a memory leak if the dependency
         /// is not marked as ExternallyOwned or SingleInstance</remarks>
-        public static ILifetimeScope UnsafeGlobalLifetimeScope
-        {
-            get
-            {
-                return current;
-            }
-        }
+        public static ILifetimeScope UnsafeGlobalLifetimeScope => current;
 
         /// <summary>
         /// Begin a lifetime scope from which dependencies can be resolved
         /// </summary>
-        public static ILifetimeScope BeginLifetimeScope()
-        {
-            return current.BeginLifetimeScope();
-        }
+        public static ILifetimeScope BeginLifetimeScope() => current.BeginLifetimeScope();
 
         /// <summary>
         /// Begin a lifetime scope from which dependencies can be resolved
         /// </summary>
-        public static ILifetimeScope BeginLifetimeScope(Action<ContainerBuilder> configurationAction)
-        {
-            return current.BeginLifetimeScope(configurationAction);
-        }
+        public static ILifetimeScope BeginLifetimeScope(Action<ContainerBuilder> configurationAction) => 
+            current.BeginLifetimeScope(configurationAction);
 
         /// <summary>
         /// Initialize the IoC container

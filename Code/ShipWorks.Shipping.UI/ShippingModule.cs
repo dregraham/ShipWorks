@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ShipmentPanelRegistration>()
+            builder.RegisterType<ShippingPanelRegistration>()
                 .AsImplementedInterfaces()
                 .PreserveExistingDefaults();
 
