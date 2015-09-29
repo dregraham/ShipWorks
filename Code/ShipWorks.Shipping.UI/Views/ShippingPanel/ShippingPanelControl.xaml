@@ -26,6 +26,7 @@
             <tc:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
             <vclocal:ShipmentTypeListConverter x:Key="ShipmentTypeList" />
             <vclocal:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
+            <vclocal:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
             <vclocal:OriginAddressListConverter x:Key="OriginAddressList" />
             <Thickness x:Key="SectionMargin" Left="0" Top="6" Right="0" Bottom="0" />
             <Style TargetType="Border">
@@ -37,7 +38,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Visible"  HorizontalScrollBarVisibility="Disabled" 
+    <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled"
                   IsEnabled="{Binding IsProcessed,Converter={StaticResource InvertBoolean}}">
         <StackPanel Margin="6,6,6,6">
             <StackPanel Visibility="{Binding LoadResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static shipping:ShippingPanelLoadedShipmentResult.Success}}">
@@ -71,7 +72,7 @@
                         </ComboBox.SelectedValue>
                     </ComboBox>
 
-                    <WrapPanel Grid.Row="1" 
+                    <WrapPanel Grid.Row="1"
                                Grid.Column="1"
                                Margin="8,0,0,4">
                         <TextBlock Padding="0,0,4,0" FontWeight="Bold">Requested shipping:</TextBlock>
@@ -80,8 +81,8 @@
                 </Grid>
                 <Border>
                     <Expander
-                          IsExpanded="{Binding IsOriginExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                          Style="{StaticResource ExpanderStyle}">
+                        IsExpanded="{Binding IsOriginExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
+                        Style="{StaticResource ExpanderStyle}">
                         <Expander.Header>
                             <StackPanel>
                                 <TextBlock>From</TextBlock>
@@ -98,15 +99,22 @@
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-                                
+
                                 <TextBlock Grid.Row="0" Grid.Column="0"
                                            Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}"
                                            Style="{StaticResource GridLabel}">Account:</TextBlock>
                                 <ComboBox Grid.Row="0" Grid.Column="1"
-                                           Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}"
-                                          SelectedValue="{Binding Account}" />
+                                          Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}"
+                                          SelectedValue="{Binding Account}"
+                                          DisplayMemberPath="Description" >
+                                    <ComboBox.ItemsSource>
+                                        <Binding Path="ShipmentType"
+                                                 Converter="{StaticResource ShipmentTypeToAccountsConverter}"
+                                                 Mode="OneWay" />
+                                    </ComboBox.ItemsSource>
+                                </ComboBox>
                                 
-                                <TextBlock Grid.Row="1" Grid.Column="0" 
+                                <TextBlock Grid.Row="1" Grid.Column="0"
                                            Style="{StaticResource GridLabel}">Origin:</TextBlock>
                                 <ComboBox Grid.Row="1" Grid.Column="1"
                                           DisplayMemberPath="Key"
@@ -123,7 +131,7 @@
                             </Grid>
                             <local:AddressControl DataContext="{Binding Origin}">
                                 <local:AddressControl.IsEnabled>
-                                    <Binding Path="SelectedValue" 
+                                    <Binding Path="SelectedValue"
                                              ElementName="OriginDropDown"
                                              Converter="{StaticResource ValueEqualToParameter}"
                                              ConverterParameter="{x:Static origin:ShipmentOriginSource.Other}" />
@@ -134,17 +142,17 @@
                 </Border>
                 <Border>
                     <Expander Header="To"
-                          IsExpanded="{Binding IsDestinationExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                          DataContext="{Binding Destination}"
-                          Style="{StaticResource ExpanderStyle}">
+                              IsExpanded="{Binding IsDestinationExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
+                              DataContext="{Binding Destination}"
+                              Style="{StaticResource ExpanderStyle}">
                         <local:AddressControl />
                     </Expander>
                 </Border>
                 <Border>
                     <Expander Header="Shipment Details"
-                          IsExpanded="{Binding IsDetailsExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                          DataContext="{Binding ShipmentViewModel}"
-                          Style="{StaticResource ExpanderStyle}">
+                              IsExpanded="{Binding IsDetailsExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
+                              DataContext="{Binding ShipmentViewModel}"
+                              Style="{StaticResource ExpanderStyle}">
                         <local:ShipmentControl />
                     </Expander>
                 </Border>

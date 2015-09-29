@@ -217,6 +217,7 @@
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\DoubleToWeightStringConverter.cs" />
     <Compile Include="Views\ShippingPanel\ValueConverters\OriginAddressListConverter.cs" />
+    <Compile Include="Views\ShippingPanel\ValueConverters\ShipmentTypeToAccountsConverter.cs" />
     <Compile Include="Views\ShippingPanel\ValueConverters\ShipmentTypeToOriginAddressesConverter.cs" />
   </ItemGroup>
   <ItemGroup>

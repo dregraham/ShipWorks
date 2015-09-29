@@ -130,6 +130,7 @@
     <Compile Include="Custom\EntityClasses\FedExAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\InsurancePolicyEntity.cs" />
     <Compile Include="Custom\EntityClasses\iParcelAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\NullCarrierAccount.cs" />
     <Compile Include="Custom\EntityClasses\NullEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderItemEntity.cs" />
@@ -1191,7 +1192,7 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include="RelationClasses\ExcludedPackageTypeRelations.cs" />
-    <Compile Include="RelationClasses\ExcludedServiceTypeRelations.cs" />    
+    <Compile Include="RelationClasses\ExcludedServiceTypeRelations.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

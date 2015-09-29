@@ -120,6 +120,7 @@
     <Compile Include="ValueConverters\DoubleToWeightStringConverterTest.cs" />
     <Compile Include="Views\ShippingPanel\ValueConverters\ShipmentTypeListConverterTest.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverterTest.cs" />
+    <Compile Include="Views\ShippingPanel\ValueConverters\ShipmentTypeToAccountsConverterTest.cs" />
     <Compile Include="Views\ShippingPanel\ValueConverters\ShipmentTypeToOriginAddressesConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>

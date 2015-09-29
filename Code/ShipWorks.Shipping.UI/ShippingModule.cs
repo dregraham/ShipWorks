@@ -98,7 +98,9 @@ namespace ShipWorks.Shipping.UI
                 .SingleInstance();
 
             builder.RegisterType<ShippingAccountListProvider>()
-                .AsSelf();
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
         }
     }
 }

@@ -153,6 +153,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\WeakAction.cs" />
     <Compile Include="Commands\WeakFunc.cs" />
+    <Compile Include="IShippingAccountListProvider.cs" />
     <Compile Include="Rating\IRateSelection.cs" />
     <Compile Include="IShipmentLoader.cs" />
     <Compile Include="IShipmentPackageBuilder.cs" />

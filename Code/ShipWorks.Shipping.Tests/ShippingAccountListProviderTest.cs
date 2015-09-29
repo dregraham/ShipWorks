@@ -33,32 +33,19 @@ namespace ShipWorks.Shipping.Tests
         }
 
         [Fact]
-        public void AvailableAccounts_ContainsNoItems_WhenNoShipmentTypeCodeIsSet()
-        {
-            var testObject = new ShippingAccountListProvider(null);
-            Assert.Equal(0, testObject.AvailableAccounts.Count);
-        }
-
-        [Fact]
         public void AvailableAccounts_ContainsCorrectAccounts_WhenShipmentTypeCodeIsSet()
         {
             var testObject = new ShippingAccountListProvider(carrierAccountRetrieverLookup.Object);
-            testObject.ShipmentTypeCode = ShipmentTypeCode.FedEx;
             
-            Assert.Same(carrierAccount.Object, testObject.AvailableAccounts.Single());
+            Assert.Same(carrierAccount.Object, testObject.GetAvailableAccounts(ShipmentTypeCode.FedEx).Single());
         }
 
         [Fact]
-        public void AvailableAccounts_SameObservableAccount_AfterShipmentTypeChanged()
+        public void AvailableAccounts_ContainsNullRepo_AfterShipmentTypeHasNullAccountRepository()
         {
             var testObject = new ShippingAccountListProvider(carrierAccountRetrieverLookup.Object);
-            var originalAvailableAccounts = testObject.AvailableAccounts;
 
-            testObject.ShipmentTypeCode = ShipmentTypeCode.FedEx;
-            Assert.Same(originalAvailableAccounts, testObject.AvailableAccounts);
-
-            testObject.ShipmentTypeCode = ShipmentTypeCode.Other;
-            Assert.Same(originalAvailableAccounts, testObject.AvailableAccounts);
+            Assert.IsType<NullEntity>(testObject.GetAvailableAccounts(ShipmentTypeCode.Other).Single());
         }
     }
 }

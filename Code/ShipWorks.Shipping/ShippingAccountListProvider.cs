@@ -12,10 +12,9 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Provides an IObservable collection of accounts for the shipment type
     /// </summary>
-    public class ShippingAccountListProvider
+    public class ShippingAccountListProvider : IShippingAccountListProvider
     {
         private readonly IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>> lookup;
-        private ShipmentTypeCode shipmentTypeCode;
 
         /// <summary>
         /// Constructor
@@ -23,26 +22,14 @@ namespace ShipWorks.Shipping
         public ShippingAccountListProvider(IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>> lookup)
         {
             this.lookup = lookup;
-            AvailableAccounts = new ObservableCollection<ICarrierAccount>();
         }
 
         /// <summary>
         /// Gets the available accounts for the ShipmentTypeCode
         /// </summary>
-        public ObservableCollection<ICarrierAccount> AvailableAccounts { get; }
-
-        /// <summary>
-        /// Gets or sets the shipment type code.
-        /// </summary>
-        public ShipmentTypeCode ShipmentTypeCode
+        public IEnumerable<ICarrierAccount> GetAvailableAccounts(ShipmentTypeCode shipmentTypeCode)
         {
-            get { return shipmentTypeCode; }
-            set
-            {
-                shipmentTypeCode = value; 
-                AvailableAccounts.Clear();
-                AvailableAccounts.AddRange(lookup[shipmentTypeCode].Accounts);
-            }
+            return lookup[shipmentTypeCode].Accounts;
         }
     }
 }

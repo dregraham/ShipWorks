@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.Custom.EntityClasses
 {
@@ -11,7 +9,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
     /// </summary>
     /// <remarks>This class is intended to be used in situations where an entity is expected
     /// but specific behavior may not be.  It is an implementation of the null object pattern</remarks>
-    public class NullEntity : EntityBase2, ICarrierAccount
+    public class NullEntity : EntityBase2
     {
         private readonly int hashCode;
 
@@ -119,29 +117,6 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         public override int GetHashCode()
         {
             return hashCode;
-        }
-
-        /// <summary>
-        /// Get the made up account id
-        /// </summary>
-        public long AccountId => -1;
-
-        /// <summary>
-        /// Get the made up description
-        /// </summary>
-        public string Description => string.Empty;
-
-        /// <summary>
-        /// Get the made up shipment type (none)
-        /// </summary>
-        public ShipmentTypeCode ShipmentType => ShipmentTypeCode.None;
-
-        /// <summary>
-        /// Applies account to shipment
-        /// </summary>
-        public void ApplyTo(ShipmentEntity shipment)
-        {
-            // nothing to apply
         }
     }
 }
