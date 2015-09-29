@@ -31,7 +31,8 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 .AsImplementedInterfaces();
 
             builder.RegisterType<UpsAccountRepository>()
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.PostalWebTools)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.UpsOnLineTools)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.UpsWorldShip)
                 .SingleInstance();
         }
     }
