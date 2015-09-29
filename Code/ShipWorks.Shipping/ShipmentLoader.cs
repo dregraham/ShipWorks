@@ -54,6 +54,7 @@ namespace ShipWorks.Shipping
                     // Make sure the shipment type objects are fully loaded.
                     shippingManager.EnsureShipmentLoaded(shipment);
 
+                    shipmentPanelLoadedShipment.RequestedShippingMode = shipment.Order.RequestedShipping;
                     shipmentPanelLoadedShipment.Shipment = shipment;
                     shipmentPanelLoadedShipment.Result = ShippingPanelLoadedShipmentResult.Success;
                 }

@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping
         private bool supportsMultiplePackages;
         private ShipmentTypeCode selectedShipmentType;
         private ShipmentTypeCode initialShipmentTypeCode;
+        private string requestedShippingMethod;
         private readonly PropertyChangedHandler handler;
         private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
@@ -159,6 +160,16 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Method of shipping requested by the customer
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string RequestedShippingMethod
+        {
+            get { return requestedShippingMethod; }
+            set { handler.Set(nameof(RequestedShippingMethod), ref requestedShippingMethod, value); }
+        }
+
+        /// <summary>
         /// The ShippingPanelLoadedShipmentResult for the selected order
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -239,6 +250,7 @@ namespace ShipWorks.Shipping
             //DisableNeedToUpdateServices();
             //DisableNeedToUpdatePackages();
 
+            RequestedShippingMethod = loadedShipment.RequestedShippingMode;
             InitialShipmentTypeCode = loadedShipment.Shipment.ShipmentTypeCode;
             ShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             //Origin.Load(loadedShipment.Shipment.OriginPerson);

@@ -30,7 +30,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" 
+    <ScrollViewer VerticalScrollBarVisibility="Visible"  HorizontalScrollBarVisibility="Disabled" 
                   IsEnabled="{Binding IsProcessed,Converter={StaticResource InvertBooleanConverter}}">
         <StackPanel Margin="6,6,6,6">
             <StackPanel Visibility="{Binding LoadResult,Converter={StaticResource VisibleWhenEqualToParameterConverter},ConverterParameter={x:Static shipping:ShippingPanelLoadedShipmentResult.Success}}">
@@ -39,12 +39,20 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
 
-                    <TextBlock VerticalAlignment="Center" Padding="0,0,6,0">Carrier:</TextBlock>
+                    <TextBlock Style="{StaticResource GridLabel}" FontSize="14">Carrier:</TextBlock>
 
-                    <ComboBox Grid.Column="1"
-                          SelectedValuePath="Value"
-                          DisplayMemberPath="Description">
+                    <ComboBox SelectedValuePath="Value"
+                              DisplayMemberPath="Description"
+                              Width="225"
+                              HorizontalAlignment="Left"
+                              FontSize="14"
+                              Margin="8,0,0,4"
+                              Grid.Column="1">
                         <ComboBox.ItemsSource>
                             <MultiBinding Converter="{StaticResource ShipmentTypeListConverter}">
                                 <Binding Path="Available" Source="{x:Static local:ShipmentTypeProvider.Current}" />
@@ -55,6 +63,13 @@
                             <Binding Path="ShipmentType" Mode="TwoWay"/>
                         </ComboBox.SelectedValue>
                     </ComboBox>
+
+                    <WrapPanel Grid.Row="1" 
+                               Grid.Column="1"
+                               Margin="8,0,0,4">
+                        <TextBlock Padding="0,0,4,0" FontWeight="Bold">Requested shipping:</TextBlock>
+                        <TextBlock Text="{Binding RequestedShippingMethod}" />
+                    </WrapPanel>
                 </Grid>
                 <Border>
                     <Expander Header="From"

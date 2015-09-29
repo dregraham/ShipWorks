@@ -22,5 +22,10 @@ namespace ShipWorks.Shipping
         /// Any exception that may have occured during loading.
         /// </summary>
         public Exception Exception { get; set; }
+
+        /// <summary>
+        /// Type of shpping requested by the customer
+        /// </summary>
+        public string RequestedShippingMode { get; internal set; }
     }
 }
