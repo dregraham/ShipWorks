@@ -305,15 +305,19 @@ namespace ShipWorks.Shipping
                         shippingManager.EnsureShipmentLoaded(shipment);
                         args.Result = shipment;
 
+                        // Fetch the rates and add them to the cache
+                        shipmentType = PrepareShipmentAndGetShipmentType(shipment);
+                        if (!shipmentType.SupportsGetRates)
+                        {
+                            throw new ShippingException("Rating not supported.");
+                        }
+
                         // We want to ignore the cache primarily when changes come from the rate control, since only the promotion
                         // footer raises the event and we want to include Express1 rates in that case
                         if (ignoreCache)
                         {
                             shippingManager.RemoveShipmentFromRatesCache(shipment);
                         }
-
-                        // Fetch the rates and add them to the cache
-                        shipmentType = PrepareShipmentAndGetShipmentType(shipment);
 
                         rates = shippingManager.GetRates(shipment, shipmentType);
                         panelRateGroup = new ShipmentRateGroup(rates, shipment);

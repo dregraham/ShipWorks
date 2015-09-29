@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using ShipWorks.AddressValidation;
 using System.Windows.Input;
 using Autofac.Features.OwnedInstances;
@@ -21,7 +22,8 @@ namespace ShipWorks.Shipping
         private ShippingPanelLoadedShipmentResult loadedShipmentResult;
         private bool supportsMultiplePackages;
         private ShipmentTypeCode selectedShipmentType;
-        private ShipmentTypeCode initialShipmentType;
+        private ShipmentTypeCode initialShipmentTypeCode;
+        private string requestedShippingMethod;
         private readonly PropertyChangedHandler handler;
         private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
@@ -35,6 +37,7 @@ namespace ShipWorks.Shipping
         private readonly Func<Owned<ICarrierConfigurationShipmentRefresher>> shipmentRefresherFactory;
 
         private bool listenForRateCriteriaChanged = false;
+        private bool forceRateCriteriaChanged = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -66,25 +69,56 @@ namespace ShipWorks.Shipping
             this.shipmentTypeFactory = shipmentTypeFactory;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
+            listenForRateCriteriaChanged = false;
+
             messenger.Handle<ShipmentChangedMessage>(this, OnShipmentChanged);
-            //Observable.FromEventPattern<PropertyChangedEventArgs>(ShipmentViewModel, "PropertyChanged")
-            //    .Where(evt => listenForRateCriteriaChanged)
-            //    .Throttle(TimeSpan.FromMilliseconds(2000))
-            //    .Where(evt => IsRatingField(evt.EventArgs.PropertyName))
-            //    .Subscribe(evt => {
-            //        OnRateCriteriaPropertyChanged(null, evt.EventArgs);
-            //    });
+
+            WireUpObservables();
 
             this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.shipmentRefresherFactory = shipmentRefresherFactory;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
+
             //Origin = new AddressViewModel();
             //Destination = new AddressViewModel();
 
             //ShipmentViewModel = shipmentViewModelFactory();
 
             //CreateLabelCommand = new RelayCommand(async () => await ProcessShipment());
+        }
+
+        /// <summary>
+        /// Wire up any Obseravable patterns
+        /// </summary>
+        private void WireUpObservables()
+        {
+            // Wire up the rate criteria obseravable throttling for the PropertyChanged event.
+            Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
+                // We only listen if listenForRateCriteriaChanged is true.
+                .Where(evt => listenForRateCriteriaChanged)
+                // Only fire the event if we have a shipment and it is a rating field.
+                .Where(evt =>
+                {
+                    bool hasShipment = loadedShipment?.Shipment != null;
+                    bool isRatingField = IsRatingField(evt.EventArgs.PropertyName);
+
+                    // forceRateCriteriaChanged is used for race conditions:
+                    // For example, ShipmentType property changes, and then before the throttle time, SupportsMultipleShipments changes.
+                    // Since SupportsMultipleShipments isn't a rating field, the event would not be fired, even though 
+                    // ShipmentType changed and the event needs to be raised.
+                    // So keep track that during the throttling a rate criteria was changed.
+                    forceRateCriteriaChanged = forceRateCriteriaChanged || (hasShipment && isRatingField);
+
+                    return forceRateCriteriaChanged;
+                })
+                .Throttle(TimeSpan.FromMilliseconds(250))
+                .Subscribe(evt =>
+                {
+                    // Reset forceRateCriteriaChanged so that we don't force it on the next round.
+                    forceRateCriteriaChanged = false;
+                    OnRateCriteriaPropertyChanged(null, evt.EventArgs);
+                });
         }
 
         /// <summary>
@@ -96,12 +130,12 @@ namespace ShipWorks.Shipping
         /// Selected shipment type code for the current shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShipmentTypeCode ShipmentTypeCode
+        public ShipmentTypeCode ShipmentType
         {
             get { return selectedShipmentType; }
             set
             {
-                if (handler.Set(nameof(ShipmentTypeCode), ref selectedShipmentType, value))
+                if (handler.Set(nameof(ShipmentType), ref selectedShipmentType, value))
                 {
                     if (loadedShipment?.Shipment != null)
                     {
@@ -121,8 +155,18 @@ namespace ShipWorks.Shipping
         [Obfuscation(Exclude = true)]
         public ShipmentTypeCode InitialShipmentTypeCode
         {
-            get { return initialShipmentType; }
-            set { handler.Set(nameof(InitialShipmentTypeCode), ref initialShipmentType, value); }
+            get { return initialShipmentTypeCode; }
+            set { handler.Set(nameof(InitialShipmentTypeCode), ref initialShipmentTypeCode, value); }
+        }
+
+        /// <summary>
+        /// Method of shipping requested by the customer
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string RequestedShippingMethod
+        {
+            get { return requestedShippingMethod; }
+            set { handler.Set(nameof(RequestedShippingMethod), ref requestedShippingMethod, value); }
         }
 
         /// <summary>
@@ -181,7 +225,7 @@ namespace ShipWorks.Shipping
             }
 
             Save();
-            shippingManager.SaveShipmentsToDatabase(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current, false);
+            shippingManager.SaveShipmentToDatabase(loadedShipment.Shipment, ValidatedAddressScope.Current, false);
         }
 
         /// <summary>
@@ -201,12 +245,14 @@ namespace ShipWorks.Shipping
                 return;
             }
 
+            listenForRateCriteriaChanged = false;
             //DisableRateCriteriaChanged();
             //DisableNeedToUpdateServices();
             //DisableNeedToUpdatePackages();
 
+            RequestedShippingMethod = loadedShipment.RequestedShippingMode;
             InitialShipmentTypeCode = loadedShipment.Shipment.ShipmentTypeCode;
-            ShipmentTypeCode = loadedShipment.Shipment.ShipmentTypeCode;
+            ShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             //Origin.Load(loadedShipment.Shipment.OriginPerson);
 
             //Destination.Load(loadedShipment.Shipment.ShipPerson);
@@ -214,6 +260,8 @@ namespace ShipWorks.Shipping
             //ShipmentViewModel.Load(loadedShipment.Shipment);
 
             IsProcessed = loadedShipment.Shipment.Processed;
+
+            listenForRateCriteriaChanged = true;
 
             //EnableRateCriteriaChanged();
             //EnableNeedToUpdateServices();
@@ -246,7 +294,7 @@ namespace ShipWorks.Shipping
                 shipmentType.UpdateDynamicShipmentData(loadedShipment.Shipment);
                 shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
 
-                loadedShipment.Shipment.ShipmentTypeCode = ShipmentTypeCode;
+                loadedShipment.Shipment.ShipmentTypeCode = ShipmentType;
                 //Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
                 //Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
                 //ShipmentViewModel.Save(loadedShipment.Shipment);
@@ -324,6 +372,11 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnRateCriteriaPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (loadedShipment?.Shipment == null)
+            {
+                return;
+            }
+            
             // Save UI values to the shipment so we can send the new values to the rates panel
             Save();
 
@@ -342,7 +395,7 @@ namespace ShipWorks.Shipping
 
             if (shipmentChangedMessage.Shipment.ShipmentID == loadedShipment.Shipment.ShipmentID)
             {
-                ShipmentTypeCode = shipmentChangedMessage.Shipment.ShipmentTypeCode;
+                ShipmentType = shipmentChangedMessage.Shipment.ShipmentTypeCode;
             }
         }
 
@@ -352,7 +405,7 @@ namespace ShipWorks.Shipping
         private bool IsRatingField(string propertyname)
         {
             // Only send the ShipmentChangedMessage message if the field that changed is a rating field.
-            ShipmentType shipmentType = shipmentTypeFactory.Get(loadedShipment.Shipment);
+            ShipmentType shipmentType = shipmentTypeFactory.Get(ShipmentType);
 
             // Since we have a generic AddressViewModel whose properties do not match entity feild names,
             // we need to translate the Ship, Origin, and Street properties to know if the changed field

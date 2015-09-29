@@ -7,7 +7,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
     public class FedExSmartPostIntegrationTest : DataDrivenIntegrationTestBase
     {
         //note: smartpost gets it account number from the spreadsheet.
-        private const bool justLabels = false;
+        private const bool justLabels = true;
         private readonly ITestOutputHelper output;
 
         public FedExSmartPostIntegrationTest(ITestOutputHelper output)

@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         private VersionCaptureRequest nativeVersionCapture;
 
         private Mock<CarrierRequest> registerCarrierRequest;
-        private RegisterWebCspUserRequest nativeRegister;
+        private RegisterWebUserRequest nativeRegister;
 
         private Mock<CarrierRequest> subscriptionCarrierRequest;
         private SubscriptionRequest nativeSubscription;
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             versionCaptureCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
 
 
-            nativeRegister = new RegisterWebCspUserRequest { ClientDetail = new ClientDetail() };
+            nativeRegister = new RegisterWebUserRequest { ClientDetail = new ClientDetail() };
             registerCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRegister);
             registerCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
 
@@ -48,8 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             subscriptionCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeSubscription);
             subscriptionCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
 
-
-            testObject = new FedExRegistrationClientDetailManipulator(settingsRepository.Object);
+            testObject = new FedExRegistrationClientDetailManipulator();
         }
 
         [Fact]
@@ -132,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
             testObject.Manipulate(registerCarrierRequest.Object);
 
-            ClientDetail detail = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).ClientDetail;
+            ClientDetail detail = ((RegisterWebUserRequest)registerCarrierRequest.Object.NativeRequest).ClientDetail;
             Assert.NotNull(detail);
         }
 
@@ -142,7 +141,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             // No additional setup since everything is in the Initialize method
             testObject.Manipulate(registerCarrierRequest.Object);
 
-            ClientDetail detail = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).ClientDetail;
+            ClientDetail detail = ((RegisterWebUserRequest)registerCarrierRequest.Object.NativeRequest).ClientDetail;
             Assert.NotNull(detail);
         }
 

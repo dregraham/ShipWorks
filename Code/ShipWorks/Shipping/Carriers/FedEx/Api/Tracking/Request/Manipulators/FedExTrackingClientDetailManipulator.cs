@@ -1,8 +1,6 @@
 using System;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
@@ -12,17 +10,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
     /// </summary>
     public class FedExTrackingClientDetailManipulator : ICarrierRequestManipulator
     {
-        private readonly FedExSettings fedExSettings;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExTrackingClientDetailManipulator" /> class.
-        /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        public FedExTrackingClientDetailManipulator(ICarrierSettingsRepository settingsRepository)
-        {
-            this.fedExSettings = new FedExSettings(settingsRepository);
-        }
-
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
@@ -36,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
             
             // We can safely cast this since we've passed validation
             TrackRequest nativeRequest = request.NativeRequest as TrackRequest;
-            nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateTrackClientDetail(account, fedExSettings);
+            nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateTrackClientDetail(account);
         }
 
         /// <summary>

@@ -35,6 +35,8 @@ namespace ShipWorks.Shipping.UI
                 return;
             }
 
+            LostFocus += (s, e) => viewModel?.SaveToDatabase();
+
             viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<ShippingPanelViewModel>();
             messenger = IoC.UnsafeGlobalLifetimeScope.Resolve<IMessenger>();
         }
@@ -58,11 +60,8 @@ namespace ShipWorks.Shipping.UI
 
         public bool SupportsMultiSelect => false;
 
-        public Task ChangeContent(IGridSelection selection)
-        {
-            viewModel.SaveToDatabase();
-            return viewModel.LoadOrder(selection.Keys.FirstOrDefault());
-        }
+        public Task ChangeContent(IGridSelection selection) =>
+            viewModel.LoadOrder(selection.Keys.FirstOrDefault());
 
         public void LoadState()
         {

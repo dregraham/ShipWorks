@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
@@ -14,7 +13,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
     {
         private FedExRateClientDetailManipulator testObject;
 
-        private Mock<ICarrierSettingsRepository> settingsRepository;
         private Mock<CarrierRequest> carrierRequest;
 
         private RateRequest nativeRequest;
@@ -24,15 +22,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         {
             account = new FedExAccountEntity { AccountNumber = "12345", MeterNumber = "67890" };
 
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(account);
-
-
             nativeRequest = new RateRequest { ClientDetail = new ClientDetail() };
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
             carrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
 
-            testObject = new FedExRateClientDetailManipulator(settingsRepository.Object);
+            testObject = new FedExRateClientDetailManipulator();
         }
 
         [Fact]

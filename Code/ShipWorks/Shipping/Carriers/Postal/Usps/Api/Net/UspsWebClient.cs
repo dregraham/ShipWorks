@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Services.Protocols;
@@ -24,6 +23,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         public static Type WebServiceType
         {
-            get { return typeof (SwsimV49); }
+            get { return typeof(SwsimV49); }
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 Url = ServiceUrl
             };
-            
+
             return webService;
         }
 
@@ -485,26 +485,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
             address.Country = person.AdjustedCountryCode(ShipmentTypeCode.Usps);
+            
+            string badAddressMessage = null;
 
-            using (SwsimV49 webService = CreateWebService("CleanseAddress"))
+            CleanseAddressCompletedEventArgs result = null;
+
+            try
             {
-                string badAddressMessage = null;
-
-                webService.OnlyLogOnMagicKeys = true;
-
-                TaskCompletionSource<CleanseAddressCompletedEventArgs> taskCompletion = new TaskCompletionSource<CleanseAddressCompletedEventArgs>();
-                CleanseAddressCompletedEventArgs result = null;
-
-                try
-                {
-                    using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
-                    {
-                        webService.CleanseAddressCompleted += (s, e) => taskCompletion.SetResult(e);
-                        webService.CleanseAddressAsync(GetCredentials(account, true), address, null);
-                        result = await taskCompletion.Task;
-                    }
-                }
-                catch (SoapException ex)
+                result = await ActionRetry.ExecuteWithRetry<InvalidOperationException, CleanseAddressCompletedEventArgs>(2, () => CleanseAddressAsync(account, address));
+            }
+            catch (AggregateException ex)
+            {
+                SoapException soapException = ex.InnerExceptions.OfType<SoapException>().FirstOrDefault();
+                if (soapException != null)
                 {
                     log.Error(ex);
 
@@ -519,30 +512,82 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         Candidates = new List<Address>()
                     };
                 }
-                catch (Exception ex)
-                {
-                    log.Error(ex);
 
-                    throw WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
+                InvalidOperationException invalidOperationException = ex.InnerExceptions.OfType<InvalidOperationException>().FirstOrDefault();
+                if (invalidOperationException != null)
+                {
+                    throw invalidOperationException;
                 }
                 
-                if (!result.AddressMatch)
-                {
-                    badAddressMessage = result.CityStateZipOK ?
-                        "City, State and ZIP Code are valid, but street address is not a match." :
-                        "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name.";
-                }
+                throw WebHelper.TranslateWebException(ex.InnerException, typeof(AddressValidationException));
+            }
+            catch (SoapException ex)
+            {
+                log.Error(ex);
 
-                return new UspsAddressValidationResults
+                // Rethrow the exception, but filter out namespaces and information that isn't useful to customers
+                badAddressMessage = ex.Message.Replace("Invalid SOAP message due to XML Schema validation failure. ", string.Empty);
+                badAddressMessage = Regex.Replace(badAddressMessage, @"http://stamps.com/xml/namespace/\d{4}/\d{1,2}/swsim/swsimv\d*:", string.Empty);
+
+                return new UspsAddressValidationResults()
                 {
-                    IsSuccessfulMatch = result.AddressMatch,
-                    IsCityStateZipOk = result.CityStateZipOK,
-                    ResidentialIndicator = result.ResidentialDeliveryIndicator,
-                    IsPoBox = result.IsPOBox,
-                    MatchedAddress = address,
-                    Candidates = result.CandidateAddresses,
-                    BadAddressMessage = badAddressMessage
+                    IsSuccessfulMatch = false,
+                    BadAddressMessage = badAddressMessage,
+                    Candidates = new List<Address>()
                 };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+
+                throw WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
+            }
+
+            if (!result.AddressMatch)
+            {
+                badAddressMessage = result.CityStateZipOK ?
+                    "City, State and ZIP Code are valid, but street address is not a match." :
+                    "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name.";
+            }
+
+            return new UspsAddressValidationResults
+            {
+                IsSuccessfulMatch = result.AddressMatch,
+                IsCityStateZipOk = result.CityStateZipOK,
+                ResidentialIndicator = result.ResidentialDeliveryIndicator,
+                IsPoBox = result.IsPOBox,
+                MatchedAddress = address,
+                Candidates = result.CandidateAddresses,
+                BadAddressMessage = badAddressMessage
+            };
+        }
+
+        /// <summary>
+        /// Cleanse an address asynchronously
+        /// </summary>
+        private Task<CleanseAddressCompletedEventArgs> CleanseAddressAsync(UspsAccountEntity account, Address address)
+        {
+            using (SwsimV49 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
+            {
+                using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
+                {
+                    TaskCompletionSource<CleanseAddressCompletedEventArgs> taskCompletion = new TaskCompletionSource<CleanseAddressCompletedEventArgs>();
+
+                    webService.CleanseAddressCompleted += (s, e) =>
+                    {
+                        if (e.Error != null)
+                        {
+                            taskCompletion.SetException(e.Error);
+                        }
+                        else
+                        {
+                            taskCompletion.SetResult(e);
+                        }
+                    };
+
+                    webService.CleanseAddressAsync(GetCredentials(account, true), address, null);
+                    return taskCompletion.Task;
+                }
             }
         }
 
@@ -643,7 +688,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             string scanFormUspsId = string.Empty;
             string scanFormUrl = string.Empty;
-            
+
             using (SwsimV49 webService = CreateWebService("ScanForm"))
             {
                 webService.CreateScanForm
@@ -675,12 +720,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <exception cref="UspsException">The Stamps.com API does not support creating a SCAN form containing a mixture of USPS and DHL shipments.</exception>
         private static Carrier GetScanFormCarrier(List<UspsShipmentEntity> shipments)
         {
-            if (shipments.All(s => ShipmentTypeManager.IsDhl((PostalServiceType) s.PostalShipment.Service)))
+            if (shipments.All(s => ShipmentTypeManager.IsDhl((PostalServiceType)s.PostalShipment.Service)))
             {
                 return Carrier.Dhl;
             }
 
-            if (shipments.All(s => !ShipmentTypeManager.IsDhl((PostalServiceType) s.PostalShipment.Service)))
+            if (shipments.All(s => !ShipmentTypeManager.IsDhl((PostalServiceType)s.PostalShipment.Service)))
             {
                 return Carrier.Usps;
             }
@@ -784,7 +829,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             WebServices.PostageBalance postageBalance;
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
-            rate.ToState = toAddress.State;    
+            rate.ToState = toAddress.State;
             rate.ToZIPCode = toAddress.ZIPCode;
 
             ThermalLanguage? thermalType = GetThermalLanguage(shipment);
@@ -807,7 +852,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             string mac_Unused;
             string postageHash;
             byte[][] imageData = null;
-            
+
             if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope && shipment.Postal.Service != (int)PostalServiceType.InternationalFirst)
             {
                 // Envelopes don't support thermal
@@ -938,13 +983,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             // Determine what thermal type, if any to use.  If USPS, use it's setting. Otherwise, use the USPS
             // settings if it is a USPS shipment being auto-switched to an Express1 shipment
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps)
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.Usps)
             {
-                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
+                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }
-            else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Usps)
+            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Usps)
             {
-                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
+                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }
             else
             {
@@ -985,7 +1030,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 labels.ForEach(l => l.Dispose());
             }
         }
-        
+
         /// <summary>
         /// Creates a scan form address (which is entirely different that the address object the rest of the API uses).
         /// </summary>
@@ -1107,8 +1152,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private static RateV18 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
-            PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
+            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
+            PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
 
             RateV18 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = UspsUtility.GetApiServiceType(serviceType);
@@ -1127,13 +1172,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             // Add in the hidden postage option (but not supported for envelopes)
-            if (shipment.Postal.Usps.HidePostage && shipment.Postal.PackagingType != (int) PostalPackagingType.Envelope)
+            if (shipment.Postal.Usps.HidePostage && shipment.Postal.PackagingType != (int)PostalPackagingType.Envelope)
             {
                 addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.SCAHP });
             }
 
             // Add insurance if using SDC insurance
-            if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+            if (shipment.Insurance && shipment.InsuranceProvider == (int)InsuranceProvider.Carrier)
             {
                 rate.InsuredValue = shipment.Postal.InsuranceValue;
                 addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.SCAINS });
@@ -1169,7 +1214,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // For domestic, add in Delivery\Signature confirmation; delivery confirmation is not allowed on DHL services
             if (SupportsConfirmation(shipment))
             {
-                PostalConfirmationType confirmation = (PostalConfirmationType) shipment.Postal.Confirmation;
+                PostalConfirmationType confirmation = (PostalConfirmationType)shipment.Postal.Confirmation;
 
                 // TODO: This comment was in here, but no supporting code for it.  Determine if it's still valid.
                 // If the service type is Parcel Select, Force DC, otherwise USPS throws an error
@@ -1177,16 +1222,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 switch (confirmation)
                 {
                     case PostalConfirmationType.Delivery:
-                        addOns.Add(new AddOnV7 {AddOnType = AddOnTypeV7.USADC});
+                        addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USADC });
                         break;
                     case PostalConfirmationType.Signature:
-                        addOns.Add(new AddOnV7 {AddOnType = AddOnTypeV7.USASC});
+                        addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USASC });
                         break;
                     case PostalConfirmationType.AdultSignatureRequired:
-                        addOns.Add(new AddOnV7 {AddOnType = AddOnTypeV7.USAASR});
+                        addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USAASR });
                         break;
                     case PostalConfirmationType.AdultSignatureRestricted:
-                        addOns.Add(new AddOnV7 {AddOnType = AddOnTypeV7.USAASRD});
+                        addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USAASRD });
                         break;
                 }
             }
@@ -1207,11 +1252,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 return false;
             }
-            
-            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
+
+            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
 
             // The following services support confirmation types.
-            if ((new [] { PostalServiceType.DhlBpmExpedited, PostalServiceType.DhlBpmGround, PostalServiceType.DhlMarketingGround, PostalServiceType.DhlMarketingExpedited }).Contains(serviceType))
+            if ((new[] { PostalServiceType.DhlBpmExpedited, PostalServiceType.DhlBpmGround, PostalServiceType.DhlMarketingGround, PostalServiceType.DhlMarketingExpedited }).Contains(serviceType))
             {
                 return true;
             }
@@ -1387,13 +1432,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             try
             {
-                return executor();
+                try
+                {
+                    return executor();
+                }
+                catch (AggregateException ex)
+                {
+                    throw ex.InnerException;
+                }
             }
             catch (SoapException ex)
             {
                 log.ErrorFormat("Failed connecting to USPS.  Account: {0}, Error Code: '{1}', Exception Message: {2}", account.UspsAccountID, UspsApiException.GetErrorCode(ex), ex.Message);
 
                 throw new UspsApiException(ex);
+            }
+            catch (InvalidOperationException ex)
+            {
+                // We had a client that was seeing this exception, so rather than crash, we should fail the operation and 
+                if (ex.Message.Contains("Response is not well-formed XML") || ex.Message.Contains("error in XML document"))
+                {
+                    throw new UspsException(ex.Message, ex);
+                }
+
+                throw;
             }
             catch (Exception ex)
             {

@@ -57,12 +57,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo9_ForTracking_Test()
+        public void Manipulate_SetsMajorTo10_ForTracking_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             VersionId version = ((TrackRequest)carrierRequest.Object.NativeRequest).Version;
-            Assert.Equal(9, version.Major);
+            Assert.Equal(10, version.Major);
         }
 
         [Fact]

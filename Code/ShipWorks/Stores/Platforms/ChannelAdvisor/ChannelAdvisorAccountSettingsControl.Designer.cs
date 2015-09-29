@@ -86,6 +86,7 @@
             this.linkHelpProfileID.Size = new System.Drawing.Size(107, 13);
             this.linkHelpProfileID.TabIndex = 3;
             this.linkHelpProfileID.Text = "Where do I find this?";
+            this.linkHelpProfileID.Url = "http://support.shipworks.com/support/solutions/articles/4000026252";
             // 
             // statusLabel
             // 

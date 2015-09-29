@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ShipmentTypeProviderTest.cs" />
     <Compile Include="ValidationRules\WeightValidationRuleTest.cs" />
     <Compile Include="ValueConverters\DoubleToWeightStringConverterTest.cs" />
     <Compile Include="ValueConverters\ShipmentTypeListConverterTest.cs" />

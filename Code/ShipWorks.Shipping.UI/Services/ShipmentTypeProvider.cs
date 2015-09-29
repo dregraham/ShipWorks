@@ -39,14 +39,15 @@ namespace ShipWorks.Shipping.UI
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             messenger.Handle<EnabledCarriersChangedMessage>(this, UpdateAvailableCarriers);
-            Available = shipmentTypeManager.EnabledShipmentTypes.Select(x => x.ShipmentTypeCode).ToList();
+            Available = shipmentTypeManager.EnabledShipmentTypeCodes.ToList();
         }
 
         /// <summary>
         /// Available shipment types
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<ShipmentTypeCode> Available {
+        public IEnumerable<ShipmentTypeCode> Available
+        {
             get { return available; }
             private set { handler.Set(nameof(Available), ref available, value); }
         }
@@ -56,7 +57,11 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         private void UpdateAvailableCarriers(EnabledCarriersChangedMessage message)
         {
-            Available = Available.Concat(message.Added).Except(message.Removed).Distinct().ToList();
+            Available = shipmentTypeManager.EnabledShipmentTypeCodes
+                .Concat(message.Added)
+                .Except(message.Removed)
+                .Distinct()
+                .ToList();
         }
     }
 }

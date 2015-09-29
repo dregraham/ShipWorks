@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<definitions xmlns:ns="http://fedex.com/ws/openship/v7" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" name="OpenShipServiceDefinitions" targetNamespace="http://fedex.com/ws/openship/v7" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<definitions xmlns:ns="http://fedex.com/ws/openship/v9" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" name="OpenShipServiceDefinitions" targetNamespace="http://fedex.com/ws/openship/v9" xmlns="http://schemas.xmlsoap.org/wsdl/">
   <types>
-    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/openship/v7" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/openship/v9" xmlns:xs="http://www.w3.org/2001/XMLSchema">
       <xs:element name="AddPackagesToOpenShipmentReply" type="ns:AddPackagesToOpenShipmentReply" />
       <xs:element name="AddPackagesToOpenShipmentRequest" type="ns:AddPackagesToOpenShipmentRequest" />
       <xs:element name="ConfirmConsolidationReply" type="ns:ConfirmConsolidationReply" />
@@ -12,6 +12,8 @@
       <xs:element name="CreateConsolidationRequest" type="ns:CreateConsolidationRequest" />
       <xs:element name="CreateOpenShipmentReply" type="ns:CreateOpenShipmentReply" />
       <xs:element name="CreateOpenShipmentRequest" type="ns:CreateOpenShipmentRequest" />
+      <xs:element name="CreatePendingShipmentReply" type="ns:CreateOpenShipmentReply" />
+      <xs:element name="CreatePendingShipmentRequest" type="ns:CreateOpenShipmentRequest" />
       <xs:element name="DeleteOpenConsolidationReply" type="ns:DeleteOpenConsolidationReply" />
       <xs:element name="DeleteOpenConsolidationRequest" type="ns:DeleteOpenConsolidationRequest" />
       <xs:element name="DeleteOpenShipmentReply" type="ns:DeleteOpenShipmentReply" />
@@ -461,16 +463,6 @@
           <xs:element minOccurs="1" name="MeterNumber" type="xs:string">
             <xs:annotation>
               <xs:documentation>This number is assigned by FedEx and identifies the unique device from which the request is originating</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="ClientProductId" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>A FedEx assigned identifier for a third party software product used by customer to do business with FedEx. Such as a Compatible Solution Provider's product.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="ClientProductVersion" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>The version of the third party product.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element minOccurs="0" name="IntegratorId" type="xs:string">
@@ -1762,6 +1754,7 @@
               <xs:documentation>If provided, thermal documents will include specified doc tab content. If omitted, document will be produced without doc tab content.</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element minOccurs="0" name="CustomContent" type="ns:CustomLabelDetail" />
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="CustomLabelBarcodeEntry">
@@ -1805,6 +1798,7 @@
           <xs:element minOccurs="0" maxOccurs="unbounded" name="TextEntries" type="ns:CustomLabelTextEntry" />
           <xs:element minOccurs="0" maxOccurs="unbounded" name="GraphicEntries" type="ns:CustomLabelGraphicEntry" />
           <xs:element minOccurs="0" maxOccurs="unbounded" name="BoxEntries" type="ns:CustomLabelBoxEntry" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TextBoxEntries" type="ns:CustomLabelTextBoxEntry" />
           <xs:element minOccurs="0" maxOccurs="unbounded" name="BarcodeEntries" type="ns:CustomLabelBarcodeEntry" />
         </xs:sequence>
       </xs:complexType>
@@ -1838,6 +1832,34 @@
               <xs:documentation>Vertical position, relative to top edge of custom area.</xs:documentation>
             </xs:annotation>
           </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CustomLabelTextBoxEntry">
+        <xs:annotation>
+          <xs:documentation>Constructed string, based on format and zero or more data fields, printed in specified printer font (for thermal labels) or generic font/size (for plain paper labels).</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element minOccurs="0" name="TopLeftCorner" type="ns:CustomLabelPosition" />
+          <xs:element minOccurs="0" name="BottomRightCorner" type="ns:CustomLabelPosition" />
+          <xs:element minOccurs="0" name="Position" type="ns:CustomLabelPosition" />
+          <xs:element minOccurs="0" name="Format" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="DataFields" type="xs:string" />
+          <xs:element minOccurs="0" name="ThermalFontId" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>Printer-specific font name for use with thermal printer labels.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="FontName" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>Generic font name for use with plain paper labels.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="FontSize" type="xs:positiveInteger">
+            <xs:annotation>
+              <xs:documentation>Generic font size for use with plain paper labels.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="Rotation" type="ns:RotationType" />
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="CustomLabelTextEntry">
@@ -2430,6 +2452,7 @@
       <xs:simpleType name="DocTabContentType">
         <xs:restriction base="xs:string">
           <xs:enumeration value="BARCODED" />
+          <xs:enumeration value="CUSTOM" />
           <xs:enumeration value="MINIMUM" />
           <xs:enumeration value="STANDARD" />
           <xs:enumeration value="ZONE001" />
@@ -2690,7 +2713,6 @@
               <xs:documentation>Indicates the types of shipping documents produced for the shipper by FedEx (see ShippingDocumentSpecification) which should be copied back to the shipper in the shipment result data.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element minOccurs="0" maxOccurs="unbounded" name="Documents" type="ns:UploadDocumentDetail" />
           <xs:element minOccurs="0" maxOccurs="unbounded" name="DocumentReferences" type="ns:UploadDocumentReferenceDetail" />
         </xs:sequence>
       </xs:complexType>
@@ -3300,6 +3322,11 @@
               <xs:documentation>Specifies the details of any radio active materials within the commodity.</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element minOccurs="0" name="NetExplosiveDetail" type="ns:NetExplosiveDetail">
+            <xs:annotation>
+              <xs:documentation>The total mass of the contained explosive substances, without the mass of any casings, bullets, shells, etc.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="HazardousCommodityDescription">
@@ -3627,6 +3654,7 @@
         <xs:restriction base="xs:string">
           <xs:enumeration value="CUSTOMS_VALUE" />
           <xs:enumeration value="DUTIES_AND_TAXES_PAYOR_ACCOUNT_NUMBER" />
+          <xs:enumeration value="SECONDARY_BARCODE" />
           <xs:enumeration value="SHIPPER_ACCOUNT_NUMBER" />
           <xs:enumeration value="TERMS_AND_CONDITIONS" />
           <xs:enumeration value="TRANSPORTATION_CHARGES_PAYOR_ACCOUNT_NUMBER" />
@@ -4076,6 +4104,21 @@
           <xs:enumeration value="UNKNOWN" />
         </xs:restriction>
       </xs:simpleType>
+      <xs:simpleType name="NetExplosiveClassificationType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NET_EXPLOSIVE_CONTENT" />
+          <xs:enumeration value="NET_EXPLOSIVE_MASS" />
+          <xs:enumeration value="NET_EXPLOSIVE_QUANTITY" />
+          <xs:enumeration value="NET_EXPLOSIVE_WEIGHT" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="NetExplosiveDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Type" type="ns:NetExplosiveClassificationType" />
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Units" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
       <xs:complexType name="Notification">
         <xs:annotation>
           <xs:documentation>The descriptive data regarding the result of the submitted transaction.</xs:documentation>
@@ -6153,7 +6196,6 @@
           <xs:enumeration value="RETURN_SHIPMENT" />
           <xs:enumeration value="SATURDAY_DELIVERY" />
           <xs:enumeration value="SATURDAY_PICKUP" />
-          <xs:enumeration value="THIRD_PARTY_CONSIGNEE" />
           <xs:enumeration value="TOP_LOAD" />
         </xs:restriction>
       </xs:simpleType>
@@ -6481,9 +6523,7 @@
           <xs:documentation>Specifies the type of paper (stock) on which a document will be printed.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-          <xs:enumeration value="OP_900_LG" />
           <xs:enumeration value="OP_900_LG_B" />
-          <xs:enumeration value="OP_900_LL" />
           <xs:enumeration value="OP_900_LL_B" />
           <xs:enumeration value="OP_950" />
           <xs:enumeration value="PAPER_4X6" />
@@ -6548,10 +6588,21 @@
           <xs:documentation>Data required for shipments handled under the SMART_POST and GROUND_SMART_POST service types.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
+          <xs:element minOccurs="0" name="ProcessingOptionsRequested" type="ns:SmartPostShipmentProcessingOptionsRequested" />
           <xs:element minOccurs="0" name="Indicia" type="ns:SmartPostIndiciaType" />
           <xs:element minOccurs="0" name="AncillaryEndorsement" type="ns:SmartPostAncillaryEndorsementType" />
           <xs:element minOccurs="0" name="HubId" type="xs:string" />
           <xs:element minOccurs="0" name="CustomerManifestId" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="SmartPostShipmentProcessingOptionType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="GROUND_TRACKING_NUMBER_REQUESTED" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="SmartPostShipmentProcessingOptionsRequested">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Options" type="ns:SmartPostShipmentProcessingOptionType" />
         </xs:sequence>
       </xs:complexType>
       <xs:simpleType name="SpecialRatingAppliedType">
@@ -6945,21 +6996,6 @@
           <xs:enumeration value="METRIC" />
         </xs:restriction>
       </xs:simpleType>
-      <xs:complexType name="UploadDocumentDetail">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="LineNumber" type="xs:nonNegativeInteger" />
-          <xs:element minOccurs="0" name="CustomerReference" type="xs:string" />
-          <xs:element minOccurs="0" name="DocumentProducer" type="ns:UploadDocumentProducerType" />
-          <xs:element minOccurs="0" name="DocumentType" type="ns:UploadDocumentType" />
-          <xs:element minOccurs="0" name="FileName" type="xs:string" />
-          <xs:element minOccurs="0" name="DocumentContent" type="xs:base64Binary" />
-          <xs:element minOccurs="0" name="ExpirationDate" type="xs:date">
-            <xs:annotation>
-              <xs:documentation>Specifies the date until which the document is available</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-        </xs:sequence>
-      </xs:complexType>
       <xs:simpleType name="UploadDocumentIdProducer">
         <xs:annotation>
           <xs:documentation>Specifies the application that is responsible for managing the document id.</xs:documentation>
@@ -7056,6 +7092,11 @@
           <xs:element minOccurs="0" name="Options" type="ns:HazardousCommodityOptionDetail">
             <xs:annotation>
               <xs:documentation>Customer-provided specifications for handling individual commodities.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="NetExplosiveDetail" type="ns:NetExplosiveDetail">
+            <xs:annotation>
+              <xs:documentation>The total mass of the contained explosive substances, without the mass of any casings, bullets, shells, etc.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>
@@ -7198,9 +7239,9 @@
           <xs:documentation>Used in authentication of the sender's identity.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-          <xs:element minOccurs="1" name="CspCredential" type="ns:WebAuthenticationCredential">
+          <xs:element minOccurs="0" name="ParentCredential" type="ns:WebAuthenticationCredential">
             <xs:annotation>
-              <xs:documentation>Credential used to authenticate a CSP product/version.</xs:documentation>
+              <xs:documentation>This was renamed from cspCredential.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element minOccurs="1" name="UserCredential" type="ns:WebAuthenticationCredential">
@@ -7237,7 +7278,7 @@
               <xs:documentation>Identifies a system or sub-system which performs an operation.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element minOccurs="1" fixed="7" name="Major" type="xs:int">
+          <xs:element minOccurs="1" fixed="9" name="Major" type="xs:int">
             <xs:annotation>
               <xs:documentation>Identifies the service business level.</xs:documentation>
             </xs:annotation>
@@ -7261,6 +7302,9 @@
   </message>
   <message name="ValidateOpenShipmentReply">
     <part name="ValidateOpenShipmentReply" element="ns:ValidateOpenShipmentReply" />
+  </message>
+  <message name="CreatePendingShipmentRequest">
+    <part name="CreatePendingShipmentRequest" element="ns:CreatePendingShipmentRequest" />
   </message>
   <message name="DeletePendingShipmentRequest">
     <part name="DeletePendingShipmentRequest" element="ns:DeletePendingShipmentRequest" />
@@ -7348,6 +7392,9 @@
   </message>
   <message name="ModifyOpenShipmentRequest">
     <part name="ModifyOpenShipmentRequest" element="ns:ModifyOpenShipmentRequest" />
+  </message>
+  <message name="CreatePendingShipmentReply">
+    <part name="CreatePendingShipmentReply" element="ns:CreatePendingShipmentReply" />
   </message>
   <message name="DeleteOpenConsolidationReply">
     <part name="DeleteOpenConsolidationReply" element="ns:DeleteOpenConsolidationReply" />
@@ -7443,6 +7490,10 @@
       <input message="ns:ConfirmConsolidationRequest" />
       <output message="ns:ConfirmConsolidationReply" />
     </operation>
+    <operation name="createPendingShipment" parameterOrder="CreatePendingShipmentRequest">
+      <input message="ns:CreatePendingShipmentRequest" />
+      <output message="ns:CreatePendingShipmentReply" />
+    </operation>
     <operation name="getModifyOpenShipmentResults" parameterOrder="GetModifyOpenShipmentResultsRequest">
       <input message="ns:GetModifyOpenShipmentResultsRequest" />
       <output message="ns:GetModifyOpenShipmentResultsReply" />
@@ -7471,7 +7522,7 @@
   <binding name="OpenShipServiceSoapBinding" type="ns:OpenShipPortType">
     <s1:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <operation name="modifyConsolidation">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/modifyConsolidation" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/modifyConsolidation" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7480,7 +7531,7 @@
       </output>
     </operation>
     <operation name="validateOpenShipment">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/validateOpenShipment" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/validateOpenShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7489,7 +7540,7 @@
       </output>
     </operation>
     <operation name="retrieveOpenShipment">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/retrieveOpenShipment" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/retrieveOpenShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7498,7 +7549,7 @@
       </output>
     </operation>
     <operation name="deleteOpenConsolidation">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/deleteOpenConsolidation" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/deleteOpenConsolidation" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7507,7 +7558,7 @@
       </output>
     </operation>
     <operation name="createConsolidation">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/createConsolidation" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/createConsolidation" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7516,7 +7567,7 @@
       </output>
     </operation>
     <operation name="retrievePackageInOpenShipment">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/retrievePackageInOpenShipment" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/retrievePackageInOpenShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7525,7 +7576,7 @@
       </output>
     </operation>
     <operation name="retrieveConsolidatedCommodities">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/retrieveConsolidatedCommodities" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/retrieveConsolidatedCommodities" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7534,7 +7585,7 @@
       </output>
     </operation>
     <operation name="modifyPackageInOpenShipment">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/modifyPackageInOpenShipment" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/modifyPackageInOpenShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7543,7 +7594,7 @@
       </output>
     </operation>
     <operation name="createOpenShipment">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/createOpenShipment" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/createOpenShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7552,7 +7603,7 @@
       </output>
     </operation>
     <operation name="deletePendingShipment">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/deletePendingShipment" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/deletePendingShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7561,7 +7612,7 @@
       </output>
     </operation>
     <operation name="confirmOpenShipment">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/confirmOpenShipment" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/confirmOpenShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7570,7 +7621,7 @@
       </output>
     </operation>
     <operation name="getConfirmOpenShipmentResults">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/getConfirmOpenShipmentResults" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/getConfirmOpenShipmentResults" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7579,7 +7630,7 @@
       </output>
     </operation>
     <operation name="getConfirmConsolidationResults">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/getConfirmConsolidationResults" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/getConfirmConsolidationResults" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7588,7 +7639,7 @@
       </output>
     </operation>
     <operation name="modifyOpenShipment">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/modifyOpenShipment" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/modifyOpenShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7597,7 +7648,16 @@
       </output>
     </operation>
     <operation name="confirmConsolidation">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/confirmConsolidation" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/confirmConsolidation" style="document" />
+      <input>
+        <s1:body use="literal" />
+      </input>
+      <output>
+        <s1:body use="literal" />
+      </output>
+    </operation>
+    <operation name="createPendingShipment">
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/createPendingShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7606,7 +7666,7 @@
       </output>
     </operation>
     <operation name="getModifyOpenShipmentResults">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/getModifyOpenShipmentResults" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/getModifyOpenShipmentResults" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7615,7 +7675,7 @@
       </output>
     </operation>
     <operation name="deletePackagesFromOpenShipment">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/deletePackagesFromOpenShipment" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/deletePackagesFromOpenShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7624,7 +7684,7 @@
       </output>
     </operation>
     <operation name="addPackagesToOpenShipment">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/addPackagesToOpenShipment" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/addPackagesToOpenShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7633,7 +7693,7 @@
       </output>
     </operation>
     <operation name="getCreateOpenShipmentResults">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/getCreateOpenShipmentResults" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/getCreateOpenShipmentResults" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7642,7 +7702,7 @@
       </output>
     </operation>
     <operation name="retrieveConsolidation">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/retrieveConsolidation" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/retrieveConsolidation" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -7651,7 +7711,7 @@
       </output>
     </operation>
     <operation name="deleteOpenShipment">
-      <s1:operation soapAction="http://fedex.com/ws/openship/v7/deleteOpenShipment" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/openship/v9/deleteOpenShipment" style="document" />
       <input>
         <s1:body use="literal" />
       </input>

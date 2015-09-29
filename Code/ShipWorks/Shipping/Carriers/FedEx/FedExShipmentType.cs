@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -45,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// FedEx implementation of ShipmentType
     /// </summary>
-    public class FedExShipmentType : ShipmentType
+    public class FedExShipmentType : ShipmentType, ICustomsRequired
     {
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
         private readonly IExcludedPackageTypeRepository excludedPackageTypeRepository;
@@ -713,6 +714,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ShippingProfileUtility.ApplyProfileValue(source.Service, fedex, FedExShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(source.PackagingType, fedex, FedExShipmentFields.PackagingType);
             ShippingProfileUtility.ApplyProfileValue(source.DropoffType, fedex, FedExShipmentFields.DropoffType);
+            ShippingProfileUtility.ApplyProfileValue(source.ReturnsClearance, fedex, FedExShipmentFields.ReturnsClearance);
             ShippingProfileUtility.ApplyProfileValue(source.NonStandardContainer, fedex, FedExShipmentFields.NonStandardContainer);
             ShippingProfileUtility.ApplyProfileValue(source.OriginResidentialDetermination, fedex, FedExShipmentFields.OriginResidentialDetermination);
 
@@ -1071,7 +1073,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
-            return new FedExShippingClerk(SettingsRepository, CertificateInspector).GetRates(shipment);
+            return FedExShippingClerkFactory.CreateShippingClerk(shipment, SettingsRepository).GetRates(shipment);
         }
 
         /// <summary>
@@ -1081,7 +1083,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
+                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
                 return shippingClerk.Track(shipment);
             }
             catch (FedExException ex)
@@ -1117,7 +1119,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Okay to "new up" the shipping clerk here, as this class is the root consumer 
                 // that drives the underlying FedEx API and outside of the current scope of unit testing,
                 // so there isn't a need to be able to specify the dependencies of the shipping clerk
-                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
+                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
                 shippingClerk.Ship(shipment);
             }
             catch (FedExException ex)
@@ -1133,7 +1135,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
+                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
                 shippingClerk.Void(shipment);
             }
             catch (FedExException ex)
@@ -1272,6 +1274,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return base.DimensionsAreValid(length, width, height);
+        }
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address.
+        /// </summary>
+        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        {
+            if (FedExUtility.IsSmartPostEnabled(shipment) 
+                && Geography.IsUSInternationalTerritory(shipment.ShipPerson)
+                && ((FedExServiceType)shipment.FedEx.Service) == FedExServiceType.SmartPost)
+            {
+                return false;
+            }
+
+            return base.IsCustomsRequiredByShipment(shipment);
         }
     }
 }
