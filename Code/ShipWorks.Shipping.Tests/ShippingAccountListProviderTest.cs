@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Tests
         {
             var testObject = new ShippingAccountListProvider(carrierAccountRetrieverLookup.Object);
 
-            Assert.IsType<NullEntity>(testObject.GetAvailableAccounts(ShipmentTypeCode.Other).Single());
+            Assert.IsType<NullCarrierAccount>(testObject.GetAvailableAccounts(ShipmentTypeCode.Other).Single());
         }
     }
 }
