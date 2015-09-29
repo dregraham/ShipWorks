@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/ServiceControlStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <local:StateProvinceConverter x:Key="StateProvinceConverter" />
         </ResourceDictionary>

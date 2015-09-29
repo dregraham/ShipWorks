@@ -10,19 +10,23 @@ namespace ShipWorks.Stores
     public class StoreManagerWrapper : IStoreManager
     {
         /// <summary>
+        /// Get the store from Id
+        /// </summary>
+        public StoreEntity GetStore(long storeId) => StoreManager.GetStore(storeId);
+
+        /// <summary>
+        /// Get the store for the related entity
+        /// </summary>
+        public StoreEntity GetRelatedStore(long orderId) => StoreManager.GetRelatedStore(orderId);
+
+        /// <summary>
         /// Get the current list of stores.  All stores are returned, regardless of security.
         /// </summary>
-        public IEnumerable<StoreEntity> GetAllStores()
-        {
-            return StoreManager.GetAllStores();
-        }
+        public IEnumerable<StoreEntity> GetAllStores() => StoreManager.GetAllStores();
 
         /// <summary>
         /// Get all stores, regardless of security, that are currently enabled for downloading and shipping
         /// </summary>
-        public IEnumerable<StoreEntity> GetEnabledStores()
-        {
-            return StoreManager.GetEnabledStores();
-        }
+        public IEnumerable<StoreEntity> GetEnabledStores() => StoreManager.GetEnabledStores();
     }
 }

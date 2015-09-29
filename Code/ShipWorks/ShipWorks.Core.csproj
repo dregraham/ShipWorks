@@ -909,6 +909,7 @@
       <DependentUpon>FimsOptionsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\FedEx\ICustomsRequired.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountRetrieverFactory.cs" />
     <Compile Include="Shipping\Carriers\ICredentialStore.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelServiceTypeServicePickerControl.cs">

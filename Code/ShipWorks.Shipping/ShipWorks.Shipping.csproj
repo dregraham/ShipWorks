@@ -154,6 +154,8 @@
     <Compile Include="Commands\WeakAction.cs" />
     <Compile Include="Commands\WeakFunc.cs" />
     <Compile Include="IShippingAccountListProvider.cs" />
+    <Compile Include="Services\CarrierAccountRetrieverFactory.cs" />
+    <Compile Include="Services\IShippingOriginManager.cs" />
     <Compile Include="Rating\IRateSelection.cs" />
     <Compile Include="IShipmentLoader.cs" />
     <Compile Include="IShipmentPackageBuilder.cs" />
@@ -174,6 +176,7 @@
     <Compile Include="ShipmentViewModel.cs" />
     <Compile Include="ShippingAccountListProvider.cs" />
     <Compile Include="ShippingErrorManager.cs" />
+    <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
     <Compile Include="ShippingPanelViewModel.cs" />
     <Compile Include="ShipmentLoader.cs" />
     <Compile Include="ShippingPanelLoadedShipmentResult.cs" />

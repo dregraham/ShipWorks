@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Utility;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping
 {
@@ -25,14 +26,18 @@ namespace ShipWorks.Shipping
         private string company;
 
         private readonly PropertyChangedHandler handler;
+        private readonly IShippingOriginManager shippingOriginManager;
+
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AddressViewModel()
+        public AddressViewModel(IShippingOriginManager shippingOriginManager)
         {
+            this.shippingOriginManager = shippingOriginManager;
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
         }
 
@@ -227,6 +232,18 @@ namespace ShipWorks.Shipping
             person.LastName = name.LastWithSuffix;
             person.UnparsedName = name.UnparsedName;
             person.NameParseStatus = name.ParseStatus;
+        }
+
+        /// <summary>
+        /// Set the address from the specified origin address type
+        /// </summary>
+        public void SetAddressFromOrigin(long addressId, long orderId, long accountId, ShipmentTypeCode shipmentType)
+        {
+            PersonAdapter address = shippingOriginManager.GetOriginAddress(addressId, orderId, accountId, shipmentType);
+            if (address != null)
+            {
+                Load(address);
+            }
         }
     }
 }

@@ -10,13 +10,6 @@ namespace ShipWorks.Shipping.Carriers
     public interface ICarrierAccountRepository<T> : ICarrierAccountRetriever<T> where T : ICarrierAccount
     {
         /// <summary>
-        /// Returns a carrier account for the provided accountID.
-        /// </summary>
-        /// <param name="accountID">The account ID for which to return an account.</param>
-        /// <returns>The matching account as IEntity2.</returns>
-        T GetAccount(long accountID);
-
-        /// <summary>
         /// Returns the default account as defined by the primary profile
         /// </summary>
         T DefaultProfileAccount { get; }

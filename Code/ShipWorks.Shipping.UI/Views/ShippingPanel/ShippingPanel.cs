@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.UI
     /// </summary>
     public partial class ShippingPanel : UserControl, IDockingPanelContent
     {
-        ShippingPanelControl shipmentPanelControl;
+        ShippingPanelControl shippingPanelControl;
         readonly ShippingPanelViewModel viewModel;
         readonly IMessenger messenger;
 
@@ -35,8 +35,6 @@ namespace ShipWorks.Shipping.UI
                 return;
             }
 
-            LostFocus += (s, e) => viewModel?.SaveToDatabase();
-
             viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<ShippingPanelViewModel>();
             messenger = IoC.UnsafeGlobalLifetimeScope.Resolve<IMessenger>();
         }
@@ -48,12 +46,13 @@ namespace ShipWorks.Shipping.UI
         {
             base.OnLoad(e);
 
-            shipmentPanelControl = new ShippingPanelControl(viewModel);
-            shipmentPanelelementHost.Child = shipmentPanelControl;
+            shippingPanelControl = new ShippingPanelControl(viewModel);
+            shippingPanelControl.LostFocus += OnShippingPanelControlLostFocus;
+            shipmentPanelelementHost.Child = shippingPanelControl;
 
             messenger.Handle<CreateLabelMessage>(this, HandleCreateLabelMessage);
         }
-        
+
         public EntityType EntityType => EntityType.ShipmentEntity;
 
         public FilterTarget[] SupportedTargets => new[] { FilterTarget.Orders, FilterTarget.Shipments };
@@ -91,25 +90,17 @@ namespace ShipWorks.Shipping.UI
         private async void HandleCreateLabelMessage(CreateLabelMessage message)
         {
             await viewModel.ProcessShipment();
-
-
-            //using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope(ConfigureShippingDialogDependencies))
-            //{
-            //    ShipmentProcessor shipmentProcessor = lifetimeScope.Resolve<ShipmentProcessor>();
-            //    CarrierConfigurationShipmentRefresher refresher = lifetimeScope.Resolve<CarrierConfigurationShipmentRefresher>();
-
-            //    await viewModel.ProcessShipment(shipmentProcessor, refresher);
-            //}
         }
 
         /// <summary>
-        /// Configure extra dependencies for the shipping dialog
+        /// The shipping panel has lost focus
         /// </summary>
-        private void ConfigureShippingDialogDependencies(ContainerBuilder builder)
+        private void OnShippingPanelControlLostFocus(object sender, System.Windows.RoutedEventArgs e)
         {
-            builder.RegisterInstance(Program.MainForm)
-                .As<Control>()
-                .ExternallyOwned();
+            if (!shippingPanelControl.IsKeyboardFocusWithin)
+            {
+                viewModel?.SaveToDatabase();
+            }
         }
     }
 }

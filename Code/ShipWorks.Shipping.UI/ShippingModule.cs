@@ -50,10 +50,11 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<RatingPanel>()
-                .AsSelf();
+            builder.RegisterType<RatingPanel>();
 
             builder.RegisterType<RatingPanelViewModel>();
+
+            builder.RegisterType<AddressViewModel>();
 
             builder.RegisterType<ShipmentProcessor>()
                 .AsImplementedInterfaces();
@@ -97,10 +98,17 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ShippingAccountListProvider>()
+            builder.RegisterType<ShippingAccountListProvider>();
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<ShippingOriginManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<CarrierAccountRetrieverFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

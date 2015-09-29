@@ -3,28 +3,39 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Windows.Data;
 
 namespace ShipWorks.Shipping.UI.Views.ShippingPanel.ValueConverters
 {
+    /// <summary>
+    /// Merge a list of addressess with a selected address
+    /// </summary>
     public class OriginAddressListConverter : IMultiValueConverter
     {
+        /// <summary>
+        /// Perform the conversions
+        /// </summary>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            List<KeyValuePair<string, long>> addresses = values.OfType<IEnumerable<KeyValuePair<string, long>>>().SelectMany(x => x).ToList();
-            long selectedAddress = values.OfType<long>().FirstOrDefault();
+            List<object> objectValues = (values ?? Enumerable.Empty<object>()).ToList();
 
-            if (addresses.None(x => x.Value == selectedAddress))
+            List<KeyValuePair<string, long>> addresses = objectValues
+                .OfType<IEnumerable<KeyValuePair<string, long>>>()
+                .SelectMany(x => x)
+                .ToList();
+            long? selectedAddress = objectValues.OfType<long?>().FirstOrDefault();
+
+            if (selectedAddress.HasValue && addresses.None(x => x.Value == selectedAddress))
             {
-                addresses.Add(new KeyValuePair<string, long>("(deleted)", selectedAddress));
+                addresses.Add(new KeyValuePair<string, long>("(deleted)", selectedAddress.Value));
             }
 
             return addresses;
-
-            //return Enumerable.Empty<KeyValuePair<string, long>>();
         }
 
+        /// <summary>
+        /// Don't support converting
+        /// </summary>
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

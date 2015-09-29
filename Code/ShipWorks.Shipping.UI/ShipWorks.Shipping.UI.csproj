@@ -140,7 +140,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddressControl.xaml.cs">
+    <Compile Include="Views\AddressControl\AddressControl.xaml.cs">
       <DependentUpon>AddressControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Carriers\iParcel\iParcelShippingModule.cs" />
@@ -287,7 +287,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="AddressControl.xaml">
+    <Page Include="Views\AddressControl\AddressControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

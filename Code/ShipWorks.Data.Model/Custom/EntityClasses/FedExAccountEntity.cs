@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.Custom;
+﻿using Interapptive.Shared.Business;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -22,6 +23,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// Get the shipment type to which this account applies
         /// </summary>
         public ShipmentTypeCode ShipmentType => ShipmentTypeCode.FedEx;
+
+        /// <summary>
+        /// Get the address of the account
+        /// </summary>
+        public PersonAdapter Address => new PersonAdapter(this, string.Empty);
 
         /// <summary>
         /// Applies account to shipment

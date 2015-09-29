@@ -63,7 +63,8 @@ namespace ShipWorks.Shipping
             ICustomsManager customsManager,
             IShipmentProcessor shipmentProcessor,
             Func<Owned<ICarrierConfigurationShipmentRefresher>> shipmentRefresherFactory,
-            Func<ShipmentViewModel> shipmentViewModelFactory) : this()
+            Func<ShipmentViewModel> shipmentViewModelFactory,
+            Func<AddressViewModel> addressViewModelFactory) : this()
         {
             this.shipmentProcessor = shipmentProcessor;
             this.customsManager = customsManager;
@@ -82,7 +83,7 @@ namespace ShipWorks.Shipping
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
-            //Origin = new AddressViewModel();
+            Origin = addressViewModelFactory();
             //Destination = new AddressViewModel();
 
             //ShipmentViewModel = shipmentViewModelFactory();
@@ -208,7 +209,13 @@ namespace ShipWorks.Shipping
         public long OriginAddressType
         {
             get { return originAddressType; }
-            set { handler.Set(nameof(OriginAddressType), ref originAddressType, value); }
+            set
+            {
+                if (handler.Set(nameof(OriginAddressType), ref originAddressType, value))
+                {
+                    Origin.SetAddressFromOrigin(OriginAddressType, loadedShipment?.Shipment?.OrderID ?? 0, -1, ShipmentType);
+                }
+            }
         }
 
         /// <summary>
@@ -278,7 +285,7 @@ namespace ShipWorks.Shipping
             OriginAddressType = loadedShipment.Shipment.OriginOriginID;
             InitialOriginAddressType = loadedShipment.Shipment.OriginOriginID;
 
-            //Origin.Load(loadedShipment.Shipment.OriginPerson);
+            Origin.Load(loadedShipment.Shipment.OriginPerson);
 
             //Destination.Load(loadedShipment.Shipment.ShipPerson);
 
@@ -320,7 +327,7 @@ namespace ShipWorks.Shipping
                 shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
 
                 loadedShipment.Shipment.ShipmentTypeCode = ShipmentType;
-                //Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
+                Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
                 //Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
                 //ShipmentViewModel.Save(loadedShipment.Shipment);
 

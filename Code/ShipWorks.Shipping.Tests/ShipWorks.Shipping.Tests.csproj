@@ -123,6 +123,7 @@
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ShippingOriginManagerWrapperTest.cs" />
     <Compile Include="ShipmentViewModelTest.cs" />
     <Compile Include="ShippingAccountListProviderTest.cs" />
     <Compile Include="ShippingPanelShipmentLoaderTest.cs" />

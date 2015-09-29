@@ -841,7 +841,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the available origins for the ShipmentType.  This is used to display the origin address UI.
         /// </summary>
-        public List<KeyValuePair<string, long>> GetOrigins()
+        public virtual List<KeyValuePair<string, long>> GetOrigins()
         {
             List<KeyValuePair<string, long>> origins = new List<KeyValuePair<string, long>>();
 
