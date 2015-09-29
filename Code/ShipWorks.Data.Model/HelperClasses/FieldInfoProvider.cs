@@ -1480,8 +1480,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("LemonStandOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)LemonStandOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			base.AddElementFieldInfo("LemonStandOrderItemEntity", "UrlName", typeof(System.String), false, false, false, false,  (int)LemonStandOrderItemFieldIndex.UrlName, 100, 0, 0);
-			base.AddElementFieldInfo("LemonStandOrderItemEntity", "IsOnSale", typeof(System.Boolean), false, false, false, false,  (int)LemonStandOrderItemFieldIndex.IsOnSale, 0, 0, 0);
-			base.AddElementFieldInfo("LemonStandOrderItemEntity", "SalePriceOrDiscount", typeof(Nullable<System.Double>), false, false, false, true,  (int)LemonStandOrderItemFieldIndex.SalePriceOrDiscount, 0, 0, 38);
 			base.AddElementFieldInfo("LemonStandOrderItemEntity", "ShortDescription", typeof(System.String), false, false, false, false,  (int)LemonStandOrderItemFieldIndex.ShortDescription, 255, 0, 0);
 			base.AddElementFieldInfo("LemonStandOrderItemEntity", "Category", typeof(System.String), false, false, false, false,  (int)LemonStandOrderItemFieldIndex.Category, 100, 0, 0);
 		}

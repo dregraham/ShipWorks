@@ -179,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                         JsonConvert.DeserializeObject<LemonStandInvoice>(
                             jsonOrder.SelectToken("invoices.data").Children().First().ToString());
 
-                    LoadOrderCharges(order, invoice);
+                    LoadOrderCharges(order, lsOrder);
 
                     // Get shipment information and set requested shipping
                     JToken jsonShipment = client.GetShipment(invoice.ID);
@@ -275,27 +275,35 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         ///     Loads the order charges.
         /// </summary>
         /// <param name="order">The order.</param>
-        /// <param name="invoice">The invoice DTO.</param>
-        private void LoadOrderCharges(OrderEntity order, LemonStandInvoice invoice)
+        /// <param name="lsOrder">The LemonStand order DTO</param>
+        private void LoadOrderCharges(OrderEntity order, LemonStandOrder lsOrder)
         {
-            if (invoice.TaxTotal.IsNullOrWhiteSpace())
+            if (lsOrder.TotalDiscount.IsNullOrWhiteSpace())
             {
-                invoice.TaxTotal = "0";
+                lsOrder.TotalDiscount = "0";
             }
 
-            if (invoice.TotalDiscount.IsNullOrWhiteSpace())
+            if (lsOrder.TotalShippingPaid.IsNullOrWhiteSpace())
             {
-                invoice.TotalDiscount = "0";
+                lsOrder.TotalShippingPaid = "0";
             }
 
-            if (invoice.TotalShippingQuote.IsNullOrWhiteSpace())
+            if (lsOrder.TotalSalesTaxPaid.IsNullOrWhiteSpace())
             {
-                invoice.TotalShippingQuote = "0";
+                lsOrder.TotalSalesTaxPaid = "0";
             }
 
-            LoadOrderCharge(order, "Total Shipping Quote", decimal.Parse(invoice.TotalShippingQuote));
-            LoadOrderCharge(order, "Tax Total", decimal.Parse(invoice.TaxTotal));
-            LoadOrderCharge(order, "Total Discount", decimal.Parse(invoice.TotalDiscount));
+            if (lsOrder.TotalShippingTaxPaid.IsNullOrWhiteSpace())
+            {
+                lsOrder.TotalShippingTaxPaid = "0";
+            }
+
+            // LemonStand gives discount as a positive value, we want to subtract it from the order total
+            // in the order charge calculations, so make it negative here.
+            LoadOrderCharge(order, "Discount", -decimal.Parse((lsOrder.TotalDiscount)));
+            LoadOrderCharge(order, "Shipping", decimal.Parse(lsOrder.TotalShippingPaid));
+            LoadOrderCharge(order, "Sales Tax", decimal.Parse(lsOrder.TotalSalesTaxPaid));
+            LoadOrderCharge(order, "Shipping Tax", decimal.Parse(lsOrder.TotalShippingTaxPaid));
         }
 
         /// <summary>
@@ -413,12 +421,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             // LemonStand specific item properties
             item.UrlName = product.UrlName;
             item.UnitCost = (string.IsNullOrWhiteSpace(product.Cost)) ? 0 : Convert.ToDecimal(product.Cost);
-
-            // We want to display "Yes" or "No", instead of 1 or 0
-            item.IsOnSale = product.IsOnSale.Equals("1");
-            item.SalePriceOrDiscount = (string.IsNullOrWhiteSpace(product.SalePriceOrDiscount))
-                ? 0
-                : double.Parse(product.SalePriceOrDiscount);
             item.ShortDescription = product.ShortDescription;
             item.Category = product.Category;
 

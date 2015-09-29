@@ -194,8 +194,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             LemonStandOrderItemEntity entity = new LemonStandOrderItemEntity();
 
             entity.UrlName = "";
-            entity.IsOnSale = false;
-            entity.SalePriceOrDiscount = 0;
             entity.ShortDescription = "";
             entity.Category = "";
 
@@ -228,8 +226,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             ElementOutline outline = container.AddElement("LemonStand");
             outline.AddElement("OrderItemID", () => item.Value.OrderItemID);
             outline.AddElement("UrlName", () => item.Value.UrlName);
-            outline.AddElement("IsOnSale", () => item.Value.IsOnSale);
-            outline.AddElement("SalePriceOrDiscount", () => item.Value.SalePriceOrDiscount);
             outline.AddElement("ShortDescription", () => item.Value.ShortDescription);
             outline.AddElement("Category", () => item.Value.Category);
         }

@@ -74,5 +74,17 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 
         [JsonProperty("updated_at")]
         public string UpdatedAt { get; set; }
+
+        [JsonProperty("total_discount")]
+        public string TotalDiscount { get; set; }
+
+        [JsonProperty("total_shipping_paid")]
+        public string TotalShippingPaid { get; set; }
+
+        [JsonProperty("total_sales_tax_paid")]
+        public string TotalSalesTaxPaid { get; set; }
+
+        [JsonProperty("total_shipping_tax_paid")]
+        public string TotalShippingTaxPaid { get; set; }
     }
 }

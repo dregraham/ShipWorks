@@ -10367,16 +10367,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.UrlName);}
 		}
-		/// <summary>Creates a new LemonStandOrderItemEntity.IsOnSale field instance</summary>
-		public static EntityField2 IsOnSale
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.IsOnSale);}
-		}
-		/// <summary>Creates a new LemonStandOrderItemEntity.SalePriceOrDiscount field instance</summary>
-		public static EntityField2 SalePriceOrDiscount
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.SalePriceOrDiscount);}
-		}
 		/// <summary>Creates a new LemonStandOrderItemEntity.ShortDescription field instance</summary>
 		public static EntityField2 ShortDescription
 		{

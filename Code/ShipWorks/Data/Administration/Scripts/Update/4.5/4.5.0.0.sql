@@ -69,8 +69,6 @@ GO
 CREATE TABLE [dbo].[LemonStandOrderItem](
 	[OrderItemID] [bigint] NOT NULL,
 	[UrlName] [nvarchar](100) NOT NULL,
-	[IsOnSale] [bit] NOT NULL,
-	[SalePriceOrDiscount] [float],
 	[ShortDescription] [nvarchar](255) NOT NULL,
 	[Category] [nvarchar](100) NOT NULL
  CONSTRAINT [PK_LemonStandOrderItem] PRIMARY KEY CLUSTERED 

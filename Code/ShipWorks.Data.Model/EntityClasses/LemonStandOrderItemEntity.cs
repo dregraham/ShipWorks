@@ -476,12 +476,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UrlName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("IsOnSale", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("SalePriceOrDiscount", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ShortDescription", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -568,28 +562,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)LemonStandOrderItemFieldIndex.UrlName, true); }
 			set	{ SetValue((int)LemonStandOrderItemFieldIndex.UrlName, value); }
-		}
-
-		/// <summary> The IsOnSale property of the Entity LemonStandOrderItem<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "LemonStandOrderItem"."IsOnSale"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean IsOnSale
-		{
-			get { return (System.Boolean)GetValue((int)LemonStandOrderItemFieldIndex.IsOnSale, true); }
-			set	{ SetValue((int)LemonStandOrderItemFieldIndex.IsOnSale, value); }
-		}
-
-		/// <summary> The SalePriceOrDiscount property of the Entity LemonStandOrderItem<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "LemonStandOrderItem"."SalePriceOrDiscount"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> SalePriceOrDiscount
-		{
-			get { return (Nullable<System.Double>)GetValue((int)LemonStandOrderItemFieldIndex.SalePriceOrDiscount, false); }
-			set	{ SetValue((int)LemonStandOrderItemFieldIndex.SalePriceOrDiscount, value); }
 		}
 
 		/// <summary> The ShortDescription property of the Entity LemonStandOrderItem<br/><br/>
