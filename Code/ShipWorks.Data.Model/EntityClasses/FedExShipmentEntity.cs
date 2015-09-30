@@ -511,6 +511,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("NonStandardContainer", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("ReferenceFIMS", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("ReferenceCustomer", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -1138,6 +1141,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.NonStandardContainer, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.NonStandardContainer, value); }
+		}
+
+		/// <summary> The ReferenceFIMS property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."ReferenceFIMS"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ReferenceFIMS
+		{
+			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.ReferenceFIMS, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.ReferenceFIMS, value); }
 		}
 
 		/// <summary> The ReferenceCustomer property of the Entity FedExShipment<br/><br/>

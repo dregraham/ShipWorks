@@ -3068,6 +3068,8 @@ namespace ShipWorks.Data.Model
 		PackagingType,
 		///<summary>NonStandardContainer. </summary>
 		NonStandardContainer,
+		///<summary>ReferenceFIMS. </summary>
+		ReferenceFIMS,
 		///<summary>ReferenceCustomer. </summary>
 		ReferenceCustomer,
 		///<summary>ReferenceInvoice. </summary>
@@ -3216,6 +3218,8 @@ namespace ShipWorks.Data.Model
 		PackagingType,
 		///<summary>NonStandardContainer. </summary>
 		NonStandardContainer,
+		///<summary>ReferenceFIMS. </summary>
+		ReferenceFIMS,
 		///<summary>ReferenceCustomer. </summary>
 		ReferenceCustomer,
 		///<summary>ReferenceInvoice. </summary>

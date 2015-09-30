@@ -6537,6 +6537,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.NonStandardContainer);}
 		}
+		/// <summary>Creates a new FedExProfileEntity.ReferenceFIMS field instance</summary>
+		public static EntityField2 ReferenceFIMS
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReferenceFIMS);}
+		}
 		/// <summary>Creates a new FedExProfileEntity.ReferenceCustomer field instance</summary>
 		public static EntityField2 ReferenceCustomer
 		{
@@ -6861,6 +6866,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 NonStandardContainer
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.NonStandardContainer);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.ReferenceFIMS field instance</summary>
+		public static EntityField2 ReferenceFIMS
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ReferenceFIMS);}
 		}
 		/// <summary>Creates a new FedExShipmentEntity.ReferenceCustomer field instance</summary>
 		public static EntityField2 ReferenceCustomer

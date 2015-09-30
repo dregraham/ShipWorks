@@ -944,6 +944,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExProfileEntity", "Signature", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfileFieldIndex.Signature, 0, 0, 10);
 			base.AddElementFieldInfo("FedExProfileEntity", "PackagingType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfileFieldIndex.PackagingType, 0, 0, 10);
 			base.AddElementFieldInfo("FedExProfileEntity", "NonStandardContainer", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.NonStandardContainer, 0, 0, 0);
+			base.AddElementFieldInfo("FedExProfileEntity", "ReferenceFIMS", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferenceFIMS, 300, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "ReferenceCustomer", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferenceCustomer, 300, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "ReferenceInvoice", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferenceInvoice, 300, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "ReferencePO", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferencePO, 300, 0, 0);
@@ -1015,6 +1016,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "Signature", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.Signature, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "PackagingType", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.PackagingType, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "NonStandardContainer", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.NonStandardContainer, 0, 0, 0);
+			base.AddElementFieldInfo("FedExShipmentEntity", "ReferenceFIMS", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ReferenceFIMS, 300, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ReferenceCustomer", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ReferenceCustomer, 300, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ReferenceInvoice", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ReferenceInvoice, 300, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ReferencePO", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ReferencePO, 300, 0, 0);

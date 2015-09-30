@@ -71,6 +71,11 @@
             this.labelSignature = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.groupFIMS = new System.Windows.Forms.GroupBox();
+            this.labelFimsReference = new System.Windows.Forms.Label();
+            this.referenceFIMS = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.referenceFimsState = new System.Windows.Forms.CheckBox();
+            this.kryptonBorderEdge12 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupLabels = new System.Windows.Forms.GroupBox();
             this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatProfileControl();
             this.requestedLabelFormatState = new System.Windows.Forms.CheckBox();
@@ -190,6 +195,7 @@
             this.groupShipment.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
+            this.groupFIMS.SuspendLayout();
             this.groupLabels.SuspendLayout();
             this.groupReturns.SuspendLayout();
             this.groupInsurance.SuspendLayout();
@@ -618,6 +624,7 @@
             // tabPageSettings
             // 
             this.tabPageSettings.AutoScroll = true;
+            this.tabPageSettings.Controls.Add(this.groupFIMS);
             this.tabPageSettings.Controls.Add(this.groupLabels);
             this.tabPageSettings.Controls.Add(this.groupReturns);
             this.tabPageSettings.Controls.Add(this.groupInsurance);
@@ -635,6 +642,63 @@
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupFIMS
+            // 
+            this.groupFIMS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupFIMS.Controls.Add(this.labelFimsReference);
+            this.groupFIMS.Controls.Add(this.referenceFIMS);
+            this.groupFIMS.Controls.Add(this.referenceFimsState);
+            this.groupFIMS.Controls.Add(this.kryptonBorderEdge12);
+            this.groupFIMS.Location = new System.Drawing.Point(6, 1379);
+            this.groupFIMS.Name = "groupFIMS";
+            this.groupFIMS.Size = new System.Drawing.Size(354, 58);
+            this.groupFIMS.TabIndex = 14;
+            this.groupFIMS.TabStop = false;
+            this.groupFIMS.Text = "Fims Options";
+            // 
+            // labelFimsReference
+            // 
+            this.labelFimsReference.AutoSize = true;
+            this.labelFimsReference.BackColor = System.Drawing.Color.Transparent;
+            this.labelFimsReference.Location = new System.Drawing.Point(35, 25);
+            this.labelFimsReference.Name = "labelFimsReference";
+            this.labelFimsReference.Size = new System.Drawing.Size(72, 13);
+            this.labelFimsReference.TabIndex = 104;
+            this.labelFimsReference.Text = "Reference #:";
+            // 
+            // referenceFIMS
+            // 
+            this.referenceFIMS.Location = new System.Drawing.Point(113, 21);
+            this.referenceFIMS.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceFIMS, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferencePO);
+            this.referenceFIMS.Name = "referenceFIMS";
+            this.referenceFIMS.Size = new System.Drawing.Size(222, 21);
+            this.referenceFIMS.TabIndex = 103;
+            this.referenceFIMS.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
+            // 
+            // referenceFimsState
+            // 
+            this.referenceFimsState.AutoSize = true;
+            this.referenceFimsState.Checked = true;
+            this.referenceFimsState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.referenceFimsState.Location = new System.Drawing.Point(9, 25);
+            this.referenceFimsState.Name = "referenceFimsState";
+            this.referenceFimsState.Size = new System.Drawing.Size(15, 14);
+            this.referenceFimsState.TabIndex = 0;
+            this.referenceFimsState.UseVisualStyleBackColor = true;
+            // 
+            // kryptonBorderEdge12
+            // 
+            this.kryptonBorderEdge12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.kryptonBorderEdge12.AutoSize = false;
+            this.kryptonBorderEdge12.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdge12.Location = new System.Drawing.Point(29, 20);
+            this.kryptonBorderEdge12.Name = "kryptonBorderEdge11";
+            this.kryptonBorderEdge12.Size = new System.Drawing.Size(1, 28);
+            this.kryptonBorderEdge12.Text = "kryptonBorderEdge1";
             // 
             // groupLabels
             // 
@@ -1962,6 +2026,8 @@
             this.groupShipment.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
+            this.groupFIMS.ResumeLayout(false);
+            this.groupFIMS.PerformLayout();
             this.groupLabels.ResumeLayout(false);
             this.groupLabels.PerformLayout();
             this.groupReturns.ResumeLayout(false);
@@ -2141,5 +2207,10 @@
         private System.Windows.Forms.Label labelReturnsClearance;
         private System.Windows.Forms.CheckBox returnsClearance;
         private System.Windows.Forms.CheckBox returnsClearanceState;
+        private System.Windows.Forms.GroupBox groupFIMS;
+        private System.Windows.Forms.Label labelFimsReference;
+        private Templates.Tokens.TemplateTokenTextBox referenceFIMS;
+        private System.Windows.Forms.CheckBox referenceFimsState;
+        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge12;
     }
 }

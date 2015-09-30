@@ -1981,7 +1981,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.sectionFimsOptions.ContentPanel.Controls.Add(this.fimsOptionsControl);
             this.sectionFimsOptions.ExtraText = "";
-            this.sectionFimsOptions.Location = new System.Drawing.Point(3, 787);
+            this.sectionFimsOptions.Location = new System.Drawing.Point(3, 935);
             this.sectionFimsOptions.Name = "sectionFimsOptions";
             this.sectionFimsOptions.SectionName = "FIMS Options";
             this.sectionFimsOptions.SettingsKey = "{e87cbd40-e049-4cdf-adbd-d2daa1720fcf}";
@@ -1994,7 +1994,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.fimsOptionsControl.BackColor = System.Drawing.Color.Transparent;
             this.fimsOptionsControl.Location = new System.Drawing.Point(27, 5);
             this.fimsOptionsControl.Name = "fimsOptionsControl";
-            this.fimsOptionsControl.Size = new System.Drawing.Size(252, 50);
+            this.fimsOptionsControl.Size = new System.Drawing.Size(252, 54);
             this.fimsOptionsControl.TabIndex = 0;
             // 
             // FedExServiceControl

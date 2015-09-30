@@ -34,11 +34,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.airWaybillLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.referenceCustomer = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.airWaybill = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
+            this.referenceCustomer = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,16 +61,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.label1.TabIndex = 2;
             this.label1.Text = "Reference #:";
             // 
-            // referenceCustomer
-            // 
-            this.referenceCustomer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.referenceCustomer.Location = new System.Drawing.Point(79, 30);
-            this.fieldLengthProvider.SetMaxLengthSource(this.referenceCustomer, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferenceCustomer);
-            this.referenceCustomer.Name = "referenceCustomer";
-            this.referenceCustomer.Size = new System.Drawing.Size(197, 20);
-            this.referenceCustomer.TabIndex = 3;
-            // 
             // airWaybill
             // 
             this.airWaybill.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -80,6 +71,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.airWaybill.Size = new System.Drawing.Size(197, 20);
             this.airWaybill.TabIndex = 1;
             // 
+            // referenceCustomer
+            // 
+            this.referenceCustomer.Location = new System.Drawing.Point(79, 29);
+            this.referenceCustomer.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceCustomer, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferenceCustomer);
+            this.referenceCustomer.Name = "referenceCustomer";
+            this.referenceCustomer.Size = new System.Drawing.Size(197, 21);
+            this.referenceCustomer.TabIndex = 4;
+            this.referenceCustomer.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            // 
             // FimsOptionsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -89,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.Add(this.airWaybill);
             this.Controls.Add(this.airWaybillLabel);
             this.Name = "FimsOptionsControl";
-            this.Size = new System.Drawing.Size(281, 61);
+            this.Size = new System.Drawing.Size(281, 58);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -101,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private System.Windows.Forms.Label airWaybillLabel;
         private MultiValueTextBox airWaybill;
         private EntityFieldLengthProvider fieldLengthProvider;
-        private MultiValueTextBox referenceCustomer;
         private System.Windows.Forms.Label label1;
+        private Templates.Tokens.TemplateTokenTextBox referenceCustomer;
     }
 }
