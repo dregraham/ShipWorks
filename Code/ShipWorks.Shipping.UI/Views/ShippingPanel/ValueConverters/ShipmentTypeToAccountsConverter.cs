@@ -14,7 +14,7 @@ using ShipWorks.UI.Controls.Design;
 namespace ShipWorks.Shipping.UI.Views.ShippingPanel.ValueConverters
 {
     /// <summary>
-    /// Convert a shipment typei into a list of available accounts
+    /// Convert a shipment type into a list of available accounts
     /// </summary>
     public class ShipmentTypeToAccountsConverter : IValueConverter
     {
