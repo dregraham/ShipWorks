@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Messaging;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -121,12 +122,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public static void SaveAccount(UspsAccountEntity account)
         {
+            bool wasDirty = account.IsDirty;
+
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.SaveAndRefetch(account);
             }
 
             CheckForChangesNeeded();
+
+            if (wasDirty)
+            {
+                Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
+            }
         }
 
         /// <summary>
@@ -134,12 +142,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public static void DeleteAccount(UspsAccountEntity account)
         {
+            ShipmentTypeCode shipmentTypeCode = account.ShipmentType;
+
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.DeleteEntity(account);
             }
 
             CheckForChangesNeeded();
+
+            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, shipmentTypeCode));
         }
 
         /// <summary>

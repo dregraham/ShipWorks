@@ -6,6 +6,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model;
 using System.ComponentModel;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data;
 
@@ -87,12 +88,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static void SaveAccount(FedExAccountEntity account)
         {
+            bool wasDirty = account.IsDirty;
+
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.SaveAndRefetch(account);
             }
 
             CheckForChangesNeeded();
+
+            if (wasDirty)
+            {
+                Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
+            }
+
         }
 
         /// <summary>
@@ -106,6 +115,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             CheckForChangesNeeded();
+
+            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, ShipmentTypeCode.FedEx));
         }
 
         /// <summary>
