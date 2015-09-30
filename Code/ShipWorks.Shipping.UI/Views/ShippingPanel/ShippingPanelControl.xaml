@@ -85,9 +85,13 @@
                         IsExpanded="{Binding IsOriginExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                         Style="{StaticResource ExpanderStyle}">
                         <Expander.Header>
-                            <StackPanel>
-                                <TextBlock>From</TextBlock>
-                                <TextBlock Text="{Binding OriginDescription}" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="0,0,8,0">From</TextBlock>
+                                <TextBlock Visibility="{Binding Visibility, ElementName=AccountDropDown}"
+                                           Text="{Binding Text, ElementName=AccountDropDown, StringFormat='Account {0}, '}"
+                                           Foreground="Gray"/>
+                                <TextBlock Text="{Binding Text, ElementName=OriginDropDown}"
+                                           Foreground="Gray"/>
                             </StackPanel>
                         </Expander.Header>
                         <StackPanel>
@@ -105,6 +109,7 @@
                                            Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}"
                                            Style="{StaticResource GridLabel}">Account:</TextBlock>
                                 <ComboBox Grid.Row="0" Grid.Column="1"
+                                          x:Name="AccountDropDown"
                                           Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}"
                                           SelectedValue="{Binding Account}"
                                           DisplayMemberPath="Description" >
@@ -120,14 +125,16 @@
                                 <ComboBox Grid.Row="1" Grid.Column="1"
                                           DisplayMemberPath="Key"
                                           SelectedValuePath="Value"
-                                          x:Name="OriginDropDown"
-                                          SelectedValue="{Binding OriginAddressType}">
+                                          x:Name="OriginDropDown">
                                     <ComboBox.ItemsSource>
                                         <MultiBinding Converter="{StaticResource OriginAddressList}">
                                             <Binding Path="ShipmentType" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
                                             <Binding Path="InitialOriginAddressType" Mode="OneWay" />
                                         </MultiBinding>
                                     </ComboBox.ItemsSource>
+                                    <ComboBox.SelectedValue>
+                                        <Binding Path="OriginAddressType" />
+                                    </ComboBox.SelectedValue>
                                 </ComboBox>
                             </Grid>
                             <local:AddressControl DataContext="{Binding Origin}">

@@ -327,6 +327,8 @@ namespace ShipWorks.Shipping
                 shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
 
                 loadedShipment.Shipment.ShipmentTypeCode = ShipmentType;
+                loadedShipment.Shipment.OriginOriginID = OriginAddressType;
+
                 Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
                 //Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
                 //ShipmentViewModel.Save(loadedShipment.Shipment);
