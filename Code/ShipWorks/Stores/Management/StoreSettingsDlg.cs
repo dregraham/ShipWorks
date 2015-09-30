@@ -484,6 +484,8 @@ namespace ShipWorks.Stores.Management
                     adapter.Commit();
                 }
 
+                StoreManager.CheckForChanges();
+
                 if (wasStoreDirty)
                 {
                     // Let any subscribers know that the store has changed.

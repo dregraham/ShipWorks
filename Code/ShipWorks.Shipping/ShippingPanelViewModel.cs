@@ -11,6 +11,8 @@ using System.Reactive.Linq;
 using ShipWorks.AddressValidation;
 using System.Windows.Input;
 using Autofac.Features.OwnedInstances;
+using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping
 {
@@ -75,6 +77,7 @@ namespace ShipWorks.Shipping
             listenForRateCriteriaChanged = false;
 
             messenger.Handle<ShipmentChangedMessage>(this, OnShipmentChanged);
+            messenger.Handle<StoreChangedMessage>(this, OnStoreChanged);
 
             WireUpObservables();
 
@@ -431,6 +434,19 @@ namespace ShipWorks.Shipping
             {
                 ShipmentType = shipmentChangedMessage.Shipment.ShipmentTypeCode;
             }
+        }
+
+        /// <summary>
+        /// Handles StoreChangedMessages.
+        /// </summary>
+        private void OnStoreChanged(StoreChangedMessage storeChangedMessage)
+        {
+            if (OriginAddressType != (int)ShipmentOriginSource.Store)
+            {
+                return;
+            }
+
+            Origin.SetAddressFromOrigin(OriginAddressType, loadedShipment?.Shipment?.OrderID ?? 0, -1, ShipmentType);
         }
 
         /// <summary>
