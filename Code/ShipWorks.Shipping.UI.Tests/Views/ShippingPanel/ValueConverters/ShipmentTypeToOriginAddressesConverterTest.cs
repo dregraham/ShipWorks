@@ -1,8 +1,8 @@
 ﻿using Autofac.Extras.Moq;
-using ShipWorks.Shipping.UI.Views.ShippingPanel.ValueConverters;
 using ShipWorks.Tests.Shared;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Shipping.UI.ShippingPanel.ValueConverters;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.Views.ShippingPanel.ValueConverters

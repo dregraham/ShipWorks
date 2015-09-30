@@ -1,9 +1,9 @@
-﻿using ShipWorks.Shipping.UI.Views.ShippingPanel.ValueConverters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShipWorks.Shipping.UI.ShippingPanel.ValueConverters;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.Views.ShippingPanel.ValueConverters

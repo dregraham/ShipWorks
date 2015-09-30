@@ -1,8 +1,8 @@
-﻿using ShipWorks.UI.Controls;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
+using ShipWorks.UI.Controls;
 
-namespace ShipWorks.Shipping.UI
+namespace ShipWorks.Shipping.UI.ShippingPanel.Styles
 {
     /// <summary>
     /// Expose the state of service control expanders

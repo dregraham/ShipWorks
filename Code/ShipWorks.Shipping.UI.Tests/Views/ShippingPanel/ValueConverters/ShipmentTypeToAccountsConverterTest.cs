@@ -8,7 +8,7 @@ using Moq;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.UI.Views.ShippingPanel.ValueConverters;
+using ShipWorks.Shipping.UI.ShippingPanel.ValueConverters;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.Views.ShippingPanel.ValueConverters

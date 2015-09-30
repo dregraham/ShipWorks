@@ -1,43 +1,43 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore;
 using TD.SandDock;
-using System.Diagnostics.CodeAnalysis;
 
-namespace ShipWorks.Shipping.UI
+namespace ShipWorks.Shipping.UI.ShippingPanel
 {
     /// <summary>
-    /// Register the rating panel
+    /// Register the shipment panel
     /// </summary>
-    public class RatingPanelRegistration : IRegisterDockableWindow
+    public class ShippingPanelRegistration : IRegisterDockableWindow
     {
         /// <summary>
         /// Register a panel with the dock manager
         /// </summary>
-        [SuppressMessage("SonarQube", "S1848:Objects should not be created to be dropped immediately without being used", 
+        [SuppressMessage("SonarQube", "S1848:Objects should not be created to be dropped immediately without being used",
             Justification = "The DockableWindow is used by the dockManager")]
-        [SuppressMessage("SonarQube", "S2930:\"IDisposables\" should be disposed",
+        [SuppressMessage("SonarQube", "S2930:\"IDisposables\" should be disposed", 
             Justification = "The dock manager owns the panel, so we can't dispose it")]
         public void Register(SandDockManager dockManager)
         {
-            RatingPanel panelRating = new RatingPanel
+            ShippingPanel panelShipment = new ShippingPanel
             {
                 BackColor = Color.White,
                 Dock = DockStyle.Fill,
                 Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0),
                 Location = new Point(1, 1),
-                Name = "panelRating",
+                Name = "panelShipment",
                 Size = new Size(376, 168),
                 TabIndex = 1
             };
 
-            new DockableWindow(dockManager, panelRating, "Rating")
+            new DockableWindow(dockManager, panelShipment, "Shipment")
             {
                 BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat,
-                Guid = new Guid("B82A3A5F-931A-40E7-AB35-9189D564C187"),
+                Guid = new Guid("574C96CC-5D02-4689-9463-4FB4DBCE22AD"),
                 Location = new Point(0, 25),
-                Name = "dockableWindowRating",
+                Name = "dockableWindowShipment",
                 ShowOptions = false,
                 Size = new Size(378, 170),
                 TabImage = Properties.Resources.add16,

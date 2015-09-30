@@ -1,7 +1,6 @@
-﻿using Interapptive.Shared.Messaging;
-using ShipWorks.Shipping.Editing.Rating;
+﻿using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Shipping.UI
+namespace ShipWorks.Shipping.UI.RatingPanel
 {
     partial class RatingPanel
     {

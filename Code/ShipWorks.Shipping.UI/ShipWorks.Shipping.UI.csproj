@@ -140,9 +140,35 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Views\AddressControl\AddressControl.xaml.cs">
+    <Compile Include="RatingPanel\RatingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RatingPanel\RatingPanel.Designer.cs">
+      <DependentUpon>RatingPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RatingPanel\RatingPanelRegistration.cs" />
+    <Compile Include="ShippingPanel\AddressControl\AddressControl.xaml.cs">
       <DependentUpon>AddressControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml.cs">
+      <DependentUpon>ShipmentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\ShippingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ShippingPanel\ShippingPanel.Designer.cs">
+      <DependentUpon>ShippingPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\ShippingPanelControl.xaml.cs">
+      <DependentUpon>ShippingPanelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\ShippingPanelRegistration.cs" />
+    <Compile Include="ShippingPanel\Styles\ExpanderState.cs" />
+    <Compile Include="ShippingPanel\ValueConverters\OriginAddressListConverter.cs" />
+    <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListConverter.cs" />
+    <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListItem.cs" />
+    <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeToAccountsConverter.cs" />
+    <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeToOriginAddressesConverter.cs" />
     <Compile Include="Carriers\iParcel\iParcelShippingModule.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShippingModule.cs" />
     <Compile Include="Carriers\BestRate\BestRateShippingModule.cs" />
@@ -179,46 +205,19 @@
     </Compile>
     <Compile Include="Carriers\Other\OtherShippingModule.cs" />
     <Compile Include="ControlExtensions.cs" />
-    <Compile Include="ExpanderState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RatingPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="RatingPanel.Designer.cs">
-      <DependentUpon>RatingPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="RatingPanelRegistration.cs" />
-    <Compile Include="ScaleControl.xaml.cs">
+    <Compile Include="ShippingModule.cs" />
+    <Compile Include="ShippingPanel\Weight\ScaleControl.xaml.cs">
       <DependentUpon>ScaleControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ShipmentControl.xaml.cs">
-      <DependentUpon>ShipmentControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Services\ShipmentTypeProvider.cs" />
-    <Compile Include="Views\ShippingPanel\ShippingPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\ShippingPanel\ShippingPanel.Designer.cs">
-      <DependentUpon>ShippingPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ShippingPanel\ShippingPanelControl.xaml.cs">
-      <DependentUpon>ShippingPanelControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ShippingPanel\ShippingPanelRegistration.cs" />
-    <Compile Include="ShippingModule.cs" />
-    <Compile Include="StateProvinceConverter.cs" />
-    <Compile Include="ValidationRules\WeightValidationRule.cs" />
+    <Compile Include="ShippingPanel\Weight\WeightValidationRule.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
-    <Compile Include="Views\ShippingPanel\ValueConverters\ShipmentTypeListConverter.cs" />
-    <Compile Include="Views\ShippingPanel\ValueConverters\ShipmentTypeListItem.cs" />
+    <Compile Include="ValueConverters\StateProvinceConverter.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\DoubleToWeightStringConverter.cs" />
-    <Compile Include="Views\ShippingPanel\ValueConverters\OriginAddressListConverter.cs" />
-    <Compile Include="Views\ShippingPanel\ValueConverters\ShipmentTypeToAccountsConverter.cs" />
-    <Compile Include="Views\ShippingPanel\ValueConverters\ShipmentTypeToOriginAddressesConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -279,21 +278,37 @@
     <EmbeddedResource Include="Carriers\Other\OtherSetupWizard.resx">
       <DependentUpon>OtherSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RatingPanel.resx">
+    <EmbeddedResource Include="RatingPanel\RatingPanel.resx">
       <DependentUpon>RatingPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\ShippingPanel\ShippingPanel.resx">
+    <EmbeddedResource Include="ShippingPanel\ShippingPanel.resx">
       <DependentUpon>ShippingPanel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\AddressControl\AddressControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="ShippingPanel\AddressControl\AddressControl.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="ScaleControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShippingPanel\ShippingPanelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShippingPanel\Styles\ServiceControlStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShippingPanel\Styles\ShipWorksExpanderStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShippingPanel\Weight\ScaleControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\EmptyButtonStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -303,23 +318,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ShipmentControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ShippingPanel\ShippingPanelControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Styles\GlobalStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ServiceControlStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ShipWorksExpanderStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 
-namespace ShipWorks.Shipping.UI.ValidationRules
+namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
 {
     /// <summary>
     /// Validate a weight entered with lbs or oz

@@ -5,6 +5,7 @@ using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Shipping.Services;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.Services

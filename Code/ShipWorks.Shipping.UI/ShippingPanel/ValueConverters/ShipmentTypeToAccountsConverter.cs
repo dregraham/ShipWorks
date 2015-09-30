@@ -11,7 +11,7 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.UI.Controls.Design;
 
-namespace ShipWorks.Shipping.UI.Views.ShippingPanel.ValueConverters
+namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
 {
     /// <summary>
     /// Convert a shipment type into a list of available accounts

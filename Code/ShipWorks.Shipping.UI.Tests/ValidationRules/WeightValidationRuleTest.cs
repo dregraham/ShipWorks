@@ -1,5 +1,5 @@
-﻿using ShipWorks.Shipping.UI.ValidationRules;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using ShipWorks.Shipping.UI.ShippingPanel.Weight;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.ValidationRules

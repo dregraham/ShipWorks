@@ -3,6 +3,8 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.UI.RatingPanel;
+using ShipWorks.Shipping.UI.ShippingPanel;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -50,7 +52,7 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<RatingPanel>();
+            builder.RegisterType<RatingPanel.RatingPanel>();
 
             builder.RegisterType<RatingPanelViewModel>();
 
