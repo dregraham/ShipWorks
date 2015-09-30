@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Tests;
 using ShipWorks.Tests.Shared;
 using System.Collections.Generic;
 using ShipWorks.AddressValidation;
+using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -225,6 +226,48 @@ namespace ShipWorks.Tests.Shipping
 
                 mock.Mock<IShipmentTypeFactory>()
                     .Verify(x => x.Get(It.IsAny<ShipmentTypeCode>()), Times.Never);
+            }
+        }
+
+        [Fact]
+        public async void SetShipmentType_DoesNotChangeOriginType_WhenShipmentTypeChangedAwayFromOther()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Other;
+                shipmentEntity.OriginOriginID = (long)ShipmentOriginSource.Store;
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                testObject.ShipmentType = ShipmentTypeCode.Usps;
+
+                Assert.Equal((long)ShipmentOriginSource.Store, testObject.OriginAddressType);
+            }
+        }
+
+        [Fact]
+        public async void SetShipmentType_DoesNotChangeOriginType_WhenShipmentTypeChangedToOtherAndOriginIsNotAccount()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
+                shipmentEntity.OriginOriginID = (long)ShipmentOriginSource.Store;
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                testObject.ShipmentType = ShipmentTypeCode.Other;
+
+                Assert.Equal((long)ShipmentOriginSource.Store, testObject.OriginAddressType);
+            }
+        }
+
+        [Fact]
+        public async void SetShipmentType_ChangesOriginTypeToOther_WhenShipmentTypeChangedToOtherAndOriginIsAccount()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
+                shipmentEntity.OriginOriginID = (long)ShipmentOriginSource.Account;
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                testObject.ShipmentType = ShipmentTypeCode.Other;
+
+                Assert.Equal((long)ShipmentOriginSource.Other, testObject.OriginAddressType);
             }
         }
 

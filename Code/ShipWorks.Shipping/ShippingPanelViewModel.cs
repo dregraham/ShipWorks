@@ -149,6 +149,12 @@ namespace ShipWorks.Shipping
                     }
 
                     SupportsMultiplePackages = shipmentTypeFactory.Get(selectedShipmentType)?.SupportsMultiplePackages ?? false;
+
+                    // If we get more carrier rules, we could bury this in the shipment type
+                    if (ShipmentType == ShipmentTypeCode.Other && OriginAddressType == (long)ShipmentOriginSource.Account)
+                    {
+                        OriginAddressType = (long)ShipmentOriginSource.Other;
+                    }
                     //UpdateServices();
                     //UpdatePackages();
                 }
