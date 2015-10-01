@@ -3068,8 +3068,6 @@ namespace ShipWorks.Data.Model
 		PackagingType,
 		///<summary>NonStandardContainer. </summary>
 		NonStandardContainer,
-		///<summary>ReferenceFIMS. </summary>
-		ReferenceFIMS,
 		///<summary>ReferenceCustomer. </summary>
 		ReferenceCustomer,
 		///<summary>ReferenceInvoice. </summary>
@@ -3128,6 +3126,8 @@ namespace ShipWorks.Data.Model
 		ReturnSaturdayPickup,
 		///<summary>ReturnsClearance. </summary>
 		ReturnsClearance,
+		///<summary>ReferenceFIMS. </summary>
+		ReferenceFIMS,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3218,8 +3218,6 @@ namespace ShipWorks.Data.Model
 		PackagingType,
 		///<summary>NonStandardContainer. </summary>
 		NonStandardContainer,
-		///<summary>ReferenceFIMS. </summary>
-		ReferenceFIMS,
 		///<summary>ReferenceCustomer. </summary>
 		ReferenceCustomer,
 		///<summary>ReferenceInvoice. </summary>
@@ -3510,6 +3508,8 @@ namespace ShipWorks.Data.Model
 		ReturnsClearance,
 		///<summary>MaskedData. </summary>
 		MaskedData,
+		///<summary>ReferenceFIMS. </summary>
+		ReferenceFIMS,
 		/// <summary></summary>
 		AmountOfFields
 	}

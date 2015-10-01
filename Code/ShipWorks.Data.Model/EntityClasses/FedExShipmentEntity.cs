@@ -511,9 +511,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("NonStandardContainer", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ReferenceFIMS", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ReferenceCustomer", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -947,6 +944,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("MaskedData", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ReferenceFIMS", fieldHashtable);
 		}
 		#endregion
 
@@ -1141,17 +1141,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.NonStandardContainer, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.NonStandardContainer, value); }
-		}
-
-		/// <summary> The ReferenceFIMS property of the Entity FedExShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "FedExShipment"."ReferenceFIMS"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ReferenceFIMS
-		{
-			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.ReferenceFIMS, true); }
-			set	{ SetValue((int)FedExShipmentFieldIndex.ReferenceFIMS, value); }
 		}
 
 		/// <summary> The ReferenceCustomer property of the Entity FedExShipment<br/><br/>
@@ -2747,6 +2736,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)FedExShipmentFieldIndex.MaskedData, false); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.MaskedData, value); }
+		}
+
+		/// <summary> The ReferenceFIMS property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."ReferenceFIMS"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ReferenceFIMS
+		{
+			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.ReferenceFIMS, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.ReferenceFIMS, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExPackageEntity' which are related to this entity via a relation of type '1:n'.
