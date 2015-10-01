@@ -62,9 +62,17 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                         client.GetOrders(1, DateTime.UtcNow.ToString());
 
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        MessageHelper.ShowError(this, "Invalid store URL or access token");
+                        if (ex.Message.Equals("The remote server returned an error: (401) Unauthorized."))
+                        {
+                            MessageHelper.ShowError(this, "Invalid access token");
+                        }
+                        else
+                        {
+                            MessageHelper.ShowError(this, "Invalid store URL");
+                        }
+
                         return false;
                     }
 
