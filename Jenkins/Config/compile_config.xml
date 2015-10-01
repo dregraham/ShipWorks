@@ -50,7 +50,7 @@
 	<hudson.tasks.Shell>
       <command># Use the current branch name to make sure the registry key is added since this could be kicked off from multiple nodes
 # It may be worthwhile to move this to its own job at some point.
-KEY=$(echo C:\\\\jenkins-builds\\\\${GIT_BRANCH#*/}\\\\Artifacts\\\\Application)
+KEY=$(echo C:\\jenkins-builds\\${GIT_BRANCH#*/}\\Artifacts\\Application)
 
 echo $KEY
 # Use the rake task to add the registry key with a randomly generated GUID value
