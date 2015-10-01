@@ -52,10 +52,6 @@ namespace ShipWorks.ApplicationCore
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<StoreManagerWrapper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<ShippingSettingsWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

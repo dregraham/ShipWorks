@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Stores
+namespace ShipWorks.Stores.Services
 {
     /// <summary>
     /// Algorithms and functions for working with stores.
