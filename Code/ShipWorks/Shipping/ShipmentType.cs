@@ -34,6 +34,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
 using Interapptive.Shared.Business.Geography;
+using ShipWorks.Core.Shipping;
 using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping
@@ -1338,5 +1339,10 @@ namespace ShipWorks.Shipping
         {
             // Default will have nothing to update
         }
+
+        /// <summary>
+        /// Gets the adapter for the shipment.
+        /// </summary>
+        public abstract IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipmentEntity);
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ShipWorks.Core.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Shipping.Carriers.None
 {
@@ -62,5 +64,13 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment) => new NullShippingBroker();
+
+        /// <summary>
+        /// Return a null shipment adapter
+        /// </summary>
+        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
+        {
+            return new NullShipmentAdapter();
+        }
     }
 }

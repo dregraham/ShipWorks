@@ -1,5 +1,7 @@
 ﻿using System;
+using ShipWorks.Core.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping
 {
@@ -12,6 +14,11 @@ namespace ShipWorks.Shipping
         /// The shipment 
         /// </summary>
         public ShipmentEntity Shipment { get; set; }
+
+        /// <summary>
+        /// The shipment adapter
+        /// </summary>
+        public IShipmentAdapter ShipmentAdapter { get; set; }
 
         /// <summary>
         /// The result of the load
@@ -27,5 +34,10 @@ namespace ShipWorks.Shipping
         /// Type of shpping requested by the customer
         /// </summary>
         public string RequestedShippingMode { get; internal set; }
+
+        /// <summary>
+        /// OrderID of the shipment.  0 if no shipments.
+        /// </summary>
+        public long OrderID { get; internal set; }
     }
 }

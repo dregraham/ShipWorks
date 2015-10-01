@@ -833,6 +833,7 @@
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRatePackageAdapter.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentAdapter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -901,6 +902,7 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExServiceTypeChangedMessage.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExTemplateElementGenerator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExShipmentAdapter.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountRetriever.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FimsOptionsControl.cs">
       <SubType>UserControl</SubType>
@@ -916,6 +918,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentAdapter.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
     <Compile Include="Shipping\Carriers\NullAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackageAdapter.cs" />
@@ -926,10 +929,15 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentAdapter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentAdapter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\PostalServicePackagingCombination.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsShipmentAdapter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\IUspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\Label.cs" />
@@ -1056,9 +1064,11 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebShipmentAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\ShippingAccountsChangedMessage.cs" />
     <Compile Include="Shipping\Carriers\TangoCredentialStore.cs" />
+    <Compile Include="Shipping\Carriers\ShipmentAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateRestrictionBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRatesBroker.cs" />
@@ -1081,10 +1091,12 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverter.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsShipmentAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shipping\Carriers\NullShipmentAdapter.cs" />
     <Compile Include="Shipping\ConfiguringCarrierMessage.cs" />
     <Compile Include="Shipping\CreateLabelMessage.cs" />
     <Compile Include="Shipping\CustomsManagerWrapper.cs" />
@@ -1158,6 +1170,7 @@
     <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shipping\IShipmentAdapter.cs" />
     <Compile Include="Shipping\IShipmentProcessor.cs" />
     <Compile Include="Shipping\IShipmentServicesBuilder.cs" />
     <Compile Include="Shipping\IShipmentServicesBuilderFactory.cs" />
