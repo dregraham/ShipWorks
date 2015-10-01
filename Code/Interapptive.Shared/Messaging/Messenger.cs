@@ -29,32 +29,15 @@ namespace Interapptive.Shared.Messaging
         /// Handle a message using the specified handler
         /// </summary>
         /// <returns>Token that can be used to remove the handler later</returns>
-        public MessengerToken Handle<T>(object owner, Action<T> handler) where T : IShipWorksMessage
-        {
-            Type messageType = typeof(T);
+        public MessengerToken Handle<T>(object owner, Action<T> handler) where T : IShipWorksMessage =>
+            Handle(owner, typeof(T), handler);
 
-            lock (lockObj)
-            {
-                if (!handlers.ContainsKey(messageType))
-                {
-                    handlers.Add(messageType, new List<MessageHandler>());
-                }
-
-                MessageHandler messageHandler = handlers[messageType].FirstOrDefault(x => x.ReferencesHandler(owner, handler));
-                
-                // If this handler isn't already registered, go ahead and register it
-                if (messageHandler == null)
-                {
-                    messageHandler = new MessageHandler(messageType, owner, handler, new MessengerToken());
-
-                    handlers[messageType].Add(messageHandler);
-                }
-
-                Cleanup();
-
-                return messageHandler.Token;
-            }
-        }
+        /// <summary>
+        /// Handle a message using the specified handler
+        /// </summary>
+        /// <returns>Token that can be used to remove the handler later</returns>
+        public MessengerToken Handle(object owner, Type messageType, Action<IShipWorksMessage> handler) =>
+            Handle(owner, messageType, (object)handler);
 
         /// <summary>
         /// Send a message to any listeners
@@ -94,6 +77,23 @@ namespace Interapptive.Shared.Messaging
         }
 
         /// <summary>
+        /// Remove all handlers of a message type for a given owner
+        /// </summary>
+        public void Remove(object owner, Type messageType)
+        {
+            lock (lockObj)
+            {
+                List<MessageHandler> handlerList;
+                if (!handlers.TryGetValue(messageType, out handlerList))
+                {
+                    return;
+                }
+                
+                Remove(handlerList.Where(x => x.IsOwnedBy(owner)).ToList());
+            }
+        }
+
+        /// <summary>
         /// Remove a handler based on the handler method
         /// </summary>
         public void Remove<T>(object owner, Action<T> handler)
@@ -101,6 +101,35 @@ namespace Interapptive.Shared.Messaging
             lock (lockObj)
             {
                 Remove(handlers.SelectMany(x => x.Value).Where(x => x.ReferencesHandler(owner, handler)).ToList());
+            }
+        }
+
+        /// <summary>
+        /// Handle a message using the specified handler
+        /// </summary>
+        /// <returns>Token that can be used to remove the handler later</returns>
+        private MessengerToken Handle(object owner, Type messageType, object handler)
+        {
+            lock (lockObj)
+            {
+                if (!handlers.ContainsKey(messageType))
+                {
+                    handlers.Add(messageType, new List<MessageHandler>());
+                }
+
+                MessageHandler messageHandler = handlers[messageType].FirstOrDefault(x => x.ReferencesHandler(owner, handler));
+
+                // If this handler isn't already registered, go ahead and register it
+                if (messageHandler == null)
+                {
+                    messageHandler = new MessageHandler(messageType, owner, handler, new MessengerToken());
+
+                    handlers[messageType].Add(messageHandler);
+                }
+
+                Cleanup();
+
+                return messageHandler.Token;
             }
         }
 
@@ -180,6 +209,11 @@ namespace Interapptive.Shared.Messaging
                 return ReferenceEquals(handlerReference.Target, owner) && 
                     ReferenceEquals(action, handler);
             }
+
+            /// <summary>
+            /// Checks whether the handler is owned by the specified object
+            /// </summary>
+            public bool IsOwnedBy(object owner) => ReferenceEquals(handlerReference.Target, owner);
 
             /// <summary>
             /// Gets whether the handler's owner is still alive

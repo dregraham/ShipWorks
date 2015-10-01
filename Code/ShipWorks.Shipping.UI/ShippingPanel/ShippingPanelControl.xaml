@@ -7,11 +7,14 @@
              xmlns:tc="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
              xmlns:shippingshared="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shared"
              xmlns:shipping="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shipping"
+             xmlns:shippingcore="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Core"
+             xmlns:carriers="clr-namespace:ShipWorks.Shipping.Carriers;assembly=ShipWorks.Core"
              xmlns:valueConverters="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ValueConverters"
              xmlns:addressControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.AddressControl"
              xmlns:styles="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Styles"
              xmlns:shipmentControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl"
              xmlns:services="clr-namespace:ShipWorks.Shipping.Services;assembly=ShipWorks.Shipping"
+             xmlns:props="clr-namespace:ShipWorks.Shipping.UI.AttachedProperties"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shipping:ShippingPanelViewModel}"
              d:DesignHeight="1304" d:DesignWidth="350"
              SnapsToDevicePixels="True">
@@ -112,6 +115,7 @@
                                 <ComboBox Grid.Row="0" Grid.Column="1"
                                           x:Name="AccountDropDown"
                                           Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}"
+                                          props:UpdateWhenMessageReceived.MessageType="{x:Type carriers:ShippingAccountsChangedMessage}"
                                           SelectedValue="{Binding Account}"
                                           DisplayMemberPath="Description" >
                                     <ComboBox.ItemsSource>
@@ -126,6 +130,7 @@
                                 <ComboBox Grid.Row="1" Grid.Column="1"
                                           DisplayMemberPath="Key"
                                           SelectedValuePath="Value"
+                                          props:UpdateWhenMessageReceived.MessageType="{x:Type shippingcore:EnabledCarriersChangedMessage}"
                                           x:Name="OriginDropDown">
                                     <ComboBox.ItemsSource>
                                         <MultiBinding Converter="{StaticResource OriginAddressList}">

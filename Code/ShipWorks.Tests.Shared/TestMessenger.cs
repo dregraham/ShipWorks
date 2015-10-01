@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Tests.Shared
 {
+    /// <summary>
+    /// Message that can be used for testing
+    /// </summary>
     public class TestMessenger : IMessenger
     {
         readonly Dictionary<Type, object> handlers = new Dictionary<Type, object>();
@@ -24,7 +24,18 @@ namespace ShipWorks.Tests.Shared
 
         public void Remove(MessengerToken token)
         {
+            // Not implement in test
+        }
 
+        public MessengerToken Handle(object owner, Type messageType, Action<IShipWorksMessage> handler)
+        {
+            handlers.Add(messageType, handler);
+            return new MessengerToken();
+        }
+
+        public void Remove(object owner, Type messageType)
+        {
+            // Not implement in test
         }
     }
 }
