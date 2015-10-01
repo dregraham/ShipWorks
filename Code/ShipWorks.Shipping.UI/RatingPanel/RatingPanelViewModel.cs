@@ -42,7 +42,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private bool showAllRates;
         private bool showSpinner;
         private RateResult selectedRateResult;
-        public StoreEntity store;
         private RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
         private string errorMessage = string.Empty;
 

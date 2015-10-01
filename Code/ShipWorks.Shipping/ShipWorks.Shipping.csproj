@@ -173,6 +173,9 @@
     <Compile Include="ShipmentTypeFactory.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
+    <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
+      <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

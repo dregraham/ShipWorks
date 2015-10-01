@@ -263,6 +263,15 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.LabelSheetEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "LabelSheetEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandOrderEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "LemonStandOrderEntity");
+					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandOrderItemEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "LemonStandOrderItemEntity");
+					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandStoreEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "LemonStandStoreEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.MagentoOrderEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "MagentoOrderEntity");
 					break;

@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public class CarrierAccountRetrieverFactory : ICarrierAccountRetrieverFactory
     {
-        private IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>> lookup;
+        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>> lookup;
 
         /// <summary>
         /// Constructor
@@ -22,9 +22,6 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get a carrier account retriever
         /// </summary>
-        public ICarrierAccountRetriever<ICarrierAccount> Get(ShipmentTypeCode shipmentType)
-        {
-            return lookup[shipmentType];
-        }
+        public ICarrierAccountRetriever<ICarrierAccount> Get(ShipmentTypeCode shipmentType) => lookup[shipmentType];
     }
 }

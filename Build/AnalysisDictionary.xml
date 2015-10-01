@@ -61,9 +61,13 @@
       <Word>FIMS</Word>
       <Word>Fims</Word>
       <Word>Groupon</Word>
+      <Word>LemonStand</Word>
+      <Word>Lemon</Word>
+      <Word>Stand</Word>
     </Recognized>
     <Compound>
       <Term CompoundAlternate="FileName">filename</Term>
+      <Term CompoundAlternate="LemonStand">lemonstand</Term>
     </Compound>
     <DiscreteExceptions>
       <Term>ShipWorks</Term>
@@ -72,6 +76,7 @@
       <Term>FedEx</Term>
       <Term>AmeriCommerce</Term>
       <Term>MainForm</Term>
+      <Term>LemonStand</Term>
     </DiscreteExceptions>
     <Deprecated>
       <Term PreferredAlternate="EnterpriseServices">ComPlus</Term>

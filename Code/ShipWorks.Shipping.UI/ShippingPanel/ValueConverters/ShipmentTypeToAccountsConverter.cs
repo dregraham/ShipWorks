@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
     /// </summary>
     public class ShipmentTypeToAccountsConverter : IValueConverter
     {
-        private IShippingAccountListProvider shippingAccountListProvider;
+        private readonly IShippingAccountListProvider shippingAccountListProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipmentTypeToAccountsConverter"/> class.

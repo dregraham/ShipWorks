@@ -11,9 +11,9 @@ namespace ShipWorks.Shipping.Tests.Services.Account
 {
     public class ShippingAccountListProviderTest
     {
-        private Mock<IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>>> carrierAccountRetrieverLookup;
-        private Mock<ICarrierAccountRetriever<ICarrierAccount>> mockedFedExRepository;
-        private Mock<ICarrierAccount> carrierAccount;
+        private readonly Mock<IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>>> carrierAccountRetrieverLookup;
+        private readonly Mock<ICarrierAccountRetriever<ICarrierAccount>> mockedFedExRepository;
+        private readonly Mock<ICarrierAccount> carrierAccount;
         
         public ShippingAccountListProviderTest()
         {
