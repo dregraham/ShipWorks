@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Moq;
 using ShipWorks.Data.Model.Custom;
@@ -11,7 +8,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.UI.ShippingPanel.ValueConverters;
 using Xunit;
 
-namespace ShipWorks.Shipping.UI.Tests.Views.ShippingPanel.ValueConverters
+namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
 {
     public class ShipmentTypeToAccountsConverterTest
     {

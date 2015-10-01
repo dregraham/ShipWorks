@@ -2,7 +2,7 @@
 using ShipWorks.Shipping.UI.ShippingPanel.Weight;
 using Xunit;
 
-namespace ShipWorks.Shipping.UI.Tests.ValidationRules
+namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.Weight
 {
     public class WeightValidationRuleTest
     {
