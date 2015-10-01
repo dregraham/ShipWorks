@@ -361,7 +361,31 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                         #endregion
 
-                        new GridColumnDefinition("{5D0135AC-ECE9-47e5-AB02-D91FAF91EA84}", true,
+                #region LemonStand
+                        new GridColumnDefinition("{39eefe98-96e4-4a31-9732-dc92ec83e155}", true,
+                            new GridTextDisplayType(), "Url Name", "cap",
+                            LemonStandOrderItemFields.UrlName)
+                            {
+                                StoreTypeCode = StoreTypeCode.LemonStand
+                            },
+
+                        new GridColumnDefinition("{39f2da7e-ec0d-4e9c-b98c-2547d8252e2d}", true,
+                            new GridTextDisplayType(), "Short Description", "A short description",
+                            LemonStandOrderItemFields.ShortDescription)
+                            {
+                                StoreTypeCode = StoreTypeCode.LemonStand
+                            },
+
+                        new GridColumnDefinition("{967932c3-462e-458a-8f91-294009bff650}", true,
+                            new GridTextDisplayType(), "Category", "Sporting Goods",
+                            LemonStandOrderItemFields.Category)
+                            {
+                                StoreTypeCode = StoreTypeCode.LemonStand
+                            },
+                        
+                #endregion
+
+                new GridColumnDefinition("{5D0135AC-ECE9-47e5-AB02-D91FAF91EA84}", true,
                             new GridActionDisplayType(o => UserSession.Security.HasPermission(PermissionType.OrdersModify, (long) o) ? "Edit" : "", GridLinkAction.Edit), "Edit", "Edit",
                             OrderItemFields.OrderItemID) 
                             { 

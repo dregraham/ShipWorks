@@ -32,6 +32,7 @@ using Interapptive.Shared.Business;
 using ShipWorks.Data.Caching;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Users.Audit;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -57,15 +58,19 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Constructor
         /// </summary>
-        protected StoreDownloader(StoreEntity store)
+        protected StoreDownloader(StoreEntity store) : this(store, StoreTypeManager.GetType(store))
+        {
+        }
+
+        protected StoreDownloader([Obfuscation(Exclude = true)] StoreEntity store, StoreType storeType)
         {
             if (store == null)
             {
-                throw new ArgumentNullException("store");
+                throw new ArgumentNullException(nameof(store));
             }
 
             this.store = store;
-            this.storeType = StoreTypeManager.GetType(store);
+            this.storeType = storeType;
         }
 
         /// <summary>
@@ -287,7 +292,7 @@ namespace ShipWorks.Stores.Communication
         /// a new one is initialized, created, and returned.  If the order does exist in the database,
         /// that order is returned.
         /// </summary>
-        protected OrderEntity InstantiateOrder(OrderIdentifier orderIdentifier)
+        protected virtual OrderEntity InstantiateOrder(OrderIdentifier orderIdentifier)
         {
             if (orderIdentifier == null)
             {
@@ -488,7 +493,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
-        protected void SaveDownloadedOrder(OrderEntity order)
+        protected virtual void SaveDownloadedOrder(OrderEntity order)
         {
             Stopwatch sw = Stopwatch.StartNew();
 
