@@ -1,4 +1,4 @@
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.Services.Builders
 {
     /// <summary>
     /// Factory for a ShipmentServicesBuilder

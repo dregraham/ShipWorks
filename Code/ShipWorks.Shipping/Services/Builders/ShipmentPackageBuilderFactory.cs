@@ -1,6 +1,6 @@
 using Autofac.Features.Indexed;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.Services.Builders
 {
     /// <summary>
     /// Retrieves a ShipmentPackageBuilder

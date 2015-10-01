@@ -1,10 +1,10 @@
 ﻿using Moq;
-using ShipWorks.Data.Model.EntityClasses;
-using Xunit;
-using ShipWorks.Shipping;
 using ShipWorks.Core.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.UI.ShippingPanel.Loading;
+using Xunit;
 
-namespace ShipWorks.Tests.Shipping
+namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.Loading
 {
     public class ShippingPanelShipmentLoaderTest
     {

@@ -3,37 +3,28 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
-using Interapptive.Shared.Utility;
-using log4net;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Policies;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Stores;
+using ShipWorks.Shipping.UI.ShippingPanel;
+using ShipWorks.Shipping.UI.ShippingPanel.Loading;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.UI.RatingPanel
 {
     /// <summary>
     /// View model for getting rates
     /// </summary>
     public class RatingPanelViewModel : IDisposable, INotifyPropertyChanged
     {
-        // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(RatingPanelViewModel));
-
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
 

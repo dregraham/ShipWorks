@@ -1,7 +1,7 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
 {
     /// <summary>
     /// Class representing the loading of an order's shipment(s).

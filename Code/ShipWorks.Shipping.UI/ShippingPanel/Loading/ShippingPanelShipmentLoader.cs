@@ -1,17 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
-using log4net;
+﻿using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
 {
     /// <summary>
     /// Loads a shipment for the order.  If allowed, and no shipment exists, one will be created.  Also validates the shipment addresses.
     /// </summary>
     public class ShippingPanelShipmentLoader : ILoader<ShippingPanelLoadedShipment>
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShippingPanelShipmentLoader));
-
         private readonly IShipmentLoader shipmentLoader;
         private readonly IValidator<ShipmentEntity> addressValidator;
 

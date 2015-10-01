@@ -3,6 +3,7 @@ using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.UI.Carriers.FedEx
 {

@@ -1,22 +1,13 @@
-﻿using System.Threading.Tasks;
-using Moq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.UI.ShippingPanel;
+using ShipWorks.Tests.Shared;
 using Xunit;
-using Autofac.Extras.Moq;
-using ShipWorks.Shipping.Carriers.Other;
-using ShipWorks.Shipping.UI;
-using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Tests;
-using System.ComponentModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-
-namespace ShipWorks.Shipping.UI.Tests
+namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 {
-    public class UnitTest1
+    public class ShipmentViewModelTest
     {
-        ShipmentEntity shipment = new ShipmentEntity();
+        readonly ShipmentEntity shipment = new ShipmentEntity();
 
         [Fact]
         public void Save_UpdatesShipmentEntity_WhenTotalWeightChanged_Test()

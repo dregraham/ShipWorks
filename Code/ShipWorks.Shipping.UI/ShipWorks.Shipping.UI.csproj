@@ -148,22 +148,33 @@
       <DependentUpon>RatingPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="RatingPanel\RatingPanelRegistration.cs" />
+    <Compile Include="RatingPanel\RatingPanelViewModel.cs" />
     <Compile Include="ShippingPanel\AddressControl\AddressControl.xaml.cs">
       <DependentUpon>AddressControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShippingPanel\IShippingPanelConfiguration.cs" />
+    <Compile Include="ShippingPanel\Loading\ILoader.cs" />
+    <Compile Include="ShippingPanel\Loading\IShipmentLoader.cs" />
+    <Compile Include="ShippingPanel\Loading\ShipmentLoader.cs" />
+    <Compile Include="ShippingPanel\Loading\ShippingPanelLoadedShipment.cs" />
+    <Compile Include="ShippingPanel\Loading\ShippingPanelLoadedShipmentResult.cs" />
+    <Compile Include="ShippingPanel\Loading\ShippingPanelShipmentLoader.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml.cs">
       <DependentUpon>ShipmentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShippingPanel\ShipmentViewModel.cs" />
     <Compile Include="ShippingPanel\ShippingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ShippingPanel\ShippingPanel.Designer.cs">
       <DependentUpon>ShippingPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="ShippingPanel\ShippingPanelConfiguration.cs" />
     <Compile Include="ShippingPanel\ShippingPanelControl.xaml.cs">
       <DependentUpon>ShippingPanelControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShippingPanel\ShippingPanelRegistration.cs" />
+    <Compile Include="ShippingPanel\ShippingPanelViewModel.cs" />
     <Compile Include="ShippingPanel\Styles\ExpanderState.cs" />
     <Compile Include="ShippingPanel\ValueConverters\OriginAddressListConverter.cs" />
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListConverter.cs" />

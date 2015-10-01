@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.Custom;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.Services.Accounts
 {
     /// <summary>
     /// Provides carrier accounts based on shipment type

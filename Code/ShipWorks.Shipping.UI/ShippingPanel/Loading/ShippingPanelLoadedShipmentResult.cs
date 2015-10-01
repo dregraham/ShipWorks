@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
 {
     /// <summary>
     /// Enum with values pertaining to the result of a shipping panel shipment load operation.

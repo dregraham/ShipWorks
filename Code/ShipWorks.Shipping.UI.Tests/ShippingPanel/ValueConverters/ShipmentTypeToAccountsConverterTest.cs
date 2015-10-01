@@ -5,6 +5,7 @@ using Moq;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Services.Accounts;
 using ShipWorks.Shipping.UI.ShippingPanel.ValueConverters;
 using Xunit;
 

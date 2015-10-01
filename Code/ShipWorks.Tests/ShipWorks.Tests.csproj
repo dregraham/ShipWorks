@@ -501,7 +501,6 @@
     <Compile Include="Shipping\ShipmentTypeTest.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensionsTest.cs" />
     <Compile Include="Shipping\ShippingManagerTest.cs" />
-    <Compile Include="Shipping\ShipmentLoaderTest.cs" />
     <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriterTest.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashTest.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKeyFactoryTest.cs" />

@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users.Security;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
 {
     /// <summary>
     /// Loads a shipment for an order.  
     /// </summary>
     public class ShipmentLoader : IShipmentLoader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipmentLoader));
-
         private readonly IShippingPanelConfiguration shippingPanelConfiguration;
         private readonly IShippingManager shippingManager;
         private readonly IFilterHelper filterHelper;

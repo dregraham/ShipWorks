@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.Services.Builders
 {
     /// <summary>
     /// Tool to build collection with package type number and string based on shipments

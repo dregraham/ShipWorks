@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
-using Xunit;
-using ShipWorks.Shipping;
+using ShipWorks.Shipping.UI.ShippingPanel;
+using ShipWorks.Shipping.UI.ShippingPanel.Loading;
 using ShipWorks.Users.Security;
+using Xunit;
 
-namespace ShipWorks.Tests.Shipping
+namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.Loading
 {
     public class ShipmentOrderLoaderTest
     {

@@ -15,7 +15,9 @@
              xmlns:shipmentControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl"
              xmlns:services="clr-namespace:ShipWorks.Shipping.Services;assembly=ShipWorks.Shipping"
              xmlns:props="clr-namespace:ShipWorks.Shipping.UI.AttachedProperties"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shipping:ShippingPanelViewModel}"
+             xmlns:shippingPanel="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel"
+             xmlns:loading="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Loading"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shippingPanel:ShippingPanelViewModel}"
              d:DesignHeight="1304" d:DesignWidth="350"
              SnapsToDevicePixels="True">
     <UserControl.Resources>
@@ -46,7 +48,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled"
                   IsEnabled="{Binding IsProcessed,Converter={StaticResource InvertBoolean}}">
         <StackPanel Margin="6,6,6,6">
-            <StackPanel Visibility="{Binding LoadResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static shipping:ShippingPanelLoadedShipmentResult.Success}}">
+            <StackPanel Visibility="{Binding LoadResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Success}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -177,7 +179,7 @@
                     <Button Command="{Binding CreateLabelCommand}">Create Label</Button>
                 </Grid>
             </StackPanel>
-            <StackPanel Visibility="{Binding LoadResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static shipping:ShippingPanelLoadedShipmentResult.Multiple}}">
+            <StackPanel Visibility="{Binding LoadResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Multiple}}">
                 <TextBlock>Multiple shipments...</TextBlock>
             </StackPanel>
         </StackPanel>

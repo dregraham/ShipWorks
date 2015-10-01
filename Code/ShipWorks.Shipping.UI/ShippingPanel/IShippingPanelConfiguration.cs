@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Security;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.UI.ShippingPanel
 {
     /// <summary>
     /// Interface for settings needed by the Shipping Panel

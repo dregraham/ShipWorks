@@ -5,6 +5,7 @@ using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
