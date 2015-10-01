@@ -8,6 +8,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.AddressValidation;
 using System.Linq;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -357,27 +358,6 @@ namespace ShipWorks.Tests.Shipping
             {
                 RetrieveShipments = () => shipments
             };
-        }
-
-        private class TestMessenger : IMessenger
-        {
-            readonly Dictionary<Type, object> handlers = new Dictionary<Type, object>();
-
-            public MessengerToken Handle<T>(object owner, Action<T> handler) where T : IShipWorksMessage
-            {
-                handlers.Add(typeof(T), handler);
-                return new MessengerToken();
-            }
-
-            public void Send<T>(T message) where T : IShipWorksMessage
-            {
-                ((Action<T>)handlers[typeof(T)])(message);
-            }
-
-            public void Remove(MessengerToken token)
-            {
-
-            }
         }
     }
 }
