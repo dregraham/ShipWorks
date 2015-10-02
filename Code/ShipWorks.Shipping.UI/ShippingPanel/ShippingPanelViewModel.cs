@@ -108,32 +108,32 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void WireUpObservables()
         {
-            // Wire up the rate criteria obseravable throttling for the PropertyChanged event.
-            Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
-                // We only listen if listenForRateCriteriaChanged is true.
-                .Where(evt => listenForRateCriteriaChanged)
-                // Only fire the event if we have a shipment and it is a rating field.
-                .Where(evt =>
-                {
-                    bool hasShipment = loadedShipment?.Shipment != null;
-                    bool isRatingField = IsRatingField(evt.EventArgs.PropertyName);
+            //// Wire up the rate criteria obseravable throttling for the PropertyChanged event.
+            //Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
+            //    // We only listen if listenForRateCriteriaChanged is true.
+            //    .Where(evt => listenForRateCriteriaChanged)
+            //    // Only fire the event if we have a shipment and it is a rating field.
+            //    .Where(evt =>
+            //    {
+            //        bool hasShipment = loadedShipment?.Shipment != null;
+            //        bool isRatingField = IsRatingField(evt.EventArgs.PropertyName);
 
-                    // forceRateCriteriaChanged is used for race conditions:
-                    // For example, ShipmentType property changes, and then before the throttle time, SupportsMultipleShipments changes.
-                    // Since SupportsMultipleShipments isn't a rating field, the event would not be fired, even though 
-                    // ShipmentType changed and the event needs to be raised.
-                    // So keep track that during the throttling a rate criteria was changed.
-                    forceRateCriteriaChanged = forceRateCriteriaChanged || (hasShipment && isRatingField);
+            //        // forceRateCriteriaChanged is used for race conditions:
+            //        // For example, ShipmentType property changes, and then before the throttle time, SupportsMultipleShipments changes.
+            //        // Since SupportsMultipleShipments isn't a rating field, the event would not be fired, even though 
+            //        // ShipmentType changed and the event needs to be raised.
+            //        // So keep track that during the throttling a rate criteria was changed.
+            //        forceRateCriteriaChanged = forceRateCriteriaChanged || (hasShipment && isRatingField);
 
-                    return forceRateCriteriaChanged;
-                })
-                .Throttle(TimeSpan.FromMilliseconds(250))
-                .Subscribe(evt =>
-                {
-                    // Reset forceRateCriteriaChanged so that we don't force it on the next round.
-                    forceRateCriteriaChanged = false;
-                    OnRateCriteriaPropertyChanged(null, evt.EventArgs);
-                });
+            //        return forceRateCriteriaChanged;
+            //    })
+            //    .Throttle(TimeSpan.FromMilliseconds(250))
+            //    .Subscribe(evt =>
+            //    {
+            //        // Reset forceRateCriteriaChanged so that we don't force it on the next round.
+            //        forceRateCriteriaChanged = false;
+            //        OnRateCriteriaPropertyChanged(null, evt.EventArgs);
+            //    });
         }
 
         /// <summary>
@@ -297,11 +297,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             listenForRateCriteriaChanged = false;
 
+            // Set the shipment type without going back through the shipment changed machinery
+            selectedShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
+
             ICarrierShipmentAdapter adapter = carrierShipmentAdapterFactory.Get(loadedShipment.Shipment);
 
             RequestedShippingMethod = loadedShipment.RequestedShippingMode;
             InitialShipmentTypeCode = loadedShipment.Shipment.ShipmentTypeCode;
-            ShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             OriginAddressType = loadedShipment.Shipment.OriginOriginID;
             InitialOriginAddressType = loadedShipment.Shipment.OriginOriginID;
             AccountId = adapter.AccountId.GetValueOrDefault();
@@ -441,6 +444,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void OnShipmentChanged(ShipmentChangedMessage shipmentChangedMessage)
         {
+            // Don't handle shipment changed messages from ourselves
+            if (Equals(shipmentChangedMessage.Sender))
+            {
+                return;
+            }
+
             if (shipmentChangedMessage?.Shipment == null || loadedShipment?.Shipment == null)
             {
                 return;
