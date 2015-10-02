@@ -1818,7 +1818,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [RequestedLabelFormat] [int] NOT NULL,
 [FimsAirWaybill] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReturnsClearance] [bit] NOT NULL CONSTRAINT [DF_FedExShipment_ReturnsClearance] DEFAULT ((0)),
-[MaskedData] [int] NULL
+[MaskedData] [int] NULL,
+[ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -1863,7 +1864,8 @@ CREATE TABLE [dbo].[FedExProfile]
 [RmaNumber] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RmaReason] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReturnSaturdayPickup] [bit] NULL,
-[ReturnsClearance] [bit] NULL
+[ReturnsClearance] [bit] NULL,
+[ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'
