@@ -93,6 +93,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
             Origin = addressViewModelFactory();
+
+            PropertyChanging += OnPropertyChanging;
+
             //Destination = new AddressViewModel();
 
             //ShipmentViewModel = shipmentViewModelFactory();
@@ -147,27 +150,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             get { return selectedShipmentType; }
             set
             {
-                if (handler.Set(nameof(ShipmentType), ref selectedShipmentType, value))
+                if (handler.Set(nameof(ShipmentType), ref selectedShipmentType, value) && loadedShipment?.Shipment != null)
                 {
-                    if (loadedShipment?.Shipment != null)
-                    {
-                        shippingManager.EnsureShipmentLoaded(loadedShipment.Shipment);
-                    }
-
-                    Save();
-                    AccountId = carrierShipmentAdapterFactory.Get(loadedShipment.Shipment).AccountId.GetValueOrDefault();
-
-                    SupportsMultiplePackages = shipmentTypeFactory.Get(selectedShipmentType)?.SupportsMultiplePackages ?? false;
-
-                    //// If we get more carrier rules, we could bury this in the shipment type
-                    //if (ShipmentType == ShipmentTypeCode.Other && OriginAddressType == (long)ShipmentOriginSource.Account)
-                    //{
-                    //    OriginAddressType = (long)ShipmentOriginSource.Other;
-                    //}
-
-                    //carrierShipmentAdapterFactory.Get()
-                    //UpdateServices();
-                    //UpdatePackages();
+                    loadedShipment.Shipment.ShipmentTypeCode = ShipmentType;
+                    shippingManager.EnsureShipmentLoaded(loadedShipment.Shipment);
+                    
+                    Populate();
                 }
             }
         }
@@ -295,19 +283,19 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             loadedShipment = await shipmentLoader.LoadAsync(orderID);
 
             LoadedShipmentResult = loadedShipment.Result;
-
-            if (loadedShipment.Shipment == null)
+            
+            if (loadedShipment.Shipment != null)
             {
-                // No shipment was created.  Show a message and return.
-                // TODO: Show a message
-
-                return;
+                Populate();
             }
+        }
 
+        /// <summary>
+        /// Populate the view model with the current state of the shipment
+        /// </summary>
+        private void Populate()
+        {
             listenForRateCriteriaChanged = false;
-            //DisableRateCriteriaChanged();
-            //DisableNeedToUpdateServices();
-            //DisableNeedToUpdatePackages();
 
             ICarrierShipmentAdapter adapter = carrierShipmentAdapterFactory.Get(loadedShipment.Shipment);
 
@@ -320,17 +308,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             Origin.Load(loadedShipment.Shipment.OriginPerson);
 
-            //Destination.Load(loadedShipment.Shipment.ShipPerson);
-
-            //ShipmentViewModel.Load(loadedShipment.Shipment);
-
             IsProcessed = loadedShipment.Shipment.Processed;
 
             listenForRateCriteriaChanged = true;
+            
+            Origin.SetAddressFromOrigin(OriginAddressType, loadedShipment?.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
 
-            //EnableRateCriteriaChanged();
-            //EnableNeedToUpdateServices();
-            //EnableNeedToUpdatePackages();
+            SupportsMultiplePackages = shipmentTypeFactory.Get(selectedShipmentType)?.SupportsMultiplePackages ?? false;
         }
 
         /// <summary>
@@ -365,12 +349,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             shipmentType.UpdateDynamicShipmentData(loadedShipment.Shipment);
             shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
 
-            loadedShipment.Shipment.ShipmentTypeCode = ShipmentType;
             loadedShipment.Shipment.OriginOriginID = OriginAddressType;
 
             Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
-            //Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
-            //ShipmentViewModel.Save(loadedShipment.Shipment);
 
             customsManager.EnsureCustomsLoaded(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current);
         }
@@ -481,7 +462,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return;
             }
 
-            Origin.SetAddressFromOrigin(OriginAddressType, loadedShipment?.Shipment?.OrderID ?? 0, -1, ShipmentType);
+            Origin.SetAddressFromOrigin(OriginAddressType, loadedShipment?.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
         }
 
         /// <summary>
@@ -503,6 +484,19 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                    shipmentType.RatingFields.FieldsContainName(shipName) ||
                    shipmentType.RatingFields.FieldsContainName(origName) ||
                    name.Equals("Street", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        /// <summary>
+        /// Handle a property change before it actually happens
+        /// </summary>
+        private void OnPropertyChanging(object sender, PropertyChangingEventArgs e)
+        {
+            if (e.PropertyName != nameof(ShipmentType))
+            {
+                return;
+            }
+
+            Save();
         }
     }
 }

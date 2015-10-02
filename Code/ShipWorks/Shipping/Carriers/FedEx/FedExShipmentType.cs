@@ -33,7 +33,6 @@ using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Api;
 using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -49,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExShipmentType"/> class.
         /// </summary>
-        public FedExShipmentType():this(IoC.UnsafeGlobalLifetimeScope.Resolve<IExcludedServiceTypeRepository>(), IoC.UnsafeGlobalLifetimeScope.Resolve<IExcludedPackageTypeRepository>())
+        public FedExShipmentType():this(new ExcludedServiceTypeRepository(), new ExcludedPackageTypeRepository())
         {
         }
 
