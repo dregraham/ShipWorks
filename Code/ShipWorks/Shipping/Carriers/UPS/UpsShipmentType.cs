@@ -23,7 +23,6 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model;
 using System.ComponentModel;
-using System.Configuration;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Data;
@@ -44,9 +43,7 @@ using ShipWorks.Stores;
 using log4net;
 using log4net.Repository.Hierarchy;
 using System.Globalization;
-using ShipWorks.Core.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -1321,21 +1318,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             return adapters;
-        }
-
-        /// <summary>
-        /// Return a UPS shipment adapter
-        /// </summary>
-        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
-        {
-            if (shipment.Ups == null)
-            {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-            }
-
-            IShipmentAdapter shipmentAdapter = new UpsShipmentAdapter(shipment);
-
-            return shipmentAdapter;
         }
 
         /// <summary>

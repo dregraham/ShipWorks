@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Net;
-using ShipWorks.Core.Shipping;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -15,7 +14,6 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
@@ -193,21 +191,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new WorldShipBestRateBroker();
-        }
-
-        /// <summary>
-        /// Return a shipment adapter
-        /// </summary>
-        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
-        {
-            if (shipment.Ups == null)
-            {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-            }
-
-            IShipmentAdapter shipmentAdapter = new UpsShipmentAdapter(shipment);
-
-            return shipmentAdapter;
         }
     }
 }

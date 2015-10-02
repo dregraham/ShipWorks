@@ -23,7 +23,6 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using Autofac;
-using ShipWorks.Core.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -746,21 +745,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             bucket.Relations.Add(ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID);
 
             adapter.UpdateEntitiesDirectly(new BestRateShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
-        }
-
-        /// <summary>
-        /// Return a shipment adapter
-        /// </summary>
-        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
-        {
-            if (shipment.BestRate == null)
-            {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-            }
-
-            IShipmentAdapter shipmentAdapter = new BestRateShipmentAdapter(shipment);
-
-            return shipmentAdapter;
         }
     }
 }

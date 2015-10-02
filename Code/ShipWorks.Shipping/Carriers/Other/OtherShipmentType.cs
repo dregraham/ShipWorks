@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
 using Interapptive.Shared.Utility;
-using ShipWorks.Core.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {
@@ -149,13 +148,5 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment) => new NullShippingBroker();
-
-        /// <summary>
-        /// Return a null shipment adapter
-        /// </summary>
-        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
-        {
-            return new NullShipmentAdapter();
-        }
     }
 }

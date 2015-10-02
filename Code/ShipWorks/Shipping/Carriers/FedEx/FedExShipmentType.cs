@@ -1286,20 +1286,5 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             return base.IsCustomsRequiredByShipment(shipment);
         }
-
-        /// <summary>
-        /// Return a shipment adapter
-        /// </summary>
-        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
-        {
-            if (shipment.FedEx == null)
-            {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-            }
-
-            IShipmentAdapter shipmentAdapter = new FedExShipmentAdapter(shipment);
-
-            return shipmentAdapter;
-        }
     }
 }

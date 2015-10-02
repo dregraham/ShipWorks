@@ -14,7 +14,6 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Data;
 using System.Drawing.Imaging;
 using System.Drawing;
-using ShipWorks.Core.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -212,21 +211,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             // Remove the Adult Sig types since we aren't supporting them.
             return baseAvailableConfirmationTypes.Where(ct => ct != PostalConfirmationType.AdultSignatureRequired &&
                                                               ct != PostalConfirmationType.AdultSignatureRestricted).ToList();
-        }
-
-        /// <summary>
-        /// Return a shipment adapter
-        /// </summary>
-        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
-        {
-            if (shipment.Postal == null)
-            {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-            }
-
-            IShipmentAdapter shipmentAdapter = new PostalWebShipmentAdapter(shipment);
-
-            return shipmentAdapter;
         }
     }
 }
