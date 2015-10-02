@@ -3,6 +3,7 @@ using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.UI.Carriers.FedEx
@@ -15,7 +16,8 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<FedExShipmentType>()
-                .FindConstructorsWith(new NonDefaultConstructorFinder())                .AsSelf()
+                .FindConstructorsWith(new NonDefaultConstructorFinder())                
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.FedEx);
 
             builder.RegisterType<FedExShipmentServicesBuilder>()
@@ -34,6 +36,10 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
             builder.RegisterType<FedExAccountRepository>()
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.FedEx)
                 .SingleInstance();
+
+            builder.RegisterType<FedExShipmentAdapter>()
+                .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.FedEx)
+                .ExternallyOwned();
         }
     }
 }
