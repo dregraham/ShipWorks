@@ -4197,25 +4197,25 @@ select new { n, n.NbLinesOfCode } ]]></Query>
     </Group>
     <Group Name="Jenkins Critical Rules" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of complex methods allowed exceeded</Name>
-warnif count > 89 from m in JustMyCode.Methods where 
+warnif count > 85 from m in JustMyCode.Methods where 
   m.CyclomaticComplexity > 20
   orderby m.CyclomaticComplexity descending
 
 select new { m, m.CyclomaticComplexity }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # long methods allowed exceeded</Name>
-warnif  count > 436
+warnif  count > 402
 from  m in JustMyCode.Methods where 
   m.NbLinesOfCode > 30
 
 select new { m, m.NbLinesOfCode }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of methods w/ too many parameters exceeded</Name>
-warnif count > 94 from  m in JustMyCode.Methods where
+warnif count > 85 from  m in JustMyCode.Methods where
  m.NbParameters > 5
  orderby m.NbParameters
 
 select new { m, m.NbParameters }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # large types allowed exceeded</Name>
-warnif count > 47 from  t in JustMyCode.Types where
+warnif count > 41 from  t in JustMyCode.Types where
  t.NbLinesOfCode > 500
  orderby t.NbLinesOfCode
 
