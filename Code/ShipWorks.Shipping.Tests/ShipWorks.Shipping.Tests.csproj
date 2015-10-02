@@ -126,6 +126,7 @@
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Account\ShippingAccountListProviderTest.cs" />
     <Compile Include="Services\ShipmentTypeProviderTest.cs" />
