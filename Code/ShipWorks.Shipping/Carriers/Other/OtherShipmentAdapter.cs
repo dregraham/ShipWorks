@@ -3,19 +3,19 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ShipWorks.Shipping.Carriers.None
+namespace ShipWorks.Shipping.Carriers.Postal.Other
 {
     /// <summary>
-    /// Adapter for None specific shipment information
+    /// Adapter for other specific shipment information
     /// </summary>
-    public class NoneShipmentAdapter : ICarrierShipmentAdapter
+    public class OtherShipmentAdapter : ICarrierShipmentAdapter
     {
         private readonly ShipmentEntity shipment;
 
         /// <summary>
         /// Constuctor
         /// </summary>
-        public NoneShipmentAdapter(ShipmentEntity shipment)
+        public OtherShipmentAdapter(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
@@ -23,12 +23,12 @@ namespace ShipWorks.Shipping.Carriers.None
         }
         
         /// <summary>
-        /// Id of the None account associated with this shipment
+        /// Id of the other account associated with this shipment
         /// </summary>
         [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used", 
-            Justification = "None shipment types don't have accounts")]
+            Justification = "Other shipment types don't have accounts")]
         [SuppressMessage("SonarQube", "S108:Nested blocks of code should not be left empty",
-            Justification = "None shipment types don't have accounts")]
+            Justification = "Other shipment types don't have accounts")]
         public long? AccountId
         {
             get { return null; }

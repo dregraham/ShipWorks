@@ -133,6 +133,7 @@
                                 <ComboBox Grid.Row="1" Grid.Column="1"
                                           DisplayMemberPath="Key"
                                           SelectedValuePath="Value"
+                                          props:SelectDefaultWhenValueIsNull.RelativeIndex="Last"
                                           props:UpdateWhenMessageReceived.MessageType="{x:Type carriers:OriginAddressChangedMessage}"
                                           x:Name="OriginDropDown">
                                     <ComboBox.ItemsSource>

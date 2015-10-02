@@ -77,9 +77,6 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.UpsWorldShip:
                     return new WorldShipShipmentType();
 
-                case ShipmentTypeCode.FedEx:
-                    return new FedExShipmentType();
-
                 case ShipmentTypeCode.Endicia:
                     return new EndiciaShipmentType();
 
