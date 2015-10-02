@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
-using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -25,7 +20,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -34,12 +28,12 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Api;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -56,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExShipmentType"/> class.
         /// </summary>
-        public FedExShipmentType()
+        public FedExShipmentType():this(IoC.UnsafeGlobalLifetimeScope.Resolve<IExcludedServiceTypeRepository>(), IoC.UnsafeGlobalLifetimeScope.Resolve<IExcludedPackageTypeRepository>())
         {
         }
 
