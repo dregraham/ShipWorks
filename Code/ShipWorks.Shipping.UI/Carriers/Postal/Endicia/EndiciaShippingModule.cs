@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Endicia
 {
@@ -22,6 +23,10 @@ namespace ShipWorks.Shipping.Carriers.Endicia
             builder.RegisterType<EndiciaAccountRepository>()
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Endicia)
                 .SingleInstance();
+
+            builder.RegisterType<EndiciaShipmentAdapter>()
+                .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Endicia)
+                .ExternallyOwned();
         }
     }
 }

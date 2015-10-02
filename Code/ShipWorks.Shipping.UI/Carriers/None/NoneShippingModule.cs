@@ -2,7 +2,6 @@
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.None;
-using ShipWorks.Shipping.Carriers.Postal.None;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Services;
 

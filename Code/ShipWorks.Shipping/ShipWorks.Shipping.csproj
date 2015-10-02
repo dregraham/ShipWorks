@@ -146,11 +146,13 @@
     <Compile Include="Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Other\OtherShipmentType.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1UspsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentAdapter.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentServicesBuilder.cs" />
