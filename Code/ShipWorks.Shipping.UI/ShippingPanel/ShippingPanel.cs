@@ -59,8 +59,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
         public bool SupportsMultiSelect => false;
 
-        public Task ChangeContent(IGridSelection selection) =>
-            viewModel.LoadOrder(selection.Keys.FirstOrDefault());
+        public Task ChangeContent(IGridSelection selection)
+        {
+            long orderId = selection.Keys.FirstOrDefault();
+
+            return orderId==0 ? null : viewModel.LoadOrder(orderId);
+        }
 
         public void LoadState()
         {
