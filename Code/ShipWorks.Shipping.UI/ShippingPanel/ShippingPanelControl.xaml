@@ -48,7 +48,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled"
                   IsEnabled="{Binding IsProcessed,Converter={StaticResource InvertBoolean}}">
         <StackPanel Margin="6,6,6,6">
-            <StackPanel Visibility="{Binding LoadResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Success}}">
+            <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Success}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -179,7 +179,7 @@
                     <Button Command="{Binding CreateLabelCommand}">Create Label</Button>
                 </Grid>
             </StackPanel>
-            <StackPanel Visibility="{Binding LoadResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Multiple}}">
+            <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Multiple}}">
                 <TextBlock>Multiple shipments...</TextBlock>
             </StackPanel>
         </StackPanel>

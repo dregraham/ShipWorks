@@ -34,7 +34,6 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Api;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Core.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
