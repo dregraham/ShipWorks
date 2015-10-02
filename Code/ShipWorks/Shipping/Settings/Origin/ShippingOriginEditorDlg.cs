@@ -13,7 +13,9 @@ using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.UI;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Settings.Origin
 {
@@ -130,6 +132,8 @@ namespace ShipWorks.Shipping.Settings.Origin
                     ShippingOriginManager.CheckForChangesNeeded();
                 }
 
+                // Send message when a new shipper is added
+                Messenger.Current.Send(new OriginAddressChangedMessage(null));
                 DialogResult = DialogResult.OK;
             }
             catch (ORMQueryExecutionException ex)

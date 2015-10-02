@@ -8,9 +8,11 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
+using Interapptive.Shared.Messaging;
 using ShipWorks.UI;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Settings.Origin
 {
@@ -101,6 +103,9 @@ namespace ShipWorks.Shipping.Settings.Origin
 
                 ShippingOriginManager.CheckForChangesNeeded();
                 LoadShippers();
+
+                // Send message when an origin address has been changed
+                Messenger.Current.Send(new OriginAddressChangedMessage(null));
             }
         }
 
@@ -160,6 +165,9 @@ namespace ShipWorks.Shipping.Settings.Origin
 
                 ShippingOriginManager.CheckForChangesNeeded();
                 LoadShippers();
+
+                // Send message when account has been deleted
+                Messenger.Current.Send(new OriginAddressChangedMessage(null));
             }
         }
     }

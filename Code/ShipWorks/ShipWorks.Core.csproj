@@ -1058,6 +1058,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\OriginAddressChangedMessage.cs" />
     <Compile Include="Shipping\Carriers\ShippingAccountsChangedMessage.cs" />
     <Compile Include="Shipping\Carriers\TangoCredentialStore.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateRestrictionBrokerFilter.cs" />

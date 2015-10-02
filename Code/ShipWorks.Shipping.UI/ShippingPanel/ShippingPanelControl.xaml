@@ -133,7 +133,7 @@
                                 <ComboBox Grid.Row="1" Grid.Column="1"
                                           DisplayMemberPath="Key"
                                           SelectedValuePath="Value"
-                                          props:UpdateWhenMessageReceived.MessageType="{x:Type shippingcore:EnabledCarriersChangedMessage}"
+                                          props:UpdateWhenMessageReceived.MessageType="{x:Type carriers:OriginAddressChangedMessage}"
                                           x:Name="OriginDropDown">
                                     <ComboBox.ItemsSource>
                                         <MultiBinding Converter="{StaticResource OriginAddressList}">
