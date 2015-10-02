@@ -40,6 +40,7 @@ using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Api;
 using Interapptive.Shared.Net;
+using ShipWorks.Core.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -1290,6 +1291,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return base.IsCustomsRequiredByShipment(shipment);
+        }
+
+        /// <summary>
+        /// Return a shipment adapter
+        /// </summary>
+        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
+        {
+            if (shipment.FedEx == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            IShipmentAdapter shipmentAdapter = new FedExShipmentAdapter(shipment);
+
+            return shipmentAdapter;
         }
     }
 }

@@ -13,6 +13,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Core.Shipping;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -895,6 +896,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             bucket.Relations.Add(PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID);
 
             adapter.UpdateEntitiesDirectly(new UspsShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
+
+        /// <summary>
+        /// Return a shipment adapter
+        /// </summary>
+        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
+        {
+            if (shipment.Postal?.Usps == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            IShipmentAdapter shipmentAdapter = new UspsShipmentAdapter(shipment);
+
+            return shipmentAdapter;
         }
     }
 }

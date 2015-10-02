@@ -8,6 +8,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Core.Shipping;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -663,6 +664,21 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             bucket.Relations.Add(ShipmentEntity.Relations.OnTracShipmentEntityUsingShipmentID);
 
             adapter.UpdateEntitiesDirectly(new OnTracShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
+
+        /// <summary>
+        /// Return a shipment adapter
+        /// </summary>
+        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
+        {
+            if (shipment.OnTrac == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            IShipmentAdapter shipmentAdapter = new OnTracShipmentAdapter(shipment);
+
+            return shipmentAdapter;
         }
     }
 }

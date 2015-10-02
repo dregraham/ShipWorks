@@ -5,6 +5,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using System.Windows.Forms;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Core.Shipping;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -12,6 +13,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Endicia;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Wizard;
@@ -233,6 +235,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             rateResults.ForEach(r => r.ShipmentType = ShipmentTypeCode);
 
             return rateResults;
+        }
+
+        /// <summary>
+        /// Return a shipment adapter
+        /// </summary>
+        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
+        {
+            if (shipment.Postal?.Endicia == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            IShipmentAdapter shipmentAdapter = new EndiciaShipmentAdapter(shipment);
+
+            return shipmentAdapter;
         }
     }
 }

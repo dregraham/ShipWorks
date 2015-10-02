@@ -10,6 +10,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Core.Shipping;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
@@ -1179,6 +1180,21 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             bucket.Relations.Add(ShipmentEntity.Relations.IParcelShipmentEntityUsingShipmentID);
 
             adapter.UpdateEntitiesDirectly(new IParcelShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
+
+        /// <summary>
+        /// Return a shipment adapter
+        /// </summary>
+        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
+        {
+            if (shipment.IParcel == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            IShipmentAdapter shipmentAdapter = new iParcelShipmentAdapter(shipment);
+
+            return shipmentAdapter;
         }
     }
 }

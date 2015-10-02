@@ -15,15 +15,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
         private readonly IShippingPanelConfiguration shippingPanelConfiguration;
         private readonly IShippingManager shippingManager;
         private readonly IFilterHelper filterHelper;
+        private readonly IShipmentTypeFactory shipmentTypeFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentLoader(IShippingPanelConfiguration shippingPanelConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper)
+        public ShipmentLoader(IShippingPanelConfiguration shippingPanelConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper, IShipmentTypeFactory shipmentTypeFactory)
         {
             this.shippingPanelConfiguration = shippingPanelConfiguration;
             this.shippingManager = shippingManager;
             this.filterHelper = filterHelper;
+            this.shipmentTypeFactory = shipmentTypeFactory;
         }
 
         /// <summary>
@@ -32,7 +34,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
         public ShippingPanelLoadedShipment Load(long orderID)
         {
             ShippingPanelLoadedShipment shipmentPanelLoadedShipment = new ShippingPanelLoadedShipment();
-            ShipmentEntity shipment = null;
+            shipmentPanelLoadedShipment.OrderID = orderID;
 
             filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
 
@@ -45,7 +47,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
 
                 if (shipments.Count == 1)
                 {
-                    shipment = shipments.FirstOrDefault();
+                    ShipmentEntity shipment = shipments.FirstOrDefault();
 
                     // Make sure the shipment type objects are fully loaded.
                     shippingManager.EnsureShipmentLoaded(shipment);
@@ -53,6 +55,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
                     shipmentPanelLoadedShipment.RequestedShippingMode = shipment.Order.RequestedShipping;
                     shipmentPanelLoadedShipment.Shipment = shipment;
                     shipmentPanelLoadedShipment.Result = ShippingPanelLoadedShipmentResult.Success;
+                    shipmentPanelLoadedShipment.ShipmentAdapter = shipmentTypeFactory.Get(shipment).GetShipmentAdapter(shipment);
                 }
                 else if (shipments.Count > 1)
                 {

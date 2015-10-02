@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Core.Shipping;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -270,6 +271,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
             rateResults.ForEach(r=> r.ShipmentType = ShipmentTypeCode);
 
             return rateResults;
+        }
+
+        /// <summary>
+        /// Return a shipment adapter
+        /// </summary>
+        public override IShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
+        {
+            if (shipment.Postal?.Usps == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            IShipmentAdapter shipmentAdapter = new UspsShipmentAdapter(shipment);
+
+            return shipmentAdapter;
         }
     }
 }
