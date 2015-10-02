@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 33);
+            this.label1.Location = new System.Drawing.Point(3, 36);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 13);
             this.label1.TabIndex = 2;
@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // referenceCustomer
             // 
-            this.referenceCustomer.Location = new System.Drawing.Point(79, 29);
+            this.referenceCustomer.Location = new System.Drawing.Point(79, 32);
             this.referenceCustomer.MaxLength = 32767;
             this.fieldLengthProvider.SetMaxLengthSource(this.referenceCustomer, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExReferenceCustomer);
             this.referenceCustomer.Name = "referenceCustomer";
