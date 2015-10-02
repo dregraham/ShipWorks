@@ -4,6 +4,7 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Ups
 {
@@ -34,6 +35,11 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.UpsOnLineTools)
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.UpsWorldShip)
                 .SingleInstance();
+
+            builder.RegisterType<UpsShipmentAdapter>()
+                .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.UpsOnLineTools)
+                .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.UpsWorldShip)
+                .ExternallyOwned();
         }
     }
 }

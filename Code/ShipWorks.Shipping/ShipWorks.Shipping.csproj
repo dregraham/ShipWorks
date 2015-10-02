@@ -152,6 +152,7 @@
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Ups\UpsShipmentAdapter.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentServicesBuilder.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\WeakAction.cs" />
