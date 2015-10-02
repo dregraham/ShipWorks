@@ -169,10 +169,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                shipmentEntity.OriginOriginID = (int)ShipmentOriginSource.Other;
-
-                IMessenger messenger = new TestMessenger();
-                mock.Provide<IMessenger>(messenger);
+                IMessenger messenger = mock.Provide<IMessenger>(new TestMessenger());
 
                 PersonAdapter newStoreAddress = new PersonAdapter(storeEntity, null)
                 {
@@ -183,10 +180,12 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                     .Returns(newStoreAddress);
 
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                testObject.OriginAddressType = (long)ShipmentOriginSource.Other;
+                testObject.Origin.Street = "Foo";
 
                 messenger.Send(new StoreChangedMessage(null, storeEntity));
 
-                Assert.NotEqual(newStoreAddress.StreetAll, testObject.Origin.Street);
+                Assert.Equal("Foo", testObject.Origin.Street);
             }
         }
 
@@ -195,24 +194,24 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                shipmentEntity.OriginOriginID = (int)ShipmentOriginSource.Account;
-
-                IMessenger messenger = new TestMessenger();
-                mock.Provide<IMessenger>(messenger);
+                IMessenger messenger = mock.Provide<IMessenger>(new TestMessenger());
 
                 PersonAdapter newStoreAddress = new PersonAdapter(storeEntity, null)
                 {
                     Street1 = "It changed!"
                 };
 
-                mock.Mock<IShippingOriginManager>().Setup(s => s.GetOriginAddress(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()))
+                mock.Mock<IShippingOriginManager>()
+                    .Setup(s => s.GetOriginAddress(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()))
                     .Returns(newStoreAddress);
 
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                testObject.OriginAddressType = (long)ShipmentOriginSource.Account;
+                testObject.Origin.Street = "Foo";
 
                 messenger.Send(new StoreChangedMessage(null, storeEntity));
-
-                Assert.NotEqual(newStoreAddress.StreetAll, testObject.Origin.Street);
+                
+                Assert.Equal("Foo", testObject.Origin.Street);
             }
         }
 
@@ -331,48 +330,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
                 mock.Mock<IShipmentTypeFactory>()
                     .Verify(x => x.Get(It.IsAny<ShipmentTypeCode>()), Times.Never);
-            }
-        }
-
-        [Fact]
-        public async void SetShipmentType_DoesNotChangeOriginType_WhenShipmentTypeChangedAwayFromOther()
-        {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Other;
-                shipmentEntity.OriginOriginID = (long)ShipmentOriginSource.Store;
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
-                testObject.ShipmentType = ShipmentTypeCode.Usps;
-
-                Assert.Equal((long)ShipmentOriginSource.Store, testObject.OriginAddressType);
-            }
-        }
-
-        [Fact]
-        public async void SetShipmentType_DoesNotChangeOriginType_WhenShipmentTypeChangedToOtherAndOriginIsNotAccount()
-        {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
-                shipmentEntity.OriginOriginID = (long)ShipmentOriginSource.Store;
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
-                testObject.ShipmentType = ShipmentTypeCode.Other;
-
-                Assert.Equal((long)ShipmentOriginSource.Store, testObject.OriginAddressType);
-            }
-        }
-
-        [Fact]
-        public async void SetShipmentType_ChangesOriginTypeToOther_WhenShipmentTypeChangedToOtherAndOriginIsAccount()
-        {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
-                shipmentEntity.OriginOriginID = (long)ShipmentOriginSource.Account;
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
-                testObject.ShipmentType = ShipmentTypeCode.Other;
-
-                Assert.Equal((long)ShipmentOriginSource.Other, testObject.OriginAddressType);
             }
         }
 

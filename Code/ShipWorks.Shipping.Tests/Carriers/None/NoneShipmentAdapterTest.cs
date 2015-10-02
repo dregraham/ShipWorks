@@ -1,5 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.None;
+using ShipWorks.Shipping.Carriers.None;
 using System;
 using Xunit;
 

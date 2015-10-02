@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             get { return selectedShipmentType; }
             set
             {
-                if (handler.Set(nameof(ShipmentType), ref selectedShipmentType, value) && loadedShipment?.Shipment != null)
+                if (handler.Set(nameof(ShipmentType), ref selectedShipmentType, value) && (loadedShipment?.Shipment?.Processed ?? true) == false)
                 {
                     loadedShipment.Shipment.ShipmentTypeCode = ShipmentType;
                     shippingManager.EnsureShipmentLoaded(loadedShipment.Shipment);
@@ -337,7 +337,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void Save()
         {
-            if (loadedShipment.Shipment.Processed)
+            if (loadedShipment?.Shipment?.Processed == true)
             {
                 return;
             }
