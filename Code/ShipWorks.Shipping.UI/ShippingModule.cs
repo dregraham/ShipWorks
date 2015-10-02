@@ -114,6 +114,10 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<CarrierAccountRetrieverFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<CarrierShipmentAdapterFactory>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
         }
     }
 }

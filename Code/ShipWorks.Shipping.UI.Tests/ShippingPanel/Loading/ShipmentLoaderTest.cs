@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Moq;
-using ShipWorks.Core.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
-using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.Loading;
 using ShipWorks.Users.Security;
@@ -38,18 +36,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.Loading
 
             filterHelper = new Mock<IFilterHelper>();
             filterHelper.Setup(s => s.EnsureFiltersUpToDate(It.IsAny<TimeSpan>())).Returns(true);
-
-            Mock<IShipmentAdapter> adapter = new Mock<IShipmentAdapter>();
-
-            Mock<ShipmentType> shipmentType = new Mock<ShipmentType>();
-            shipmentType.Setup(t => t.GetShipmentAdapter(It.IsAny<ShipmentEntity>()))
-                .Returns(adapter.Object);
             
-            var shipmentTypeFactory = new Mock<IShipmentTypeFactory>();
-            shipmentTypeFactory.Setup(f => f.Get(It.IsAny<ShipmentEntity>()))
-                .Returns(shipmentType.Object);
-
-            testObject = new ShipmentLoader(shippingPanelConfigurator.Object, shippingManager.Object, filterHelper.Object, shipmentTypeFactory.Object);
+            testObject = new ShipmentLoader(shippingPanelConfigurator.Object, shippingManager.Object, filterHelper.Object);
         }
 
         [Fact]
@@ -60,6 +48,5 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.Loading
             Assert.Equal(shipmentEntity.ShipmentID, shipmentPanelLoadedShipment.Shipment.ShipmentID);
             Assert.Equal(ShippingPanelLoadedShipmentResult.Success, shipmentPanelLoadedShipment.Result);
         }
-        
     }
 }

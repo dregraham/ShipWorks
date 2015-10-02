@@ -14,6 +14,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.UI.ShippingPanel.Loading;
 using ShipWorks.Stores;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -29,6 +30,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private string requestedShippingMethod;
         private long originAddressType;
         private long initialOriginAddressType;
+        private long accountId;
         private readonly PropertyChangedHandler handler;
         private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
@@ -43,6 +45,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
         private bool listenForRateCriteriaChanged = false;
         private bool forceRateCriteriaChanged = false;
+        private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -65,6 +68,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IShipmentTypeFactory shipmentTypeFactory,
             ICustomsManager customsManager,
             IShipmentProcessor shipmentProcessor,
+            ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
             Func<Owned<ICarrierConfigurationShipmentRefresher>> shipmentRefresherFactory,
             Func<ShipmentViewModel> shipmentViewModelFactory,
             Func<AddressViewModel> addressViewModelFactory) : this()
@@ -82,6 +86,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             WireUpObservables();
 
+            this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
             this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.shipmentRefresherFactory = shipmentRefresherFactory;
 
@@ -149,6 +154,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                         shippingManager.EnsureShipmentLoaded(loadedShipment.Shipment);
                     }
 
+                    Save();
+                    AccountId = carrierShipmentAdapterFactory.Get(loadedShipment.Shipment).AccountId.GetValueOrDefault();
+
                     SupportsMultiplePackages = shipmentTypeFactory.Get(selectedShipmentType)?.SupportsMultiplePackages ?? false;
 
                     // If we get more carrier rules, we could bury this in the shipment type
@@ -156,6 +164,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                     {
                         OriginAddressType = (long)ShipmentOriginSource.Other;
                     }
+
+                    //carrierShipmentAdapterFactory.Get()
                     //UpdateServices();
                     //UpdatePackages();
                 }
@@ -239,6 +249,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
+        /// Id of the account for the shipment
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public long AccountId
+        {
+            get { return accountId; }
+            set { handler.Set(nameof(AccountId), ref accountId, value); }
+        }
+
+        /// <summary>
         /// The origin address view model.
         /// </summary>
         public AddressViewModel Origin { get; }
@@ -289,11 +309,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             //DisableNeedToUpdateServices();
             //DisableNeedToUpdatePackages();
 
+            ICarrierShipmentAdapter adapter = carrierShipmentAdapterFactory.Get(loadedShipment.Shipment);
+
             RequestedShippingMethod = loadedShipment.RequestedShippingMode;
             InitialShipmentTypeCode = loadedShipment.Shipment.ShipmentTypeCode;
             ShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             OriginAddressType = loadedShipment.Shipment.OriginOriginID;
             InitialOriginAddressType = loadedShipment.Shipment.OriginOriginID;
+            AccountId = adapter.AccountId.GetValueOrDefault();
 
             Origin.Load(loadedShipment.Shipment.OriginPerson);
 
@@ -330,21 +353,26 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void Save()
         {
-            if (!loadedShipment.Shipment.Processed)
+            if (loadedShipment.Shipment.Processed)
             {
-                ShipmentType shipmentType = shipmentTypeFactory.Get(loadedShipment.Shipment);
-                shipmentType.UpdateDynamicShipmentData(loadedShipment.Shipment);
-                shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
-
-                loadedShipment.Shipment.ShipmentTypeCode = ShipmentType;
-                loadedShipment.Shipment.OriginOriginID = OriginAddressType;
-
-                Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
-                //Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
-                //ShipmentViewModel.Save(loadedShipment.Shipment);
-
-                customsManager.EnsureCustomsLoaded(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current);
+                return;
             }
+            
+            ICarrierShipmentAdapter adapter = carrierShipmentAdapterFactory.Get(loadedShipment.Shipment);
+            adapter.AccountId = AccountId;
+
+            ShipmentType shipmentType = shipmentTypeFactory.Get(loadedShipment.Shipment);
+            shipmentType.UpdateDynamicShipmentData(loadedShipment.Shipment);
+            shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
+
+            loadedShipment.Shipment.ShipmentTypeCode = ShipmentType;
+            loadedShipment.Shipment.OriginOriginID = OriginAddressType;
+
+            Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
+            //Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
+            //ShipmentViewModel.Save(loadedShipment.Shipment);
+
+            customsManager.EnsureCustomsLoaded(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current);
         }
 
         /// <summary>
@@ -420,7 +448,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 return;
             }
-            
+
             // Save UI values to the shipment so we can send the new values to the rates panel
             Save();
 

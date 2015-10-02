@@ -118,8 +118,9 @@
                                           x:Name="AccountDropDown"
                                           Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}"
                                           props:UpdateWhenMessageReceived.MessageType="{x:Type carriers:ShippingAccountsChangedMessage}"
-                                          SelectedValue="{Binding Account}"
-                                          DisplayMemberPath="Description" >
+                                          SelectedValue="{Binding AccountId}"
+                                          DisplayMemberPath="Description"
+                                          SelectedValuePath="AccountId">
                                     <ComboBox.ItemsSource>
                                         <Binding Path="ShipmentType"
                                                  Converter="{StaticResource ShipmentTypeToAccountsConverter}"

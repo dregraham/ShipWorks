@@ -139,6 +139,7 @@
     <Compile Include="Carriers\None\NoneShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\None\NoneShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\None\NoneShipmentType.cs" />
+    <Compile Include="Carriers\None\NoneShipmentAdapter.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1UspsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentServicesBuilder.cs" />
@@ -160,6 +162,9 @@
     <Compile Include="Services\Builders\ShipmentPackageBuilderFactory.cs" />
     <Compile Include="Services\Builders\ShipmentServicesBuilderFactory.cs" />
     <Compile Include="Services\CarrierAccountRetrieverFactory.cs" />
+    <Compile Include="Services\CarrierShipmentAdapterFactory.cs" />
+    <Compile Include="Services\ICarrierShipmentAdapter.cs" />
+    <Compile Include="Services\ICarrierShipmentAdapterFactory.cs" />
     <Compile Include="Services\IShippingOriginManager.cs" />
     <Compile Include="Rating\IRateSelection.cs" />
     <Compile Include="IValidator.cs" />
