@@ -846,6 +846,7 @@
     <Compile Include="Messages\FedExServiceTypeChangedMessage.cs" />
     <Compile Include="Messages\FilterNodeEditedMessage.cs" />
     <Compile Include="Messages\OpenShippingDialogMessage.cs" />
+    <Compile Include="Messages\OrderSelectionChangedMessage.cs" />
     <Compile Include="Messages\OriginAddressChangedMessage.cs" />
     <Compile Include="Messages\SelectedRateChangedMessage.cs" />
     <Compile Include="Messages\ShipmentChangedMessage.cs" />

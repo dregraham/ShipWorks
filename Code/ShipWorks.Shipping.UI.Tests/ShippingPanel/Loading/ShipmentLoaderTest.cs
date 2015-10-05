@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
@@ -43,10 +44,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.Loading
         [Fact]
         public void ShipmentAndSuccess_WhenOrderHasOneShipment_ReturnsThatShipment_Test()
         {
-            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = testObject.Load(orderEntity.OrderID);
+            OrderSelectionLoaded orderSelectionLoaded = testObject.Load(orderEntity.OrderID);
 
-            Assert.Equal(shipmentEntity.ShipmentID, shipmentPanelLoadedShipment.Shipment.ShipmentID);
-            Assert.Equal(ShippingPanelLoadedShipmentResult.Success, shipmentPanelLoadedShipment.Result);
+            Assert.Equal(shipmentEntity.ShipmentID, orderSelectionLoaded.Shipments.FirstOrDefault().ShipmentID);
+            Assert.Equal(ShippingPanelLoadedShipmentResult.Success, orderSelectionLoaded.Result);
         }
     }
 }

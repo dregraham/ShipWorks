@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Moq;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.UI.ShippingPanel.Loading;
@@ -20,15 +22,15 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.Loading
             shipmentEntity = new ShipmentEntity(1031);
             shipmentEntity.Order = orderEntity;
             
-            ShippingPanelLoadedShipment shippingPanelLoadedShipment = new ShippingPanelLoadedShipment()
+            OrderSelectionLoaded orderSelectionLoaded = new OrderSelectionLoaded()
             {
-                Shipment = shipmentEntity,
+                Shipments = new List<ShipmentEntity>() { shipmentEntity },
                 Result = ShippingPanelLoadedShipmentResult.Success,
                 Exception = null
             };
 
             shipmentLoader = new Mock<IShipmentLoader>();
-            shipmentLoader.Setup(s => s.Load(It.IsAny<long>())).Returns(shippingPanelLoadedShipment);
+            shipmentLoader.Setup(s => s.Load(It.IsAny<long>())).Returns(orderSelectionLoaded);
             
             validator = new Mock<IValidator<ShipmentEntity>>();
             validator.Setup(s => s.ValidateAsync(It.IsAny<ShipmentEntity>())).Returns(TaskUtility.CompletedTask);
@@ -39,10 +41,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.Loading
         [Fact]
         public async void ShipmentAndSuccess_WhenOrderHasOneShipment_ReturnsThatShipment_Test()
         {
-            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = await testObject.LoadAsync(orderEntity.OrderID);
+            OrderSelectionLoaded orderSelectionLoaded = await testObject.LoadAsync(orderEntity.OrderID);
 
-            Assert.Equal(shipmentEntity.ShipmentID, shipmentPanelLoadedShipment.Shipment.ShipmentID);
-            Assert.Equal(ShippingPanelLoadedShipmentResult.Success, shipmentPanelLoadedShipment.Result);
+            Assert.Equal(shipmentEntity.ShipmentID, orderSelectionLoaded.Shipments.FirstOrDefault().ShipmentID);
+            Assert.Equal(ShippingPanelLoadedShipmentResult.Success, orderSelectionLoaded.Result);
         }
         
     }

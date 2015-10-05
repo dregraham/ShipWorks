@@ -29,9 +29,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
         /// <summary>
         /// Load all the shipments on a background thread
         /// </summary>
-        public ShippingPanelLoadedShipment Load(long orderID)
+        public OrderSelectionLoaded Load(long orderID)
         {
-            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = new ShippingPanelLoadedShipment();
+            OrderSelectionLoaded orderSelectionLoaded = new OrderSelectionLoaded();
             ShipmentEntity shipment = null;
 
             filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
@@ -50,26 +50,25 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
                     // Make sure the shipment type objects are fully loaded.
                     shippingManager.EnsureShipmentLoaded(shipment);
 
-                    shipmentPanelLoadedShipment.RequestedShippingMode = shipment.Order.RequestedShipping;
-                    shipmentPanelLoadedShipment.Shipment = shipment;
-                    shipmentPanelLoadedShipment.Result = ShippingPanelLoadedShipmentResult.Success;
+                    orderSelectionLoaded.Shipments = shipments;
+                    orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.Success;
                 }
                 else if (shipments.Count > 1)
                 {
-                    shipmentPanelLoadedShipment.Result = ShippingPanelLoadedShipmentResult.Multiple;
+                    orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.Multiple;
                 }
                 else
                 {
-                    shipmentPanelLoadedShipment.Result = ShippingPanelLoadedShipmentResult.NotCreated;
+                    orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.NotCreated;
                 }
             }
             catch (Exception ex)
             {
-                shipmentPanelLoadedShipment.Result = ShippingPanelLoadedShipmentResult.Error;
-                shipmentPanelLoadedShipment.Exception = ex;
+                orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.Error;
+                orderSelectionLoaded.Exception = ex;
             }
 
-            return shipmentPanelLoadedShipment;
+            return orderSelectionLoaded;
         }
     }
 }

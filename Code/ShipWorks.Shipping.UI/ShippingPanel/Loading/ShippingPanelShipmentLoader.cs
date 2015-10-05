@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
@@ -6,7 +7,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
     /// <summary>
     /// Loads a shipment for the order.  If allowed, and no shipment exists, one will be created.  Also validates the shipment addresses.
     /// </summary>
-    public class ShippingPanelShipmentLoader : ILoader<ShippingPanelLoadedShipment>
+    public class ShippingPanelShipmentLoader : ILoader<OrderSelectionLoaded>
     {
         private readonly IShipmentLoader shipmentLoader;
         private readonly IValidator<ShipmentEntity> addressValidator;
@@ -23,16 +24,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
         /// <summary>
         /// Load the shipment results asychronously.
         /// </summary>
-        public async Task<ShippingPanelLoadedShipment> LoadAsync(long orderID)
+        public async Task<OrderSelectionLoaded> LoadAsync(long orderID)
         {
-            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = await TaskEx.Run(() => shipmentLoader.Load(orderID));
+            OrderSelectionLoaded orderSelectionLoaded = await TaskEx.Run(() => shipmentLoader.Load(orderID));
 
-            if (shipmentPanelLoadedShipment.Shipment != null)
+            if (orderSelectionLoaded.Shipments != null && orderSelectionLoaded.Shipments.Any())
             {
-                await addressValidator.ValidateAsync(shipmentPanelLoadedShipment.Shipment);
+                await addressValidator.ValidateAsync(orderSelectionLoaded.Shipments.FirstOrDefault());
             }
 
-            return shipmentPanelLoadedShipment;
+            return orderSelectionLoaded;
         }
     }
 }

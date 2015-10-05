@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         private readonly OrderEntity orderEntity;
         private readonly StoreEntity storeEntity;
         private readonly ShipmentEntity shipmentEntity;
-        private readonly ShippingPanelLoadedShipment shippingPanelLoadedShipment;
+        private readonly OrderSelectionLoaded orderSelectionLoaded;
 
         public ShippingPanelViewModelTest()
         {
@@ -46,7 +46,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             orderEntity = new OrderEntity(1006)
             {
                 Store = storeEntity,
-                StoreID = storeEntity.StoreID
+                StoreID = storeEntity.StoreID,
+                RequestedShipping = "Ground"
             };
 
             shipmentEntity = new ShipmentEntity(1031)
@@ -56,19 +57,20 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             };
 
             shipmentEntity.Order = orderEntity;
-            shippingPanelLoadedShipment = new ShippingPanelLoadedShipment()
+            orderSelectionLoaded = new OrderSelectionLoaded()
             {
-                Shipment = shipmentEntity,
+                Shipments = new List<ShipmentEntity>() { shipmentEntity },
                 Result = ShippingPanelLoadedShipmentResult.Success,
-                Exception = null
+                Exception = null,
+                Order = orderEntity
             };
         }
 
         private async Task<ShippingPanelViewModel> GetViewModelWithLoadedShipment(AutoMock mock)
         {
-            mock.Mock<ILoader<ShippingPanelLoadedShipment>>()
+            mock.Mock<ILoader<OrderSelectionLoaded>>()
                 .Setup(s => s.LoadAsync(It.IsAny<long>()))
-                .ReturnsAsync(shippingPanelLoadedShipment);
+                .ReturnsAsync(orderSelectionLoaded);
             
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
             await testObject.LoadOrder(orderEntity.OrderID);
@@ -115,9 +117,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                mock.Mock<ILoader<ShippingPanelLoadedShipment>>()
+                mock.Mock<ILoader<OrderSelectionLoaded>>()
                     .Setup(s => s.LoadAsync(It.IsAny<long>()))
-                    .ReturnsAsync(shippingPanelLoadedShipment);
+                    .ReturnsAsync(orderSelectionLoaded);
 
                 ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
                 await testObject.LoadOrder(orderEntity.OrderID);
@@ -360,17 +362,17 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
-                await testObject.LoadOrder(3);
+                await testObject.LoadOrder(orderEntity.OrderID);
 
-                mock.Mock<ILoader<ShippingPanelLoadedShipment>>()
-                    .Verify(x => x.LoadAsync((long)3));
+                mock.Mock<ILoader<OrderSelectionLoaded>>()
+                    .Verify(x => x.LoadAsync(orderEntity.OrderID));
             }
         }
 
         [Fact]
         public async void Load_ShowsMessage_WhenMultipleShipmentsAreLoaded()
         {
-            shippingPanelLoadedShipment.Result = ShippingPanelLoadedShipmentResult.Multiple;
+            orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.Multiple;
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -414,7 +416,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                shippingPanelLoadedShipment.Shipment = null;
+                orderSelectionLoaded.Shipments = null;
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
 
                 testObject.SaveToDatabase();

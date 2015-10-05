@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
@@ -6,12 +7,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
     /// <summary>
     /// Class representing the loading of an order's shipment(s).
     /// </summary>
-    public class ShippingPanelLoadedShipment
+    public class OrderSelectionLoaded
     {
         /// <summary>
-        /// The shipment 
+        /// The shipments
         /// </summary>
-        public ShipmentEntity Shipment { get; set; }
+        public List<ShipmentEntity> Shipments { get; set; }
 
         /// <summary>
         /// The result of the load
@@ -24,8 +25,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
         public Exception Exception { get; set; }
 
         /// <summary>
-        /// Type of shpping requested by the customer
+        /// Order that has been loaded
         /// </summary>
-        public string RequestedShippingMode { get; internal set; }
+        public OrderEntity Order { get; set; }
     }
 }

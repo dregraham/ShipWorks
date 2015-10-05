@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private readonly MessengerToken shipmentChangedMessageToken;
         private readonly IMessenger messenger;
 
-        private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
+        private readonly ILoader<OrderSelectionLoaded> shipmentLoader;
         private readonly IShippingManager shippingManager;
         private readonly IShipmentTypeFactory shipmentTypeFactory;
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Constructor
         /// </summary>
         /// <param name="messenger"></param>
-        public RatingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shippingManager, IShipmentTypeFactory shipmentTypeFactory)
+        public RatingPanelViewModel(ILoader<OrderSelectionLoaded> shipmentLoader, IMessenger messenger, IShippingManager shippingManager, IShipmentTypeFactory shipmentTypeFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -156,8 +156,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// <summary>
         /// Change the content of the control to be the given shipment
         /// </summary>
-        public void ChangeShipment(ShipmentEntity shipment)
+        public void ChangeShipment(OrderSelectionLoaded orderSelectionLoaded)
         {
+            ShipmentEntity shipment = orderSelectionLoaded.Shipments.FirstOrDefault();
             selectedShipmentID = shipment.ShipmentID;
 
             // Refresh the rates in the panel; using cached rates is fine here since nothing
@@ -214,17 +215,17 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         public async Task RefreshSelectedShipments(long orderID)
         {
-            ShippingPanelLoadedShipment loadedShipment = await shipmentLoader.LoadAsync(orderID);
+            OrderSelectionLoaded orderSelectionLoaded = await shipmentLoader.LoadAsync(orderID);
             
-            if (loadedShipment.Result == ShippingPanelLoadedShipmentResult.Success)
+            if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Success)
             {
-                ChangeShipment(loadedShipment.Shipment);
+                ChangeShipment(orderSelectionLoaded);
             }
-            else if (loadedShipment.Result == ShippingPanelLoadedShipmentResult.Multiple)
+            else if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Multiple)
             {
                 ErrorMessage = "Multiple shipments selected.";
             }
-            else if (loadedShipment.Result == ShippingPanelLoadedShipmentResult.Error)
+            else if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Error)
             {
                 ErrorMessage = "An error occurred while retrieving rates.";
             }

@@ -2,6 +2,6 @@
 {
     public interface IShipmentLoader
     {
-        ShippingPanelLoadedShipment Load(long orderID);
+        OrderSelectionLoaded Load(long orderID);
     }
 }
