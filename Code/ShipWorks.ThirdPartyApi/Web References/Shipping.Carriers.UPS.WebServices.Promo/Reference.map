@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Work/Shipworks3x/Code/ShipWorks/Shipping/Carriers/UPS/Promo/Wsdl/UPSSecurity.xsd" filename="UPSSecurity.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Work/Shipworks3x/Code/ShipWorks/Shipping/Carriers/UPS/Promo/Wsdl/common.xsd" filename="common.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Work/Shipworks3x/Code/ShipWorks/Shipping/Carriers/UPS/Promo/Wsdl/PromoDiscount.xsd" filename="PromoDiscount.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/Work/Shipworks3x/Code/ShipWorks/Shipping/Carriers/UPS/Promo/Wsdl/Error1.1.xsd" filename="Error1.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///C:/Work/Shipworks3x/Code/ShipWorks/Shipping/Carriers/UPS/Promo/Wsdl/PromoDiscount.wsdl" filename="PromoDiscount.wsdl" />
+  </Results>
+</DiscoveryClientResultsFile>

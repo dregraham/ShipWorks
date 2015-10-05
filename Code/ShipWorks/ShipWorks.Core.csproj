@@ -1037,6 +1037,8 @@
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsPharmaceuticalControl.Designer.cs">
       <DependentUpon>UpsPharmaceuticalControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\UPS\Promo\API\PromoAcceptanceTerms.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsApiPromoClient.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
@@ -8445,6 +8447,19 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Shipping\Carriers\UPS\OpenAccount\Wsdl\UPSSecurity.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\common.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\Error1.1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\PromoDiscount.wsdl" />
+    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\PromoDiscount.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\UPSSecurity.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Stores\Platforms\CsCart\shipworks3.php" />

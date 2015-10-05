@@ -162,6 +162,11 @@
     <Compile Include="ApiLogEncryption.cs" />
     <Compile Include="IApiLogEntry.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\IFedExNativeShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\IFedExNativeShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\ProcessShipmentReply.cs" />
@@ -224,6 +229,11 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -354,6 +364,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\CloseServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseDocumentsReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
@@ -698,6 +712,29 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\UPSSecurity.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\common.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\Error1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\PromoDiscount.wsdl" />
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\PromoDiscount.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\PromoDiscountAgreementResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\PromoDiscountResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\UPSSecurity.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Admin\AdminService.wsdl" />
@@ -1947,6 +1984,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\Work\Shipworks3x\Code\ShipWorks\Shipping\Carriers\UPS\Promo\Wsdl\PromoDiscount.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.UPS.WebServices.Promo\</RelPath>
+      <UpdateFromURL>C:\Work\Shipworks3x\Code\ShipWorks\Shipping\Carriers\UPS\Promo\Wsdl\PromoDiscount.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_ThirdPartyApi_Shipping_Carriers_UPS_WebServices_Promo_PromoDiscountService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl">
       <UrlBehavior>Static</UrlBehavior>
