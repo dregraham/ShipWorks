@@ -1043,6 +1043,7 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\API\PromoActivation.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsApiPromoClient.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsPromo.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
