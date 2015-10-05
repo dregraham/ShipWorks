@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Services.Protocols;
+using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
@@ -62,21 +63,55 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                     return new PromoAcceptanceTerms(response);
                 }
             }
-            catch (SoapException ex)
-            {
-                throw new NotImplementedException();
-                //throw new UpsPromoSoapException(ex);
-            }
             catch (Exception ex)
             {
-                throw new NotImplementedException();
-                //throw WebHelper.TranslateWebException(ex, typeof(UpsPromoException));
+                throw WebHelper.TranslateWebException(ex, typeof(UpsPromoException));
             }
         }
         
+        /// <summary>
+        /// Activates the UPS Promo with the given acceptance code
+        /// </summary>
         public PromoActivation Activate(string acceptanceCode)
         {
-            throw new NotImplementedException();
+            PromoDiscountRequest request = new PromoDiscountRequest()
+            {
+                Locale = new LocaleType()
+                {
+                    CountryCode = upsPromo.CountryCode,
+                    LanguageCode = "en"
+                },
+                AgreementAcceptanceCode = acceptanceCode,
+                PromoCode = promoCode
+            };
+
+            try
+            {
+                using (PromoDiscountService service = new PromoDiscountService())
+                {
+                    // Point the service to the correct endpoint
+                    service.Url = endpoint;
+                    service.UPSSecurityValue = new UPSSecurity()
+                    {
+                        ServiceAccessToken = new UPSSecurityServiceAccessToken()
+                        {
+                            AccessLicenseNumber = upsPromo.AccessLicenseNumber
+                        },
+                        UsernameToken = new UPSSecurityUsernameToken()
+                        {
+                            Username = upsPromo.Username,
+                            Password = upsPromo.Password
+                        }
+                    };
+
+                    PromoDiscountResponse response = service.ProcessPromoDiscount(request);
+                    return new PromoActivation(upsPromo, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(UpsPromoException));
+            }
         }
     }
 }
