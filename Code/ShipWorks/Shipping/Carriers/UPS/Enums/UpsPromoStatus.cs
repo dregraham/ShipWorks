@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Enums
 {
@@ -8,7 +9,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum UpsPromoStatus
     {
+        [Description("None")]
         None = 0,
+
+        [Description("Applied")]
         Applied = 1
     }
 }
