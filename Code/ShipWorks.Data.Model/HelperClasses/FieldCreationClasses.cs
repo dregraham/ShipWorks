@@ -6682,6 +6682,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReturnsClearance);}
 		}
+		/// <summary>Creates a new FedExProfileEntity.ReferenceFIMS field instance</summary>
+		public static EntityField2 ReferenceFIMS
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReferenceFIMS);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfilePackageEntity</summary>
@@ -7586,6 +7591,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 MaskedData
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.MaskedData);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.ReferenceFIMS field instance</summary>
+		public static EntityField2 ReferenceFIMS
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ReferenceFIMS);}
 		}
 	}
 

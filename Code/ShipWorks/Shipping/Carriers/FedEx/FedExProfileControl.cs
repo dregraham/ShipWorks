@@ -92,6 +92,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(fedex, FedExProfileFields.DropoffType, dropoffTypeState, dropoffType, labelDropoffType);
 
             AddValueMapping(fedex, FedExProfileFields.Signature, signatureState, signature, labelSignature);
+            AddValueMapping(fedex, FedExProfileFields.ReferenceFIMS, referenceFimsState, referenceFIMS, labelFimsReference);
             AddValueMapping(fedex, FedExProfileFields.ReferenceCustomer, referenceCustomerState, referenceCustomer, labelReference);
             AddValueMapping(fedex, FedExProfileFields.ReferenceInvoice, referenceInvoiceState, referenceInvoice, labelInvoice);
             AddValueMapping(fedex, FedExProfileFields.ReferencePO, referencePoState, referencePO, labelPO);

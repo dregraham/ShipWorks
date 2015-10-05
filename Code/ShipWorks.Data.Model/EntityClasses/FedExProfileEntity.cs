@@ -593,6 +593,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ReturnsClearance", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ReferenceFIMS", fieldHashtable);
 		}
 		#endregion
 
@@ -1095,6 +1098,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.ReturnsClearance, false); }
 			set	{ SetValue((int)FedExProfileFieldIndex.ReturnsClearance, value); }
+		}
+
+		/// <summary> The ReferenceFIMS property of the Entity FedExProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."ReferenceFIMS"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ReferenceFIMS
+		{
+			get { return (System.String)GetValue((int)FedExProfileFieldIndex.ReferenceFIMS, true); }
+			set	{ SetValue((int)FedExProfileFieldIndex.ReferenceFIMS, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExProfilePackageEntity' which are related to this entity via a relation of type '1:n'.

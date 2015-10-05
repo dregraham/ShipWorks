@@ -37,7 +37,7 @@
   <customWorkspace>c:\jenkins-builds\master-public</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>rake build:public_installer[4.0.0]</command>
+      <command>rake build:public_installer[4.4.0]</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -47,7 +47,7 @@
       <parsingRulesPath>c:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
     </hudson.plugins.logparser.LogParserPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.15">
-      <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com</recipients>
+      <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com c.hicks@shipworks.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
@@ -55,7 +55,7 @@
       <IP>10.1.10.121,10.1.10.109</IP>
     </hudson.plugins.growl.GrowlPublisher>
     <hudson.tasks.Fingerprinter>
-      <targets>Artifacts/Application/*.*</targets>
+      <targets>Artifacts/Distribute/*.*, Artifacts/Logs/*.*</targets>
     </hudson.tasks.Fingerprinter>
   </publishers>
   <buildWrappers/>
