@@ -9432,6 +9432,8 @@ namespace ShipWorks.Data.Model
 		Email,
 		///<summary>Website. </summary>
 		Website,
+		///<summary>PromoStatus. </summary>
+		PromoStatus,
 		/// <summary></summary>
 		AmountOfFields
 	}

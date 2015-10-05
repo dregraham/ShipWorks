@@ -20242,6 +20242,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.Website);}
 		}
+		/// <summary>Creates a new UpsAccountEntity.PromoStatus field instance</summary>
+		public static EntityField2 PromoStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.PromoStatus);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsPackageEntity</summary>

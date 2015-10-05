@@ -2496,6 +2496,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)UpsAccountFieldIndex.Phone, 25, 0, 0);
 			base.AddElementFieldInfo("UpsAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)UpsAccountFieldIndex.Email, 100, 0, 0);
 			base.AddElementFieldInfo("UpsAccountEntity", "Website", typeof(System.String), false, false, false, false,  (int)UpsAccountFieldIndex.Website, 50, 0, 0);
+			base.AddElementFieldInfo("UpsAccountEntity", "PromoStatus", typeof(System.Byte), false, false, false, false,  (int)UpsAccountFieldIndex.PromoStatus, 0, 0, 3);
 		}
 		/// <summary>Inits UpsPackageEntity's FieldInfo objects</summary>
 		private void InitUpsPackageEntityInfos()
