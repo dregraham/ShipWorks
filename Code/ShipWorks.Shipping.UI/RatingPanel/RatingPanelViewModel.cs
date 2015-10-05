@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messages;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;

@@ -95,6 +95,7 @@ using Autofac;
 using Interapptive.Shared.Messaging;
 using System.Threading.Tasks;
 using ShipWorks.Core.Common.Threading;
+using ShipWorks.Messages;
 
 namespace ShipWorks
 {

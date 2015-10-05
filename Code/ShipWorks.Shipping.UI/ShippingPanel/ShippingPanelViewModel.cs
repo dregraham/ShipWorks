@@ -11,6 +11,7 @@ using Interapptive.Shared.Messaging;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messages;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.UI.ShippingPanel.Loading;
 using ShipWorks.Stores;

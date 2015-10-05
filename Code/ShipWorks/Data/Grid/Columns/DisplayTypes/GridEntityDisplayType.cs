@@ -31,6 +31,7 @@ using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.ApplicationCore;
 using Autofac;
 using Interapptive.Shared.Messaging;
+using ShipWorks.Messages;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {

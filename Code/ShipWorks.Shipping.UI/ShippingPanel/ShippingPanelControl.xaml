@@ -17,6 +17,7 @@
              xmlns:props="clr-namespace:ShipWorks.Shipping.UI.AttachedProperties"
              xmlns:shippingPanel="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel"
              xmlns:loading="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Loading"
+             xmlns:messages="clr-namespace:ShipWorks.Messages;assembly=ShipWorks.Core"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shippingPanel:ShippingPanelViewModel}"
              d:DesignHeight="1304" d:DesignWidth="350"
              SnapsToDevicePixels="True">
@@ -117,7 +118,7 @@
                                 <ComboBox Grid.Row="0" Grid.Column="1"
                                           x:Name="AccountDropDown"
                                           Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}"
-                                          props:UpdateWhenMessageReceived.MessageType="{x:Type carriers:ShippingAccountsChangedMessage}"
+                                          props:UpdateWhenMessageReceived.MessageType="{x:Type messages:ShippingAccountsChangedMessage}"
                                           SelectedValue="{Binding AccountId}"
                                           DisplayMemberPath="Description"
                                           SelectedValuePath="AccountId">
@@ -134,7 +135,7 @@
                                           DisplayMemberPath="Key"
                                           SelectedValuePath="Value"
                                           props:SelectDefaultWhenValueIsNull.RelativeIndex="Last"
-                                          props:UpdateWhenMessageReceived.MessageType="{x:Type carriers:OriginAddressChangedMessage}"
+                                          props:UpdateWhenMessageReceived.MessageType="{x:Type messages:OriginAddressChangedMessage}"
                                           x:Name="OriginDropDown">
                                     <ComboBox.ItemsSource>
                                         <MultiBinding Converter="{StaticResource OriginAddressList}">

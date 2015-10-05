@@ -30,6 +30,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data;
 using ShipWorks.Editions;
 using ShipWorks.Filters.Search;
+using ShipWorks.Messages;
 
 namespace ShipWorks.Filters.Controls
 {

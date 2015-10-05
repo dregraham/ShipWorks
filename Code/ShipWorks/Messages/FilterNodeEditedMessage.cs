@@ -1,7 +1,7 @@
 using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Filters.Management
+namespace ShipWorks.Messages
 {
     /// <summary>
     /// A filter has been changed

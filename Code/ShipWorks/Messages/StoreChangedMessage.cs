@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Messaging;
+﻿using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Stores
+namespace ShipWorks.Messages
 {
     /// <summary>
     /// An IShipWorksMessage used to inform subscribers that a store has changed.

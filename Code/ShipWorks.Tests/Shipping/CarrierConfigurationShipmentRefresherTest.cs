@@ -8,6 +8,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.AddressValidation;
 using System.Linq;
+using ShipWorks.Messages;
 using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Shipping

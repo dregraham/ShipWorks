@@ -23,6 +23,7 @@ using Autofac;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping;
 using System.Linq;
+using ShipWorks.Messages;
 using TD.SandDock;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode

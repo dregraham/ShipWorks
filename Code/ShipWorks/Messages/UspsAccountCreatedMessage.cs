@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Messaging;
+using ShipWorks.Shipping;
 
-namespace ShipWorks.Shipping.Settings
+namespace ShipWorks.Messages
 {
     /// <summary>
     /// Message that notifies consumers that a Usps account was just created

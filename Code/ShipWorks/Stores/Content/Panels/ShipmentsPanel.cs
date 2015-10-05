@@ -29,6 +29,7 @@ using Divelements.SandGrid;
 using ShipWorks.ApplicationCore;
 using Autofac;
 using Interapptive.Shared.Messaging;
+using ShipWorks.Messages;
 
 namespace ShipWorks.Stores.Content.Panels
 {

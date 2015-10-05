@@ -6,6 +6,7 @@ using Interapptive.Shared.Messaging;
 using Moq;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.UI.ShippingPanel;

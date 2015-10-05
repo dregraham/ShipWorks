@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Messaging;
 
-namespace ShipWorks.Shipping.Carriers
+namespace ShipWorks.Messages
 {
     /// <summary>
     /// Message that shipping accounts have changed for a carrier.

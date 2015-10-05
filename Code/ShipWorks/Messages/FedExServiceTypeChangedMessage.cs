@@ -1,7 +1,7 @@
 using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
-namespace ShipWorks.Shipping.Carriers.FedEx
+namespace ShipWorks.Messages
 {
     /// <summary>
     /// Notify listeners that the FedEx service type has changed

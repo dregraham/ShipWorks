@@ -26,6 +26,7 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using System.Collections;
 using Interapptive.Shared.Messaging;
+using ShipWorks.Messages;
 
 namespace ShipWorks.Stores.Management
 {

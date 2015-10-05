@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using Interapptive.Shared.Messaging;
+﻿using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Messages
 {
     /// <summary>
     /// Message that the selected rate has changed.

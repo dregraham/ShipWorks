@@ -17,6 +17,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data.Controls;
 using ShipWorks.ApplicationCore;
 using Autofac;
+using ShipWorks.Messages;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {

@@ -15,6 +15,7 @@ using ShipWorks.UI;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
+using ShipWorks.Messages;
 using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Settings.Origin

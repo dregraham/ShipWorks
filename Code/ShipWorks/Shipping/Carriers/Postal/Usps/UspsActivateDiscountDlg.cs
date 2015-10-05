@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messages;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;

@@ -816,13 +816,25 @@
     <Compile Include="Filters\Management\DisableLinkedFilterDlg.Designer.cs">
       <DependentUpon>DisableLinkedFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Filters\Management\FilterNodeEditedMessage.cs" />
     <Compile Include="Filters\Management\FilterNodeReferenceRepository.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Messages\CarrierConfiguredMessage.cs" />
+    <Compile Include="Messages\ConfiguringCarrierMessage.cs" />
+    <Compile Include="Messages\CreateLabelMessage.cs" />
+    <Compile Include="Messages\EnabledCarriersChangedMessage.cs" />
+    <Compile Include="Messages\FedExServiceTypeChangedMessage.cs" />
+    <Compile Include="Messages\FilterNodeEditedMessage.cs" />
+    <Compile Include="Messages\OpenShippingDialogMessage.cs" />
+    <Compile Include="Messages\OriginAddressChangedMessage.cs" />
+    <Compile Include="Messages\SelectedRateChangedMessage.cs" />
+    <Compile Include="Messages\ShipmentChangedMessage.cs" />
+    <Compile Include="Messages\ShippingAccountsChangedMessage.cs" />
+    <Compile Include="Messages\StoreChangedMessage.cs" />
+    <Compile Include="Messages\UspsAccountCreatedMessage.cs" />
+    <Compile Include="Messages\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AddressConversions.cs" />
     <Compile Include="Shipping\BilledType.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
-    <Compile Include="Shipping\CarrierConfiguredMessage.cs" />
     <Compile Include="Shipping\Carriers\AccountManagerBase.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
@@ -899,7 +911,6 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\FedEx\FedExServiceTypeChangedMessage.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExTemplateElementGenerator.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountRetriever.cs" />
@@ -1058,8 +1069,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\OriginAddressChangedMessage.cs" />
-    <Compile Include="Shipping\Carriers\ShippingAccountsChangedMessage.cs" />
     <Compile Include="Shipping\Carriers\TangoCredentialStore.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateRestrictionBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
@@ -1087,8 +1096,6 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\ConfiguringCarrierMessage.cs" />
-    <Compile Include="Shipping\CreateLabelMessage.cs" />
     <Compile Include="Shipping\CustomsManagerWrapper.cs" />
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
@@ -1136,7 +1143,6 @@
       <DependentUpon>RequestedLabelFormatProfileControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
-    <Compile Include="Shipping\EnabledCarriersChangedMessage.cs" />
     <Compile Include="Shipping\ICarrierConfigurationShipmentRefresher.cs" />
     <Compile Include="Shipping\ICustomsManager.cs" />
     <Compile Include="Shipping\Insurance\InsuranceSubmitClaimControl.cs">
@@ -1167,9 +1173,6 @@
     <Compile Include="Shipping\IShipmentTypeManager.cs" />
     <Compile Include="Shipping\IShippingErrorManager.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />
-    <Compile Include="Shipping\SelectedRateChangedMessage.cs" />
-    <Compile Include="Shipping\ShipmentChangedMessage.cs" />
-    <Compile Include="Shipping\OpenShippingDialogMessage.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\RatingFields.cs" />
@@ -1192,7 +1195,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Settings\ShippingSettingsWrapper.cs" />
-    <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
     <Compile Include="Shipping\ShipmentProcessor.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
@@ -1228,7 +1230,6 @@
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
-    <Compile Include="Stores\StoreChangedMessage.cs" />
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinder.cs" />
@@ -1283,7 +1284,6 @@
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Settings\UspsAccountCreatedMessage.cs" />
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>

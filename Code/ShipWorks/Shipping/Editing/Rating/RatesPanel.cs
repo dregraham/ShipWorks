@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Settings;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using Autofac.Features.OwnedInstances;
+using ShipWorks.Messages;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {

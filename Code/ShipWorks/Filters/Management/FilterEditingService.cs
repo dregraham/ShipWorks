@@ -15,6 +15,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.ApplicationCore.Appearance;
 using Interapptive.Shared.UI;
 using ShipWorks.Filters.Grid;
+using ShipWorks.Messages;
 
 namespace ShipWorks.Filters.Management
 {
