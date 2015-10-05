@@ -62,9 +62,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
         public Task ChangeContent(IGridSelection selection)
         {
-            long orderId = selection.Keys.FirstOrDefault();
-
-            return orderId==0 ? null : viewModel.LoadOrder(orderId);
+            viewModel.SelectionChanged();
+            return TaskUtility.CompletedTask;
         }
 
         public void LoadState()

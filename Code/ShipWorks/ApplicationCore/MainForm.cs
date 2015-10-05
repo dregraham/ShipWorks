@@ -96,6 +96,7 @@ using ShipWorks.Core.Messaging;
 using System.Threading.Tasks;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Messages;
+using ShipWorks.Core.Messages;
 
 namespace ShipWorks
 {
@@ -2130,6 +2131,11 @@ namespace ShipWorks
         /// </summary>
         private void OnGridSelectionChanged(object sender, EventArgs e)
         {
+            if (gridControl.ActiveFilterTarget == FilterTarget.Orders)
+            {
+                Messenger.Current.Send(new OrderSelectionChangingMessage(this, gridControl.Selection.Keys));
+            }
+
             UpdateSelectionDependentUI();
         }
 

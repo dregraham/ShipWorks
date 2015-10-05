@@ -46,8 +46,9 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled"
-                  IsEnabled="{Binding IsProcessed,Converter={StaticResource InvertBoolean}}">
+    <ScrollViewer VerticalScrollBarVisibility="Visible" 
+                  HorizontalScrollBarVisibility="Disabled"
+                  IsEnabled="{Binding AllowEditing}">
         <StackPanel Margin="6,6,6,6">
             <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Success}}">
                 <Grid>

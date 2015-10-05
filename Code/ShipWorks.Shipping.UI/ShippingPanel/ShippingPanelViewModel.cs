@@ -16,6 +16,8 @@ using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.UI.ShippingPanel.Loading;
 using ShipWorks.Stores;
 using ShipWorks.Shipping.Services;
+using System.Reactive.Concurrency;
+using System.Threading;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -36,7 +38,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
         private readonly IMessenger messenger;
-        private bool isProcessed;
+        private bool allowEditing;
         private readonly IShipmentTypeFactory shipmentTypeFactory;
         private readonly Func<ShipmentViewModel> shipmentViewModelFactory;
         private readonly IShippingManager shippingManager;
@@ -46,6 +48,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
         private bool listenForRateCriteriaChanged = false;
         private bool forceRateCriteriaChanged = false;
+
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -96,6 +99,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin = addressViewModelFactory();
 
             PropertyChanging += OnPropertyChanging;
+
+            messenger.AsObservable<ShipWorks.Core.Messages.OrderSelectionChangingMessage>()
+                .ObserveOn(TaskPoolScheduler.Default)
+                .Do(x => Thread.Sleep(2000))
+                .ObserveOn(DispatcherScheduler.Current)
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .Subscribe(x => AllowEditing = true);
 
             //Destination = new AddressViewModel();
 
@@ -205,10 +215,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Is the loaded shipment processed?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsProcessed
+        public bool AllowEditing
         {
-            get { return isProcessed; }
-            set { handler.Set(nameof(IsProcessed), ref isProcessed, value); }
+            get { return allowEditing; }
+            set { handler.Set(nameof(AllowEditing), ref allowEditing, value); }
         }
 
         /// <summary>
@@ -291,6 +301,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
         }
 
+        internal void SelectionChanged() => AllowEditing = false;
+
         /// <summary>
         /// Populate the view model with the current state of the shipment
         /// </summary>
@@ -312,7 +324,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             Origin.Load(loadedShipment.Shipment.OriginPerson);
 
-            IsProcessed = loadedShipment.Shipment.Processed;
+            AllowEditing = loadedShipment.Shipment.Processed;
 
             listenForRateCriteriaChanged = true;
             
@@ -332,7 +344,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 IEnumerable<ShipmentEntity> shipments = await shipmentProcessor.Process(new[] { loadedShipment.Shipment }, refresher, null, null);
                 await LoadOrder(loadedShipment.Shipment.OrderID);
-                IsProcessed = shipments?.FirstOrDefault()?.Processed ?? false;
+                AllowEditing = shipments?.FirstOrDefault()?.Processed ?? false;
             }
         }
 
