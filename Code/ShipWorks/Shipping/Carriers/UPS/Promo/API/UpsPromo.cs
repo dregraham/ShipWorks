@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <summary>
         /// Activates the Promo Code
         /// </summary>
-        public PromoActivation Apply()
+        public void Apply()
         {
             // Check to see if the terms have been accepted
             if (Terms.IsAccepted == false)
@@ -90,13 +90,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             PromoActivation promoActivation = client.Activate(Terms.AcceptanceCode);
 
             // If the activation was successful save it to the UpsAccount Entity
+            // Otherwise throw exception containing the info about the failure 
             if (promoActivation.IsSuccessful)
             {
                 account.PromoStatus = (int)UpsPromoStatus.Applied;
                 upsAccountRepository.Save(account);
             }
-
-            return promoActivation;
+            else
+            {
+                throw new UpsPromoException(promoActivation.Info);
+            }
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Web.Services.Protocols;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
@@ -10,10 +10,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
     /// </summary>
     public class UpsApiPromoClient : IUpsApiPromoClient
     {
-        private readonly UpsPromo upsPromo;
-        private static readonly string promoCode = "SomePromoCode";
-        private static readonly string endpoint = "https://onlinetools.ups.com/webservices/PromoDiscount";
-        private static readonly string testingEndpoint = "https://wwwcie.ups.com/webservices/PromoDiscount";
+        private const string PromoCode = "SomePromoCode";
+        private const string LiveEndpoing = "https://onlinetools.ups.com/webservices/PromoDiscount";
+        private const string TestingEndpoint = "https://wwwcie.ups.com/webservices/PromoDiscount";
 
         /// <summary>
         /// Constructor
@@ -21,9 +20,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <param name="upsPromo"></param>
         public UpsApiPromoClient(UpsPromo upsPromo)
         {
-            this.upsPromo = upsPromo;
-        }
+            this.UpsPromo = upsPromo;
+            Locale = new LocaleType()
+            {
+                CountryCode = upsPromo.CountryCode,
+                LanguageCode = "en"
+            };
 
+        }
+        
         /// <summary>
         /// Requests Terms and Conditions for UPS Promo Api
         /// </summary>
@@ -32,12 +37,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         {
             PromoDiscountAgreementRequest request = new PromoDiscountAgreementRequest
             {
-                Locale = new LocaleType()
-                {
-                    CountryCode = upsPromo.CountryCode,
-                    LanguageCode = "en"
-                },
-                PromoCode = promoCode
+                Locale = Locale,
+                PromoCode = PromoCode
             };
 
             try
@@ -45,17 +46,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                 using (PromoDiscountService service = new PromoDiscountService())
                 {
                     // Point the service to the correct endpoint
-                    service.Url = endpoint;
+                    service.Url = UseTestServer ? TestingEndpoint : LiveEndpoing;
                     service.UPSSecurityValue = new UPSSecurity()
                     {
                         ServiceAccessToken = new UPSSecurityServiceAccessToken()
                         {
-                            AccessLicenseNumber = upsPromo.AccessLicenseNumber
+                            AccessLicenseNumber = UpsPromo.AccessLicenseNumber
                         },
                         UsernameToken = new UPSSecurityUsernameToken()
                         {
-                            Username = upsPromo.Username,
-                            Password = upsPromo.Password
+                            Username = UpsPromo.Username,
+                            Password = UpsPromo.Password
                         }
                     };
 
@@ -76,13 +77,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         {
             PromoDiscountRequest request = new PromoDiscountRequest()
             {
-                Locale = new LocaleType()
-                {
-                    CountryCode = upsPromo.CountryCode,
-                    LanguageCode = "en"
-                },
+                Locale = Locale,
                 AgreementAcceptanceCode = acceptanceCode,
-                PromoCode = promoCode
+                PromoCode = PromoCode
             };
 
             try
@@ -90,17 +87,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                 using (PromoDiscountService service = new PromoDiscountService())
                 {
                     // Point the service to the correct endpoint
-                    service.Url = endpoint;
+                    service.Url = UseTestServer ? TestingEndpoint : LiveEndpoing;
                     service.UPSSecurityValue = new UPSSecurity()
                     {
                         ServiceAccessToken = new UPSSecurityServiceAccessToken()
                         {
-                            AccessLicenseNumber = upsPromo.AccessLicenseNumber
+                            AccessLicenseNumber = UpsPromo.AccessLicenseNumber
                         },
                         UsernameToken = new UPSSecurityUsernameToken()
                         {
-                            Username = upsPromo.Username,
-                            Password = upsPromo.Password
+                            Username = UpsPromo.Username,
+                            Password = UpsPromo.Password
                         }
                     };
 
@@ -112,6 +109,25 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             {
                 throw WebHelper.TranslateWebException(ex, typeof(UpsPromoException));
             }
+        }
+
+        /// <summary>
+        /// Ups Promo code information
+        /// </summary>
+        private UpsPromo UpsPromo { get; }
+
+        /// <summary>
+        /// Locale information for the request
+        /// </summary>
+        private LocaleType Locale { get; }
+
+        /// <summary>
+        /// Indicates if the test server should be used instead of the live server
+        /// </summary>
+        public static bool UseTestServer
+        {
+            get { return InterapptiveOnly.Registry.GetValue("UpsOltTestServer", false); }
+            set { InterapptiveOnly.Registry.SetValue("UpsOltTestServer", value); }
         }
     }
 }
