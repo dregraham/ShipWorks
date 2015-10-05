@@ -1,20 +1,22 @@
 ﻿using System;
-using ShipWorks.Stores.Platforms.PayPal.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
 {
     /// <summary>
     /// Client for interacting with UPS Promo API
     /// </summary>
-    public class UpsApiPromoClient
+    public class UpsApiPromoClient : IUpsApiPromoClient
     {
-        public UpsApiPromoClient()
+        private readonly UpsPromo promo;
+
+        public UpsApiPromoClient(UpsPromo promo)
         {
-                
+            this.promo = promo;
         }
 
         public PromoAcceptanceTerms GetAgreement()
         {
+
             throw new NotImplementedException();
         }
 

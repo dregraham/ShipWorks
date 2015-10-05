@@ -1037,9 +1037,12 @@
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsPharmaceuticalControl.Designer.cs">
       <DependentUpon>UpsPharmaceuticalControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\UPS\Promo\API\IPromoClientFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\API\IUpsApiPromoClient.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\PromoAcceptanceTerms.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\PromoActivation.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsApiPromoClient.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
