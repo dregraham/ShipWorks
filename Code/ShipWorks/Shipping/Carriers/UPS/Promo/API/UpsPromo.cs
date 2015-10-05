@@ -9,13 +9,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
     /// </summary>
     public class UpsPromo
     {
-        public readonly string AccountNumber;
-        public readonly string Username;
-        public readonly string Password;
-        public readonly string AccessLicenseNumber;
-        public readonly string CountryCode;
-        public readonly IPromoClientFactory PromoClientFactory;
-        public PromoAcceptanceTerms Terms;
+        private readonly IPromoClientFactory promoClientFactory;
         private readonly ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository;
         private readonly UpsAccountEntity account;
 
@@ -31,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             Password = upsAccount.Password;
             AccessLicenseNumber = licenseNumber;
             CountryCode = upsAccount.CountryCode == "CA" ? "CA" : "US";
-            PromoClientFactory = promoFactory;
+            promoClientFactory = promoFactory;
             this.upsAccountRepository = upsAccountRepository;
             account = upsAccount;
         }
@@ -46,10 +40,40 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             Password = upsAccount.Password;
             AccessLicenseNumber = licenseNumber;
             CountryCode = upsAccount.CountryCode == "CA" ? "CA" : "US";
-            PromoClientFactory = promoFactory;
+            promoClientFactory = promoFactory;
             this.upsAccountRepository = upsAccountRepository;
             account = upsAccount;
         }
+
+        /// <summary>
+        /// The UPS Account Number
+        /// </summary>
+        public string AccountNumber { get; }
+
+        /// <summary>
+        /// The UPS Accounts UserId
+        /// </summary>
+        public string Username { get; }
+
+        /// <summary>
+        /// The UPS Accounts Password
+        /// </summary>
+        public string Password { get; }
+
+        /// <summary>
+        /// The Access License Number
+        /// </summary>
+        public string AccessLicenseNumber { get; }
+
+        /// <summary>
+        /// The Country Code of the UPS Account
+        /// </summary>
+        public string CountryCode { get; }
+
+        /// <summary>
+        /// The Promo Terms and Conditions
+        /// </summary>
+        public PromoAcceptanceTerms Terms { get; set; }
 
         /// <summary>
         /// Activates the Promo Code
@@ -62,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                 throw new UpsPromoException("You must first accept the Terms and Conditions");
             }
 
-            IUpsApiPromoClient client = PromoClientFactory.CreatePromoClient(this);
+            IUpsApiPromoClient client = promoClientFactory.CreatePromoClient(this);
             PromoActivation promoActivation = client.Activate(Terms.AcceptanceCode);
 
             // If the activation was successful save it to the UpsAccount Entity
@@ -81,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <returns></returns>
         public PromoAcceptanceTerms GetAgreementTerms()
         {
-            IUpsApiPromoClient client = PromoClientFactory.CreatePromoClient(this);
+            IUpsApiPromoClient client = promoClientFactory.CreatePromoClient(this);
             Terms = client.GetAgreement();
             return Terms;
         }
