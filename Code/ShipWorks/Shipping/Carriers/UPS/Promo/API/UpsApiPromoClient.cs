@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                     };
 
                     PromoDiscountResponse response = service.ProcessPromoDiscount(request);
-                    return new PromoActivation(upsPromo, response);
+                    return new PromoActivation(response);
                 }
             }
             catch (Exception ex)
