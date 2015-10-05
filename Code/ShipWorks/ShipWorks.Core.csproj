@@ -1045,7 +1045,6 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsPromoWebClientFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsApiPromoClient.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsPromo.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />

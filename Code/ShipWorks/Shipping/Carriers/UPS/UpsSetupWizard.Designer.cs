@@ -1,4 +1,7 @@
-﻿namespace ShipWorks.Shipping.Carriers.UPS
+﻿using System;
+using ShipWorks.UI.Wizard;
+
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     partial class UpsSetupWizard
     {
@@ -46,6 +49,7 @@
             this.wizardPageAccount = new ShipWorks.UI.Wizard.WizardPage();
             this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageFinishOlt = new ShipWorks.UI.Wizard.WizardPage();
+            this.upsPromoFailed = new System.Windows.Forms.Label();
             this.labelSetupCompleteNotifyTime = new System.Windows.Forms.Label();
             this.labelSetupComplete3 = new System.Windows.Forms.Label();
             this.labelSetupComplete2 = new System.Windows.Forms.Label();
@@ -94,6 +98,9 @@
             this.labelCreateAccountRegistrationFailed2 = new System.Windows.Forms.Label();
             this.labelCreateAccountRegistrationFailed3 = new System.Windows.Forms.Label();
             this.labelCreateAccountRegistrationFailed1 = new System.Windows.Forms.Label();
+            this.wizardPagePromo = new ShipWorks.UI.Wizard.WizardPage();
+            this.promoTermsLink = new System.Windows.Forms.LinkLabel();
+            this.promoDescription = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -118,6 +125,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.helpPickupLocation)).BeginInit();
             this.wizardPageOpenAccountPickupLocation.SuspendLayout();
             this.wizardPageFinishCreateAccountRegistrationFailed.SuspendLayout();
+            this.wizardPagePromo.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -134,7 +142,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageOpenAccountCharacteristics);
+            this.mainPanel.Controls.Add(this.wizardPagePromo);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
             // etchBottom
@@ -337,6 +345,7 @@
             // 
             // wizardPageFinishOlt
             // 
+            this.wizardPageFinishOlt.Controls.Add(this.upsPromoFailed);
             this.wizardPageFinishOlt.Controls.Add(this.labelSetupCompleteNotifyTime);
             this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete3);
             this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete2);
@@ -349,6 +358,13 @@
             this.wizardPageFinishOlt.Size = new System.Drawing.Size(579, 474);
             this.wizardPageFinishOlt.TabIndex = 0;
             this.wizardPageFinishOlt.Title = "Account Registration";
+            // 
+            // upsPromoFailed
+            // 
+            this.upsPromoFailed.Location = new System.Drawing.Point(21, 246);
+            this.upsPromoFailed.Name = "upsPromoFailed";
+            this.upsPromoFailed.Size = new System.Drawing.Size(438, 32);
+            this.upsPromoFailed.TabIndex = 4;
             // 
             // labelSetupCompleteNotifyTime
             // 
@@ -843,6 +859,39 @@
             this.labelCreateAccountRegistrationFailed1.TabIndex = 3;
             this.labelCreateAccountRegistrationFailed1.Text = "You have successfully created a UPS account within ShipWorks!";
             // 
+            // wizardPagePromo
+            // 
+            this.wizardPagePromo.Controls.Add(this.promoTermsLink);
+            this.wizardPagePromo.Controls.Add(this.promoDescription);
+            this.wizardPagePromo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPagePromo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPagePromo.Location = new System.Drawing.Point(0, 0);
+            this.wizardPagePromo.Name = "wizardPagePromo";
+            this.wizardPagePromo.Size = new System.Drawing.Size(579, 474);
+            this.wizardPagePromo.TabIndex = 0;
+            this.wizardPagePromo.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnWizardPagePromoStepNext);
+            this.wizardPagePromo.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnWizardPagePromoSteppingInto);
+            // 
+            // promoTermsLink
+            // 
+            this.promoTermsLink.AutoSize = true;
+            this.promoTermsLink.Location = new System.Drawing.Point(26, 121);
+            this.promoTermsLink.Name = "promoTermsLink";
+            this.promoTermsLink.Size = new System.Drawing.Size(110, 13);
+            this.promoTermsLink.TabIndex = 1;
+            this.promoTermsLink.TabStop = true;
+            this.promoTermsLink.Text = "Terms and Conditions";
+            this.promoTermsLink.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.promoTermsLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnPromoTermsLinkClicked);
+            // 
+            // promoDescription
+            // 
+            this.promoDescription.Location = new System.Drawing.Point(23, 5);
+            this.promoDescription.Name = "promoDescription";
+            this.promoDescription.Size = new System.Drawing.Size(530, 21);
+            this.promoDescription.TabIndex = 0;
+            this.promoDescription.Text = "label2";
+            // 
             // UpsSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -865,6 +914,7 @@
             this.wizardPageRates,
             this.wizardPageOptionsOlt,
             this.wizardPageOptionsWorldShip,
+            this.wizardPagePromo,
             this.wizardPageFinishOlt,
             this.wizardPageFinishAddAccount,
             this.wizardPageFinishCreateAccountRegistrationFailed});
@@ -911,6 +961,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.helpPickupLocation)).EndInit();
             this.wizardPageOpenAccountPickupLocation.ResumeLayout(false);
             this.wizardPageFinishCreateAccountRegistrationFailed.ResumeLayout(false);
+            this.wizardPagePromo.ResumeLayout(false);
+            this.wizardPagePromo.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -982,5 +1034,9 @@
         private OpenAccount.UpsShipmentCharacteristicsControl shipmentCharacteristics;
         private System.Windows.Forms.Label labelSetupCompleteNotifyTime;
         private OpenAccount.UpsPharmaceuticalControl upsPharmaceuticalControl;
+        private UI.Wizard.WizardPage wizardPagePromo;
+        private System.Windows.Forms.LinkLabel promoTermsLink;
+        private System.Windows.Forms.Label promoDescription;
+        private System.Windows.Forms.Label upsPromoFailed;
     }
 }

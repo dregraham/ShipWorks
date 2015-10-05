@@ -24,6 +24,8 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.UPS.Promo.API;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -35,6 +37,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         ShipmentType shipmentType;
         bool forceAccountOnly;
         DateTime? notifyTime;
+        UpsPromo promo;
 
         string upsLicense;
 
@@ -42,6 +45,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         UpsAccountEntity upsAccount = new UpsAccountEntity();
 
         private OpenAccountRequest openAccountRequest;
+
 
         /// <summary>
         /// Constructor
@@ -135,6 +139,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageOpenAccountPickupSchedule);
                 Pages.Remove(wizardPageOpenAccountPageBillingContactInfo);
                 Pages.Remove(wizardPageOpenAccountPickupLocation);
+                Pages.Remove(wizardPagePromo);
             }
 
             upsAccount.CountryCode = "US";
@@ -286,6 +291,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageOpenAccountPageBillingContactInfo);
                 Pages.Remove(wizardPageOpenAccountPickupLocation);
                 Pages.Remove(wizardPageOpenAccountPickupSchedule);
+                Pages.Remove(wizardPagePromo);
             }
             else
             {
@@ -791,7 +797,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 if (upsBillingContactInfoControl.SameAsPickup)
                 {
                     CreateAccount();
-                    e.NextPage = Pages[Pages.Count - 1]; // Go to last page.
+                    e.NextPage = wizardPagePromo;
                 }
             }
             catch (UpsOpenAccountException ex)
@@ -931,6 +937,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 RegisterNewAccount(upsOpenAccountResponse.AccountNumber);
                 notifyTime = upsOpenAccountResponse.NotifyTime;
+
             }
             catch (UpsException ex)
             {
@@ -1097,6 +1104,49 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             return isAddressCorrected;
+        }
+
+        private void OnPromoTermsLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (promo?.Terms?.URL == null)
+            {
+                throw new Exception("Promo Not Set");
+            }
+
+            WebHelper.OpenUrl(promo.Terms.URL, this);
+        }
+
+        /// <summary>
+        /// Called when Stepping Into wizardPagePromo
+        /// </summary>
+        private void OnWizardPagePromoSteppingInto(object sender, WizardSteppingIntoEventArgs e)
+        {
+            try
+            {
+                promo = new UpsPromo(upsAccount, upsLicense, new UpsAccountRepository(), new UpsPromoWebClientFactory());
+                promo.GetAgreementTerms();
+                promoDescription.Text = promo.Terms.Description;
+                promoTermsLink.Top = promoDescription.Bottom + 5;
+            }
+            catch (UpsPromoException)
+            {
+                e.Skip = true;
+            }
+        }
+
+        /// <summary>
+        /// Called when Stepping out of wizardPagePromo
+        /// </summary>
+        private void OnWizardPagePromoStepNext(object sender, WizardStepEventArgs e)
+        {
+            try
+            {
+                promo.Apply();
+            }
+            catch (UpsPromoException)
+            {
+                upsPromoFailed.Text = @"An error occurred when trying to apply promotion. Standard UPS account created.";
+            }
         }
     }
 }

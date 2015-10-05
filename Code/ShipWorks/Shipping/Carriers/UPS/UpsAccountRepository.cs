@@ -6,7 +6,7 @@ using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
-    public class UpsAccountRepository : CarrierAccountRepositoryBase<UpsAccountEntity>, IUpsOpenAccountRepository
+    public class UpsAccountRepository : CarrierAccountRepositoryBase<UpsAccountEntity>, IUpsOpenAccountRepository, ICarrierAccountRepository<UpsAccountEntity>
     {
         /// <summary>
         /// Returns a list of accounts for the carrier.
