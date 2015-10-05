@@ -4,11 +4,12 @@
   <Assemblies>
     <Name>Interapptive.Shared</Name>
     <Name>ShipWorks</Name>
+    <Name>ShipWorks.Shared</Name>
+    <Name>ShipWorks.SqlServer</Name>
     <Name>ShipWorks.Core</Name>
     <Name>ShipWorks.Shipping</Name>
     <Name>ShipWorks.Shipping.UI</Name>
-    <Name>ShipWorks.Shared</Name>
-    <Name>ShipWorks.SqlServer</Name>
+    <Name>ShipWorks.ThirdPartyApi</Name>
   </Assemblies>
   <FrameworkAssemblies>
     <Name>mscorlib</Name>
@@ -17,58 +18,75 @@
     <Name>System.Xml</Name>
     <Name>System.Windows.Forms</Name>
     <Name>System.Drawing</Name>
-    <Name>SD.LLBLGen.Pro.ORMSupportClasses.NET20</Name>
-    <Name>log4net</Name>
     <Name>System.Core</Name>
     <Name>System.Web</Name>
-    <Name>Newtonsoft.Json</Name>
     <Name>System.Web.Services</Name>
-    <Name>Apitron.PDF.Rasterizer</Name>
     <Name>System.Xml.Linq</Name>
     <Name>System.Transactions</Name>
     <Name>System.Management</Name>
-    <Name>Divelements.SandGrid</Name>
-    <Name>Quartz</Name>
-    <Name>Divelements.SandRibbon</Name>
     <Name>System.ServiceProcess</Name>
-    <Name>ShipWorks.Data.Model</Name>
     <Name>System.Configuration.Install</Name>
     <Name>System.Runtime.Caching</Name>
-    <Name>Microsoft.Web.Services3</Name>
     <Name>System.Design</Name>
+    <Name>System.ComponentModel.DataAnnotations</Name>
+    <Name>System.DirectoryServices.AccountManagement</Name>
+    <Name>System.Data.DataSetExtensions</Name>
+    <Name>System.Web.Extensions</Name>
+    <Name>System.Configuration</Name>
+    <Name>log4net</Name>
+    <Name>Apitron.PDF.Rasterizer</Name>
+    <Name>Newtonsoft.Json</Name>
+    <Name>SD.LLBLGen.Pro.ORMSupportClasses.NET20</Name>
+    <Name>Divelements.SandRibbon</Name>
+    <Name>ComponentFactory.Krypton.Toolkit</Name>
+    <Name>SandDock</Name>
+    <Name>ShipWorks.Data.Model</Name>
+    <Name>Divelements.SandGrid</Name>
+    <Name>Autofac</Name>
     <Name>ShipWorks.Data.Adapter</Name>
     <Name>ActiproSoftware.SyntaxEditor.Net20</Name>
     <Name>ActiproSoftware.SyntaxEditor.Addons.Web.Net20</Name>
-    <Name>ComponentFactory.Krypton.Toolkit</Name>
-    <Name>Common.Logging</Name>
-    <Name>Rebex.Net.ProxySocket</Name>
+    <Name>Rebex.Networking</Name>
+    <Name>Rebex.Common</Name>
     <Name>Rebex.Mail</Name>
-    <Name>SandDock</Name>
-    <Name>SpreadsheetGear</Name>
     <Name>Rebex.Net.Imap</Name>
-    <Name>Rebex.Net.Ftp</Name>
-    <Name>RestSharp</Name>
-    <Name>NAudio</Name>
-    <Name>Rebex.Net.Smtp</Name>
     <Name>Rebex.Net.Pop3</Name>
-    <Name>System.DirectoryServices.AccountManagement</Name>
     <Name>Rebex.Net.SecureSocket</Name>
-    <Name>System.Data.DataSetExtensions</Name>
-    <Name>System.ComponentModel.DataAnnotations</Name>
-    <Name>System.Web.Extensions</Name>
-    <Name>System.Configuration</Name>
+    <Name>Common.Logging.Core</Name>
+    <Name>RestSharp</Name>
+    <Name>Microsoft.Web.Services3</Name>
+    <Name>Rebex.Ftp</Name>
+    <Name>Rebex.Sftp</Name>
+    <Name>Rebex.Net.Smtp</Name>
+    <Name>SpreadsheetGear</Name>
+    <Name>Common.Logging</Name>
+    <Name>NAudio</Name>
+    <Name>Quartz</Name>
     <Name>SD.LLBLGen.Pro.DQE.SqlServer.NET20</Name>
-    <Name>Common.Logging.Log4Net1210</Name>
+    <Name>Common.Logging.Log4Net1213</Name>
   </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319</Dir>
     <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319\WPF</Dir>
     <Dir>..\Artifacts\Application</Dir>
+    <Dir>..\Code\ShipWorks\bin\Debug</Dir>
+    <Dir>..\Code\ShipWorks.Data.Adapter\bin\Debug</Dir>
+    <Dir>..\Code\ShipWorks.Data.Model\bin\Debug</Dir>
+    <Dir>..\Code\Interapptive.Shared\bin\Debug</Dir>
+    <Dir>..\Code\ShipWorks.Shared\bin\Debug</Dir>
+    <Dir>..\Code\ShipWorks.Tests\bin\Debug</Dir>
+    <Dir>..\Code\ShipWorks.Tests.Integration\bin\Debug</Dir>
+    <Dir>..\Code\ShipWorks.Executable\bin\Debug</Dir>
+    <Dir>..\Code\ShipWorks.Shipping\bin\Debug</Dir>
+    <Dir>..\Code\ShipWorks.Shipping.UI\bin\Debug</Dir>
+    <Dir>..\Code\ShipWorks.Shipping.Tests\bin\Debug</Dir>
+    <Dir>..\Code\ShipWorks.ThirdPartyApi\bin\Debug</Dir>
   </Dirs>
+  <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <Report Kind="0" SectionsEnabled="45055" XslPath="" Flags="60416" />
   <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="ParticularAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
   <BaselineInUISetting ProjectMode="DontCompare" BuildMode="MostRecentAnalysisResultAvailable" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
-  <CoverageFiles UncoverableAttribute="" />
+  <CoverageFiles CoverageDir="" UncoverableAttribute="" />
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="">
     <Chart Name="Lines of Code" ShowInReport="True">
       <Serie MetricName="# Lines of Code" MetricUnit="Loc" Color="#FF00BFFF" ChartType="Line" ScaleExp="0" />
@@ -117,6 +135,8 @@
   <HistoricAnalysisResult PersistRecurrence="1" UseCustomDir="False" CustomDir="" />
   <SourceFileRebasing FromPath="" ToPath="" />
   <PathVariables />
+  <RuleFiles />
+  <ProjectRules AreActive="True" />
   <Queries>
     <Group Name="Code Quality" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types too big - critical</Name>
@@ -3938,6 +3958,16 @@ from f in Application.Fields where
   // Eliminate "components" generated in Windows Form Conrol context
   f.Name == "components" && f.ParentType.DeriveFrom("System.Windows.Forms.Control".AllowNoMatch())
 select f]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Discard third party source code from JustMyCode</Name>
+notmycode
+from t in Application.Types where
+  // Exclude types in the SharpZip lib
+  t.ParentNamespace.NameLike("[.]*ICSharpCode[.]*") ||
+  t.ParentNamespace.NameLike("[.]*Microsoft.Xml[.]*") ||
+  t.ParentNamespace.NameLike("[.]*HtmlAgilityPack[.]*") 
+
+select new { t, t.NbLinesOfCode }
+]]></Query>
     </Group>
     <Group Name="Statistics" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="False" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Most used types (Rank)</Name>
@@ -4167,25 +4197,25 @@ select new { n, n.NbLinesOfCode } ]]></Query>
     </Group>
     <Group Name="Jenkins Critical Rules" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of complex methods allowed exceeded</Name>
-warnif count > 89 from m in JustMyCode.Methods where 
+warnif count > 85 from m in JustMyCode.Methods where 
   m.CyclomaticComplexity > 20
   orderby m.CyclomaticComplexity descending
 
 select new { m, m.CyclomaticComplexity }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # long methods allowed exceeded</Name>
-warnif  count > 436
+warnif  count > 402
 from  m in JustMyCode.Methods where 
   m.NbLinesOfCode > 30
 
 select new { m, m.NbLinesOfCode }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of methods w/ too many parameters exceeded</Name>
-warnif count > 94 from  m in JustMyCode.Methods where
+warnif count > 85 from  m in JustMyCode.Methods where
  m.NbParameters > 5
  orderby m.NbParameters
 
 select new { m, m.NbParameters }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # large types allowed exceeded</Name>
-warnif count > 47 from  t in JustMyCode.Types where
+warnif count > 41 from  t in JustMyCode.Types where
  t.NbLinesOfCode > 500
  orderby t.NbLinesOfCode
 

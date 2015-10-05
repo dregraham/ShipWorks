@@ -77,11 +77,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 
             string declaration = DetermineDeclaration(fedExShipment);
 
+            fedExShipment.ReferenceFIMS = tokenProcessor.ProcessTokens(fedExShipment.ReferenceFIMS, shipment);
+
             XElement fimsRequestXml =
                 new XElement("labelRequest",
                     new XElement("custCode", fimsShipRequest.Username),
                     new XElement("serviceId", fimsShipRequest.Password),
-                    new XElement("shipperReference", tokenProcessor.ProcessTokens(fedExShipment.ReferenceCustomer,shipment)),
+                    new XElement("shipperReference", fedExShipment.ReferenceFIMS),
                     new XElement("labelType", labelType),
                     new XElement("declaration", declaration),
                     new XElement("shipper",

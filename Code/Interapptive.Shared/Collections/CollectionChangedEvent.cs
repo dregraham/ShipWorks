@@ -2,19 +2,19 @@ using System;
 
 namespace Interapptive.Shared.Collections
 {
-    public delegate void CollectionChangedEventHandler<T>(object sender, CollectionChangedEventArgs<T> e) where T: class;
+    public delegate void CollectionChangedEventHandler<T>(object sender, CollectionChangedEventArgs<T> e) where T : class;
 
     /// <summary>
     /// EventArgs for the CollectionChanged event
     /// </summary>
-    public class CollectionChangedEventArgs<T> : EventArgs
+    public class CollectionChangedEventArgs<T> : EventArgs where T : class
     {
         /// <summary>
         /// Consructor
         /// </summary>
         public CollectionChangedEventArgs(T newItem, T oldItem, int index)
         {
-            if (newItem.Equals(default(T)) && oldItem.Equals(default(T)))
+            if (newItem == null && oldItem == null)
             {
                 throw new ArgumentException("Both newItem and oldItem cannot be null.");
             }
