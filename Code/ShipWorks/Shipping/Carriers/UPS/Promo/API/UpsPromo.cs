@@ -14,24 +14,65 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         public readonly string Password;
         public readonly string AccessLicenseNumber;
         public readonly string CountryCode;
+        public readonly IPromoClientFactory PromoClientFactory;
         public PromoAcceptanceTerms Terms;
+        private readonly ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository;
+        private readonly UpsAccountEntity account;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public UpsPromo(int accountId, string licenseNumber, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory)
         {
-            
-        }
+            UpsAccountEntity upsAccount = upsAccountRepository.GetAccount(accountId);
 
+            AccountNumber = upsAccount.AccountNumber;
+            Username = upsAccount.UserID;
+            Password = upsAccount.Password;
+            AccessLicenseNumber = licenseNumber;
+            CountryCode = upsAccount.CountryCode == "CA" ? "CA" : "US";
+            PromoClientFactory = promoFactory;
+            this.upsAccountRepository = upsAccountRepository;
+            account = upsAccount;
+        }
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public UpsPromo(UpsAccountEntity upsAccount, string licenseNumber, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory)
         {
-            
+            AccountNumber = upsAccount.AccountNumber;
+            Username = upsAccount.UserID;
+            Password = upsAccount.Password;
+            AccessLicenseNumber = licenseNumber;
+            CountryCode = upsAccount.CountryCode == "CA" ? "CA" : "US";
+            PromoClientFactory = promoFactory;
+            this.upsAccountRepository = upsAccountRepository;
+            account = upsAccount;
         }
 
         /// <summary>
         /// Activates the Promo Code
         /// </summary>
-        public void Apply()
+        public PromoActivation Apply()
         {
-            
+            // Check to see if the terms have been accepted
+            if (Terms.IsAccepted == false)
+            {
+                throw new UpsPromoException("You must first accept the Terms and Conditions");
+            }
+
+            IUpsApiPromoClient client = PromoClientFactory.CreatePromoClient(this);
+            PromoActivation promoActivation = client.Activate(Terms.AcceptanceCode);
+
+            // If the activation was successful save it to the UpsAccount Entity
+            if (promoActivation.IsSuccessful)
+            {
+                account.PromoStatus = (int)UpsPromoStatus.Applied;
+                upsAccountRepository.Save(account);
+            }
+
+            return promoActivation;
         }
 
         /// <summary>
@@ -40,7 +81,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <returns></returns>
         public PromoAcceptanceTerms GetAgreementTerms()
         {
-            throw new NotImplementedException();
+            IUpsApiPromoClient client = PromoClientFactory.CreatePromoClient(this);
+            Terms = client.GetAgreement();
+            return Terms;
         }
 
         /// <summary>
@@ -49,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <returns></returns>
         public UpsPromoStatus GetStatus()
         {
-            throw new NotImplementedException();
+            return (UpsPromoStatus)account.PromoStatus;
         }
     }
 }

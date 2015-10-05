@@ -8,13 +8,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
     public class PromoAcceptanceTerms
     {
         // URL to the terms and conditons
-        readonly string URL;
+        public readonly string URL;
 
         // Description of the promo 
-        readonly string Description;
+        public readonly string Description;
 
         // Code used to activate discount 
-        readonly string AcceptanceCode;
+        public readonly string AcceptanceCode;
 
         // Has the user accepted the Terms and Conditions
         public bool IsAccepted;
@@ -25,10 +25,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <param name="response"></param>
         public PromoAcceptanceTerms(PromoDiscountAgreementResponse response)
         {
-            this.URL = response.PromoAgreement.AgreementURL;
-            this.Description = response.PromoDescription;
-            this.AcceptanceCode = response.PromoAgreement.AcceptanceCode;
-            this.IsAccepted = false;
+            URL = response.PromoAgreement.AgreementURL;
+            Description = response.PromoDescription;
+            AcceptanceCode = response.PromoAgreement.AcceptanceCode;
+            IsAccepted = false;
         }
     }
 }

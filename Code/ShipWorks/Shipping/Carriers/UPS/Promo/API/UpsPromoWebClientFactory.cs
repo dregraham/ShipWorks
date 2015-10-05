@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
+﻿namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
 {
     /// <summary>
     /// An implementation of the IPromoClientFactory that creates the "live" implementation
