@@ -37,5 +37,10 @@ namespace ShipWorks.Tests.Shared
         {
             // Not implement in test
         }
+
+        public IObservable<T> AsObservable<T>() where T : IShipWorksMessage
+        {
+            return null;
+        }
     }
 }

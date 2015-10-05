@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 namespace ShipWorks.Core.Messaging
 {
@@ -11,6 +13,7 @@ namespace ShipWorks.Core.Messaging
     {
         private readonly object lockObj = new object();
         private readonly Dictionary<Type, List<MessageHandler>> handlers = new Dictionary<Type, List<MessageHandler>>();
+        private readonly Subject<IShipWorksMessage> subject;
 
         /// <summary>
         /// Create the static instance
@@ -18,6 +21,14 @@ namespace ShipWorks.Core.Messaging
         static Messenger()
         {
             Current = new Messenger();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public Messenger()
+        {
+            subject = new Subject<IShipWorksMessage>();
         }
 
         /// <summary>
@@ -40,10 +51,17 @@ namespace ShipWorks.Core.Messaging
             Handle(owner, messageType, (object)handler);
 
         /// <summary>
+        /// Get a reference to the messenger as an observable stream of messages
+        /// </summary>
+        public IObservable<T> AsObservable<T>() where T : IShipWorksMessage => subject.OfType<T>();
+
+        /// <summary>
         /// Send a message to any listeners
         /// </summary>
         public void Send<T>(T message) where T : IShipWorksMessage
         {
+            subject.OnNext(message);
+
             Type messageType = typeof (T);
 
             List<MessageHandler> handlerList;
