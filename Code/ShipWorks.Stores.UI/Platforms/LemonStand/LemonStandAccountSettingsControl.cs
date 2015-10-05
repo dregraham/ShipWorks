@@ -4,8 +4,9 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.LemonStand;
 
-namespace ShipWorks.Stores.Platforms.LemonStand
+namespace ShipWorks.Stores.UI.Platforms.LemonStand
 {
     public partial class LemonStandAccountSettingsControl : AccountSettingsControlBase
     {
