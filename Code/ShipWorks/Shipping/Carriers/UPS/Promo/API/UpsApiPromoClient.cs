@@ -26,7 +26,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                 CountryCode = upsPromo.CountryCode,
                 LanguageCode = "en"
             };
-
         }
         
         /// <summary>
