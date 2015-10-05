@@ -1,7 +1,6 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Stores.Platforms.PayPal.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
 {
@@ -10,11 +9,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
     /// </summary>
     public class UpsPromo
     {
-        private string AccountNumber;
-        private string UserId;
-        private string Password;
-        private string AccessLicenseNumber;
-        private CountryCodeType CountryCode;
+        public readonly string AccountNumber;
+        public readonly string Username;
+        public readonly string Password;
+        public readonly string AccessLicenseNumber;
+        public readonly string CountryCode;
         public PromoAcceptanceTerms Terms;
 
         public UpsPromo(int accountId, string licenseNumber, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory)
