@@ -2,6 +2,7 @@
 using ShipWorks.Core.Messaging;
 using Xunit;
 using Moq;
+using ShipWorks.Messages;
 
 namespace ShipWorks.Tests.Interapptive.Shared
 {
@@ -126,6 +127,24 @@ namespace ShipWorks.Tests.Interapptive.Shared
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
+            messenger.Send(new TestMessage());
+            Assert.False(wasCalled);
+        }
+
+        [Fact]
+        public void Send_RoutesMessagesThroughObservable_WhenMessageIsOfSpecifiedType()
+        {
+            bool wasCalled = false;
+            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled = true);
+            messenger.Send(new TestMessage());
+            Assert.True(wasCalled);
+        }
+
+        [Fact]
+        public void Send_DoesNotRouteMessagesThroughObservable_WhenMessageIsNotOfSpecifiedType()
+        {
+            bool wasCalled = false;
+            messenger.AsObservable<CreateLabelMessage>().Subscribe(x => wasCalled = true);
             messenger.Send(new TestMessage());
             Assert.False(wasCalled);
         }
