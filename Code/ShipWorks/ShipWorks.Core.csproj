@@ -1020,6 +1020,7 @@
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Enums\UpsPromoStatus.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsYesNoType.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
