@@ -6,7 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.UI.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messages;

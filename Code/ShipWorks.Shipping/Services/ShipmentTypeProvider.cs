@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Autofac;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.UI;
 using ShipWorks.Messages;

@@ -832,6 +832,10 @@
     <Compile Include="Messages\StoreChangedMessage.cs" />
     <Compile Include="Messages\UspsAccountCreatedMessage.cs" />
     <Compile Include="Messages\UspsAutomaticExpeditedChangedMessage.cs" />
+    <Compile Include="Messaging\IMessenger.cs" />
+    <Compile Include="Messaging\IShipWorksMessage.cs" />
+    <Compile Include="Messaging\Messenger.cs" />
+    <Compile Include="Messaging\MessengerToken.cs" />
     <Compile Include="Shipping\AddressConversions.cs" />
     <Compile Include="Shipping\BilledType.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />

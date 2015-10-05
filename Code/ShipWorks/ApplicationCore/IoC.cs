@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
 using ShipWorks.Filters;

@@ -1,5 +1,5 @@
 ﻿using System;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using Xunit;
 using Moq;
 

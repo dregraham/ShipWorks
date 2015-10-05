@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using Moq;
 using ShipWorks.Messages;
 using ShipWorks.Shipping.Services;

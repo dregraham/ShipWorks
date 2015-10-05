@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.Core.Messaging;
 using System.Linq;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Messages

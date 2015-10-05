@@ -1,4 +1,4 @@
-﻿using Interapptive.Shared.Messaging;
+﻿using ShipWorks.Core.Messaging;
 using System;
 using System.Windows;
 using System.Windows.Controls;

@@ -11,7 +11,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using System.Windows.Forms;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Messages;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;

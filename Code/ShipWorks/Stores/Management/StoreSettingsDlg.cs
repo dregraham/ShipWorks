@@ -25,7 +25,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using System.Collections;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Messages;
 
 namespace ShipWorks.Stores.Management

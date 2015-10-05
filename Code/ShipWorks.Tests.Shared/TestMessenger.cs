@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.Tests.Shared
 {

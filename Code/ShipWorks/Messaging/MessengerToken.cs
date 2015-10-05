@@ -1,4 +1,4 @@
-﻿namespace Interapptive.Shared.Messaging
+﻿namespace ShipWorks.Core.Messaging
 {
     /// <summary>
     /// Token that allows the messenger to track handlers

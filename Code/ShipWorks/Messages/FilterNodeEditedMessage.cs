@@ -1,4 +1,4 @@
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Messages

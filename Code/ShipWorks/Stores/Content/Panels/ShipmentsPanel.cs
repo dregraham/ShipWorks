@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 using Divelements.SandGrid;
 using ShipWorks.ApplicationCore;
 using Autofac;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Messages;
 
 namespace ShipWorks.Stores.Content.Panels

@@ -1,4 +1,4 @@
-﻿namespace Interapptive.Shared.Messaging
+﻿namespace ShipWorks.Core.Messaging
 {
     /// <summary>
     /// Defines a message usable with the Messenger

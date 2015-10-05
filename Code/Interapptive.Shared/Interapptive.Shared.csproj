@@ -304,10 +304,6 @@
     <Compile Include="IO\Zip\ZipWriterItem.cs" />
     <Compile Include="IO\Zip\ZipWriterProgressEventArgs.cs" />
     <Compile Include="IO\Zip\ZipWriterStringItem.cs" />
-    <Compile Include="Messaging\IMessenger.cs" />
-    <Compile Include="Messaging\IShipWorksMessage.cs" />
-    <Compile Include="Messaging\Messenger.cs" />
-    <Compile Include="Messaging\MessengerToken.cs" />
     <Compile Include="MyComputer.cs" />
     <Compile Include="Net\CertificateRequest.cs" />
     <Compile Include="Net\CertificateSecurityLevel.cs" />

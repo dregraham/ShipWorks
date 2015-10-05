@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.UI;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.UI;

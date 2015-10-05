@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Autofac.Features.OwnedInstances;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;

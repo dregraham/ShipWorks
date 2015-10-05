@@ -13,7 +13,7 @@ using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.UI;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using Interapptive.Shared.UI;
 using ShipWorks.Messages;
 using ShipWorks.Shipping.Carriers;

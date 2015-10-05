@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using Moq;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
