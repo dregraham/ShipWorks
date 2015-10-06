@@ -1179,6 +1179,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             pickup.CountryCode = billing.CountryCode;
         }
 
+        /// <summary>
+        /// Called when [promo terms link clicked].
+        /// </summary>
         private void OnPromoTermsLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (promo?.Terms?.URL == null)
@@ -1186,7 +1189,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new Exception("Promo Not Set");
             }
 
-            WebHelper.OpenUrl(promo.Terms.URL, this);
+            WebHelper.OpenUrl(Uri.IsWellFormedUriString(promo.Terms.URL, UriKind.Absolute) && !promo.Terms.URL.StartsWith("http") ?
+                new Uri(promo.Terms.URL) : new Uri($"http://{promo.Terms.URL}"), this);
         }
 
         /// <summary>
@@ -1216,6 +1220,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 if (promoYes.Checked)
                 {
+                    promo.Terms.AcceptTerms();
                     promo.Apply();
                 }
             }

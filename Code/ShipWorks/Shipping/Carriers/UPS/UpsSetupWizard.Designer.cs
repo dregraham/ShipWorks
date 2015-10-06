@@ -99,11 +99,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelCreateAccountRegistrationFailed3 = new System.Windows.Forms.Label();
             this.labelCreateAccountRegistrationFailed1 = new System.Windows.Forms.Label();
             this.wizardPagePromo = new ShipWorks.UI.Wizard.WizardPage();
+            this.promoControls = new System.Windows.Forms.Panel();
             this.promoTermsLink = new System.Windows.Forms.LinkLabel();
-            this.promoDescription = new System.Windows.Forms.Label();
             this.promoNo = new System.Windows.Forms.RadioButton();
             this.promoYes = new System.Windows.Forms.RadioButton();
-            this.promoControls = new System.Windows.Forms.Panel();
+            this.promoDescription = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -878,6 +878,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPagePromo.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnWizardPagePromoStepNext);
             this.wizardPagePromo.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnWizardPagePromoSteppingInto);
             // 
+            // promoControls
+            // 
+            this.promoControls.Controls.Add(this.promoTermsLink);
+            this.promoControls.Controls.Add(this.promoNo);
+            this.promoControls.Controls.Add(this.promoYes);
+            this.promoControls.Location = new System.Drawing.Point(23, 29);
+            this.promoControls.Name = "promoControls";
+            this.promoControls.Size = new System.Drawing.Size(328, 100);
+            this.promoControls.TabIndex = 5;
+            // 
             // promoTermsLink
             // 
             this.promoTermsLink.AutoSize = true;
@@ -890,14 +900,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.promoTermsLink.VisitedLinkColor = System.Drawing.Color.Blue;
             this.promoTermsLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnPromoTermsLinkClicked);
             // 
-            // promoDescription
-            // 
-            this.promoDescription.Location = new System.Drawing.Point(26, 5);
-            this.promoDescription.Name = "promoDescription";
-            this.promoDescription.Size = new System.Drawing.Size(530, 21);
-            this.promoDescription.TabIndex = 0;
-            this.promoDescription.Text = "label2";
-            // 
             // promoNo
             // 
             this.promoNo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -905,10 +907,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.promoNo.Checked = true;
             this.promoNo.Location = new System.Drawing.Point(3, 53);
             this.promoNo.Name = "promoNo";
-            this.promoNo.Size = new System.Drawing.Size(196, 17);
+            this.promoNo.Size = new System.Drawing.Size(243, 17);
             this.promoNo.TabIndex = 4;
             this.promoNo.TabStop = true;
-            this.promoNo.Text = "No, I do not accept the agreement.";
+            this.promoNo.Text = "No, I do not accept the Terms and Conditions";
             this.promoNo.UseVisualStyleBackColor = true;
             // 
             // promoYes
@@ -917,20 +919,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.promoYes.AutoSize = true;
             this.promoYes.Location = new System.Drawing.Point(3, 30);
             this.promoYes.Name = "promoYes";
-            this.promoYes.Size = new System.Drawing.Size(166, 17);
+            this.promoYes.Size = new System.Drawing.Size(213, 17);
             this.promoYes.TabIndex = 3;
-            this.promoYes.Text = "Yes, I accept the agreement.";
+            this.promoYes.Text = "Yes, I accept the Terms and Conditions";
             this.promoYes.UseVisualStyleBackColor = true;
             // 
-            // promoControls
+            // promoDescription
             // 
-            this.promoControls.Controls.Add(this.promoTermsLink);
-            this.promoControls.Controls.Add(this.promoNo);
-            this.promoControls.Controls.Add(this.promoYes);
-            this.promoControls.Location = new System.Drawing.Point(23, 29);
-            this.promoControls.Name = "promoControls";
-            this.promoControls.Size = new System.Drawing.Size(328, 100);
-            this.promoControls.TabIndex = 5;
+            this.promoDescription.Location = new System.Drawing.Point(26, 5);
+            this.promoDescription.Name = "promoDescription";
+            this.promoDescription.Size = new System.Drawing.Size(530, 21);
+            this.promoDescription.TabIndex = 0;
+            this.promoDescription.Text = "label2";
             // 
             // UpsSetupWizard
             // 

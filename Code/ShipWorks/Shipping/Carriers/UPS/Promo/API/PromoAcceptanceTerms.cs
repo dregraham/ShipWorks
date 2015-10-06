@@ -19,6 +19,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             IsAccepted = false;
         }
 
+        /// <summary>
+        /// Accepts the terms.
+        /// </summary>
+        public void AcceptTerms() =>
+                    IsAccepted = true;
+
         // URL to the terms and conditons
         public string URL { get; }
 
