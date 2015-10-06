@@ -100,7 +100,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin = addressViewModelFactory();
 
             PropertyChanging += OnPropertyChanging;
-
+            
+            //TODO: This is just a test -- This should ultimately be wired up to the OrderSelectionChangedMessage
             messenger.AsObservable<OrderSelectionChangingMessage>()
                 .ObserveOn(TaskPoolScheduler.Default)
                 .Do(x => Thread.Sleep(2000))
