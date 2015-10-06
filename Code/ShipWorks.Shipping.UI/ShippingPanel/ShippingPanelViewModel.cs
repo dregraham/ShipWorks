@@ -19,6 +19,7 @@ using System.Reactive.Concurrency;
 using System.Threading;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Core.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.UI.MessageHandlers;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -67,6 +68,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Constructor
         /// </summary>
         public ShippingPanelViewModel(
+            OrderSelectionChangedHandler orderSelectionChangedHandler,
             IMessenger messenger,
             IShippingManager shippingManager,
             IShipmentTypeFactory shipmentTypeFactory,
@@ -98,19 +100,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin = addressViewModelFactory();
 
             PropertyChanging += OnPropertyChanging;
-
+            
             //TODO: This is just a test -- This should ultimately be wired up to the OrderSelectionChangedMessage
-            // AND  determine what to do with ".ObserveOn(DispatcherScheduler.Current)" as it causes an exception.
-            messenger.AsObservable<OrderSelectionChangedMessage>()
-                //.ObserveOn(DispatcherScheduler.Current)
-                .SubscribeOn(TaskPoolScheduler.Default)
-                .Subscribe(x => LoadOrder(x));
+            //messenger.AsObservable<OrderSelectionChangedMessage>()
+            //    .ObserveOn(DispatcherScheduler.Current)
+            //    .SubscribeOn(TaskPoolScheduler.Default)
+            //    .Subscribe(x => AllowEditing = true);
 
             //Destination = new AddressViewModel();
 
             //ShipmentViewModel = shipmentViewModelFactory();
 
             //CreateLabelCommand = new RelayCommand(async () => await ProcessShipment());
+
+            orderSelectionChangedHandler.Listen(LoadOrder);
         }
 
         /// <summary>
@@ -288,7 +291,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Load the shipment from the given order
         /// </summary>
-        public async Task LoadOrder(OrderSelectionChangedMessage orderMessage)
+        public void LoadOrder(OrderSelectionChangedMessage orderMessage)
         {
             orderSelectionLoaded = (OrderSelectionLoaded)orderMessage.LoadedOrderSelection?.FirstOrDefault();
             shipment = orderSelectionLoaded.Shipments?.FirstOrDefault();

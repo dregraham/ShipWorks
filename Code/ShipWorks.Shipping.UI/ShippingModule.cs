@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.Loading;
+using ShipWorks.Shipping.UI.MessageHandlers;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -118,6 +119,8 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShipmentLoaderService>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<OrderSelectionChangedHandler>();
         }
     }
 }

@@ -146,6 +146,7 @@
   <ItemGroup>
     <Compile Include="AttachedProperties\SelectDefaultWhenValueIsNull.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
+    <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
     <Compile Include="RatingPanel\RatingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
