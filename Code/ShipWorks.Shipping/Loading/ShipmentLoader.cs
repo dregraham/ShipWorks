@@ -45,13 +45,14 @@ namespace ShipWorks.Shipping.Loading
                 bool createIfNone = shippingConfiguration.AutoCreateShipments && shippingConfiguration.UserHasPermission(PermissionType.ShipmentsCreateEditProcess, orderID);
 
                 List<ShipmentEntity> shipments = shippingManager.GetShipments(orderID, createIfNone);
+                ShipmentEntity firstShipment = shipments?.FirstOrDefault();
 
-                if (shipments?.Any() ?? false)
+                if (firstShipment != null && shippingConfiguration.GetAddressValidation(firstShipment))
                 {
-                    addressValidator.ValidateAsync(shipments.FirstOrDefault());
+                    addressValidator.ValidateAsync(firstShipment);
                 }
 
-                OrderEntity order = shipments?.FirstOrDefault()?.Order;
+                OrderEntity order = firstShipment?.Order;
 
                 return new OrderSelectionLoaded(order, shipments);
             }
