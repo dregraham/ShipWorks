@@ -26,6 +26,7 @@ using Interapptive.Shared.Win32;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -1125,7 +1126,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                promo = new UpsPromo(upsAccount, upsLicense, new UpsAccountRepository(), new UpsPromoWebClientFactory());
+                promo = new UpsPromo(upsAccount, new UpsSettingsRepository(), new UpsAccountRepository(), new UpsPromoWebClientFactory());
                 promo.GetAgreementTerms();
                 promoDescription.Text = promo.Terms.Description;
                 promoTermsLink.Top = promoDescription.Bottom + 5;

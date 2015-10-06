@@ -1,5 +1,7 @@
 ﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
@@ -16,29 +18,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsPromo(int accountId, string licenseNumber, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory)
-        {
-            UpsAccountEntity upsAccount = upsAccountRepository.GetAccount(accountId);
-
-            AccountNumber = upsAccount.AccountNumber;
-            Username = upsAccount.UserID;
-            Password = upsAccount.Password;
-            AccessLicenseNumber = licenseNumber;
-            CountryCode = upsAccount.CountryCode == "CA" ? "CA" : "US";
-            promoClientFactory = promoFactory;
-            this.upsAccountRepository = upsAccountRepository;
-            account = upsAccount;
-        }
+        public UpsPromo(long accountId, ICarrierSettingsRepository upsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory) :
+            this(upsAccountRepository.GetAccount(accountId), upsSettingsRepository, upsAccountRepository, promoFactory)
+        { }
         
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsPromo(UpsAccountEntity upsAccount, string licenseNumber, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory)
+        public UpsPromo(UpsAccountEntity upsAccount, ICarrierSettingsRepository upsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory)
         {
             AccountNumber = upsAccount.AccountNumber;
             Username = upsAccount.UserID;
             Password = upsAccount.Password;
-            AccessLicenseNumber = licenseNumber;
+            AccessLicenseNumber = SecureText.Decrypt(upsSettingsRepository.GetShippingSettings().UpsAccessKey, "UPS");
             CountryCode = upsAccount.CountryCode == "CA" ? "CA" : "US";
             promoClientFactory = promoFactory;
             this.upsAccountRepository = upsAccountRepository;
