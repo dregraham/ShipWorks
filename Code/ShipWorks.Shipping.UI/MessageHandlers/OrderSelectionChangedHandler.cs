@@ -1,5 +1,4 @@
-﻿using Autofac.Extras.Attributed;
-using ShipWorks.Core.Messaging;
+﻿using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using System;
 using System.Reactive.Concurrency;
@@ -7,6 +6,9 @@ using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.UI.MessageHandlers
 {
+    /// <summary>
+    /// Handle wiring up the order selection changed handler
+    /// </summary>
     public class OrderSelectionChangedHandler : IDisposable
     {
         private readonly IMessenger messenger;
@@ -14,15 +16,28 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
         private readonly IScheduler observeOnScheduler;
         IDisposable subscription;
 
-        public OrderSelectionChangedHandler(IMessenger messenger, 
-            [WithKey(typeof(TaskPoolScheduler))] IScheduler subscribeOn, 
-            [WithKey(typeof(DispatcherScheduler))] IScheduler observeOn)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="messenger"></param>
+        public OrderSelectionChangedHandler(IMessenger messenger) : this(messenger, TaskPoolScheduler.Default, DispatcherScheduler.Current)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderSelectionChangedHandler(IMessenger messenger, IScheduler subscribeOn, IScheduler observeOn)
         {
             this.messenger = messenger;
             subscribeOnScheduler = subscribeOn;
             observeOnScheduler = observeOn;
         }
 
+        /// <summary>
+        /// Listen for the message
+        /// </summary>
         public void Listen(Action<OrderSelectionChangedMessage> action)
         {
             subscription = messenger.AsObservable<OrderSelectionChangedMessage>()
@@ -31,9 +46,13 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
                 .Subscribe(action);
         }
 
+        /// <summary>
+        /// Dispose
+        /// </summary>
         public void Dispose()
         {
             subscription?.Dispose();
+            subscription = null;
         }
     }
 }

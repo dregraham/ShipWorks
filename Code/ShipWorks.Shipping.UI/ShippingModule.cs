@@ -9,6 +9,8 @@ using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.UI.MessageHandlers;
+using System.Reactive.Concurrency;
+using Autofac.Extras.Attributed;
 
 namespace ShipWorks.Shipping.UI
 {

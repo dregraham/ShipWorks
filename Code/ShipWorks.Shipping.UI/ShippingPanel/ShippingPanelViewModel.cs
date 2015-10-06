@@ -20,6 +20,7 @@ using System.Threading;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.UI.MessageHandlers;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -293,17 +294,29 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void LoadOrder(OrderSelectionChangedMessage orderMessage)
         {
-            orderSelectionLoaded = (OrderSelectionLoaded)orderMessage.LoadedOrderSelection?.FirstOrDefault();
-            shipment = orderSelectionLoaded.Shipments?.FirstOrDefault();
+            int orders = orderMessage.LoadedOrderSelection.HasMoreOrLessThanCount(1);
+            if (orders != 0)
+            {
+                return;
+            }
+            
+            orderSelectionLoaded = orderMessage.LoadedOrderSelection.Single();
+
+            int shipments = orderSelectionLoaded.Shipments.HasMoreOrLessThanCount(1);
+            if (shipments != 0)
+            {
+                return;
+            }
 
             SetLoadedShipmentResult();
-
+            shipment = orderSelectionLoaded.Shipments.Single();
             if (shipment != null)
             {
                 Populate();
+                AllowEditing = true;
             }
         }
-
+		
         /// <summary>
         /// Sets the LoadedShipmentResult based on orderSelectionLoaded
         /// </summary>
