@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
@@ -349,18 +350,55 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void Load_ShowsMessage_WhenMultipleShipmentsAreLoaded()
+        public async void Load_LoadedShipmentResult_IsSuccess_WhenMultipleShipmentsAreLoaded()
         {
-            Assert.False(true, "Fix this test to test show message.");
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity });
 
-            //orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.Multiple;
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
 
-            //using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            //{
-            //    ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                Assert.Equal(ShippingPanelLoadedShipmentResult.Success, testObject.LoadedShipmentResult);
+            }
+        }
 
-            //    Assert.Equal(ShippingPanelLoadedShipmentResult.Multiple, testObject.LoadedShipmentResult);
-            //}
+        [Fact]
+        public async void Load_LoadedShipmentResult_IsMultiple_WhenMultipleShipmentsAreLoaded()
+        {
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity, shipmentEntity });
+
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+
+                Assert.Equal(ShippingPanelLoadedShipmentResult.Multiple, testObject.LoadedShipmentResult);
+            }
+        }
+
+        [Fact]
+        public async void Load_LoadedShipmentResult_IsNotCreated_WhenNoShipmentsAreLoaded()
+        {
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { });
+
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+
+                Assert.Equal(ShippingPanelLoadedShipmentResult.NotCreated, testObject.LoadedShipmentResult);
+            }
+        }
+
+        [Fact]
+        public async void Load_LoadedShipmentResult_IsError_WhenNullList()
+        {
+            orderSelectionLoaded = new OrderSelectionLoaded(new Exception());
+
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+
+                Assert.Equal(ShippingPanelLoadedShipmentResult.Error, testObject.LoadedShipmentResult);
+            }
         }
 
         [Fact]

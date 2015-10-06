@@ -290,14 +290,37 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public async Task LoadOrder(OrderSelectionChangedMessage orderMessage)
         {
-            //LoadedShipmentResult = orderSelectionLoaded.Result;
-
             orderSelectionLoaded = (OrderSelectionLoaded)orderMessage.LoadedOrderSelection?.FirstOrDefault();
             shipment = orderSelectionLoaded.Shipments?.FirstOrDefault();
+
+            SetLoadedShipmentResult();
 
             if (shipment != null)
             {
                 Populate();
+            }
+        }
+
+        /// <summary>
+        /// Sets the LoadedShipmentResult based on orderSelectionLoaded
+        /// </summary>
+        private void SetLoadedShipmentResult()
+        {
+            if (orderSelectionLoaded.Exception != null)
+            {
+                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Error;
+            }
+            else if (orderSelectionLoaded.Shipments?.Count() > 1)
+            {
+                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Multiple;
+            }
+            else if (orderSelectionLoaded.Shipments?.Count() == 1)
+            {
+                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Success;
+            }
+            else if (orderSelectionLoaded.Shipments?.Any() == false)
+            {
+                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.NotCreated;
             }
         }
 
