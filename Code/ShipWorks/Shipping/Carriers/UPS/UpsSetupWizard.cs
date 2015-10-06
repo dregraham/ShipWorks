@@ -119,6 +119,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 wizardPageOpenAccountPickupSchedule,
                 wizardPageOpenAccountPageBillingContactInfo,
                 wizardPageOpenAccountPickupLocation,
+                wizardPagePromo,
                 wizardPageRates,
                 wizardPageOptionsOlt,
                 wizardPageOptionsWorldShip,
