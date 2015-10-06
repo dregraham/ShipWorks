@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Data.Controls;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
@@ -22,10 +21,9 @@ using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Win32;
+using Quartz.Util;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.UPS.Promo.API;
-using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -799,8 +797,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 upsBillingContactInfoControl.SaveToAccountAndRequest(openAccountRequest, upsAccount);
                 if (upsBillingContactInfoControl.SameAsPickup)
                 {
-                    CreateAccount();
-                    e.NextPage = wizardPagePromo;
+                    e.NextPage = CreateAccount() ? wizardPagePromo : CurrentPage;
                 }
             }
             catch (UpsOpenAccountException ex)
@@ -932,15 +929,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Creates the account.
         /// </summary>
         /// <exception cref="System.NotImplementedException"></exception>
-        private void CreateAccount()
+        private bool CreateAccount()
         {
             UpsOpenAccountResponseDTO upsOpenAccountResponse = OpenUpsAccount(new UpsClerk(upsAccount));
+
+            if (upsOpenAccountResponse == null)
+            {
+                return false;
+            }
 
             try
             {
                 RegisterNewAccount(upsOpenAccountResponse.AccountNumber);
                 notifyTime = upsOpenAccountResponse.NotifyTime;
-
+                return true;
             }
             catch (UpsException ex)
             {
@@ -998,22 +1000,27 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 OpenAccountResponse response = clerk.OpenAccount(openAccountRequest);
-
-
                 upsOpenAccountResponse = new UpsOpenAccountResponseDTO(response.ShipperNumber, response.NotifyTime);
-
-            }
-            catch (UpsOpenAccountPickupAddressException ex)
-            {
-                if (CorrectPickupAddress(ex.SuggestedAddress, openAccountRequest.PickupAddress))
-                {
-                    upsOpenAccountResponse = OpenUpsAccount(clerk);
-                }
             }
             catch (UpsOpenAccountBusinessAddressException ex)
             {
                 if (CorrectBillingAddress(ex.SuggestedAddress, openAccountRequest.BillingAddress))
                 {
+                    if (upsBillingContactInfoControl.SameAsPickup)
+                    {
+                        CopyBillingToPickup(openAccountRequest.BillingAddress, openAccountRequest.PickupAddress);
+                    }
+                    upsOpenAccountResponse = OpenUpsAccount(clerk);
+                }
+            }
+            catch (UpsOpenAccountPickupAddressException ex)
+            {
+                if (CorrectPickupAddress(ex.SuggestedAddress, openAccountRequest.PickupAddress))
+                {
+                    if (upsBillingContactInfoControl.SameAsPickup)
+                    {
+                        CopyPickupToBilling(openAccountRequest.BillingAddress, openAccountRequest.PickupAddress);
+                    }
                     upsOpenAccountResponse = OpenUpsAccount(clerk);
                 }
             }
@@ -1030,7 +1037,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     if (!string.IsNullOrEmpty(correctedAddress))
                     {
                         openAccountRequest.PickupAddress.City = correctedAddress;
-
                         upsOpenAccountResponse = OpenUpsAccount(clerk, true);
                     }
                     else
@@ -1065,11 +1071,31 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 if (result == DialogResult.OK)
                 {
-                    pickupAddressType.StreetAddress = addressCandidate.StreetAddress;
-                    pickupAddressType.City = addressCandidate.City;
-                    pickupAddressType.StateProvinceCode = addressCandidate.State;
-                    pickupAddressType.PostalCode = addressCandidate.PostalCode;
-                    pickupAddressType.CountryCode = addressCandidate.CountryCode;
+                    // Only use the suggestion if its not blank
+                    if (!addressCandidate.StreetAddress.IsNullOrWhiteSpace())
+                    {
+                        pickupAddressType.StreetAddress = addressCandidate.StreetAddress;
+                    }
+
+                    if (!addressCandidate.City.IsNullOrWhiteSpace())
+                    {
+                        pickupAddressType.City = addressCandidate.City;
+                    }
+
+                    if (!addressCandidate.State.IsNullOrWhiteSpace())
+                    {
+                        pickupAddressType.StateProvinceCode = addressCandidate.State;
+                    }
+
+                    if (!addressCandidate.PostalCode.IsNullOrWhiteSpace())
+                    {
+                        pickupAddressType.PostalCode = addressCandidate.PostalCode;
+                    }
+
+                    if (!addressCandidate.CountryCode.IsNullOrWhiteSpace())
+                    {
+                        pickupAddressType.CountryCode = addressCandidate.CountryCode;
+                    }
 
                     isAddressCorrected = true;
                 }
@@ -1096,17 +1122,61 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 if (result == DialogResult.OK)
                 {
-                    billingAddressType.StreetAddress = addressCandidate.StreetAddress;
-                    billingAddressType.City = addressCandidate.City;
-                    billingAddressType.StateProvinceCode = addressCandidate.State;
-                    billingAddressType.PostalCode = addressCandidate.PostalCode;
-                    billingAddressType.CountryCode = addressCandidate.CountryCode;
+                    // Only use the suggestion if its not blank
+                    if (!addressCandidate.StreetAddress.IsNullOrWhiteSpace())
+                    {
+                        billingAddressType.StreetAddress = addressCandidate.StreetAddress;
+                    }
+
+                    if (!addressCandidate.City.IsNullOrWhiteSpace())
+                    {
+                        billingAddressType.City = addressCandidate.City;
+                    }
+
+                    if (!addressCandidate.State.IsNullOrWhiteSpace())
+                    {
+                        billingAddressType.StateProvinceCode = addressCandidate.State;
+                    }
+
+                    if (!addressCandidate.PostalCode.IsNullOrWhiteSpace())
+                    {
+                        billingAddressType.PostalCode = addressCandidate.PostalCode;
+                    }
+
+                    if (!addressCandidate.CountryCode.IsNullOrWhiteSpace())
+                    {
+                        billingAddressType.CountryCode = addressCandidate.CountryCode;
+                    }
 
                     isAddressCorrected = true;
                 }
             }
 
             return isAddressCorrected;
+        }
+
+        /// <summary>
+        /// Copies the pickup address to the billing address
+        /// </summary>
+        private static void CopyPickupToBilling(BillingAddressType billing, PickupAddressType pickup)
+        {
+            billing.StreetAddress = pickup.StreetAddress;
+            billing.City = pickup.City;
+            billing.StateProvinceCode = pickup.StateProvinceCode;
+            billing.PostalCode = pickup.PostalCode;
+            billing.CountryCode = pickup.CountryCode;
+        }
+
+        /// <summary>
+        /// Copies the billing address to the pickup address
+        /// </summary>
+        private static void CopyBillingToPickup(BillingAddressType billing, PickupAddressType pickup)
+        {
+            pickup.StreetAddress = billing.StreetAddress;
+            pickup.City = billing.City;
+            pickup.StateProvinceCode = billing.StateProvinceCode;
+            pickup.PostalCode = billing.PostalCode;
+            pickup.CountryCode = billing.CountryCode;
         }
 
         private void OnPromoTermsLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

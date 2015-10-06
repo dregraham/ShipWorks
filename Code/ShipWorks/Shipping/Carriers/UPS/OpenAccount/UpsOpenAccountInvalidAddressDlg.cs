@@ -49,6 +49,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// </summary>
         private void ClickOkButton(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.OK;
             Close();
         }
 
