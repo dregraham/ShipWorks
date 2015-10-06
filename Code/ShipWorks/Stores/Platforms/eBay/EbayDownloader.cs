@@ -326,7 +326,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     foreach (OrderItemEntity item in abandonedItems)
                     {
                         // Detatch it from the order
-                        affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.Single(i => i.OrderItemID == item.OrderItemID).Order = null;
+                        OrderItemEntity orderItem = affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.SingleOrDefault(i => i.OrderItemID == item.OrderItemID);
+                        if (orderItem != null)
+                        {
+                            orderItem.Order = null;
+                        }
+                        else
+                        {
+                            log.Error($"Item {item.OrderItemID} does not belong to an order.");
+                        }
+                        
                         // Make sure the detachment works both ways
                         Debug.Assert(affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.All(i => i.OrderItemID != item.OrderItemID));
 
