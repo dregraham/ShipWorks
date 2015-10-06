@@ -15,7 +15,7 @@
         public IUpsApiPromoClient CreatePromoClient(UpsPromo promo)
         {
             //return new UpsApiPromoClient(promo);
-            return new FakeUpsApiPromoClient();
+            return new FakeUpsApiPromoClient(promo);
         }
     }
 }
