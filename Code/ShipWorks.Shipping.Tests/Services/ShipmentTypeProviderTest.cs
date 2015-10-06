@@ -4,7 +4,7 @@ using System.Linq;
 using Autofac.Extras.Moq;
 using ShipWorks.Core.Messaging;
 using Moq;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;

@@ -10,7 +10,7 @@ using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel

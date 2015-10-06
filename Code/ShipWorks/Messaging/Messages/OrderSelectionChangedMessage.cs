@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ShipWorks.Core.Messaging;
 
-namespace ShipWorks.Messages
+namespace ShipWorks.Messaging.Messages
 {
     public class OrderSelectionChangedMessage : IShipWorksMessage
     {

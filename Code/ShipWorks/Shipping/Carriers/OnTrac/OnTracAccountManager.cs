@@ -8,7 +8,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using System.Text;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {

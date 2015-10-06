@@ -5,7 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Messages
+namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
     /// Request that the shipping dialog be opened

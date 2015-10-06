@@ -1,7 +1,7 @@
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Messages
+namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
     /// A filter has been changed

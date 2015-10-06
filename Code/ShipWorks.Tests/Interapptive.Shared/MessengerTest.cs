@@ -2,7 +2,7 @@
 using ShipWorks.Core.Messaging;
 using Xunit;
 using Moq;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Tests.Interapptive.Shared
 {

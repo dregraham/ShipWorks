@@ -6,7 +6,7 @@ using Autofac;
 using ShipWorks.Core.Messaging;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.UI;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Shipping.Services

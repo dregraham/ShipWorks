@@ -1,29 +1,29 @@
 ﻿using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping;
 
-namespace ShipWorks.Messages
+namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
-    /// A carrier is being configured for the first time
+    /// Message that shipping accounts have changed for a carrier.
     /// </summary>
-    public class ConfiguringCarrierMessage : IShipWorksMessage
+    public class ShippingAccountsChangedMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ConfiguringCarrierMessage(object sender, ShipmentTypeCode shipmentTypeCode)
+        public ShippingAccountsChangedMessage(object sender, ShipmentTypeCode shipmentTypeCode)
         {
             Sender = sender;
             ShipmentTypeCode = shipmentTypeCode;
         }
 
         /// <summary>
-        /// Source of the message
+        /// Originator of the message
         /// </summary>
         public object Sender { get; private set; }
 
         /// <summary>
-        /// Carrier that is being configured
+        /// Shipment type that had accounts change
         /// </summary>
         public ShipmentTypeCode ShipmentTypeCode { get; private set; }
     }

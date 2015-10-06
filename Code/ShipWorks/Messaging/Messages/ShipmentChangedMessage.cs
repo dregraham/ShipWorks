@@ -1,20 +1,20 @@
 ﻿using ShipWorks.Core.Messaging;
-using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Messages
+namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
-    /// Message that the selected rate has changed.
+    /// Message that a shipment has changed.
     /// </summary>
-    public class SelectedRateChangedMessage : IShipWorksMessage
+    public class ShipmentChangedMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public SelectedRateChangedMessage(object sender, RateResult rateResult)
+        public ShipmentChangedMessage(object sender, ShipmentEntity shipment)
         {
             Sender = sender;
-            RateResult = rateResult;
+            Shipment = shipment;
         }
 
         /// <summary>
@@ -25,6 +25,6 @@ namespace ShipWorks.Messages
         /// <summary>
         /// Shipment that has changed
         /// </summary>
-        public RateResult RateResult { get; private set; }
+        public ShipmentEntity Shipment { get; private set; }
     }
 }

@@ -9,7 +9,7 @@ using System.ComponentModel;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {

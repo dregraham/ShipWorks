@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using ShipWorks.Core.Messaging;
 using ShipWorks.UI.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Settings
 {

@@ -1,7 +1,7 @@
 ﻿using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Messages
+namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
     /// An IShipWorksMessage used to inform subscribers that a store has changed.

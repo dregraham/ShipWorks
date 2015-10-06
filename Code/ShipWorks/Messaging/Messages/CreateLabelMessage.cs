@@ -1,6 +1,6 @@
 ﻿using ShipWorks.Core.Messaging;
 
-namespace ShipWorks.Messages
+namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
     /// Create labels for the given shipments

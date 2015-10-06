@@ -38,7 +38,7 @@ using ShipWorks.Shipping.Policies;
 using Timer = System.Windows.Forms.Timer;
 using System.Threading.Tasks;
 using ShipWorks.Core.Common.Threading;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping
 {

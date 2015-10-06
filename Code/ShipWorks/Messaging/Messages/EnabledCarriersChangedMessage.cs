@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Core.Messaging;
 using System.Linq;
 using Interapptive.Shared.Collections;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping;
 
-namespace ShipWorks.Messages
+namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
     /// Indicate that enabled carriers have changed

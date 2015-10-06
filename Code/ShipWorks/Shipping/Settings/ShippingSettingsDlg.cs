@@ -16,7 +16,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Templates.Printing;
 using log4net;
 using Autofac;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Settings
 {

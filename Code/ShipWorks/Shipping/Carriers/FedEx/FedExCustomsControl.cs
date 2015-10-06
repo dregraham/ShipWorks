@@ -15,7 +15,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.Business;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {

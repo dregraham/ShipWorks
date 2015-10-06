@@ -1,7 +1,7 @@
 ﻿using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping;
 
-namespace ShipWorks.Messages
+namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
     /// Message that notifies consumers that a Usps account was just converted to discount

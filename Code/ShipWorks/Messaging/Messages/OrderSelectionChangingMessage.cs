@@ -1,9 +1,9 @@
-﻿using ShipWorks.Core.Messaging;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ShipWorks.Core.Messaging;
 
-namespace ShipWorks.Core.Messages
+namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
     /// The order selection on the main grid is changing

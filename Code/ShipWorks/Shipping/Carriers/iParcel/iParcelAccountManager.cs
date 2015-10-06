@@ -7,7 +7,7 @@ using ShipWorks.Data.Utility;
 using System.Collections.Generic;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {

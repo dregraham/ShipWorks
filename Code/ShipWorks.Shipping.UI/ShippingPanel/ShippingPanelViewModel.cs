@@ -11,13 +11,13 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messages;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.UI.ShippingPanel.Loading;
 using ShipWorks.Stores;
 using ShipWorks.Shipping.Services;
 using System.Reactive.Concurrency;
 using System.Threading;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             PropertyChanging += OnPropertyChanging;
 
-            messenger.AsObservable<ShipWorks.Core.Messages.OrderSelectionChangingMessage>()
+            messenger.AsObservable<OrderSelectionChangingMessage>()
                 .ObserveOn(TaskPoolScheduler.Default)
                 .Do(x => Thread.Sleep(2000))
                 .ObserveOn(DispatcherScheduler.Current)

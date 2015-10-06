@@ -7,7 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
 using Interapptive.Shared.Collections;
 using ShipWorks.AddressValidation;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping
 {

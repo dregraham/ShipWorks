@@ -7,7 +7,7 @@ using System.Reflection;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messages;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services.Builders;
 
