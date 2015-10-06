@@ -47,10 +47,6 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ShippingPanelShipmentLoader>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<ShipmentAddressValidator>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -118,6 +114,10 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<CarrierShipmentAdapterFactory>()
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
+
+            builder.RegisterType<ShipmentLoaderService>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

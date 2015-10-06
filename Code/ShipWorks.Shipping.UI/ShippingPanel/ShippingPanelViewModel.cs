@@ -98,12 +98,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin = addressViewModelFactory();
 
             PropertyChanging += OnPropertyChanging;
-            
+
             //TODO: This is just a test -- This should ultimately be wired up to the OrderSelectionChangedMessage
+            // AND  determine what to do with ".ObserveOn(DispatcherScheduler.Current)" as it causes an exception.
             messenger.AsObservable<OrderSelectionChangedMessage>()
-                .ObserveOn(DispatcherScheduler.Current)
+                //.ObserveOn(DispatcherScheduler.Current)
                 .SubscribeOn(TaskPoolScheduler.Default)
-                .Subscribe(x => AllowEditing = true);
+                .Subscribe(x => LoadOrder(x));
 
             //Destination = new AddressViewModel();
 
@@ -289,16 +290,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public async Task LoadOrder(OrderSelectionChangedMessage orderMessage)
         {
-            //orderSelectionLoaded = orderMessage.;
-
             //LoadedShipmentResult = orderSelectionLoaded.Result;
 
-            //shipment = orderSelectionLoaded.Shipments?.FirstOrDefault();
+            orderSelectionLoaded = (OrderSelectionLoaded)orderMessage.LoadedOrderSelection?.FirstOrDefault();
+            shipment = orderSelectionLoaded.Shipments?.FirstOrDefault();
 
-            //if (shipment != null)
-            //{
-            //    Populate();
-            //}
+            if (shipment != null)
+            {
+                Populate();
+            }
         }
 
         internal void SelectionChanged() => AllowEditing = false;
@@ -314,12 +314,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             selectedShipmentType = shipment.ShipmentTypeCode;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
 
-            ICarrierShipmentAdapter adapter = carrierShipmentAdapterFactory.Get(shipment);
-
             RequestedShippingMethod = orderSelectionLoaded.Order.RequestedShipping;
             InitialShipmentTypeCode = shipment.ShipmentTypeCode;
             OriginAddressType = shipment.OriginOriginID;
             InitialOriginAddressType = shipment.OriginOriginID;
+
+            ICarrierShipmentAdapter adapter = carrierShipmentAdapterFactory.Get(shipment);
             AccountId = adapter.AccountId.GetValueOrDefault();
 
             Origin.Load(shipment.OriginPerson);

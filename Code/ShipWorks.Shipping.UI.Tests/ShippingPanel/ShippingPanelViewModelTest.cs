@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
@@ -10,7 +11,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.UI.ShippingPanel;
-using ShipWorks.Shipping.UI.ShippingPanel.Loading;
+using ShipWorks.Shipping.Loading;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         private readonly OrderEntity orderEntity;
         private readonly StoreEntity storeEntity;
         private readonly ShipmentEntity shipmentEntity;
-        private readonly OrderSelectionLoaded orderSelectionLoaded;
+        private OrderSelectionLoaded orderSelectionLoaded;
 
         public ShippingPanelViewModelTest()
         {
@@ -58,23 +59,15 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             };
 
             shipmentEntity.Order = orderEntity;
-            orderSelectionLoaded = new OrderSelectionLoaded()
-            {
-                Shipments = new List<ShipmentEntity>() { shipmentEntity },
-                Result = ShippingPanelLoadedShipmentResult.Success,
-                Exception = null,
-                Order = orderEntity
-            };
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() {shipmentEntity});
         }
 
         private async Task<ShippingPanelViewModel> GetViewModelWithLoadedShipment(AutoMock mock)
         {
-            mock.Mock<ILoader<OrderSelectionLoaded>>()
-                .Setup(s => s.LoadAsync(It.IsAny<long>()))
-                .ReturnsAsync(orderSelectionLoaded);
+            OrderSelectionChangedMessage message = new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded> {orderSelectionLoaded});
             
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-            await testObject.LoadOrder(orderEntity.OrderID);
+            await testObject.LoadOrder(message);
 
             // Reset mocks so that tests don't have to worry about calls made during loading
             mock.Mock<IShipmentTypeFactory>().ResetCalls();
@@ -118,12 +111,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                mock.Mock<ILoader<OrderSelectionLoaded>>()
-                    .Setup(s => s.LoadAsync(It.IsAny<long>()))
-                    .ReturnsAsync(orderSelectionLoaded);
+                OrderSelectionChangedMessage message = new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded> { orderSelectionLoaded });
 
                 ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-                await testObject.LoadOrder(orderEntity.OrderID);
+                await testObject.LoadOrder(message);
 
                 mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>()), Times.Never);
             }
@@ -356,31 +347,20 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 Assert.Equal(supportsMultiplePackages, testObject.SupportsMultiplePackages);
             }
         }
-        
-        [Fact]
-        public async void Load_DelegatesToShipmentLoader()
-        {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
-                await testObject.LoadOrder(orderEntity.OrderID);
-
-                mock.Mock<ILoader<OrderSelectionLoaded>>()
-                    .Verify(x => x.LoadAsync(orderEntity.OrderID));
-            }
-        }
 
         [Fact]
         public async void Load_ShowsMessage_WhenMultipleShipmentsAreLoaded()
         {
-            orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.Multiple;
+            Assert.False(true, "Fix this test to test show message.");
 
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+            //orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.Multiple;
 
-                Assert.Equal(ShippingPanelLoadedShipmentResult.Multiple, testObject.LoadedShipmentResult);
-            }
+            //using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            //{
+            //    ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+
+            //    Assert.Equal(ShippingPanelLoadedShipmentResult.Multiple, testObject.LoadedShipmentResult);
+            //}
         }
 
         [Fact]
@@ -415,9 +395,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public async void Save_DoesNotCallSaveToDatabase_WhenShipmentIsNull()
         {
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, null);
+
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                orderSelectionLoaded.Shipments = null;
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
 
                 testObject.SaveToDatabase();

@@ -114,6 +114,10 @@
       <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-XAML.2.2.5\lib\net40\System.Reactive.Windows.Threading.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Runtime.dll</HintPath>
       <Private>True</Private>
@@ -128,6 +132,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressViewModel.cs" />
@@ -162,11 +167,9 @@
     <Compile Include="Commands\WeakFunc.cs" />
     <Compile Include="Configuration\IShippingConfiguration.cs" />
     <Compile Include="Configuration\ShippingConfiguration.cs" />
-    <Compile Include="Loading\ILoader.cs" />
     <Compile Include="Loading\IShipmentLoader.cs" />
     <Compile Include="Loading\ShipmentLoader.cs" />
     <Compile Include="Loading\ShippingPanelLoadedShipmentResult.cs" />
-    <Compile Include="Loading\ShippingPanelShipmentLoader.cs" />
     <Compile Include="Services\Accounts\IShippingAccountListProvider.cs" />
     <Compile Include="Services\Accounts\ShippingAccountListProvider.cs" />
     <Compile Include="Services\Builders\IShipmentPackageBuilder.cs" />
@@ -177,6 +180,7 @@
     <Compile Include="Services\CarrierShipmentAdapterFactory.cs" />
     <Compile Include="Services\ICarrierShipmentAdapter.cs" />
     <Compile Include="Services\ICarrierShipmentAdapterFactory.cs" />
+    <Compile Include="Services\IShipmentLoaderService.cs" />
     <Compile Include="Services\IShippingOriginManager.cs" />
     <Compile Include="Rating\IRateSelection.cs" />
     <Compile Include="IValidator.cs" />
@@ -184,6 +188,7 @@
     <Compile Include="Rating\IRateSelectionFactory.cs" />
     <Compile Include="Rating\RateSelection.cs" />
     <Compile Include="Rating\RateSelectionFactory.cs" />
+    <Compile Include="Services\ShipmentLoaderService.cs" />
     <Compile Include="Services\ShipmentTypeManagerWrapper.cs" />
     <Compile Include="Services\ShipmentTypeProvider.cs" />
     <Compile Include="ShipmentAddressValidator.cs" />

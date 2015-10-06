@@ -122,8 +122,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingPanel\AddressControl\AddressViewModelTest.cs" />
-    <Compile Include="ShippingPanel\Loading\ShipmentLoaderTest.cs" />
-    <Compile Include="ShippingPanel\Loading\ShippingPanelShipmentLoaderTest.cs" />
     <Compile Include="ShippingPanel\ShipmentViewModelTest.cs" />
     <Compile Include="ShippingPanel\ShippingPanelViewModelTest.cs" />
     <Compile Include="ShippingPanel\ValueConverters\OriginAddressListConverterTest.cs" />

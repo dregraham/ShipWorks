@@ -35,7 +35,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private readonly MessengerToken shipmentChangedMessageToken;
         private readonly IMessenger messenger;
 
-        private readonly ILoader<OrderSelectionLoaded> shipmentLoader;
         private readonly IShippingManager shippingManager;
         private readonly IShipmentTypeFactory shipmentTypeFactory;
 
@@ -52,11 +51,10 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Constructor
         /// </summary>
         /// <param name="messenger"></param>
-        public RatingPanelViewModel(ILoader<OrderSelectionLoaded> shipmentLoader, IMessenger messenger, IShippingManager shippingManager, IShipmentTypeFactory shipmentTypeFactory)
+        public RatingPanelViewModel(IMessenger messenger, IShippingManager shippingManager, IShipmentTypeFactory shipmentTypeFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.shipmentTypeFactory = shipmentTypeFactory;
@@ -217,9 +215,10 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         public async Task RefreshSelectedShipments(long orderID)
         {
-            OrderSelectionLoaded orderSelectionLoaded = await shipmentLoader.LoadAsync(orderID);
-            
             //TODO: Implement selection loading
+
+            //OrderSelectionLoaded orderSelectionLoaded = await shipmentLoader.LoadAsync(orderID);
+
             //if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Success)
             //{
             //    ChangeShipment(orderSelectionLoaded);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users.Security;
@@ -18,15 +19,17 @@ namespace ShipWorks.Shipping.Loading
         private readonly IShippingConfiguration shippingConfiguration;
         private readonly IShippingManager shippingManager;
         private readonly IFilterHelper filterHelper;
+        private readonly IValidator<ShipmentEntity> addressValidator;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper)
+        public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper, IValidator<ShipmentEntity> addressValidator)
         {
             this.shippingConfiguration = shippingConfiguration;
             this.shippingManager = shippingManager;
             this.filterHelper = filterHelper;
+            this.addressValidator = addressValidator;
         }
 
         /// <summary>
@@ -42,6 +45,11 @@ namespace ShipWorks.Shipping.Loading
                 bool createIfNone = shippingConfiguration.AutoCreateShipments && shippingConfiguration.UserHasPermission(PermissionType.ShipmentsCreateEditProcess, orderID);
 
                 List<ShipmentEntity> shipments = shippingManager.GetShipments(orderID, createIfNone);
+
+                if (shipments?.Any() ?? false)
+                {
+                    addressValidator.ValidateAsync(shipments.FirstOrDefault());
+                }
 
                 OrderEntity order = shipments?.FirstOrDefault()?.Order;
 
