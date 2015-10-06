@@ -1129,7 +1129,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 promo = new UpsPromo(upsAccount, new UpsSettingsRepository(), new UpsAccountRepository(), new UpsPromoWebClientFactory());
                 promo.GetAgreementTerms();
                 promoDescription.Text = promo.Terms.Description;
-                promoTermsLink.Top = promoDescription.Bottom + 5;
+                promoControls.Top = promoDescription.Bottom + 5;
             }
             catch (UpsPromoException)
             {
@@ -1144,7 +1144,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                promo.Apply();
+                if (promoYes.Checked)
+                {
+                    promo.Apply();
+                }
             }
             catch (UpsPromoException)
             {

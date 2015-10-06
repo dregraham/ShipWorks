@@ -43,7 +43,8 @@ namespace Interapptive.Shared.Net
         /// </summary>
         public static void OpenUrl(string url, IWin32Window errorOwner)
         {
-            OpenUrl(new Uri(url), errorOwner);
+            OpenUrl(Uri.IsWellFormedUriString(url, UriKind.Absolute) && !url.StartsWith("http") ?
+                new Uri(url) : new Uri($"http://{url}"), errorOwner);
         }
 
         /// <summary>

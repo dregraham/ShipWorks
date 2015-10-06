@@ -101,6 +101,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPagePromo = new ShipWorks.UI.Wizard.WizardPage();
             this.promoTermsLink = new System.Windows.Forms.LinkLabel();
             this.promoDescription = new System.Windows.Forms.Label();
+            this.promoNo = new System.Windows.Forms.RadioButton();
+            this.promoYes = new System.Windows.Forms.RadioButton();
+            this.promoControls = new System.Windows.Forms.Panel();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -126,6 +129,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageOpenAccountPickupLocation.SuspendLayout();
             this.wizardPageFinishCreateAccountRegistrationFailed.SuspendLayout();
             this.wizardPagePromo.SuspendLayout();
+            this.promoControls.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -861,21 +865,23 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // 
             // wizardPagePromo
             // 
-            this.wizardPagePromo.Controls.Add(this.promoTermsLink);
+            this.wizardPagePromo.Controls.Add(this.promoControls);
             this.wizardPagePromo.Controls.Add(this.promoDescription);
+            this.wizardPagePromo.Description = "You are eligible for a Shipworks exclusive promotional price!";
             this.wizardPagePromo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPagePromo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPagePromo.Location = new System.Drawing.Point(0, 0);
             this.wizardPagePromo.Name = "wizardPagePromo";
             this.wizardPagePromo.Size = new System.Drawing.Size(579, 474);
             this.wizardPagePromo.TabIndex = 0;
+            this.wizardPagePromo.Title = "Account Registration";
             this.wizardPagePromo.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnWizardPagePromoStepNext);
             this.wizardPagePromo.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnWizardPagePromoSteppingInto);
             // 
             // promoTermsLink
             // 
             this.promoTermsLink.AutoSize = true;
-            this.promoTermsLink.Location = new System.Drawing.Point(26, 121);
+            this.promoTermsLink.Location = new System.Drawing.Point(3, 4);
             this.promoTermsLink.Name = "promoTermsLink";
             this.promoTermsLink.Size = new System.Drawing.Size(110, 13);
             this.promoTermsLink.TabIndex = 1;
@@ -886,11 +892,45 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // 
             // promoDescription
             // 
-            this.promoDescription.Location = new System.Drawing.Point(23, 5);
+            this.promoDescription.Location = new System.Drawing.Point(26, 5);
             this.promoDescription.Name = "promoDescription";
             this.promoDescription.Size = new System.Drawing.Size(530, 21);
             this.promoDescription.TabIndex = 0;
             this.promoDescription.Text = "label2";
+            // 
+            // promoNo
+            // 
+            this.promoNo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.promoNo.AutoSize = true;
+            this.promoNo.Checked = true;
+            this.promoNo.Location = new System.Drawing.Point(3, 53);
+            this.promoNo.Name = "promoNo";
+            this.promoNo.Size = new System.Drawing.Size(196, 17);
+            this.promoNo.TabIndex = 4;
+            this.promoNo.TabStop = true;
+            this.promoNo.Text = "No, I do not accept the agreement.";
+            this.promoNo.UseVisualStyleBackColor = true;
+            // 
+            // promoYes
+            // 
+            this.promoYes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.promoYes.AutoSize = true;
+            this.promoYes.Location = new System.Drawing.Point(3, 30);
+            this.promoYes.Name = "promoYes";
+            this.promoYes.Size = new System.Drawing.Size(166, 17);
+            this.promoYes.TabIndex = 3;
+            this.promoYes.Text = "Yes, I accept the agreement.";
+            this.promoYes.UseVisualStyleBackColor = true;
+            // 
+            // promoControls
+            // 
+            this.promoControls.Controls.Add(this.promoTermsLink);
+            this.promoControls.Controls.Add(this.promoNo);
+            this.promoControls.Controls.Add(this.promoYes);
+            this.promoControls.Location = new System.Drawing.Point(23, 29);
+            this.promoControls.Name = "promoControls";
+            this.promoControls.Size = new System.Drawing.Size(328, 100);
+            this.promoControls.TabIndex = 5;
             // 
             // UpsSetupWizard
             // 
@@ -962,7 +1002,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageOpenAccountPickupLocation.ResumeLayout(false);
             this.wizardPageFinishCreateAccountRegistrationFailed.ResumeLayout(false);
             this.wizardPagePromo.ResumeLayout(false);
-            this.wizardPagePromo.PerformLayout();
+            this.promoControls.ResumeLayout(false);
+            this.promoControls.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1038,5 +1079,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private System.Windows.Forms.LinkLabel promoTermsLink;
         private System.Windows.Forms.Label promoDescription;
         private System.Windows.Forms.Label upsPromoFailed;
+        private System.Windows.Forms.Panel promoControls;
+        private System.Windows.Forms.RadioButton promoNo;
+        private System.Windows.Forms.RadioButton promoYes;
     }
 }
