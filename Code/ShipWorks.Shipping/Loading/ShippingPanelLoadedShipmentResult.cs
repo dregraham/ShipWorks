@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
+namespace ShipWorks.Shipping.Loading
 {
     /// <summary>
     /// Enum with values pertaining to the result of a shipping panel shipment load operation.

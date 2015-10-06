@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
+namespace ShipWorks.Shipping.Loading
 {
     /// <summary>
     /// Interface for classes that need to load something

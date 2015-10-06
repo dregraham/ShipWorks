@@ -160,6 +160,13 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\WeakAction.cs" />
     <Compile Include="Commands\WeakFunc.cs" />
+    <Compile Include="Configuration\IShippingConfiguration.cs" />
+    <Compile Include="Configuration\ShippingConfiguration.cs" />
+    <Compile Include="Loading\ILoader.cs" />
+    <Compile Include="Loading\IShipmentLoader.cs" />
+    <Compile Include="Loading\ShipmentLoader.cs" />
+    <Compile Include="Loading\ShippingPanelLoadedShipmentResult.cs" />
+    <Compile Include="Loading\ShippingPanelShipmentLoader.cs" />
     <Compile Include="Services\Accounts\IShippingAccountListProvider.cs" />
     <Compile Include="Services\Accounts\ShippingAccountListProvider.cs" />
     <Compile Include="Services\Builders\IShipmentPackageBuilder.cs" />

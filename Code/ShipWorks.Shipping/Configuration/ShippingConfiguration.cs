@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -6,9 +7,9 @@ using ShipWorks.Users.Security;
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
     /// <summary>
-    /// Interface for settings needed by the Shipping Panel
+    /// Interface for settings needed by the Shipping activities
     /// </summary>
-    public class ShippingPanelConfiguration : IShippingPanelConfiguration
+    public class ShippingConfiguration : IShippingConfiguration
     {
         /// <summary>
         /// Wraps a call to determine if a user has permission on an entity
@@ -19,12 +20,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
-        /// TBD
+        /// Determines address validation for a shipment
         /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
         public bool GetAddressValidation(ShipmentEntity shipment)
         {
+            // TODO: Implement this
             return true;
         }
 

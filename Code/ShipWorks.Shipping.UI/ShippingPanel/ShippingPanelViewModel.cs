@@ -12,7 +12,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.UI.ShippingPanel.Loading;
+using ShipWorks.Shipping.Loading;
 using ShipWorks.Stores;
 using ShipWorks.Shipping.Services;
 using System.Reactive.Concurrency;

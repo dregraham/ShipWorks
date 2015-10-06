@@ -157,12 +157,6 @@
     <Compile Include="ShippingPanel\AddressControl\AddressControl.xaml.cs">
       <DependentUpon>AddressControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ShippingPanel\IShippingPanelConfiguration.cs" />
-    <Compile Include="ShippingPanel\Loading\ILoader.cs" />
-    <Compile Include="ShippingPanel\Loading\IShipmentLoader.cs" />
-    <Compile Include="ShippingPanel\Loading\ShipmentLoader.cs" />
-    <Compile Include="ShippingPanel\Loading\ShippingPanelLoadedShipmentResult.cs" />
-    <Compile Include="ShippingPanel\Loading\ShippingPanelShipmentLoader.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml.cs">
       <DependentUpon>ShipmentControl.xaml</DependentUpon>
     </Compile>
@@ -173,7 +167,6 @@
     <Compile Include="ShippingPanel\ShippingPanel.Designer.cs">
       <DependentUpon>ShippingPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="ShippingPanel\ShippingPanelConfiguration.cs" />
     <Compile Include="ShippingPanel\ShippingPanelControl.xaml.cs">
       <DependentUpon>ShippingPanelControl.xaml</DependentUpon>
     </Compile>

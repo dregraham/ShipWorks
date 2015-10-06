@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
+namespace ShipWorks.Shipping.Loading
 {
     /// <summary>
     /// Loads a shipment for the order.  If allowed, and no shipment exists, one will be created.  Also validates the shipment addresses.

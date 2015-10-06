@@ -17,8 +17,9 @@ using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.UI.ShippingPanel;
-using ShipWorks.Shipping.UI.ShippingPanel.Loading;
+using ShipWorks.Shipping.Loading;
 using ShipWorks.Core.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Loading;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {

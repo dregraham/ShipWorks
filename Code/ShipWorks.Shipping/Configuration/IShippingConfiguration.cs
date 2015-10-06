@@ -1,12 +1,12 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Security;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel
+namespace ShipWorks.Shipping.Configuration
 {
     /// <summary>
-    /// Interface for settings needed by the Shipping Panel
+    /// Interface for settings needed by the Shipping activities
     /// </summary>
-    public interface IShippingPanelConfiguration
+    public interface IShippingConfiguration
     {
         /// <summary>
         /// Wraps a call to determine if a user has permission on an entity
@@ -14,10 +14,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         bool UserHasPermission(PermissionType permissionType, long entityID);
 
         /// <summary>
-        /// TBD
+        /// Determines address validation for a shipment
         /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
         bool GetAddressValidation(ShipmentEntity shipment);
 
         /// <summary>

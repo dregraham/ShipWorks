@@ -7,7 +7,7 @@ using ShipWorks.Shipping.Services.Accounts;
 using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel;
-using ShipWorks.Shipping.UI.ShippingPanel.Loading;
+using ShipWorks.Shipping.Loading;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<RatingPanelViewModel>();
 
-            builder.RegisterType<ShippingPanelConfiguration>()
+            builder.RegisterType<ShippingConfiguration>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
