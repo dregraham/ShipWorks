@@ -147,9 +147,14 @@ namespace :build do
 		labelForBuild = labelForBuild + "." + revisionNumber
 		print "Building with label #{labelForBuild}\r\n\r\n"
 		
+		# Write the label for the build out to a file, so CI (Jenkins) can pick it up for tagging purposes
+		labelFile = ".build-label"		
+		delete_if_exists(labelFile)
+		File.open(labelFile, "w") {|file| file.puts labelForBuild}
+		
 		# Use the revisionNumber extracted from the file and pass the revision filename
 		# so the build will increment the version in preparation for the next run
-		msb.parameters = "/p:CreateInstaller=True /p:PackageModules=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:BuildType=Automated /p:ProjectRevisionFile=#{@revisionFilePath} /p:CCNetLabel=#{labelForBuild}"
+		msb.parameters = "/p:CreateInstaller=True /p:PackageModules=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:BuildType=Automated /p:ProjectRevisionFile=#{@revisionFilePath} /p:CCNetLabel=#{labelForBuild}"			
 	end
 end
 
