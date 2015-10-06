@@ -146,6 +146,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             upsAccount.InvoiceAuth = false;
             upsAccount.RateType = (int)UpsRateType.DailyPickup;
             upsAccount.InitializeNullsToDefault();
+            upsAccount.PromoStatus = (int) UpsPromoStatus.None;
 
             personControl.LoadEntity(new PersonAdapter(upsAccount, ""));
 
