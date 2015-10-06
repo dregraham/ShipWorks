@@ -157,9 +157,7 @@ namespace Interapptive.Shared.Collections
         /// <summary>
         /// Create a ReadOnlyCollection from the given enumerable
         /// </summary>
-        public static ReadOnlyCollection<T> ToReadOnly<T>(this IEnumerable<T> source)
-        {
-            return new ReadOnlyCollection<T>(source.ToList());
-        }
+        public static ReadOnlyCollection<T> ToReadOnly<T>(this IEnumerable<T> source) => 
+            new ReadOnlyCollection<T>(source?.ToList() ?? new List<T>());
     }
 }

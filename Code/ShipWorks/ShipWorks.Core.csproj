@@ -853,6 +853,7 @@
     <Compile Include="Messaging\Messages\SelectedRateChangedMessage.cs" />
     <Compile Include="Messaging\Messages\ShipmentChangedMessage.cs" />
     <Compile Include="Messaging\Messages\ShippingAccountsChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\OrderSelectionLoaded.cs" />
     <Compile Include="Messaging\Messages\StoreChangedMessage.cs" />
     <Compile Include="Messaging\Messages\UspsAccountCreatedMessage.cs" />
     <Compile Include="Messaging\Messages\UspsAutomaticExpeditedChangedMessage.cs" />

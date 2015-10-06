@@ -1,27 +1,32 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Messaging.Messages
 {
-    public class OrderSelectionChangedMessage : IShipWorksMessage
+    /// <summary>
+    /// Order selection change loaded complete
+    /// </summary>
+    public struct OrderSelectionChangedMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSelectionChangedMessage(object sender, List<long> orderIDs)
+        public OrderSelectionChangedMessage(object sender, IEnumerable<OrderSelectionLoaded> loadedSelection)
         {
             Sender = sender;
-            OrderIDs = orderIDs;
+            LoadedOrderSelection = loadedSelection.ToReadOnly();
         }
 
         /// <summary>
         /// Originator of the message
         /// </summary>
-        public object Sender { get; private set; }
+        public object Sender { get; }
 
         /// <summary>
         /// Order IDs that have changed
         /// </summary>
-        public List<long> OrderIDs { get; private set; }
+        public IEnumerable<OrderSelectionLoaded> LoadedOrderSelection { get; }
     }
 }

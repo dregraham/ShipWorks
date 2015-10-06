@@ -4,6 +4,7 @@ using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users.Security;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
 {
@@ -31,9 +32,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
         /// </summary>
         public OrderSelectionLoaded Load(long orderID)
         {
-            OrderSelectionLoaded orderSelectionLoaded = new OrderSelectionLoaded();
-            ShipmentEntity shipment = null;
-
             filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
 
             // Execute the work
@@ -43,32 +41,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
 
                 List<ShipmentEntity> shipments = shippingManager.GetShipments(orderID, createIfNone);
 
-                if (shipments.Count == 1)
-                {
-                    shipment = shipments.FirstOrDefault();
-
-                    // Make sure the shipment type objects are fully loaded.
-                    shippingManager.EnsureShipmentLoaded(shipment);
-
-                    orderSelectionLoaded.Shipments = shipments;
-                    orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.Success;
-                }
-                else if (shipments.Count > 1)
-                {
-                    orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.Multiple;
-                }
-                else
-                {
-                    orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.NotCreated;
-                }
+                //TODO: Add the loaded order to the selection
+                return new OrderSelectionLoaded(null, shipments);
             }
             catch (Exception ex)
             {
-                orderSelectionLoaded.Result = ShippingPanelLoadedShipmentResult.Error;
-                orderSelectionLoaded.Exception = ex;
+                return new OrderSelectionLoaded(ex);
             }
-
-            return orderSelectionLoaded;
         }
     }
 }

@@ -14,6 +14,7 @@ using ShipWorks.Shipping.UI.ShippingPanel.Loading;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 {

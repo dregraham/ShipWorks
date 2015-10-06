@@ -161,7 +161,6 @@
     <Compile Include="ShippingPanel\Loading\ILoader.cs" />
     <Compile Include="ShippingPanel\Loading\IShipmentLoader.cs" />
     <Compile Include="ShippingPanel\Loading\ShipmentLoader.cs" />
-    <Compile Include="ShippingPanel\Loading\OrderSelectionLoaded.cs" />
     <Compile Include="ShippingPanel\Loading\ShippingPanelLoadedShipmentResult.cs" />
     <Compile Include="ShippingPanel\Loading\ShippingPanelShipmentLoader.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml.cs">

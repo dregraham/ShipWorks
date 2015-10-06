@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.Loading
 {

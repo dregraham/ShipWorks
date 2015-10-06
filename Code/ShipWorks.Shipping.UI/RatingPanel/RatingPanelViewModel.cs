@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.Loading;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -217,22 +218,23 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             OrderSelectionLoaded orderSelectionLoaded = await shipmentLoader.LoadAsync(orderID);
             
-            if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Success)
-            {
-                ChangeShipment(orderSelectionLoaded);
-            }
-            else if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Multiple)
-            {
-                ErrorMessage = "Multiple shipments selected.";
-            }
-            else if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Error)
-            {
-                ErrorMessage = "An error occurred while retrieving rates.";
-            }
-            else
-            {
-                ErrorMessage = "No shipments are selected.";
-            }
+            //TODO: Implement selection loading
+            //if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Success)
+            //{
+            //    ChangeShipment(orderSelectionLoaded);
+            //}
+            //else if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Multiple)
+            //{
+            //    ErrorMessage = "Multiple shipments selected.";
+            //}
+            //else if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Error)
+            //{
+            //    ErrorMessage = "An error occurred while retrieving rates.";
+            //}
+            //else
+            //{
+            //    ErrorMessage = "No shipments are selected.";
+            //}
         }
 
         /// <summary>

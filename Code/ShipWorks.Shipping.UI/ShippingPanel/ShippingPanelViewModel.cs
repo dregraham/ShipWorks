@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Services;
 using System.Reactive.Concurrency;
 using System.Threading;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -35,7 +36,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private long initialOriginAddressType;
         private long accountId;
         private readonly PropertyChangedHandler handler;
-        private readonly ILoader<OrderSelectionLoaded> shipmentLoader;
         private OrderSelectionLoaded orderSelectionLoaded;
         private readonly IMessenger messenger;
         private bool allowEditing;
@@ -67,7 +67,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Constructor
         /// </summary>
         public ShippingPanelViewModel(
-            ILoader<OrderSelectionLoaded> shipmentLoader,
             IMessenger messenger,
             IShippingManager shippingManager,
             IShipmentTypeFactory shipmentTypeFactory,
@@ -82,7 +81,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.customsManager = customsManager;
             this.shippingManager = shippingManager;
             this.shipmentTypeFactory = shipmentTypeFactory;
-            this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
             listenForRateCriteriaChanged = false;
 
@@ -102,9 +100,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             PropertyChanging += OnPropertyChanging;
             
             //TODO: This is just a test -- This should ultimately be wired up to the OrderSelectionChangedMessage
-            messenger.AsObservable<OrderSelectionChangingMessage>()
-                .ObserveOn(TaskPoolScheduler.Default)
-                .Do(x => Thread.Sleep(2000))
+            messenger.AsObservable<OrderSelectionChangedMessage>()
                 .ObserveOn(DispatcherScheduler.Current)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .Subscribe(x => AllowEditing = true);
@@ -291,18 +287,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Load the shipment from the given order
         /// </summary>
-        public async Task LoadOrder(long orderID)
+        public async Task LoadOrder(OrderSelectionChangedMessage orderMessage)
         {
-            orderSelectionLoaded = await shipmentLoader.LoadAsync(orderID);
+            //orderSelectionLoaded = orderMessage.;
 
-            LoadedShipmentResult = orderSelectionLoaded.Result;
+            //LoadedShipmentResult = orderSelectionLoaded.Result;
 
-            shipment = orderSelectionLoaded.Shipments?.FirstOrDefault();
+            //shipment = orderSelectionLoaded.Shipments?.FirstOrDefault();
 
-            if (shipment != null)
-            {
-                Populate();
-            }
+            //if (shipment != null)
+            //{
+            //    Populate();
+            //}
         }
 
         internal void SelectionChanged() => AllowEditing = false;
@@ -347,7 +343,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory().Value)
             {
                 IEnumerable<ShipmentEntity> shipments = await shipmentProcessor.Process(new[] { shipment }, refresher, null, null);
-                await LoadOrder(shipment.OrderID);
+                //await LoadOrder(null);
                 AllowEditing = (shipments?.FirstOrDefault()?.Processed ?? false) == false;
             }
         }
