@@ -12,6 +12,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls.Design;
+using ShipWorks.Shipping.UI.MessageHandlers;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -25,6 +26,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
     public partial class RatingPanel : UserControl, IDockingPanelContent
     {
         private readonly RatingPanelViewModel viewModel;
+        readonly OrderSelectionChangedHandler orderSelectionChangedHandler;
         private RateGroup rateGroup;
         private bool showAllRates;
         private bool showSpinner;
@@ -44,6 +46,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             }
 
             viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<RatingPanelViewModel>();
+            orderSelectionChangedHandler = IoC.UnsafeGlobalLifetimeScope.Resolve<OrderSelectionChangedHandler>();
 
             DataBindings.Add(nameof(RateGroup), viewModel, nameof(viewModel.RateGroup));
             DataBindings.Add(nameof(ErrorMessage), viewModel, nameof(viewModel.ErrorMessage));
@@ -152,6 +155,8 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             rateControl.Initialize(new FootnoteParameters(() => viewModel.RefreshRates(false), () => viewModel.Store));
 
             rateControl.RateSelected += OnRateControlRateSelected;
+
+            orderSelectionChangedHandler.Listen(viewModel.RefreshSelectedShipments);
         }
 
         /// <summary>
@@ -203,8 +208,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             // Reset the error message and show the spinner
             viewModel.ErrorMessage = string.Empty;
             rateControl.ShowSpinner = true;
-
-            await viewModel.RefreshSelectedShipments(selection.Keys.FirstOrDefault());
         }
 
         /// <summary>

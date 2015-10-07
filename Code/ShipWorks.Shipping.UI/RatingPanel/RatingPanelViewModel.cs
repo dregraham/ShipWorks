@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,11 +14,9 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.UI.ShippingPanel;
-using ShipWorks.Shipping.Loading;
 using ShipWorks.Core.Messaging.Messages.Shipping;
-using ShipWorks.Shipping.Loading;
+using Interapptive.Shared.Collections;
+using ShipWorks.Data;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -38,7 +35,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private readonly IShippingManager shippingManager;
         private readonly IShipmentTypeFactory shipmentTypeFactory;
 
-        private long? selectedShipmentID;
+        private ShipmentEntity selectedShipment;
         private readonly bool consolidatePostalRates;
         private bool actionLinkVisible;
         private bool showAllRates;
@@ -154,87 +151,90 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         public StoreEntity Store { get; set; }
 
         /// <summary>
-        /// Change the content of the control to be the given shipment
-        /// </summary>
-        public void ChangeShipment(OrderSelectionLoaded orderSelectionLoaded)
-        {
-            ShipmentEntity shipment = orderSelectionLoaded.Shipments.FirstOrDefault();
-            selectedShipmentID = shipment.ShipmentID;
-
-            // Refresh the rates in the panel; using cached rates is fine here since nothing
-            // about the shipment has changed, so don't force a re-fetch
-            RefreshRates(false);
-        }
-
-        /// <summary>
         /// Forces rates to be refreshed by re-fetching the rates from the shipping provider.
         /// </summary>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
         public void RefreshRates(bool ignoreCache)
         {
-            ShipmentEntity shipment = null;
-
-            if (selectedShipmentID != null)
+            ShipmentEntity shipment = selectedShipment;
+            if (shipment == null)
             {
-                shipment = shippingManager.GetShipment(selectedShipmentID.Value);
+                ErrorMessage = "No shipments are selected.";
+                return;
             }
 
-            if (shipment != null)
+            if (shipment.Processed)
             {
-                if (!shipment.Processed)
-                {
-                    ShipmentType shipmentType = shipmentTypeFactory.Get(shipment.ShipmentTypeCode);
+                ErrorMessage = "The shipment has already been processed.";
+                return;
+            }
+            
+            ShipmentType shipmentType = shipmentTypeFactory.Get(shipment.ShipmentTypeCode);
 
-                    if (!shipmentType.SupportsGetRates)
-                    {
-                        RateGroup rateGroupWithNoRatesFooter = new RateGroup(new List<RateResult>());
+            if (!shipmentType.SupportsGetRates)
+            {
+                RateGroup rateGroupWithNoRatesFooter = new RateGroup(new List<RateResult>());
 
-                        rateGroupWithNoRatesFooter.AddFootnoteFactory(new InformationFootnoteFactory("Select another provider to get rates."));
+                rateGroupWithNoRatesFooter.AddFootnoteFactory(new InformationFootnoteFactory("Select another provider to get rates."));
 
-                        RateGroup = rateGroupWithNoRatesFooter;
-                    }
-                    else
-                    {
-                        // We need to fetch the rates from the provider
-                        FetchRates(shipment, ignoreCache);
-                    }
-                }
-                else
-                {
-                    ErrorMessage = "The shipment has already been processed.";
-                }
+                RateGroup = rateGroupWithNoRatesFooter;
             }
             else
             {
-                ErrorMessage = "No shipments are selected.";
+                // We need to fetch the rates from the provider
+                FetchRates(shipment, ignoreCache);
             }
         }
 
         /// <summary>
-        /// Refreshes the selected shipments - Updates the rate control
+        /// Load the shipment from the given order
         /// </summary>
-        public async Task RefreshSelectedShipments(long orderID)
+        public void RefreshSelectedShipments(OrderSelectionChangedMessage orderMessage)
         {
-            //TODO: Implement selection loading
+            int orders = orderMessage.LoadedOrderSelection.HasMoreOrLessThanCount(1);
+            if (orders != 0)
+            {
+                return;
+            }
 
-            //OrderSelectionLoaded orderSelectionLoaded = await shipmentLoader.LoadAsync(orderID);
+            ShipmentEntity shipment = GetLoadedShipmentResult(orderMessage.LoadedOrderSelection.Single());
+            if (shipment != null)
+            {
+                selectedShipment = EntityUtility.CloneEntity(shipment, true);
+                RefreshRates(false);
+            }
+            else
+            {
+                ShowSpinner = false;
+            }
+        }
 
-            //if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Success)
-            //{
-            //    ChangeShipment(orderSelectionLoaded);
-            //}
-            //else if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Multiple)
-            //{
-            //    ErrorMessage = "Multiple shipments selected.";
-            //}
-            //else if (orderSelectionLoaded.Result == ShippingPanelLoadedShipmentResult.Error)
-            //{
-            //    ErrorMessage = "An error occurred while retrieving rates.";
-            //}
-            //else
-            //{
-            //    ErrorMessage = "No shipments are selected.";
-            //}
+        /// <summary>
+        /// Sets the LoadedShipmentResult based on orderSelectionLoaded
+        /// </summary>
+        private ShipmentEntity GetLoadedShipmentResult(OrderSelectionLoaded loadedSelection)
+        {
+            if (loadedSelection.Exception != null)
+            {
+                ErrorMessage = "An error occurred while retrieving rates.";
+                return null;
+            }
+
+            int moreOrLessThanOne = loadedSelection.Shipments.HasMoreOrLessThanCount(1);
+
+            if (moreOrLessThanOne > 0)
+            {
+                ErrorMessage = "Multiple shipments selected.";
+                return null;
+            }
+
+            if (moreOrLessThanOne < 0)
+            {
+                ErrorMessage = "No shipments are selected.";
+                return null;
+            }
+
+            return loadedSelection.Shipments.Single();
         }
 
         /// <summary>
@@ -255,13 +255,14 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         private void HandleUspsAutomaticExpeditedChangedMessage(UspsAutomaticExpeditedChangedMessage message)
         {
-            if (!selectedShipmentID.HasValue)
+            ShipmentEntity shipment = selectedShipment;
+
+            if (shipment == null)
             {
                 return;
             }
 
             // Refresh the shipment data and then the rates
-            ShipmentEntity shipment = shippingManager.GetShipment(selectedShipmentID.Value);
             shippingManager.RefreshShipment(shipment);
 
             FetchRates(shipment, false);
@@ -357,7 +358,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     ShippingException exception = args.Result as ShippingException;
                     if (exception != null)
                     {
-                        if (exception.Data.Contains("shipmentID") && (long)exception.Data["shipmentID"] == selectedShipmentID)
+                        if (exception.Data.Contains("shipmentID") && (long)exception.Data["shipmentID"] == shipment.ShipmentID)
                         {
                             if (panelRateGroup.FootnoteFactories.OfType<ExceptionsRateFootnoteFactory>().Any())
                             {
@@ -372,7 +373,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     else
                     {
                         ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
-                        if (ratedShipment != null && ratedShipment.ShipmentID == selectedShipmentID)
+                        if (ratedShipment != null && ratedShipment.ShipmentID == shipment.ShipmentID)
                         {
                             // Only update the rate control if the shipment is for the currently selected 
                             // order to avoid the appearance of lag when a user is quickly clicking around
