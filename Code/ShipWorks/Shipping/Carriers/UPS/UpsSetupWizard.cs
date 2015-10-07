@@ -292,7 +292,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageOpenAccountPageBillingContactInfo);
                 Pages.Remove(wizardPageOpenAccountPickupLocation);
                 Pages.Remove(wizardPageOpenAccountPickupSchedule);
-                Pages.Remove(wizardPagePromo);
             }
             else
             {
@@ -1224,6 +1223,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     promo.Terms.AcceptTerms();
                     promo.Apply();
+                }
+                else
+                {
+                    if (existingAccount.Checked)
+                    {
+                        promo.Decline();
+                    }
                 }
             }
             catch (UpsPromoException)
