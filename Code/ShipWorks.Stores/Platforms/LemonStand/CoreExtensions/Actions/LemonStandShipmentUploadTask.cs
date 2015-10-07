@@ -26,10 +26,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         /// <summary>
         ///     Descriptive label which appears on the task editor
         /// </summary>
-        public override string InputLabel
-        {
-            get { return "Upload the tracking number for:"; }
-        }
+        public override string InputLabel => "Upload the tracking number for:";
 
         /// <summary>
         ///     Instantiates the editor for the action
@@ -45,12 +42,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         public override bool SupportsStore(StoreEntity store)
         {
             LemonStandStoreEntity lemonStandStore = store as LemonStandStoreEntity;
-            if (lemonStandStore == null)
-            {
-                return false;
-            }
-
-            return true;
+            return lemonStandStore != null;
         }
 
         /// <summary>

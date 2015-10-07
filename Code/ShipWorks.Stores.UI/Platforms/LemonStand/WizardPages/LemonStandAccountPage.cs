@@ -3,9 +3,10 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.LemonStand;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
+namespace ShipWorks.Stores.UI.Platforms.LemonStand.WizardPages
 {
     public partial class LemonStandAccountPage : AddStoreWizardPage
     {
@@ -49,7 +50,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
                 //Ask for some orders
                 try
                 {
-                    client.GetOrders(1, DateTime.UtcNow.ToString());
+                    client.GetOrderStatuses();
+                    LemonStandStatusCodeProvider statusProvider = new LemonStandStatusCodeProvider(store);
+                    statusProvider.UpdateFromOnlineStore();
 
                 }
                 catch (Exception ex)
