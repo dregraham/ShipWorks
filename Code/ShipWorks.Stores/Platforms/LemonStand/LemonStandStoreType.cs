@@ -18,8 +18,6 @@ using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Filters;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -79,13 +77,37 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) {DefaultDaysBack = 7, MaxDaysBack = 30};
 
         /// <summary>
-        ///     Create menu commands for upload shipment details
+        /// Create any MenuCommand's that are applied to this specific store instance
         /// </summary>
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
-            MenuCommand command = new MenuCommand("Upload Shipment Details", OnUploadDetails);
-            commands.Add(command);
+
+            // get possible status codes from the provider
+            LemonStandStatusCodeProvider codeProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity)Store);
+
+            // create a menu item for each status 
+            ICollection<string> statusCodeNames = GetOnlineStatusChoices();
+
+            bool isOne = false;
+            foreach (string codeName in statusCodeNames)
+            {
+                isOne = true;
+
+                MenuCommand command = new MenuCommand(codeName, OnSetOnlineStatus)
+                {
+                    Tag = codeProvider.GetCodeValue(codeName)
+                };
+
+                commands.Add(command);
+            }
+
+            MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", OnUploadDetails)
+            {
+                BreakBefore = isOne
+            };
+
+            commands.Add(uploadCommand);
 
             return commands;
         }
@@ -98,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             BackgroundExecutor<IEnumerable<long>> executor = new BackgroundExecutor<IEnumerable<long>>(context.Owner,
                 "Upload Shipment Details",
                 "ShipWorks is uploading shipment information.",
-                string.Format("Updating {0} orders...", context.SelectedKeys.Count()));
+                $"Updating {context.SelectedKeys.Count()} orders...");
 
             executor.ExecuteCompleted += (o, e) => { context.Complete(e.Issues, MenuCommandResult.Error); };
 
@@ -178,11 +200,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns></returns>
         public override OrderItemEntity CreateOrderItemInstance()
         {
-            LemonStandOrderItemEntity entity = new LemonStandOrderItemEntity();
-
-            entity.UrlName = "";
-            entity.ShortDescription = "";
-            entity.Category = "";
+            LemonStandOrderItemEntity entity = new LemonStandOrderItemEntity
+            {
+                UrlName = "",
+                ShortDescription = "",
+                Category = ""
+            };
 
             return entity;
         }
@@ -196,7 +219,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             if (container == null)
             {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
             ElementOutline outline = container.AddElement("LemonStand");
             outline.AddElement("LemonStandOrderID", () => order.Value.LemonStandOrderID);
@@ -254,23 +277,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public override List<FilterEntity> CreateInitialFilters()
         {
-            List<FilterEntity> filters = new List<FilterEntity>();
-
             List<string> statuses = (List<string>) GetOnlineStatusChoices();
 
-            foreach (string status in statuses)
-            {
-                if (status.ToLower().Equals("shipped"))
-                {
-                    filters.Add(CreateFilterShipped());
-                }
-                else
-                {
-                    filters.Add((CreateOrderStatusFilter(status)));
-                }
-            }
-
-            return filters;
+            return statuses.Select(status => status.ToLower().Equals("shipped") ? CreateFilterShipped() : (CreateOrderStatusFilter(status))).ToList();
         }
 
         /// <summary>
@@ -283,9 +292,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
 
             //      [Store] == this store
-            StoreCondition storeCondition = new StoreCondition();
-            storeCondition.Operator = EqualityOperator.Equals;
-            storeCondition.Value = Store.StoreID;
+            StoreCondition storeCondition = new StoreCondition
+            {
+                Operator = EqualityOperator.Equals,
+                Value = Store.StoreID
+            };
             definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
 
             // [AND]
@@ -294,13 +305,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             definition.RootContainer.SecondGroup = shippedDefinition;
 
             //      [Any]
-            shippedDefinition.FirstGroup = new ConditionGroup();
-            shippedDefinition.FirstGroup.JoinType = ConditionJoinType.Any;
+            shippedDefinition.FirstGroup = new ConditionGroup {JoinType = ConditionJoinType.Any};
 
             // LemonStand Shipping Status == Shipped
-            OnlineStatusCondition onlineStatus = new OnlineStatusCondition();
-            onlineStatus.Operator = StringOperator.Equals;
-            onlineStatus.TargetValue = "Shipped";
+            OnlineStatusCondition onlineStatus = new OnlineStatusCondition
+            {
+                Operator = StringOperator.Equals,
+                TargetValue = "Shipped"
+            };
             shippedDefinition.FirstGroup.Conditions.Add(onlineStatus);
 
             // [OR]
@@ -325,9 +337,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
 
             //      [Store] == this store
-            StoreCondition storeCondition = new StoreCondition();
-            storeCondition.Operator = EqualityOperator.Equals;
-            storeCondition.Value = Store.StoreID;
+            StoreCondition storeCondition = new StoreCondition
+            {
+                Operator = EqualityOperator.Equals,
+                Value = Store.StoreID
+            };
             definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
 
             // [AND]
@@ -336,12 +350,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             definition.RootContainer.SecondGroup = shippedDefinition;
 
             //      [Any]
-            shippedDefinition.FirstGroup = new ConditionGroup();
-            shippedDefinition.FirstGroup.JoinType = ConditionJoinType.Any;
+            shippedDefinition.FirstGroup = new ConditionGroup {JoinType = ConditionJoinType.Any};
 
-            OnlineStatusCondition onlineStatus = new OnlineStatusCondition();
-            onlineStatus.Operator = StringOperator.Equals;
-            onlineStatus.TargetValue = orderStatus;
+            OnlineStatusCondition onlineStatus = new OnlineStatusCondition
+            {
+                Operator = StringOperator.Equals,
+                TargetValue = orderStatus
+            };
             shippedDefinition.FirstGroup.Conditions.Add(onlineStatus);
 
             return new FilterEntity
@@ -360,9 +375,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             ConditionGroup group = new ConditionGroup();
 
-            LemonStandOrderIdCondition condition = new LemonStandOrderIdCondition();
-            condition.TargetValue = search;
-            condition.Operator = StringOperator.BeginsWith;
+            LemonStandOrderIdCondition condition = new LemonStandOrderIdCondition
+            {
+                TargetValue = search,
+                Operator = StringOperator.BeginsWith
+            };
             group.Conditions.Add(condition);
 
             return group;
@@ -377,6 +394,47 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             return statuses.Select(status => status.SelectToken("name").ToString()).ToList();
         }
 
-        public string ShippedOrderStatus { get; set; }
+        /// <summary>
+        /// Command handler for setting online order status
+        /// </summary>
+        private void OnSetOnlineStatus(MenuCommandExecutionContext context)
+        {
+            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
+               "Set Status",
+               "ShipWorks is setting the online status.",
+               "Updating order {0} of {1}...");
+
+            MenuCommand command = context.MenuCommand;
+            int statusCode = (int)command.Tag;
+
+            executor.ExecuteCompleted += (o, e) =>
+            {
+                context.Complete(e.Issues, MenuCommandResult.Error);
+            };
+            executor.ExecuteAsync(SetOnlineStatusCallback, context.SelectedKeys, statusCode);
+        }
+
+        /// <summary>
+        /// Worker thread method for updating online order status
+        /// </summary>
+        private void SetOnlineStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        {
+            log.Debug(Store.StoreName);
+
+            int statusCode = (int)userState;
+            try
+            {
+                LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater((LemonStandStoreEntity)Store);
+                updater.UpdateOrderStatus(orderID, statusCode);
+            }
+            catch (LemonStandException ex)
+            {
+                // log it
+                log.ErrorFormat("Error updating online status of orderID {0}: {1}", orderID, ex.Message);
+
+                // add the error to issues so we can react later
+                issueAdder.Add(orderID, ex);
+            }
+        }
     }
 }

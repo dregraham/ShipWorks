@@ -27,7 +27,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
         LemonStandStatusCodeProvider statusProvider;
 
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
         /// </summary>

@@ -122,9 +122,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
            
             LemonStandOrderEntity order = (LemonStandOrderEntity)shipment.Order;
-            
-            //order.OnlineStatus = "Shipped";
-            //order.OnlineStatus = ((LemonStandStoreType)StoreTypeManager.GetType(order.Store)).ShippedOrderStatus;
 
             if (!order.IsManual)
             {

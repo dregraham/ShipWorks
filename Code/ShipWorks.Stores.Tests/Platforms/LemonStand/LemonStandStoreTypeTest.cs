@@ -37,16 +37,6 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         }
 
         [Fact]
-        public void CreateOnlineUpdateInstanceCommands_OnlyReturnsOneCommand_WhenStoreIsInstantiated_Test()
-        {
-            testObject = new LemonStandStoreType(lemonStandStore.Object);
-
-            List<MenuCommand> commands = testObject.CreateOnlineUpdateInstanceCommands();
-
-            Assert.Equal(1, commands.Count);
-        }
-
-        [Fact]
         public void TypeCode_ThrowsInvalidOperationException_WhenGivenNonLemonStandTypeCode_Test()
         {
             lemonStandStore.Setup(s => s.TypeCode).Returns(69);

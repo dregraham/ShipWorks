@@ -18,10 +18,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         /// <summary>
         ///     This task is for Orders
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get { return EntityType.ShipmentEntity; }
-        }
+        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
 
         /// <summary>
         ///     Descriptive label which appears on the task editor
@@ -31,11 +28,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         /// <summary>
         ///     Instantiates the editor for the action
         /// </summary>
-        public override ActionTaskEditor CreateEditor()
-        {
-            return new BasicShipmentUploadTaskEditor();
-        }
-
+        public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
+        
         /// <summary>
         ///     Indicates if the task is supported for the specified store
         /// </summary>
