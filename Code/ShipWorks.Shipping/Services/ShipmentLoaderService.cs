@@ -52,6 +52,9 @@ namespace ShipWorks.Shipping.Services
             });
         }
 
+        /// <summary>
+        /// Used to let ShipWorks create an instance of this from ShipWorks.Core
+        /// </summary>
         public void InitializeForCurrentSession()
         {
             // Do nothing, just needed this to get an instance in memory on ShipWorks load.
