@@ -88,6 +88,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         }
 
         /// <summary>
+        /// Sets the PromoStatus of the UpsAccount to Declined
+        /// </summary>
+        public void Decline()
+        {
+            account.PromoStatus = (int)UpsPromoStatus.Declined;
+            upsAccountRepository.Save(account);
+        }
+
+        /// <summary>
         /// Gets the PromoAcceptanceTerms from UpsApiPromoClient
         /// </summary>
         /// <returns></returns>
