@@ -232,7 +232,14 @@ namespace ShipWorks.Core.Messaging
                     return false;
                 }
 
-                ((Action<IShipWorksMessage>)action)(message);
+                Action<IShipWorksMessage> interfaceAction = action as Action<IShipWorksMessage>;
+                if (interfaceAction != null)
+                {
+                    interfaceAction(message);
+                    return true;
+                }
+
+                ((Action<T>)action)(message);
                 return true;
             }
 
