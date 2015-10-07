@@ -3,6 +3,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using System;
 using ShipWorks.AddressValidation;
 using ShipWorks.Shipping.Editing.Rating;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ShipWorks.Shipping
 {
@@ -57,6 +59,11 @@ namespace ShipWorks.Shipping
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
         RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType);
+
+        /// <summary>
+        /// Get rates asynchronously
+        /// </summary>
+        Task<RateGroup> GetRatesAsync(ShipmentEntity shipment, ShipmentType shipmentType, CancellationToken token);
 
         /// <summary>
         /// Removes the specified shipment from the cache

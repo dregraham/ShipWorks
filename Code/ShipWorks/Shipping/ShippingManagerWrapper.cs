@@ -8,6 +8,8 @@ using ShipWorks.Data.Connection;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Editing.Rating;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ShipWorks.Shipping
 {
@@ -65,10 +67,14 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
-        {
-            return ShippingManager.GetRates(shipment, shipmentType);
-        }
+        public RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType) =>
+            ShippingManager.GetRates(shipment, shipmentType);
+
+        /// <summary>
+        /// Get rates for the given shipment using the appropriate ShipmentType
+        /// </summary>
+        public Task<RateGroup> GetRatesAsync(ShipmentEntity shipment, ShipmentType shipmentType, CancellationToken token) =>
+            TaskEx.Run(() => ShippingManager.GetRates(shipment, shipmentType), token);
 
         /// <summary>
         /// Removes the specified shipment from the cache

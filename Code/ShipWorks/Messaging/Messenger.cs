@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Interapptive.Shared.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
@@ -13,7 +15,7 @@ namespace ShipWorks.Core.Messaging
     {
         private readonly object lockObj = new object();
         private readonly Dictionary<Type, List<MessageHandler>> handlers = new Dictionary<Type, List<MessageHandler>>();
-        private readonly Subject<IShipWorksMessage> subject;
+        private readonly IObservable<IShipWorksMessage> subject;
 
         /// <summary>
         /// Create the static instance
@@ -28,7 +30,12 @@ namespace ShipWorks.Core.Messaging
         /// </summary>
         public Messenger()
         {
-            subject = new Subject<IShipWorksMessage>();
+            //subject = new Subject<IShipWorksMessage>();
+            subject = Observable.Create<IShipWorksMessage>(x =>
+            {
+                MessengerToken token = Handle<IShipWorksMessage>(this, x.OnNext);
+                return Disposable.Create(() => Remove(token));
+            });
         }
 
         /// <summary>
@@ -60,12 +67,22 @@ namespace ShipWorks.Core.Messaging
         /// </summary>
         public void Send<T>(T message) where T : IShipWorksMessage
         {
-            subject.OnNext(message);
-
             Type messageType = typeof (T);
 
+            List<MessageHandler> allHandlers = new List<MessageHandler>();
+
             List<MessageHandler> handlerList;
-            if (!handlers.TryGetValue(messageType, out handlerList))
+            if (handlers.TryGetValue(typeof(IShipWorksMessage), out handlerList))
+            {
+                allHandlers.AddRange(handlerList);
+            }
+
+            if (handlers.TryGetValue(messageType, out handlerList))
+            {
+                allHandlers.AddRange(handlerList);
+            }
+
+            if (allHandlers.None())
             {
                 return;
             }
@@ -73,7 +90,7 @@ namespace ShipWorks.Core.Messaging
             // Get a copy of the list to ensure that it doesn't change while we're iterating through it
             lock (lockObj)
             {
-                List<MessageHandler> invalidHandlers = handlerList.Where(handler => !handler.Handle(message)).ToList();
+                List<MessageHandler> invalidHandlers = allHandlers.Where(handler => !handler.Handle(message)).ToList();
 
                 foreach (MessageHandler handler in invalidHandlers)
                 {
@@ -208,14 +225,14 @@ namespace ShipWorks.Core.Messaging
             /// </summary>
             /// <returns>True if the message was handled, false if not.  If false, it means the handler was garbage collected
             /// and should be removed</returns>
-            public bool Handle<T>(T message)
+            public bool Handle<T>(T message) where T : IShipWorksMessage
             {
                 if (!handlerReference.IsAlive || handlerReference.Target == null)
                 {
                     return false;
                 }
 
-                ((Action<T>)action)(message);
+                ((Action<IShipWorksMessage>)action)(message);
                 return true;
             }
 

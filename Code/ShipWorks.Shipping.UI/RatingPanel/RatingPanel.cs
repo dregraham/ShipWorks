@@ -150,7 +150,10 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             base.OnLoad(e);
 
             // Force the rates to be refreshed when the rate control tells us
-            rateControl.ReloadRatesRequired += (sender, args) => viewModel.RefreshRates(true);
+            rateControl.ReloadRatesRequired += (sender, args) =>
+            {
+                viewModel.RefreshRates(true);
+            };
 
             rateControl.Initialize(new FootnoteParameters(() => viewModel.RefreshRates(false), () => viewModel.Store));
 
@@ -206,7 +209,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         public async Task ChangeContent(IGridSelection selection)
         {
             // Reset the error message and show the spinner
-            viewModel.ErrorMessage = string.Empty;
+            //viewModel.ErrorMessage = string.Empty;
             rateControl.ShowSpinner = true;
         }
 
@@ -216,7 +219,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         public Task ReloadContent()
         {
-            viewModel.RefreshRates(true);
+            //viewModel.RefreshRates(true);
             return TaskUtility.CompletedTask;
         }
 
@@ -225,7 +228,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         public Task UpdateContent()
         {
-            viewModel.RefreshRates(true);
+            //viewModel.RefreshRates(true);
             return TaskUtility.CompletedTask;
         }
 

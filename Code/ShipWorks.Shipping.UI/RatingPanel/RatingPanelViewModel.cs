@@ -17,6 +17,9 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data;
+using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
+using System.Threading;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -43,6 +46,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private RateResult selectedRateResult;
         private RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
         private string errorMessage = string.Empty;
+        private CancellationTokenSource cancelRatesToken;
 
         /// <summary>
         /// Constructor
@@ -60,8 +64,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             ActionLinkVisible = false;
             ShowAllRates = true;
 
-            uspsAccountConvertedToken = messenger.Handle<UspsAutomaticExpeditedChangedMessage>(this, HandleUspsAutomaticExpeditedChangedMessage);
-
+            uspsAccountConvertedToken = messenger.Handle<UspsAutomaticExpeditedChangedMessage>(this, x => HandleUspsAutomaticExpeditedChangedMessage(x));
             shipmentChangedMessageToken = messenger.Handle<ShipmentChangedMessage>(this, HandleShipmentChangedMessage);
         }
 
@@ -100,7 +103,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             get { return rateGroup; }
             set
             {
-                handler.Set(nameof(RateGroup), ref rateGroup, value); 
+                handler.Set(nameof(RateGroup), ref rateGroup, value);
             }
         }
 
@@ -156,6 +159,8 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
         public void RefreshRates(bool ignoreCache)
         {
+            CancellationToken token = ResetCancellationTokenSource();
+
             ShipmentEntity shipment = selectedShipment;
             if (shipment == null)
             {
@@ -168,7 +173,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 ErrorMessage = "The shipment has already been processed.";
                 return;
             }
-            
+
             ShipmentType shipmentType = shipmentTypeFactory.Get(shipment.ShipmentTypeCode);
 
             if (!shipmentType.SupportsGetRates)
@@ -182,7 +187,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             else
             {
                 // We need to fetch the rates from the provider
-                FetchRates(shipment, ignoreCache);
+                FetchRates(shipment, ignoreCache, token);
             }
         }
 
@@ -243,29 +248,33 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         private void HandleShipmentChangedMessage(ShipmentChangedMessage message)
         {
+            CancellationToken cancellationToken = ResetCancellationTokenSource();
+
             // Refresh the shipment data and then the rates
             ShipmentEntity shipment = message.Shipment;
 
-            FetchRates(shipment, false);
+            FetchRates(shipment, false, cancellationToken);
         }
 
         /// <summary>
         /// Called when the shipping settings for using USPS has changed. We need to refresh the
         /// shipment data/rates being displayed to accurately reflect that the shipment type has changed to USPS.
         /// </summary>
-        private void HandleUspsAutomaticExpeditedChangedMessage(UspsAutomaticExpeditedChangedMessage message)
+        private Task HandleUspsAutomaticExpeditedChangedMessage(UspsAutomaticExpeditedChangedMessage message)
         {
+            CancellationToken cancellationToken = ResetCancellationTokenSource();
+
             ShipmentEntity shipment = selectedShipment;
 
             if (shipment == null)
             {
-                return;
+                return TaskUtility.CompletedTask;
             }
 
             // Refresh the shipment data and then the rates
             shippingManager.RefreshShipment(shipment);
 
-            FetchRates(shipment, false);
+            return FetchRates(shipment, false, cancellationToken);
         }
 
         /// <summary>
@@ -273,121 +282,65 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
-        private void FetchRates(ShipmentEntity shipment, bool ignoreCache)
+        private async Task FetchRates(ShipmentEntity shipment, bool ignoreCache, CancellationToken cancellationToken)
         {
             ShowSpinner = true;
 
-            using (BackgroundWorker ratesWorker = new BackgroundWorker())
+            ShipmentRateGroup panelRateGroup = new ShipmentRateGroup(new RateGroup(new List<RateResult>()), shipment);
+
+            RateGroup rates = null;
+            ShipmentType shipmentType = null;
+
+            try
             {
-                ratesWorker.WorkerReportsProgress = false;
-                ratesWorker.WorkerSupportsCancellation = true;
-
-                // We're going to be going over the network to get rates from the provider, so show the spinner
-                // while rates are being fetched to give the user some indication that we're working
-                ShipmentRateGroup panelRateGroup = new ShipmentRateGroup(new RateGroup(new List<RateResult>()), shipment);
-
-                // Setup the worker with the work to perform asynchronously
-                ratesWorker.DoWork += (sender, args) =>
+                // Fetch the rates and add them to the cache
+                shipmentType = PrepareShipmentAndGetShipmentType(shipment);
+                if (!shipmentType.SupportsGetRates)
                 {
-                    RateGroup rates = null;
-                    ShipmentType shipmentType = null;
+                    throw new ShippingException("Rating not supported.");
+                }
 
-                    try
-                    {
-                        // Load all the child shipment data otherwise we'll get null reference
-                        // errors when getting rates; we're going to use the shipment in the
-                        // completed event handler to see if we should load the grid or not
-                        shippingManager.EnsureShipmentLoaded(shipment);
-                        args.Result = shipment;
-
-                        // Fetch the rates and add them to the cache
-                        shipmentType = PrepareShipmentAndGetShipmentType(shipment);
-                        if (!shipmentType.SupportsGetRates)
-                        {
-                            throw new ShippingException("Rating not supported.");
-                        }
-
-                        // We want to ignore the cache primarily when changes come from the rate control, since only the promotion
-                        // footer raises the event and we want to include Express1 rates in that case
-                        if (ignoreCache)
-                        {
-                            shippingManager.RemoveShipmentFromRatesCache(shipment);
-                        }
-
-                        rates = shippingManager.GetRates(shipment, shipmentType);
-                        panelRateGroup = new ShipmentRateGroup(rates, shipment);
-                    }
-                    catch (InvalidRateGroupShippingException ex)
-                    {
-                        panelRateGroup = new ShipmentRateGroup(ex.InvalidRates, shipment);
-
-                        // Add the shipment ID to the exception data, so we can determine whether
-                        // to update the rate control
-                        ex.Data.Add("shipmentID", shipment.ShipmentID);
-                        args.Result = ex;
-                    }
-                    catch (FedExAddressValidationException ex)
-                    {
-                        panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(new FedExShipmentType(), ex),
-                            shipment);
-
-                        // Add the shipment ID to the exception data, so we can determine whether
-                        // to update the rate control
-                        ex.Data.Add("shipmentID", shipment.ShipmentID);
-                        args.Result = ex;
-
-                    }
-                    catch (ShippingException ex)
-                    {
-                        // While the rate group should be cached, there was a situation where getting credentials from Tango caused an exception,
-                        // which happened before exception handling kicked in.  So calling GetRates again and relying on cache was causing a crash.
-                        if (rates == null)
-                        {
-                            rates = new RateGroup(new List<RateResult>());
-                            ShipmentType exceptionShipmentType = shipmentType ?? shipmentTypeFactory.Get(ShipmentTypeCode.None);
-                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(exceptionShipmentType, ex));
-                        }
-
-                        panelRateGroup = new ShipmentRateGroup(rates, shipment);
-                    }
-                };
-
-                // What to run when the work has been completed
-                ratesWorker.RunWorkerCompleted += (sender, args) =>
+                // We want to ignore the cache primarily when changes come from the rate control, since only the promotion
+                // footer raises the event and we want to include Express1 rates in that case
+                if (ignoreCache)
                 {
-                    ShippingException exception = args.Result as ShippingException;
-                    if (exception != null)
-                    {
-                        if (exception.Data.Contains("shipmentID") && (long)exception.Data["shipmentID"] == shipment.ShipmentID)
-                        {
-                            if (panelRateGroup.FootnoteFactories.OfType<ExceptionsRateFootnoteFactory>().Any())
-                            {
-                                RateGroup = panelRateGroup;
-                            }
-                            else
-                            {
-                                ErrorMessage = exception.Message;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
-                        if (ratedShipment != null && ratedShipment.ShipmentID == shipment.ShipmentID)
-                        {
-                            // Only update the rate control if the shipment is for the currently selected 
-                            // order to avoid the appearance of lag when a user is quickly clicking around
-                            // the rate grid
-                            RateGroup = panelRateGroup;
-                        }
-                    }
+                    shippingManager.RemoveShipmentFromRatesCache(shipment);
+                }
 
-                    ShowSpinner = false;
-                };
-
-                // Execute the work to get the rates
-                ratesWorker.RunWorkerAsync();
+                rates = await shippingManager.GetRatesAsync(shipment, shipmentType, cancellationToken);
+                panelRateGroup = new ShipmentRateGroup(rates, shipment);
             }
+            catch (InvalidRateGroupShippingException ex)
+            {
+                panelRateGroup = new ShipmentRateGroup(ex.InvalidRates, shipment);
+                ErrorMessage = ex.Message;
+            }
+            catch (FedExAddressValidationException ex)
+            {
+                panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(new FedExShipmentType(), ex), shipment);
+                ErrorMessage = ex.Message;
+            }
+            catch (ShippingException ex)
+            {
+                // While the rate group should be cached, there was a situation where getting credentials from Tango caused an exception,
+                // which happened before exception handling kicked in.  So calling GetRates again and relying on cache was causing a crash.
+                if (rates == null)
+                {
+                    rates = new RateGroup(new List<RateResult>());
+                    ShipmentType exceptionShipmentType = shipmentType ?? shipmentTypeFactory.Get(ShipmentTypeCode.None);
+                    rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(exceptionShipmentType, ex));
+                }
+
+                panelRateGroup = new ShipmentRateGroup(rates, shipment);
+            }
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
+            RateGroup = panelRateGroup;
+            ShowSpinner = false;
         }
 
         /// <summary>
@@ -428,7 +381,18 @@ namespace ShipWorks.Shipping.UI.RatingPanel
 
             return shipmentType;
         }
-        
+
+        /// <summary>
+        /// Cancel any existing actions and get a new token
+        /// </summary>
+        private CancellationToken ResetCancellationTokenSource()
+        {
+            cancelRatesToken?.Cancel();
+            cancelRatesToken?.Dispose();
+            cancelRatesToken = new CancellationTokenSource();
+            return cancelRatesToken.Token;
+        }
+
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
