@@ -17,6 +17,7 @@ using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using ShipWorks.Core.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.UI.MessageHandlers;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 {
@@ -63,12 +64,12 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() {shipmentEntity});
         }
 
-        private async Task<ShippingPanelViewModel> GetViewModelWithLoadedShipment(AutoMock mock)
+        private ShippingPanelViewModel GetViewModelWithLoadedShipment(AutoMock mock)
         {
             OrderSelectionChangedMessage message = new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded> {orderSelectionLoaded});
             
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-            await testObject.LoadOrder(message);
+            testObject.LoadOrder(message);
 
             // Reset mocks so that tests don't have to worry about calls made during loading
             mock.Mock<IShipmentTypeFactory>().ResetCalls();
@@ -79,11 +80,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 #pragma warning disable S125 // Sections of code should not be "commented out"
 
         //[Fact]
-        //public async void Save_UpdatesShipmentEntity_WhenDestinationCountryCodeChanged_Test()
+        //public void Save_UpdatesShipmentEntity_WhenDestinationCountryCodeChanged_Test()
         //{
         //    using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
         //    {
-        //        ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+        //        ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
         //        testObject.Destination.CountryCode = "XX";
         //        testObject.Save();
@@ -93,11 +94,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         //}
 
         //[Fact]
-        //public async void Save_UpdatesShipmentEntity_WhenOriginCountryCodeChanged_Test()
+        //public void Save_UpdatesShipmentEntity_WhenOriginCountryCodeChanged_Test()
         //{
         //    using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
         //    {
-        //        ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+        //        ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
         //        testObject.Origin.CountryCode = "XX";
         //        testObject.Save();
@@ -108,25 +109,25 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
         [Fact]
 #pragma warning restore S125 // Sections of code should not be "commented out"
-        public async void Save_DoesNotSendShipmentChangedMessage_WhenLoadingOrderTest()
+        public void Save_DoesNotSendShipmentChangedMessage_WhenLoadingOrderTest()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 OrderSelectionChangedMessage message = new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded> { orderSelectionLoaded });
-
+                
                 ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-                await testObject.LoadOrder(message);
+                testObject.LoadOrder(message);
 
                 mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>()), Times.Never);
             }
         }
 
         [Fact]
-        public async void Save_DoesNotSendShipmentChangedMessage_WhenNothingChanged_Test()
+        public void Save_DoesNotSendShipmentChangedMessage_WhenNothingChanged_Test()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
                 testObject.Save();
 
@@ -135,7 +136,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void StoreChangedMessage_ChangesShipmentOriginAddress_WhenOriginTypeIsStore_Test()
+        public void StoreChangedMessage_ChangesShipmentOriginAddress_WhenOriginTypeIsStore_Test()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -152,7 +153,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 mock.Mock<IShippingOriginManager>().Setup(s => s.GetOriginAddress(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()))
                     .Returns(newStoreAddress);
 
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 
                 messenger.Send(new StoreChangedMessage(null, storeEntity));
 
@@ -161,7 +162,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void StoreChangedMessage_DoesNotChangeShipmentOriginAddress_WhenOriginTypeIsOther_Test()
+        public void StoreChangedMessage_DoesNotChangeShipmentOriginAddress_WhenOriginTypeIsOther_Test()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -175,7 +176,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 mock.Mock<IShippingOriginManager>().Setup(s => s.GetOriginAddress(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()))
                     .Returns(newStoreAddress);
 
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.OriginAddressType = (long)ShipmentOriginSource.Other;
                 testObject.Origin.Street = "Foo";
 
@@ -186,7 +187,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void StoreChangedMessage_DoesNotChangeShipmentOriginAddress_WhenOriginTypeIsAccount_Test()
+        public void StoreChangedMessage_DoesNotChangeShipmentOriginAddress_WhenOriginTypeIsAccount_Test()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -201,7 +202,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                     .Setup(s => s.GetOriginAddress(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()))
                     .Returns(newStoreAddress);
 
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.OriginAddressType = (long)ShipmentOriginSource.Account;
                 testObject.Origin.Street = "Foo";
 
@@ -213,13 +214,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
 #pragma warning disable S125 // Sections of code should not be "commented out"
         //[Fact]
-        //public async void Save_DoesNotSendShipmentChangedMessage_WhenTotalWeightSetToSameValue_Test()
+        //public void Save_DoesNotSendShipmentChangedMessage_WhenTotalWeightSetToSameValue_Test()
         //{
         //    using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
         //    {
         //        shipmentEntity.TotalWeight = 2.93;
 
-        //        ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+        //        ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
         //        testObject.ShipmentViewModel.TotalWeight = 2.93;
         //        testObject.Save();
@@ -229,13 +230,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         //}
 
         //[Fact]
-        //public async void Save_SendsShipmentChangedMessage_WhenOriginRatingFieldsChanged_Test()
+        //public void Save_SendsShipmentChangedMessage_WhenOriginRatingFieldsChanged_Test()
         //{
         //    using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
         //    {
         //        mock.WithShipmentTypeFromFactory(type => type.SetupGet(x => x.RatingFields).CallBase());
 
-        //        ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+        //        ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
         //        testObject.Origin.CountryCode = "XX";
         //        testObject.Origin.Street = "XX";
@@ -247,13 +248,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         //}
 
         //[Fact]
-        //public async void Save_SendsShipmentChangedMessage_WhenDestinationRatingFieldsChanged_Test()
+        //public void Save_SendsShipmentChangedMessage_WhenDestinationRatingFieldsChanged_Test()
         //{
         //    using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
         //    {
         //        mock.WithShipmentTypeFromFactory(type => type.SetupGet(x => x.RatingFields).CallBase());
 
-        //        ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+        //        ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
         //        testObject.Destination.CountryCode = "XX";
         //        testObject.Destination.Street = "XX";
@@ -267,22 +268,22 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 #pragma warning restore S125 // Sections of code should not be "commented out"
 
         [Fact]
-        public async void SetShipmentType_UpdatesShipmentType_WhenChanged()
+        public void SetShipmentType_UpdatesShipmentType_WhenChanged()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = ShipmentTypeCode.OnTrac;
                 Assert.Equal(ShipmentTypeCode.OnTrac, testObject.ShipmentType);
             }
         }
 
         [Fact]
-        public async void SetShipmentType_CallsEnsureShipmentLoaded_WhenChanged()
+        public void SetShipmentType_CallsEnsureShipmentLoaded_WhenChanged()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = ShipmentTypeCode.OnTrac;
 
                 mock.Mock<IShippingManager>()
@@ -291,11 +292,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void SetShipmentType_DoesNotCallEnsureShipmentLoaded_WhenNotChanged()
+        public void SetShipmentType_DoesNotCallEnsureShipmentLoaded_WhenNotChanged()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = shipmentEntity.ShipmentTypeCode;
 
                 mock.Mock<IShippingManager>()
@@ -304,11 +305,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void SetShipmentType_GetsShipmentType_WhenChanged()
+        public void SetShipmentType_GetsShipmentType_WhenChanged()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = ShipmentTypeCode.FedEx;
 
                 mock.Mock<IShipmentTypeFactory>()
@@ -317,11 +318,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void SetShipmentType_DoesNotGetShipmentType_WhenNotChanged()
+        public void SetShipmentType_DoesNotGetShipmentType_WhenNotChanged()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = shipmentEntity.ShipmentTypeCode;
 
                 mock.Mock<IShipmentTypeFactory>()
@@ -332,7 +333,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async void SetShipmentType_UpdatesSupportsMultiplePackagesWithValueFromShipmentType_WhenChanged(bool supportsMultiplePackages)
+        public void SetShipmentType_UpdatesSupportsMultiplePackagesWithValueFromShipmentType_WhenChanged(bool supportsMultiplePackages)
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -342,7 +343,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 });
 
                 shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = ShipmentTypeCode.FedEx;
 
                 Assert.Equal(supportsMultiplePackages, testObject.SupportsMultiplePackages);
@@ -350,64 +351,65 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void Load_LoadedShipmentResult_IsSuccess_WhenMultipleShipmentsAreLoaded()
+        public void Load_LoadedShipmentResult_IsSuccess_WhenMultipleShipmentsAreLoaded()
         {
             orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity });
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
                 Assert.Equal(ShippingPanelLoadedShipmentResult.Success, testObject.LoadedShipmentResult);
             }
         }
 
         [Fact]
-        public async void Load_LoadedShipmentResult_IsMultiple_WhenMultipleShipmentsAreLoaded()
+        public void Load_LoadedShipmentResult_IsMultiple_WhenMultipleShipmentsAreLoaded()
         {
             orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity, shipmentEntity });
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
                 Assert.Equal(ShippingPanelLoadedShipmentResult.Multiple, testObject.LoadedShipmentResult);
             }
         }
 
         [Fact]
-        public async void Load_LoadedShipmentResult_IsNotCreated_WhenNoShipmentsAreLoaded()
+        public void Load_LoadedShipmentResult_IsNotCreated_WhenNoShipmentsAreLoaded()
         {
             orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { });
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
                 Assert.Equal(ShippingPanelLoadedShipmentResult.NotCreated, testObject.LoadedShipmentResult);
             }
         }
 
         [Fact]
-        public async void Load_LoadedShipmentResult_IsError_WhenNullList()
+        public void Load_LoadedShipmentResult_IsError_WhenNullList()
         {
             orderSelectionLoaded = new OrderSelectionLoaded(new Exception());
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
-
+                ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
+                testObject.LoadOrder(new OrderSelectionChangedMessage(this, new[] { new OrderSelectionLoaded(new Exception()) }));
+                
                 Assert.Equal(ShippingPanelLoadedShipmentResult.Error, testObject.LoadedShipmentResult);
             }
         }
 
         [Fact]
-        public async void Save_DoesNotCallSaveToDatabase_WhenShipmentIsProcessed()
+        public void Save_DoesNotCallSaveToDatabase_WhenShipmentIsProcessed()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 shipmentEntity.Processed = true;
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
                 testObject.SaveToDatabase();
 
@@ -431,13 +433,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void Save_DoesNotCallSaveToDatabase_WhenShipmentIsNull()
+        public void Save_DoesNotCallSaveToDatabase_WhenShipmentIsNull()
         {
             orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, null);
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
                 testObject.SaveToDatabase();
 
@@ -447,14 +449,14 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void Save_DoesNotUpdateShipment_WhenShipmentIsProcessed()
+        public void Save_DoesNotUpdateShipment_WhenShipmentIsProcessed()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
                 shipmentEntity.Processed = true;
 
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = ShipmentTypeCode.OnTrac;
 
                 testObject.SaveToDatabase();
@@ -464,13 +466,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void Save_UpdatesShipment_WhenShipmentIsNotProcessed()
+        public void Save_UpdatesShipment_WhenShipmentIsNotProcessed()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
 
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = ShipmentTypeCode.OnTrac;
 
                 testObject.SaveToDatabase();
@@ -480,11 +482,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public async void Save_CallsSaveToDatabase_WhenShipmentIsNotProcessed()
+        public void Save_CallsSaveToDatabase_WhenShipmentIsNotProcessed()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 
                 testObject.SaveToDatabase();
 

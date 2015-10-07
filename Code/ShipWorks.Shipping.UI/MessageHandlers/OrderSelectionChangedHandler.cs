@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
         /// <summary>
         /// Listen for the message
         /// </summary>
-        public void Listen(Action<OrderSelectionChangedMessage> action)
+        public virtual void Listen(Action<OrderSelectionChangedMessage> action)
         {
             subscription = messenger.AsObservable<OrderSelectionChangedMessage>()
                 .ObserveOn(observeOnScheduler)

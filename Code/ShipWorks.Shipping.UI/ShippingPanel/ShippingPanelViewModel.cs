@@ -69,7 +69,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Constructor
         /// </summary>
         public ShippingPanelViewModel(
-            OrderSelectionChangedHandler orderSelectionChangedHandler,
             IMessenger messenger,
             IShippingManager shippingManager,
             IShipmentTypeFactory shipmentTypeFactory,
@@ -101,7 +100,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin = addressViewModelFactory();
 
             PropertyChanging += OnPropertyChanging;
-            
+
             //TODO: This is just a test -- This should ultimately be wired up to the OrderSelectionChangedMessage
             //messenger.AsObservable<OrderSelectionChangedMessage>()
             //    .ObserveOn(DispatcherScheduler.Current)
@@ -113,8 +112,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             //ShipmentViewModel = shipmentViewModelFactory();
 
             //CreateLabelCommand = new RelayCommand(async () => await ProcessShipment());
-
-            orderSelectionChangedHandler.Listen(LoadOrder);
         }
 
         /// <summary>
@@ -168,7 +165,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 {
                     shipment.ShipmentTypeCode = ShipmentType;
                     shippingManager.EnsureShipmentLoaded(shipment);
-                    
+
                     Populate();
                 }
             }
@@ -299,45 +296,45 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 return;
             }
-            
+
             orderSelectionLoaded = orderMessage.LoadedOrderSelection.Single();
+            LoadedShipmentResult = GetLoadedShipmentResult(orderSelectionLoaded);
 
-            int shipments = orderSelectionLoaded.Shipments.HasMoreOrLessThanCount(1);
-            if (shipments != 0)
+            if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
             {
-                return;
-            }
-
-            SetLoadedShipmentResult();
-            shipment = orderSelectionLoaded.Shipments.Single();
-            if (shipment != null)
-            {
+                shipment = orderSelectionLoaded.Shipments.Single();
                 Populate();
                 AllowEditing = true;
             }
+            else
+            {
+                shipment = null;
+            }
         }
-		
+
         /// <summary>
         /// Sets the LoadedShipmentResult based on orderSelectionLoaded
         /// </summary>
-        private void SetLoadedShipmentResult()
+        private ShippingPanelLoadedShipmentResult GetLoadedShipmentResult(OrderSelectionLoaded loadedSelection)
         {
-            if (orderSelectionLoaded.Exception != null)
+            if (loadedSelection.Exception != null)
             {
-                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Error;
+                return ShippingPanelLoadedShipmentResult.Error;
             }
-            else if (orderSelectionLoaded.Shipments?.Count() > 1)
+
+            int moreOrLessThanOne = loadedSelection.Shipments.HasMoreOrLessThanCount(1);
+
+            if (moreOrLessThanOne > 0)
             {
-                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Multiple;
+                return ShippingPanelLoadedShipmentResult.Multiple;
             }
-            else if (orderSelectionLoaded.Shipments?.Count() == 1)
+
+            if (moreOrLessThanOne < 0)
             {
-                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Success;
+                return ShippingPanelLoadedShipmentResult.NotCreated;
             }
-            else if (orderSelectionLoaded.Shipments?.Any() == false)
-            {
-                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.NotCreated;
-            }
+
+            return ShippingPanelLoadedShipmentResult.Success;
         }
 
         internal void SelectionChanged() => AllowEditing = false;
@@ -366,7 +363,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             AllowEditing = !shipment.Processed;
 
             listenForRateCriteriaChanged = true;
-            
+
             Origin.SetAddressFromOrigin(OriginAddressType, shipment?.OrderID ?? 0, AccountId, ShipmentType);
 
             SupportsMultiplePackages = shipmentTypeFactory.Get(selectedShipmentType)?.SupportsMultiplePackages ?? false;
@@ -396,7 +393,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 return;
             }
-            
+
             ICarrierShipmentAdapter adapter = carrierShipmentAdapterFactory.Get(shipment);
             adapter.AccountId = AccountId;
 
