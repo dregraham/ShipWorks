@@ -10547,6 +10547,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.StoreURL);}
 		}
+		/// <summary>Creates a new LemonStandStoreEntity.StatusCodes field instance</summary>
+		public static EntityField2 StatusCodes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.StatusCodes);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity MagentoOrderEntity</summary>

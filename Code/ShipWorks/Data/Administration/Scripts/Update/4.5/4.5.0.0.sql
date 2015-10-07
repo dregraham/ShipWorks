@@ -39,6 +39,7 @@ CREATE TABLE [dbo].[LemonStandStore](
 	[StoreID] [bigint] NOT NULL,
 	[Token] [varchar](100) NOT NULL,
 	[StoreURL] [varchar](255) NOT NULL,
+	[StatusCodes] [xml] NULL,
  CONSTRAINT [PK_LemonStandStore] PRIMARY KEY CLUSTERED 
 (
 	[StoreID] ASC

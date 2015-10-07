@@ -1489,6 +1489,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("LemonStandStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)LemonStandStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("LemonStandStoreEntity", "Token", typeof(System.String), false, false, false, false,  (int)LemonStandStoreFieldIndex.Token, 100, 0, 0);
 			base.AddElementFieldInfo("LemonStandStoreEntity", "StoreURL", typeof(System.String), false, false, false, false,  (int)LemonStandStoreFieldIndex.StoreURL, 255, 0, 0);
+			base.AddElementFieldInfo("LemonStandStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)LemonStandStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
 		}
 		/// <summary>Inits MagentoOrderEntity's FieldInfo objects</summary>
 		private void InitMagentoOrderEntityInfos()
