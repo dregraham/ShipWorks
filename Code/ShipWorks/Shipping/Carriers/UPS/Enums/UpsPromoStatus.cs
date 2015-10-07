@@ -13,6 +13,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
         None = 0,
 
         [Description("Applied")]
-        Applied = 1
+        Applied = 1,
+
+        [Description("Declined")]
+        Declined = 2,
     }
 }
