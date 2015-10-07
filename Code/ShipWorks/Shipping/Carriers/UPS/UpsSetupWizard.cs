@@ -1233,7 +1233,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
                 else
                 {
-                    if (existingAccount.Checked)
+                    if (existingAccount.Checked || shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
                     {
                         promo.Decline();
                     }
