@@ -139,7 +139,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageOpenAccountPickupSchedule);
                 Pages.Remove(wizardPageOpenAccountPageBillingContactInfo);
                 Pages.Remove(wizardPageOpenAccountPickupLocation);
-                Pages.Remove(wizardPagePromo);
             }
 
             upsAccount.CountryCode = "US";
