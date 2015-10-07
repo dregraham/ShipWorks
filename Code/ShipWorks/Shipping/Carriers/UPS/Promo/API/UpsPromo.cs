@@ -94,7 +94,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         public PromoAcceptanceTerms GetAgreementTerms()
         {
             IUpsApiPromoClient client = promoClientFactory.CreatePromoClient(this);
-            return client.GetAgreement();
+            Terms = client.GetAgreement();
+            return Terms;
         }
 
         /// <summary>
