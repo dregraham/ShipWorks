@@ -1,0 +1,10 @@
+{
+  "GetAgreement": {
+    "ThrowsError": "false",
+	  "IsSuccessful": "true"
+  },
+  "Activate":{
+    "ThrowsError": "false",
+    "IsSuccessful": "true"
+  }
+}
