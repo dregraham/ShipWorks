@@ -13,6 +13,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <param name="response"></param>
         public PromoAcceptanceTerms(PromoDiscountAgreementResponse response)
         {
+            if (response.Response.ResponseStatus.Code != "1")
+            {
+                throw new UpsPromoException(
+                    $"PromoDiscountAgreementResponse status code is {response.Response.ResponseStatus.Code} " + 
+                    $"with a description of \"{response.Response.ResponseStatus.Description}.\"");
+            }
+
             URL = response.PromoAgreement.AgreementURL;
             Description = response.PromoDescription;
             AcceptanceCode = response.PromoAgreement.AcceptanceCode;
