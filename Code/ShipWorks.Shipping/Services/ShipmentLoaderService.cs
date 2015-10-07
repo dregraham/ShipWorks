@@ -38,9 +38,9 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Loads the order and sends a message that it has been loaded.
         /// </summary>
-        public void LoadAndNotify(IEnumerable<long> entityIDs)
+        public Task LoadAndNotify(IEnumerable<long> entityIDs)
         {
-            TaskEx.Run(() =>
+            return TaskEx.Run(() =>
             {
                 long entityID = entityIDs?.FirstOrDefault() ?? 0;
 

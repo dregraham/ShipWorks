@@ -36,8 +36,9 @@ namespace ShipWorks.Shipping.Tests.Loading
             shippingConfigurator.Setup(s => s.GetAddressValidation(It.IsAny<ShipmentEntity>())).Returns(true);
 
             shippingManager = new Mock<IShippingManager>();
-            shippingManager.Setup(s => s.GetShipments(It.IsAny<long>(), true)).Returns(new List<ShipmentEntity>() { shipmentEntity });
-            shippingManager.Setup(s => s.GetShipments(It.IsAny<long>(), false)).Returns(new List<ShipmentEntity>() { });
+            shippingManager.Setup(s => s.GetShipments(orderEntity.OrderID, true)).Returns(new List<ShipmentEntity>() { shipmentEntity });
+            shippingManager.Setup(s => s.GetShipments(orderEntity.OrderID, false)).Returns(new List<ShipmentEntity>() { });
+            shippingManager.Setup(s => s.GetShipments(0, It.IsAny<bool>())).Throws<Exception>();
 
             filterHelper = new Mock<IFilterHelper>();
             filterHelper.Setup(s => s.EnsureFiltersUpToDate(It.IsAny<TimeSpan>())).Returns(true);
@@ -153,6 +154,14 @@ namespace ShipWorks.Shipping.Tests.Loading
             OrderSelectionLoaded orderSelectionLoaded = testObject.Load(orderEntity.OrderID);
 
             filterHelper.Verify(s => s.EnsureFiltersUpToDate(It.IsAny<TimeSpan>()), Times.Once);
+        }
+
+        [Fact]
+        public void OrderSelectionLoaded_HasException_WhenInvalidOrderID_Test()
+        {
+            OrderSelectionLoaded orderSelectionLoaded = testObject.Load(0);
+
+            Assert.NotNull(orderSelectionLoaded.Exception);
         }
     }
 }

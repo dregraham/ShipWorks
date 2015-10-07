@@ -15,6 +15,6 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Loads the order and sends a message that it has been loaded.
         /// </summary>
-        void LoadAndNotify(IEnumerable<long>entityIDs);
+        Task LoadAndNotify(IEnumerable<long>entityIDs);
     }
 }
