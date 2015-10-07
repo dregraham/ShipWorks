@@ -812,7 +812,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 upsPickupLocationControl.SavePickupInfoToAccountAndRequest(openAccountRequest, upsAccount);
-                CreateAccount();
+                if (!CreateAccount())
+                {
+                    e.NextPage = CurrentPage;
+                }
             }
             catch (UpsOpenAccountException ex)
             {
@@ -929,8 +932,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <exception cref="System.NotImplementedException"></exception>
         private bool CreateAccount()
         {
-            UpsOpenAccountResponseDTO upsOpenAccountResponse = OpenUpsAccount(new UpsClerk(upsAccount));
+            if (!GetUpsAccessKey())
+            {
+                return false;
+            }
 
+            UpsOpenAccountResponseDTO upsOpenAccountResponse = OpenUpsAccount(new UpsClerk(upsAccount));
+            
             if (upsOpenAccountResponse == null)
             {
                 return false;
