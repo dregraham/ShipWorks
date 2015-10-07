@@ -32,25 +32,5 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
                     UpsAccessKey = "/zJ4i4UGkI+TqGUaylfws+lDqbv4EV2K" // Decrypted: 3CECFFF7FF6F3365
                 });
         }
-
-        [Fact]
-        public void CreatePromoClient_ReturnsUpsPromoApiClient_Test()
-        {
-            UpsPromo promo = new UpsPromo(1, upsSettingsRepository.Object, upsAccountRepository.Object, new Mock<IPromoClientFactory>().Object);
-
-            IUpsApiPromoClient client = testObject.CreatePromoClient(promo);
-
-            Assert.IsType<UpsApiPromoClient>(client);
-        }
-
-        [Fact]
-        public void CreatePromoClient_PromoApiClientIsNotNull_Test()
-        {
-            UpsPromo promo = new UpsPromo(1, upsSettingsRepository.Object, upsAccountRepository.Object, new Mock<IPromoClientFactory>().Object);
-
-            IUpsApiPromoClient client = testObject.CreatePromoClient(promo);
-
-            Assert.NotNull(client);
-        }
     }
 }

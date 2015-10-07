@@ -14,13 +14,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         private readonly IPromoClientFactory promoClientFactory;
         private readonly ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository;
         private readonly UpsAccountEntity account;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public UpsPromo(long accountId, ICarrierSettingsRepository upsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory) :
-            this(upsAccountRepository.GetAccount(accountId), upsSettingsRepository, upsAccountRepository, promoFactory)
-        { }
         
         /// <summary>
         /// Constructor
@@ -101,8 +94,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         public PromoAcceptanceTerms GetAgreementTerms()
         {
             IUpsApiPromoClient client = promoClientFactory.CreatePromoClient(this);
-            Terms = client.GetAgreement();
-            return Terms;
+            return client.GetAgreement();
         }
 
         /// <summary>

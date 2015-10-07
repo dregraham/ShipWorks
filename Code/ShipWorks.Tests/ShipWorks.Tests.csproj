@@ -433,6 +433,7 @@
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Response\UpsOpenAccountCreateUpsAccountEntityManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\UpsOpenAccountRequestFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\Api\PromoActiviationTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\Api\UpsPromoTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\Api\UpsPromoWebClientFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\Api\PromoAcceptanceTermsTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsCanadaServiceManagerTest.cs" />
