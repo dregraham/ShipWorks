@@ -26,6 +26,10 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand
             builder.RegisterType<LemonStandOnlineUpdateActionControl>()
                 .Keyed<OnlineUpdateActionControlBase>(StoreTypeCode.LemonStand)
                 .ExternallyOwned();
+
+            builder.RegisterType<LemonStandOrderUpdateTaskEditor>()
+                .Keyed<ActionTaskEditor>(StoreTypeCode.LemonStand)
+                .ExternallyOwned();
         }
     }
 }

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using log4net;
 using Newtonsoft.Json.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms.BigCommerce;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {

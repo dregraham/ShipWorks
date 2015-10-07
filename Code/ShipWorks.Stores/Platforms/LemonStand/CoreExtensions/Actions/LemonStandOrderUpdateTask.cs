@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
-using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.BigCommerce;
-using ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
 {
@@ -38,6 +32,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
             set { statusCode = value; }
         }
 
+        public override ActionTaskEditor CreateEditor()
+        {
+            return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<ActionTaskEditor>(StoreTypeCode.LemonStand, new TypedParameter(typeof(LemonStandOrderUpdateTask), this));
+        }
+
         /// <summary>
         /// How to label input selection for the task
         /// </summary>
@@ -47,12 +46,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         /// This task only operates on orders
         /// </summary>
         public override EntityType? InputEntityType => EntityType.OrderEntity;
-
-
-        public override ActionTaskEditor CreateEditor()
-        {
-            return new BasicShipmentUploadTaskEditor();
-        }
 
         /// <summary>
         /// Execute the status updates
@@ -78,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
                     updater.UpdateOrderStatus(orderID, statusCode, context.CommitWork);
                 }
             }
-            catch (BigCommerceException ex)
+            catch (LemonStandException ex)
             {
                 throw new ActionTaskRunException(ex.Message, ex);
             }

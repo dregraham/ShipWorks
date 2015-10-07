@@ -8,7 +8,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.BigCommerce;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {

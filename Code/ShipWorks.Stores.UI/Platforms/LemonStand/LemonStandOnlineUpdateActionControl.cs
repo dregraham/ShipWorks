@@ -4,8 +4,6 @@ using System.Linq;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.BigCommerce;
-using ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.LemonStand;
 using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions;
 

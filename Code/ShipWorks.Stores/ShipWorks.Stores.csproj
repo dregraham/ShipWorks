@@ -39,6 +39,10 @@
     <DelaySign>true</DelaySign>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Components\log4net.dll</HintPath>
     </Reference>
