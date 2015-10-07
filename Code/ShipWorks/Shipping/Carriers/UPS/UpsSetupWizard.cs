@@ -1204,6 +1204,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 promo.GetAgreementTerms();
                 promoDescription.Text = promo.Terms.Description;
                 promoControls.Top = promoDescription.Bottom + 5;
+
+                BackEnabled = false;
             }
             catch (UpsPromoException)
             {
