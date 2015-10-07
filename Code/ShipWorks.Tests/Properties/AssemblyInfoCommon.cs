@@ -20,5 +20,3 @@ using System;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
-// CLS Compliance
-[assembly: CLSCompliant(true)]
