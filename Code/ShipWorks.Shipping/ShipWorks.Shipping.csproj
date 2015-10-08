@@ -136,17 +136,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressViewModel.cs" />
+    <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExUtilityWrapper.cs" />
     <Compile Include="Carriers\FedEx\IFedExUtility.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapter.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\iParcel\iParcelShipmentAdapter.cs" />
     <Compile Include="Carriers\None\NoneShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\None\NoneShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\None\NoneShipmentType.cs" />
     <Compile Include="Carriers\None\NoneShipmentAdapter.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracShipmentAdapter.cs" />
     <Compile Include="Carriers\Other\OtherShipmentAdapter.cs" />
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />

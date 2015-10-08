@@ -142,10 +142,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageBuilderTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\iParcel\iParcelShipmentAdapterTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Other\OtherShipmentAdapterTest.cs" />
     <Compile Include="Carriers\None\NoneShipmentAdapterTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />
