@@ -1010,22 +1010,22 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             catch (UpsOpenAccountBusinessAddressException ex)
             {
-                if (CorrectBillingAddress(ex.SuggestedAddress, openAccountRequest.BillingAddress))
+                if (CorrectAddress(ex.SuggestedAddress, openAccountRequest.BillingAddress))
                 {
                     if (upsBillingContactInfoControl.SameAsPickup)
                     {
-                        CopyBillingToPickup(openAccountRequest.BillingAddress, openAccountRequest.PickupAddress);
+                        CopyAddress(openAccountRequest.BillingAddress, openAccountRequest.PickupAddress);
                     }
                     upsOpenAccountResponse = OpenUpsAccount(clerk);
                 }
             }
             catch (UpsOpenAccountPickupAddressException ex)
             {
-                if (CorrectPickupAddress(ex.SuggestedAddress, openAccountRequest.PickupAddress))
+                if (CorrectAddress(ex.SuggestedAddress, openAccountRequest.PickupAddress))
                 {
                     if (upsBillingContactInfoControl.SameAsPickup)
                     {
-                        CopyPickupToBilling(openAccountRequest.BillingAddress, openAccountRequest.PickupAddress);
+                        CopyAddress(openAccountRequest.BillingAddress, openAccountRequest.PickupAddress);
                     }
                     upsOpenAccountResponse = OpenUpsAccount(clerk);
                 }
@@ -1060,70 +1060,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Validates the pickup address.
-        /// </summary>
-        /// <param name="addressCandidate">The address candidate.</param>
-        /// <param name="pickupAddressType">Type of the pickup address.</param>
-        /// <returns></returns>
-        /// <exception cref="ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountInvalidAddressException"></exception>
-        private static bool CorrectPickupAddress(AddressKeyCandidateType addressCandidate, PickupAddressType pickupAddressType)
-        {
-            bool isAddressCorrected = false;
-
-            using (UpsOpenAccountInvalidAddressDlg invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
-            {
-                invalidAddressDlg.SetAddress(addressCandidate, "Pickup");
-                DialogResult result = invalidAddressDlg.ShowDialog();
-
-                if (result == DialogResult.OK)
-                {
-                    // Only use the suggestion if its not blank
-                    if (!addressCandidate.StreetAddress.IsNullOrWhiteSpace())
-                    {
-                        pickupAddressType.StreetAddress = addressCandidate.StreetAddress;
-                    }
-
-                    if (!addressCandidate.City.IsNullOrWhiteSpace())
-                    {
-                        pickupAddressType.City = addressCandidate.City;
-                    }
-
-                    if (!addressCandidate.State.IsNullOrWhiteSpace())
-                    {
-                        pickupAddressType.StateProvinceCode = addressCandidate.State;
-                    }
-
-                    if (!addressCandidate.PostalCode.IsNullOrWhiteSpace())
-                    {
-                        pickupAddressType.PostalCode = addressCandidate.PostalCode;
-                    }
-
-                    if (!addressCandidate.CountryCode.IsNullOrWhiteSpace())
-                    {
-                        pickupAddressType.CountryCode = addressCandidate.CountryCode;
-                    }
-
-                    isAddressCorrected = true;
-                }
-            }
-
-            return isAddressCorrected;
-        }
-
-        /// <summary>
         /// Validates the address.
         /// </summary>
         /// <param name="addressCandidate">The address candidate.</param>
-        /// <param name="billingAddressType">Type of the billing address.</param>
+        /// <param name="originalAddress">The original address</param>
         /// <returns></returns>
-        /// <exception cref="ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountInvalidAddressException">If address suggested and user cancels, throw</exception>
-        private static bool CorrectBillingAddress(AddressKeyCandidateType addressCandidate, BillingAddressType billingAddressType)
+        /// <exception cref="ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountInvalidAddressException"></exception>
+        private static bool CorrectAddress(AddressKeyCandidateType addressCandidate, IAddressType originalAddress)
         {
             bool isAddressCorrected = false;
 
             using (UpsOpenAccountInvalidAddressDlg invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
             {
-                invalidAddressDlg.SetAddress(addressCandidate, "Billing");
+                string type = originalAddress.GetType() == typeof (BillingAddressType) ? "Billing" : "Pickup";
+
+                invalidAddressDlg.SetAddress(addressCandidate, type);
                 DialogResult result = invalidAddressDlg.ShowDialog();
 
                 if (result == DialogResult.OK)
@@ -1131,27 +1082,27 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     // Only use the suggestion if its not blank
                     if (!addressCandidate.StreetAddress.IsNullOrWhiteSpace())
                     {
-                        billingAddressType.StreetAddress = addressCandidate.StreetAddress;
+                        originalAddress.StreetAddress = addressCandidate.StreetAddress;
                     }
 
                     if (!addressCandidate.City.IsNullOrWhiteSpace())
                     {
-                        billingAddressType.City = addressCandidate.City;
+                        originalAddress.City = addressCandidate.City;
                     }
 
                     if (!addressCandidate.State.IsNullOrWhiteSpace())
                     {
-                        billingAddressType.StateProvinceCode = addressCandidate.State;
+                        originalAddress.StateProvinceCode = addressCandidate.State;
                     }
 
                     if (!addressCandidate.PostalCode.IsNullOrWhiteSpace())
                     {
-                        billingAddressType.PostalCode = addressCandidate.PostalCode;
+                        originalAddress.PostalCode = addressCandidate.PostalCode;
                     }
 
                     if (!addressCandidate.CountryCode.IsNullOrWhiteSpace())
                     {
-                        billingAddressType.CountryCode = addressCandidate.CountryCode;
+                        originalAddress.CountryCode = addressCandidate.CountryCode;
                     }
 
                     isAddressCorrected = true;
@@ -1160,29 +1111,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             return isAddressCorrected;
         }
-
+        
         /// <summary>
         /// Copies the pickup address to the billing address
         /// </summary>
-        private static void CopyPickupToBilling(BillingAddressType billing, PickupAddressType pickup)
+        private static void CopyAddress(IAddressType copyFrom, IAddressType copyTo)
         {
-            billing.StreetAddress = pickup.StreetAddress;
-            billing.City = pickup.City;
-            billing.StateProvinceCode = pickup.StateProvinceCode;
-            billing.PostalCode = pickup.PostalCode;
-            billing.CountryCode = pickup.CountryCode;
-        }
-
-        /// <summary>
-        /// Copies the billing address to the pickup address
-        /// </summary>
-        private static void CopyBillingToPickup(BillingAddressType billing, PickupAddressType pickup)
-        {
-            pickup.StreetAddress = billing.StreetAddress;
-            pickup.City = billing.City;
-            pickup.StateProvinceCode = billing.StateProvinceCode;
-            pickup.PostalCode = billing.PostalCode;
-            pickup.CountryCode = billing.CountryCode;
+            copyTo.StreetAddress = copyFrom.StreetAddress;
+            copyTo.City = copyFrom.City;
+            copyTo.StateProvinceCode = copyFrom.StateProvinceCode;
+            copyTo.PostalCode = copyFrom.PostalCode;
+            copyTo.CountryCode = copyFrom.CountryCode;
         }
 
         /// <summary>
