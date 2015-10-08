@@ -21,7 +21,6 @@ using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
-using Quartz.Util;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
@@ -1096,7 +1095,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             using (UpsOpenAccountInvalidAddressDlg invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
             {
-                string type = originalAddress.GetType() == typeof (BillingAddressType) ? "Billing" : "Pickup";
+                string type = originalAddress.GetType() == typeof(BillingAddressType) ? "Billing" : "Pickup";
 
                 invalidAddressDlg.SetAddress(addressCandidate, type);
                 DialogResult result = invalidAddressDlg.ShowDialog();
@@ -1104,27 +1103,27 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 if (result == DialogResult.OK)
                 {
                     // Only use the suggestion if its not blank
-                    if (!addressCandidate.StreetAddress.IsNullOrWhiteSpace())
+                    if (!string.IsNullOrWhiteSpace(addressCandidate.StreetAddress))
                     {
                         originalAddress.StreetAddress = addressCandidate.StreetAddress;
                     }
 
-                    if (!addressCandidate.City.IsNullOrWhiteSpace())
+                    if (!string.IsNullOrWhiteSpace(addressCandidate.City))
                     {
                         originalAddress.City = addressCandidate.City;
                     }
 
-                    if (!addressCandidate.State.IsNullOrWhiteSpace())
+                    if (!string.IsNullOrWhiteSpace(addressCandidate.State))
                     {
                         originalAddress.StateProvinceCode = addressCandidate.State;
                     }
 
-                    if (!addressCandidate.PostalCode.IsNullOrWhiteSpace())
+                    if (!string.IsNullOrWhiteSpace(addressCandidate.PostalCode))
                     {
                         originalAddress.PostalCode = addressCandidate.PostalCode;
                     }
 
-                    if (!addressCandidate.CountryCode.IsNullOrWhiteSpace())
+                    if (!string.IsNullOrWhiteSpace(addressCandidate.CountryCode))
                     {
                         originalAddress.CountryCode = addressCandidate.CountryCode;
                     }
@@ -1135,7 +1134,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             return isAddressCorrected;
         }
-        
+
         /// <summary>
         /// Copies the pickup address to the billing address
         /// </summary>
