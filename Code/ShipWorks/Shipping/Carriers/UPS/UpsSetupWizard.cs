@@ -170,6 +170,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // If there are other shippers (added from the other UPS shipment type), then just show the list
                 else
                 {
+                    Pages.Remove(wizardPagePromo);
                     Pages.Remove(wizardPageLicense);
                     Pages.Remove(wizardPageAccount);
                     Pages.Remove(wizardPageRates);
@@ -503,6 +504,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private bool GetUpsAccessKey()
         {
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            if (!string.IsNullOrEmpty(settings.UpsAccessKey))
+            {
+                // Already been set
+                return true;
+            }
+
             // Create the client for connecting to the UPS server
             XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.AccessKey, null);
 
@@ -552,7 +560,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // Now we can get the Access License number
                 string accessKey = (string) upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseNumber)");
 
-                ShippingSettingsEntity settings = ShippingSettings.Fetch();
+                // Refetch in case it changed...
+                settings = ShippingSettings.Fetch();
                 settings.UpsAccessKey = SecureText.Encrypt(accessKey, "UPS");
 
                 ShippingSettings.Save(settings);
@@ -795,7 +804,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 upsBillingContactInfoControl.SaveToAccountAndRequest(openAccountRequest, upsAccount);
                 if (upsBillingContactInfoControl.SameAsPickup)
                 {
-                    e.NextPage = CreateAccount() ? wizardPagePromo : CurrentPage;
+                    if (!CreateAccount())
+                    {
+                        e.NextPage = CurrentPage;
+                    }
+                    else if (Pages.Contains(wizardPagePromo))
+                    {
+                        e.NextPage = wizardPagePromo;
+                    }
+                    else
+                    {
+                        e.NextPage = Pages[Pages.Count - 1]; // Go to last page
+                    }
                 }
             }
             catch (UpsOpenAccountException ex)
