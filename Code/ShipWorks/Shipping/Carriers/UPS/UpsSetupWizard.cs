@@ -1010,8 +1010,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             catch (UpsOpenAccountBusinessAddressException ex)
             {
+                // Fix the BillingAddress
                 if (CorrectAddress(ex.SuggestedAddress, openAccountRequest.BillingAddress))
                 {
+                    // If billing and pickup are the same copy from billing to pickup
                     if (upsBillingContactInfoControl.SameAsPickup)
                     {
                         CopyAddress(openAccountRequest.BillingAddress, openAccountRequest.PickupAddress);
@@ -1021,11 +1023,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             catch (UpsOpenAccountPickupAddressException ex)
             {
+                // Fix the PickupAddress
                 if (CorrectAddress(ex.SuggestedAddress, openAccountRequest.PickupAddress))
                 {
+                    // If billing and pickup are the same copy from pickup to billing
                     if (upsBillingContactInfoControl.SameAsPickup)
                     {
-                        CopyAddress(openAccountRequest.BillingAddress, openAccountRequest.PickupAddress);
+                        CopyAddress(openAccountRequest.PickupAddress, openAccountRequest.BillingAddress);
                     }
                     upsOpenAccountResponse = OpenUpsAccount(clerk);
                 }
