@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using ShipWorks.Core.Messaging;
@@ -492,6 +493,66 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
                 mock.Mock<IShippingManager>()
                     .Verify(x => x.SaveShipmentToDatabase(shipmentEntity, It.IsAny<ValidatedAddressScope>(), false));
+            }
+        }
+
+        [Fact]
+        public void Load_AccountVisibility_IsVisible_WhenShipmentType_IsUsps()
+        {
+            shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity });
+
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+                Assert.Equal(Visibility.Visible, testObject.AccountVisibility);
+            }
+        }
+
+        [Fact]
+        public void Load_AccountVisibility_IsCollapsed_WhenShipmentType_IsPostalWebTools()
+        {
+            shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.PostalWebTools;
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity });
+
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+                Assert.Equal(Visibility.Collapsed, testObject.AccountVisibility);
+            }
+        }
+
+        [Fact]
+        public void ShipmentTypeChanged_AccountVisibility_IsVisible_WhenShipmentType_IsUsps()
+        {
+            shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity });
+
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+                testObject.ShipmentType = ShipmentTypeCode.BestRate;
+                testObject.ShipmentType = ShipmentTypeCode.Usps;
+
+                Assert.Equal(Visibility.Visible, testObject.AccountVisibility);
+            }
+        }
+
+        [Fact]
+        public void ShipmentTypeChanged_AccountVisibility_IsCollapsed_WhenShipmentType_IsPostalWebTools()
+        {
+            shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.PostalWebTools;
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity });
+
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+                testObject.ShipmentType = ShipmentTypeCode.Usps;
+                testObject.ShipmentType = ShipmentTypeCode.BestRate;
+
+                Assert.Equal(Visibility.Collapsed, testObject.AccountVisibility);
             }
         }
     }
