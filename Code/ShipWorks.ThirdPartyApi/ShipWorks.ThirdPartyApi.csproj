@@ -173,6 +173,9 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\ProcessShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageAttribute.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageSoapExtension.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\BillingAddressType.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\IAddressType.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\PickupAddressType.cs" />
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
