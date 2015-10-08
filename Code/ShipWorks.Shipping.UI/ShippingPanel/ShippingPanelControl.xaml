@@ -95,14 +95,15 @@
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Margin="0,0,8,0">From</TextBlock>
+                                <TextBlock Visibility="{Binding AccountVisibility}" Foreground="Gray">Account: </TextBlock>
                                 <TextBlock Visibility="{Binding Visibility, ElementName=AccountDropDown}"
-                                           Text="{Binding Text, ElementName=AccountDropDown, StringFormat='Account {0}, '}"
+                                           Text="{Binding Text, ElementName=AccountDropDown, StringFormat=' {0}, '}"
                                            Foreground="Gray"/>
                                 <TextBlock Text="{Binding Text, ElementName=OriginDropDown}"
                                            Foreground="Gray"/>
                             </StackPanel>
                         </Expander.Header>
-                        <StackPanel>
+                        <StackPanel Margin="0,3,0,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="75" />
@@ -112,24 +113,22 @@
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-
                                 <TextBlock Grid.Row="0" Grid.Column="0"
-                                           Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}"
-                                           Style="{StaticResource GridLabel}">Account:</TextBlock>
+                                        Visibility="{Binding AccountVisibility}"
+                                        Style="{StaticResource GridLabel}">Account:</TextBlock>
                                 <ComboBox Grid.Row="0" Grid.Column="1"
-                                          x:Name="AccountDropDown"
-                                          Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}"
-                                          props:UpdateWhenMessageReceived.MessageType="{x:Type messages:ShippingAccountsChangedMessage}"
-                                          SelectedValue="{Binding AccountId}"
-                                          DisplayMemberPath="Description"
-                                          SelectedValuePath="AccountId">
+                                        x:Name="AccountDropDown"
+                                        Visibility="{Binding AccountVisibility}"
+                                        props:UpdateWhenMessageReceived.MessageType="{x:Type messages:ShippingAccountsChangedMessage}"
+                                        SelectedValue="{Binding AccountId}"
+                                        DisplayMemberPath="Description"
+                                        SelectedValuePath="AccountId">
                                     <ComboBox.ItemsSource>
                                         <Binding Path="ShipmentType"
-                                                 Converter="{StaticResource ShipmentTypeToAccountsConverter}"
-                                                 Mode="OneWay" />
+                                                Converter="{StaticResource ShipmentTypeToAccountsConverter}"
+                                                Mode="OneWay" />
                                     </ComboBox.ItemsSource>
                                 </ComboBox>
-                                
                                 <TextBlock Grid.Row="1" Grid.Column="0"
                                            Style="{StaticResource GridLabel}">Origin:</TextBlock>
                                 <ComboBox Grid.Row="1" Grid.Column="1"

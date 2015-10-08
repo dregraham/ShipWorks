@@ -17,6 +17,7 @@ using ShipWorks.Stores;
 using ShipWorks.Shipping.Services;
 using System.Reactive.Concurrency;
 using System.Threading;
+using System.Windows;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.UI.MessageHandlers;
@@ -48,6 +49,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IShipmentProcessor shipmentProcessor;
         private readonly Func<Owned<ICarrierConfigurationShipmentRefresher>> shipmentRefresherFactory;
         private ShipmentEntity shipment;
+        private Visibility accountVisibility;
+        private IShipmentTypeManager shipmentTypeManager;
 
         private bool listenForRateCriteriaChanged = false;
         private bool forceRateCriteriaChanged = false;
@@ -84,6 +87,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.shippingManager = shippingManager;
             this.shipmentTypeFactory = shipmentTypeFactory;
             this.messenger = messenger;
+
+            shipmentTypeManager = new ShipmentTypeManagerWrapper();
+
             listenForRateCriteriaChanged = false;
 
             messenger.Handle<ShipmentChangedMessage>(this, OnShipmentChanged);
@@ -273,6 +279,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public ShipmentViewModel ShipmentViewModel { get; set; }
 
         /// <summary>
+        /// True if the carrier supports accounts, false otherwise.
+        /// </summary>
+        public Visibility AccountVisibility
+        {
+            get { return accountVisibility; }
+            set { handler.Set(nameof(AccountVisibility), ref accountVisibility, value); }
+        }
+
+        /// <summary>
         /// Save the current shipment to the database
         /// </summary>
         public void SaveToDatabase()
@@ -348,6 +363,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             // Set the shipment type without going back through the shipment changed machinery
             selectedShipmentType = shipment.ShipmentTypeCode;
+
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
 
             RequestedShippingMethod = orderSelectionLoaded.Order.RequestedShipping;
@@ -361,6 +377,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.Load(shipment.OriginPerson);
 
             AllowEditing = !shipment.Processed;
+
+            AccountVisibility = shipmentTypeManager.ShipmentTypesSupportingAccounts.Contains(shipment.ShipmentTypeCode) ? Visibility.Visible : Visibility.Collapsed; 
 
             listenForRateCriteriaChanged = true;
 
