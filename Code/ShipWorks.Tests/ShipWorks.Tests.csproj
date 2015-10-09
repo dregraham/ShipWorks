@@ -436,6 +436,7 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\Api\UpsPromoTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\Api\UpsPromoWebClientFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\Api\PromoAcceptanceTermsTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnoteTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsCanadaServiceManagerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsPuertoRicoServiceManagerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\UpsServiceManagerFactoryTest.cs" />

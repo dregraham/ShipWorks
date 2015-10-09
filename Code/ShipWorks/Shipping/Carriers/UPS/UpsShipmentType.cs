@@ -44,6 +44,7 @@ using log4net;
 using log4net.Repository.Hierarchy;
 using System.Globalization;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.UI.Wizard;
 
@@ -993,8 +994,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
-
+                
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
+                
+                // Create promofootnote factory
+                UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(UpsApiCore.GetUpsAccount(shipment, AccountRepository), SettingsRepository, AccountRepository);
+
+                // Add factgory too the final group rate group
+                finalGroup.AddFootnoteFactory(promoFootNoteFactory);
 
                 return finalGroup;
             }
