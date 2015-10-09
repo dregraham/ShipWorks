@@ -11,7 +11,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 {
     public class UpsShipmentTypeTest
     {
-        UpsShipmentType testObject = new UpsOltShipmentType();
+        UpsShipmentType testObject = (UpsShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
 
 
         [Fact]

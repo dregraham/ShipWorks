@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
                 shipment.Ups = new UpsShipmentEntity();
             }
 
-            UpsOltShipmentType shipmentType = new UpsOltShipmentType();
+            UpsOltShipmentType shipmentType = (UpsOltShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
 
             shipmentType.ConfigureNewShipment(shipment);
 
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
 
         protected override decimal RateShipment(ShipmentEntity shipment)
         {
-            UpsOltShipmentType UpsShipmentType = new UpsOltShipmentType();
+            UpsOltShipmentType UpsShipmentType = (UpsOltShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
             RateGroup response = UpsShipmentType.GetRates(shipment);
 
             return response.Rates.Sum(x => x.Amount);
@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
                 shipment.Ups.Subclassification = (int)UpsPostalSubclassificationType.Irregular;
             }
 
-            UpsOltShipmentType upsOltShipmentType = new UpsOltShipmentType();
+            UpsOltShipmentType upsOltShipmentType = (UpsOltShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
             upsOltShipmentType.ProcessShipment(shipment);
 
             shipment.ContentWeight = shipment.Ups.Packages.Sum(p => p.DimsWeight);

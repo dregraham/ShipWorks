@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate
         {
             get
             {
-                long? accountID = new WorldShipShipmentType().GetPrimaryProfile().Ups.UpsAccountID;
+                long? accountID = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsWorldShip).GetPrimaryProfile().Ups.UpsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.UpsWorldShip, accountID);
             }
         }

@@ -103,26 +103,26 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         public void IsMailInnovationsAvailable_ReturnsTrue_OltEnabled_Test()
         {
             settings.UpsMailInnovationsEnabled = true;
-            Assert.Equal(true, testObject.IsMailInnovationsAvailable(new UpsOltShipmentType()));
+            Assert.Equal(true, testObject.IsMailInnovationsAvailable(ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools)));
         }
 
         [Fact]
         public void IsMailInnovationsAvailable_ReturnsFalse_OltDisabled_Test()
         {
-            Assert.Equal(false, testObject.IsMailInnovationsAvailable(new UpsOltShipmentType()));            
+            Assert.Equal(false, testObject.IsMailInnovationsAvailable(ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools)));            
         }
 
         [Fact]
         public void IsMailInnovationsAvailable_ReturnsTrue_WorldShipEnabled_Test()
         {
             settings.WorldShipMailInnovationsEnabled = true;
-            Assert.Equal(true, testObject.IsMailInnovationsAvailable(new WorldShipShipmentType()));
+            Assert.Equal(true, testObject.IsMailInnovationsAvailable(ShipmentTypeManager.GetType(ShipmentTypeCode.UpsWorldShip)));
         }
 
         [Fact]
         public void IsMailInnovationsAvailable_ReturnsFalse_WorldShipDisabled_Test()
         {
-            Assert.Equal(false, testObject.IsMailInnovationsAvailable(new WorldShipShipmentType()));
+            Assert.Equal(false, testObject.IsMailInnovationsAvailable(ShipmentTypeManager.GetType(ShipmentTypeCode.UpsWorldShip)));
         }
 
     }

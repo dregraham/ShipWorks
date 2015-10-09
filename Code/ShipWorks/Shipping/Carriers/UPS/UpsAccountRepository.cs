@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             get
             {
-                long? accountID = new UpsOltShipmentType().GetPrimaryProfile().Ups.UpsAccountID;
+                long? accountID = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools).GetPrimaryProfile().Ups.UpsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.UpsOnLineTools, accountID);
             }
         }

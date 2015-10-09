@@ -18,6 +18,7 @@ using System.Drawing;
 using ShipWorks.Data.Model;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
@@ -26,6 +27,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
     /// </summary>
     public class UpsOltShipmentType : UpsShipmentType
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpsOltShipmentType"/> class.
+        /// </summary>
+        public UpsOltShipmentType(IUpsPromoPolicy promoPolicy) : base(promoPolicy)
+        {
+        }
+
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>

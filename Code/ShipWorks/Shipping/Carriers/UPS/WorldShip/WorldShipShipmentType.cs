@@ -14,6 +14,7 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
@@ -23,6 +24,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     /// </summary>
     public class WorldShipShipmentType : UpsShipmentType
     {
+        public WorldShipShipmentType(IUpsPromoPolicy promoPolicy) : base(promoPolicy)
+        { }
+
         /// <summary>
         /// Indicates if the shipment service type supports return shipments
         /// </summary>

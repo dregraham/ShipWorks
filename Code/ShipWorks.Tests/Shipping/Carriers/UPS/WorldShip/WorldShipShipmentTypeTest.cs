@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
@@ -16,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
 
         public WorldShipShipmentTypeTest()
         {
-            testObject = new WorldShipShipmentType();
+            testObject = (WorldShipShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsWorldShip);
         }
 
         [Fact]

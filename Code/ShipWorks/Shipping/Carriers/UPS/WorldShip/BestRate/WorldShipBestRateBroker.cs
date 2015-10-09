@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate
         /// Creates a broker with the default shipment type and account repository
         /// </summary>
         /// <remarks>This is designed to be used within ShipWorks</remarks>
-        public WorldShipBestRateBroker() : base(new WorldShipShipmentType(), new WorldShipAccountRepository(), new UpsSettingsRepository())
+        public WorldShipBestRateBroker() : base(ShipmentTypeManager.GetType(ShipmentTypeCode.UpsWorldShip), new WorldShipAccountRepository(), new UpsSettingsRepository())
         {
         }
 

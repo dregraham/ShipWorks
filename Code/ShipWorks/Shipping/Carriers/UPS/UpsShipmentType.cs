@@ -44,6 +44,7 @@ using log4net;
 using log4net.Repository.Hierarchy;
 using System.Globalization;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -53,8 +54,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public abstract class UpsShipmentType : ShipmentType
     {
-        protected UpsShipmentType()
+        protected readonly IUpsPromoPolicy promoPolicy;
+
+        protected UpsShipmentType(IUpsPromoPolicy promoPolicy)
         {
+            this.promoPolicy = promoPolicy;
+
             // Use the "live" versions of the repository by default
             AccountRepository = new UpsAccountRepository();
             SettingsRepository = new UpsSettingsRepository();

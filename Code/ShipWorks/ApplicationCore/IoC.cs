@@ -5,6 +5,8 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using System.Reflection;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 
 namespace ShipWorks.ApplicationCore
 {

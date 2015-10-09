@@ -114,12 +114,6 @@ namespace ShipWorks.Shipping
         {
             switch (typeCode)
             {
-                case ShipmentTypeCode.UpsOnLineTools:
-                    return new UpsOltShipmentType();
-
-                case ShipmentTypeCode.UpsWorldShip:
-                    return new WorldShipShipmentType();
-
                 case ShipmentTypeCode.FedEx:
                     return new FedExShipmentType();
 
