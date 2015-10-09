@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
 
             rateControl.RateSelected += OnRateControlRateSelected;
 
-            orderSelectionChangedHandler.Listen(viewModel.RefreshSelectedShipments);
+            //orderSelectionChangedHandler.Listen(viewModel.RefreshSelectedShipments);
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             // Reset the error message and show the spinner
             //viewModel.ErrorMessage = string.Empty;
-            rateControl.ShowSpinner = true;
+            //rateControl.ShowSpinner = true;
         }
 
         /// <summary>

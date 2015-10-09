@@ -138,10 +138,7 @@
                                           props:UpdateWhenMessageReceived.MessageType="{x:Type messages:OriginAddressChangedMessage}"
                                           x:Name="OriginDropDown">
                                     <ComboBox.ItemsSource>
-                                        <MultiBinding Converter="{StaticResource OriginAddressList}">
-                                            <Binding Path="ShipmentType" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
-                                            <Binding Path="InitialOriginAddressType" Mode="OneWay" />
-                                        </MultiBinding>
+                                        <Binding Path="ShipmentType" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
                                     </ComboBox.ItemsSource>
                                     <ComboBox.SelectedValue>
                                         <Binding Path="OriginAddressType" />

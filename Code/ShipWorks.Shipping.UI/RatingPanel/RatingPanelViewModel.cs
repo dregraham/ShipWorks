@@ -20,6 +20,7 @@ using ShipWorks.Data;
 using System.Threading.Tasks;
 using ShipWorks.Core.Common.Threading;
 using System.Threading;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -66,6 +67,11 @@ namespace ShipWorks.Shipping.UI.RatingPanel
 
             uspsAccountConvertedToken = messenger.Handle<UspsAutomaticExpeditedChangedMessage>(this, x => HandleUspsAutomaticExpeditedChangedMessage(x));
             shipmentChangedMessageToken = messenger.Handle<ShipmentChangedMessage>(this, HandleShipmentChangedMessage);
+
+            messenger.AsObservable<OrderSelectionChangingMessage>()
+                .Select(x => messenger.AsObservable<OrderSelectionChangedMessage>())
+                .Switch()
+                .Subscribe(RefreshSelectedShipments);
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
 {
     public enum RelativeIndex
     {
+        None,
         First,
         Last
     }
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// Message type dependency property
         /// </summary>
         public static readonly DependencyProperty RelativeIndexProperty = DependencyProperty.RegisterAttached("RelativeIndex", typeof(RelativeIndex),
-                typeof(SelectDefaultWhenValueIsNull), new PropertyMetadata(OnRelativeIndexChanged));
+                typeof(SelectDefaultWhenValueIsNull), new PropertyMetadata(RelativeIndex.None, OnRelativeIndexChanged));
 
         /// <summary>
         /// Handle when the specific message type changes
@@ -35,11 +36,11 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
                 return;
             }
 
-            if (e.NewValue != null && e.OldValue == null)
+            if ((RelativeIndex)e.OldValue == RelativeIndex.None)
             {
                 control.SelectionChanged += OnControlSelectionChanged;
             }
-            else if (e.NewValue == null && e.OldValue != null)
+            else if ((RelativeIndex)e.NewValue == RelativeIndex.None)
             {
                 control.SelectionChanged -= OnControlSelectionChanged;
             }
