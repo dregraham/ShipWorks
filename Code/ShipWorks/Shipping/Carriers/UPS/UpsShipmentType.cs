@@ -997,17 +997,30 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
                 
-                // Create promofootnote factory
-                UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(UpsApiCore.GetUpsAccount(shipment, AccountRepository), SettingsRepository, AccountRepository);
-
-                // Add factgory too the final group rate group
-                finalGroup.AddFootnoteFactory(promoFootNoteFactory);
+                AddFootnoteFactory(finalGroup, UpsApiCore.GetUpsAccount(shipment, AccountRepository););
 
                 return finalGroup;
             }
             catch (InvalidPackageDimensionsException ex)
             {
                 throw new UpsException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Adds the FootnoteFactory to the rategroup
+        /// </summary>
+        /// <param name="rateGroup"></param>
+        /// <param name="account"></param>
+        private void AddFootnoteFactory(RateGroup rateGroup, UpsAccountEntity account)
+        {
+            if (promoPolicy.IsEligible(account))
+            {
+                // Create promofootnote factory
+                UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(account, SettingsRepository, AccountRepository);
+
+                // Add factgory too the final group rate group
+                rateGroup.AddFootnoteFactory(promoFootNoteFactory);
             }
         }
 
