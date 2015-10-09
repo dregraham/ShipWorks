@@ -119,11 +119,12 @@
                                 <ComboBox Grid.Row="0" Grid.Column="1"
                                         x:Name="AccountDropDown"
                                         Visibility="{Binding AccountVisibility}"
+                                        props:SelectDefaultWhenValueIsNull.RelativeIndex="First"
                                         props:UpdateWhenMessageReceived.MessageType="{x:Type messages:ShippingAccountsChangedMessage}"
                                         SelectedValue="{Binding AccountId}"
                                         DisplayMemberPath="Description"
                                         SelectedValuePath="AccountId">
-                                    <ComboBox.ItemsSource>
+                                    <ComboBox.ItemsSource> 
                                         <Binding Path="ShipmentType"
                                                 Converter="{StaticResource ShipmentTypeToAccountsConverter}"
                                                 Mode="OneWay" />
@@ -138,7 +139,7 @@
                                           props:UpdateWhenMessageReceived.MessageType="{x:Type messages:OriginAddressChangedMessage}"
                                           x:Name="OriginDropDown">
                                     <ComboBox.ItemsSource>
-                                        <Binding Path="ShipmentType" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
+                                            <Binding Path="ShipmentType" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
                                     </ComboBox.ItemsSource>
                                     <ComboBox.SelectedValue>
                                         <Binding Path="OriginAddressType" />
