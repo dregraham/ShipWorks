@@ -996,8 +996,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
                 
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
-                
-                AddFootnoteFactory(finalGroup, UpsApiCore.GetUpsAccount(shipment, AccountRepository););
+
+                AddFootnoteFactory(finalGroup, UpsApiCore.GetUpsAccount(shipment, AccountRepository));
 
                 return finalGroup;
             }
