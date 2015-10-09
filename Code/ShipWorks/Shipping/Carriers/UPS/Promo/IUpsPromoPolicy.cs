@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
@@ -10,11 +11,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Determines whether the specified account is eligible for the promo
         /// </summary>
-        bool IsEligible(UpsAccountEntity account);
+        bool IsEligible(IUpsPromo promo);
 
         /// <summary>
         /// Adds account to RemindLater so it will not be eligible for the duration of the reminder interval
         /// </summary>
-        void RemindLater(UpsAccountEntity account);
+        void RemindLater(IUpsPromo promo);
     }
 }

@@ -7,7 +7,8 @@ using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Shipping.Carriers.UPS.Promo;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
+using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.Promo
@@ -24,34 +25,34 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.Promo
         [Fact]
         public void IsEligible_ReturnsTrue_WhenStatusIsNoneAndNotRemindedLater()
         {
-            Assert.True(testObject.IsEligible(GetAccount(UpsPromoStatus.None)));
+            Assert.True(testObject.IsEligible(GetMockedPromo(UpsPromoStatus.None)));
         }
 
         [Fact]
         public void IsEligible_ReturnsFalse_WhenStatusIsDeclined()
         {
-            Assert.False(testObject.IsEligible(GetAccount(UpsPromoStatus.Declined)));
+            Assert.False(testObject.IsEligible(GetMockedPromo(UpsPromoStatus.Declined)));
         }
 
         [Fact]
         public void IsEligible_ReturnsFalse_WhenStatusIsApplied()
         {
-            Assert.False(testObject.IsEligible(GetAccount(UpsPromoStatus.Applied)));
+            Assert.False(testObject.IsEligible(GetMockedPromo(UpsPromoStatus.Applied)));
         }
 
         [Fact]
         public void IsEligible_ReturnsFalse_WhenStatusIsNoneAndRemindMeLasterJustCalled()
         {
-            UpsAccountEntity account = GetAccount(UpsPromoStatus.None);
-            testObject.RemindLater(account);
+            IUpsPromo promo = GetMockedPromo(UpsPromoStatus.None);
+            testObject.RemindLater(promo);
 
-            Assert.False(testObject.IsEligible(account));
+            Assert.False(testObject.IsEligible(promo));
         }
 
         [Fact]
         public void IsEligible_ReturnsTrue_WhenStatusIsNoneAndReminderMoreThanEightHoursAgo()
         {
-            UpsAccountEntity account = GetAccount(UpsPromoStatus.None);
+            IUpsPromo promo = GetMockedPromo(UpsPromoStatus.None);
 
             Mock<IDateTimeProvider> dateTimeProvider = new Mock<IDateTimeProvider>();
 
@@ -60,20 +61,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.Promo
             dateTimeProvider.Setup(x => x.Now)
                 .Returns(DateTime.Now);
 
-            testObject.RemindLater(account);
+            testObject.RemindLater(promo);
 
             dateTimeProvider.Setup(x => x.Now)
                 .Returns(DateTime.Now.AddHours(8).AddMinutes(1));
 
-            Assert.True(testObject.IsEligible(account));
+            Assert.True(testObject.IsEligible(promo));
         }
 
-        private static UpsAccountEntity GetAccount(UpsPromoStatus promoStatus)
+        private static IUpsPromo GetMockedPromo(UpsPromoStatus promoStatus)
         {
-            return new UpsAccountEntity(42)
-            {
-                PromoStatus = (byte) promoStatus
-            };
+            Mock<IUpsPromo> promo = new Mock<IUpsPromo>();
+
+            promo.Setup(p => p.AccountId)
+                .Returns(42);
+
+            promo.Setup(p => p.GetStatus())
+                .Returns(promoStatus);
+
+            return promo.Object;
         }
 
     }

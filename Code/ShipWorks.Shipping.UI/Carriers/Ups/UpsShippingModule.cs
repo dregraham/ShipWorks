@@ -1,8 +1,13 @@
 ﻿using Autofac;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Api;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
+using ShipWorks.Shipping.Carriers.UPS.Promo.API;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Shipping.Carriers.UPS.Promo;
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups
 {
@@ -21,9 +26,27 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.UpsWorldShip);
 
+            builder.RegisterType<UpsAccountRepository>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsSettingsRepository>()
+                .AsSelf()
+                .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.UpsOnLineTools)
+                .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.UpsWorldShip);
+
+            builder.RegisterType<UpsPromoWebClientFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterType<UpsPromoPolicy>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<UpsPromoFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsPromoFootnoteFootnoteFactoryFactory>()
+                .AsImplementedInterfaces();
         }
     }
 }

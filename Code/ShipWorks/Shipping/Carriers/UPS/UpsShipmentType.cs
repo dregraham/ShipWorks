@@ -55,12 +55,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public abstract class UpsShipmentType : ShipmentType
     {
-        protected readonly IUpsPromoPolicy promoPolicy;
+        private readonly IUpsPromoFootnoteFactoryFactory promoFootnoteFactoryFactory;
 
-        protected UpsShipmentType(IUpsPromoPolicy promoPolicy)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected UpsShipmentType(IUpsPromoFootnoteFactoryFactory promoFootnoteFactoryFactory)
         {
-            this.promoPolicy = promoPolicy;
-
+            this.promoFootnoteFactoryFactory = promoFootnoteFactoryFactory;
             // Use the "live" versions of the repository by default
             AccountRepository = new UpsAccountRepository();
             SettingsRepository = new UpsSettingsRepository();
@@ -997,30 +999,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
 
-                AddFootnoteFactory(finalGroup, UpsApiCore.GetUpsAccount(shipment, AccountRepository));
+                UpsPromoFootnoteFactory upsPromoFootnoteFactory = promoFootnoteFactoryFactory.Get(shipment);
+                if (upsPromoFootnoteFactory != null)
+                {
+                    finalGroup.AddFootnoteFactory(upsPromoFootnoteFactory);
+                }
 
                 return finalGroup;
             }
             catch (InvalidPackageDimensionsException ex)
             {
                 throw new UpsException(ex.Message, ex);
-            }
-        }
-
-        /// <summary>
-        /// Adds the FootnoteFactory to the rategroup
-        /// </summary>
-        /// <param name="rateGroup"></param>
-        /// <param name="account"></param>
-        private void AddFootnoteFactory(RateGroup rateGroup, UpsAccountEntity account)
-        {
-            if (promoPolicy.IsEligible(account))
-            {
-                // Create promofootnote factory
-                UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(account, SettingsRepository, AccountRepository);
-
-                // Add factgory too the final group rate group
-                rateGroup.AddFootnoteFactory(promoFootNoteFactory);
             }
         }
 

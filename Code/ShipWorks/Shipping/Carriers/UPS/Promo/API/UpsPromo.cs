@@ -9,17 +9,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
     /// <summary>
     /// Used to activate UPS Promo on UPS accounts
     /// </summary>
-    public class UpsPromo
+    public class UpsPromo : IUpsPromo
     {
         private readonly IPromoClientFactory promoClientFactory;
         private readonly ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository;
         private readonly UpsAccountEntity account;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
         public UpsPromo(UpsAccountEntity upsAccount, ICarrierSettingsRepository upsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory)
         {
+            AccountId = upsAccount.UpsAccountID;
             AccountNumber = upsAccount.AccountNumber;
             Username = upsAccount.UserID;
             Password = upsAccount.Password;
@@ -54,6 +55,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// The Country Code of the UPS Account
         /// </summary>
         public string CountryCode { get; }
+        
+        /// <summary>
+        /// Gets the account identifier.
+        /// </summary>
+        public long AccountId { get; }
 
         /// <summary>
         /// The Promo Terms and Conditions

@@ -1039,12 +1039,15 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\Promo\API\IPromoClientFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\IUpsApiPromoClient.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\API\IUpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\PromoAcceptanceTerms.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\PromoActivation.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsPromoException.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsPromoWebClientFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsApiPromoClient.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsPromo.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromoFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromoFootnoteFactoryFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnote.cs">
       <SubType>UserControl</SubType>
     </Compile>

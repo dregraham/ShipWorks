@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     /// </summary>
     public class WorldShipShipmentType : UpsShipmentType
     {
-        public WorldShipShipmentType(IUpsPromoPolicy promoPolicy) : base(promoPolicy)
+        public WorldShipShipmentType(IUpsPromoFootnoteFactoryFactory upsPromoFootnoteFactoryFactory) : base(upsPromoFootnoteFactoryFactory)
         { }
 
         /// <summary>

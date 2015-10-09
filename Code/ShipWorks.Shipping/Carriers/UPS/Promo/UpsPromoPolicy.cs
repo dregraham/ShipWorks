@@ -3,12 +3,12 @@ using System.Collections.Concurrent;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.Promo;
+using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 
-namespace ShipWorks.Shipping.Shipping.Carriers.UPS.Promo
+namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
     /// <summary>
-    /// Static Class - 
+    /// PromoPolicy class
     /// </summary>
     public class UpsPromoPolicy : IUpsPromoPolicy
     {
@@ -28,19 +28,19 @@ namespace ShipWorks.Shipping.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Determines whether the specified account is eligible.
         /// </summary>
-        public bool IsEligible(UpsAccountEntity account)
+        public bool IsEligible(IUpsPromo promo)
         {
             // If PromoStatus isn't none, they already made a choice. Return False
-            if ((UpsPromoStatus) account.PromoStatus != UpsPromoStatus.None)
+            if (promo.GetStatus() != UpsPromoStatus.None)
             {
                 return false;
             }
 
             // PromoStatus is none, check the remindLaterAccounts to see if they are to be reminded later
-            if (remindLaterAccounts.ContainsKey(account.UpsAccountID))
+            if (remindLaterAccounts.ContainsKey(promo.AccountId))
             {
                 // RemindLater has been called for the account. If past the interval return true, else false
-                return remindLaterAccounts[account.UpsAccountID].AddHours(reminderInterval) < dateTimeProvider.Now;
+                return remindLaterAccounts[promo.AccountId].AddHours(reminderInterval) < dateTimeProvider.Now;
             }
 
             // PromoStatus is none and they havn't asked to be reminded later.
@@ -50,15 +50,14 @@ namespace ShipWorks.Shipping.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Adds account to RemindLater so it will not be eligible for the duration of the reminder interval
         /// </summary>
-        public void RemindLater(UpsAccountEntity account)
+        public void RemindLater(IUpsPromo promo)
         {
             var now = dateTimeProvider.Now;
 
             remindLaterAccounts.AddOrUpdate(
-                account.UpsAccountID,
+                promo.AccountId,
                 now,
                 (key, oldvalue) => now);
         }
-
     }
 }
