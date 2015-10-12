@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Stores.Platforms.LemonStand
+﻿namespace ShipWorks.Stores.UI.Platforms.LemonStand
 {
     partial class LemonStandAccountSettingsControl
     {

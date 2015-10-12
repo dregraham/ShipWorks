@@ -5472,6 +5472,13 @@ GO
 ALTER TABLE [dbo].[LemonStandOrder] ADD CONSTRAINT [PK_LemonStandOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
 
+ALTER TABLE [dbo].[LemonStandOrder]  WITH CHECK ADD  CONSTRAINT [FK_LemonStandOrder_Order] FOREIGN KEY([OrderID])
+REFERENCES [dbo].[Order] ([OrderID])
+GO
+
+ALTER TABLE [dbo].[LemonStandOrder] CHECK CONSTRAINT [FK_LemonStandOrder_Order]
+GO
+
 PRINT N'Creating [dbo].[LemonStandOrderItem]'
 GO
 CREATE TABLE [dbo].[LemonStandOrderItem]
