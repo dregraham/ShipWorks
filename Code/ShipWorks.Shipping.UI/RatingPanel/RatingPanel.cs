@@ -137,7 +137,15 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 if (!Equals(showSpinner, value))
                 {
                     showSpinner = value;
-                    rateControl.InvokeIfRequired(() => rateControl.ShowSpinner = showSpinner, true);
+                    rateControl.InvokeIfRequired(() =>
+                    {
+                        if (showSpinner)
+                        {
+                            rateControl.ClearRates(string.Empty);
+                        }
+
+                        rateControl.ShowSpinner = showSpinner;
+                    }, true);
                 }
             }
         }
@@ -158,8 +166,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             rateControl.Initialize(new FootnoteParameters(() => viewModel.RefreshRates(false), () => viewModel.Store));
 
             rateControl.RateSelected += OnRateControlRateSelected;
-
-            //orderSelectionChangedHandler.Listen(viewModel.RefreshSelectedShipments);
         }
 
         /// <summary>
@@ -206,11 +212,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// <summary>
         /// Change the order selected
         /// </summary>
-        public async Task ChangeContent(IGridSelection selection)
+        public Task ChangeContent(IGridSelection selection)
         {
-            // Reset the error message and show the spinner
-            //viewModel.ErrorMessage = string.Empty;
-            //rateControl.ShowSpinner = true;
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>
@@ -219,7 +223,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         public Task ReloadContent()
         {
-            //viewModel.RefreshRates(true);
             return TaskUtility.CompletedTask;
         }
 
@@ -228,7 +231,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         public Task UpdateContent()
         {
-            //viewModel.RefreshRates(true);
             return TaskUtility.CompletedTask;
         }
 

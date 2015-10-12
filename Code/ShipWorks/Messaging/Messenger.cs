@@ -1,10 +1,9 @@
-﻿using Interapptive.Shared.Collections;
-using System;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 
 namespace ShipWorks.Core.Messaging
 {
@@ -14,8 +13,8 @@ namespace ShipWorks.Core.Messaging
     public class Messenger : IMessenger
     {
         private readonly object lockObj = new object();
-        private readonly Dictionary<Type, List<MessageHandler>> handlers = new Dictionary<Type, List<MessageHandler>>();
-        private readonly IObservable<IShipWorksMessage> subject;
+        private readonly ConcurrentDictionary<Type, List<MessageHandler>> handlers = new ConcurrentDictionary<Type, List<MessageHandler>>();
+        private readonly IObservable<IShipWorksMessage> messageStream;
 
         /// <summary>
         /// Create the static instance
@@ -30,18 +29,17 @@ namespace ShipWorks.Core.Messaging
         /// </summary>
         public Messenger()
         {
-            //subject = new Subject<IShipWorksMessage>();
-            subject = Observable.Create<IShipWorksMessage>(x =>
+            messageStream = Observable.Create<IShipWorksMessage>(x =>
             {
                 MessengerToken token = Handle<IShipWorksMessage>(this, x.OnNext);
                 return Disposable.Create(() => Remove(token));
-            });
+            }).Publish().RefCount();
         }
 
         /// <summary>
         /// Get the current messenger instance
         /// </summary>
-        public static Messenger Current { get; private set; }
+        public static IMessenger Current { get; private set; }
 
         /// <summary>
         /// Handle a message using the specified handler
@@ -60,43 +58,38 @@ namespace ShipWorks.Core.Messaging
         /// <summary>
         /// Get a reference to the messenger as an observable stream of messages
         /// </summary>
-        public IObservable<T> AsObservable<T>() where T : IShipWorksMessage => subject.OfType<T>();
+        public IObservable<T> AsObservable<T>() where T : IShipWorksMessage => messageStream.OfType<T>();
 
         /// <summary>
         /// Send a message to any listeners
         /// </summary>
         public void Send<T>(T message) where T : IShipWorksMessage
         {
-            Type messageType = typeof (T);
+            List<MessageHandler> handlersToRemove = new List<MessageHandler>();
+            handlersToRemove.AddRange(SendInternal(typeof(IShipWorksMessage), message));
+            handlersToRemove.AddRange(SendInternal(typeof(T), message));
 
-            List<MessageHandler> allHandlers = new List<MessageHandler>();
-
-            List<MessageHandler> handlerList;
-            if (handlers.TryGetValue(typeof(IShipWorksMessage), out handlerList))
+            if (handlersToRemove.Any())
             {
-                allHandlers.AddRange(handlerList);
-            }
-
-            if (handlers.TryGetValue(messageType, out handlerList))
-            {
-                allHandlers.AddRange(handlerList);
-            }
-
-            if (allHandlers.None())
-            {
-                return;
-            }
-
-            // Get a copy of the list to ensure that it doesn't change while we're iterating through it
-            lock (lockObj)
-            {
-                List<MessageHandler> invalidHandlers = allHandlers.Where(handler => !handler.Handle(message)).ToList();
-
-                foreach (MessageHandler handler in invalidHandlers)
+                lock (lockObj)
                 {
-                    handlerList.Remove(handler);
-                }   
+                    Remove(handlersToRemove);
+                }
             }
+        }
+
+        /// <summary>
+        /// Send messages to a specific type
+        /// </summary>
+        private IEnumerable<MessageHandler> SendInternal<T>(Type messageType, T message) where T : IShipWorksMessage
+        {
+            List<MessageHandler> handlerList;
+            if (!handlers.TryGetValue(messageType, out handlerList))
+            {
+                return Enumerable.Empty<MessageHandler>();
+            }
+
+            return handlerList.Where(handler => !handler.Handle(message)).ToList();
         }
 
         /// <summary>
@@ -112,34 +105,6 @@ namespace ShipWorks.Core.Messaging
         }
 
         /// <summary>
-        /// Remove all handlers of a message type for a given owner
-        /// </summary>
-        public void Remove(object owner, Type messageType)
-        {
-            lock (lockObj)
-            {
-                List<MessageHandler> handlerList;
-                if (!handlers.TryGetValue(messageType, out handlerList))
-                {
-                    return;
-                }
-                
-                Remove(handlerList.Where(x => x.IsOwnedBy(owner)).ToList());
-            }
-        }
-
-        /// <summary>
-        /// Remove a handler based on the handler method
-        /// </summary>
-        public void Remove<T>(object owner, Action<T> handler)
-        {
-            lock (lockObj)
-            {
-                Remove(handlers.SelectMany(x => x.Value).Where(x => x.ReferencesHandler(owner, handler)).ToList());
-            }
-        }
-
-        /// <summary>
         /// Handle a message using the specified handler
         /// </summary>
         /// <returns>Token that can be used to remove the handler later</returns>
@@ -147,19 +112,15 @@ namespace ShipWorks.Core.Messaging
         {
             lock (lockObj)
             {
-                if (!handlers.ContainsKey(messageType))
-                {
-                    handlers.Add(messageType, new List<MessageHandler>());
-                }
-
-                MessageHandler messageHandler = handlers[messageType].FirstOrDefault(x => x.ReferencesHandler(owner, handler));
+                List<MessageHandler> handlerList = handlers.GetOrAdd(messageType, x => new List<MessageHandler>());
+                MessageHandler messageHandler = handlerList.FirstOrDefault(x => x.ReferencesHandler(owner, handler));
 
                 // If this handler isn't already registered, go ahead and register it
                 if (messageHandler == null)
                 {
                     messageHandler = new MessageHandler(messageType, owner, handler, new MessengerToken());
 
-                    handlers[messageType].Add(messageHandler);
+                    handlerList.Add(messageHandler);
                 }
 
                 Cleanup();
@@ -173,19 +134,30 @@ namespace ShipWorks.Core.Messaging
         /// </summary>
         private void Remove(IEnumerable<MessageHandler> handlersToRemove)
         {
+            // Kill the handlers immediately in case we can't remove them right away
             foreach (MessageHandler handler in handlersToRemove)
             {
-                handlers[handler.MessageType].Remove(handler);  
+                handler.Kill();
+            }
+
+            foreach (var handler in handlersToRemove.GroupBy(x => x.MessageType))
+            {
+                List<MessageHandler> handlerList = null;
+                if (handlers.TryGetValue(handler.Key, out handlerList))
+                {
+                    // We're replacing the list of handlers instead of modifying it so that any current enumeration doesn't break
+                    // If the original list has changed since we retrieved it, we'll just rely on the next cleanup cycle to deal
+                    // with it.  The handlers have already been killed.
+                    handlers.TryUpdate(handler.Key, handlerList.Except(handlersToRemove).ToList(), handlerList);
+                }
             }
         }
 
         /// <summary>
         /// Clean up any dead references
         /// </summary>
-        private void Cleanup()
-        {
+        private void Cleanup() =>
             Remove(handlers.SelectMany(x => x.Value).Where(x => !x.IsAlive).ToList());
-        }
 
         /// <summary>
         /// Associate a handler with a type to make removal easier
@@ -227,7 +199,7 @@ namespace ShipWorks.Core.Messaging
             /// and should be removed</returns>
             public bool Handle<T>(T message) where T : IShipWorksMessage
             {
-                if (!handlerReference.IsAlive || handlerReference.Target == null)
+                if (!IsAlive)
                 {
                     return false;
                 }
@@ -236,10 +208,12 @@ namespace ShipWorks.Core.Messaging
                 if (interfaceAction != null)
                 {
                     interfaceAction(message);
-                    return true;
+                }
+                else
+                {
+                    ((Action<T>)action)(message);
                 }
 
-                ((Action<T>)action)(message);
                 return true;
             }
 
@@ -248,7 +222,7 @@ namespace ShipWorks.Core.Messaging
             /// </summary>
             public bool ReferencesHandler(object owner, object handler)
             {
-                return ReferenceEquals(handlerReference.Target, owner) && 
+                return ReferenceEquals(handlerReference.Target, owner) &&
                     ReferenceEquals(action, handler);
             }
 
@@ -258,15 +232,14 @@ namespace ShipWorks.Core.Messaging
             public bool IsOwnedBy(object owner) => ReferenceEquals(handlerReference.Target, owner);
 
             /// <summary>
+            /// Kill the handler so that it can be cleaned up
+            /// </summary>
+            internal void Kill() => handlerReference.Target = null;
+
+            /// <summary>
             /// Gets whether the handler's owner is still alive
             /// </summary>
-            public bool IsAlive
-            {
-                get
-                {
-                    return handlerReference != null && handlerReference.Target != null;
-                }
-            }
+            public bool IsAlive => handlerReference.Target != null;
         }
     }
 }

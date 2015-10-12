@@ -1,9 +1,6 @@
-﻿using ShipWorks.Core.Messaging;
-using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 namespace ShipWorks.Shipping.UI.AttachedProperties
 {

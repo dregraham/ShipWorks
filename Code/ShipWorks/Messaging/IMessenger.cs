@@ -32,10 +32,5 @@ namespace ShipWorks.Core.Messaging
         /// </summary>
         /// <param name="token"></param>
         void Remove(MessengerToken token);
-
-        /// <summary>
-        /// Remove all handlers of a message type for a given owner
-        /// </summary>
-        void Remove(object owner, Type messageType);
     }
 }

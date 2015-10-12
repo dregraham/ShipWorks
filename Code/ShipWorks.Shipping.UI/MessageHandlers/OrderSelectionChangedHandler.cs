@@ -1,7 +1,7 @@
 ﻿using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using System;
-using System.Reactive.Concurrency;
+using System.Linq;
 using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.UI.MessageHandlers
@@ -9,50 +9,35 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
     /// <summary>
     /// Handle wiring up the order selection changed handler
     /// </summary>
-    public class OrderSelectionChangedHandler : IDisposable
+    public class OrderSelectionChangedHandler
     {
         private readonly IMessenger messenger;
-        private readonly IScheduler subscribeOnScheduler;
-        private readonly IScheduler observeOnScheduler;
-        IDisposable subscription;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="messenger"></param>
-        public OrderSelectionChangedHandler(IMessenger messenger) : this(messenger, TaskPoolScheduler.Default, DispatcherScheduler.Current)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public OrderSelectionChangedHandler(IMessenger messenger, IScheduler subscribeOn, IScheduler observeOn)
+        public OrderSelectionChangedHandler(IMessenger messenger)
         {
             this.messenger = messenger;
-            subscribeOnScheduler = subscribeOn;
-            observeOnScheduler = observeOn;
         }
 
         /// <summary>
-        /// Listen for the message
+        /// Gets a stream of order changing messages
         /// </summary>
-        public virtual void Listen(Action<OrderSelectionChangedMessage> action)
-        {
-            subscription = messenger.AsObservable<OrderSelectionChangedMessage>()
-                .ObserveOn(observeOnScheduler)
-                .SubscribeOn(subscribeOnScheduler)
-                .Subscribe(action);
-        }
+        /// <returns></returns>
+        public IObservable<OrderSelectionChangingMessage> OrderChangingStream() =>
+            messenger.AsObservable<OrderSelectionChangingMessage>();
 
         /// <summary>
-        /// Dispose
+        /// Gets a stream of the most recent order changed messages
         /// </summary>
-        public void Dispose()
+        public IObservable<OrderSelectionChangedMessage> ShipmentLoadedStream()
         {
-            subscription?.Dispose();
-            subscription = null;
+            return messenger.AsObservable<OrderSelectionChangingMessage>()
+                .CombineLatest(messenger.AsObservable<OrderSelectionChangedMessage>(), (x, y) => new { OrderIdList = x.OrderIdList, Message = y })
+                .Where(x => x.OrderIdList.Intersect(x.Message.LoadedOrderSelection.Select(y => y.Order?.OrderID ?? -1)).Any())
+                .Select(x => x.Message);
         }
     }
 }

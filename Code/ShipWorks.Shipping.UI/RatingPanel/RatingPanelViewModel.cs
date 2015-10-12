@@ -21,6 +21,9 @@ using System.Threading.Tasks;
 using ShipWorks.Core.Common.Threading;
 using System.Threading;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using System.Reactive.Disposables;
+using System.Reactive.Concurrency;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -69,8 +72,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             shipmentChangedMessageToken = messenger.Handle<ShipmentChangedMessage>(this, HandleShipmentChangedMessage);
 
             messenger.AsObservable<OrderSelectionChangingMessage>()
-                .Select(x => messenger.AsObservable<OrderSelectionChangedMessage>())
-                .Switch()
+                .CombineLatest(messenger.AsObservable<OrderSelectionChangedMessage>(), (x, y) => new { OrderIdList = x.OrderIdList, Message = y })
+                .Where(x => x.OrderIdList.Intersect(x.Message.LoadedOrderSelection.Select(y => y.Order.OrderID)).Any())
+                .Select(x => x.Message)
                 .Subscribe(RefreshSelectedShipments);
         }
 
@@ -290,31 +294,32 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
         private async Task FetchRates(ShipmentEntity shipment, bool ignoreCache, CancellationToken cancellationToken)
         {
-            ShowSpinner = true;
-
             ShipmentRateGroup panelRateGroup = new ShipmentRateGroup(new RateGroup(new List<RateResult>()), shipment);
 
             RateGroup rates = null;
             ShipmentType shipmentType = null;
-
             try
             {
-                // Fetch the rates and add them to the cache
-                shipmentType = PrepareShipmentAndGetShipmentType(shipment);
-                if (!shipmentType.SupportsGetRates)
+                using (Observable.Timer(TimeSpan.FromMilliseconds(75)).Subscribe(_ => ShowSpinner = true))
                 {
-                    throw new ShippingException("Rating not supported.");
-                }
+                    // Fetch the rates and add them to the cache
+                    shipmentType = PrepareShipmentAndGetShipmentType(shipment);
+                    if (!shipmentType.SupportsGetRates)
+                    {
+                        throw new ShippingException("Rating not supported.");
+                    }
 
-                // We want to ignore the cache primarily when changes come from the rate control, since only the promotion
-                // footer raises the event and we want to include Express1 rates in that case
-                if (ignoreCache)
-                {
-                    shippingManager.RemoveShipmentFromRatesCache(shipment);
-                }
+                    // We want to ignore the cache primarily when changes come from the rate control, since only the promotion
+                    // footer raises the event and we want to include Express1 rates in that case
+                    if (ignoreCache)
+                    {
+                        shippingManager.RemoveShipmentFromRatesCache(shipment);
+                    }
 
-                rates = await shippingManager.GetRatesAsync(shipment, shipmentType, cancellationToken);
-                panelRateGroup = new ShipmentRateGroup(rates, shipment);
+                    rates = await shippingManager.GetRatesAsync(shipment, shipmentType, cancellationToken);
+
+                    panelRateGroup = new ShipmentRateGroup(rates, shipment);
+                }  
             }
             catch (InvalidRateGroupShippingException ex)
             {

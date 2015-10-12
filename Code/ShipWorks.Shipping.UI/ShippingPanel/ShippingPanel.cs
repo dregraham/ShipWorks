@@ -26,7 +26,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         ShippingPanelControl shippingPanelControl;
         readonly ShippingPanelViewModel viewModel;
         readonly IMessenger messenger;
-        readonly OrderSelectionChangedHandler orderSelectionChangedHandler;
 
         /// <summary>
         /// Constructor
@@ -42,7 +41,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<ShippingPanelViewModel>();
             messenger = IoC.UnsafeGlobalLifetimeScope.Resolve<IMessenger>();
-            orderSelectionChangedHandler = IoC.UnsafeGlobalLifetimeScope.Resolve<OrderSelectionChangedHandler>();
         }
 
         /// <summary>
@@ -59,7 +57,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             shippingPanelControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
 
             messenger.Handle<CreateLabelMessage>(this, HandleCreateLabelMessage);
-            orderSelectionChangedHandler.Listen(viewModel.LoadOrder);
         }
 
         public EntityType EntityType => EntityType.ShipmentEntity;
@@ -70,7 +67,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
         public Task ChangeContent(IGridSelection selection)
         {
-            viewModel.SelectionChanged();
             return TaskUtility.CompletedTask;
         }
 

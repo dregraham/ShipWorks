@@ -56,6 +56,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private bool forceRateCriteriaChanged = false;
 
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
+        private readonly OrderSelectionChangedHandler shipmentChangedHandler;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -73,6 +74,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public ShippingPanelViewModel(
             IMessenger messenger,
+            OrderSelectionChangedHandler shipmentChangedHandler,
             IShippingManager shippingManager,
             IShipmentTypeFactory shipmentTypeFactory,
             ICustomsManager customsManager,
@@ -87,6 +89,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.shippingManager = shippingManager;
             this.shipmentTypeFactory = shipmentTypeFactory;
             this.messenger = messenger;
+            this.shipmentChangedHandler = shipmentChangedHandler;
 
             shipmentTypeManager = new ShipmentTypeManagerWrapper();
 
@@ -107,17 +110,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             PropertyChanging += OnPropertyChanging;
 
-            //TODO: This is just a test -- This should ultimately be wired up to the OrderSelectionChangedMessage
-            //messenger.AsObservable<OrderSelectionChangedMessage>()
-            //    .ObserveOn(DispatcherScheduler.Current)
-            //    .SubscribeOn(TaskPoolScheduler.Default)
-            //    .Subscribe(x => AllowEditing = true);
+            shipmentChangedHandler.OrderChangingStream()
+                .Subscribe(_ => AllowEditing = false);
+                //.Select(x => Observable.Timer(TimeSpan.FromMilliseconds(75)).Do(_ => AllowEditing = false))
+                //.Switch();
 
-            //Destination = new AddressViewModel();
-
-            //ShipmentViewModel = shipmentViewModelFactory();
-
-            //CreateLabelCommand = new RelayCommand(async () => await ProcessShipment());
+            shipmentChangedHandler.ShipmentLoadedStream()
+                .Do(_ => AllowEditing = true)
+                .Subscribe(LoadOrder);
         }
 
         /// <summary>
@@ -281,6 +281,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// True if the carrier supports accounts, false otherwise.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public Visibility AccountVisibility
         {
             get { return accountVisibility; }

@@ -90,22 +90,6 @@ namespace ShipWorks.Tests.Interapptive.Shared
         }
 
         [Fact]
-        public void Handle_HandlerDoesNotGetCalled_WhenRemovedByReference()
-        {
-            bool wasCalled1 = false;
-            bool wasCalled2 = false;
-
-            Action<TestMessage> handler1 = x => wasCalled1 = true;
-
-            messenger.Handle(this, handler1);
-            messenger.Handle<TestMessage>(this, x => wasCalled2 = true);
-            messenger.Remove(this, handler1);
-            messenger.Send(new TestMessage());
-            Assert.False(wasCalled1);
-            Assert.True(wasCalled2);
-        }
-
-        [Fact]
         public void Send_DoesNotThrow_WhenHandlerHasBeenDisposed()
         {
             DisposableHandler handler = new DisposableHandler();

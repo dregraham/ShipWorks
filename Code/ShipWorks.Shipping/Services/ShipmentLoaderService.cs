@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Services
             messenger.AsObservable<OrderSelectionChangingMessage>()
                 //.ObserveOn(DispatcherScheduler.Current)
                 .SubscribeOn(TaskPoolScheduler.Default)
-                .Throttle(TimeSpan.FromMilliseconds(250))
+                .Throttle(TimeSpan.FromMilliseconds(100))
                 .Subscribe(x => LoadAndNotify(x.OrderIdList));
         }
 
