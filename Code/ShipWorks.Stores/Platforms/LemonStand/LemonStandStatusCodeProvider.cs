@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using log4net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Quartz.Util;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Platforms.LemonStand.DTO;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -31,7 +34,22 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 List<JToken> statuses = client.GetOrderStatuses().SelectToken("data").Children().ToList();
 
-                return statuses.ToDictionary(status => int.Parse(status.SelectToken("id").ToString()), status => status.SelectToken("name").ToString());
+                LemonStandOrderStatuses stats =
+                    JsonConvert.DeserializeObject<LemonStandOrderStatuses>(client.GetOrderStatuses().ToString());
+
+                Dictionary<int, string> dictionary = new Dictionary<int, string>();
+
+                foreach (var status in stats.OrderStatus)
+                {
+                    if (status.Name.IsNullOrWhiteSpace() || status.ID == 0)
+                    {
+                        throw new LemonStandException();
+                    }
+                    
+                    dictionary.Add(status.ID, status.Name);
+                }
+
+                return dictionary;
             }
             catch (LemonStandException ex)
             {

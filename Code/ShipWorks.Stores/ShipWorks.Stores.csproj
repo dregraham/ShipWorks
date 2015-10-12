@@ -89,6 +89,8 @@
     <Compile Include="Platforms\LemonStand\DTO\LemonStandInvoice.cs" />
     <Compile Include="Platforms\LemonStand\DTO\LemonStandItem.cs" />
     <Compile Include="Platforms\LemonStand\DTO\LemonStandOrder.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandOrderStatus.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandOrderStatuses.cs" />
     <Compile Include="Platforms\LemonStand\DTO\LemonStandShipment.cs" />
     <Compile Include="Platforms\LemonStand\DTO\LemonStandShippingAddress.cs" />
     <Compile Include="Platforms\LemonStand\DTO\LemonStandStatusCode.cs" />
