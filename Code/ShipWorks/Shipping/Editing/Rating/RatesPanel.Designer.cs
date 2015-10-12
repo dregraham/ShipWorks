@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             if (disposing && (components != null))
             {
-                Messenger.Current.Remove(uspsAccountConvertedToken);
+                uspsAccountConvertedToken.Dispose();
                 components.Dispose();
             }
 

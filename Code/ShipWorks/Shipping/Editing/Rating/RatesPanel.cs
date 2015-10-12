@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Editing.Rating
     {
         private long? selectedShipmentID;
         private bool resetCollapsibleStateRequired;
-        private readonly MessengerToken uspsAccountConvertedToken;
+        private readonly IDisposable uspsAccountConvertedToken;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RatesPanel"/> class.
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Editing.Rating
 
             rateControl.Initialize(new FootnoteParameters(() => RefreshRates(false), GetStoreForCurrentShipment));
 
-            uspsAccountConvertedToken = Messenger.Current.Handle<UspsAutomaticExpeditedChangedMessage>(this, OnStampsUspsAutomaticExpeditedChanged);
+            uspsAccountConvertedToken = Messenger.Current.AsObservable<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
         }
 
         /// <summary>

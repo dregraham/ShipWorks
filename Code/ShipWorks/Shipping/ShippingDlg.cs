@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping
         private readonly Timer shipSenseChangedTimer = new Timer();
         private const int shipSenseChangedDebounceTime = 500;
         private bool shipSenseNeedsUpdated = false;
-        private MessengerToken uspsAccountConvertedToken;
+        private readonly IDisposable uspsAccountConvertedToken;
         private readonly IMessenger messenger;
         private readonly ILifetimeScope lifetimeScope;
         private readonly IShippingManager shippingManager;
@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping
             shipments.ForEach(ShippingManager.EnsureShipmentLoaded);
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
-            uspsAccountConvertedToken = messenger.Handle<UspsAutomaticExpeditedChangedMessage>(this, OnStampsUspsAutomaticExpeditedChanged);
+            uspsAccountConvertedToken = messenger.AsObservable<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
         }
 
         /// <summary>
@@ -2359,7 +2359,7 @@ namespace ShipWorks.Shipping
                 components?.Dispose();
                 validatedAddressScope?.Dispose();
 
-                messenger.Remove(uspsAccountConvertedToken);
+                uspsAccountConvertedToken.Dispose();
             }
 
             base.Dispose(disposing);

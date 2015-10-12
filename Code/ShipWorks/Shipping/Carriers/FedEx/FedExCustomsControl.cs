@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public partial class FedExCustomsControl : CustomsControlBase
     {
-        private MessengerToken fedExServiceChangedToken;
+        private IDisposable fedExServiceChangedToken;
 
         /// <summary>
         /// Constructor
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             InitializeComponent();
 
-            fedExServiceChangedToken = Messenger.Current.Handle<FedExServiceTypeChangedMessage>(this, OnServiceChanged);
+            fedExServiceChangedToken = Messenger.Current.AsObservable<FedExServiceTypeChangedMessage>().Subscribe(OnServiceChanged);
         }
 
         /// <summary>

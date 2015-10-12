@@ -8,6 +8,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using System.Reactive.Subjects;
 
 namespace ShipWorks.Shipping.Tests.Services
 {
@@ -34,17 +35,18 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                Action<EnabledCarriersChangedMessage> handler = null;
+                Subject<EnabledCarriersChangedMessage> subject = new Subject<EnabledCarriersChangedMessage>();
 
                 mock.Mock<IShipmentTypeManager>().SetupSequence(x => x.EnabledShipmentTypeCodes)
                     .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps })
                     .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.FedEx, ShipmentTypeCode.Usps });
-                mock.Mock<IMessenger>().Setup(x => x.Handle(It.IsAny<object>(), It.IsAny<Action<EnabledCarriersChangedMessage>>()))
-                    .Callback((object _, Action<EnabledCarriersChangedMessage> x) => handler = x);
+                mock.Mock<IMessenger>()
+                    .Setup(x => x.AsObservable<EnabledCarriersChangedMessage>())
+                    .Returns(subject);
 
                 ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
-                handler(new EnabledCarriersChangedMessage(null, new List<int>(), new List<int>()));
+                subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int>(), new List<int>()));
 
                 Assert.Equal(2, testObject.Available.Count());
                 Assert.Contains(ShipmentTypeCode.FedEx, testObject.Available);
@@ -57,16 +59,17 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                Action<EnabledCarriersChangedMessage> handler = null;
+                Subject<EnabledCarriersChangedMessage> subject = new Subject<EnabledCarriersChangedMessage>();
 
                 mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
                     .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps });
-                mock.Mock<IMessenger>().Setup(x => x.Handle(It.IsAny<object>(), It.IsAny<Action<EnabledCarriersChangedMessage>>()))
-                    .Callback((object _, Action<EnabledCarriersChangedMessage> x) => handler = x);
+                mock.Mock<IMessenger>()
+                    .Setup(x => x.AsObservable<EnabledCarriersChangedMessage>())
+                    .Returns(subject);
 
                 ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
-                handler(new EnabledCarriersChangedMessage(null, new List<int>(), new List<int> { (int)ShipmentTypeCode.Other }));
+                subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int>(), new List<int> { (int)ShipmentTypeCode.Other }));
                 
                 Assert.DoesNotContain(ShipmentTypeCode.Other, testObject.Available);
             }
@@ -77,16 +80,17 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                Action<EnabledCarriersChangedMessage> handler = null;
+                Subject<EnabledCarriersChangedMessage> subject = new Subject<EnabledCarriersChangedMessage>();
 
                 mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
                     .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps });
-                mock.Mock<IMessenger>().Setup(x => x.Handle(It.IsAny<object>(), It.IsAny<Action<EnabledCarriersChangedMessage>>()))
-                    .Callback((object _, Action<EnabledCarriersChangedMessage> x) => handler = x);
+                mock.Mock<IMessenger>()
+                    .Setup(x => x.AsObservable<EnabledCarriersChangedMessage>())
+                    .Returns(subject);
 
                 ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
-                handler(new EnabledCarriersChangedMessage(null, new List<int> { (int)ShipmentTypeCode.FedEx }, new List<int>()));
+                subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int> { (int)ShipmentTypeCode.FedEx }, new List<int>()));
 
                 Assert.Contains(ShipmentTypeCode.FedEx, testObject.Available);
             }
@@ -97,16 +101,17 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                Action<EnabledCarriersChangedMessage> handler = null;
+                Subject<EnabledCarriersChangedMessage> subject = new Subject<EnabledCarriersChangedMessage>();
 
                 mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
                     .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps });
-                mock.Mock<IMessenger>().Setup(x => x.Handle(It.IsAny<object>(), It.IsAny<Action<EnabledCarriersChangedMessage>>()))
-                    .Callback((object _, Action<EnabledCarriersChangedMessage> x) => handler = x);
+                mock.Mock<IMessenger>()
+                    .Setup(x => x.AsObservable<EnabledCarriersChangedMessage>())
+                    .Returns(subject);
 
                 ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
-                handler(new EnabledCarriersChangedMessage(null, new List<int> { (int)ShipmentTypeCode.Other }, new List<int>()));
+                subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int> { (int)ShipmentTypeCode.Other }, new List<int>()));
 
                 Assert.Equal(2, testObject.Available.Count());
             }

@@ -21,9 +21,7 @@ using System.Threading.Tasks;
 using ShipWorks.Core.Common.Threading;
 using System.Threading;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
 using System.Reactive.Disposables;
-using System.Reactive.Concurrency;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -35,8 +33,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private readonly MessengerToken uspsAccountConvertedToken;
-        private readonly MessengerToken shipmentChangedMessageToken;
+        private readonly IDisposable subscriptions;
         private readonly IMessenger messenger;
 
         private readonly IShippingManager shippingManager;
@@ -68,14 +65,15 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             ActionLinkVisible = false;
             ShowAllRates = true;
 
-            uspsAccountConvertedToken = messenger.Handle<UspsAutomaticExpeditedChangedMessage>(this, x => HandleUspsAutomaticExpeditedChangedMessage(x));
-            shipmentChangedMessageToken = messenger.Handle<ShipmentChangedMessage>(this, HandleShipmentChangedMessage);
-
-            messenger.AsObservable<OrderSelectionChangingMessage>()
-                .CombineLatest(messenger.AsObservable<OrderSelectionChangedMessage>(), (x, y) => new { OrderIdList = x.OrderIdList, Message = y })
-                .Where(x => x.OrderIdList.Intersect(x.Message.LoadedOrderSelection.Select(y => y.Order.OrderID)).Any())
-                .Select(x => x.Message)
-                .Subscribe(RefreshSelectedShipments);
+            subscriptions = new CompositeDisposable(
+                messenger.AsObservable<UspsAutomaticExpeditedChangedMessage>().Subscribe(x => HandleUspsAutomaticExpeditedChangedMessage(x)),
+                messenger.AsObservable<ShipmentChangedMessage>().Subscribe(HandleShipmentChangedMessage),
+                messenger.AsObservable<OrderSelectionChangingMessage>()
+                    .CombineLatest(messenger.AsObservable<OrderSelectionChangedMessage>(), (x, y) => new { OrderIdList = x.OrderIdList, Message = y })
+                    .Where(x => x.OrderIdList.Intersect(x.Message.LoadedOrderSelection.Select(y => y.Order.OrderID)).Any())
+                    .Select(x => x.Message)
+                    .Subscribe(RefreshSelectedShipments)
+            );
         }
 
         /// <summary>
@@ -319,7 +317,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     rates = await shippingManager.GetRatesAsync(shipment, shipmentType, cancellationToken);
 
                     panelRateGroup = new ShipmentRateGroup(rates, shipment);
-                }  
+                }
             }
             catch (InvalidRateGroupShippingException ex)
             {
@@ -412,8 +410,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             if (disposing)
             {
-                messenger.Remove(uspsAccountConvertedToken);
-                messenger.Remove(shipmentChangedMessageToken);
+                subscriptions.Dispose();
             }
         }
 

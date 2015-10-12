@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (disposing)
             {
-                Messenger.Current.Remove(fedExServiceChangedToken);
+                fedExServiceChangedToken.Dispose();
 
                 if (components != null)
                 {

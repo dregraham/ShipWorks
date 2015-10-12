@@ -171,7 +171,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                lifetimeScope.Resolve<IMessenger>().Handle<OpenShippingDialogMessage>(this, HandleOpenShippingDialogMessage);
+                lifetimeScope.Resolve<IMessenger>()
+                    .AsObservable<OpenShippingDialogMessage>()
+                    .Subscribe(HandleOpenShippingDialogMessage);
             }
         }
 

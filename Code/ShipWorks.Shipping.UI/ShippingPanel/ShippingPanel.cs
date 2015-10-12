@@ -26,6 +26,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         ShippingPanelControl shippingPanelControl;
         readonly ShippingPanelViewModel viewModel;
         readonly IMessenger messenger;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -56,7 +57,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             shippingPanelControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
 
-            messenger.Handle<CreateLabelMessage>(this, HandleCreateLabelMessage);
+            subscription = messenger.AsObservable<CreateLabelMessage>().Subscribe(HandleCreateLabelMessage);
         }
 
         public EntityType EntityType => EntityType.ShipmentEntity;

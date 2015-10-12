@@ -13,22 +13,20 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Loading;
-using ShipWorks.Stores;
 using ShipWorks.Shipping.Services;
-using System.Reactive.Concurrency;
-using System.Threading;
 using System.Windows;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.UI.MessageHandlers;
 using Interapptive.Shared.Collections;
+using System.Reactive.Disposables;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
     /// <summary>
     /// Main view model for the shipment panel
     /// </summary>
-    public class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging
+    public class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
     {
         private ShippingPanelLoadedShipmentResult loadedShipmentResult;
         private bool supportsMultiplePackages;
@@ -57,6 +55,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private readonly OrderSelectionChangedHandler shipmentChangedHandler;
+        private readonly IDisposable subscriptions;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -95,9 +94,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             listenForRateCriteriaChanged = false;
 
-            messenger.Handle<ShipmentChangedMessage>(this, OnShipmentChanged);
-            messenger.Handle<StoreChangedMessage>(this, OnStoreChanged);
-
+            subscriptions = new CompositeDisposable(
+                messenger.AsObservable<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
+                messenger.AsObservable<StoreChangedMessage>().Subscribe(OnStoreChanged),
+                shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
+                shipmentChangedHandler.ShipmentLoadedStream().Do(_ => AllowEditing = true).Subscribe(LoadOrder)
+            );
+            
             WireUpObservables();
 
             this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
@@ -109,15 +112,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin = addressViewModelFactory();
 
             PropertyChanging += OnPropertyChanging;
-
-            shipmentChangedHandler.OrderChangingStream()
-                .Subscribe(_ => AllowEditing = false);
-                //.Select(x => Observable.Timer(TimeSpan.FromMilliseconds(75)).Do(_ => AllowEditing = false))
-                //.Switch();
-
-            shipmentChangedHandler.ShipmentLoadedStream()
-                .Do(_ => AllowEditing = true)
-                .Subscribe(LoadOrder);
         }
 
         /// <summary>
@@ -379,7 +373,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             AllowEditing = !shipment.Processed;
 
-            AccountVisibility = shipmentTypeManager.ShipmentTypesSupportingAccounts.Contains(shipment.ShipmentTypeCode) ? Visibility.Visible : Visibility.Collapsed; 
+            AccountVisibility = shipmentTypeManager.ShipmentTypesSupportingAccounts.Contains(shipment.ShipmentTypeCode) ? Visibility.Visible : Visibility.Collapsed;
 
             listenForRateCriteriaChanged = true;
 
@@ -574,6 +568,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             Save();
+        }
+
+        /// <summary>
+        /// Dispose resources
+        /// </summary>
+        public void Dispose()
+        {
+            subscriptions.Dispose();
         }
     }
 }

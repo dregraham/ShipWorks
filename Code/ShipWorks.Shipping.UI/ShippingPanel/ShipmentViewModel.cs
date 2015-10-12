@@ -16,19 +16,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     /// <summary>
     /// View model for use by ShipmentControl
     /// </summary>
-    public class ShipmentViewModel : INotifyPropertyChanged, INotifyPropertyChanging
+    public class ShipmentViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
     {
         private DateTime shipDate;
         private double totalWeight;
         private bool insurance;
         private int serviceType;
         private readonly IRateSelectionFactory rateSelectionFactory;
+        private readonly IDisposable subscription;
 
         private readonly PropertyChangedHandler handler;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
         private readonly IShipmentPackageBuilderFactory shipmentPackageBuilderFactory;
-
-        private readonly IMessenger messenger;
 
         [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", 
             Justification = "Event is virtual to allow tests to fire it")]
@@ -53,9 +52,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.shipmentPackageBuilderFactory = shipmentPackageBuilderFactory;
             this.rateSelectionFactory = rateSelectionFactory;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
-            this.messenger = messenger;
-
-            messenger.Handle<SelectedRateChangedMessage>(this, HandleSelectedRateChangedMessage);
+            
+            subscription = messenger.AsObservable<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage);
         }
 
         public ObservableCollection<KeyValuePair<int, string>> Services { get; }
@@ -151,7 +149,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IRateSelection rateSelection = rateSelectionFactory.CreateRateSelection(message.RateResult);
 
             // Set the newly selected service type
-            this.ServiceType = rateSelection.ServiceType;
+            ServiceType = rateSelection.ServiceType;
+        }
+
+        /// <summary>
+        /// Dispose resources
+        /// </summary>
+        public void Dispose()
+        {
+            subscription.Dispose();
         }
     }
 }

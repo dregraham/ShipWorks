@@ -8,6 +8,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
+using System;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Services
             this.shipmentTypeManager = shipmentTypeManager;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            messenger.Handle<EnabledCarriersChangedMessage>(this, UpdateAvailableCarriers);
+            messenger.AsObservable<EnabledCarriersChangedMessage>().Subscribe(UpdateAvailableCarriers);
             Available = shipmentTypeManager.EnabledShipmentTypeCodes.ToList();
         }
 

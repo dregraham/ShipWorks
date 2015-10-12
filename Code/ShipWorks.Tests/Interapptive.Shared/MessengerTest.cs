@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Send_DoesNotCallHandler_WhenHandlerIsForDifferentMessage()
         {
             bool wasCalled = false;
-            messenger.Handle<TestMessage>(this, x => wasCalled = true);
+            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled = true);
             messenger.Send(Mock.Of<IShipWorksMessage>());
             Assert.False(wasCalled);
         }
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Handle_GetsCalled_OnMessageSend()
         {
             bool wasCalled = false;
-            messenger.Handle<TestMessage>(this, x => wasCalled = true);
+            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled = true);
             messenger.Send(new TestMessage());
             Assert.True(wasCalled);
         }
@@ -44,36 +44,11 @@ namespace ShipWorks.Tests.Interapptive.Shared
         {
             bool wasCalled1 = false;
             bool wasCalled2 = false;
-            messenger.Handle<TestMessage>(this, x => wasCalled1 = true);
-            messenger.Handle<TestMessage>(this, x => wasCalled2 = true);
+            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled1 = true);
+            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled2 = true);
             messenger.Send(new TestMessage());
             Assert.True(wasCalled1);
             Assert.True(wasCalled2);
-        }
-
-        [Fact]
-        public void Handle_WithExistingHandler_ReturnsExistingToken()
-        {
-            using (DisposableHandler handler = new DisposableHandler())
-            {
-                MessengerToken firstToken = messenger.Handle(handler, handler.Handler);
-                MessengerToken secondToken = messenger.Handle(handler, handler.Handler);
-
-                Assert.Equal(firstToken, secondToken);
-            }
-        }
-
-        [Fact]
-        public void Handle_WithExistingHandler_CallsHandlerOnceOnSend()
-        {
-            using (DisposableHandler handler = new DisposableHandler())
-            {
-                messenger.Handle(handler, handler.Handler);
-                messenger.Handle(handler, handler.Handler);
-                messenger.Send(new TestMessage());
-
-                Assert.Equal(1, handler.Calls);
-            }
         }
 
         [Fact]
@@ -81,9 +56,9 @@ namespace ShipWorks.Tests.Interapptive.Shared
         {
             bool wasCalled1 = false;
             bool wasCalled2 = false;
-            MessengerToken token = messenger.Handle<TestMessage>(this, x => wasCalled1 = true);
-            messenger.Handle<TestMessage>(this, x => wasCalled2 = true);
-            messenger.Remove(token);
+            IDisposable token = messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled1 = true);
+            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled2 = true);
+            token.Dispose();
             messenger.Send(new TestMessage());
             Assert.False(wasCalled1);
             Assert.True(wasCalled2);
@@ -93,26 +68,10 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Send_DoesNotThrow_WhenHandlerHasBeenDisposed()
         {
             DisposableHandler handler = new DisposableHandler();
-            messenger.Handle(handler, handler.Handler);
+            messenger.AsObservable<TestMessage>().Subscribe(handler.Handler);
             handler.Dispose();
             GC.Collect();
             messenger.Send(new TestMessage());
-        }
-
-        [Fact]
-        public void Send_DoesNotCallMethod_WhenObjectHasBeenCollected()
-        {
-            bool wasCalled = false;
-            DisposableHandler handler = new DisposableHandler(x => wasCalled = true);
-            messenger.Handle(handler, handler.Handler);
-            handler.Dispose();
-            handler = null;
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            messenger.Send(new TestMessage());
-            Assert.False(wasCalled);
         }
 
         [Fact]
