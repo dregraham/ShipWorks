@@ -40,7 +40,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             if (remindLaterAccounts.ContainsKey(promo.AccountId))
             {
                 // RemindLater has been called for the account. If past the interval return true, else false
-                return remindLaterAccounts[promo.AccountId].AddHours(reminderInterval) < dateTimeProvider.Now;
+
+                DateTime reminderExpiration = remindLaterAccounts[promo.AccountId].AddHours(reminderInterval);
+                return reminderExpiration < dateTimeProvider.Now;
             }
 
             // PromoStatus is none and they havn't asked to be reminded later.
@@ -52,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         public void RemindLater(IUpsPromo promo)
         {
-            var now = dateTimeProvider.Now;
+            DateTime now = dateTimeProvider.Now;
 
             remindLaterAccounts.AddOrUpdate(
                 promo.AccountId,
