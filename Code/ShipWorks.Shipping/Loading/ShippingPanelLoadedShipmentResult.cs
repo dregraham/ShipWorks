@@ -19,6 +19,9 @@ namespace ShipWorks.Shipping.Loading
         Multiple = 2,
 
         [Description("Error")]
-        Error = 3
+        Error = 3,
+
+        [Description("Deleted")]
+        Deleted = 4
     }
 }

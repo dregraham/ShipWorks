@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
@@ -14,11 +12,11 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.Loading;
-using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using ShipWorks.Core.Messaging.Messages.Shipping;
-using ShipWorks.Shipping.UI.MessageHandlers;
+using ShipWorks.Messaging.Messages.Shipping;
+using System.Reactive.Subjects;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 {
@@ -553,6 +551,36 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 testObject.ShipmentType = ShipmentTypeCode.BestRate;
 
                 Assert.Equal(Visibility.Collapsed, testObject.AccountVisibility);
+            }
+        }
+
+        [Fact]
+        public void ShipmentDeletedMessage_WhenCurrentShipmentIsDeleted_UpdatesStatus()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger messenger = new TestMessenger();
+                mock.Provide<IMessenger>(messenger);
+
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+                messenger.Send(new ShipmentDeletedMessage(this, shipmentEntity.ShipmentID));
+
+                Assert.Equal(ShippingPanelLoadedShipmentResult.Deleted, testObject.LoadedShipmentResult);
+            }
+        }
+
+        [Fact]
+        public void ShipmentDeletedMessage_WhenOtherShipmentIsDeleted_DoesNotUpdateStatus()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger messenger = new TestMessenger();
+                mock.Provide<IMessenger>(messenger);
+
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+                messenger.Send(new ShipmentDeletedMessage(this, shipmentEntity.ShipmentID + 1));
+
+                Assert.NotEqual(ShippingPanelLoadedShipmentResult.Error, testObject.LoadedShipmentResult);
             }
         }
     }

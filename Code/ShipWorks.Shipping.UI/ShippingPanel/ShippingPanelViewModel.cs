@@ -20,6 +20,7 @@ using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.UI.MessageHandlers;
 using Interapptive.Shared.Collections;
 using System.Reactive.Disposables;
+using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -97,6 +98,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             subscriptions = new CompositeDisposable(
                 messenger.AsObservable<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
                 messenger.AsObservable<StoreChangedMessage>().Subscribe(OnStoreChanged),
+                messenger.AsObservable<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
                 shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
                 shipmentChangedHandler.ShipmentLoadedStream().Do(_ => AllowEditing = true).Subscribe(LoadOrder)
             );
@@ -347,6 +349,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             return ShippingPanelLoadedShipmentResult.Success;
         }
 
+        /// <summary>
+        /// Order selection has changed
+        /// </summary>
         internal void SelectionChanged() => AllowEditing = false;
 
         /// <summary>
@@ -568,6 +573,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             Save();
+        }
+
+        /// <summary>
+        /// A shipment has been deleted
+        /// </summary>
+        private void OnShipmentDeleted(ShipmentDeletedMessage message)
+        {
+            LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Deleted;
+            shipment = null;
         }
 
         /// <summary>

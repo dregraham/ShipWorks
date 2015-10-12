@@ -185,6 +185,9 @@
             <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Multiple}}">
                 <TextBlock>Multiple shipments...</TextBlock>
             </StackPanel>
+            <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Deleted}}">
+                <TextBlock>Shipment has been deleted.</TextBlock>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
