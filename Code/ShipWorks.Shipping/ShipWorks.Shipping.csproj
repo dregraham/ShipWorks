@@ -85,7 +85,6 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Carriers\UPS\Promo\UpsPromoFactory.cs" />
-    <Compile Include="Carriers\UPS\Promo\UpsPromoFootnoteFootnoteFactoryFactory.cs" />
     <Compile Include="Carriers\UPS\Promo\UpsPromoPolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

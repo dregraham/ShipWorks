@@ -11,6 +11,7 @@ using System.Xml;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Reflection;
+using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Settings;
@@ -21,7 +22,9 @@ using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
@@ -1168,7 +1171,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                promo = new UpsPromo(upsAccount, new UpsSettingsRepository(), new UpsAccountRepository(), new UpsPromoWebClientFactory());
+                IUpsPromoFactory upsPromoFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpsPromoFactory>();
+                promo = upsPromoFactory.Get(upsAccount);
+
                 promo.GetAgreementTerms();
                 promoDescription.Text = promo.Terms.Description;
                 promoControls.Top = promoDescription.Bottom + 5;

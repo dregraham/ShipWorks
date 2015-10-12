@@ -16,15 +16,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
         private readonly IPromoClientFactory promoClientFactory;
+        private readonly IUpsPromoPolicy upsPromoPolicy;
         readonly ICarrierSettingsRepository settingsRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsPromoFactory(IIndex<ShipmentTypeCode, ICarrierSettingsRepository> lookup, ICarrierAccountRepository<UpsAccountEntity> accountRepository, IPromoClientFactory promoClientFactory)
+        public UpsPromoFactory(IIndex<ShipmentTypeCode, ICarrierSettingsRepository> lookup, ICarrierAccountRepository<UpsAccountEntity> accountRepository, IPromoClientFactory promoClientFactory, IUpsPromoPolicy upsPromoPolicy)
         {
             this.accountRepository = accountRepository;
             this.promoClientFactory = promoClientFactory;
+            this.upsPromoPolicy = upsPromoPolicy;
             settingsRepository = lookup[ShipmentTypeCode.UpsOnLineTools];
         }
 
@@ -33,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         public UpsPromo Get(UpsAccountEntity account)
         {
-            return new UpsPromo(account, settingsRepository, accountRepository, promoClientFactory);
+            return new UpsPromo(account, settingsRepository, accountRepository, promoClientFactory, upsPromoPolicy);
         }
     }
 }

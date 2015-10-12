@@ -1047,7 +1047,6 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsApiPromoClient.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromoFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromoFootnoteFactoryFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnote.cs">
       <SubType>UserControl</SubType>
     </Compile>

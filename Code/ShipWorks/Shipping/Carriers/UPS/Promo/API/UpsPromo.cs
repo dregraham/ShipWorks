@@ -3,6 +3,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
 {
@@ -12,13 +13,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
     public class UpsPromo : IUpsPromo
     {
         private readonly IPromoClientFactory promoClientFactory;
+        private readonly IUpsPromoPolicy promoPolicy;
         private readonly ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository;
         private readonly UpsAccountEntity account;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsPromo(UpsAccountEntity upsAccount, ICarrierSettingsRepository upsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory)
+        public UpsPromo(UpsAccountEntity upsAccount, ICarrierSettingsRepository upsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory, IUpsPromoPolicy promoPolicy)
         {
             AccountId = upsAccount.UpsAccountID;
             AccountNumber = upsAccount.AccountNumber;
@@ -27,6 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             AccessLicenseNumber = SecureText.Decrypt(upsSettingsRepository.GetShippingSettings().UpsAccessKey, "UPS");
             CountryCode = upsAccount.CountryCode == "CA" ? "CA" : "US";
             promoClientFactory = promoFactory;
+            this.promoPolicy = promoPolicy;
             this.upsAccountRepository = upsAccountRepository;
             account = upsAccount;
         }
@@ -107,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// </summary>
         public void RemindMe()
         {
-            throw new NotImplementedException("REMIND ME LATER IS NOT DONE YET");
+            promoPolicy.RemindLater(this);
         }
 
         /// <summary>
@@ -128,6 +131,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         public UpsPromoStatus GetStatus()
         {
             return (UpsPromoStatus)account.PromoStatus;
+        }
+
+        /// <summary>
+        /// Gets the footnote factory.
+        /// </summary>
+        public UpsPromoFootnoteFactory GetFootnoteFactory()
+        {
+            if (!promoPolicy.IsEligible(this))
+            {
+                return null;
+            }
+
+            // Create promofootnote factory
+            UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(this);
+
+            // Add factgory too the final group rate group
+            return promoFootNoteFactory;
         }
     }
 }

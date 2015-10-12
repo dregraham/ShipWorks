@@ -30,7 +30,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsOltShipmentType"/> class.
         /// </summary>
-        public UpsOltShipmentType(IUpsPromoFootnoteFactoryFactory upsPromoFootnoteFactoryFactory) : base(upsPromoFootnoteFactoryFactory)
+        public UpsOltShipmentType(IUpsPromoFactory promoFactory) :
+            base(promoFactory)
         {
         }
 

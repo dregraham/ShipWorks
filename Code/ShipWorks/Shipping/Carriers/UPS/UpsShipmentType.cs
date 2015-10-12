@@ -37,6 +37,7 @@ using System.Globalization;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
+using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -45,14 +46,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public abstract class UpsShipmentType : ShipmentType
     {
-        private readonly IUpsPromoFootnoteFactoryFactory promoFootnoteFactoryFactory;
+        private readonly IUpsPromoFactory promoFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        protected UpsShipmentType(IUpsPromoFootnoteFactoryFactory promoFootnoteFactoryFactory)
+        protected UpsShipmentType(IUpsPromoFactory promoFactory)
         {
-            this.promoFootnoteFactoryFactory = promoFootnoteFactoryFactory;
+            this.promoFactory = promoFactory;
             // Use the "live" versions of the repository by default
             AccountRepository = new UpsAccountRepository();
             SettingsRepository = new UpsSettingsRepository();
@@ -849,9 +850,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             try
             {
+                bool usingCounterRates = !SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted;
+
                 // Check with the SettingsRepository here rather than UpsAccountManager, so getting 
                 // counter rates from the broker is not impacted
-                if (!SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted)
+                if (usingCounterRates)
                 {
                     CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
@@ -926,6 +929,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 UpsApiRateClient upsApiRateClient = new UpsApiRateClient(AccountRepository, SettingsRepository, CertificateInspector);
                 List<UpsServiceRate> serviceRates = upsApiRateClient.GetRates(shipment);
 
+                UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, AccountRepository);
+                
                 if (!serviceRates.Any())
                 {
                     rates.Add(new RateResult("* No rates were returned for the selected Service.", ""));
@@ -933,7 +938,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 else
                 {
                     // Determine if the user is hoping to get negotiated rates back
-                    bool wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, AccountRepository).RateType == (int)UpsRateType.Negotiated;
+                    bool wantedNegotiated = account.RateType == (int)UpsRateType.Negotiated;
 
                     // Indicates if any of the rates returned were negotiated.
                     bool anyNegotiated = serviceRates.Any(s => s.Negotiated);
@@ -989,17 +994,27 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
 
-                UpsPromoFootnoteFactory upsPromoFootnoteFactory = promoFootnoteFactoryFactory.Get(shipment);
-                if (upsPromoFootnoteFactory != null)
-                {
-                    finalGroup.AddFootnoteFactory(upsPromoFootnoteFactory);
-                }
+                AddFootnoteFactory(account, finalGroup);
 
                 return finalGroup;
             }
             catch (InvalidPackageDimensionsException ex)
             {
                 throw new UpsException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Adds the footnote factory.
+        /// </summary>
+        private void AddFootnoteFactory(UpsAccountEntity account, RateGroup rateGroup)
+        {
+            UpsPromo upsPromo = promoFactory.Get(account);
+            UpsPromoFootnoteFactory upsPromoFootnoteFactory = upsPromo.GetFootnoteFactory();
+
+            if (upsPromoFootnoteFactory != null)
+            {
+                rateGroup.AddFootnoteFactory(upsPromoFootnoteFactory);
             }
         }
 
