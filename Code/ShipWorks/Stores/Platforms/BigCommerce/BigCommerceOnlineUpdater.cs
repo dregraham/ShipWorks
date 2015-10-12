@@ -191,7 +191,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Get the BigCommerceItems to pass to the web client
             List<BigCommerceItem> bigCommerceOrderItems = GetOrderItems(order, orderProducts);
 
-            webClient.UploadOrderShipmentDetails(order.OrderNumber, bigCommerceOrderAddressId, shipment.TrackingNumber, bigCommerceOrderItems);
+            string carrier = ShipmentTypeManager.GetType(shipment).ToString();
+
+            webClient.UploadOrderShipmentDetails(order.OrderNumber, bigCommerceOrderAddressId, shipment.TrackingNumber, carrier, bigCommerceOrderItems);
         }
 
         /// <summary>

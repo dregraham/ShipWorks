@@ -103,9 +103,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="orderNumber">The order number of this shipment</param>
         /// <param name="orderAddressID">The BigCommerce order addressID for this shipment</param>
         /// <param name="trackingNumber">Tracking number for this shipment</param>
+        /// <param name="carrier">Carrier for this shipment</param>
         /// <param name="orderItems">The list of BigCommerceItem's in this shipment</param>
         /// <exception cref="BigCommerceException" />
-        public void UploadOrderShipmentDetails(long orderNumber, long orderAddressID, string trackingNumber, List<BigCommerceItem> orderItems)
+        public void UploadOrderShipmentDetails(long orderNumber, long orderAddressID, string trackingNumber, string carrier, List<BigCommerceItem> orderItems)
         {
             string uploadShipmentResource = BigCommerceWebClientEndpoints.GetUploadShipmentResource(orderNumber);
 
@@ -116,6 +117,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 {
                     order_address_id = (int)orderAddressID,
                     tracking_number = trackingNumber,
+                    shipping_method = carrier,
                     comments = string.Empty,
                     items = orderItems
                 };
