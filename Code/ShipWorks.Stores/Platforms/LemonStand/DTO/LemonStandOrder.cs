@@ -71,5 +71,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 
         [JsonProperty("total_shipping_tax_paid")]
         public string TotalShippingTaxPaid { get; set; }
+
+        [JsonProperty("shop_order_status_id")]
+        public string ShopOrderStatusID { get; set; }
     }
 }

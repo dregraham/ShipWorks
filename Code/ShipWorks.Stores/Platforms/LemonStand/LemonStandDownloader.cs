@@ -170,6 +170,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     (LemonStandOrderEntity) InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
                 order.LemonStandOrderID = lsOrder.ID;
                 order.OnlineStatus = lsOrder.Status;
+                order.OnlineStatusCode = lsOrder.ShopOrderStatusID;
 
                 // Only load new orders
                 if (order.IsNew)
