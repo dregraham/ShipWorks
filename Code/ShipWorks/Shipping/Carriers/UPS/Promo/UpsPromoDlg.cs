@@ -32,12 +32,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             try
             {
                 // Apply the promo
+                promo.Terms.AcceptTerms();
                 promo.Apply();
             }
             catch (UpsPromoException)
             {
                 MessageHelper.ShowError(this, "Error applying promo, we will try again later.");
-                //TODO promo.RemindMe();
+                promo.RemindMe();
             }
 
             Close();
@@ -91,8 +92,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                 catch (UpsPromoException )
                 {
                     MessageHelper.ShowError(this, "Error getting Terms and Conditions, we will try again later");
-                    //TODO promo.RemindMe();
-                    // close();
+                    promo.RemindMe();
+                    Close();
                 }
             }
         }
