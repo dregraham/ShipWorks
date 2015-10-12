@@ -119,6 +119,7 @@
             this.Controls.Add(this.enroll);
             this.Controls.Add(this.remindMe);
             this.Name = "UpsPromoDlg";
+            this.ShowInTaskbar = false;
             this.Text = "Activate Ups Promo";
             this.ResumeLayout(false);
             this.PerformLayout();
