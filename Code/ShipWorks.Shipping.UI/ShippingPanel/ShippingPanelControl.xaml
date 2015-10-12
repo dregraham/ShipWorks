@@ -20,7 +20,9 @@
              xmlns:loading="clr-namespace:ShipWorks.Shipping.Loading;assembly=ShipWorks.Shipping"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shippingPanel:ShippingPanelViewModel}"
              d:DesignHeight="1304" d:DesignWidth="350"
-             SnapsToDevicePixels="True">
+             SnapsToDevicePixels="True"
+             Focusable="True" 
+             IsTabStop="True">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

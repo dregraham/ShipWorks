@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using Common.Logging;
 using ShipWorks.Core.Messaging;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
@@ -21,6 +22,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     /// </summary>
     public partial class ShippingPanel : UserControl, IDockingPanelContent
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(ShippingPanel));
         ShippingPanelControl shippingPanelControl;
         readonly ShippingPanelViewModel viewModel;
         readonly IMessenger messenger;
@@ -51,8 +53,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             base.OnLoad(e);
 
             shippingPanelControl = new ShippingPanelControl(viewModel);
-            shippingPanelControl.LostFocus += OnShippingPanelControlLostFocus;
+            
             shipmentPanelelementHost.Child = shippingPanelControl;
+
+            shippingPanelControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
 
             messenger.Handle<CreateLabelMessage>(this, HandleCreateLabelMessage);
             orderSelectionChangedHandler.Listen(viewModel.LoadOrder);
@@ -101,11 +105,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
-        /// The shipping panel has lost focus
+        /// Saves the shipment to the database when the shipping panel loses focus.
         /// </summary>
-        private void OnShippingPanelControlLostFocus(object sender, System.Windows.RoutedEventArgs e)
+        private void OnIsKeyboardFocusWithinChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
-            if (!shippingPanelControl.IsKeyboardFocusWithin)
+            // The other Focus events, like LostFocus, don't seem to work the way we need, but IsKeyBoardFocusWithinChanged does.
+            // If the new value is false, meaning we had focus within this control and it's children and then lost it, and it wasn't already false,
+            // save to the db.
+            if (!((bool)e.NewValue) && e.NewValue != e.OldValue)
             {
                 viewModel?.SaveToDatabase();
             }
