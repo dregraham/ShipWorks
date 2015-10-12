@@ -227,6 +227,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
             shipmentEntity.FedEx.SmartPostHubID = "5571";
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.FedEx;
 
             excludedServiceTypeRepository = new Mock<IExcludedServiceTypeRepository>();
             excludedServiceTypeRepository.Setup(x => x.GetExcludedServiceTypes(It.IsAny<ShipmentType>()))

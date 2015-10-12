@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac.Extras.Moq;
 using Xunit;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -11,27 +12,30 @@ using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Policies;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Shipping.Policies
 {
-    public class BestRateUpsRestrictionShippingPolicyTest
+    public class BestRateUpsRestrictionShippingPolicyTest : IDisposable
     {
         private IShippingPolicy testObject;
         private List<IBestRateShippingBroker> brokers;
         private int initialBrokerCount;
         private List<ShipmentTypeCode> shipmentTypeCodes;
-        
+        private AutoMock autoMock;
+
         public BestRateUpsRestrictionShippingPolicyTest()
         {
+            autoMock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = new BestRateUpsRestrictionShippingPolicy();
 
             brokers = new List<IBestRateShippingBroker>()
             {
                 new EndiciaBestRateBroker(),
                 new Express1EndiciaBestRateBroker(),
-                new WorldShipBestRateBroker(),
-                new UpsBestRateBroker(),
-                new UpsCounterRatesBroker()
+                autoMock.Create<WorldShipBestRateBroker>(),
+                autoMock.Create<UpsBestRateBroker>(),
+                autoMock.Create<UpsCounterRatesBroker>()
             };
             
             initialBrokerCount = brokers.Count;
@@ -122,6 +126,11 @@ namespace ShipWorks.Tests.Shipping.Policies
             testObject.Apply(shipmentTypeCodes);
 
             Assert.False(shipmentTypeCodes.Any());
+        }
+
+        public void Dispose()
+        {
+            autoMock.Dispose();
         }
     }
 }

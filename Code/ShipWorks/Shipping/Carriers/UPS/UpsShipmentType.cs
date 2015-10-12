@@ -1207,7 +1207,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <returns>An instance of an UpsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return UpsAccountManager.Accounts.Any() ? new UpsBestRateBroker() : new UpsCounterRatesBroker();
+            return UpsAccountManager.Accounts.Any() ? new UpsBestRateBroker(this) : new UpsCounterRatesBroker(this);
         }
 
         /// <summary>

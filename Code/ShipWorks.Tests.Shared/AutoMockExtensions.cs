@@ -25,14 +25,6 @@ namespace ShipWorks.Tests.Shared
         {
             var shipmentTypeMock = mock.MockRepository.Create<ShipmentType>();
             shipmentTypeConfiguration(shipmentTypeMock);
-
-            mock.Mock<IShipmentTypeFactory>()
-                .Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
-                .Returns(shipmentTypeMock.Object);
-
-            mock.Mock<IShipmentTypeFactory>()
-                .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
-                .Returns(shipmentTypeMock.Object);
         }
 
         /// <summary>

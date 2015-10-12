@@ -11,6 +11,8 @@ using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
 {
@@ -32,15 +34,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
         [Fact]
         public void Filter_WithNoPostalBrokers_ReturnsCopyOfOriginalList_Test()
         {
-            var testBroker1 = new UpsBestRateBroker();
-            var testBroker2 = new FedExBestRateBroker();
-            var brokers = new List<IBestRateShippingBroker> { testBroker1, testBroker2 };
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                var testBroker1 = new UpsBestRateBroker(mock.Create<UpsOltShipmentType>());
+                var testBroker2 = new FedExBestRateBroker();
+                var brokers = new List<IBestRateShippingBroker> { testBroker1, testBroker2 };
 
-            var testObject = new PostalCounterBrokerFilter();
-            var results = testObject.Filter(brokers);
+                var testObject = new PostalCounterBrokerFilter();
+                var results = testObject.Filter(brokers);
 
-            Assert.Equal(testBroker1, results.First());
-            Assert.Equal(testBroker2, results.Last());
+                Assert.Equal(testBroker1, results.First());
+                Assert.Equal(testBroker2, results.Last());
+            }
         }
     }
 }

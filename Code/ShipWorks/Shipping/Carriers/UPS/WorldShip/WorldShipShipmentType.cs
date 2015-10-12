@@ -194,7 +194,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <returns>An instance of a WorldShipBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new WorldShipBestRateBroker();
+            return new WorldShipBestRateBroker(this);
         }
     }
 }

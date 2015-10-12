@@ -5,7 +5,9 @@ using System.Text;
 using Xunit;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 {
@@ -21,59 +23,82 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         [Fact]
         public void Filter_RemovesWorldShipBroker_WhenListContainsUpsBrokerAndWorldShipBroker_Test()
         {
-            List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                new UpsBestRateBroker(),
-                new WorldShipBestRateBroker()
-            };
+                var worldShipBestRateBroker = mock.Create<WorldShipBestRateBroker>();
+                var upsBestRateBroker = mock.Create<UpsBestRateBroker>();
 
-            List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
+                List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
+                {
+                    upsBestRateBroker,
+                    worldShipBestRateBroker
+                };
 
-            Assert.Equal(1, fileredBrokers.Count);
-            Assert.Equal(0, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
+                List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
+
+                Assert.Equal(1, fileredBrokers.Count);
+                Assert.Equal(0, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
+            }
         }
 
         [Fact]
         public void Filter_KeepsUpsBroker_WhenListContainsUpsBrokerAndWorldShipBroker_Test()
         {
-            List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                new UpsBestRateBroker(),
-                new WorldShipBestRateBroker()
-            };
+                var worldShipBestRateBroker = mock.Create<WorldShipBestRateBroker>();
+                var upsBestRateBroker = mock.Create<UpsBestRateBroker>();
 
-            List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
+                List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
+                {
+                    upsBestRateBroker,
+                    worldShipBestRateBroker
+                };
 
-            Assert.Equal(1, fileredBrokers.Count);
-            Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
+                List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
+
+                Assert.Equal(1, fileredBrokers.Count);
+                Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
+            }
         }
 
         [Fact]
         public void Filter_DoesNotRemoveWorldShipBroker_WhenListOnlyContainsWorldShipBroker_Test()
         {
-            List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                new WorldShipBestRateBroker()
-            };
+                var worldShipBestRateBroker = mock.Create<WorldShipBestRateBroker>();
 
-            List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
+                List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
+                {
+                    worldShipBestRateBroker
+                };
 
-            Assert.Equal(1, fileredBrokers.Count);
-            Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
+                List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
+
+                Assert.Equal(1, fileredBrokers.Count);
+                Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
+            }
+
         }
 
         [Fact]
         public void Filter_KeepsUpsBroker_WhenListOnlyContainsUpsBroker_Test()
         {
-            List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                new UpsBestRateBroker()
-            };
+                var bestRateBroker = new UpsBestRateBroker(mock.Create<UpsOltShipmentType>());
 
-            List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
+                List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
+                {
+                    bestRateBroker
+                };
 
-            Assert.Equal(1, fileredBrokers.Count);
-            Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
+                List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
+
+                Assert.Equal(1, fileredBrokers.Count);
+                Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
+            }
         }
     }
 }

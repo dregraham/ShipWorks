@@ -9,9 +9,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
     /// </summary>
     public partial class UpsPromoFootnote : RateFootnoteControl
     {
-        private readonly UpsPromo upsPromo;
+        private readonly IUpsPromo upsPromo;
 
-        public UpsPromoFootnote(UpsPromo upsPromo)
+        public UpsPromoFootnote(IUpsPromo upsPromo)
         {
             InitializeComponent();
             this.upsPromo = upsPromo;

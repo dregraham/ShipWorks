@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             };
 
 
-            testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate, 
+            testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate,
                 ContentWeight = 12.1, 
                 BestRate = new BestRateShipmentEntity
                 {

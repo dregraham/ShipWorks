@@ -27,8 +27,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <remarks>
         /// This is designed to be used within ShipWorks
         /// </remarks>
-        public UpsCounterRatesBroker()
-            : this((UpsOltShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools), new UpsCounterRateAccountRepository(TangoCredentialStore.Instance), new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance))
+        public UpsCounterRatesBroker(UpsShipmentType shipmentType)
+            : this(shipmentType, new UpsCounterRateAccountRepository(TangoCredentialStore.Instance), new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance))
         {}
 
 

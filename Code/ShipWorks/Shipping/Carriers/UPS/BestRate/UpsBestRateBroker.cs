@@ -26,8 +26,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// Creates a broker with the default shipment type and account repository
         /// </summary>
         /// <remarks>This is designed to be used within ShipWorks</remarks>
-        public UpsBestRateBroker()
-            : this(ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools), new UpsAccountRepository(), new UpsSettingsRepository())
+        public UpsBestRateBroker(ShipmentType shipmentType)
+            : this(shipmentType, new UpsAccountRepository(), new UpsSettingsRepository())
         {
         }
 

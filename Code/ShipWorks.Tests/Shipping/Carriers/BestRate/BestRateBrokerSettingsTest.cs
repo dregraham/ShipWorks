@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -115,8 +116,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [Fact]
         public void IsMailInnovationsAvailable_ReturnsTrue_WorldShipEnabled_Test()
         {
-            settings.WorldShipMailInnovationsEnabled = true;
-            Assert.Equal(true, testObject.IsMailInnovationsAvailable(ShipmentTypeManager.GetType(ShipmentTypeCode.UpsWorldShip)));
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                settings.WorldShipMailInnovationsEnabled = true;
+                Assert.Equal(true, testObject.IsMailInnovationsAvailable(mock.Create<WorldShipShipmentType>()));
+            }
         }
 
         [Fact]

@@ -16,14 +16,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         private readonly IUpsPromoPolicy promoPolicy;
         private readonly ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository;
         private readonly IUpsPromoFactory promoFactory;
-        private readonly ICarrierSettingsRepository upsSettingsRepository;
 
-        public UpsPromoFootnoteFootnoteFactoryFactory(IUpsPromoPolicy promoPolicy, IIndex<ShipmentTypeCode, ICarrierSettingsRepository> lookup, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IUpsPromoFactory promoFactory)
+        public UpsPromoFootnoteFootnoteFactoryFactory(IUpsPromoPolicy promoPolicy, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IUpsPromoFactory promoFactory)
         {
             this.promoPolicy = promoPolicy;
             this.upsAccountRepository = upsAccountRepository;
             this.promoFactory = promoFactory;
-            upsSettingsRepository = lookup[ShipmentTypeCode.UpsOnLineTools];
         }
 
         /// <summary>
@@ -40,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             }
 
             // Create promofootnote factory
-            UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(account, upsSettingsRepository, upsAccountRepository);
+            UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(upsPromo);
 
             // Add factgory too the final group rate group
             return promoFootNoteFactory;

@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
         private List<ShipmentEntity> getRatesShipments; 
 
         private Mock<ICarrierAccountRepository<UpsAccountEntity>> genericRepositoryMock;
-        private Mock<WorldShipShipmentType> genericShipmentTypeMock;
+        private Mock<ShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
 
         private int expectedNumberOfAccountsReturned = 1;
@@ -81,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
             getRatesShipments = new List<ShipmentEntity>();
 
             // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
-            genericShipmentTypeMock = new Mock<WorldShipShipmentType>();
+            genericShipmentTypeMock = new Mock<ShipmentType>();
             genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.UpsWorldShip);
             genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
                             .Returns((ShipmentEntity s) => rateResults[s.Ups.UpsAccountID])

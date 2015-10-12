@@ -588,6 +588,10 @@
       <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
+      <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
+      <Name>ShipWorks.Tests.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
       <Project>{0406ca21-03b7-4bf0-aeb3-993c7be208b9}</Project>
       <Name>ShipWorks.ThirdPartyApi</Name>

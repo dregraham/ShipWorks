@@ -38,6 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             {
                 RequestedLabelFormat = (int)ThermalLanguage.EPL,
                 ActualLabelFormat = (int)ThermalLanguage.EPL,
+                ShipmentType = (int) ShipmentTypeCode.FedEx,
                 FedEx = new FedExShipmentEntity()
                 {
                     Shipment = new ShipmentEntity()

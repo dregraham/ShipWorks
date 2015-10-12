@@ -10,18 +10,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
     /// </summary>
     public class UpsPromoFootnoteFactory : IRateFootnoteFactory
     {
-        private readonly UpsAccountEntity upsAccount;
-        private readonly ICarrierSettingsRepository settingsRepository;
-        private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private readonly IUpsPromo promo;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsPromoFootnoteFactory(UpsAccountEntity upsAccount, ICarrierSettingsRepository settingsRepository, ICarrierAccountRepository<UpsAccountEntity> accountRepository)
+        public UpsPromoFootnoteFactory(IUpsPromo promo)
         {
-            this.settingsRepository = settingsRepository;
-            this.accountRepository = accountRepository;
-            this.upsAccount = upsAccount;
+            this.promo = promo;
         }
 
         /// <summary>
@@ -31,16 +27,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
         /// <returns></returns>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
-            return new UpsPromoFootnote(CreatePromo());
-        }
-
-        /// <summary>
-        /// Creates the UpsPromo
-        /// </summary>
-        /// <returns></returns>
-        private UpsPromo CreatePromo()
-        {
-            return new UpsPromo(upsAccount, settingsRepository, accountRepository, new UpsPromoWebClientFactory());
+            return new UpsPromoFootnote(promo);
         }
 
         /// <summary>
