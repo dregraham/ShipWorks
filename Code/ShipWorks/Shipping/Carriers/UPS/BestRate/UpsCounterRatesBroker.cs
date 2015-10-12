@@ -35,8 +35,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsCounterRatesBroker"/> class.
         /// </summary>
-        public UpsCounterRatesBroker(UpsShipmentType upsShipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository) 
-            : base(upsShipmentType, accountRepository, settingsRepository)
+        public UpsCounterRatesBroker(UpsShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository) 
+            : base(shipmentType, accountRepository, settingsRepository)
         {
 
         }

@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac;
 using Autofac.Extras.Moq;
 using Xunit;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Policies;
@@ -29,13 +32,21 @@ namespace ShipWorks.Tests.Shipping.Policies
             autoMock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = new BestRateUpsRestrictionShippingPolicy();
 
+            var endiciaBestRateBroker = new EndiciaBestRateBroker();
+            var express1EndiciaBestRateBroker = new Express1EndiciaBestRateBroker();
+            var worldShipBestRateBroker = autoMock.Create<WorldShipBestRateBroker>();
+            var upsBestRateBroker = autoMock.Create<UpsBestRateBroker>();
+
+            var upsShipmentType = autoMock.Create<UpsOltShipmentType>();
+            var upsCounterRatesBroker = autoMock.Create<UpsCounterRatesBroker>(new NamedParameter("shipmentType", upsShipmentType));
+
             brokers = new List<IBestRateShippingBroker>()
             {
-                new EndiciaBestRateBroker(),
-                new Express1EndiciaBestRateBroker(),
-                autoMock.Create<WorldShipBestRateBroker>(),
-                autoMock.Create<UpsBestRateBroker>(),
-                autoMock.Create<UpsCounterRatesBroker>()
+                endiciaBestRateBroker,
+                express1EndiciaBestRateBroker,
+                worldShipBestRateBroker,
+                upsBestRateBroker,
+                upsCounterRatesBroker
             };
             
             initialBrokerCount = brokers.Count;
