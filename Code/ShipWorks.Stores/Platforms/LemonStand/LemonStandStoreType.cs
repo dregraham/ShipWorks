@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 using Interapptive.Shared.Net;
 using log4net;
 using Newtonsoft.Json.Linq;
@@ -19,6 +21,7 @@ using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Filters;
+using ShipWorks.Stores.Platforms.LemonStand.DTO;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
@@ -87,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             LemonStandStatusCodeProvider codeProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity)Store);
 
             // create a menu item for each status 
-            ICollection<string> statusCodeNames = GetOnlineStatusChoices();
+            ICollection<string> statusCodeNames = GetCurrentOrderStatuses();
 
             bool isOne = false;
             foreach (string codeName in statusCodeNames)
@@ -435,6 +438,25 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 // add the error to issues so we can react later
                 issueAdder.Add(orderID, ex);
             }
+        }
+
+        private ICollection<string> GetCurrentOrderStatuses()
+        {
+            XmlSerializer deserializer = new XmlSerializer(typeof(LemonStandStatusCodes));
+
+            LemonStandStoreEntity store = (LemonStandStoreEntity) Store;
+            TextReader reader = new StringReader(store.StatusCodes);
+
+            LemonStandStatusCodes codes = (LemonStandStatusCodes) deserializer.Deserialize(reader);
+
+            ICollection<string> statusList = new List<string>();
+
+            foreach(var code in codes.StatusCode)
+            {
+                statusList.Add(code.Name);
+            }
+
+            return statusList;
         }
     }
 }

@@ -91,6 +91,8 @@
     <Compile Include="Platforms\LemonStand\DTO\LemonStandOrder.cs" />
     <Compile Include="Platforms\LemonStand\DTO\LemonStandShipment.cs" />
     <Compile Include="Platforms\LemonStand\DTO\LemonStandShippingAddress.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandStatusCode.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandStatusCodes.cs" />
     <Compile Include="Platforms\LemonStand\ILemonStandWebClient.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloader.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandException.cs" />
