@@ -45,6 +45,7 @@
             this.linkControl.Size = new System.Drawing.Size(103, 13);
             this.linkControl.TabIndex = 8;
             this.linkControl.Text = "Activate Discount...";
+            this.linkControl.Click += new System.EventHandler(this.OnLinkActivate);
             // 
             // pictureBox
             // 

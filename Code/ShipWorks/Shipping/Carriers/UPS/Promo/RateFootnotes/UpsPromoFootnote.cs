@@ -20,12 +20,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
         /// <summary>
         /// Bring up the UpsPromoDlg
         /// </summary>
-        private void OnLinkViewSavings(object sender, EventArgs e)
+        private void OnLinkActivate(object sender, EventArgs e)
         {
-            //using (somedlg dlg = new somedlg(upsPromo))
-            //{
-            //    dlg.ShowDialog(this);
-            //}
+            using (UpsPromoDlg dlg = new UpsPromoDlg(upsPromo))
+            {
+                dlg.ShowDialog(this);
+            }
+
+            RateCache.Instance.Clear();
+            Hide();
         }
 
         /// <summary>

@@ -60,5 +60,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// </summary>
         /// <returns></returns>
         UpsPromoStatus GetStatus();
+
+        /// <summary>
+        /// Remind the user of the paromo later
+        /// </summary>
+        void RemindMe();
     }
 }

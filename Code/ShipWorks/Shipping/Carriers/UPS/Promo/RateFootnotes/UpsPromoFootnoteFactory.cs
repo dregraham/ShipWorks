@@ -1,6 +1,4 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
+﻿using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes

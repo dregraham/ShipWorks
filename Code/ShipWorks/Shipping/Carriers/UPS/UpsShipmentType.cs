@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Net;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -14,10 +12,8 @@ using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -31,22 +27,16 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Tracking;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Win32;
 using ShipWorks.UI;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Stores;
-using log4net;
-using log4net.Repository.Hierarchy;
 using System.Globalization;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {

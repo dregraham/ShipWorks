@@ -1,7 +1,5 @@
 ﻿using Autofac;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.Promo;

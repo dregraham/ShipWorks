@@ -1056,6 +1056,12 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromoPolicy.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoDlg.Designer.cs">
+      <DependentUpon>UpsPromoDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
@@ -7711,6 +7717,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnote.resx">
       <DependentUpon>UpsPromoFootnote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\Promo\UpsPromoDlg.resx">
+      <DependentUpon>UpsPromoDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\UpsDryIceControl.resx">
       <DependentUpon>UpsDryIceControl.cs</DependentUpon>

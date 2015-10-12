@@ -103,6 +103,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         }
 
         /// <summary>
+        /// Remind the user about the promo later
+        /// </summary>
+        public void RemindMe()
+        {
+            throw new NotImplementedException("REMIND ME LATER IS NOT DONE YET");
+        }
+
+        /// <summary>
         /// Gets the PromoAcceptanceTerms from UpsApiPromoClient
         /// </summary>
         /// <returns></returns>
@@ -112,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             Terms = client.GetAgreement();
             return Terms;
         }
-
+        
         /// <summary>
         /// Gets the PromoStatus for the UpsAccountEntity
         /// </summary>
