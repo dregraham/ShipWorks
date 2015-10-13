@@ -39,7 +39,7 @@
             // remindMe
             // 
             this.remindMe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remindMe.Location = new System.Drawing.Point(353, 447);
+            this.remindMe.Location = new System.Drawing.Point(272, 447);
             this.remindMe.Name = "remindMe";
             this.remindMe.Size = new System.Drawing.Size(75, 23);
             this.remindMe.TabIndex = 2;
@@ -51,18 +51,18 @@
             // 
             this.enroll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.enroll.Enabled = false;
-            this.enroll.Location = new System.Drawing.Point(191, 447);
+            this.enroll.Location = new System.Drawing.Point(353, 447);
             this.enroll.Name = "enroll";
             this.enroll.Size = new System.Drawing.Size(75, 23);
             this.enroll.TabIndex = 3;
-            this.enroll.Text = "Enroll";
+            this.enroll.Text = "Activate";
             this.enroll.UseVisualStyleBackColor = true;
             this.enroll.Click += new System.EventHandler(this.OnEnrollClick);
             // 
             // decline
             // 
             this.decline.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.decline.Location = new System.Drawing.Point(272, 447);
+            this.decline.Location = new System.Drawing.Point(191, 447);
             this.decline.Name = "decline";
             this.decline.Size = new System.Drawing.Size(75, 23);
             this.decline.TabIndex = 4;

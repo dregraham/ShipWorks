@@ -79,6 +79,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         private void OnAcceptTermsChanged(object sender, EventArgs e)
         {
             enroll.Enabled = acceptTerms.Checked;
+            enroll.Focus();
         }
 
         private void GetTerms()
