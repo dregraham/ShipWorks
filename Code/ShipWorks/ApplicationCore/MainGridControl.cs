@@ -436,12 +436,14 @@ namespace ShipWorks.ApplicationCore
         {
             FilterEntityGrid grid = new FilterEntityGrid(target);
             grid.BorderStyle = BorderStyle.None;
-
+            
+            grid.CheckBoxes = true;
             grid.Visible = false;
             grid.Dock = DockStyle.Fill;
             grid.Parent = gridPanel;
             grid.StretchPrimaryGrid = false;
-
+            
+            grid.AfterCheck += new GridRowCheckEventHandler(OnCheckChanged);
             grid.SelectionChanged += new SelectionChangedEventHandler(OnGridSelectionChanged);
             grid.SortChanged += new GridEventHandler(OnGridSortChanged);
             grid.KeyDown += new KeyEventHandler(OnGridKeyDown);
@@ -575,7 +577,27 @@ namespace ShipWorks.ApplicationCore
                 log.InfoFormat("Grid selection changed while not visible. ({0}, {1})", grid.Rows.Count, grid.Selection.Count);
                 return;
             }
+            
 
+            RaiseSelectionChanged();
+        }
+
+        /// <summary>
+        /// Checkbox changed in grid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnCheckChanged(object sender, GridRowCheckEventArgs e)
+        {
+            PagedEntityGrid grid = (PagedEntityGrid)sender;
+            if (!grid.Visible)
+            {
+                log.InfoFormat("Grid selection changed while not visible. ({0}, {1})", grid.Rows.Count, grid.Selection.Count);
+                return;
+            }
+
+            e.Row.Selected = e.Row.Checked;
+            
             RaiseSelectionChanged();
         }
 

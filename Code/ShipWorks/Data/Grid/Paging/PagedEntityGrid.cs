@@ -916,6 +916,15 @@ namespace ShipWorks.Data.Grid.Paging
                 }
             }
 
+            if (e?.Grid.SelectedElementCount == 0)
+            {
+                foreach (GridRow row in Rows)
+                {
+                    row.Checked = false;
+                }
+            }
+
+
             // See if this number of items is restricted
             EditionRestrictionIssue restriciton = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SelectionLimit, virtualSelection.Count);
             if (restriciton.Level != EditionRestrictionLevel.None)
