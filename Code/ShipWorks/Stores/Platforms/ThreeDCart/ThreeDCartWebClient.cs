@@ -350,6 +350,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <returns>List of orders matching criteria, sorted by LastUpdate ascending </returns>
         public List<XmlNode> GetOrders(ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria)
         {
+            // Track if we should send the invoice number prefix
+            bool sendPrefix = false;
             List<XmlNode> ordersToReturn = new List<XmlNode>();
 
             // 3d Cart's regular api doesn't let you query by modified date, but the advanced api does.
@@ -378,10 +380,22 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 string invoiceNumber = orderNode["invoicenum"].InnerText;
                 string invoiceNumberPrefix = orderNode["invoicenum_prefix"].InnerText;
                 XmlNode orderResultXml;
+              
+                // Sometimes 3dcart wants the invoice number prefix included in the request
+                string invoiceNumberToSend = sendPrefix ? $"{invoiceNumberPrefix}{invoiceNumber}" : invoiceNumber;
 
-                using (cartAPI api = CreateApiWebService(string.Format("GetOrder ({0})", invoiceNumber)))
+                using (cartAPI api = CreateApiWebService($"GetOrder ({invoiceNumber})"))
                 {
-                    orderResultXml = api.getOrder(store.StoreDomain, store.ApiUserKey, 1, 1, false, invoiceNumber, string.Empty, string.Empty, string.Empty, string.Empty);
+                    orderResultXml = api.getOrder(store.StoreDomain, store.ApiUserKey, 1, 1, false, invoiceNumberToSend, string.Empty, string.Empty, string.Empty, string.Empty);
+                  
+                    // Check to see if orders were returned, if they returned an error
+                    // Call getOrders again with the prefix and then set sendPrefix to true
+                    // see FD#603416
+                    if (orderResultXml.Name == "Error")
+                    {
+                        orderResultXml = api.getOrder(store.StoreDomain, store.ApiUserKey, 1, 1, false, $"{invoiceNumberPrefix}{invoiceNumber}", string.Empty, string.Empty, string.Empty, string.Empty);
+                        sendPrefix = true;
+                    }
                 }
 
                 ValidateCartApiQueryResponse(orderResultXml, "GetOrder");
