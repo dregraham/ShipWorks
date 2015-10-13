@@ -367,8 +367,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             RequestedShippingMethod = orderSelectionLoaded.Order.RequestedShipping;
             InitialShipmentTypeCode = shipment.ShipmentTypeCode;
-            OriginAddressType = shipment.OriginOriginID;
-            InitialOriginAddressType = shipment.OriginOriginID;
+
+            bool supportsAccounts = shipmentTypeManager.ShipmentTypesSupportingAccounts.Contains(shipment.ShipmentTypeCode);
+            AccountVisibility = supportsAccounts ? Visibility.Visible : Visibility.Collapsed;
+
+            // If the shipment type does not support accounts, and the current origin id is account, default to store origin.
+            OriginAddressType = !supportsAccounts && shipment.OriginOriginID == 2 ? 0 : shipment.OriginOriginID;
+            InitialOriginAddressType = OriginAddressType;
 
             ICarrierShipmentAdapter adapter = carrierShipmentAdapterFactory.Get(shipment);
             AccountId = adapter.AccountId.GetValueOrDefault();
@@ -376,8 +381,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.Load(shipment.OriginPerson);
 
             AllowEditing = !shipment.Processed;
-
-            AccountVisibility = shipmentTypeManager.ShipmentTypesSupportingAccounts.Contains(shipment.ShipmentTypeCode) ? Visibility.Visible : Visibility.Collapsed;
 
             listenForRateCriteriaChanged = true;
 
