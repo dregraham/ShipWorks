@@ -3126,6 +3126,8 @@ namespace ShipWorks.Data.Model
 		ReturnSaturdayPickup,
 		///<summary>ReturnsClearance. </summary>
 		ReturnsClearance,
+		///<summary>ReferenceFIMS. </summary>
+		ReferenceFIMS,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3506,6 +3508,8 @@ namespace ShipWorks.Data.Model
 		ReturnsClearance,
 		///<summary>MaskedData. </summary>
 		MaskedData,
+		///<summary>ReferenceFIMS. </summary>
+		ReferenceFIMS,
 		/// <summary></summary>
 		AmountOfFields
 	}

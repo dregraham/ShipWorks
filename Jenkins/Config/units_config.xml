@@ -22,7 +22,7 @@
   <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>C:\jenkins-builds\spike-amazon-assembly</customWorkspace>
+  <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>rake test:units</command>
@@ -64,7 +64,7 @@
       </extraConfiguration>
     </xunit>
     <hudson.tasks.Mailer plugin="mailer@1.15">
-      <recipients>t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com</recipients>
+      <recipients>t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com c.hicks@shipworks.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
