@@ -1,10 +1,13 @@
 ﻿using ShipWorks.Core.Messaging;
 using System;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace ShipWorks.Shipping.UI.AttachedProperties
 {
@@ -19,7 +22,7 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         public static readonly DependencyProperty MessageTypeProperty = DependencyProperty.RegisterAttached("MessageType", typeof(Type),
                 typeof(UpdateWhenMessageReceived), new PropertyMetadata(null, OnMessageTypeChanged));
 
-        private static readonly DependencyProperty SubscriptionProperty = 
+        private static readonly DependencyProperty SubscriptionProperty =
             DependencyProperty.RegisterAttached("Subscription", typeof(IDisposable), typeof(UpdateWhenMessageReceived));
 
         /// <summary>
@@ -40,11 +43,15 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
             {
                 throw new InvalidOperationException("MessageType must be an implementation of IShipWorksMessage");
             }
-            
+
             IDisposable subscription = Messenger.Current.AsObservable<IShipWorksMessage>()
                 .Where(x => x.GetType() == messageType)
                 .ObserveOn(DispatcherScheduler.Current)
-                .Subscribe(x => BindingOperations.GetBindingExpressionBase(control, ItemsControl.ItemsSourceProperty)?.UpdateTarget());
+                .Subscribe(x =>
+                {
+                    BindingOperations.GetBindingExpressionBase(control, ItemsControl.ItemsSourceProperty)?.UpdateTarget();
+                    ResetSelection(control as Selector);
+                });
 
             SetSubscription(control, subscription);
 
@@ -81,5 +88,68 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// Remove the old handler, if there was one
         /// </summary>
         private static void RemoveExistingSubscription(DependencyObject control) => GetSubscription(control)?.Dispose();
+
+        /// <summary>
+        /// Reset the selection of the items control so it matches the item in the collection
+        /// </summary>
+        /// <remarks>
+        /// If we don't clear the selected value first, the control 
+        /// doesn't think anything has changed when we update the binding
+        /// </remarks>
+        private static void ResetSelection(Selector selector)
+        {
+            if (selector == null)
+            {
+                return;
+            }
+
+            selector.SelectedValue = null;
+            BindingOperations.GetBindingExpressionBase(selector, Selector.SelectedValueProperty)?.UpdateTarget();
+
+            UpdateComboBoxText(selector as ComboBox);
+        }
+
+        /// <summary>
+        /// Update the displayed text of the combo box
+        /// </summary>
+        /// <remarks>
+        /// The Text property updates correctly when we reset the selection, 
+        /// but the displayed text does not
+        /// </remarks>
+        private static void UpdateComboBoxText(ComboBox comboBox)
+        {
+            if (comboBox == null)
+            {
+                return;
+            }
+
+            SetSelectedText(comboBox, comboBox.Text);
+        }
+
+        /// <summary>
+        /// Set the selected text of the combobox
+        /// </summary>
+        /// <remarks>
+        /// This is necessary because updating the list of items doesn't update the text of the selected item.
+        /// I believe this is because the selected value of </remarks>
+        private static void SetSelectedText(DependencyObject element, string textValue)
+        {
+            ContentPresenter contentPresenter = element as ContentPresenter;
+            int childCount = VisualTreeHelper.GetChildrenCount(element);
+
+            if (contentPresenter != null)
+            {
+                TextBlock textBlock = VisualTreeHelper.GetChild(contentPresenter, 0) as TextBlock ?? new TextBlock();
+                textBlock.Text = textValue;
+                contentPresenter.Content = textBlock;
+                return;
+            }
+
+            for (int i = 0; i < childCount; i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(element, i) as DependencyObject;
+                SetSelectedText(child, textValue);
+            }
+        }
     }
 }
