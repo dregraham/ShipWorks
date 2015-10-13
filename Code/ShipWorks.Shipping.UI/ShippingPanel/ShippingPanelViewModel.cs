@@ -234,7 +234,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 if (handler.Set(nameof(OriginAddressType), ref originAddressType, value))
                 {
-                    Origin.SetAddressFromOrigin(OriginAddressType, shipment?.OrderID ?? 0, -1, ShipmentType);
+                    Origin.SetAddressFromOrigin(OriginAddressType, shipment?.OrderID ?? 0, AccountId, ShipmentType);
                 }
             }
         }
