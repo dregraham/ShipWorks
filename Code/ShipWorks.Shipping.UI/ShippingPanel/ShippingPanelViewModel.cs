@@ -580,8 +580,23 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void OnShipmentDeleted(ShipmentDeletedMessage message)
         {
-            LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Deleted;
-            shipment = null;
+            // Check to see if there are any other un processed shipments we could display.
+            List<ShipmentEntity> shipments = shippingManager.GetShipments(shipment.OrderID, false).Where(s => !s.Processed).ToList();
+
+            if (shipments.Any())
+            {
+                // Load up the unprocessed shipment
+                LoadOrder(new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded>()
+                    {
+                        new OrderSelectionLoaded(shipment.Order, shipments)
+                    }));
+            }
+            else
+            {
+                // There weren't any unprocessed shipments, so show as deleted.
+                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Deleted;
+                shipment = null;
+            }
         }
 
         /// <summary>
