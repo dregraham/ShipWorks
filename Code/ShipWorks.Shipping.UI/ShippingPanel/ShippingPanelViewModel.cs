@@ -316,7 +316,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 shipment = orderSelectionLoaded.Shipments.Single();
                 Populate();
-                AllowEditing = true;
             }
             else
             {
