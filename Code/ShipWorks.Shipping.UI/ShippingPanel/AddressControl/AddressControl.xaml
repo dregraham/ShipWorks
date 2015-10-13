@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI"
+             xmlns:props="clr-namespace:ShipWorks.Shipping.UI.AttachedProperties"
              xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
              xmlns:valueConverters="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
              mc:Ignorable="d" 
@@ -32,10 +33,10 @@
                        Style="{StaticResource GridLabel}">Full Name:</TextBlock>
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
             <TextBlock Grid.Row="1" Grid.Column="0"
                        Style="{StaticResource GridLabel}">Company:</TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1"
+                     props:EntityFieldLength.FieldName="PersonCompany"
                      Text="{Binding Company, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
 
@@ -64,17 +65,20 @@
             <TextBlock Grid.Row="1" Grid.Column="0"
                        Style="{StaticResource GridLabel}">City:</TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1"
+                     props:EntityFieldLength.FieldName="PersonCity"
                      Text="{Binding City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="2" Grid.Column="0"
                        Style="{StaticResource GridLabel}">State \ Prov:</TextBlock>
             <ComboBox Grid.Row="2" Grid.Column="1"
+                      props:EntityFieldLength.FieldName="PersonState"
                       ItemsSource="{Binding SelectedValue,ElementName=CountryComboBox,Converter={StaticResource StateProvinceConverter}}"
                       Text="{Binding StateProvCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
 
             <TextBlock Grid.Row="3" Grid.Column="0"
                        Style="{StaticResource GridLabel}">Postal Code:</TextBlock>
             <TextBox Grid.Row="3" Grid.Column="1"
+                     props:EntityFieldLength.FieldName="PersonPostal"
                      Text="{Binding PostalCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="4" Grid.Column="0"
@@ -101,11 +105,13 @@
             <TextBlock Grid.Row="0" Grid.Column="0"
                        Style="{StaticResource GridLabel}">Email:</TextBlock>
             <TextBox Grid.Row="0" Grid.Column="1"
+                     props:EntityFieldLength.FieldName="PersonEmail"
                      Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="1" Grid.Column="0"
                         Style="{StaticResource GridLabel}">Phone:</TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1"
+                     props:EntityFieldLength.FieldName="PersonPhone"
                      Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </StackPanel>
