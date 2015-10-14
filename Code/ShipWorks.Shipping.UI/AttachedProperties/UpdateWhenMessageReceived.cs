@@ -102,8 +102,8 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
             {
                 return;
             }
-
-            selector.SelectedValue = null;
+            
+            selector.SetCurrentValue(Selector.SelectedValueProperty, null);
             BindingOperations.GetBindingExpressionBase(selector, Selector.SelectedValueProperty)?.UpdateTarget();
 
             UpdateComboBoxText(selector as ComboBox);
@@ -132,24 +132,28 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// <remarks>
         /// This is necessary because updating the list of items doesn't update the text of the selected item.
         /// I believe this is because the selected value of </remarks>
-        private static void SetSelectedText(DependencyObject element, string textValue)
+        private static bool SetSelectedText(DependencyObject element, string textValue)
         {
             ContentPresenter contentPresenter = element as ContentPresenter;
             int childCount = VisualTreeHelper.GetChildrenCount(element);
 
             if (contentPresenter != null)
             {
-                TextBlock textBlock = VisualTreeHelper.GetChild(contentPresenter, 0) as TextBlock ?? new TextBlock();
-                textBlock.Text = textValue;
-                contentPresenter.Content = textBlock;
-                return;
+                TextBlock textBlock = VisualTreeHelper.GetChild(contentPresenter, 0) as TextBlock ;
+                textBlock.SetCurrentValue(TextBlock.TextProperty, textValue);
+                return true;
             }
 
             for (int i = 0; i < childCount; i++)
             {
                 DependencyObject child = VisualTreeHelper.GetChild(element, i) as DependencyObject;
-                SetSelectedText(child, textValue);
+                if (SetSelectedText(child, textValue))
+                {
+                    return true;
+                }
             }
+
+            return false;
         }
     }
 }
