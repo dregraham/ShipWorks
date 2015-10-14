@@ -176,6 +176,7 @@ namespace Interapptive.Shared.Business.Geography
             countries.Add("Belize", "BZ");
             countries.Add("Benin", "BJ");
             countries.Add("Bermuda", "BM");
+            countries.Add("Bhutan", "BT");
             countries.Add("Bolivia", "BO");
             countries.Add("Bonaire", "BL");
             countries.Add("Bosnia", "BA");
