@@ -1034,8 +1034,8 @@ namespace ShipWorks.ApplicationCore
             foreach (GridRow row in checkedRows)
             {
                 row.Checked = false;
-                checkedRows.Remove(row);
             }
+            checkedRows.Clear();
         }
     }
 }
