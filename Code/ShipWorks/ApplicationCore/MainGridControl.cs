@@ -440,7 +440,8 @@ namespace ShipWorks.ApplicationCore
             grid.Dock = DockStyle.Fill;
             grid.Parent = gridPanel;
             grid.StretchPrimaryGrid = false;
-            
+
+            grid.ColumnsReordered += OnColumnsReordered;
             grid.AfterCheck += OnCheckChanged;
             grid.SelectionChanged += new SelectionChangedEventHandler(OnGridSelectionChanged);
             grid.SortChanged += new GridEventHandler(OnGridSortChanged);
@@ -449,6 +450,22 @@ namespace ShipWorks.ApplicationCore
             grid.RowActivated += new GridRowEventHandler(OnGridRowActivated);
 
             return grid;
+        }
+
+        /// <summary>
+        /// Someone reordered the grid columns
+        /// </summary>
+        private void OnColumnsReordered(object sender, EventArgs e)
+        {
+            // Reset the active filter node 
+            // this will move the checkbox all the way
+            // to the left of the screen
+            if (!IsSearchActive)
+            {
+                FilterNodeEntity currentFilterNode = ActiveFilterNode;
+                ActiveFilterNode = null;
+                ActiveFilterNode = currentFilterNode;
+            }
         }
 
         /// <summary>
@@ -576,25 +593,13 @@ namespace ShipWorks.ApplicationCore
                 return;
             }
 
-            // Clear all checked rows 
-            foreach (GridRow row in checkedRows)
-            {
-                row.Checked = false;
-            }
+            ClearCheckedRows();
 
             // Check the rows that are selected 
             foreach (GridRow row in e.Grid.SelectedElements)
             {
                 row.Checked = row.Selected;
-                
-                if (row.Checked)
-                {
-                    checkedRows.Add(row);
-                }
-                else
-                {
-                    checkedRows.Remove(row);
-                }
+                checkedRows.Add(row);
             }
             
             RaiseSelectionChanged();
@@ -617,12 +622,6 @@ namespace ShipWorks.ApplicationCore
             // Set the rows Selected status to the Rows checked status
             e.Row.Selected = e.Row.Checked;
             
-            // Find each row that is selected and se its check status to checked 
-            foreach (GridRow row in e.Row.Grid.SelectedElements)
-            {
-                row.Checked = row.Selected;
-            }
-
             // Keep track of all of the checked rows
             if (e.Row.Checked)
             {
@@ -878,7 +877,7 @@ namespace ShipWorks.ApplicationCore
 
             ActiveGrid.ActiveFilterNode = searchProvider.SearchResultsNode;
             UpdateHeaderContent();
-
+            ClearCheckedRows();
             RaiseSelectionChanged();
         }
 
@@ -1024,6 +1023,19 @@ namespace ShipWorks.ApplicationCore
         {
             AdvancedSearchVisible = true;
             filterEditor.LoadDefinition(definition);
+        }
+
+        /// <summary>
+        /// Uncheks the checked rows
+        /// </summary>
+        public void ClearCheckedRows()
+        {
+            // Clear all checked rows 
+            foreach (GridRow row in checkedRows)
+            {
+                row.Checked = false;
+                checkedRows.Remove(row);
+            }
         }
     }
 }
