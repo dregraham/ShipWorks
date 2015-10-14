@@ -60,6 +60,7 @@
             <TextBox Grid.Row="0" Grid.Column="1" 
                      MinLines="3" MaxLines="3"
                      AcceptsReturn="True"
+                     MaxLength="180"
                      Text="{Binding Street, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="1" Grid.Column="0"
