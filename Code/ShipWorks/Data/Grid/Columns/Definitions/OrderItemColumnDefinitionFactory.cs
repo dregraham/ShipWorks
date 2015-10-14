@@ -359,9 +359,21 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                                 StoreTypeCode = StoreTypeCode.BigCommerce
                             },
 
-                        #endregion
+                #endregion
 
-                        new GridColumnDefinition("{5D0135AC-ECE9-47e5-AB02-D91FAF91EA84}", true,
+                #region Groupon
+
+                        new GridColumnDefinition("{4D8AB7C4-E166-4C52-A00D-44BC3B53D8DD}", true,
+                            new GridTextDisplayType(), "BOM SKU", "A123456",
+                            GrouponOrderItemFields.BomSKU)
+                        {
+                            StoreTypeCode = StoreTypeCode.Groupon
+                        },
+
+                #endregion
+
+
+                new GridColumnDefinition("{5D0135AC-ECE9-47e5-AB02-D91FAF91EA84}", true,
                             new GridActionDisplayType(o => UserSession.Security.HasPermission(PermissionType.OrdersModify, (long) o) ? "Edit" : "", GridLinkAction.Edit), "Edit", "Edit",
                             OrderItemFields.OrderItemID) 
                             { 
