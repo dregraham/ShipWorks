@@ -916,13 +916,7 @@ namespace ShipWorks.Data.Grid.Paging
                 }
             }
 
-            if (e?.Grid.SelectedElementCount == 0)
-            {
-                foreach (GridRow row in Rows)
-                {
-                    row.Checked = false;
-                }
-            }
+
 
 
             // See if this number of items is restricted
