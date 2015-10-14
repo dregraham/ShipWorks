@@ -50,8 +50,9 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Visible" 
                   HorizontalScrollBarVisibility="Disabled"
-                  IsEnabled="{Binding AllowEditing}">
-        <StackPanel Margin="6,6,6,6">
+                  >
+        <StackPanel Margin="6,6,6,6" 
+            IsEnabled="{Binding AllowEditing}">
             <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Success}}">
                 <Grid>
                     <Grid.ColumnDefinitions>

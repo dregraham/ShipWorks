@@ -526,7 +526,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             if (shipmentChangedMessage.Shipment.ShipmentID == shipment.ShipmentID)
             {
-                ShipmentType = shipmentChangedMessage.Shipment.ShipmentTypeCode;
+                shipment = shipmentChangedMessage.Shipment;
+                Populate();
             }
         }
 
