@@ -7,6 +7,8 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using System.Text;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -51,12 +53,19 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public static void SaveAccount(OnTracAccountEntity account)
         {
+            bool wasDirty = account.IsDirty;
+
             using (var adapter = new SqlAdapter())
             {
                 adapter.SaveAndRefetch(account);
             }
 
             CheckForChangesNeeded();
+
+            if (wasDirty)
+            {
+                Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
+            }
         }
 
         /// <summary>
@@ -105,6 +114,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
 
             CheckForChangesNeeded();
+
+            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, ShipmentTypeCode.OnTrac));
         }
 
         /// <summary>

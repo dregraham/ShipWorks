@@ -2,6 +2,7 @@
 using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -157,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         /// <summary>
         /// Create a repository with no accounts
         /// </summary>
-        private Mock<ICarrierAccountRepository<T>> CreateEmptyRepository<T>() where T : IEntity2
+        private Mock<ICarrierAccountRepository<T>> CreateEmptyRepository<T>() where T : ICarrierAccount
         {
             return CreateRepositoryWithAccounts(new List<T>());
         }
@@ -165,7 +166,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         /// <summary>
         /// Create a repository that has the accounts in the given list
         /// </summary>
-        private Mock<ICarrierAccountRepository<T>> CreateRepositoryWithAccounts<T>(IEnumerable<T> accountList) where T : IEntity2
+        private Mock<ICarrierAccountRepository<T>> CreateRepositoryWithAccounts<T>(IEnumerable<T> accountList) where T : ICarrierAccount
         {
             Mock<ICarrierAccountRepository<T>> repo = mockRepository.Create<ICarrierAccountRepository<T>>();
             repo.Setup(x => x.Accounts).Returns(accountList);

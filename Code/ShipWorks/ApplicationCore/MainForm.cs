@@ -92,9 +92,10 @@ using SandComboBox = Divelements.SandRibbon.ComboBox;
 using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using Autofac;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using System.Threading.Tasks;
 using ShipWorks.Core.Common.Threading;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks
 {
@@ -2129,6 +2130,11 @@ namespace ShipWorks
         /// </summary>
         private void OnGridSelectionChanged(object sender, EventArgs e)
         {
+            if (gridControl.ActiveFilterTarget == FilterTarget.Orders)
+            {
+                Messenger.Current.Send(new OrderSelectionChangingMessage(this, gridControl.Selection.Keys));
+            }
+
             UpdateSelectionDependentUI();
         }
 

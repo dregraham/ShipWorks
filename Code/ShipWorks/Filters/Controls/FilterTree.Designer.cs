@@ -1,4 +1,4 @@
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.Filters.Controls
 {
@@ -19,7 +19,7 @@ namespace ShipWorks.Filters.Controls
             {
                 components.Dispose();
 
-                Messenger.Current.Remove(filterEditedToken);
+                filterEditedToken.Dispose();
 
                 quickFilterDisplayManager.Dispose();
             }

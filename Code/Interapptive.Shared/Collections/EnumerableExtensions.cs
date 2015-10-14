@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Interapptive.Shared.Utility;
 using System.Collections.ObjectModel;
+using System.Collections;
 
 namespace Interapptive.Shared.Collections
 {
@@ -157,9 +158,66 @@ namespace Interapptive.Shared.Collections
         /// <summary>
         /// Create a ReadOnlyCollection from the given enumerable
         /// </summary>
-        public static ReadOnlyCollection<T> ToReadOnly<T>(this IEnumerable<T> source)
+        public static ReadOnlyCollection<T> ToReadOnly<T>(this IEnumerable<T> source) => 
+            new ReadOnlyCollection<T>(source?.ToList() ?? new List<T>());
+
+
+
+        /// <summary>
+        /// Returns whether the collection has more, less, or equal to the specified count
+        /// </summary>
+        public static int HasMoreOrLessThanCount<T>(this IEnumerable<T> source, int count)
         {
-            return new ReadOnlyCollection<T>(source.ToList());
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
+
+            ICollection<T> collection = source as ICollection<T>;
+            if (collection != null)
+            {
+                return collection.Count.CompareTo(count);
+            }
+
+            return HasMoreOrLessThanCount(source as IEnumerable, count);
+        }
+
+        /// <summary>
+        /// Returns whether the collection has more, less, or equal to the specified count
+        /// </summary>
+        public static int HasMoreOrLessThanCount(this IEnumerable source, int count)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
+            
+            ICollection collection = source as ICollection;
+            if (collection != null)
+            {
+                return collection.Count.CompareTo(count);
+            }
+
+            // It's not a collection, so enumerate only as long as necessary
+            int num = 0;
+            checked
+            {
+                IEnumerator enumerator = null;
+
+                try
+                {
+                    enumerator = source.GetEnumerator();
+
+                    while (enumerator.MoveNext())
+                    {
+                        num++;
+                        if (num > count)
+                        {
+                            return 1;
+                        }
+                    }
+                }
+                finally
+                {
+                    (enumerator as IDisposable)?.Dispose();
+                }
+            }
+
+            return num == count ? 0 : -1;
         }
     }
 }

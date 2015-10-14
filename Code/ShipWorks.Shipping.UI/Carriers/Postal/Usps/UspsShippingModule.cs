@@ -1,5 +1,7 @@
 ﻿using Autofac;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Usps
 {
@@ -17,6 +19,14 @@ namespace ShipWorks.Shipping.Carriers.Usps
             builder.RegisterType<UspsShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Usps)
                 .SingleInstance();
+
+            builder.RegisterType<UspsAccountRepository>()
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Usps)
+                .SingleInstance();
+
+            builder.RegisterType<UspsShipmentAdapter>()
+                .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Usps)
+                .ExternallyOwned();
         }
     }
 }

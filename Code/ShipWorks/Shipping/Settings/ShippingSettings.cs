@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data;
@@ -11,6 +11,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Threading;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Settings
 {

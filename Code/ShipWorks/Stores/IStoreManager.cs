@@ -9,6 +9,16 @@ namespace ShipWorks.Stores
     public interface IStoreManager
     {
         /// <summary>
+        /// Get the store for the related entity
+        /// </summary>
+        StoreEntity GetRelatedStore(long entityID);
+
+        /// <summary>
+        /// Get the store from Id
+        /// </summary>
+        StoreEntity GetStore(long storeId);
+
+        /// <summary>
         /// Get the current list of stores.  All stores are returned, regardless of security.
         /// </summary>
         IEnumerable<StoreEntity> GetAllStores();

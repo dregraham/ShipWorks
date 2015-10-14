@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
@@ -10,17 +9,13 @@ using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.HelperClasses;
 using System.ComponentModel;
 using System.Windows.Forms;
-using ShipWorks.UI;
 using System.Linq;
 using ShipWorks.Data.Utility;
 using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.Data.Model.Custom;
-using ShipWorks.Stores.Management;
 using ShipWorks.ApplicationCore.Setup;
 
 namespace ShipWorks.Stores

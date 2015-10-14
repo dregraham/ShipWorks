@@ -1818,7 +1818,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [RequestedLabelFormat] [int] NOT NULL,
 [FimsAirWaybill] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReturnsClearance] [bit] NOT NULL CONSTRAINT [DF_FedExShipment_ReturnsClearance] DEFAULT ((0)),
-[MaskedData] [int] NULL
+[MaskedData] [int] NULL,
+[ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -1863,7 +1864,8 @@ CREATE TABLE [dbo].[FedExProfile]
 [RmaNumber] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RmaReason] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReturnSaturdayPickup] [bit] NULL,
-[ReturnsClearance] [bit] NULL
+[ReturnsClearance] [bit] NULL,
+[ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'
@@ -5438,6 +5440,75 @@ PRINT N'Adding foreign keys to [dbo].[GrouponStore]'
 GO
 ALTER TABLE [dbo].[GrouponStore] ADD CONSTRAINT [FK_GrouponStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
+
+PRINT N'Creating [dbo].[LemonStandStore]'
+GO
+CREATE TABLE [dbo].[LemonStandStore]
+(
+	[StoreID] [bigint] NOT NULL,
+	[Token] [varchar](100) NOT NULL,
+	[StoreURL] [varchar](255) NOT NULL,
+)
+GO
+PRINT N'Creating primary key [PK_LemonStandStore] on [dbo].[LemonStandStore]'
+GO
+ALTER TABLE [dbo].[LemonStandStore] ADD CONSTRAINT [PK_LemonStandStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[LemonStandStore]'
+GO
+ALTER TABLE [dbo].[LemonStandStore] ADD CONSTRAINT [FK_LemonStandStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
+
+PRINT N'Creating [dbo].[LemonStandOrder]'
+GO
+CREATE TABLE [dbo].[LemonStandOrder]
+(
+[OrderID] [bigint] NOT NULL,
+[LemonStandOrderID] [nvarchar](20) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_LemonStandOrder] on [dbo].[LemonStandOrder]'
+GO
+ALTER TABLE [dbo].[LemonStandOrder] ADD CONSTRAINT [PK_LemonStandOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+
+ALTER TABLE [dbo].[LemonStandOrder]  WITH CHECK ADD  CONSTRAINT [FK_LemonStandOrder_Order] FOREIGN KEY([OrderID])
+REFERENCES [dbo].[Order] ([OrderID])
+GO
+
+ALTER TABLE [dbo].[LemonStandOrder] CHECK CONSTRAINT [FK_LemonStandOrder_Order]
+GO
+
+PRINT N'Creating [dbo].[LemonStandOrderItem]'
+GO
+CREATE TABLE [dbo].[LemonStandOrderItem]
+(
+	[OrderItemID] [bigint] NOT NULL,
+	[UrlName] [nvarchar](100) NOT NULL,
+	[ShortDescription] [nvarchar](255) NOT NULL,
+	[Category] [nvarchar](100) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_LemonStandOrderItem] on [dbo].[LemonStandOrderItem]'
+GO
+ALTER TABLE [dbo].[LemonStandOrderItem] ADD CONSTRAINT [PK_LemonStandOrderItem] PRIMARY KEY CLUSTERED ([OrderItemID])
+GO
+
+ALTER TABLE [dbo].[LemonStandOrderItem]  WITH CHECK ADD  CONSTRAINT [FK_LemonStandOrderItem_OrderItem] FOREIGN KEY([OrderItemID])
+REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+
+ALTER TABLE [dbo].[LemonStandOrderItem] CHECK CONSTRAINT [FK_LemonStandOrderItem_OrderItem]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Auto_LemonStandOrderID] ON [dbo].[LemonStandOrder]
+(
+	[LemonStandOrderID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+
+
 PRINT N'Creating extended properties'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiToken'

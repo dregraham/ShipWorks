@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.AddressValidation;
-using Interapptive.Shared.IO.Text.Sgml;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
@@ -18,7 +17,6 @@ using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Shipping;
 using ShipWorks.Data.Connection;
 using ShipWorks.Properties;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
@@ -26,9 +24,8 @@ using System.Runtime.InteropServices;
 using log4net;
 using System.Threading.Tasks;
 using Divelements.SandGrid;
-using ShipWorks.ApplicationCore;
-using Autofac;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -130,52 +127,9 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnShipmentGridLoaded(object sender, EventArgs e)
         {
-            if (EntityID == null)
+            if (EntityID == null || entityGrid.Rows.Count == 0)
             {
                 ratesControl.ChangeShipment(null);
-            }
-
-            if (entityGrid.Rows.Count == 0)
-            {
-                ratesControl.ChangeShipment(null);
-
-                long orderID = EntityID.Value;
-
-                // Don't auto create for a customer, only for an order
-                if (EntityUtility.GetEntityType(orderID) == EntityType.OrderEntity && 
-                    ShippingSettings.Fetch().AutoCreateShipments &&
-                    UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, orderID))
-                {
-                    // Don't do it if we are already in the middle of doing it
-                    if (!autoCreatingShipments.Contains(orderID))
-                    {
-                        autoCreatingShipments.Add(orderID);
-
-                        // Do it in the background so creating the shipment doesn't make the UI feel sluggish
-                        Task.Factory.StartNew(() =>
-                            {
-                                return ShippingManager.CreateShipment(orderID);
-                            })
-                            .ContinueWith(
-                                ant =>
-                                {
-                                    // If there was a problem creating the shipment, just give up.  This is to handle a situation
-                                    // where ShipWorks would lock in an endless loop on an exception
-                                    if (ant.IsFaulted)
-                                    {
-                                        log.Warn("Could not create shipment", ant.Exception);
-                                        return;
-                                    }
-
-                                    autoCreatingShipments.Remove(orderID);
-
-                                    if (orderID == EntityID)
-                                    {
-                                        entityGrid.ReloadGridRows();
-                                    }
-                                }, TaskScheduler.FromCurrentSynchronizationContext());
-                    }
-                }
             }
             else
             {
@@ -202,8 +156,8 @@ namespace ShipWorks.Stores.Content.Panels
             if (entityGrid.Rows.Count == 1)
             {
                 ratesControl.ChangeShipment(entityGrid.EntityGateway.GetKeyFromRow(0));
-
-            } else if (shipmentSelectionCount == 1)
+            }
+            else if (shipmentSelectionCount == 1)
             {
                 ratesControl.ChangeShipment(entityGrid.Selection.Keys.First());
             }

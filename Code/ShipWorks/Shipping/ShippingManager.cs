@@ -42,6 +42,8 @@ using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
 using ShipWorks.Stores.Content;
 using Autofac;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Shipping
 {
@@ -556,6 +558,8 @@ namespace ShipWorks.Shipping
 
                 DataProvider.RemoveEntity(shipmentID);
                 shipment.Order = null;
+
+                Messenger.Current.Send(new ShipmentDeletedMessage(null, shipmentID));
             }
         }
 

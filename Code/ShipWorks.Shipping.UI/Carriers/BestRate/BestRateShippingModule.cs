@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -12,6 +14,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             builder.RegisterType<BestRateShipmentType>()
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.BestRate);
+
+            builder.RegisterType<NullAccountRepository>()
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.BestRate)
+                .SingleInstance();
+
+            builder.RegisterType<BestRateShipmentAdapter>()
+                .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.BestRate)
+                .ExternallyOwned();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Interapptive.Shared.Messaging;
+﻿using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Settings
         {
             if (disposing)
             {
-                Messenger.Current.Remove(carrierConfiguredToken);
+                carrierConfiguredToken.Dispose();
 
                 if (components != null)
                 {

@@ -3,6 +3,14 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Accounts;
+using ShipWorks.Shipping.Services.Builders;
+using ShipWorks.Shipping.UI.RatingPanel;
+using ShipWorks.Shipping.UI.ShippingPanel;
+using ShipWorks.Shipping.Loading;
+using ShipWorks.Shipping.UI.MessageHandlers;
+using System.Reactive.Concurrency;
+using Autofac.Extras.Attributed;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -16,7 +24,7 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ShipmentPanelRegistration>()
+            builder.RegisterType<ShippingPanelRegistration>()
                 .AsImplementedInterfaces()
                 .PreserveExistingDefaults();
 
@@ -32,7 +40,7 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<RatingPanelViewModel>();
 
-            builder.RegisterType<ShippingPanelConfiguration>()
+            builder.RegisterType<ShippingConfiguration>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -42,18 +50,15 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ShippingPanelShipmentLoader>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<ShipmentAddressValidator>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<RatingPanel>()
-                .AsSelf();
+            builder.RegisterType<RatingPanel.RatingPanel>();
 
             builder.RegisterType<RatingPanelViewModel>();
+
+            builder.RegisterType<AddressViewModel>();
 
             builder.RegisterType<ShipmentProcessor>()
                 .AsImplementedInterfaces();
@@ -96,6 +101,28 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShipmentTypeManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<ShippingAccountListProvider>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShippingOriginManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<CarrierAccountRetrieverFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<CarrierShipmentAdapterFactory>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
+            builder.RegisterType<ShipmentLoaderService>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<OrderSelectionChangedHandler>();
         }
     }
 }

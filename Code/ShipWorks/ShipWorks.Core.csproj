@@ -286,6 +286,26 @@
     </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net40\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Interfaces.2.2.5\lib\net40\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net40\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-XAML.2.2.5\lib\net40\System.Reactive.Windows.Threading.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Runtime.dll</HintPath>
       <Private>True</Private>
@@ -722,6 +742,7 @@
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
+    <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
@@ -815,13 +836,33 @@
     <Compile Include="Filters\Management\DisableLinkedFilterDlg.Designer.cs">
       <DependentUpon>DisableLinkedFilterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Filters\Management\FilterNodeEditedMessage.cs" />
     <Compile Include="Filters\Management\FilterNodeReferenceRepository.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Messaging\IMessenger.cs" />
+    <Compile Include="Messaging\IShipWorksMessage.cs" />
+    <Compile Include="Messaging\Messages\CarrierConfiguredMessage.cs" />
+    <Compile Include="Messaging\Messages\ConfiguringCarrierMessage.cs" />
+    <Compile Include="Messaging\Messages\CreateLabelMessage.cs" />
+    <Compile Include="Messaging\Messages\EnabledCarriersChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\FedExServiceTypeChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\FilterNodeEditedMessage.cs" />
+    <Compile Include="Messaging\Messages\OpenShippingDialogMessage.cs" />
+    <Compile Include="Messaging\Messages\OrderSelectionChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\OrderSelectionChangingMessage.cs" />
+    <Compile Include="Messaging\Messages\OriginAddressChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\SelectedRateChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ShipmentChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ShippingAccountsChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\OrderSelectionLoaded.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ShipmentDeletedMessage.cs" />
+    <Compile Include="Messaging\Messages\StoreChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\UspsAccountCreatedMessage.cs" />
+    <Compile Include="Messaging\Messages\UspsAutomaticExpeditedChangedMessage.cs" />
+    <Compile Include="Messaging\Messenger.cs" />
+    <Compile Include="Messaging\MessengerToken.cs" />
     <Compile Include="Shipping\AddressConversions.cs" />
     <Compile Include="Shipping\BilledType.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
-    <Compile Include="Shipping\CarrierConfiguredMessage.cs" />
     <Compile Include="Shipping\Carriers\AccountManagerBase.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
@@ -898,9 +939,9 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\FedEx\FedExServiceTypeChangedMessage.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExTemplateElementGenerator.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountRetriever.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FimsOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -908,6 +949,7 @@
       <DependentUpon>FimsOptionsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\FedEx\ICustomsRequired.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountRetrieverFactory.cs" />
     <Compile Include="Shipping\Carriers\ICredentialStore.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelServiceTypeServicePickerControl.cs">
@@ -915,6 +957,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
+    <Compile Include="Shipping\Carriers\NullAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackagePickerControl.cs">
       <SubType>UserControl</SubType>
@@ -1081,8 +1124,6 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\ConfiguringCarrierMessage.cs" />
-    <Compile Include="Shipping\CreateLabelMessage.cs" />
     <Compile Include="Shipping\CustomsManagerWrapper.cs" />
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
@@ -1130,7 +1171,6 @@
       <DependentUpon>RequestedLabelFormatProfileControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
-    <Compile Include="Shipping\EnabledCarriersChangedMessage.cs" />
     <Compile Include="Shipping\ICarrierConfigurationShipmentRefresher.cs" />
     <Compile Include="Shipping\ICustomsManager.cs" />
     <Compile Include="Shipping\Insurance\InsuranceSubmitClaimControl.cs">
@@ -1161,9 +1201,6 @@
     <Compile Include="Shipping\IShipmentTypeManager.cs" />
     <Compile Include="Shipping\IShippingErrorManager.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />
-    <Compile Include="Shipping\SelectedRateChangedMessage.cs" />
-    <Compile Include="Shipping\ShipmentChangedMessage.cs" />
-    <Compile Include="Shipping\OpenShippingDialogMessage.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\RatingFields.cs" />
@@ -1186,7 +1223,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Settings\ShippingSettingsWrapper.cs" />
-    <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
     <Compile Include="Shipping\ShipmentProcessor.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
@@ -1224,7 +1260,6 @@
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
-    <Compile Include="Stores\StoreManagerWrapper.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinder.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinder.cs" />
     <Compile Include="UI\Controls\ResizingRichTextBox.cs">
@@ -1277,7 +1312,6 @@
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Settings\UspsAccountCreatedMessage.cs" />
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1677,7 +1711,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypes.cs" />
@@ -10399,7 +10432,9 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.4.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.5.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10540,6 +10575,7 @@
     <None Include="Resources\instastore.png" />
     <None Include="Resources\choxi.png" />
     <None Include="Resources\instantestore.png" />
+    <None Include="Resources\lemonstand.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

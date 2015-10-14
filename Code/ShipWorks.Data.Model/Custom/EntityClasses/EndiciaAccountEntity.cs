@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.Custom;
+﻿using Interapptive.Shared.Business;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -24,5 +25,16 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         /// <remarks>Assume Endicia unless explicitly marked as Express1</remarks>
         public ShipmentTypeCode ShipmentType => EndiciaReseller == 1 ? ShipmentTypeCode.Express1Endicia : ShipmentTypeCode.Endicia;
+
+        /// <summary>
+        /// Get the address of the account
+        /// </summary>
+        public PersonAdapter Address => new PersonAdapter(this, string.Empty);
+
+        /// <summary>
+        /// Applies account to shipment
+        /// </summary>
+        public void ApplyTo(ShipmentEntity shipment) => 
+            shipment.Postal.Endicia.EndiciaAccountID = AccountId;
     }
 }

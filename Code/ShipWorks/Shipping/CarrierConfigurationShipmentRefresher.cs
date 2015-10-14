@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
 using Interapptive.Shared.Collections;
 using ShipWorks.AddressValidation;
+using ShipWorks.Messaging.Messages;
+using System.Reactive.Disposables;
 
 namespace ShipWorks.Shipping
 {
@@ -19,8 +21,7 @@ namespace ShipWorks.Shipping
         private readonly IShippingErrorManager errorManager;
         private readonly IShippingProfileManager shippingProfileManager;
         private readonly IShippingManager shippingManager;
-        private readonly MessengerToken configuringCarrierToken;
-        private readonly MessengerToken carrierConfiguredToken;
+        private readonly IDisposable messageSubscriptions;
         private readonly List<ShipmentEntity> shipmentsProcessing = new List<ShipmentEntity>();
 
         /// <summary>
@@ -33,9 +34,11 @@ namespace ShipWorks.Shipping
             this.errorManager = MethodConditions.EnsureArgumentIsNotNull(errorManager, nameof(errorManager));
             this.shippingProfileManager = MethodConditions.EnsureArgumentIsNotNull(shippingProfileManager, "shippingProfileManager");
             this.shippingManager = MethodConditions.EnsureArgumentIsNotNull(shippingManager, "shippingManager");
-            
-            configuringCarrierToken = messenger.Handle<ConfiguringCarrierMessage>(this, OnConfiguringCarrier);
-            carrierConfiguredToken = messenger.Handle<CarrierConfiguredMessage>(this, OnCarrierConfigured);
+
+            messageSubscriptions = new CompositeDisposable(
+                messenger.AsObservable<ConfiguringCarrierMessage>().Subscribe(OnConfiguringCarrier),
+                messenger.AsObservable<CarrierConfiguredMessage>().Subscribe(OnCarrierConfigured)
+            );
         }
 
         /// <summary>
@@ -122,8 +125,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public void Dispose()
         {
-            messenger.Remove(configuringCarrierToken);
-            messenger.Remove(carrierConfiguredToken);
+            messageSubscriptions.Dispose();
         }
     }
 }

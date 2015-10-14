@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (disposing)
             {
-                Messenger.Current.Remove(fedExServiceChangedToken);
+                fedExServiceChangedToken.Dispose();
 
                 if (components != null)
                 {

@@ -21,5 +21,10 @@ namespace ShipWorks.Shipping
         /// Get the sort value for a given shipment type code
         /// </summary>
         int GetSortValue(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Returns a list of ShipmentTypeCodes that support accounts
+        /// </summary>
+        IEnumerable<ShipmentTypeCode> ShipmentTypesSupportingAccounts { get; }
     }
 }

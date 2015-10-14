@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.UI.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -18,7 +16,7 @@ namespace ShipWorks.Shipping.Settings
     public partial class ShippingProviderControl : UserControl
     {
         List<ShipmentType> activeShipmentTypes;
-        private MessengerToken carrierConfiguredToken;
+        private IDisposable carrierConfiguredToken;
 
         /// <summary>
         /// Constructor
@@ -30,7 +28,7 @@ namespace ShipWorks.Shipping.Settings
             toolStripFakeDelete.Renderer = new NoBorderToolStripRenderer();
             toolStripAddRule.Renderer = new NoBorderToolStripRenderer();
 
-            carrierConfiguredToken = Messenger.Current.Handle<CarrierConfiguredMessage>(this, HandleCarrierConfigured);
+            carrierConfiguredToken = Messenger.Current.AsObservable<CarrierConfiguredMessage>().Subscribe(HandleCarrierConfigured);
         }
 
         private void HandleCarrierConfigured(CarrierConfiguredMessage message)

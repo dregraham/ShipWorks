@@ -25,6 +25,8 @@ using Interapptive.Shared.UI;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using System.Collections;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Stores.Management
 {
@@ -471,6 +473,8 @@ namespace ShipWorks.Stores.Management
 
             try
             {
+                bool wasStoreDirty = store.IsDirty;
+
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     orderStatusPresets.Save(adapter);
@@ -479,6 +483,14 @@ namespace ShipWorks.Stores.Management
                     StoreManager.SaveStore(store, adapter);
 
                     adapter.Commit();
+                }
+
+                StoreManager.CheckForChanges();
+
+                if (wasStoreDirty)
+                {
+                    // Let any subscribers know that the store has changed.
+                    Messenger.Current.Send(new StoreChangedMessage(this, store));
                 }
 
                 // If the user has just disabled address validation, we should mark any pending orders

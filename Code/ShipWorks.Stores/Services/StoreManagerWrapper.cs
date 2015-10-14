@@ -1,0 +1,32 @@
+using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
+
+namespace ShipWorks.Stores.Services
+{
+    /// <summary>
+    /// Algorithms and functions for working with stores.
+    /// </summary>
+    /// <remarks>This is an instance that wraps the static StoreManager until we can replace that class</remarks>
+    public class StoreManagerWrapper : IStoreManager
+    {
+        /// <summary>
+        /// Get the store from Id
+        /// </summary>
+        public StoreEntity GetStore(long storeId) => StoreManager.GetStore(storeId);
+
+        /// <summary>
+        /// Get the store for the related entity
+        /// </summary>
+        public StoreEntity GetRelatedStore(long orderId) => StoreManager.GetRelatedStore(orderId);
+
+        /// <summary>
+        /// Get the current list of stores.  All stores are returned, regardless of security.
+        /// </summary>
+        public IEnumerable<StoreEntity> GetAllStores() => StoreManager.GetAllStores();
+
+        /// <summary>
+        /// Get all stores, regardless of security, that are currently enabled for downloading and shipping
+        /// </summary>
+        public IEnumerable<StoreEntity> GetEnabledStores() => StoreManager.GetEnabledStores();
+    }
+}

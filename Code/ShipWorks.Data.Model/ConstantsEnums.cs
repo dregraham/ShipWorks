@@ -3126,6 +3126,8 @@ namespace ShipWorks.Data.Model
 		ReturnSaturdayPickup,
 		///<summary>ReturnsClearance. </summary>
 		ReturnsClearance,
+		///<summary>ReferenceFIMS. </summary>
+		ReferenceFIMS,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3506,6 +3508,8 @@ namespace ShipWorks.Data.Model
 		ReturnsClearance,
 		///<summary>MaskedData. </summary>
 		MaskedData,
+		///<summary>ReferenceFIMS. </summary>
+		ReferenceFIMS,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4649,6 +4653,299 @@ namespace ShipWorks.Data.Model
 		Rows,
 		///<summary>Columns. </summary>
 		Columns,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandOrder.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum LemonStandOrderFieldIndex:int
+	{
+		///<summary>OrderID. Inherited from Order</summary>
+		OrderID_Order,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>CustomerID. </summary>
+		CustomerID,
+		///<summary>OrderNumber. </summary>
+		OrderNumber,
+		///<summary>OrderNumberComplete. </summary>
+		OrderNumberComplete,
+		///<summary>OrderDate. </summary>
+		OrderDate,
+		///<summary>OrderTotal. </summary>
+		OrderTotal,
+		///<summary>LocalStatus. </summary>
+		LocalStatus,
+		///<summary>IsManual. </summary>
+		IsManual,
+		///<summary>OnlineLastModified. </summary>
+		OnlineLastModified,
+		///<summary>OnlineCustomerID. </summary>
+		OnlineCustomerID,
+		///<summary>OnlineStatus. </summary>
+		OnlineStatus,
+		///<summary>OnlineStatusCode. </summary>
+		OnlineStatusCode,
+		///<summary>RequestedShipping. </summary>
+		RequestedShipping,
+		///<summary>BillFirstName. </summary>
+		BillFirstName,
+		///<summary>BillMiddleName. </summary>
+		BillMiddleName,
+		///<summary>BillLastName. </summary>
+		BillLastName,
+		///<summary>BillCompany. </summary>
+		BillCompany,
+		///<summary>BillStreet1. </summary>
+		BillStreet1,
+		///<summary>BillStreet2. </summary>
+		BillStreet2,
+		///<summary>BillStreet3. </summary>
+		BillStreet3,
+		///<summary>BillCity. </summary>
+		BillCity,
+		///<summary>BillStateProvCode. </summary>
+		BillStateProvCode,
+		///<summary>BillPostalCode. </summary>
+		BillPostalCode,
+		///<summary>BillCountryCode. </summary>
+		BillCountryCode,
+		///<summary>BillPhone. </summary>
+		BillPhone,
+		///<summary>BillFax. </summary>
+		BillFax,
+		///<summary>BillEmail. </summary>
+		BillEmail,
+		///<summary>BillWebsite. </summary>
+		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
+		///<summary>ShipFirstName. </summary>
+		ShipFirstName,
+		///<summary>ShipMiddleName. </summary>
+		ShipMiddleName,
+		///<summary>ShipLastName. </summary>
+		ShipLastName,
+		///<summary>ShipCompany. </summary>
+		ShipCompany,
+		///<summary>ShipStreet1. </summary>
+		ShipStreet1,
+		///<summary>ShipStreet2. </summary>
+		ShipStreet2,
+		///<summary>ShipStreet3. </summary>
+		ShipStreet3,
+		///<summary>ShipCity. </summary>
+		ShipCity,
+		///<summary>ShipStateProvCode. </summary>
+		ShipStateProvCode,
+		///<summary>ShipPostalCode. </summary>
+		ShipPostalCode,
+		///<summary>ShipCountryCode. </summary>
+		ShipCountryCode,
+		///<summary>ShipPhone. </summary>
+		ShipPhone,
+		///<summary>ShipFax. </summary>
+		ShipFax,
+		///<summary>ShipEmail. </summary>
+		ShipEmail,
+		///<summary>ShipWebsite. </summary>
+		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
+		///<summary>RollupItemCount. </summary>
+		RollupItemCount,
+		///<summary>RollupItemName. </summary>
+		RollupItemName,
+		///<summary>RollupItemCode. </summary>
+		RollupItemCode,
+		///<summary>RollupItemSKU. </summary>
+		RollupItemSKU,
+		///<summary>RollupItemLocation. </summary>
+		RollupItemLocation,
+		///<summary>RollupItemQuantity. </summary>
+		RollupItemQuantity,
+		///<summary>RollupItemTotalWeight. </summary>
+		RollupItemTotalWeight,
+		///<summary>RollupNoteCount. </summary>
+		RollupNoteCount,
+		///<summary>BillNameParseStatus. </summary>
+		BillNameParseStatus,
+		///<summary>BillUnparsedName. </summary>
+		BillUnparsedName,
+		///<summary>ShipNameParseStatus. </summary>
+		ShipNameParseStatus,
+		///<summary>ShipUnparsedName. </summary>
+		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>LemonStandOrderID. </summary>
+		LemonStandOrderID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandOrderItem.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum LemonStandOrderItemFieldIndex:int
+	{
+		///<summary>OrderItemID. Inherited from OrderItem</summary>
+		OrderItemID_OrderItem,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>Name. </summary>
+		Name,
+		///<summary>Code. </summary>
+		Code,
+		///<summary>SKU. </summary>
+		SKU,
+		///<summary>ISBN. </summary>
+		ISBN,
+		///<summary>UPC. </summary>
+		UPC,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>Location. </summary>
+		Location,
+		///<summary>Image. </summary>
+		Image,
+		///<summary>Thumbnail. </summary>
+		Thumbnail,
+		///<summary>UnitPrice. </summary>
+		UnitPrice,
+		///<summary>UnitCost. </summary>
+		UnitCost,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>Quantity. </summary>
+		Quantity,
+		///<summary>LocalStatus. </summary>
+		LocalStatus,
+		///<summary>IsManual. </summary>
+		IsManual,
+		///<summary>OrderItemID. </summary>
+		OrderItemID,
+		///<summary>UrlName. </summary>
+		UrlName,
+		///<summary>ShortDescription. </summary>
+		ShortDescription,
+		///<summary>Category. </summary>
+		Category,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandStore.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum LemonStandStoreFieldIndex:int
+	{
+		///<summary>StoreID. Inherited from Store</summary>
+		StoreID_Store,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>License. </summary>
+		License,
+		///<summary>Edition. </summary>
+		Edition,
+		///<summary>TypeCode. </summary>
+		TypeCode,
+		///<summary>Enabled. </summary>
+		Enabled,
+		///<summary>SetupComplete. </summary>
+		SetupComplete,
+		///<summary>StoreName. </summary>
+		StoreName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>Street2. </summary>
+		Street2,
+		///<summary>Street3. </summary>
+		Street3,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Phone. </summary>
+		Phone,
+		///<summary>Fax. </summary>
+		Fax,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Website. </summary>
+		Website,
+		///<summary>AutoDownload. </summary>
+		AutoDownload,
+		///<summary>AutoDownloadMinutes. </summary>
+		AutoDownloadMinutes,
+		///<summary>AutoDownloadOnlyAway. </summary>
+		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
+		///<summary>ComputerDownloadPolicy. </summary>
+		ComputerDownloadPolicy,
+		///<summary>DefaultEmailAccountID. </summary>
+		DefaultEmailAccountID,
+		///<summary>ManualOrderPrefix. </summary>
+		ManualOrderPrefix,
+		///<summary>ManualOrderPostfix. </summary>
+		ManualOrderPostfix,
+		///<summary>InitialDownloadDays. </summary>
+		InitialDownloadDays,
+		///<summary>InitialDownloadOrder. </summary>
+		InitialDownloadOrder,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>Token. </summary>
+		Token,
+		///<summary>StoreURL. </summary>
+		StoreURL,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10607,6 +10904,12 @@ namespace ShipWorks.Data.Model
 		IParcelShipmentEntity,
 		///<summary>LabelSheet</summary>
 		LabelSheetEntity,
+		///<summary>LemonStandOrder</summary>
+		LemonStandOrderEntity,
+		///<summary>LemonStandOrderItem</summary>
+		LemonStandOrderItemEntity,
+		///<summary>LemonStandStore</summary>
+		LemonStandStoreEntity,
 		///<summary>MagentoOrder</summary>
 		MagentoOrderEntity,
 		///<summary>MagentoStore</summary>

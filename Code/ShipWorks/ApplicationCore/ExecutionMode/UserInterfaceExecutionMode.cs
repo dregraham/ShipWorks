@@ -20,9 +20,10 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Stores;
 using Autofac;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping;
 using System.Linq;
+using ShipWorks.Messaging.Messages;
 using TD.SandDock;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
@@ -170,7 +171,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                lifetimeScope.Resolve<IMessenger>().Handle<OpenShippingDialogMessage>(this, HandleOpenShippingDialogMessage);
+                lifetimeScope.Resolve<IMessenger>()
+                    .AsObservable<OpenShippingDialogMessage>()
+                    .Subscribe(HandleOpenShippingDialogMessage);
             }
         }
 

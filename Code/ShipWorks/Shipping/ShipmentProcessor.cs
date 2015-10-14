@@ -177,8 +177,10 @@ namespace ShipWorks.Shipping
                     Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int)ShipmentTypeCode.BestRate ?
                         (Func<CounterRatesProcessingArgs, DialogResult>)BestRateCounterRatesProcessing :
                         CounterRatesProcessing;
-
-                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, ratesProcessing, selectedRate, lifetimeScope);
+                    
+                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, 
+                        x => (DialogResult)owner.Invoke(ratesProcessing, x), 
+                        selectedRate, lifetimeScope);
 
                     // Clear any previous errors
                     errorManager.Remove(shipmentID);

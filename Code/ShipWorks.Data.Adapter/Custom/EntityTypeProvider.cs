@@ -185,8 +185,11 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "GrouponOrderEntity": return EntityType.GrouponOrderEntity;
 				case "GrouponOrderItemEntity": return EntityType.GrouponOrderItemEntity;
 				case "GrouponStoreEntity": return EntityType.GrouponStoreEntity;
-				case "ExcludedPackageTypeEntity": return EntityType.ExcludedPackageTypeEntity;
 				case "ExcludedServiceTypeEntity": return EntityType.ExcludedServiceTypeEntity;
+				case "ExcludedPackageTypeEntity": return EntityType.ExcludedPackageTypeEntity;
+				case "LemonStandStoreEntity": return EntityType.LemonStandStoreEntity;
+				case "LemonStandOrderEntity": return EntityType.LemonStandOrderEntity;
+				case "LemonStandOrderItemEntity": return EntityType.LemonStandOrderItemEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));
@@ -292,6 +295,9 @@ namespace ShipWorks.Data.Adapter.Custom
 				case EntityType.GrouponOrderEntity: return new GrouponOrderRelations();
 				case EntityType.GrouponOrderItemEntity: return new GrouponOrderItemRelations();
 				case EntityType.GrouponStoreEntity: return new GrouponStoreRelations();
+				case EntityType.LemonStandStoreEntity: return new LemonStandStoreRelations();
+				case EntityType.LemonStandOrderEntity: return new LemonStandOrderRelations();
+				case EntityType.LemonStandOrderItemEntity: return new LemonStandOrderItemRelations();
 				}
 			
 			throw new ArgumentException(string.Format("Entity type '{0}' is not valid or is not a part of a TargetPerEntity hierarchy.", entityType));

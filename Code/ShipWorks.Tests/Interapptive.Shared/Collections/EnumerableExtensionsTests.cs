@@ -4,7 +4,8 @@ using Interapptive.Shared.Collections;
 using Xunit;
 using System.Linq;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
-
+using Moq;
+using System.Collections;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Collections
 {
@@ -190,6 +191,81 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
         {
             bool result = Enumerable.Range(0, 100).None(x => x == 20);
             Assert.False(result);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithFewerItems_ReturnsNegative()
+        {
+            int result = Enumerable.Range(0, 5).HasMoreOrLessThanCount(6);
+            Assert.InRange(result, int.MinValue, -1);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithMoreItems_ReturnsPositive()
+        {
+            int result = Enumerable.Range(0, 5).HasMoreOrLessThanCount(4);
+            Assert.InRange(result, 1, int.MaxValue);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithSameItems_ReturnsZero()
+        {
+            int result = Enumerable.Range(0, 5).HasMoreOrLessThanCount(5);
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithFewerItemsAndGenericICollection_ReturnsNegativeUsingCount()
+        {
+            Mock<ICollection<string>> testObject = new Mock<ICollection<string>>();
+            testObject.SetupGet(x => x.Count).Returns(2);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.True(testObject.Object.HasMoreOrLessThanCount(3) < 0);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithMoreItemsAndGenericICollection_ReturnsPositiveUsingCount()
+        {
+            Mock<ICollection<string>> testObject = new Mock<ICollection<string>>();
+            testObject.SetupGet(x => x.Count).Returns(4);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.True(testObject.Object.HasMoreOrLessThanCount(3) > 0);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithEqualItemsAndGenericICollection_ReturnsZeroUsingCount()
+        {
+            Mock<ICollection<string>> testObject = new Mock<ICollection<string>>();
+            testObject.SetupGet(x => x.Count).Returns(3);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.Equal(0, testObject.Object.HasMoreOrLessThanCount(3));
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithFewerItemsAndICollection_ReturnsNegativeUsingCount()
+        {
+            Mock<ICollection> testObject = new Mock<ICollection>();
+            testObject.SetupGet(x => x.Count).Returns(2);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.True(testObject.Object.HasMoreOrLessThanCount(3) < 0);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithMoreItemsAndICollection_ReturnsPositiveUsingCount()
+        {
+            Mock<ICollection> testObject = new Mock<ICollection>();
+            testObject.SetupGet(x => x.Count).Returns(4);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.True(testObject.Object.HasMoreOrLessThanCount(3) > 0);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithEqualItemsAndICollection_ReturnsZeroUsingCount()
+        {
+            Mock<ICollection> testObject = new Mock<ICollection>();
+            testObject.SetupGet(x => x.Count).Returns(3);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.Equal(0, testObject.Object.HasMoreOrLessThanCount(3));
         }
     }
 }

@@ -24,6 +24,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using System.Threading.Tasks;
 using ShipWorks.Core.Common.Threading;
+using System.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
@@ -1447,6 +1448,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 throw new UspsApiException(ex);
             }
+            catch (WebException ex)
+            {
+                throw new UspsException(ex.Message, ex);
+            }
             catch (InvalidOperationException ex)
             {
                 // We had a client that was seeing this exception, so rather than crash, we should fail the operation and 
@@ -1466,10 +1471,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the Credentials for the given account
         /// </summary>
-        private static Credentials GetCredentials(UspsAccountEntity account)
-        {
-            return GetCredentials(account, false);
-        }
+        private static Credentials GetCredentials(UspsAccountEntity account) => GetCredentials(account, false);
 
         /// <summary>
         /// Get the Credentials for the given account

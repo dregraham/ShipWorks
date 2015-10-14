@@ -180,7 +180,8 @@ namespace Interapptive.Shared.Net
         /// </summary>
         private static string GetContentTypeParameter(string contentType, string paramName)
         {
-            string[] strArray = contentType.Split(new char[] { ';' });
+            // Magento is including multiple content types separated by commas, which is why the comma is included here
+            string[] strArray = contentType.Split(new char[] { ';', ',' });
             for (int i = 1; i < strArray.Length; i++)
             {
                 string strA = strArray[i].TrimStart(null);

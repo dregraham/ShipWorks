@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (167 + 0));
+			base.InitClass( (170 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -134,6 +134,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitIParcelProfilePackageEntityInfos();
 			InitIParcelShipmentEntityInfos();
 			InitLabelSheetEntityInfos();
+			InitLemonStandOrderEntityInfos();
+			InitLemonStandOrderItemEntityInfos();
+			InitLemonStandStoreEntityInfos();
 			InitMagentoOrderEntityInfos();
 			InitMagentoStoreEntityInfos();
 			InitMarketplaceAdvisorOrderEntityInfos();
@@ -973,6 +976,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExProfileEntity", "RmaReason", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.RmaReason, 60, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "ReturnSaturdayPickup", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.ReturnSaturdayPickup, 0, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "ReturnsClearance", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.ReturnsClearance, 0, 0, 0);
+			base.AddElementFieldInfo("FedExProfileEntity", "ReferenceFIMS", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferenceFIMS, 300, 0, 0);
 		}
 		/// <summary>Inits FedExProfilePackageEntity's FieldInfo objects</summary>
 		private void InitFedExProfilePackageEntityInfos()
@@ -1160,6 +1164,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "FimsAirWaybill", typeof(System.String), false, false, false, true,  (int)FedExShipmentFieldIndex.FimsAirWaybill, 50, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ReturnsClearance", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.ReturnsClearance, 0, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "MaskedData", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExShipmentFieldIndex.MaskedData, 0, 0, 10);
+			base.AddElementFieldInfo("FedExShipmentEntity", "ReferenceFIMS", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ReferenceFIMS, 300, 0, 0);
 		}
 		/// <summary>Inits FilterEntity's FieldInfo objects</summary>
 		private void InitFilterEntityInfos()
@@ -1465,6 +1470,27 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("LabelSheetEntity", "HorizontalSpacing", typeof(System.Double), false, false, false, false,  (int)LabelSheetFieldIndex.HorizontalSpacing, 0, 0, 38);
 			base.AddElementFieldInfo("LabelSheetEntity", "Rows", typeof(System.Int32), false, false, false, false,  (int)LabelSheetFieldIndex.Rows, 0, 0, 10);
 			base.AddElementFieldInfo("LabelSheetEntity", "Columns", typeof(System.Int32), false, false, false, false,  (int)LabelSheetFieldIndex.Columns, 0, 0, 10);
+		}
+		/// <summary>Inits LemonStandOrderEntity's FieldInfo objects</summary>
+		private void InitLemonStandOrderEntityInfos()
+		{
+			base.AddElementFieldInfo("LemonStandOrderEntity", "OrderID", typeof(System.Int64), true, false, false, false,  (int)LemonStandOrderFieldIndex.OrderID, 0, 0, 19);
+			base.AddElementFieldInfo("LemonStandOrderEntity", "LemonStandOrderID", typeof(System.String), false, false, false, false,  (int)LemonStandOrderFieldIndex.LemonStandOrderID, 20, 0, 0);
+		}
+		/// <summary>Inits LemonStandOrderItemEntity's FieldInfo objects</summary>
+		private void InitLemonStandOrderItemEntityInfos()
+		{
+			base.AddElementFieldInfo("LemonStandOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)LemonStandOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			base.AddElementFieldInfo("LemonStandOrderItemEntity", "UrlName", typeof(System.String), false, false, false, false,  (int)LemonStandOrderItemFieldIndex.UrlName, 100, 0, 0);
+			base.AddElementFieldInfo("LemonStandOrderItemEntity", "ShortDescription", typeof(System.String), false, false, false, false,  (int)LemonStandOrderItemFieldIndex.ShortDescription, 255, 0, 0);
+			base.AddElementFieldInfo("LemonStandOrderItemEntity", "Category", typeof(System.String), false, false, false, false,  (int)LemonStandOrderItemFieldIndex.Category, 100, 0, 0);
+		}
+		/// <summary>Inits LemonStandStoreEntity's FieldInfo objects</summary>
+		private void InitLemonStandStoreEntityInfos()
+		{
+			base.AddElementFieldInfo("LemonStandStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)LemonStandStoreFieldIndex.StoreID, 0, 0, 19);
+			base.AddElementFieldInfo("LemonStandStoreEntity", "Token", typeof(System.String), false, false, false, false,  (int)LemonStandStoreFieldIndex.Token, 100, 0, 0);
+			base.AddElementFieldInfo("LemonStandStoreEntity", "StoreURL", typeof(System.String), false, false, false, false,  (int)LemonStandStoreFieldIndex.StoreURL, 255, 0, 0);
 		}
 		/// <summary>Inits MagentoOrderEntity's FieldInfo objects</summary>
 		private void InitMagentoOrderEntityInfos()

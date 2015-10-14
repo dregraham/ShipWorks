@@ -8,6 +8,8 @@ using ShipWorks.Data.Connection;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Editing.Rating;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ShipWorks.Shipping
 {
@@ -37,8 +39,14 @@ namespace ShipWorks.Shipping
         /// Get the list of shipments that correspond to the given order key.  If no shipment exists for the order,
         /// one will be created if autoCreate is true.  An OrderEntity will be attached to each shipment.
         /// </summary>
-        public List<ShipmentEntity> GetShipments(long orderID, bool createIfNone) =>
-            ShippingManager.GetShipments(orderID, createIfNone);
+        public List<ShipmentEntity> GetShipments(long orderID, bool createIfNone)
+        {
+            List<ShipmentEntity>  shipments = ShippingManager.GetShipments(orderID, createIfNone);
+
+            shipments?.ForEach(EnsureShipmentLoaded);
+
+            return shipments;
+        }
 
         /// <summary>
         /// Ensure the specified shipment is fully loaded
@@ -49,15 +57,24 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
-        public ShipmentEntity GetShipment(long shipmentID) => ShippingManager.GetShipment(shipmentID);
+        public ShipmentEntity GetShipment(long shipmentID)
+        {
+            ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
+            EnsureShipmentLoaded(shipment);
+            return shipment;
+        }
 
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
-        {
-            return ShippingManager.GetRates(shipment, shipmentType);
-        }
+        public RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType) =>
+            ShippingManager.GetRates(shipment, shipmentType);
+
+        /// <summary>
+        /// Get rates for the given shipment using the appropriate ShipmentType
+        /// </summary>
+        public Task<RateGroup> GetRatesAsync(ShipmentEntity shipment, ShipmentType shipmentType, CancellationToken token) =>
+            TaskEx.Run(() => ShippingManager.GetRates(shipment, shipmentType), token);
 
         /// <summary>
         /// Removes the specified shipment from the cache

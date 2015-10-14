@@ -30,7 +30,8 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.ApplicationCore;
 using Autofac;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {

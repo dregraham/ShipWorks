@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((167 + 0));
+			base.InitClass((170 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -133,6 +133,9 @@ namespace ShipWorks.Data.Adapter
 			InitIParcelProfilePackageEntityMappings();
 			InitIParcelShipmentEntityMappings();
 			InitLabelSheetEntityMappings();
+			InitLemonStandOrderEntityMappings();
+			InitLemonStandOrderItemEntityMappings();
+			InitLemonStandStoreEntityMappings();
 			InitMagentoOrderEntityMappings();
 			InitMagentoStoreEntityMappings();
 			InitMarketplaceAdvisorOrderEntityMappings();
@@ -986,7 +989,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits FedExProfileEntity's mappings</summary>
 		private void InitFedExProfileEntityMappings()
 		{
-			base.AddElementMapping( "FedExProfileEntity", "ShipWorksLocal", @"dbo", "FedExProfile", 35 );
+			base.AddElementMapping( "FedExProfileEntity", "ShipWorksLocal", @"dbo", "FedExProfile", 36 );
 			base.AddElementFieldMapping( "FedExProfileEntity", "ShippingProfileID", "ShippingProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "FedExProfileEntity", "FedExAccountID", "FedExAccountID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "FedExProfileEntity", "Service", "Service", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
@@ -1022,6 +1025,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "FedExProfileEntity", "RmaReason", "RmaReason", true, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 32 );
 			base.AddElementFieldMapping( "FedExProfileEntity", "ReturnSaturdayPickup", "ReturnSaturdayPickup", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 33 );
 			base.AddElementFieldMapping( "FedExProfileEntity", "ReturnsClearance", "ReturnsClearance", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 34 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "ReferenceFIMS", "ReferenceFIMS", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 35 );
 		}
 		/// <summary>Inits FedExProfilePackageEntity's mappings</summary>
 		private void InitFedExProfilePackageEntityMappings()
@@ -1058,7 +1062,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits FedExShipmentEntity's mappings</summary>
 		private void InitFedExShipmentEntityMappings()
 		{
-			base.AddElementMapping( "FedExShipmentEntity", "ShipWorksLocal", @"dbo", "FedExShipment", 152 );
+			base.AddElementMapping( "FedExShipmentEntity", "ShipWorksLocal", @"dbo", "FedExShipment", 153 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "FedExAccountID", "FedExAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "MasterFormID", "MasterFormID", false, (int)SqlDbType.VarChar, 4, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -1211,6 +1215,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "FedExShipmentEntity", "FimsAirWaybill", "FimsAirWaybill", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 149 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "ReturnsClearance", "ReturnsClearance", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 150 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "MaskedData", "MaskedData", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 151 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "ReferenceFIMS", "ReferenceFIMS", false, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 152 );
 		}
 		/// <summary>Inits FilterEntity's mappings</summary>
 		private void InitFilterEntityMappings()
@@ -1541,6 +1546,30 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "LabelSheetEntity", "HorizontalSpacing", "HorizontalSpacing", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 10 );
 			base.AddElementFieldMapping( "LabelSheetEntity", "Rows", "Rows", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 11 );
 			base.AddElementFieldMapping( "LabelSheetEntity", "Columns", "Columns", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 12 );
+		}
+		/// <summary>Inits LemonStandOrderEntity's mappings</summary>
+		private void InitLemonStandOrderEntityMappings()
+		{
+			base.AddElementMapping( "LemonStandOrderEntity", "ShipWorksLocal", @"dbo", "LemonStandOrder", 2 );
+			base.AddElementFieldMapping( "LemonStandOrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "LemonStandOrderEntity", "LemonStandOrderID", "LemonStandOrderID", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 1 );
+		}
+		/// <summary>Inits LemonStandOrderItemEntity's mappings</summary>
+		private void InitLemonStandOrderItemEntityMappings()
+		{
+			base.AddElementMapping( "LemonStandOrderItemEntity", "ShipWorksLocal", @"dbo", "LemonStandOrderItem", 4 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "UrlName", "UrlName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "ShortDescription", "ShortDescription", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "LemonStandOrderItemEntity", "Category", "Category", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 3 );
+		}
+		/// <summary>Inits LemonStandStoreEntity's mappings</summary>
+		private void InitLemonStandStoreEntityMappings()
+		{
+			base.AddElementMapping( "LemonStandStoreEntity", "ShipWorksLocal", @"dbo", "LemonStandStore", 3 );
+			base.AddElementFieldMapping( "LemonStandStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "LemonStandStoreEntity", "Token", "Token", false, (int)SqlDbType.VarChar, 100, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "LemonStandStoreEntity", "StoreURL", "StoreURL", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
 		}
 		/// <summary>Inits MagentoOrderEntity's mappings</summary>
 		private void InitMagentoOrderEntityMappings()
