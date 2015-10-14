@@ -359,6 +359,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private void Populate()
         {
             listenForRateCriteriaChanged = false;
+            InitialShipmentTypeCode = shipment.ShipmentTypeCode;
 
             // Set the shipment type without going back through the shipment changed machinery
             selectedShipmentType = shipment.ShipmentTypeCode;
@@ -366,7 +367,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
 
             RequestedShippingMethod = orderSelectionLoaded.Order.RequestedShipping;
-            InitialShipmentTypeCode = shipment.ShipmentTypeCode;
 
             bool supportsAccounts = shipmentTypeManager.ShipmentTypesSupportingAccounts.Contains(shipment.ShipmentTypeCode);
             AccountVisibility = supportsAccounts ? Visibility.Visible : Visibility.Collapsed;
