@@ -90,35 +90,36 @@
                         <TextBlock Text="{Binding RequestedShippingMethod}" />
                     </WrapPanel>
                 </Grid>
-                <Border>
-                    <Expander
+                <StackPanel Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.None}}">
+                    <Border>
+                        <Expander
                         IsExpanded="{Binding IsOriginExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                         Style="{StaticResource ExpanderStyle}">
-                        <Expander.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Margin="0,0,8,0">From</TextBlock>
-                                <TextBlock Visibility="{Binding AccountVisibility}" Foreground="Gray">Account: </TextBlock>
-                                <TextBlock Visibility="{Binding Visibility, ElementName=AccountDropDown}"
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="0,0,8,0">From</TextBlock>
+                                    <TextBlock Visibility="{Binding AccountVisibility}" Foreground="Gray">Account:</TextBlock>
+                                    <TextBlock Visibility="{Binding Visibility, ElementName=AccountDropDown}"
                                            Text="{Binding Text, ElementName=AccountDropDown, StringFormat=' {0}, '}"
                                            Foreground="Gray"/>
-                                <TextBlock Text="{Binding Text, ElementName=OriginDropDown}"
+                                    <TextBlock Text="{Binding Text, ElementName=OriginDropDown}"
                                            Foreground="Gray"/>
-                            </StackPanel>
-                        </Expander.Header>
-                        <StackPanel Margin="0,3,0,0">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="75" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <TextBlock Grid.Row="0" Grid.Column="0"
+                                </StackPanel>
+                            </Expander.Header>
+                            <StackPanel Margin="0,3,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="75" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" Grid.Column="0"
                                         Visibility="{Binding AccountVisibility}"
                                         Style="{StaticResource GridLabel}">Account:</TextBlock>
-                                <ComboBox Grid.Row="0" Grid.Column="1"
+                                    <ComboBox Grid.Row="0" Grid.Column="1"
                                         x:Name="AccountDropDown"
                                         Visibility="{Binding AccountVisibility}"
                                         props:SelectDefaultWhenValueIsNull.RelativeIndex="First"
@@ -126,64 +127,68 @@
                                         SelectedValue="{Binding AccountId}"
                                         DisplayMemberPath="Description"
                                         SelectedValuePath="AccountId">
-                                    <ComboBox.ItemsSource> 
-                                        <Binding Path="ShipmentType"
+                                        <ComboBox.ItemsSource>
+                                            <Binding Path="ShipmentType"
                                                 Converter="{StaticResource ShipmentTypeToAccountsConverter}"
                                                 Mode="OneWay" />
-                                    </ComboBox.ItemsSource>
-                                </ComboBox>
-                                <TextBlock Grid.Row="1" Grid.Column="0"
+                                        </ComboBox.ItemsSource>
+                                    </ComboBox>
+                                    <TextBlock Grid.Row="1" Grid.Column="0"
                                            Style="{StaticResource GridLabel}">Origin:</TextBlock>
-                                <ComboBox Grid.Row="1" Grid.Column="1"
+                                    <ComboBox Grid.Row="1" Grid.Column="1"
                                           DisplayMemberPath="Key"
                                           SelectedValuePath="Value"
                                           props:SelectDefaultWhenValueIsNull.RelativeIndex="Last"
                                           props:UpdateWhenMessageReceived.MessageType="{x:Type messages:OriginAddressChangedMessage}"
                                           x:Name="OriginDropDown">
-                                    <ComboBox.ItemsSource>
+                                        <ComboBox.ItemsSource>
                                             <Binding Path="ShipmentType" Converter="{StaticResource ShipmentTypeToOriginAddresses}" Mode="OneWay" />
-                                    </ComboBox.ItemsSource>
-                                    <ComboBox.SelectedValue>
-                                        <Binding Path="OriginAddressType" />
-                                    </ComboBox.SelectedValue>
-                                </ComboBox>
-                            </Grid>
-                            <addressControl:AddressControl DataContext="{Binding Origin}">
-                                <addressControl:AddressControl.IsEnabled>
-                                    <Binding Path="SelectedValue"
+                                        </ComboBox.ItemsSource>
+                                        <ComboBox.SelectedValue>
+                                            <Binding Path="OriginAddressType" />
+                                        </ComboBox.SelectedValue>
+                                    </ComboBox>
+                                </Grid>
+                                <addressControl:AddressControl DataContext="{Binding Origin}">
+                                    <addressControl:AddressControl.IsEnabled>
+                                        <Binding Path="SelectedValue"
                                              ElementName="OriginDropDown"
                                              Converter="{StaticResource ValueEqualToParameter}">
-                                        <Binding.ConverterParameter>
-                                            <sys:Int64>1</sys:Int64>
-                                        </Binding.ConverterParameter>
-                                    </Binding>
-                                </addressControl:AddressControl.IsEnabled>
-                            </addressControl:AddressControl>
-                        </StackPanel>
-                    </Expander>
-                </Border>
-                <Border>
-                    <Expander Header="To"
+                                            <Binding.ConverterParameter>
+                                                <sys:Int64>1</sys:Int64>
+                                            </Binding.ConverterParameter>
+                                        </Binding>
+                                    </addressControl:AddressControl.IsEnabled>
+                                </addressControl:AddressControl>
+                            </StackPanel>
+                        </Expander>
+                    </Border>
+                    <Border>
+                        <Expander Header="To"
                               IsExpanded="{Binding IsDestinationExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                               DataContext="{Binding Destination}"
                               Style="{StaticResource ExpanderStyle}">
-                        <addressControl:AddressControl />
-                    </Expander>
-                </Border>
-                <Border>
-                    <Expander Header="Shipment Details"
+                            <addressControl:AddressControl />
+                        </Expander>
+                    </Border>
+                    <Border>
+                        <Expander Header="Shipment Details"
                               IsExpanded="{Binding IsDetailsExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                               DataContext="{Binding ShipmentViewModel}"
                               Style="{StaticResource ExpanderStyle}">
-                        <shipmentControl:ShipmentControl />
-                    </Expander>
-                </Border>
-                <Grid Margin="{StaticResource SectionMargin}">
-                    <Button Command="{Binding CreateLabelCommand}">Create Label</Button>
-                </Grid>
+                            <shipmentControl:ShipmentControl />
+                        </Expander>
+                    </Border>
+                    <Grid Margin="{StaticResource SectionMargin}">
+                        <Button Command="{Binding CreateLabelCommand}">Create Label</Button>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.None}}">
+                    <TextBlock>Select a shipping carrier from the list above.</TextBlock>
+                </StackPanel>
             </StackPanel>
             <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Multiple}}">
-                <TextBlock>Multiple shipments...</TextBlock>
+                <TextBlock>Multiple shipments.</TextBlock>
             </StackPanel>
             <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Deleted}}">
                 <TextBlock>Shipment has been deleted.</TextBlock>
