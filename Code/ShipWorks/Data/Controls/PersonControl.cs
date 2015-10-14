@@ -19,6 +19,7 @@ using Interapptive.Shared.Business;
 using System.ComponentModel.DataAnnotations;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Data.Controls
 {

@@ -29,6 +29,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.ApplicationCore;
 using Autofac;
 using System.Linq;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Stores
 {

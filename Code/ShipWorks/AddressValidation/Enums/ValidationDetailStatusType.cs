@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace ShipWorks.AddressValidation
+namespace ShipWorks.AddressValidation.Enums
 {
     /// <summary>
     /// Defines states for residential address status

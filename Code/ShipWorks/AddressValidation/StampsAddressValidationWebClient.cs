@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Business;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;

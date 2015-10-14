@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Model.EntityClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.CoreExtensions.Grid;

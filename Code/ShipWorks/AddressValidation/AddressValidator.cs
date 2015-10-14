@@ -6,6 +6,7 @@ using Interapptive.Shared.Business.Geography;
 using log4net;
 using Microsoft.Web.Services3.Addressing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 

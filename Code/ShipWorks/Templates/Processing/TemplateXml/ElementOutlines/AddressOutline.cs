@@ -6,6 +6,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {

@@ -15,6 +15,7 @@ using ShipWorks.UI.Wizard;
 using System.Data.SqlTypes;
 using ShipWorks.Templates.Processing.TemplateXml;
 using Interapptive.Shared.Utility;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Stores.Management;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;

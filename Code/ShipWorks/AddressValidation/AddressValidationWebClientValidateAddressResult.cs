@@ -8,7 +8,7 @@ namespace ShipWorks.AddressValidation
     public class AddressValidationWebClientValidateAddressResult
     {
         /// <summary>
-        /// Constructro
+        /// Constructor
         /// </summary>
         public AddressValidationWebClientValidateAddressResult()
         {

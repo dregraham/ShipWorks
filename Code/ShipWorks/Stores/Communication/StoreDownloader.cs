@@ -33,6 +33,7 @@ using ShipWorks.Data.Caching;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Users.Audit;
 using System.Reflection;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Stores.Communication
 {

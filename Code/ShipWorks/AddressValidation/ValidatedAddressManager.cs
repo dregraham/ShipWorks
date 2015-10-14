@@ -5,6 +5,7 @@ using Interapptive.Shared.Business;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;

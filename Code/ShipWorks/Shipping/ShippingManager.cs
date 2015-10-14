@@ -61,6 +61,7 @@ using System.Xml.Linq;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using Autofac;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Shipping
 {
