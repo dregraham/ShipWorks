@@ -1,0 +1,13 @@
+﻿SET NUMERIC_ROUNDABORT OFF
+GO
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+GO
+PRINT N'Altering [dbo].[Order]'
+GO
+ALTER TABLE [dbo].[Order] ADD
+[ShipAddressType] [tinyint] NOT NULL CONSTRAINT [DF_Order_ShipAddressType] DEFAULT ((0))
+GO
+PRINT N'Dropping constraints from [dbo].[Order]'
+GO
+ALTER TABLE [dbo].[Order] DROP CONSTRAINT [DF_Order_ShipAddressType]
+GO
