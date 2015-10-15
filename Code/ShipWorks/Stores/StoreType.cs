@@ -151,6 +151,7 @@ namespace ShipWorks.Stores
             newOrder.BillMilitaryAddress = (int)ValidationDetailStatusType.Unknown;
             newOrder.BillAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
             newOrder.BillAddressValidationSuggestionCount = 0;
+            newOrder.ShipAddressType = (int) AddressType.NotChecked;
 
             return newOrder;
         }
