@@ -59,6 +59,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private readonly OrderSelectionChangedHandler shipmentChangedHandler;
         private readonly IDisposable subscriptions;
+        private IMessageHelper messageHelper;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -82,6 +83,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ICustomsManager customsManager,
             IShipmentProcessor shipmentProcessor,
             ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
+            IMessageHelper messageHelper,
             Func<Owned<ICarrierConfigurationShipmentRefresher>> shipmentRefresherFactory,
             Func<ShipmentViewModel> shipmentViewModelFactory,
             Func<AddressViewModel> addressViewModelFactory) : this()
@@ -92,6 +94,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.shipmentTypeFactory = shipmentTypeFactory;
             this.messenger = messenger;
             this.shipmentChangedHandler = shipmentChangedHandler;
+            this.messageHelper = messageHelper;
 
             shipmentTypeManager = new ShipmentTypeManagerWrapper();
 
@@ -343,7 +346,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             Save();
-            shippingManager.SaveShipmentToDatabase(shipment, ValidatedAddressScope.Current, false);
+            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(shipment, ValidatedAddressScope.Current, false);
+            DisplayError(errors);
         }
 
         /// <summary>
@@ -477,7 +481,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.SaveToEntity(shipment.OriginPerson);
             Destination.SaveToEntity(shipment.ShipPerson);
 
-            customsManager.EnsureCustomsLoaded(new[] { shipment }, ValidatedAddressScope.Current);
+            IDictionary<ShipmentEntity, Exception> errors = customsManager.EnsureCustomsLoaded(new[] { shipment }, ValidatedAddressScope.Current);
+            DisplayError(errors);
         }
 
         /// <summary>
@@ -651,6 +656,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 // There weren't any unprocessed shipments, so show as deleted.
                 LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Deleted;
                 shipment = null;
+            }
+        }
+
+        /// <summary>
+        /// Show an error if one is associated with the current shipment
+        /// </summary>
+        private void DisplayError(IDictionary<ShipmentEntity, Exception> errors)
+        {
+            if (errors.ContainsKey(shipment))
+            {
+                messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
+                                        "The shipments will be refreshed to reflect the recent changes.");
+
+                messenger.Send(new OrderSelectionChangingMessage(this, new[] { shipment.OrderID }));
             }
         }
 

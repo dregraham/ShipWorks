@@ -98,6 +98,7 @@ namespace ShipWorks.ApplicationCore
 
             builder.Register(c => Program.MainForm)
                 .As<Control>()
+                .As<IWin32Window>()
                 .ExternallyOwned();
 
             builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
