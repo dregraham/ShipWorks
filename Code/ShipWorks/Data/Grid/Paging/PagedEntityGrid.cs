@@ -916,9 +916,6 @@ namespace ShipWorks.Data.Grid.Paging
                 }
             }
 
-
-
-
             // See if this number of items is restricted
             EditionRestrictionIssue restriciton = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SelectionLimit, virtualSelection.Count);
             if (restriciton.Level != EditionRestrictionLevel.None)
@@ -1436,6 +1433,7 @@ namespace ShipWorks.Data.Grid.Paging
 
             suspendSelectionProcessing = true;
             gridRow.Selected = virtualSelection.Contains(entityID);
+            gridRow.Checked = virtualSelection.Contains(entityID);
             suspendSelectionProcessing = false;
         }
 

@@ -2099,10 +2099,7 @@ namespace ShipWorks
 
             // Update the grid to show the new node
             gridControl.ActiveFilterNode = ((FilterTree)sender).SelectedFilterNode;
-
-            // Clear all of the checked rows
-            gridControl.ClearCheckedRows();
-
+            
             // Could be changing to a Null node selection due to logging off.  If that's the case, we don't have to 
             // update UI, b\c its already blank.
             if (UserSession.IsLoggedOn)

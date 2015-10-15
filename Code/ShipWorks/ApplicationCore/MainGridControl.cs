@@ -253,6 +253,9 @@ namespace ShipWorks.ApplicationCore
                         throw new InvalidOperationException("Cannot update ActiveFilterNode when there is no active grid.");
                     }
                 }
+
+                // Clear all of the checked rows
+                ClearCheckedRows();
             }
         }
 
@@ -659,7 +662,8 @@ namespace ShipWorks.ApplicationCore
                 log.InfoFormat("Grid selection changed while not visible. ({0}, {1})", grid.Rows.Count, grid.Selection.Count);
                 return;
             }
-
+            
+            ClearCheckedRows();
             RaiseSortChanged();
         }
 
