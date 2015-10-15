@@ -592,12 +592,15 @@ namespace ShipWorks.ApplicationCore
             }
 
             ClearCheckedRows();
-
+            
             // Check the rows that are selected 
-            foreach (GridRow row in e.Grid.SelectedElements)
+            if (e?.Grid != null)
             {
-                row.Checked = row.Selected;
-                checkedRows.Add(row);
+                foreach (GridRow row in e.Grid.SelectedElements)
+                {
+                    row.Checked = row.Selected;
+                    checkedRows.Add(row);
+                }
             }
             
             RaiseSelectionChanged();
