@@ -112,6 +112,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
             Origin = addressViewModelFactory();
+            Destination = addressViewModelFactory();
 
             PropertyChanging += OnPropertyChanging;
         }
@@ -379,6 +380,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             AccountId = adapter.AccountId.GetValueOrDefault();
 
             Origin.Load(shipment.OriginPerson);
+            Destination.Load(shipment.ShipPerson);
 
             AllowEditing = !shipment.Processed;
 
@@ -424,6 +426,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             shipment.OriginOriginID = OriginAddressType;
 
             Origin.SaveToEntity(shipment.OriginPerson);
+            Destination.SaveToEntity(shipment.ShipPerson);
 
             customsManager.EnsureCustomsLoaded(new[] { shipment }, ValidatedAddressScope.Current);
         }

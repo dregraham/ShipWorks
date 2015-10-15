@@ -50,13 +50,60 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             {
                 Store = storeEntity,
                 StoreID = storeEntity.StoreID,
-                RequestedShipping = "Ground"
+                RequestedShipping = "Ground",
+                ShipCity = "Saint Louis",
+                ShipCompany = "Ship Company",
+                ShipCountryCode = "US",
+                ShipEmail = "ShipEmail@test.com",
+                ShipFax = "",
+                ShipFirstName = "ShipFirstName",
+                ShipLastName = "ShipLastName",
+                ShipMiddleName = "ShipMiddleName",
+                ShipMilitaryAddress = 0,
+                ShipPOBox = 0,
+                ShipPhone = "8885551212",
+                ShipPostalCode = "63109",
+                ShipStateProvCode = "MO",
+                ShipStreet1 = "1 Memorial Drive",
+                ShipStreet2 = "Suite 2000",
+                ShipStreet3 = "",
+                ShipWebsite = "www.shipworks.com"
             };
 
             shipmentEntity = new ShipmentEntity(1031)
             {
                 ShipmentTypeCode = ShipmentTypeCode.Other,
-                OriginOriginID = (int)ShipmentOriginSource.Store
+                OriginOriginID = (int)ShipmentOriginSource.Store,
+                OriginCity = "Saint Louis",
+                OriginCompany = "Origin Company",
+                OriginCountryCode = "US",
+                OriginEmail = "OriginEmail@test.com",
+                OriginFax = "",
+                OriginFirstName = "OriginFirstName",
+                OriginLastName = "OriginLastName",
+                OriginMiddleName = "OriginMiddleName",
+                OriginPhone = "8885551212",
+                OriginPostalCode = "63109",
+                OriginStateProvCode = "MO",
+                OriginStreet1 = "1 Memorial Drive",
+                OriginStreet2 = "Suite 2000",
+                OriginStreet3 = "",
+                OriginWebsite = "www.Originworks.com",
+                ShipCity = "Saint Louis",
+                ShipCompany = "Ship Company",
+                ShipCountryCode = "US",
+                ShipEmail = "ShipEmail@test.com",
+                ShipFirstName = "ShipFirstName",
+                ShipLastName = "ShipLastName",
+                ShipMiddleName = "ShipMiddleName",
+                ShipMilitaryAddress = 0,
+                ShipPOBox = 0,
+                ShipPhone = "8885551212",
+                ShipPostalCode = "63109",
+                ShipStateProvCode = "MO",
+                ShipStreet1 = "1 Memorial Drive",
+                ShipStreet2 = "Suite 2000",
+                ShipStreet3 = ""
             };
 
             shipmentEntity.Order = orderEntity;
@@ -76,38 +123,36 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             return testObject;
         }
-#pragma warning disable S125 // Sections of code should not be "commented out"
-
-        //[Fact]
-        //public void Save_UpdatesShipmentEntity_WhenDestinationCountryCodeChanged_Test()
-        //{
-        //    using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-        //    {
-        //        ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-
-        //        testObject.Destination.CountryCode = "XX";
-        //        testObject.Save();
-
-        //        Assert.Equal("XX", shipmentEntity.ShipCountryCode);
-        //    }
-        //}
-
-        //[Fact]
-        //public void Save_UpdatesShipmentEntity_WhenOriginCountryCodeChanged_Test()
-        //{
-        //    using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-        //    {
-        //        ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-
-        //        testObject.Origin.CountryCode = "XX";
-        //        testObject.Save();
-
-        //        Assert.Equal("XX", shipmentEntity.OriginCountryCode);
-        //    }
-        //}
 
         [Fact]
-#pragma warning restore S125 // Sections of code should not be "commented out"
+        public void Save_UpdatesShipmentEntity_WhenDestinationCountryCodeChanged_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+                testObject.Destination.CountryCode = "XX";
+                testObject.Save();
+
+                Assert.Equal("XX", shipmentEntity.ShipCountryCode);
+            }
+        }
+
+        [Fact]
+        public void Save_UpdatesShipmentEntity_WhenOriginCountryCodeChanged_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+                testObject.Origin.CountryCode = "XX";
+                testObject.Save();
+
+                Assert.Equal("XX", shipmentEntity.OriginCountryCode);
+            }
+        }
+
+        [Fact]
         public void Save_DoesNotSendShipmentChangedMessage_WhenLoadingOrderTest()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
