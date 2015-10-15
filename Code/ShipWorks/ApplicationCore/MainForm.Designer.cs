@@ -2738,7 +2738,6 @@ namespace ShipWorks
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.WindowText = "ShipWorks";
             this.Activated += new System.EventHandler(this.OnActivated);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
             this.Shown += new System.EventHandler(this.OnShown);
             this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.OnHelpRequested);
