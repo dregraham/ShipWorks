@@ -146,8 +146,6 @@
     <Compile Include="Custom\EntityClasses\UserEntity.cs" />
     <Compile Include="Custom\EntityPersistedAction.cs" />
     <Compile Include="Custom\EntityPersistedEvent.cs" />
-    <Compile Include="EntityClasses\ExcludedPackageTypeEntity.cs" />
-    <Compile Include="EntityClasses\ExcludedServiceTypeEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Custom\EntityClasses\FilterNodeEntity.cs" />
     <AppDesigner Include="Properties\" />
@@ -1184,8 +1182,6 @@
     <Compile Include=".\RelationClasses\GrouponOrderItemRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include="RelationClasses\ExcludedPackageTypeRelations.cs" />
-    <Compile Include="RelationClasses\ExcludedServiceTypeRelations.cs" />
     <Compile Include=".\EntityClasses\ExcludedServiceTypeEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
