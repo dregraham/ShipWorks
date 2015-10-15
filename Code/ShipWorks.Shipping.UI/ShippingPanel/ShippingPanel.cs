@@ -14,6 +14,8 @@ using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.Shipping.UI.MessageHandlers;
+using System.Diagnostics;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -50,6 +52,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            ParentForm.FormClosing += (s, evt) => viewModel.SaveToDatabase();
 
             shippingPanelControl = new ShippingPanelControl(viewModel);
             
@@ -106,11 +109,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void OnIsKeyboardFocusWithinChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
+            Debug.WriteLine($"XXXXXXXXXXXXXXXXXX -- Keyboard focus changed {e.NewValue} and {e.OldValue}");
             // The other Focus events, like LostFocus, don't seem to work the way we need, but IsKeyBoardFocusWithinChanged does.
             // If the new value is false, meaning we had focus within this control and it's children and then lost it, and it wasn't already false,
             // save to the db.
             if (!((bool)e.NewValue) && e.NewValue != e.OldValue)
             {
+                Debug.WriteLine("XXXXXXXXXXXXXXXXXX -- -- -- -- SAVING");
                 viewModel?.SaveToDatabase();
             }
         }

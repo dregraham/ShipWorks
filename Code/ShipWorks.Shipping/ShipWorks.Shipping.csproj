@@ -183,6 +183,7 @@
     <Compile Include="Services\CarrierShipmentAdapterFactory.cs" />
     <Compile Include="Services\ICarrierShipmentAdapter.cs" />
     <Compile Include="Services\ICarrierShipmentAdapterFactory.cs" />
+    <Compile Include="Services\IMessageHelper.cs" />
     <Compile Include="Services\IShipmentLoaderService.cs" />
     <Compile Include="Services\IShippingOriginManager.cs" />
     <Compile Include="Rating\IRateSelection.cs" />
@@ -243,9 +244,7 @@
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Carriers\BestRate\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

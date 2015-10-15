@@ -11,6 +11,7 @@ using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.UI.MessageHandlers;
 using System.Reactive.Concurrency;
 using Autofac.Extras.Attributed;
+using ShipWorks.Shipping.UI.Services;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -123,6 +124,9 @@ namespace ShipWorks.Shipping.UI
                 .SingleInstance();
 
             builder.RegisterType<OrderSelectionChangedHandler>();
+
+            builder.RegisterType<MessageHelperWrapper>()
+                .AsImplementedInterfaces();
         }
     }
 }

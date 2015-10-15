@@ -319,8 +319,12 @@ namespace ShipWorks
         /// <summary>
         /// The window is about to close
         /// </summary>
-        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        /// <remarks>This is an override instead of an event handler to ensure that any other event handlers run before
+        /// this code.  That's because this clears the user session which is needed by other components on shutdown.</remarks>
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            base.OnFormClosing(e);
+
             // Make sure we are not in a failure state
             if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
             {
