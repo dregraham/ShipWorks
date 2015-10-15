@@ -88,7 +88,9 @@ namespace ShipWorks.ApplicationCore
         // Cached list of selected store keys.  So if it's asked for more than once and the selection hasn't changed,
         // we don't have to refigure it out
         List<long> selectedStoreKeys = null;
-
+        
+        // Keep track of the rows that are checked. this is only because the SandGrid has no way of removing 
+        // all of the checks at once, so that we dont have to loop through each row. 
         private readonly List<GridRow> checkedRows = new List<GridRow>();
 
         /// <summary>
@@ -463,7 +465,9 @@ namespace ShipWorks.ApplicationCore
             // Reset the active filter node 
             // this will move the checkbox all the way
             // to the left of the screen
-            if (!IsSearchActive)
+            // Only if no orders are selected or no search
+            // is currently running
+            if (!IsSearchActive && checkedRows.Count == 0)
             {
                 FilterNodeEntity currentFilterNode = ActiveFilterNode;
                 ActiveFilterNode = null;
