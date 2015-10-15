@@ -225,7 +225,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             var item = new Lazy<GrouponOrderItemEntity>(() => (GrouponOrderItemEntity)itemSource());
 
             ElementOutline outline = container.AddElement("Groupon");
-            outline.AddElement("BOM SKU", () => item.Value.BomSKU);
+            outline.AddElement("BOMSKU", () => item.Value.BomSKU);
         }
 
         /// <summary>
