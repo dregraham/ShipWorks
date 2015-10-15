@@ -462,16 +462,11 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void OnColumnsReordered(object sender, EventArgs e)
         {
-            // Reset the active filter node 
-            // this will move the checkbox all the way
-            // to the left of the screen
-            // Only if no orders are selected or no search
-            // is currently running
-            if (!IsSearchActive && checkedRows.Count == 0)
+            FilterEntityGrid grid = sender as FilterEntityGrid;
+            if (grid != null)
             {
-                FilterNodeEntity currentFilterNode = ActiveFilterNode;
-                ActiveFilterNode = null;
-                ActiveFilterNode = currentFilterNode;
+                grid.SaveColumns();
+                grid.ReloadColumns();
             }
         }
 
