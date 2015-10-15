@@ -617,7 +617,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-               // LoadOrder()
+                messenger.Send(new OrderSelectionChangingMessage(this, new[] { shipment.OrderID }));
             }
         }
 
