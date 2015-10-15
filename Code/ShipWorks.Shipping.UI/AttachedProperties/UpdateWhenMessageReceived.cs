@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// </summary>
         public static readonly DependencyProperty MessageTypeProperty = DependencyProperty.RegisterAttached("MessageType", typeof(Type),
                 typeof(UpdateWhenMessageReceived), new PropertyMetadata(null, OnMessageTypeChanged));
-
+        
         private static readonly DependencyProperty SubscriptionProperty =
             DependencyProperty.RegisterAttached("Subscription", typeof(IDisposable), typeof(UpdateWhenMessageReceived));
 
@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
             ContentPresenter contentPresenter = element as ContentPresenter;
             int childCount = VisualTreeHelper.GetChildrenCount(element);
 
-            if (contentPresenter != null)
+            if (contentPresenter != null && childCount > 0)
             {
                 TextBlock textBlock = VisualTreeHelper.GetChild(contentPresenter, 0) as TextBlock ;
                 textBlock.SetCurrentValue(TextBlock.TextProperty, textValue);
