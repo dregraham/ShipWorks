@@ -20,6 +20,7 @@ namespace Interapptive.Shared.Utility
         class EnumMetadata
         {
             public DescriptionAttribute DescriptionAttribute { get; set; }
+            public DetailsAttribute DetailsAttribute { get; set; }
             public Image Image { get; set; }
             public bool Deprecated { get; set; }
             public bool Hidden { get; set; }
@@ -160,7 +161,12 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static string GetDescription(Enum value)
         {
-            return GetEnumMetadata(value).DescriptionAttribute.Description;
+            return GetEnumMetadata(value).DescriptionAttribute?.Description ?? string.Empty;
+        }
+
+        public static string GetDetails(Enum value)
+        {
+            return GetEnumMetadata(value).DetailsAttribute?.Details ?? string.Empty;
         }
 
         /// <summary>
@@ -224,14 +230,9 @@ namespace Interapptive.Shared.Utility
                 {
                     EnumMetadata metadata = new EnumMetadata();
 
-                    DescriptionAttribute attribute = (DescriptionAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute));
-                    if (attribute == null)
-                    {
-                        throw new InvalidOperationException("Cannot use GetDescription on enum without DescriptionAttribute.");
-                    }
-
-                    metadata.DescriptionAttribute = attribute;
-
+                    metadata.DescriptionAttribute = (DescriptionAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute));
+                    metadata.DetailsAttribute = (DetailsAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(DetailsAttribute));
+                    
                     ImageResourceAttribute imageAttribute = (ImageResourceAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(ImageResourceAttribute));
                     if (imageAttribute != null)
                     {

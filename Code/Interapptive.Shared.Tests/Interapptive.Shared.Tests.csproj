@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Collections\CollectionChangedEventArgsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\EnumHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
