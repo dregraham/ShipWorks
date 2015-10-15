@@ -26,6 +26,7 @@ namespace ShipWorks.AddressValidation
             CountryCode = string.Empty;
             ResidentialStatus = ValidationDetailStatusType.Unknown;
             POBox = ValidationDetailStatusType.Unknown;
+            AddressType = AddressType.NotChecked;
         }
 
         /// <summary>
@@ -74,6 +75,11 @@ namespace ShipWorks.AddressValidation
         public ValidationDetailStatusType POBox { get; set; }
 
         /// <summary>
+        /// Address type, the type of address
+        /// </summary>
+        public AddressType AddressType { get; set; }
+
+        /// <summary>
         /// Defines whether an address is valid and usable
         /// </summary>
         public bool IsValid { get; set; }
@@ -117,6 +123,7 @@ namespace ShipWorks.AddressValidation
             adapter.CountryCode = CountryCode;
             adapter.ResidentialStatus = (int) ResidentialStatus;
             adapter.POBox = (int) POBox;
+            adapter.AddressType = (int)AddressType;
         }
 
         /// <summary>

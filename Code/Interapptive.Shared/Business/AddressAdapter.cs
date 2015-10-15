@@ -433,5 +433,14 @@ namespace Interapptive.Shared.Business
 
             return string.Equals(trimmedLeft, trimmedRight, StringComparison.CurrentCultureIgnoreCase);
         }
+
+        /// <summary>
+        /// Address type see AddressType enume
+        /// </summary>
+        public int AddressType
+        {
+            get { return GetField<int>("AddressType"); }
+            set { SetField("AddressType", value); }
+        }
     }
 }
