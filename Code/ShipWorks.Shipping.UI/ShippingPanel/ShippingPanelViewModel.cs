@@ -50,9 +50,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private ShipmentEntity shipment;
         private Visibility accountVisibility;
         private IShipmentTypeManager shipmentTypeManager;
+        private string domesticInternationalText;
 
         private bool listenForRateCriteriaChanged = false;
         private bool forceRateCriteriaChanged = false;
+        private bool forceDomesticInternationalChanged = false;
 
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private readonly OrderSelectionChangedHandler shipmentChangedHandler;
@@ -102,8 +104,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
                 shipmentChangedHandler.ShipmentLoadedStream().Do(_ => AllowEditing = true).Subscribe(LoadOrder)
             );
-            
-            WireUpObservables();
 
             this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
             this.shipmentViewModelFactory = shipmentViewModelFactory;
@@ -114,6 +114,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin = addressViewModelFactory();
             Destination = addressViewModelFactory();
 
+            // Wiring up observables needs objects to not be null, so do this last.
+            WireUpObservables();
+
             PropertyChanging += OnPropertyChanging;
         }
 
@@ -122,6 +125,40 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void WireUpObservables()
         {
+            // Merge the two address view models together so that we can respond to their property changed events
+            Observable.Merge(
+                (new List<AddressViewModel>() { Origin, Destination }).Select(
+                    o => Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+                        h => o.PropertyChanged += h,
+                        h => o.PropertyChanged -= h
+                        )
+                    ))
+                    .Where(evt =>
+                    {
+                        string propertyName = evt.EventArgs.PropertyName;
+
+                        bool handleField = propertyName.Equals(nameof(AddressViewModel.CountryCode), StringComparison.InvariantCultureIgnoreCase) ||
+                                           propertyName.Equals(nameof(AddressViewModel.PostalCode), StringComparison.InvariantCultureIgnoreCase) ||
+                                           propertyName.Equals(nameof(AddressViewModel.StateProvCode), StringComparison.InvariantCultureIgnoreCase); 
+
+                        // forceDomesticInternationalChanged is used for race conditions:
+                        // For example (from rate criteria changing), ShipmentType property changes, and then before the throttle time, SupportsMultipleShipments changes.
+                        // Since SupportsMultipleShipments isn't a rating field, the event would not be fired, even though 
+                        // ShipmentType changed and the event needs to be raised.
+                        // So keep track that during the throttling a rate criteria was changed.
+                        forceDomesticInternationalChanged = forceDomesticInternationalChanged || handleField;
+
+                        return forceDomesticInternationalChanged;
+                    })
+                .Throttle(TimeSpan.FromMilliseconds(250))
+                .Subscribe(evt =>
+                {
+                    // Reset forceDomesticInternationalChanged so that we don't force it on the next round.
+                    forceDomesticInternationalChanged = false;
+                    Save();
+                    DomesticInternationalText = shipmentTypeFactory.Get(shipment).IsDomestic(shipment) ? "Domestic" : "International";
+                });
+
             //// Wire up the rate criteria obseravable throttling for the PropertyChanged event.
             //Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
             //    // We only listen if listenForRateCriteriaChanged is true.
@@ -182,6 +219,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get { return initialShipmentTypeCode; }
             set { handler.Set(nameof(InitialShipmentTypeCode), ref initialShipmentTypeCode, value); }
+        }
+
+        /// <summary>
+        /// Returns "Domestic" or "International" depending on the shipments to/from fields.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string DomesticInternationalText
+        {
+            get { return domesticInternationalText; }
+            set { handler.Set(nameof(DomesticInternationalText), ref domesticInternationalText, value); }
         }
 
         /// <summary>
@@ -387,6 +434,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             listenForRateCriteriaChanged = true;
 
             Origin.SetAddressFromOrigin(OriginAddressType, shipment?.OrderID ?? 0, AccountId, ShipmentType);
+
+            DomesticInternationalText = "Domestic";
 
             SupportsMultiplePackages = shipmentTypeFactory.Get(selectedShipmentType)?.SupportsMultiplePackages ?? false;
         }

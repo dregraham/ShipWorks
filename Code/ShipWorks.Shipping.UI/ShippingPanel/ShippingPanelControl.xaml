@@ -167,17 +167,23 @@
                     <Border>
                         <Expander Header="{Binding}"
                               IsExpanded="{Binding IsDestinationExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                              DataContext="{Binding Destination}"
                               Style="{StaticResource ExpanderStyle}">
                             <Expander.HeaderTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="0,0,8,0">To</TextBlock>
-                                        <TextBlock Text="{Binding Path=FullName, Mode=OneWay, StringFormat=' {0},'}" Foreground="Gray"/>
+                                        <TextBlock Foreground="Gray">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0}, {1}">
+                                                    <Binding Path="Destination.FullName" />
+                                                    <Binding Path="DomesticInternationalText" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
                                     </StackPanel>
                                 </DataTemplate>
                             </Expander.HeaderTemplate>
-                            <addressControl:AddressControl />
+                            <addressControl:AddressControl DataContext="{Binding Destination }" />
                         </Expander>
                     </Border>
                     <Border>
