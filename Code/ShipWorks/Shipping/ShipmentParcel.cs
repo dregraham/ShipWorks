@@ -81,6 +81,14 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Gets or sets the weight of the package contents
+        /// </summary>
+        /// <value>
+        /// The weight of the package contents
+        /// </value>
+        public double Weight { get; set; }
+
+        /// <summary>
         /// Tracking number for the package, if it exists
         /// </summary>
         public string TrackingNumber { get; private set; }

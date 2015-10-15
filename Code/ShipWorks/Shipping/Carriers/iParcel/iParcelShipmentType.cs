@@ -685,7 +685,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
                 return new ShipmentParcel(shipment, package.IParcelPackageID, package.TrackingNumber,
                     new InsuranceChoice(shipment, package, package, package),
-                    new DimensionsAdapter(package));
+                    new DimensionsAdapter(package)) { Weight = package.Weight };
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");

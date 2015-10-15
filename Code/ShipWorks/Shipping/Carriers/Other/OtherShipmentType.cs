@@ -172,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Other
 
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment, shipment.Other, null),
-                new DimensionsAdapter());
+                new DimensionsAdapter()) { Weight = shipment.ContentWeight };
         }
 
         /// <summary>
