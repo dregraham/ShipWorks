@@ -1855,7 +1855,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "OrderEntity", "ShipUnparsedName", "ShipUnparsedName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 70 );
 			base.AddElementFieldMapping( "OrderEntity", "ShipSenseHashKey", "ShipSenseHashKey", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 71 );
 			base.AddElementFieldMapping( "OrderEntity", "ShipSenseRecognitionStatus", "ShipSenseRecognitionStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 72 );
-			base.AddElementFieldMapping( "OrderEntity", "ShipAddressType", "ShipAddressType", false, (int)SqlDbType.TinyInt, 0, 0, 3, false, "", null, typeof(System.Byte), 73 );
+			base.AddElementFieldMapping( "OrderEntity", "ShipAddressType", "ShipAddressType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 73 );
 		}
 		/// <summary>Inits OrderChargeEntity's mappings</summary>
 		private void InitOrderChargeEntityMappings()

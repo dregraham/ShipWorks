@@ -2092,11 +2092,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The ShipAddressType property of the Entity Order<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "Order"."ShipAddressType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Byte ShipAddressType
+		public virtual System.Int32 ShipAddressType
 		{
-			get { return (System.Byte)GetValue((int)OrderFieldIndex.ShipAddressType, true); }
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipAddressType, true); }
 			set	{ SetValue((int)OrderFieldIndex.ShipAddressType, value); }
 		}
 

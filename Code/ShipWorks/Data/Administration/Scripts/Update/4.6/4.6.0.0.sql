@@ -5,7 +5,7 @@ GO
 PRINT N'Altering [dbo].[Order]'
 GO
 ALTER TABLE [dbo].[Order] ADD
-[ShipAddressType] [tinyint] NOT NULL CONSTRAINT [DF_Order_ShipAddressType] DEFAULT ((0))
+[ShipAddressType] [int] NOT NULL CONSTRAINT [DF_Order_ShipAddressType] DEFAULT ((0))
 GO
 PRINT N'Dropping constraints from [dbo].[Order]'
 GO

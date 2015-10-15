@@ -236,6 +236,7 @@ namespace ShipWorks.Data.Grid
             }
         }
 
+
         /// <summary>
         /// Get the formatted value to use for display of the given column in this row.  
         /// </summary>
@@ -346,6 +347,18 @@ namespace ShipWorks.Data.Grid
             }
         }
 
+        protected override string GetTooltipText(Point position)
+        {
+            EntityGridColumn column = HitTestColumn(position);
+            string toolTip = column.GetTooltipText(this);
+            if (!string.IsNullOrEmpty(toolTip))
+            {
+                return toolTip;
+            }
+
+            return base.GetTooltipText(position);
+        }
+
         /// <summary>
         /// Moving the mouse over the grid row
         /// </summary>
@@ -361,7 +374,7 @@ namespace ShipWorks.Data.Grid
             }
             else
             {
-                column = HitTestColumn(e);
+                column = HitTestColumn(new Point(e.X, e.Y));
             }
 
             // The column under the mouse changed
@@ -388,7 +401,7 @@ namespace ShipWorks.Data.Grid
         protected override void OnMouseDown(MouseEventArgs e)
         {
             // See what column its in
-            EntityGridColumn column = HitTestColumn(e);
+            EntityGridColumn column = HitTestColumn(new Point(e.X, e.Y));
             if (column != null)
             {
                 // We should have already captured this in the mouse move
@@ -417,7 +430,7 @@ namespace ShipWorks.Data.Grid
             }
             else
             {
-                column = HitTestColumn(e);
+                column = HitTestColumn(new Point(e.X, e.Y));
             }
 
             if (column != null)
@@ -450,13 +463,13 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Determine what column the mouse event falls in for this row.  Or null if it doesn't.
         /// </summary>
-        private EntityGridColumn HitTestColumn(MouseEventArgs e)
+        private EntityGridColumn HitTestColumn(Point point)
         {
             if (Grid != null)
             {
                 foreach (EntityGridColumn column in Grid.Columns.OfType<EntityGridColumn>())
                 {
-                    if (e.X > column.Bounds.Left && e.X < column.Bounds.Right)
+                    if (point.X > column.Bounds.Left && point.X < column.Bounds.Right)
                     {
                         return column;
                     }
