@@ -1566,10 +1566,11 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits LemonStandStoreEntity's mappings</summary>
 		private void InitLemonStandStoreEntityMappings()
 		{
-			base.AddElementMapping( "LemonStandStoreEntity", "ShipWorksLocal", @"dbo", "LemonStandStore", 3 );
+			base.AddElementMapping( "LemonStandStoreEntity", "ShipWorksLocal", @"dbo", "LemonStandStore", 4 );
 			base.AddElementFieldMapping( "LemonStandStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "LemonStandStoreEntity", "Token", "Token", false, (int)SqlDbType.VarChar, 100, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "LemonStandStoreEntity", "StoreURL", "StoreURL", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "LemonStandStoreEntity", "StatusCodes", "StatusCodes", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 3 );
 		}
 		/// <summary>Inits MagentoOrderEntity's mappings</summary>
 		private void InitMagentoOrderEntityMappings()

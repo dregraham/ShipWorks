@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
+
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -11,8 +8,6 @@ namespace ShipWorks.Actions.Tasks.Common
     /// </summary>
     public abstract class StoreInstanceTaskBase : ActionTask
     {
-        long storeID = -1;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -29,10 +24,6 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// The StoreID that the task applies to.
         /// </summary>
-        public long StoreID
-        {
-            get { return storeID; }
-            set { storeID = value; }
-        }
+        public long StoreID { get; set; } = -1;
     }
 }

@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using Quartz.Util;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -96,14 +97,20 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Uploads tracking number and order status to LemonStand
+        ///     Gets all of the possible order statuses for this store
+        /// </summary>
+        /// <returns></returns>
+        public JToken GetOrderStatuses()
+        {
+            return ProcessRequest(CreateGetRequest("orderstatuses"), "GetOrderStatuses");
+        }
+
+        /// <summary>
+        ///     Uploads tracking number to LemonStand
         /// </summary>
         /// <param name="trackingNumber">The tracking number.</param>
         /// <param name="shipmentID">The LemonStand shipment id.</param>
-        /// <param name="onlineStatus">The online order status.</param>
-        /// <param name="orderNumber">The LemonStand order number.</param>
-        public void UploadShipmentDetails(string trackingNumber, string shipmentID, string onlineStatus,
-            string orderNumber)
+        public void UploadShipmentDetails(string trackingNumber, string shipmentID)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
 
@@ -117,17 +124,41 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 ProcessRequest(CreatePostRequest("shipment/" + shipmentID + "/trackingcode", parameters),
                     "UploadShipmentDetails");
-
-                parameters.Clear();
-
-                parameters.Add("status", onlineStatus);
-                ProcessRequest(CreatePatchRequest("order/" + orderNumber, parameters), "UploadShipmentDetails");
             }
-            catch (LemonStandException ex)
+            catch (Exception ex)
+            {
+                throw new LemonStandException(ex.Message);
+            }
+        }
+
+        /// <summary>
+        ///     Upload order status to LemonStand
+        /// </summary>
+        /// <param name="orderID">The LemonStand order ID</param>
+        /// <param name="onlineStatus">The online status to set for this order</param>
+        /// <exception cref="LemonStandException">
+        /// The status is not a possible option.
+        /// or
+        /// This order's status can't transition to \ + onlineStatus + \ from it's current order status
+        /// </exception>
+        public void UpdateOrderStatus(string orderID, string onlineStatus)
+        {
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+
+            try
+            {
+                parameters.Add("status", onlineStatus);
+                ProcessRequest(CreatePatchRequest("order/" + orderID, parameters), "UpdateOrderStatus");
+            }
+            catch (Exception ex)
             {
                 if (ex.Message.Equals("The remote server returned an error: (400) Bad Request."))
                 {
                     throw new LemonStandException("The status is not a possible option.", ex);
+                }
+                if (ex.Message.Equals("The remote server returned an error: (500) Internal Server Error."))
+                {
+                    throw new LemonStandException("This order's status can't transition to \"" + onlineStatus + "\" from it's current order status", ex);
                 }
 
                 throw;

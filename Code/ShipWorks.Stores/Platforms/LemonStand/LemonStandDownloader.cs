@@ -25,6 +25,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         private readonly ILemonStandWebClient client;
         private readonly ISqlAdapterRetry sqlAdapter;
 
+        LemonStandStatusCodeProvider statusProvider;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
         /// </summary>
@@ -56,6 +58,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </exception>
         protected override void Download()
         {
+            UpdateOrderStatuses();
+
             Progress.Detail = "Downloading new orders...";
 
             try
@@ -166,6 +170,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     (LemonStandOrderEntity) InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
                 order.LemonStandOrderID = lsOrder.ID;
                 order.OnlineStatus = lsOrder.Status;
+                order.OnlineStatusCode = lsOrder.ShopOrderStatusID;
 
                 // Only load new orders
                 if (order.IsNew)
@@ -469,6 +474,18 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
 
             return product;
+        }
+
+        /// <summary>
+        /// Update the local order status provider
+        /// </summary>
+        private void UpdateOrderStatuses()
+        {
+            Progress.Detail = "Updating status codes...";
+
+            // refresh the status codes from LemonStand
+            statusProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity)Store);
+            statusProvider.UpdateFromOnlineStore();
         }
     }
 }

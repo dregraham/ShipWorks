@@ -18,39 +18,25 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         /// <summary>
         ///     This task is for Orders
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get { return EntityType.ShipmentEntity; }
-        }
+        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
 
         /// <summary>
         ///     Descriptive label which appears on the task editor
         /// </summary>
-        public override string InputLabel
-        {
-            get { return "Upload the tracking number for:"; }
-        }
+        public override string InputLabel => "Upload the tracking number for:";
 
         /// <summary>
         ///     Instantiates the editor for the action
         /// </summary>
-        public override ActionTaskEditor CreateEditor()
-        {
-            return new BasicShipmentUploadTaskEditor();
-        }
-
+        public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
+        
         /// <summary>
         ///     Indicates if the task is supported for the specified store
         /// </summary>
         public override bool SupportsStore(StoreEntity store)
         {
             LemonStandStoreEntity lemonStandStore = store as LemonStandStoreEntity;
-            if (lemonStandStore == null)
-            {
-                return false;
-            }
-
-            return true;
+            return lemonStandStore != null;
         }
 
         /// <summary>
