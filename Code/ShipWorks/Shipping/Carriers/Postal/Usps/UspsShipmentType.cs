@@ -666,7 +666,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             UspsProfileEntity usps = profile.Postal.Usps;
 
             usps.UspsAccountID = AccountRepository.Accounts.Any() ? AccountRepository.Accounts.First().UspsAccountID : 0;
-            usps.RequireFullAddressValidation = true;
+            usps.RequireFullAddressValidation = false;
             usps.HidePostage = true;
 
             profile.Postal.Usps.RateShop = true;
