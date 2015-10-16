@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
@@ -13,9 +12,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
-using ShipWorks.Shipping.UI.MessageHandlers;
 using System.Diagnostics;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -45,15 +42,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<ShippingPanelViewModel>();
             messenger = IoC.UnsafeGlobalLifetimeScope.Resolve<IMessenger>();
         }
-
+        
         /// <summary>
         /// Handle control load event
         /// </summary>
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            ParentForm.FormClosing += (s, evt) => viewModel.SaveToDatabase();
-
+            
+            // We have to go directly to main form here because if the panel is loaded after SW starts, ParentForm is null
+            Program.MainForm.FormClosing += OnParentFormClosing;
             shippingPanelControl = new ShippingPanelControl(viewModel);
             
             shipmentPanelelementHost.Child = shippingPanelControl;
@@ -116,8 +114,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             if (!((bool)e.NewValue) && e.NewValue != e.OldValue)
             {
                 Debug.WriteLine("XXXXXXXXXXXXXXXXXX -- -- -- -- SAVING");
-                viewModel?.SaveToDatabase();
+                SaveToDatabase();
             }
         }
+
+        /// <summary>
+        /// Handle the parent form closing
+        /// </summary>
+        private void OnParentFormClosing(object sender, FormClosingEventArgs e) => SaveToDatabase();
+
+        /// <summary>
+        /// Tell the view model to save to the database
+        /// </summary>
+        private void SaveToDatabase() => viewModel?.SaveToDatabase();
     }
 }
