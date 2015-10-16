@@ -314,16 +314,20 @@ namespace ShipWorks.Data.Administration
                                         // Some trigger's state depend on the enabledness of the action
                                         ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
 
-                                        // Check to see if the action is a One Time action and in the past, if so we disable it
-                                        if (scheduledTrigger.Schedule.StartDateTimeInUtc < DateTime.UtcNow && 
-                                            scheduledTrigger.Schedule.ScheduleType == ActionScheduleType.OneTime)
+                                        if (scheduledTrigger?.Schedule != null )
                                         {
-                                            action.Enabled = false;
+                                            // Check to see if the action is a One Time action and in the past, if so we disable it
+                                            if (scheduledTrigger.Schedule.StartDateTimeInUtc < DateTime.UtcNow &&
+                                                scheduledTrigger.Schedule.ScheduleType == ActionScheduleType.OneTime)
+                                            {
+                                                action.Enabled = false;
+                                            }
+                                            else
+                                            {
+                                                scheduledTrigger.SaveExtraState(action, adapter);
+                                            }
                                         }
-                                        else
-                                        {
-                                            scheduledTrigger.SaveExtraState(action, adapter);
-                                        }
+
 
                                         ActionManager.SaveAction(action, adapter);
                                     }
