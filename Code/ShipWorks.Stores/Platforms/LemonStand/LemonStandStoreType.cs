@@ -84,14 +84,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
-            List<MenuCommand> commands = new List<MenuCommand>();
+            List<MenuCommand> commands = new List<MenuCommand>(); 
 
             // get possible status codes from the provider
             LemonStandStatusCodeProvider codeProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity)Store);
 
             // create a menu item for each status 
-            ICollection<string> statusCodeNames = GetCurrentOrderStatuses();
-
+            List<string> statusCodeNames = GetCurrentOrderStatuses().ToList();
+            
             bool isOne = false;
             foreach (string codeName in statusCodeNames)
             {
@@ -280,7 +280,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public override List<FilterEntity> CreateInitialFilters()
         {
-            List<string> statuses = (List<string>) GetOnlineStatusChoices();
+            List<string> statuses = GetOnlineStatusChoices().ToList();
 
             return statuses.Select(status => status.ToLower().Equals("shipped") ? CreateFilterShipped() : (CreateOrderStatusFilter(status))).ToList();
         }
@@ -393,8 +393,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             LemonStandWebClient client = new LemonStandWebClient((LemonStandStoreEntity)Store);
 
             List<JToken> statuses = client.GetOrderStatuses().SelectToken("data").Children().ToList();
+            
+            List<string> list = statuses.Select(status => status.SelectToken("name").ToString()).ToList();
+            
+            list.Sort();
 
-            return statuses.Select(status => status.SelectToken("name").ToString()).ToList();
+            return list;
         }
 
         /// <summary>
@@ -440,7 +444,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
         }
 
-        private ICollection<string> GetCurrentOrderStatuses()
+        private List<string> GetCurrentOrderStatuses()
         {
             XmlSerializer deserializer = new XmlSerializer(typeof(LemonStandStatusCodes));
 
@@ -449,12 +453,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             LemonStandStatusCodes codes = (LemonStandStatusCodes) deserializer.Deserialize(reader);
 
-            ICollection<string> statusList = new List<string>();
-
-            foreach(var code in codes.StatusCode)
-            {
-                statusList.Add(code.Name);
-            }
+            List<string> statusList = codes.StatusCode.Select(code => code.Name).ToList();
+            
+            statusList.Sort();
 
             return statusList;
         }
