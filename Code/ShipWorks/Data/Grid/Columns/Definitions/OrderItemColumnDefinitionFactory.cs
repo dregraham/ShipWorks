@@ -373,7 +373,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 #endregion
 
 
-<<<<<<< HEAD
                 #region LemonStand
                         new GridColumnDefinition("{39eefe98-96e4-4a31-9732-dc92ec83e155}", true,
                             new GridTextDisplayType(), "Url Name", "cap",
@@ -398,8 +397,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         
                 #endregion
 
-=======
->>>>>>> feature-groupon-add-bomsku-to-grid
                 new GridColumnDefinition("{5D0135AC-ECE9-47e5-AB02-D91FAF91EA84}", true,
                             new GridActionDisplayType(o => UserSession.Security.HasPermission(PermissionType.OrdersModify, (long) o) ? "Edit" : "", GridLinkAction.Edit), "Edit", "Edit",
                             OrderItemFields.OrderItemID) 
