@@ -42,10 +42,9 @@ namespace ShipWorks.ApplicationCore
         static readonly ILog log = LogManager.GetLogger(typeof(MainGridControl));
 
         // Active target.  Or last target, if there is no active node
-        FilterTarget activeFilterTarget = FilterTarget.Orders;
 
         // The grids
-        Dictionary<FilterTarget, FilterEntityGrid> entityGrids = new Dictionary<FilterTarget, FilterEntityGrid>();
+        readonly Dictionary<FilterTarget, FilterEntityGrid> entityGrids = new Dictionary<FilterTarget, FilterEntityGrid>();
 
         // Text that is displayed when a search is in progress
         readonly string searchingText;
@@ -89,6 +88,10 @@ namespace ShipWorks.ApplicationCore
         // Cached list of selected store keys.  So if it's asked for more than once and the selection hasn't changed,
         // we don't have to refigure it out
         List<long> selectedStoreKeys = null;
+        
+        // Keep track of the rows that are checked. this is only because the SandGrid has no way of removing 
+        // all of the checks at once, so that we dont have to loop through each row. 
+        private readonly List<GridRow> checkedRows = new List<GridRow>();
 
         /// <summary>
         /// Constructor
@@ -144,7 +147,7 @@ namespace ShipWorks.ApplicationCore
 
             ApplyDisplaySettings();
 
-            if (filterTarget == activeFilterTarget)
+            if (filterTarget == ActiveFilterTarget)
             {
                 SetupForTarget(filterTarget);
             }
@@ -189,7 +192,7 @@ namespace ShipWorks.ApplicationCore
             get
             {
                 FilterEntityGrid grid;
-                if (entityGrids.TryGetValue(activeFilterTarget, out grid))
+                if (entityGrids.TryGetValue(ActiveFilterTarget, out grid))
                 {
                     return grid;
                 }
@@ -220,11 +223,11 @@ namespace ShipWorks.ApplicationCore
                 if (value != null)
                 {
                     FilterTarget newTarget = (FilterTarget) value.Filter.FilterTarget;
-                    if (newTarget != activeFilterTarget)
+                    if (newTarget != ActiveFilterTarget)
                     {
-                        activeFilterTarget = newTarget;
+                        ActiveFilterTarget = newTarget;
 
-                        SetupForTarget(activeFilterTarget);
+                        SetupForTarget(ActiveFilterTarget);
                     }
                 }
 
@@ -252,6 +255,9 @@ namespace ShipWorks.ApplicationCore
                         throw new InvalidOperationException("Cannot update ActiveFilterNode when there is no active grid.");
                     }
                 }
+
+                // Clear all of the checked rows
+                ClearCheckedRows();
             }
         }
 
@@ -259,10 +265,7 @@ namespace ShipWorks.ApplicationCore
         /// The FilterTarget the grid control is configured to display
         /// </summary>
         [Browsable(false)]
-        public FilterTarget ActiveFilterTarget
-        {
-            get { return activeFilterTarget; }
-        }
+        public FilterTarget ActiveFilterTarget { get; private set; } = FilterTarget.Orders;
 
         /// <summary>
         /// The DetailViewSettings currently in use in the active grid.
@@ -298,7 +301,7 @@ namespace ShipWorks.ApplicationCore
         {
             get
             {
-                if (activeFilterTarget != FilterTarget.Orders)
+                if (ActiveFilterTarget != FilterTarget.Orders)
                 {
                     throw new InvalidOperationException("This property is only valid for order selection.");
                 }
@@ -436,12 +439,15 @@ namespace ShipWorks.ApplicationCore
         {
             FilterEntityGrid grid = new FilterEntityGrid(target);
             grid.BorderStyle = BorderStyle.None;
-
+            
+            grid.CheckBoxes = true;
             grid.Visible = false;
             grid.Dock = DockStyle.Fill;
             grid.Parent = gridPanel;
             grid.StretchPrimaryGrid = false;
 
+            grid.ColumnsReordered += OnColumnsReordered;
+            grid.AfterCheck += OnCheckChanged;
             grid.SelectionChanged += new SelectionChangedEventHandler(OnGridSelectionChanged);
             grid.SortChanged += new GridEventHandler(OnGridSortChanged);
             grid.KeyDown += new KeyEventHandler(OnGridKeyDown);
@@ -449,6 +455,15 @@ namespace ShipWorks.ApplicationCore
             grid.RowActivated += new GridRowEventHandler(OnGridRowActivated);
 
             return grid;
+        }
+
+        /// <summary>
+        /// Someone reordered the grid columns
+        /// </summary>
+        private void OnColumnsReordered(object sender, EventArgs e)
+        {
+            SaveGridColumnState();
+            ReloadGridColumns();
         }
 
         /// <summary>
@@ -476,7 +491,7 @@ namespace ShipWorks.ApplicationCore
         {
             if (IsSearchActive)
             {
-                kryptonHeader.Values.Heading = string.Format("Search {0}", EnumHelper.GetDescription(activeFilterTarget));
+                kryptonHeader.Values.Heading = string.Format("Search {0}", EnumHelper.GetDescription(ActiveFilterTarget));
                 kryptonHeader.Values.Image = Resources.view;
 
                 kryptonHeader.Values.Description = searchProvider.IsSearching ? searchingText : "";
@@ -519,7 +534,7 @@ namespace ShipWorks.ApplicationCore
                     kryptonHeader.Values.Heading = ActiveGrid.ActiveFilterNode.Filter.Name;
                 }
 
-                kryptonHeader.Values.Image = FilterHelper.GetFilterImage(activeFilterTarget);
+                kryptonHeader.Values.Image = FilterHelper.GetFilterImage(ActiveFilterTarget);
             }
 
             UpdateHeaderColors();
@@ -560,7 +575,7 @@ namespace ShipWorks.ApplicationCore
             }
             else
             {
-                searchBox.WaterText = string.Format("Search All {0}", EnumHelper.GetDescription(activeFilterTarget));
+                searchBox.WaterText = string.Format("Search All {0}", EnumHelper.GetDescription(ActiveFilterTarget));
             }
         }
 
@@ -576,6 +591,48 @@ namespace ShipWorks.ApplicationCore
                 return;
             }
 
+            ClearCheckedRows();
+            
+            // Check the rows that are selected 
+            if (e?.Grid != null)
+            {
+                foreach (GridRow row in e.Grid.SelectedElements)
+                {
+                    row.Checked = row.Selected;
+                    checkedRows.Add(row);
+                }
+            }
+            
+            RaiseSelectionChanged();
+        }
+
+        /// <summary>
+        /// Checkbox changed in grid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnCheckChanged(object sender, GridRowCheckEventArgs e)
+        {
+            PagedEntityGrid grid = (PagedEntityGrid)sender;
+            if (!grid.Visible)
+            {
+                log.InfoFormat("Grid selection changed while not visible. ({0}, {1})", grid.Rows.Count, grid.Selection.Count);
+                return;
+            }
+
+            // Set the rows Selected status to the Rows checked status
+            e.Row.Selected = e.Row.Checked;
+            
+            // Keep track of all of the checked rows
+            if (e.Row.Checked)
+            {
+                checkedRows.Add(e.Row);
+            }
+            else
+            {
+                checkedRows.Remove(e.Row);
+            }
+            
             RaiseSelectionChanged();
         }
 
@@ -591,7 +648,7 @@ namespace ShipWorks.ApplicationCore
                 SelectionChanged(this, EventArgs.Empty);
             }
         }
-
+        
         /// <summary>
         /// The sort changed in the grid
         /// </summary>
@@ -603,7 +660,8 @@ namespace ShipWorks.ApplicationCore
                 log.InfoFormat("Grid selection changed while not visible. ({0}, {1})", grid.Rows.Count, grid.Selection.Count);
                 return;
             }
-
+            
+            ClearCheckedRows();
             RaiseSortChanged();
         }
 
@@ -655,7 +713,7 @@ namespace ShipWorks.ApplicationCore
             // Need to initialize the editor before its shown
             if (!AdvancedSearchVisible && !initiatedAdvanced)
             {            
-                filterEditor.LoadDefinition(new FilterDefinition(activeFilterTarget));
+                filterEditor.LoadDefinition(new FilterDefinition(ActiveFilterTarget));
             }
 
             AdvancedSearchVisible = !AdvancedSearchVisible;
@@ -746,7 +804,7 @@ namespace ShipWorks.ApplicationCore
             }
 
             // Create a new search provider
-            searchProvider = new SearchProvider(activeFilterTarget);
+            searchProvider = new SearchProvider(ActiveFilterTarget);
             searchProvider.StatusChanged += new EventHandler(OnSearchStatusChanged);
 
             // Start the search
@@ -782,7 +840,7 @@ namespace ShipWorks.ApplicationCore
                     return null;
                 }
 
-                return QuickSearchCriteria.CreateDefinition(activeFilterTarget, search);
+                return QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, search);
             }
         }
 
@@ -821,7 +879,7 @@ namespace ShipWorks.ApplicationCore
 
             ActiveGrid.ActiveFilterNode = searchProvider.SearchResultsNode;
             UpdateHeaderContent();
-
+            ClearCheckedRows();
             RaiseSelectionChanged();
         }
 
@@ -967,6 +1025,19 @@ namespace ShipWorks.ApplicationCore
         {
             AdvancedSearchVisible = true;
             filterEditor.LoadDefinition(definition);
+        }
+
+        /// <summary>
+        /// Uncheks the checked rows
+        /// </summary>
+        public void ClearCheckedRows()
+        {
+            // Clear all checked rows 
+            foreach (GridRow row in checkedRows)
+            {
+                row.Checked = false;
+            }
+            checkedRows.Clear();
         }
     }
 }

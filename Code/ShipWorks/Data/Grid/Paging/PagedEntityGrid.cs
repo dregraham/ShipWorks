@@ -1433,6 +1433,7 @@ namespace ShipWorks.Data.Grid.Paging
 
             suspendSelectionProcessing = true;
             gridRow.Selected = virtualSelection.Contains(entityID);
+            gridRow.Checked = virtualSelection.Contains(entityID);
             suspendSelectionProcessing = false;
         }
 
