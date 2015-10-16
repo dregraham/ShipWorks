@@ -359,8 +359,21 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                                 StoreTypeCode = StoreTypeCode.BigCommerce
                             },
 
-                        #endregion
+                #endregion
 
+                #region Groupon
+
+                        new GridColumnDefinition("{4D8AB7C4-E166-4C52-A00D-44BC3B53D8DD}", true,
+                            new GridTextDisplayType(), "BOM SKU", "A123456",
+                            GrouponOrderItemFields.BomSKU)
+                        {
+                            StoreTypeCode = StoreTypeCode.Groupon
+                        },
+
+                #endregion
+
+
+<<<<<<< HEAD
                 #region LemonStand
                         new GridColumnDefinition("{39eefe98-96e4-4a31-9732-dc92ec83e155}", true,
                             new GridTextDisplayType(), "Url Name", "cap",
@@ -385,6 +398,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         
                 #endregion
 
+=======
+>>>>>>> feature-groupon-add-bomsku-to-grid
                 new GridColumnDefinition("{5D0135AC-ECE9-47e5-AB02-D91FAF91EA84}", true,
                             new GridActionDisplayType(o => UserSession.Security.HasPermission(PermissionType.OrdersModify, (long) o) ? "Edit" : "", GridLinkAction.Edit), "Edit", "Edit",
                             OrderItemFields.OrderItemID) 
