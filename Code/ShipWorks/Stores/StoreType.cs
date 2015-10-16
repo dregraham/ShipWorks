@@ -29,6 +29,8 @@ using ShipWorks.Data.Model;
 using ShipWorks.ApplicationCore;
 using Autofac;
 using System.Linq;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores
 {
@@ -563,7 +565,7 @@ namespace ShipWorks.Stores
             }
 
             // Can't edit the address of a shipment that has been processed
-            return !shipment.Processed;
+            return !shipment.Processed && UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, shipment.OrderID);
         }
 
         /// <summary>

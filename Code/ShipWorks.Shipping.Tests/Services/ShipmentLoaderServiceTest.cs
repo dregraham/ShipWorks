@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Tests.Services
             shipmentEntity = new ShipmentEntity(1031);
             shipmentEntity.Order = orderEntity;
 
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity });
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, true);
 
             shipmentLoader = new Mock<IShipmentLoader>();
             shipmentLoader.Setup(s => s.Load(orderEntity.OrderID)).Returns(orderSelectionLoaded);
@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Tests.Services
         public async void MessageCorrect_WhenOrderHasMoreThanOneShipment_ReturnsFirstShipment_Test()
         {
             ShipmentEntity secondShipmentEntity = new ShipmentEntity(2031);
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity, secondShipmentEntity });
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity, secondShipmentEntity }, true);
             shipmentLoader.Setup(s => s.Load(It.IsAny<long>())).Returns(orderSelectionLoaded);
 
             await testObject.LoadAndNotify(new List<long> { orderEntity.OrderID });

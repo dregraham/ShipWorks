@@ -127,6 +127,10 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<MessageHelperWrapper>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<StoreTypeManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

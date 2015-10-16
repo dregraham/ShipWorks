@@ -14,11 +14,12 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor for success
         /// </summary>
-        public OrderSelectionLoaded(OrderEntity order, IEnumerable<ShipmentEntity> shipments)
+        public OrderSelectionLoaded(OrderEntity order, IEnumerable<ShipmentEntity> shipments, bool destinationAddressEditable)
         {
             Order = order;
             Shipments = shipments.ToReadOnly();
             Exception = null;
+            DestinationAddressEditable = destinationAddressEditable;
         }
 
         /// <summary>
@@ -29,6 +30,7 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
             Order = null;
             Shipments = Enumerable.Empty<ShipmentEntity>();
             Exception = ex;
+            DestinationAddressEditable = false;
         }
 
         /// <summary>
@@ -45,5 +47,10 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         /// Order that has been loaded
         /// </summary>
         public OrderEntity Order { get; }
+
+        /// <summary>
+        /// Returns whether the destination address is editable.
+        /// </summary>
+        public bool DestinationAddressEditable { get; }
     }
 }

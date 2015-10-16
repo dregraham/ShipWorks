@@ -183,7 +183,11 @@
                                     </StackPanel>
                                 </DataTemplate>
                             </Expander.HeaderTemplate>
-                            <addressControl:AddressControl DataContext="{Binding Destination }" />
+                            <addressControl:AddressControl DataContext="{Binding Destination }"
+                                IsEnabled="{Binding 
+                                    RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type shippingPanel:ShippingPanelControl}}, 
+                                    Path=DataContext.DestinationAddressEditable}">
+                            </addressControl:AddressControl>
                         </Expander>
                     </Border>
                     <Border>

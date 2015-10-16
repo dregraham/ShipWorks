@@ -41,6 +41,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private OrderSelectionLoaded orderSelectionLoaded;
         private readonly IMessenger messenger;
         private bool allowEditing;
+        private bool destinationAddressEditable;
         private readonly IShipmentTypeFactory shipmentTypeFactory;
         private readonly Func<ShipmentViewModel> shipmentViewModelFactory;
         private readonly IShippingManager shippingManager;
@@ -49,7 +50,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly Func<Owned<ICarrierConfigurationShipmentRefresher>> shipmentRefresherFactory;
         private ShipmentEntity shipment;
         private Visibility accountVisibility;
-        private IShipmentTypeManager shipmentTypeManager;
+        private readonly IShipmentTypeManager shipmentTypeManager;
         private string domesticInternationalText;
 
         private bool listenForRateCriteriaChanged = false;
@@ -59,7 +60,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private readonly OrderSelectionChangedHandler shipmentChangedHandler;
         private readonly IDisposable subscriptions;
-        private IMessageHelper messageHelper;
+        private readonly IMessageHelper messageHelper;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -274,6 +275,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             set { handler.Set(nameof(AllowEditing), ref allowEditing, value); }
         }
 
+
+        /// <summary>
+        /// Is the loaded shipment destination address editable?
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool DestinationAddressEditable
+        {
+            get { return destinationAddressEditable; }
+            set { handler.Set(nameof(DestinationAddressEditable), ref destinationAddressEditable, value); }
+        }
+        
         /// <summary>
         /// Origin address type that should be used
         /// </summary>
@@ -434,6 +446,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Destination.Load(shipment.ShipPerson);
 
             AllowEditing = !shipment.Processed;
+            
+            DestinationAddressEditable = AllowEditing && orderSelectionLoaded.DestinationAddressEditable; 
 
             listenForRateCriteriaChanged = true;
 
@@ -643,13 +657,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             // Check to see if there are any other un processed shipments we could display.
             List<ShipmentEntity> shipments = shippingManager.GetShipments(shipment.OrderID, false).Where(s => !s.Processed).ToList();
 
-            if (shipments.Any())
+            if (shipments.Count == 1)
             {
-                // Load up the unprocessed shipment
-                LoadOrder(new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded>()
-                    {
-                        new OrderSelectionLoaded(shipment.Order, shipments)
-                    }));
+                messenger.Send(new OrderSelectionChangingMessage(this, new List<long>() { shipment.OrderID }));
             }
             else
             {

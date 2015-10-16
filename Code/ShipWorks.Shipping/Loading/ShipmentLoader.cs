@@ -8,6 +8,9 @@ using ShipWorks.Users.Security;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Loading;
+using ShipWorks.Shipping.Services;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Services;
 
 namespace ShipWorks.Shipping.Loading
 {
@@ -20,16 +23,20 @@ namespace ShipWorks.Shipping.Loading
         private readonly IShippingManager shippingManager;
         private readonly IFilterHelper filterHelper;
         private readonly IValidator<ShipmentEntity> addressValidator;
+        private readonly IStoreManager storeManager;
+        private readonly IStoreTypeManager storeTypeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper, IValidator<ShipmentEntity> addressValidator)
+        public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper, IValidator<ShipmentEntity> addressValidator, IStoreManager storeManager, IStoreTypeManager storeTypeManager)
         {
             this.shippingConfiguration = shippingConfiguration;
             this.shippingManager = shippingManager;
             this.filterHelper = filterHelper;
             this.addressValidator = addressValidator;
+            this.storeManager = storeManager;
+            this.storeTypeManager = storeTypeManager;
         }
 
         /// <summary>
@@ -52,9 +59,17 @@ namespace ShipWorks.Shipping.Loading
                     addressValidator.ValidateAsync(firstShipment);
                 }
 
+                bool destinationAddressEditable = true;
                 OrderEntity order = firstShipment?.Order;
 
-                return new OrderSelectionLoaded(order, shipments);
+                if (order != null)
+                {
+                    order.Store = storeManager.GetStore(order.StoreID);
+
+                    destinationAddressEditable = storeTypeManager.GetType(order.Store).IsShippingAddressEditable(firstShipment);
+                }
+
+                return new OrderSelectionLoaded(order, shipments, destinationAddressEditable);
             }
             catch (Exception ex)
             {

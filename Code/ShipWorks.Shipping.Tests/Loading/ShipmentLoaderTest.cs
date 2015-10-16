@@ -8,6 +8,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Loading;
+using ShipWorks.Shipping.Services;
+using ShipWorks.Stores;
+using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Security;
 using Xunit;
 
@@ -23,11 +26,14 @@ namespace ShipWorks.Shipping.Tests.Loading
         private Mock<IShippingManager> shippingManager;
         private Mock<IFilterHelper> filterHelper;
         private Mock<IValidator<ShipmentEntity>> addressValidator;
+        private Mock<IStoreManager> storeManager;
+        private Mock<IStoreTypeManager> storeTypeManager;
+        private Mock<TestStoreType> storeType;
 
         public ShipmentLoaderTest()
         {
             orderEntity = new OrderEntity(1006);
-            shipmentEntity = new ShipmentEntity(1031);
+            shipmentEntity = new ShipmentEntity(1031) { Processed = false };
             shipmentEntity.Order = orderEntity;
 
             shippingConfigurator = new Mock<IShippingConfiguration>();
@@ -46,7 +52,17 @@ namespace ShipWorks.Shipping.Tests.Loading
             addressValidator = new Mock<IValidator<ShipmentEntity>>();
             addressValidator.Setup(av => av.ValidateAsync(It.IsAny<ShipmentEntity>())).Returns(Task.FromResult(true));
 
-            testObject = new ShipmentLoader(shippingConfigurator.Object, shippingManager.Object, filterHelper.Object, addressValidator.Object);
+            storeType = new Mock<TestStoreType>();
+            storeType.Setup(s => s.IsShippingAddressEditable(It.IsAny<ShipmentEntity>())).Returns(true);
+
+            storeManager = new Mock<IStoreManager>();
+            storeManager.Setup(s => s.GetStore(It.IsAny<long>())).Returns(new StoreEntity(1) { TypeCode = (int)StoreTypeCode.BigCommerce });
+
+            storeTypeManager = new Mock<IStoreTypeManager>();
+            storeTypeManager.Setup(s => s.GetType(It.IsAny<StoreTypeCode>())).Returns(storeType.Object);
+            storeTypeManager.Setup(s => s.GetType(It.IsAny<StoreEntity>())).Returns(storeType.Object);
+
+            testObject = new ShipmentLoader(shippingConfigurator.Object, shippingManager.Object, filterHelper.Object, addressValidator.Object, storeManager.Object, storeTypeManager.Object);
         }
 
         [Fact]
