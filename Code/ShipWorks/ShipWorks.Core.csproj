@@ -1225,6 +1225,7 @@
     <Compile Include="Shipping\Settings\ShippingSettingsWrapper.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
     <Compile Include="Shipping\ShipmentProcessor.cs" />
+    <Compile Include="Shipping\ShippingAddressEditStateType.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
     <Compile Include="Stores\Content\IOrderUtility.cs" />
     <Compile Include="Stores\Content\OrderUtilityWrapper.cs" />

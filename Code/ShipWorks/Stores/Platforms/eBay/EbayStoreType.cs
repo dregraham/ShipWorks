@@ -36,6 +36,8 @@ using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.Properties;
 using ShipWorks.ApplicationCore.Dashboard;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Stores.Management;
 using ShipWorks.Filters;
 using ShipWorks.Data.Administration;
@@ -46,6 +48,7 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Shipping;
 using ShipWorks.Data.Connection;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Ebay
@@ -679,15 +682,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 if (ebayOrder.GspEligible)
                 {
-                    if (ebayOrder.SelectedShippingMethod != (int)EbayShippingMethod.GlobalShippingProgram)
+                    if (ebayOrder.SelectedShippingMethod != (int) EbayShippingMethod.GlobalShippingProgram)
                     {
                         // We have an eBay order that is eligible for the GSP program that needs to have the 
                         // shipping method changed 
-                        ebayOrder.SelectedShippingMethod = (int)EbayShippingMethod.GlobalShippingProgram;
+                        ebayOrder.SelectedShippingMethod = (int) EbayShippingMethod.GlobalShippingProgram;
                         using (SqlAdapter adapter = new SqlAdapter())
                         {
                             adapter.SaveAndRefetch(ebayOrder);
                         }
+
+                        SendOrderSelectionChangedMessage(ebayOrder);
                     }
                 }
                 else
@@ -701,6 +706,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 log.ErrorFormat("Could not change order ID {0} to be shipped to GSP facility: ", orderId, ex.Message);
                 issueAdder.Add(orderId, ex);
             }
+        }
+
+        /// <summary>
+        /// Sends an OrderSelectionChangedMessage so that other panels can update appropriately.
+        /// </summary>
+        private static void SendOrderSelectionChangedMessage(EbayOrderEntity ebayOrder)
+        {
+            OrderSelectionChangingMessage orderSelectionChangingMessage = new OrderSelectionChangingMessage(null, new List<long>() {ebayOrder.OrderID});
+            Messenger.Current.Send(orderSelectionChangingMessage);
         }
 
         /// <summary>
@@ -746,6 +760,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     {
                         adapter.SaveAndRefetch(ebayOrder);
                     }
+
+                    SendOrderSelectionChangedMessage(ebayOrder);
                 }
             }
             catch (EbayException ex)
@@ -1093,14 +1109,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// Determines whether the shipping address is editable for the specified shipment.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <returns>
-        ///   <c>true</c> if [shipping address is editable] for [the specified shipment]; otherwise, <c>false</c>.
-        /// </returns>
-        public override bool IsShippingAddressEditable(ShipmentEntity shipment)
+        public override ShippingAddressEditStateType ShippingAddressEditableState(ShipmentEntity shipment)
         {
-            bool isEditable = false;
+            ShippingAddressEditStateType editable = base.ShippingAddressEditableState(shipment);
 
-            if (base.IsShippingAddressEditable(shipment))
+            if (editable == ShippingAddressEditStateType.Editable)
             {
                 // Grab the order details and check with the GSP policy to see if 
                 // the order is currently flagged as a GSP order
@@ -1108,10 +1121,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 Shipping.GlobalShippingProgram.Policy gspPolicy = new Shipping.GlobalShippingProgram.Policy();
 
                 // Global Shipping Program shipments should not have an editable shipping address
-                isEditable = !gspPolicy.IsEligibleForGlobalShippingProgram(ebayOrder);                
+                //isEditable = !gspPolicy.IsEligibleForGlobalShippingProgram(ebayOrder);
+
+                if (gspPolicy.IsEligibleForGlobalShippingProgram(ebayOrder))
+                {
+                    editable = ShippingAddressEditStateType.GspFulfilled;
+                }
             }
 
-            return isEditable;
+            return editable;
         }
 
         /// <summary>

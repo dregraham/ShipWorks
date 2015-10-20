@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Tests.Loading
             addressValidator.Setup(av => av.ValidateAsync(It.IsAny<ShipmentEntity>())).Returns(Task.FromResult(true));
 
             storeType = new Mock<TestStoreType>();
-            storeType.Setup(s => s.IsShippingAddressEditable(It.IsAny<ShipmentEntity>())).Returns(true);
+            storeType.Setup(s => s.ShippingAddressEditableState(It.IsAny<ShipmentEntity>())).Returns(ShippingAddressEditStateType.Editable);
 
             storeManager = new Mock<IStoreManager>();
             storeManager.Setup(s => s.GetStore(It.IsAny<long>())).Returns(new StoreEntity(1) { TypeCode = (int)StoreTypeCode.BigCommerce });

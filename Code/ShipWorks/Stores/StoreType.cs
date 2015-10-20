@@ -29,6 +29,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.ApplicationCore;
 using Autofac;
 using System.Linq;
+using ShipWorks.Shipping;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
@@ -557,15 +558,24 @@ namespace ShipWorks.Stores
             return new List<ShipmentFieldIndex>();
         }
 
-        public virtual bool IsShippingAddressEditable(ShipmentEntity shipment)
+        public virtual ShippingAddressEditStateType ShippingAddressEditableState(ShipmentEntity shipment)
         {
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
 
-            // Can't edit the address of a shipment that has been processed
-            return !shipment.Processed && UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, shipment.OrderID);
+            if (shipment.Processed)
+            {
+                return ShippingAddressEditStateType.Processed;
+            }
+
+            if (!UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, shipment.OrderID))
+            {
+                return ShippingAddressEditStateType.PermissionDenied;
+            }
+
+            return ShippingAddressEditStateType.Editable;
         }
 
         /// <summary>

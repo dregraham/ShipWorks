@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             };
 
             shipmentEntity.Order = orderEntity;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() {shipmentEntity}, true);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() {shipmentEntity}, ShippingAddressEditStateType.Editable);
         }
 
         private ShippingPanelViewModel GetViewModelWithLoadedShipment(AutoMock mock)
@@ -397,7 +397,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void Load_LoadedShipmentResult_IsSuccess_WhenMultipleShipmentsAreLoaded()
         {
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, true);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Editable);
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -410,7 +410,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void Load_LoadedShipmentResult_IsMultiple_WhenMultipleShipmentsAreLoaded()
         {
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity, shipmentEntity }, true);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity, shipmentEntity }, ShippingAddressEditStateType.Editable);
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -423,7 +423,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void Load_LoadedShipmentResult_IsNotCreated_WhenNoShipmentsAreLoaded()
         {
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { }, true);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { }, ShippingAddressEditStateType.Editable);
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -479,7 +479,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void Save_DoesNotCallSaveToDatabase_WhenShipmentIsNull()
         {
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, null, true);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, null, ShippingAddressEditStateType.Editable);
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -543,7 +543,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         public void Load_AccountVisibility_IsVisible_WhenShipmentType_IsUsps()
         {
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, true);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Editable);
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -557,7 +557,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         public void Load_AccountVisibility_IsCollapsed_WhenShipmentType_IsPostalWebTools()
         {
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.PostalWebTools;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, true);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Editable);
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -571,7 +571,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         public void ShipmentTypeChanged_AccountVisibility_IsVisible_WhenShipmentType_IsUsps()
         {
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, true);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Editable);
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -587,7 +587,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         public void ShipmentTypeChanged_AccountVisibility_IsCollapsed_WhenShipmentType_IsPostalWebTools()
         {
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.PostalWebTools;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, true);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Editable);
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {

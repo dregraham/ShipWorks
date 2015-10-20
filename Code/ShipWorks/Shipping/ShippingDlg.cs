@@ -803,7 +803,7 @@ namespace ShipWorks.Shipping
                 return false;
             }
 
-            return loadedShipmentEntities.All(storeType.IsShippingAddressEditable);
+            return loadedShipmentEntities.All(s => storeType.ShippingAddressEditableState(s) == ShippingAddressEditStateType.Editable);
         }
 
         /// <summary>

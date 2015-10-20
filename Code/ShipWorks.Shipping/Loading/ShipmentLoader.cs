@@ -59,14 +59,14 @@ namespace ShipWorks.Shipping.Loading
                     addressValidator.ValidateAsync(firstShipment);
                 }
 
-                bool destinationAddressEditable = true;
+                ShippingAddressEditStateType destinationAddressEditable = ShippingAddressEditStateType.Editable;
                 OrderEntity order = firstShipment?.Order;
 
                 if (order != null)
                 {
                     order.Store = storeManager.GetStore(order.StoreID);
 
-                    destinationAddressEditable = storeTypeManager.GetType(order.Store).IsShippingAddressEditable(firstShipment);
+                    destinationAddressEditable = storeTypeManager.GetType(order.Store).ShippingAddressEditableState(firstShipment);
                 }
 
                 return new OrderSelectionLoaded(order, shipments, destinationAddressEditable);

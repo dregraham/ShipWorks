@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Linq;
 using Interapptive.Shared.Collections;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Core.Messaging.Messages.Shipping
 {
@@ -14,7 +15,7 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor for success
         /// </summary>
-        public OrderSelectionLoaded(OrderEntity order, IEnumerable<ShipmentEntity> shipments, bool destinationAddressEditable)
+        public OrderSelectionLoaded(OrderEntity order, IEnumerable<ShipmentEntity> shipments, ShippingAddressEditStateType destinationAddressEditable)
         {
             Order = order;
             Shipments = shipments.ToReadOnly();
@@ -30,7 +31,7 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
             Order = null;
             Shipments = Enumerable.Empty<ShipmentEntity>();
             Exception = ex;
-            DestinationAddressEditable = false;
+            DestinationAddressEditable = ShippingAddressEditStateType.Editable;
         }
 
         /// <summary>
@@ -49,8 +50,8 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         public OrderEntity Order { get; }
 
         /// <summary>
-        /// Returns whether the destination address is editable.
+        /// Returns the ShippingAddressEditStateType of the shipment.
         /// </summary>
-        public bool DestinationAddressEditable { get; }
+        public ShippingAddressEditStateType DestinationAddressEditable { get; }
     }
 }

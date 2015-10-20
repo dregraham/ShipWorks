@@ -239,6 +239,7 @@
       <DependentUpon>ScaleControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShippingPanel\Weight\WeightValidationRule.cs" />
+    <Compile Include="ValueConverters\EnumDescriptionConverter.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />

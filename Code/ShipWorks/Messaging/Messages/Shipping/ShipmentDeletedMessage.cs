@@ -7,6 +7,9 @@ namespace ShipWorks.Messaging.Messages.Shipping
     /// </summary>
     public struct ShipmentDeletedMessage : IShipWorksMessage
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShipmentDeletedMessage(object sender, long deletedShipmentId)
         {
             Sender = sender;

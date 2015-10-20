@@ -34,6 +34,7 @@
             <tc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <tc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
             <tc:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
+            <tc:EnumDescriptionConverter x:Key="EnumDescription"></tc:EnumDescriptionConverter>
             <valueConverters:ShipmentTypeListConverter x:Key="ShipmentTypeList" />
             <valueConverters:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
             <valueConverters:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
@@ -51,10 +52,9 @@
     <ScrollViewer VerticalScrollBarVisibility="Visible" 
                   HorizontalScrollBarVisibility="Disabled"
                   >
-        <StackPanel Margin="6,6,6,6" 
-            IsEnabled="{Binding AllowEditing}">
+        <StackPanel Margin="6,6,6,6" >
             <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Success}}">
-                <Grid>
+                <Grid IsEnabled="{Binding AllowEditing}"> 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -93,7 +93,7 @@
                 </Grid>
                 <StackPanel Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.None}}">
                     <Border>
-                        <Expander
+                        <Expander IsEnabled="True"
                         IsExpanded="{Binding IsOriginExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                         Style="{StaticResource ExpanderStyle}">
                             <Expander.Header>
@@ -107,7 +107,7 @@
                                            Foreground="Gray"/>
                                 </StackPanel>
                             </Expander.Header>
-                            <StackPanel Margin="0,3,0,0">
+                            <StackPanel IsEnabled="{Binding AllowEditing}" Margin="0,3,0,0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="75" />
@@ -165,33 +165,49 @@
                         </Expander>
                     </Border>
                     <Border>
-                        <Expander Header="{Binding}"
+                        <Expander IsEnabled="True" Header="{Binding}"
                               IsExpanded="{Binding IsDestinationExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                               Style="{StaticResource ExpanderStyle}">
                             <Expander.HeaderTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="0,0,8,0">To</TextBlock>
-                                        <TextBlock Foreground="Gray">
+                                    <StackPanel Orientation="Vertical">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="0,0,8,0">To</TextBlock>
+                                            <TextBlock Foreground="Gray">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0}, {1} ">
+                                                        <Binding Path="Destination.FullName" />
+                                                        <Binding Path="DomesticInternationalText" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Margin="20,0,8,0" Foreground="Gray" Visibility="{Binding DestinationAddressEditableState, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static shippingcore:ShippingAddressEditStateType.Editable}}">
                                             <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0}, {1}">
-                                                    <Binding Path="Destination.FullName" />
-                                                    <Binding Path="DomesticInternationalText" />
+                                                <MultiBinding StringFormat="{}({0})">
+                                                    <Binding Path="DestinationAddressEditableState" 
+                                                             Converter="{StaticResource EnumDescription}" 
+                                                             ConverterParameter="{x:Static shippingcore:ShippingAddressEditStateType.Editable}"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>
                                     </StackPanel>
                                 </DataTemplate>
                             </Expander.HeaderTemplate>
-                            <addressControl:AddressControl DataContext="{Binding Destination }"
-                                IsEnabled="{Binding 
-                                    RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type shippingPanel:ShippingPanelControl}}, 
-                                    Path=DataContext.DestinationAddressEditable}">
+
+                            <addressControl:AddressControl DataContext="{Binding Destination}">
+                                <addressControl:AddressControl.IsEnabled>
+                                    <Binding Path="DataContext.DestinationAddressEditableState"
+                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type shippingPanel:ShippingPanelControl}}"
+                                             Converter="{StaticResource ValueEqualToParameter}"
+                                             ConverterParameter="{x:Static shippingcore:ShippingAddressEditStateType.Editable}">
+                                    </Binding>
+                                </addressControl:AddressControl.IsEnabled>
                             </addressControl:AddressControl>
                         </Expander>
                     </Border>
                     <Border>
-                        <Expander Header="Shipment Details"
+                        <Expander IsEnabled="True" Header="Shipment Details"
                               IsExpanded="{Binding IsDetailsExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                               DataContext="{Binding ShipmentViewModel}"
                               Style="{StaticResource ExpanderStyle}">
