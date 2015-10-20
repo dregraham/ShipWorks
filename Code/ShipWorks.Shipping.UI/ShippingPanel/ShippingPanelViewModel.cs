@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private bool allowEditing;
         private ShippingAddressEditStateType destinationAddressEditableState;
         private readonly IShipmentTypeFactory shipmentTypeFactory;
-        private readonly Func<ShipmentViewModel> shipmentViewModelFactory;
+        private readonly IShippingViewModelFactory shippingViewModelFactory;
         private readonly IShippingManager shippingManager;
         private readonly ICustomsManager customsManager;
         private readonly IShipmentProcessor shipmentProcessor;
@@ -86,8 +86,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
             IMessageHelper messageHelper,
             Func<Owned<ICarrierConfigurationShipmentRefresher>> shipmentRefresherFactory,
-            Func<ShipmentViewModel> shipmentViewModelFactory,
-            Func<AddressViewModel> addressViewModelFactory) : this()
+            IShippingViewModelFactory shippingViewModelFactory) : this()
         {
             this.shipmentProcessor = shipmentProcessor;
             this.customsManager = customsManager;
@@ -110,13 +109,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             );
 
             this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
-            this.shipmentViewModelFactory = shipmentViewModelFactory;
+            this.shippingViewModelFactory = shippingViewModelFactory;
             this.shipmentRefresherFactory = shipmentRefresherFactory;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
-            Origin = addressViewModelFactory();
-            Destination = addressViewModelFactory();
+            Origin = shippingViewModelFactory.GetAddressViewModel();
+            Destination = shippingViewModelFactory.GetAddressViewModel();
 
             // Wiring up observables needs objects to not be null, so do this last.
             WireUpObservables();

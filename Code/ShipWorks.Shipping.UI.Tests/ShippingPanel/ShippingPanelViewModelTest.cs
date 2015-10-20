@@ -17,6 +17,7 @@ using Xunit;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.Shipping;
 using System.Reactive.Subjects;
+using Autofac.Core.Activators.Reflection;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 {
@@ -194,14 +195,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                     Street1 = "It changed!"
                 };
 
-                mock.Mock<IShippingOriginManager>().Setup(s => s.GetOriginAddress(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()))
+                Mock<IShippingOriginManager> shippingOriginManager = mock.Mock<IShippingOriginManager>();
+                shippingOriginManager.Setup(s => s.GetOriginAddress(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()))
                     .Returns(newStoreAddress);
+
+                Mock<AddressViewModel> addressViewModel = new Mock<AddressViewModel>(shippingOriginManager.Object);
+
+                mock.Mock<IShippingViewModelFactory>().Setup(s => s.GetAddressViewModel()).Returns(addressViewModel.Object);
 
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 
                 messenger.Send(new StoreChangedMessage(null, storeEntity));
 
-                Assert.Equal(newStoreAddress.StreetAll, testObject.Origin.Street);
+                addressViewModel.Verify(s => s.SetAddressFromOrigin(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()), Times.AtLeastOnce);
             }
         }
 

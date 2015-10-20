@@ -33,6 +33,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Constructor
         /// </summary>
+        public AddressViewModel()
+        {
+            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public AddressViewModel(IShippingOriginManager shippingOriginManager)
         {
             this.shippingOriginManager = shippingOriginManager;
@@ -236,7 +244,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Set the address from the specified origin address type
         /// </summary>
-        public void SetAddressFromOrigin(long addressId, long orderId, long accountId, ShipmentTypeCode shipmentType)
+        public virtual void SetAddressFromOrigin(long addressId, long orderId, long accountId, ShipmentTypeCode shipmentType)
         {
             PersonAdapter address = shippingOriginManager.GetOriginAddress(addressId, orderId, accountId, shipmentType);
             if (address != null)

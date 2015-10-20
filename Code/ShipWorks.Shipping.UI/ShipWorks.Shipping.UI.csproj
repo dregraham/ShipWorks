@@ -173,6 +173,7 @@
       <DependentUpon>AddressControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShippingPanel\AddressViewModel.cs" />
+    <Compile Include="ShippingPanel\IShippingViewModelFactory.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml.cs">
       <DependentUpon>ShipmentControl.xaml</DependentUpon>
     </Compile>
@@ -188,6 +189,7 @@
     </Compile>
     <Compile Include="ShippingPanel\ShippingPanelRegistration.cs" />
     <Compile Include="ShippingPanel\ShippingPanelViewModel.cs" />
+    <Compile Include="ShippingPanel\ShippingViewModelFactory.cs" />
     <Compile Include="ShippingPanel\Styles\ExpanderState.cs" />
     <Compile Include="ShippingPanel\ValueConverters\OriginAddressListConverter.cs" />
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListConverter.cs" />
