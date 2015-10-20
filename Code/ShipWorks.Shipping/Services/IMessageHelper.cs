@@ -9,5 +9,10 @@
         /// Show an error
         /// </summary>
         void ShowError(string message);
+
+        /// <summary>
+        /// Show an information message
+        /// </summary>
+        void ShowInformation(string message);
     }
 }

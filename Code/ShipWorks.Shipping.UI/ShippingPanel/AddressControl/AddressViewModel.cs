@@ -3,140 +3,81 @@ using Interapptive.Shared.Business.Geography;
 using ShipWorks.Core.UI;
 using System;
 using System.ComponentModel;
-using System.Reflection;
 using ShipWorks.Data.Utility;
 using ShipWorks.Shipping.Services;
+using ShipWorks.AddressValidation;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Reflection;
+using ShipWorks.Shipping.Commands;
+using ShipWorks.Data.Model.EntityClasses;
+using System.Collections.Generic;
+using System.Reactive.Linq;
+using System.Reactive.Disposables;
 
-namespace ShipWorks.Shipping.UI.ShippingPanel
+namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
 {
     /// <summary>
     /// View model for use by AddressControl
     /// </summary>
-    public class AddressViewModel : INotifyPropertyChanged, INotifyPropertyChanging
+    public partial class AddressViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
     {
-        private string fullName;
-        private string phone;
-        private string email;
-        private string countryCode;
-        private string postalCode;
-        private string stateProvCode;
-        private string city;
-        private string street;
-        private string company;
-
+        private readonly string[] validationProperties = { nameof(Street), nameof(CountryCode), nameof(PostalCode), nameof(StateProvCode), nameof(City) };
+        private readonly AddressValidator validator;
         private readonly PropertyChangedHandler handler;
         private readonly IShippingOriginManager shippingOriginManager;
+        private readonly IDisposable subscriptions;
+        private readonly IMessageHelper messageHelper;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
         /// <summary>
-        /// Constructor
+        /// Constructor that should only be used by WPF
         /// </summary>
         public AddressViewModel()
         {
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
+
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AddressViewModel(IShippingOriginManager shippingOriginManager)
+        public AddressViewModel(IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper, AddressValidator validator)
         {
+            this.validator = validator;
             this.shippingOriginManager = shippingOriginManager;
+            this.messageHelper = messageHelper;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
+
+            subscriptions = new CompositeDisposable(
+                handler.Where(x => x == nameof(ValidationStatus)).Subscribe(x => InvalidateValidationProperties()),
+                handler.Where(x => validationProperties.Contains(x)).Subscribe(x => ValidationStatus = AddressValidationStatusType.NotChecked)
+            );
+
+            AddressSuggestions = Enumerable.Empty<ValidatedAddressEntity>();
+            ValidateCommand = new RelayCommand(async () => await ValidateAddress());
+            ShowValidationMessageCommand = new RelayCommand(ShowValidationMessage);
         }
 
         /// <summary>
-        /// Full name
+        /// Can the current address be validated
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string FullName
-        {
-            get { return fullName; }
-            set { handler.Set(nameof(FullName), ref fullName, value); }
-        }
+        public bool CanValidateAddress => validator.CanValidate(ValidationStatus);
 
         /// <summary>
-        /// Company name
+        /// Can suggestions be displayed
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Company
-        {
-            get { return company; }
-            set { handler.Set(nameof(Company), ref company, value); }
-        }
+        public bool CanShowSuggestions => validator.CanShowSuggestions(ValidationStatus) && SuggestionCount > 0;
 
         /// <summary>
-        /// Street
+        /// Can a validation message be shown
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Street
-        {
-            get { return street; }
-            set { handler.Set(nameof(Street), ref street, value); }
-        }
-
-        /// <summary>
-        /// City
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string City
-        {
-            get { return city; }
-            set { handler.Set(nameof(City), ref city, value); }
-        }
-
-        /// <summary>
-        /// State
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string StateProvCode
-        {
-            get { return stateProvCode; }
-            set { handler.Set(nameof(StateProvCode), ref stateProvCode, value); }
-        }
-
-        /// <summary>
-        /// PostalCode
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string PostalCode
-        {
-            get { return postalCode; }
-            set { handler.Set(nameof(PostalCode), ref postalCode, value); }
-        }
-
-        /// <summary>
-        /// Country
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string CountryCode
-        {
-            get { return countryCode; }
-            set { handler.Set(nameof(CountryCode), ref countryCode, value); }
-        }
-
-        /// <summary>
-        /// EmailAddress
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string Email
-        {
-            get { return email; }
-            set { handler.Set(nameof(Email), ref email, value); }
-        }
-
-        /// <summary>
-        /// PhoneNumber
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string Phone
-        {
-            get { return phone; }
-            set { handler.Set(nameof(Phone), ref phone, value); }
-        }
+        public bool CanShowValidationMessage => validator.CanShowMessage(ValidationStatus) && !string.IsNullOrEmpty(ValidationMessage);
 
         /// <summary>
         /// Load the person
@@ -152,6 +93,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             CountryCode = person.CountryCode;
             Email = person.Email;
             Phone = person.Phone;
+            ValidationMessage = person.AddressValidationError;
+            SuggestionCount = person.AddressValidationSuggestionCount;
+            ValidationStatus = (AddressValidationStatusType)person.AddressValidationStatus;
         }
 
         /// <summary>
@@ -168,6 +112,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             person.CountryCode = CountryCode;
             person.Email = Email;
             person.Phone = Phone;
+            person.AddressValidationStatus = (int)ValidationStatus;
         }
 
         /// <summary>
@@ -251,6 +196,46 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 Load(address);
             }
+        }
+
+        /// <summary>
+        /// Validate the currently entered address
+        /// </summary>
+        private async Task ValidateAddress()
+        {
+            PersonAdapter adapter = new PersonAdapter();
+            SaveToEntity(adapter);
+            await validator.ValidateAsync(adapter.ConvertTo<AddressAdapter>(), true, (x, y) =>
+            {
+                List<ValidatedAddressEntity> suggestions = y.ToList();
+                SuggestionCount = suggestions.Count;
+                AddressSuggestions = suggestions;
+
+                Load(adapter);
+            });
+        }
+
+        /// <summary>
+        /// Show the validation message
+        /// </summary>
+        private void ShowValidationMessage() => messageHelper.ShowInformation(ValidationMessage);
+
+        /// <summary>
+        /// Invalidate the validation properties
+        /// </summary>
+        private void InvalidateValidationProperties()
+        {
+            handler.RaisePropertyChanged(nameof(CanValidateAddress));
+            handler.RaisePropertyChanged(nameof(CanShowSuggestions));
+            handler.RaisePropertyChanged(nameof(CanShowValidationMessage));
+        }
+
+        /// <summary>
+        /// Dispose of resources
+        /// </summary>
+        public void Dispose()
+        {
+            subscriptions.Dispose();
         }
     }
 }

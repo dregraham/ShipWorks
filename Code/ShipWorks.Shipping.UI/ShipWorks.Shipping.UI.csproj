@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttachedProperties\EntityFieldLength.cs" />
+    <Compile Include="AttachedProperties\OpenPopupWhenClicked.cs" />
     <Compile Include="AttachedProperties\SelectDefaultWhenValueIsNull.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
@@ -172,8 +173,9 @@
     <Compile Include="ShippingPanel\AddressControl\AddressControl.xaml.cs">
       <DependentUpon>AddressControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ShippingPanel\AddressViewModel.cs" />
     <Compile Include="ShippingPanel\IShippingViewModelFactory.cs" />
+    <Compile Include="ShippingPanel\AddressControl\AddressViewModel.cs" />
+    <Compile Include="ShippingPanel\AddressControl\AddressViewModel.Properties.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml.cs">
       <DependentUpon>ShipmentControl.xaml</DependentUpon>
     </Compile>
@@ -244,6 +246,8 @@
     <Compile Include="ValueConverters\EnumDescriptionConverter.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\EnumDescriptionConverter.cs" />
+    <Compile Include="ValueConverters\EnumImageConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
     <Compile Include="ValueConverters\StateProvinceConverter.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />

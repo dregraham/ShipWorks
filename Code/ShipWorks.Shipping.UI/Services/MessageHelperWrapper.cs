@@ -24,5 +24,10 @@ namespace ShipWorks.Shipping.UI.Services
         /// Show an error message box with the given error text.
         /// </summary>
         public void ShowError(string message) => MessageHelper.ShowError(ownerFactory(), message);
+
+        /// <summary>
+        /// Show an information message
+        /// </summary>
+        public void ShowInformation(string message) => MessageHelper.ShowMessage(ownerFactory(), message);
     }
 }

@@ -21,6 +21,7 @@ using ShipWorks.Shipping.UI.MessageHandlers;
 using Interapptive.Shared.Collections;
 using System.Reactive.Disposables;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {

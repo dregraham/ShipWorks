@@ -61,6 +61,7 @@ namespace Interapptive.Shared.Business
 
             adapter.AddressValidationStatus = 0;
             adapter.AddressValidationSuggestionCount = 0;
+            adapter.AddressValidationError = string.Empty;
         }
 
         /// <summary>
@@ -123,6 +124,7 @@ namespace Interapptive.Shared.Business
             toAdapter.Website = fromAdapter.Website;
 
             toAdapter.AddressValidationStatus = fromAdapter.AddressValidationStatus;
+            toAdapter.AddressValidationError = fromAdapter.AddressValidationError;
         }
 
         /// <summary>
@@ -158,6 +160,7 @@ namespace Interapptive.Shared.Business
             destinationAddress.CountryCode = CountryCode;
 
             destinationAddress.AddressValidationStatus = AddressValidationStatus;
+            destinationAddress.AddressValidationError = AddressValidationError;
         }
 
         /// <summary>
@@ -515,6 +518,15 @@ namespace Interapptive.Shared.Business
         {
             get { return GetField<int>("AddressValidationSuggestionCount"); }
             set { SetField("AddressValidationSuggestionCount", value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the address validation error.
+        /// </summary>
+        public string AddressValidationError
+        {
+            get { return GetField<string>("AddressValidationError"); }
+            set { SetField("AddressValidationError", value); }
         }
 
         /// <summary>

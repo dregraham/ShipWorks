@@ -12,6 +12,8 @@ using ShipWorks.Shipping.UI.MessageHandlers;
 using System.Reactive.Concurrency;
 using Autofac.Extras.Attributed;
 using ShipWorks.Shipping.UI.Services;
+using ShipWorks.AddressValidation;
+using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -59,7 +61,8 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<RatingPanelViewModel>();
 
-            builder.RegisterType<AddressViewModel>();
+            builder.RegisterType<AddressViewModel>()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
 
             builder.RegisterType<ShipmentProcessor>()
                 .AsImplementedInterfaces();
@@ -126,6 +129,13 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<OrderSelectionChangedHandler>();
 
             builder.RegisterType<MessageHelperWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<AddressValidator>();
+            
+            builder.RegisterType<AddressValidator>();
+
+            builder.RegisterType<StampsAddressValidationWebClient>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<StoreTypeManagerWrapper>()

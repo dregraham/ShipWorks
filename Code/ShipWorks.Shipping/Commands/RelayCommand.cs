@@ -20,6 +20,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
 using Interapptive.Shared.Utility;
+using log4net;
 
 namespace ShipWorks.Shipping.Commands
 {
@@ -41,6 +42,8 @@ namespace ShipWorks.Shipping.Commands
     ////  Email = "laurent@galasoft.ch")]
     public class RelayCommand : ICommand
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(RelayCommand));
+
         private readonly WeakAction execute;
         private readonly WeakFunc<bool> canExecute;
         private EventHandler requerySuggestedLocal;
@@ -73,7 +76,7 @@ namespace ShipWorks.Shipping.Commands
                 this.canExecute = new WeakFunc<bool>(canExecute);
             }
         }
-        
+
         /// <summary>
         /// Occurs when changes occur that affect whether the command should execute.
         /// </summary>
@@ -157,11 +160,18 @@ namespace ShipWorks.Shipping.Commands
         /// <param name="parameter">This parameter will always be ignored.</param>
         public virtual void Execute(object parameter)
         {
-            if (CanExecute(parameter)
-                && execute != null
-                && (execute.IsStatic || execute.IsAlive))
+            if (!CanExecute(parameter) || execute == null)
+            {
+                return;
+            }
+
+            if ((execute.IsStatic || execute.IsAlive))
             {
                 execute.Execute();
+            }
+            else
+            {
+                log.Debug("WeakReference is no longer alive");
             }
         }
     }

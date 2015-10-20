@@ -1,16 +1,21 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Core.UI
 {
     /// <summary>
     /// Help manage INotifyPropertyChanged classes
     /// </summary>
-    public class PropertyChangedHandler
+    public class PropertyChangedHandler : IObservable<string>
     {
         private readonly Func<PropertyChangedEventHandler> getPropertyChanged;
         private readonly Func<PropertyChangingEventHandler> getPropertyChanging;
         private readonly object source;
+
+        private readonly IObservable<string> eventStream;
+        private IObserver<string> observer;
 
         /// <summary>
         /// Constructor
@@ -29,6 +34,12 @@ namespace ShipWorks.Core.UI
             this.source = source;
             this.getPropertyChanged = getPropertyChanged;
             this.getPropertyChanging = getPropertyChanging;
+
+            eventStream = Observable.Create<string>(x =>
+            {
+                observer = x;
+                return Disposable.Create(() => observer = null);
+            }).Publish().RefCount();
         }
 
         /// <summary>
@@ -41,23 +52,29 @@ namespace ShipWorks.Core.UI
                 return false;
             }
 
-            OnPropertyChanging(name);
+            RaisePropertyChanging(name);
             field = value;
-            OnPropertyChanged(name);
+            RaisePropertyChanged(name);
 
             return true;
         }
 
         /// <summary>
-        /// Raise the property changed event
+        /// Raise the changed event for the given property
         /// </summary>
-        protected virtual void OnPropertyChanging(string propertyName) =>
-            getPropertyChanging()?.Invoke(source, new PropertyChangingEventArgs(propertyName));
+        /// <remarks>This is public so that the event can be raised manually.</remarks>
+        public virtual void RaisePropertyChanged(string propertyName)
+        {
+            observer?.OnNext(propertyName);
+            getPropertyChanged()?.Invoke(source, new PropertyChangedEventArgs(propertyName));
+        }
 
         /// <summary>
         /// Raise the property changed event
         /// </summary>
-        protected virtual void OnPropertyChanged(string propertyName) =>
-            getPropertyChanged()?.Invoke(source, new PropertyChangedEventArgs(propertyName));
+        protected virtual void RaisePropertyChanging(string propertyName) =>
+            getPropertyChanging()?.Invoke(source, new PropertyChangingEventArgs(propertyName));
+
+        public IDisposable Subscribe(IObserver<string> observer) => eventStream.Subscribe(observer);
     }
 }

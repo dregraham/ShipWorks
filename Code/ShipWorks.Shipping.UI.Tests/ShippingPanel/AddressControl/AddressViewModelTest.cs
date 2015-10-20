@@ -2,7 +2,7 @@
 using Interapptive.Shared.Business;
 using Moq;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.UI.ShippingPanel;
+using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Tests.Shared;
 using Xunit;
 

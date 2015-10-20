@@ -4,10 +4,8 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using log4net;
-using Microsoft.Web.Services3.Addressing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal;
 using System.Threading.Tasks;
 
 namespace ShipWorks.AddressValidation
@@ -47,6 +45,39 @@ namespace ShipWorks.AddressValidation
         public Task ValidateAsync(IEntity2 addressEntity, string addressPrefix, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
             return ValidateAsync(new AddressAdapter(addressEntity, addressPrefix), canAdjustAddress, saveAction);
+        }
+
+        /// <summary>
+        /// Can suggestions be shown for the given validation status
+        /// </summary>
+        public bool CanShowSuggestions(AddressValidationStatusType status)
+        {
+            switch(status)
+            {
+                case AddressValidationStatusType.Fixed:
+                case AddressValidationStatusType.HasSuggestions:
+                case AddressValidationStatusType.SuggestionIgnored:
+                case AddressValidationStatusType.SuggestionSelected:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Can a message be shown fo the given validation status
+        /// </summary>
+        public bool CanShowMessage(AddressValidationStatusType status)
+        {
+            switch(status)
+            {
+                case AddressValidationStatusType.BadAddress:
+                case AddressValidationStatusType.WillNotValidate:
+                case AddressValidationStatusType.Error:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         /// <summary>
@@ -124,13 +155,24 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
+        /// Can the given status be validated
+        /// </summary>
+        public bool CanValidate(AddressValidationStatusType status) => ShouldValidateAddress(status);
+
+        /// <summary>
         /// Should the specified address be validated
         /// </summary>
-        public static bool ShouldValidateAddress(AddressAdapter adapter)
+        public static bool ShouldValidateAddress(AddressAdapter adapter) =>
+            ShouldValidateAddress((AddressValidationStatusType)adapter.AddressValidationStatus);
+
+        /// <summary>
+        /// Can the given status be validated
+        /// </summary>
+        private static bool ShouldValidateAddress(AddressValidationStatusType status)
         {
-            return adapter.AddressValidationStatus == (int) AddressValidationStatusType.NotChecked ||
-                   adapter.AddressValidationStatus == (int) AddressValidationStatusType.Pending ||
-                   adapter.AddressValidationStatus == (int) AddressValidationStatusType.Error;
+            return status == AddressValidationStatusType.NotChecked ||
+                   status == AddressValidationStatusType.Pending ||
+                   status == AddressValidationStatusType.Error;
         }
 
         /// <summary>
