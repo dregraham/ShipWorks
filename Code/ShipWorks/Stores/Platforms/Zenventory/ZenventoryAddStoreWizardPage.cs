@@ -25,6 +25,11 @@ namespace ShipWorks.Stores.Platforms.Zenventory
         public ZenventoryAddStoreWizardPage()
         {
             InitializeComponent();
+
+            ZenventoryStoreType store =
+                new ZenventoryStoreType(new StoreEntity() { TypeCode = (int)StoreTypeCode.Zenventory });
+
+            helpLink.Url = store.AccountSettingsHelpUrl;
         }
 
         /// <summary>

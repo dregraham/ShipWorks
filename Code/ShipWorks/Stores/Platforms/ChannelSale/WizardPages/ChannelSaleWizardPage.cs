@@ -31,6 +31,11 @@ namespace ShipWorks.Stores.Platforms.ChannelSale.WizardPages
         public ChannelSaleWizardPage()
         {
             InitializeComponent();
+
+            ChannelSaleStoreType store =
+                new ChannelSaleStoreType(new StoreEntity() { TypeCode = (int)StoreTypeCode.ChannelSale });
+
+            helpLink.Url = store.AccountSettingsHelpUrl;
         }
 
         /// <summary>

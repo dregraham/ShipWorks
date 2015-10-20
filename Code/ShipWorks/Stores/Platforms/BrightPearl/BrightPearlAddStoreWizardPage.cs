@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -27,6 +21,11 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
             InitializeComponent();
             
             accountSettingsControl.LoadControl();
+
+            BrightpearlStoreType store =
+                new BrightpearlStoreType(new StoreEntity() {TypeCode = (int) StoreTypeCode.Brightpearl});
+
+            helpLink.Url = store.AccountSettingsHelpUrl;
         }
 
         /// <summary>

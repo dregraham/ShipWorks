@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Miva.WizardPages
 {
@@ -22,6 +23,10 @@ namespace ShipWorks.Stores.Platforms.Miva.WizardPages
         public MivaModuleInstallPage()
         {
             InitializeComponent();
+
+            MivaStoreType store = new MivaStoreType(new StoreEntity() {TypeCode =  (int) StoreTypeCode.Miva}) ;
+
+            linkInstructions.Url = store.AccountSettingsHelpUrl;
         }
 
         /// <summary>

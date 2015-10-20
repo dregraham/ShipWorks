@@ -27,6 +27,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         public MagentoAccountSettingsControl()
         {
             InitializeComponent();
+
+            MagentoStoreType store =
+                new MagentoStoreType(new StoreEntity() { TypeCode = (int)StoreTypeCode.Magento });
+
+            helpLink.Url = store.AccountSettingsHelpUrl;
         }
 
         /// <summary>

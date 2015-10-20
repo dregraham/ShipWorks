@@ -121,7 +121,7 @@
             this.helpLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.helpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.helpLink.ForeColor = System.Drawing.Color.Blue;
-            this.helpLink.Location = new System.Drawing.Point(296, 103);
+            this.helpLink.Location = new System.Drawing.Point(331, 103);
             this.helpLink.Name = "helpLink";
             this.helpLink.Size = new System.Drawing.Size(55, 18);
             this.helpLink.TabIndex = 10;
@@ -136,9 +136,9 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(223, 29);
             this.label5.TabIndex = 11;
-            this.label5.Text = "For help with adding NoMoreRack ";
+            this.label5.Text = "For help with adding Choxi (NoMoreRack) ";
             // 
-            // NoMoreRackStoreAccountSettingsControl
+            // ChoxiStoreAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -152,7 +152,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "NoMoreRackStoreAccountSettingsControl";
+            this.Name = "ChoxiStoreAccountSettingsControl";
             this.Size = new System.Drawing.Size(482, 135);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -25,24 +22,17 @@ namespace ShipWorks.Stores.Platforms.SolidCommerce
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.SolidCommerce;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.SolidCommerce;
 
         /// <summary>
         /// Log request/responses as CreLoaded
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.SolidCommerce;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.SolidCommerce;
+
+        /// <summary>
+        /// Gets the help URL to use in the account settings.
+        /// </summary>
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000019078";
 
         /// <summary>
         /// Identifies this store type

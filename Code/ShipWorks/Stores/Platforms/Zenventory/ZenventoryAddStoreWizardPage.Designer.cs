@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.accountSettingsControl = new ShipWorks.Stores.Platforms.Zenventory.ZenventoryStoreAccountSettingsControl();
+            this.label1 = new System.Windows.Forms.Label();
+            this.helpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
             this.SuspendLayout();
             // 
             // accountSettingsControl
@@ -39,21 +41,47 @@
             this.accountSettingsControl.Size = new System.Drawing.Size(482, 188);
             this.accountSettingsControl.TabIndex = 1;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 96);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(197, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "For help adding your Zenventory store,";
+            // 
+            // helpLink
+            // 
+            this.helpLink.AutoSize = true;
+            this.helpLink.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.helpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.helpLink.ForeColor = System.Drawing.Color.Blue;
+            this.helpLink.Location = new System.Drawing.Point(203, 96);
+            this.helpLink.Name = "helpLink";
+            this.helpLink.Size = new System.Drawing.Size(51, 13);
+            this.helpLink.TabIndex = 4;
+            this.helpLink.Text = "click here";
+            this.helpLink.Url = "http://www.interapptive.com/shipworks/help";
+            // 
             // ZenventoryAddStoreWizardPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.helpLink);
             this.Controls.Add(this.accountSettingsControl);
             this.Name = "ZenventoryAddStoreWizardPage";
             this.Size = new System.Drawing.Size(563, 203);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private ZenventoryStoreAccountSettingsControl accountSettingsControl;
-
+        private System.Windows.Forms.Label label1;
+        private ApplicationCore.Interaction.HelpLink helpLink;
     }
 }

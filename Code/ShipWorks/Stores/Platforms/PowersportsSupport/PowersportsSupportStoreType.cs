@@ -21,31 +21,16 @@ namespace ShipWorks.Stores.Platforms.PowersportsSupport
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.PowersportsSupport;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.PowersportsSupport;
 
         /// <summary>
         /// Log request/responses as PowersportsSupport
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.PowersportsSupport;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.PowersportsSupport;
 
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000024104-connecting-powersport-support-with"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000024104";
     }
 }
