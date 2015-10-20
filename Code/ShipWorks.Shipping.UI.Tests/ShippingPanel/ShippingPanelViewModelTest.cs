@@ -18,6 +18,7 @@ using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.Shipping;
 using System.Reactive.Subjects;
 using Autofac.Core.Activators.Reflection;
+using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 {
@@ -126,30 +127,42 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public void Save_UpdatesShipmentEntity_WhenDestinationCountryCodeChanged_Test()
+        public void Save_DelegatesToDestination_Test()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+                Mock<AddressViewModel> destinationAddress = new Mock<AddressViewModel>();
 
-                testObject.Destination.CountryCode = "XX";
+                mock.Mock<IShippingViewModelFactory>()
+                    .SetupSequence(s => s.GetAddressViewModel())
+                    .Returns(new Mock<AddressViewModel>().Object)
+                    .Returns(destinationAddress.Object);
+
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+                
                 testObject.Save();
 
-                Assert.Equal("XX", shipmentEntity.ShipCountryCode);
+                destinationAddress.Verify(x => x.SaveToEntity(shipmentEntity.ShipPerson));
             }
         }
 
         [Fact]
-        public void Save_UpdatesShipmentEntity_WhenOriginCountryCodeChanged_Test()
+        public void Save_DelegatesToOrigin_Test()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
+                Mock<AddressViewModel> originAddress = new Mock<AddressViewModel>();
+
+                mock.Mock<IShippingViewModelFactory>()
+                    .SetupSequence(s => s.GetAddressViewModel())
+                    .Returns(originAddress.Object)
+                    .Returns(new Mock<AddressViewModel>().Object);
+
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
-                testObject.Origin.CountryCode = "XX";
                 testObject.Save();
 
-                Assert.Equal("XX", shipmentEntity.OriginCountryCode);
+                originAddress.Verify(x => x.SaveToEntity(shipmentEntity.OriginPerson));
             }
         }
 
@@ -194,12 +207,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 {
                     Street1 = "It changed!"
                 };
-
-                Mock<IShippingOriginManager> shippingOriginManager = mock.Mock<IShippingOriginManager>();
-                shippingOriginManager.Setup(s => s.GetOriginAddress(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()))
-                    .Returns(newStoreAddress);
-
-                Mock<AddressViewModel> addressViewModel = new Mock<AddressViewModel>(shippingOriginManager.Object);
+                
+                Mock<AddressViewModel> addressViewModel = new Mock<AddressViewModel>();
 
                 mock.Mock<IShippingViewModelFactory>().Setup(s => s.GetAddressViewModel()).Returns(addressViewModel.Object);
 
@@ -216,23 +225,17 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
+                Mock<AddressViewModel> originAddress = mock.WithOriginAddressViewModel();
+
                 IMessenger messenger = mock.Provide<IMessenger>(new TestMessenger());
-
-                PersonAdapter newStoreAddress = new PersonAdapter(storeEntity, null)
-                {
-                    Street1 = "It changed!"
-                };
-
-                mock.Mock<IShippingOriginManager>().Setup(s => s.GetOriginAddress(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()))
-                    .Returns(newStoreAddress);
 
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.OriginAddressType = (long)ShipmentOriginSource.Other;
-                testObject.Origin.Street = "Foo";
 
+                originAddress.ResetCalls();
                 messenger.Send(new StoreChangedMessage(null, storeEntity));
 
-                Assert.Equal("Foo", testObject.Origin.Street);
+                originAddress.Verify(x => x.SetAddressFromOrigin(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()), Times.Never);
             }
         }
 
@@ -241,24 +244,17 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
+                Mock<AddressViewModel> originAddress = mock.WithOriginAddressViewModel();
+
                 IMessenger messenger = mock.Provide<IMessenger>(new TestMessenger());
-
-                PersonAdapter newStoreAddress = new PersonAdapter(storeEntity, null)
-                {
-                    Street1 = "It changed!"
-                };
-
-                mock.Mock<IShippingOriginManager>()
-                    .Setup(s => s.GetOriginAddress(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()))
-                    .Returns(newStoreAddress);
-
+                
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.OriginAddressType = (long)ShipmentOriginSource.Account;
-                testObject.Origin.Street = "Foo";
 
+                originAddress.ResetCalls();
                 messenger.Send(new StoreChangedMessage(null, storeEntity));
-                
-                Assert.Equal("Foo", testObject.Origin.Street);
+
+                originAddress.Verify(x => x.SetAddressFromOrigin(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()), Times.Never);
             }
         }
 

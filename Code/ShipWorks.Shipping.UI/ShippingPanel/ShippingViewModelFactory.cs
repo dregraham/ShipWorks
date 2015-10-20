@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {

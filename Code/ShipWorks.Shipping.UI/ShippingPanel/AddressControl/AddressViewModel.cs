@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// <summary>
         /// Load the person
         /// </summary>
-        public void Load(PersonAdapter person)
+        public virtual void Load(PersonAdapter person)
         {
             FullName = new PersonName(person).FullName;
             Company = person.Company;
@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// <summary>
         /// Save the current values to the specified person adapter
         /// </summary>
-        public void SaveToEntity(PersonAdapter person)
+        public virtual void SaveToEntity(PersonAdapter person)
         {
             SaveStreet(person, Street);
             SaveFullName(person, FullName);
