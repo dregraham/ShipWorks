@@ -310,7 +310,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment, shipment.Postal, null),
-                new DimensionsAdapter(shipment.Postal)) { Weight = shipment.TotalWeight };
+                new DimensionsAdapter(shipment.Postal)) { TotalWeight = shipment.TotalWeight };
         }
 
         /// <summary>

@@ -952,7 +952,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 return new ShipmentParcel(shipment, package.FedExPackageID, package.TrackingNumber,
                     new InsuranceChoice(shipment, package, package, package),
-                    new DimensionsAdapter(package)) { Weight = package.Weight };
+                    new DimensionsAdapter(package)) { TotalWeight = package.Weight + package.DimsWeight };
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");

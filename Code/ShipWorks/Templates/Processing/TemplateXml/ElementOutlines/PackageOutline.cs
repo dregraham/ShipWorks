@@ -32,7 +32,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             // Dimensinos
             AddElement("Dimensions", new DimensionsOutline(context), () => Parcel.Dimensions);
 
-            AddElement("Weight", () => Parcel.Weight);
+            AddElement("TotalWeight", () => Parcel.TotalWeight);
         }
 
         /// <summary>
