@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.UI.Wizard;
-using Interapptive.Shared.Net;
 using System.Net;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
@@ -33,36 +30,19 @@ namespace ShipWorks.Stores.Platforms.OrderDynamics
         /// <summary>
         /// Identifying store typecode for OrderDynamics
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.OrderDynamics;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.OrderDynamics;
 
         /// <summary>
         /// Logging source
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.OrderDynamics;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.OrderDynamics;
 
         /// <summary>
         /// Get the license identifier for ShipWorks
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get
-            {
-                // the store code is the orderdynamics license identifier
-                return ((GenericModuleStoreEntity) Store).ModuleOnlineStoreCode;
-            }
-        }
+        protected override string InternalLicenseIdentifier => ((GenericModuleStoreEntity) Store).ModuleOnlineStoreCode;
+
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000065047";
 
         /// <summary>
         /// Required module version 

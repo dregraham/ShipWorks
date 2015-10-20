@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Stores.Communication;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
 
 namespace ShipWorks.Stores.Platforms.SellerVantage
 {
@@ -29,34 +25,24 @@ namespace ShipWorks.Stores.Platforms.SellerVantage
         /// <summary>
         /// Identifying typecode for SellerVantage
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.SellerVantage;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.SellerVantage;
 
         /// <summary>
         /// Logging source
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get { return ApiLogSource.SellerVantage; }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.SellerVantage;
 
 
         /// <summary>
         /// Get the uniquely identifying string for this store instance
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get
-            {
-                return ((GenericModuleStoreEntity) Store).ModuleOnlineStoreCode;
-            }
-        }
-        
+        protected override string InternalLicenseIdentifier => ((GenericModuleStoreEntity) Store).ModuleOnlineStoreCode;
+
+        /// <summary>
+        /// Gets the account settings help URL.
+        /// </summary>
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000065051";
+
         /// <summary>
         /// Create a new store entity
         /// </summary>

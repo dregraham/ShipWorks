@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Logging;
-using Interapptive.Shared.Net;
 using System.Net;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
 
@@ -28,24 +25,12 @@ namespace ShipWorks.Stores.Platforms.WebShopManager
         /// <summary>
         /// Identifying typecode for WebShopManager
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.WebShopManager;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.WebShopManager;
 
         /// <summary>
         /// Logging source
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.WebShopManager;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.WebShopManager;
 
         /// <summary>
         /// Get required module version
@@ -54,6 +39,14 @@ namespace ShipWorks.Stores.Platforms.WebShopManager
         {
             return new Version("2.8.20");
         }
+
+        /// <summary>
+        /// Gets or sets the account settings help URL.
+        /// </summary>
+        /// <value>
+        /// The account settings help URL.
+        /// </value>
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000065053";
 
         /// <summary>
         /// Create a legacy-compatible web client configured for WebShopManager

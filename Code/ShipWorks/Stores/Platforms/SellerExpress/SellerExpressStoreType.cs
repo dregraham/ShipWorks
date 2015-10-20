@@ -24,32 +24,17 @@ namespace ShipWorks.Stores.Platforms.SellerExpress
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.SellerExpress;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.SellerExpress;
 
         /// <summary>
         /// Log request/responses as SellerExpress
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.SellerExpress;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.SellerExpress;
 
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000024105-connecting-sellerexpress-with"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000065050";
 
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.
