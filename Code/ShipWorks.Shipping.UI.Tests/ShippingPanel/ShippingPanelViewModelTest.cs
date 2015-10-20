@@ -628,5 +628,17 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 Assert.NotEqual(ShippingPanelLoadedShipmentResult.Error, testObject.LoadedShipmentResult);
             }
         }
+
+        [Fact]
+        public void DestinationAddressEditableState_IsSet_AfterLoad()
+        {
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Processed);
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+                
+                Assert.Equal(ShippingAddressEditStateType.Processed, testObject.DestinationAddressEditableState);
+            }
+        }
     }
 }

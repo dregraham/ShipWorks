@@ -41,7 +41,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private OrderSelectionLoaded orderSelectionLoaded;
         private readonly IMessenger messenger;
         private bool allowEditing;
-        private bool destinationAddressEditable;
         private ShippingAddressEditStateType destinationAddressEditableState;
         private readonly IShipmentTypeFactory shipmentTypeFactory;
         private readonly Func<ShipmentViewModel> shipmentViewModelFactory;
@@ -280,23 +279,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Is the loaded shipment destination address editable?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool DestinationAddressEditable
-        {
-            get { return destinationAddressEditable; }
-            set { handler.Set(nameof(DestinationAddressEditable), ref destinationAddressEditable, value); }
-        }
-
-        /// <summary>
-        /// Is the loaded shipment destination address editable?
-        /// </summary>
-        [Obfuscation(Exclude = true)]
         public ShippingAddressEditStateType DestinationAddressEditableState
         {
             get { return destinationAddressEditableState; }
             set
             {
                 handler.Set(nameof(DestinationAddressEditableState), ref destinationAddressEditableState, value);
-                DestinationAddressEditable = AllowEditing && destinationAddressEditableState == ShippingAddressEditStateType.Editable;
             }
         }
 
