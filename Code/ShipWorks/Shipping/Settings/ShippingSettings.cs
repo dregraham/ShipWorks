@@ -9,9 +9,12 @@ using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Threading;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -123,7 +126,11 @@ namespace ShipWorks.Shipping.Settings
 
             if (!isConfigured)
             {
-                new ShippingManagerWrapper().UpdateLabelFormatOfUnprocessedShipments(shipmentTypeCode);
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    ICarrierShipmentAdapterFactory shipmentAdapterFactory = scope.Resolve<ICarrierShipmentAdapterFactory>();
+                    new ShippingManagerWrapper(shipmentAdapterFactory).UpdateLabelFormatOfUnprocessedShipments(shipmentTypeCode);
+                }
                 Messenger.Current.Send(new CarrierConfiguredMessage(settings, shipmentTypeCode));   
             }
         }

@@ -1205,6 +1205,7 @@
     <Compile Include="Shipping\Profiles\ShippingProfileManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\RatingFields.cs" />
     <Compile Include="Shipping\Services\ICarrierShipmentAdapter.cs" />
+    <Compile Include="Shipping\Services\ICarrierShipmentAdapterFactory.cs" />
     <Compile Include="Shipping\Settings\EnumCheckboxDataSource.cs" />
     <Compile Include="Shipping\Settings\EnumCheckboxControl.cs">
       <SubType>UserControl</SubType>

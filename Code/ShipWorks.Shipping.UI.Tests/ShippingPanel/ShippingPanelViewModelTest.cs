@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
     {
         private readonly OrderEntity orderEntity;
         private readonly StoreEntity storeEntity;
-        private readonly ShipmentEntity shipmentEntity;
+        private ShipmentEntity shipmentEntity;
         private OrderSelectionLoaded orderSelectionLoaded;
 
         private Mock<ICarrierShipmentAdapterFactory> shipmentAdapterFactory;
@@ -113,10 +113,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             shipmentEntity.Order = orderEntity;
 
             shipmentAdapter = new Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(s => s.Shipment).Returns(shipmentEntity);
+            shipmentAdapter.Setup(s => s.Shipment).Returns(() => shipmentEntity);
+            shipmentAdapter.Setup(s => s.ShipmentTypeCode).Returns(() => shipmentEntity.ShipmentTypeCode);
+            shipmentAdapter.Setup(s => s.SupportsAccounts).Returns(() =>
+            {
+                return !(shipmentAdapter.Object.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools ||
+                         shipmentAdapter.Object.ShipmentTypeCode == ShipmentTypeCode.BestRate ||
+                         shipmentAdapter.Object.ShipmentTypeCode == ShipmentTypeCode.Other ||
+                         shipmentAdapter.Object.ShipmentTypeCode == ShipmentTypeCode.None);
+            });
+            shipmentAdapter.Setup(s => s.UpdateDynamicData(It.IsAny<ValidatedAddressScope>())).Returns(new Dictionary<ShipmentEntity, Exception>());
 
             shipmentAdapterFactory = new Mock<ICarrierShipmentAdapterFactory>();
-            shipmentAdapterFactory.Setup(s => s.Get(It.IsAny<ShipmentEntity>())).Returns(shipmentAdapter.Object);
+            shipmentAdapterFactory.Setup(s => s.Get(It.IsAny<ShipmentEntity>())).Returns(() => shipmentAdapter.Object);
 
             orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
                 new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
@@ -490,7 +499,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
+                shipmentAdapter = null;
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock); //mock.Create<ShippingPanelViewModel>();
 
                 testObject.SaveToDatabase();
 

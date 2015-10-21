@@ -259,7 +259,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             CancellationToken cancellationToken = ResetCancellationTokenSource();
 
             // Refresh the shipment data and then the rates
-            ShipmentEntity shipment = message.Shipment;
+            ShipmentEntity shipment = message.ShipmentAdapter.Shipment;
 
             FetchRates(shipment, false, cancellationToken);
         }

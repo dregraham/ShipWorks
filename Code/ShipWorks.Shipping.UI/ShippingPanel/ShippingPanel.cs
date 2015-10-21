@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
         private async void HandleCreateLabelMessage(CreateLabelMessage message)
         {
-            await viewModel.ProcessShipment();
+//            await viewModel.ProcessShipment();
         }
 
         /// <summary>

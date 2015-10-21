@@ -1,5 +1,8 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Messaging.Messages
 {
@@ -14,7 +17,9 @@ namespace ShipWorks.Messaging.Messages
         public ShipmentChangedMessage(object sender, ShipmentEntity shipment)
         {
             Sender = sender;
-            Shipment = shipment;
+
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
+            ShipmentAdapter = shipmentAdapterFactory.Get(shipment);
         }
 
         /// <summary>
@@ -25,6 +30,6 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Shipment that has changed
         /// </summary>
-        public ShipmentEntity Shipment { get; private set; }
+        public ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
     }
 }

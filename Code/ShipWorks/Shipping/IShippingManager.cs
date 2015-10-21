@@ -5,6 +5,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Threading.Tasks;
 using System.Threading;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping
 {
@@ -71,5 +72,10 @@ namespace ShipWorks.Shipping
         /// <param name="shipment">Shipment that should be removed from cache</param>
         /// <returns></returns>
         void RemoveShipmentFromRatesCache(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Change the shipment type of the provided shipment and return it's shipment adapter
+        /// </summary>
+        ICarrierShipmentAdapter ChangeShipmentType(ShipmentTypeCode shipmentTypeCode, ShipmentEntity shipment);
     }
 }

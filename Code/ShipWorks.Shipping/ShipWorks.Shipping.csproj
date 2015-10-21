@@ -180,7 +180,6 @@
     <Compile Include="Services\Builders\ShipmentServicesBuilderFactory.cs" />
     <Compile Include="Services\CarrierAccountRetrieverFactory.cs" />
     <Compile Include="Services\CarrierShipmentAdapterFactory.cs" />
-    <Compile Include="Services\ICarrierShipmentAdapterFactory.cs" />
     <Compile Include="Services\IMessageHelper.cs" />
     <Compile Include="Services\IShipmentLoaderService.cs" />
     <Compile Include="Services\IShippingOriginManager.cs" />

@@ -10,6 +10,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Threading.Tasks;
 using System.Threading;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping
 {
@@ -18,6 +19,17 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShippingManagerWrapper : IShippingManager
     {
+        private ICarrierShipmentAdapterFactory shipmentAdapterFactory;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="shipmentAdapterFactor"></param>
+        public ShippingManagerWrapper(ICarrierShipmentAdapterFactory shipmentAdapterFactor)
+        {
+            this.shipmentAdapterFactory = shipmentAdapterFactor;
+        }
+
         /// <summary>
         /// Refresh the data for the given shipment, including the carrier specific data.  The order and the other siblings are not touched.
         /// If the shipment has been deleted, an ObjectDeletedException is thrown.
@@ -84,6 +96,16 @@ namespace ShipWorks.Shipping
         public void RemoveShipmentFromRatesCache(ShipmentEntity shipment)
         {
             ShippingManager.RemoveShipmentFromRatesCache(shipment);
+        }
+
+        /// <summary>
+        /// Change the shipment type of the provided shipment and return it's shipment adapter
+        /// </summary>
+        public ICarrierShipmentAdapter ChangeShipmentType(ShipmentTypeCode shipmentTypeCode, ShipmentEntity shipment)
+        {
+            shipment.ShipmentTypeCode = shipmentTypeCode;
+            EnsureShipmentLoaded(shipment);
+            return shipmentAdapterFactory.Get(shipment);
         }
 
         /// <summary>
