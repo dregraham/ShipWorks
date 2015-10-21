@@ -25,11 +25,14 @@ namespace ShipWorks.Shipping.Loading
         private readonly IValidator<ShipmentEntity> addressValidator;
         private readonly IStoreManager storeManager;
         private readonly IStoreTypeManager storeTypeManager;
+        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper, IValidator<ShipmentEntity> addressValidator, IStoreManager storeManager, IStoreTypeManager storeTypeManager)
+        public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper, 
+                              IValidator<ShipmentEntity> addressValidator, IStoreManager storeManager, IStoreTypeManager storeTypeManager,
+                              ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             this.shippingConfiguration = shippingConfiguration;
             this.shippingManager = shippingManager;
@@ -37,6 +40,7 @@ namespace ShipWorks.Shipping.Loading
             this.addressValidator = addressValidator;
             this.storeManager = storeManager;
             this.storeTypeManager = storeTypeManager;
+            this.shipmentAdapterFactory = shipmentAdapterFactory;
         }
 
         /// <summary>
@@ -69,7 +73,10 @@ namespace ShipWorks.Shipping.Loading
                     destinationAddressEditable = storeTypeManager.GetType(order.Store).ShippingAddressEditableState(firstShipment);
                 }
 
-                return new OrderSelectionLoaded(order, shipments, destinationAddressEditable);
+                List<ICarrierShipmentAdapter> shipmentAdapters = new List<ICarrierShipmentAdapter>();
+                shipments?.ForEach(s => shipmentAdapters.Add(shipmentAdapterFactory.Get(s)));
+
+                return new OrderSelectionLoaded(order, shipmentAdapters, destinationAddressEditable);
             }
             catch (Exception ex)
             {

@@ -29,9 +29,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         private readonly ShipmentEntity shipmentEntity;
         private OrderSelectionLoaded orderSelectionLoaded;
 
+        private Mock<ICarrierShipmentAdapterFactory> shipmentAdapterFactory;
+        private Mock<ICarrierShipmentAdapter> shipmentAdapter;
+
         public ShippingPanelViewModelTest()
         {
-
             storeEntity = new StoreEntity(1005)
             {
                 City = "Saint Louis",
@@ -109,7 +111,17 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             };
 
             shipmentEntity.Order = orderEntity;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() {shipmentEntity}, ShippingAddressEditStateType.Editable);
+
+            shipmentAdapter = new Mock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(s => s.Shipment).Returns(shipmentEntity);
+
+            shipmentAdapterFactory = new Mock<ICarrierShipmentAdapterFactory>();
+            shipmentAdapterFactory.Setup(s => s.Get(It.IsAny<ShipmentEntity>())).Returns(shipmentAdapter.Object);
+
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
+                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
+                ShippingAddressEditStateType.Editable
+                );
         }
 
         private ShippingPanelViewModel GetViewModelWithLoadedShipment(AutoMock mock)
@@ -399,7 +411,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void Load_LoadedShipmentResult_IsSuccess_WhenMultipleShipmentsAreLoaded()
         {
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Editable);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
+                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
+                ShippingAddressEditStateType.Editable
+                );
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -412,7 +427,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void Load_LoadedShipmentResult_IsMultiple_WhenMultipleShipmentsAreLoaded()
         {
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity, shipmentEntity }, ShippingAddressEditStateType.Editable);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
+                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity), shipmentAdapterFactory.Object.Get(shipmentEntity) },
+                ShippingAddressEditStateType.Editable
+                );
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -425,7 +443,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void Load_LoadedShipmentResult_IsNotCreated_WhenNoShipmentsAreLoaded()
         {
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { }, ShippingAddressEditStateType.Editable);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
+                new List<ICarrierShipmentAdapter>() { },
+                ShippingAddressEditStateType.Editable
+                );
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -545,7 +566,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         public void Load_AccountVisibility_IsVisible_WhenShipmentType_IsUsps()
         {
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Editable);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
+                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
+                ShippingAddressEditStateType.Editable
+                );
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -559,7 +583,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         public void Load_AccountVisibility_IsCollapsed_WhenShipmentType_IsPostalWebTools()
         {
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.PostalWebTools;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Editable);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
+                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
+                ShippingAddressEditStateType.Editable
+                );
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -573,7 +600,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         public void ShipmentTypeChanged_AccountVisibility_IsVisible_WhenShipmentType_IsUsps()
         {
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Editable);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
+                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
+                ShippingAddressEditStateType.Editable
+                );
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -589,7 +619,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         public void ShipmentTypeChanged_AccountVisibility_IsCollapsed_WhenShipmentType_IsPostalWebTools()
         {
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.PostalWebTools;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Editable);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
+                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
+                ShippingAddressEditStateType.Editable
+                );
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -634,7 +667,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void DestinationAddressEditableState_IsSet_AfterLoad()
         {
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ShipmentEntity>() { shipmentEntity }, ShippingAddressEditStateType.Processed);
+            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
+                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
+                ShippingAddressEditStateType.Processed
+                );
+
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);

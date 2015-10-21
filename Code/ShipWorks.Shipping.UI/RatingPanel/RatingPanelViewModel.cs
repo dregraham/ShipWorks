@@ -233,7 +233,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 return null;
             }
 
-            int moreOrLessThanOne = loadedSelection.Shipments.HasMoreOrLessThanCount(1);
+            int moreOrLessThanOne = loadedSelection.ShipmentAdapters.HasMoreOrLessThanCount(1);
 
             if (moreOrLessThanOne > 0)
             {
@@ -247,7 +247,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 return null;
             }
 
-            return loadedSelection.Shipments.Single();
+            return loadedSelection.ShipmentAdapters.Single().Shipment;
         }
 
         /// <summary>

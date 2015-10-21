@@ -380,7 +380,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
             {
-                shipment = orderSelectionLoaded.Shipments.Single();
+                shipment = orderSelectionLoaded.ShipmentAdapters.Single().Shipment;
                 Populate();
             }
             else
@@ -399,7 +399,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return ShippingPanelLoadedShipmentResult.Error;
             }
 
-            int moreOrLessThanOne = loadedSelection.Shipments.HasMoreOrLessThanCount(1);
+            int moreOrLessThanOne = loadedSelection.ShipmentAdapters.HasMoreOrLessThanCount(1);
 
             if (moreOrLessThanOne > 0)
             {

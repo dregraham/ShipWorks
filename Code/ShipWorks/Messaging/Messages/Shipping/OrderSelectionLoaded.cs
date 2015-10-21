@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Core.Messaging.Messages.Shipping
 {
@@ -15,10 +16,10 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor for success
         /// </summary>
-        public OrderSelectionLoaded(OrderEntity order, IEnumerable<ShipmentEntity> shipments, ShippingAddressEditStateType destinationAddressEditable)
+        public OrderSelectionLoaded(OrderEntity order, IEnumerable<ICarrierShipmentAdapter> shipmentAdapters, ShippingAddressEditStateType destinationAddressEditable)
         {
             Order = order;
-            Shipments = shipments.ToReadOnly();
+            ShipmentAdapters = shipmentAdapters.ToReadOnly();
             Exception = null;
             DestinationAddressEditable = destinationAddressEditable;
         }
@@ -29,7 +30,7 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         public OrderSelectionLoaded(Exception ex)
         {
             Order = null;
-            Shipments = Enumerable.Empty<ShipmentEntity>();
+            ShipmentAdapters = Enumerable.Empty<ICarrierShipmentAdapter>();
             Exception = ex;
             DestinationAddressEditable = ShippingAddressEditStateType.Editable;
         }
@@ -37,7 +38,7 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         /// <summary>
         /// The shipments
         /// </summary>
-        public IEnumerable<ShipmentEntity> Shipments { get; }
+        public IEnumerable<ICarrierShipmentAdapter> ShipmentAdapters { get; }
         
         /// <summary>
         /// Any exception that may have occured during loading.
