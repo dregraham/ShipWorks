@@ -30,7 +30,7 @@
         {
             this.accountSettingsControl = new ShipWorks.Stores.Platforms.Brightpearl.BrightpearlStoreAccountSettingsControl();
             this.helpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
-            this.label1 = new System.Windows.Forms.Label();
+            this.helpLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // accountSettingsControl
@@ -54,20 +54,20 @@
             this.helpLink.Text = "click here";
             this.helpLink.Url = "http://www.interapptive.com/shipworks/help";
             // 
-            // label1
+            // helpLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 157);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(193, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "For help adding your Brightpearl store,";
+            this.helpLabel.AutoSize = true;
+            this.helpLabel.Location = new System.Drawing.Point(9, 157);
+            this.helpLabel.Name = "helpLabel";
+            this.helpLabel.Size = new System.Drawing.Size(193, 13);
+            this.helpLabel.TabIndex = 3;
+            this.helpLabel.Text = "For help adding your Brightpearl store,";
             // 
             // BrightpearlAddStoreWizardPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.helpLabel);
             this.Controls.Add(this.helpLink);
             this.Controls.Add(this.accountSettingsControl);
             this.Name = "BrightpearlAddStoreWizardPage";
@@ -82,6 +82,6 @@
 
         private BrightpearlStoreAccountSettingsControl accountSettingsControl;
         private ApplicationCore.Interaction.HelpLink helpLink;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label helpLabel;
     }
 }

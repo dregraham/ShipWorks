@@ -26,8 +26,7 @@ namespace ShipWorks.Stores.Platforms.Zenventory
         {
             InitializeComponent();
 
-            ZenventoryStoreType store =
-                new ZenventoryStoreType(new StoreEntity() { TypeCode = (int)StoreTypeCode.Zenventory });
+            ZenventoryStoreType store = (ZenventoryStoreType) StoreTypeManager.GetType(StoreTypeCode.Zenventory);
 
             helpLink.Url = store.AccountSettingsHelpUrl;
         }

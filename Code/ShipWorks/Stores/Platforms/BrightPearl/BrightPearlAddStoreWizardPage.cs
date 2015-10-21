@@ -22,8 +22,7 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
             
             accountSettingsControl.LoadControl();
 
-            BrightpearlStoreType store =
-                new BrightpearlStoreType(new StoreEntity() {TypeCode = (int) StoreTypeCode.Brightpearl});
+            BrightpearlStoreType store = (BrightpearlStoreType) StoreTypeManager.GetType(StoreTypeCode.Brightpearl);
 
             helpLink.Url = store.AccountSettingsHelpUrl;
         }

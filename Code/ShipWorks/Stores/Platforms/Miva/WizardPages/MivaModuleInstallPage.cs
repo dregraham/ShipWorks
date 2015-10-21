@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Miva.WizardPages
         {
             InitializeComponent();
 
-            MivaStoreType store = new MivaStoreType(new StoreEntity() {TypeCode =  (int) StoreTypeCode.Miva}) ;
+            MivaStoreType store = (MivaStoreType) StoreTypeManager.GetType(StoreTypeCode.Miva);
 
             linkInstructions.Url = store.AccountSettingsHelpUrl;
         }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.accountSettingsControl = new ShipWorks.Stores.Platforms.ChannelSale.ChannelSaleAccountSettingsControl();
-            this.label1 = new System.Windows.Forms.Label();
+            this.helpLabel = new System.Windows.Forms.Label();
             this.helpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
             this.SuspendLayout();
             // 
@@ -41,14 +41,14 @@
             this.accountSettingsControl.Size = new System.Drawing.Size(482, 188);
             this.accountSettingsControl.TabIndex = 0;
             // 
-            // label1
+            // helpLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 97);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(200, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "For help adding your ChannelSale store,";
+            this.helpLabel.AutoSize = true;
+            this.helpLabel.Location = new System.Drawing.Point(9, 97);
+            this.helpLabel.Name = "helpLabel";
+            this.helpLabel.Size = new System.Drawing.Size(200, 13);
+            this.helpLabel.TabIndex = 5;
+            this.helpLabel.Text = "For help adding your ChannelSale store,";
             // 
             // helpLink
             // 
@@ -67,7 +67,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.helpLabel);
             this.Controls.Add(this.helpLink);
             this.Controls.Add(this.accountSettingsControl);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
@@ -82,7 +82,7 @@
         #endregion
 
         private ShipWorks.Stores.Platforms.ChannelSale.ChannelSaleAccountSettingsControl accountSettingsControl;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label helpLabel;
         private ApplicationCore.Interaction.HelpLink helpLink;
     }
 }
