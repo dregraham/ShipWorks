@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
-using ShipWorks.AddressValidation;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Threading.Tasks;
 using System.Threading;
@@ -34,12 +33,12 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Save the shipments to the database
         /// </summary>
-        IDictionary<ShipmentEntity, Exception> SaveShipmentToDatabase(ShipmentEntity shipment, ValidatedAddressScope validatedAddressScope, bool forceSave);
+        IDictionary<ShipmentEntity, Exception> SaveShipmentToDatabase(ShipmentEntity shipment, bool forceSave);
 
         /// <summary>
         /// Save the shipments to the database
         /// </summary>
-        IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, ValidatedAddressScope validatedAddressScope, bool forceSave);
+        IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave);
 
         /// <summary>
         /// Ensure the specified shipment is fully loaded
@@ -77,5 +76,21 @@ namespace ShipWorks.Shipping
         /// Change the shipment type of the provided shipment and return it's shipment adapter
         /// </summary>
         ICarrierShipmentAdapter ChangeShipmentType(ShipmentTypeCode shipmentTypeCode, ShipmentEntity shipment);
+
+        /// <summary>
+        /// Indicates if the given shipment type code is enabled for selection in the shipping window
+        /// </summary>
+        bool IsShipmentTypeEnabled(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Get rates for the given shipment using the appropriate ShipmentType
+        /// </summary>
+        object GetRates(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Void the given shipment.  If the shipment is already voided, then no action is taken and no error is reported.  The fact that
+        /// it was voided is logged to tango.
+        /// </summary>
+        void VoidShipment(long shipmentID);
     }
 }

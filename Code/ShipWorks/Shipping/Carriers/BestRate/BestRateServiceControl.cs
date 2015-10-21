@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Initialization
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             base.Initialize();
 

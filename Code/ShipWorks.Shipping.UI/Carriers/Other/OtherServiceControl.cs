@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Initialize the comboboxes
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             originControl.Initialize(ShipmentTypeCode.Other);
         }

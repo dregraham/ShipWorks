@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Initialize the comboboxes
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             dimensionsControl.Initialize();
 

@@ -24,6 +24,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Carriers;
+using Autofac;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -147,11 +148,20 @@ namespace ShipWorks.Shipping.Editing
         /// Clear the rates in the main rates grid
         /// </summary>
         public Action<string> ClearRatesAction { get; set; }
+        
+        /// <summary>
+        /// Initialization
+        /// </summary>
+        public virtual void Initialize(ILifetimeScope lifetimeScope)
+        {
+            personControl.ValidatedAddressScope = lifetimeScope.Resolve<IValidatedAddressScope>();
+            Initialize();
+        }
 
         /// <summary>
         /// Initialization
         /// </summary>
-        public virtual void Initialize()
+        protected virtual void Initialize()
         {
 
         }

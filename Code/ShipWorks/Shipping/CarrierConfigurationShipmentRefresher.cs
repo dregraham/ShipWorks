@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping
             IEnumerable<ShipmentEntity> unprocessedShipments = RetrieveShipments()
                 .Except(shipmentsProcessing, x => x.ShipmentID)
                 .Where(x => !x.Processed);
-            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentsToDatabase(unprocessedShipments, ValidatedAddressScope.Current, true);
+            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentsToDatabase(unprocessedShipments, true);
 
             foreach (KeyValuePair<ShipmentEntity, Exception> error in errors)
             {

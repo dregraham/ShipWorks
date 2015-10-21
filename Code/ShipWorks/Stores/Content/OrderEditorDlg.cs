@@ -23,6 +23,8 @@ using ShipWorks.Filters;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Administration.Retry;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Content
 {
@@ -325,8 +327,11 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         private void OnEditAddress(object sender, EventArgs e)
         {
-            using (ShipBillAddressEditorDlg dlg = new ShipBillAddressEditorDlg(order, true))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                ShipBillAddressEditorDlg dlg = lifetimeScope.Resolve<ShipBillAddressEditorDlg>(
+                    new TypedParameter(typeof(EntityBase2), order), 
+                    new TypedParameter(typeof(bool), true));
                 dlg.ShowDialog(this);
             }
         }

@@ -85,16 +85,17 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterType<ShippingManagerWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ValidatedAddressScope>()
                 .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<ShipmentProcessor>();
-
-            builder.RegisterType<CarrierConfigurationShipmentRefresher>();
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<ShippingProfileManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<ShipBillAddressEditorDlg>();
 
             builder.Register(c => Program.MainForm)
                 .As<Control>()

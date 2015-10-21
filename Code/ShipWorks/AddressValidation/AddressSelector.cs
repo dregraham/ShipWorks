@@ -336,7 +336,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Format the address for display in the menu
         /// </summary>
-        private static string FormatAddress(ValidatedAddressEntity address)
+        public static string FormatAddress(ValidatedAddressEntity address)
         {
             StringBuilder format = new StringBuilder();
             AddAddressPart(format, address.Street1);

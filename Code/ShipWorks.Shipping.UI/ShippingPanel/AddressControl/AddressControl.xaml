@@ -145,13 +145,14 @@
             <Popup.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="3" ShadowDepth="6" />
             </Popup.Effect>
-            <ListBox Padding="25,6,10,6">
-                <ListBox.Items>
-                    <TextBlock>1 Memorial Dr., St. Louis, MO, 63102 (Original)</TextBlock>
-                    <TextBlock>1 Memorial Dr., Ste (Range 300 - 500), Saint Louis, MO, 63102</TextBlock>
-                    <TextBlock>1 Memorial Dr., Ste (Range 700 - 800), Saint Louis, MO, 63102</TextBlock>
-                    <TextBlock>1 Memorial Dr., Ste (Range 300 - 500), Saint Louis, MO, 63102</TextBlock>
-                </ListBox.Items>
+            <ListBox Padding="25,6,10,6"
+                     ItemsSource="{Binding AddressSuggestions}"
+                     DisplayMemberPath="Key">
+                <!--<ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding }" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>-->
             </ListBox>
         </Popup>
     </StackPanel>

@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Shipping
 
             messenger.Send(new ConfiguringCarrierMessage(this, ShipmentTypeCode.Usps));
 
-            shippingManagerMock.Verify(x => x.SaveShipmentsToDatabase(shipments, It.IsAny<ValidatedAddressScope>(), true));
+            shippingManagerMock.Verify(x => x.SaveShipmentsToDatabase(shipments, true));
         }
 
         [Fact]
@@ -112,7 +112,7 @@ namespace ShipWorks.Tests.Shipping
             messenger.Send(new ConfiguringCarrierMessage(this, ShipmentTypeCode.Usps));
 
             List<ShipmentEntity> expectedShipments = new List<ShipmentEntity> { shipment1, shipment3 };
-            shippingManagerMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, It.IsAny<ValidatedAddressScope>(), true));
+            shippingManagerMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, true));
         }
 
         [Fact]
@@ -132,7 +132,7 @@ namespace ShipWorks.Tests.Shipping
             Exception exception1 = new Exception();
             Exception exception2 = new Exception();
 
-            shippingManagerMock.Setup(x => x.SaveShipmentsToDatabase(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>(), It.IsAny<bool>()))
+            shippingManagerMock.Setup(x => x.SaveShipmentsToDatabase(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<bool>()))
                 .Returns(new Dictionary<ShipmentEntity, Exception> {
                     { shipments[0], exception1 },
                     { shipments[2], exception2 },
@@ -159,7 +159,7 @@ namespace ShipWorks.Tests.Shipping
             messenger.Send(new ConfiguringCarrierMessage(this, ShipmentTypeCode.Usps));
 
             List<ShipmentEntity> expectedShipments = new List<ShipmentEntity> { shipment1, shipment3 };
-            shippingManagerMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, It.IsAny<ValidatedAddressScope>(), true));
+            shippingManagerMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, true));
         }
 
         [Fact]

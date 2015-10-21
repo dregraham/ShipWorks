@@ -1,6 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -41,13 +40,13 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensire customs items are loaded if the address or shipment type has changed
         /// </summary>
-        public IDictionary<ShipmentEntity, Exception> EnsureCustomsLoaded(IEnumerable<ShipmentEntity> shipments, ValidatedAddressScope validatedAddressScope)
+        public IDictionary<ShipmentEntity, Exception> EnsureCustomsLoaded(IEnumerable<ShipmentEntity> shipments)
         {
             // We also need to save changes to any whose state\country has changed, since that affects customs items requirements
             List<ShipmentEntity> destinationChangeNeedsSaved = shipments.Where(s => fields.Select(x => s.Fields[x.FieldIndex].IsChanged).Any()).ToList();
 
             // We need to show the user if anything went wrong while doing that
-            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentsToDatabase(destinationChangeNeedsSaved, validatedAddressScope, false);
+            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentsToDatabase(destinationChangeNeedsSaved, false);
 
             // When the destination address is changed we save the affected shipments to the database right away to ensure that any concurrency errors that could
             // occur while generating customs items are caught right away.  This is why we do the Load here - if the customs items already exist, then this will do

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
@@ -148,6 +147,11 @@ namespace ShipWorks.Data.Controls
 
             EnableValidationControls = false;
         }
+
+        /// <summary>
+        /// Gets and sets the validated address scope used by this control
+        /// </summary>
+        public IValidatedAddressScope ValidatedAddressScope { get; set; }
 
         /// <summary>
         /// Address selector used by the validator
@@ -670,7 +674,7 @@ namespace ShipWorks.Data.Controls
                     ValidatedAddressScope.StoreAddresses(EntityUtility.GetEntityId(person.Entity), validatedAddresses, person.FieldPrefix);   
                 }
             }
-        }
+        }  
 
         /// <summary>
         /// Populate the person from the values in the UI

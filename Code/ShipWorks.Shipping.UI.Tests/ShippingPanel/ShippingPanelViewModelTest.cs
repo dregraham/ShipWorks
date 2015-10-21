@@ -490,7 +490,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 testObject.SaveToDatabase();
 
                 mock.Mock<IShippingManager>()
-                    .Verify(x => x.SaveShipmentsToDatabase(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>(), It.IsAny<bool>()), Times.Never);
+                    .Verify(x => x.SaveShipmentsToDatabase(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<bool>()), Times.Never);
             }
         }
 
@@ -505,7 +505,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 testObject.SaveToDatabase();
 
                 mock.Mock<IShippingManager>()
-                    .Verify(x => x.SaveShipmentsToDatabase(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>(), It.IsAny<bool>()), Times.Never);
+                    .Verify(x => x.SaveShipmentsToDatabase(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<bool>()), Times.Never);
             }
         }
 
@@ -521,7 +521,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 testObject.SaveToDatabase();
 
                 mock.Mock<IShippingManager>()
-                    .Verify(x => x.SaveShipmentToDatabase(It.IsAny<ShipmentEntity>(), It.IsAny<ValidatedAddressScope>(), It.IsAny<bool>()), Times.Never);
+                    .Verify(x => x.SaveShipmentToDatabase(It.IsAny<ShipmentEntity>(), It.IsAny<bool>()), Times.Never);
             }
         }
 
@@ -568,7 +568,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 testObject.SaveToDatabase();
 
                 mock.Mock<IShippingManager>()
-                    .Verify(x => x.SaveShipmentToDatabase(shipmentEntity, It.IsAny<ValidatedAddressScope>(), false));
+                    .Verify(x => x.SaveShipmentToDatabase(shipmentEntity, false));
             }
         }
 

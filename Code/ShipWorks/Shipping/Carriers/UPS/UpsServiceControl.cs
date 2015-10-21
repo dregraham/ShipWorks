@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
         }
 
-        public override void Initialize()
+        protected override void Initialize()
         {
             packageControl.PackageCountChanged += packageDetailsControl.PackageCountChanged;
         }

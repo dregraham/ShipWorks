@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         private string company;
         private AddressValidationStatusType validationStatus;
         private string validationMessage;
-        private IEnumerable<ValidatedAddressEntity> addressSuggestions;
+        private IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> addressSuggestions;
         private int suggestionCount;
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// List of address suggestions
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<ValidatedAddressEntity> AddressSuggestions
+        public IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> AddressSuggestions
         {
             get { return addressSuggestions; }
             set { handler.Set(nameof(AddressSuggestions), ref addressSuggestions, value); }

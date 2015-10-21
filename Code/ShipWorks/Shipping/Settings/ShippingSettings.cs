@@ -14,7 +14,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping.Services;
+using Autofac;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -126,12 +126,11 @@ namespace ShipWorks.Shipping.Settings
 
             if (!isConfigured)
             {
-                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    ICarrierShipmentAdapterFactory shipmentAdapterFactory = scope.Resolve<ICarrierShipmentAdapterFactory>();
-                    new ShippingManagerWrapper(shipmentAdapterFactory).UpdateLabelFormatOfUnprocessedShipments(shipmentTypeCode);
+                    lifetimeScope.Resolve<IShippingManager>().UpdateLabelFormatOfUnprocessedShipments(shipmentTypeCode);
+                    lifetimeScope.Resolve<IMessenger>().Send(new CarrierConfiguredMessage(settings, shipmentTypeCode));
                 }
-                Messenger.Current.Send(new CarrierConfiguredMessage(settings, shipmentTypeCode));   
             }
         }
 

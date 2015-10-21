@@ -341,7 +341,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             Save();
-            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(shipmentAdapter.Shipment, ValidatedAddressScope.Current, false);
+            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(shipmentAdapter.Shipment, false);
             DisplayError(errors);
         }
 
@@ -470,7 +470,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.SaveToEntity(shipmentAdapter.Shipment.OriginPerson);
             Destination.SaveToEntity(shipmentAdapter.Shipment.ShipPerson);
 
-            IDictionary<ShipmentEntity, Exception> errors = shipmentAdapter.UpdateDynamicData(new ValidatedAddressScope());
+            IDictionary<ShipmentEntity, Exception> errors = shipmentAdapter.UpdateDynamicData();
             DisplayError(errors);
         }
 

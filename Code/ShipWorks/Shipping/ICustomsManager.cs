@@ -1,5 +1,4 @@
-﻿using ShipWorks.AddressValidation;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Collections.Generic;
 
@@ -18,6 +17,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensire customs items are loaded if the address or shipment type has changed
         /// </summary>
-        IDictionary<ShipmentEntity, Exception> EnsureCustomsLoaded(IEnumerable<ShipmentEntity> shipments, ValidatedAddressScope validatedAddressScope);
+        IDictionary<ShipmentEntity, Exception> EnsureCustomsLoaded(IEnumerable<ShipmentEntity> shipments);
     }
 }

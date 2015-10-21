@@ -3,7 +3,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using System;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model;
-using System.Linq;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -19,15 +18,17 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShippingManagerWrapper : IShippingManager
     {
-        private ICarrierShipmentAdapterFactory shipmentAdapterFactory;
+        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
+        private readonly IValidatedAddressScope validatedAddressScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="shipmentAdapterFactor"></param>
-        public ShippingManagerWrapper(ICarrierShipmentAdapterFactory shipmentAdapterFactor)
+        public ShippingManagerWrapper(ICarrierShipmentAdapterFactory shipmentAdapterFactor, IValidatedAddressScope validatedAddressScope)
         {
             this.shipmentAdapterFactory = shipmentAdapterFactor;
+            this.validatedAddressScope = validatedAddressScope;
         }
 
         /// <summary>
@@ -111,13 +112,13 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Save the shipment to the database
         /// </summary>
-        public IDictionary<ShipmentEntity, Exception> SaveShipmentToDatabase(ShipmentEntity shipment, ValidatedAddressScope validatedAddressScope, bool forceSave) =>
-            SaveShipmentsToDatabase(new[] { shipment }, validatedAddressScope, forceSave);
+        public IDictionary<ShipmentEntity, Exception> SaveShipmentToDatabase(ShipmentEntity shipment, bool forceSave) =>
+            SaveShipmentsToDatabase(new[] { shipment }, forceSave);
 
         /// <summary>
         /// Save the shipments to the database
         /// </summary>
-        public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, ValidatedAddressScope validatedAddressScope, bool forceSave)
+        public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
         {
             if (shipments == null)
             {
@@ -168,5 +169,22 @@ namespace ShipWorks.Shipping
         /// </summary>
         public ShipmentEntity GetOverriddenStoreShipment(ShipmentEntity shipment) =>
             ShippingManager.GetOverriddenStoreShipment(shipment);
+
+        /// <summary>
+        /// Indicates if the given shipment type code is enabled for selection in the shipping window
+        /// </summary>
+        public bool IsShipmentTypeEnabled(ShipmentTypeCode shipmentTypeCode) => 
+            ShippingManager.IsShipmentTypeEnabled(shipmentTypeCode);
+
+        /// <summary>
+        /// Get rates for the given shipment using the appropriate ShipmentType
+        /// </summary>
+        public object GetRates(ShipmentEntity shipment) => ShippingManager.GetRates(shipment);
+
+        /// <summary>
+        /// Void the given shipment.  If the shipment is already voided, then no action is taken and no error is reported.  The fact that
+        /// it was voided is logged to tango.
+        /// </summary>
+        public void VoidShipment(long shipmentID) => ShippingManager.VoidShipment(shipmentID);
     }
 }

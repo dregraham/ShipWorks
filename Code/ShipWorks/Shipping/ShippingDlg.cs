@@ -17,7 +17,6 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing;
@@ -77,7 +76,6 @@ namespace ShipWorks.Shipping
         private ShipmentEntity clonedShipmentEntityForRates;
         
         private RateSelectedEventArgs preSelectedRateEventArgs;
-        private ValidatedAddressScope validatedAddressScope;
 
         private readonly ShipSenseSynchronizer shipSenseSynchronizer;
 
@@ -144,7 +142,7 @@ namespace ShipWorks.Shipping
 
             //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
             shipments.ForEach(OrderUtility.PopulateOrderDetails);
-            shipments.ForEach(ShippingManager.EnsureShipmentLoaded);
+            shipments.ForEach(shippingManager.EnsureShipmentLoaded);
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
             uspsAccountConvertedToken = messenger.AsObservable<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
@@ -186,7 +184,7 @@ namespace ShipWorks.Shipping
             // We need to reload shipment to ensure we have the latest data being displayed
             foreach (ShipmentEntity shipment in loadedShipmentEntities)
             {
-                ShippingManager.RefreshShipment(shipment);
+                shippingManager.RefreshShipment(shipment);
                 ApplyShipmentToGridRow(shipment);
             }
 
@@ -207,8 +205,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            validatedAddressScope = new ValidatedAddressScope();
-
             labelInternal.Visible = InterapptiveOnly.IsInterapptiveUser;
             unprocess.Visible = InterapptiveOnly.IsInterapptiveUser;
 
@@ -278,7 +274,7 @@ namespace ShipWorks.Shipping
             }
 
             List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = ShipmentTypeManager.ShipmentTypes
-                   .Where(t => ShippingManager.IsShipmentTypeEnabled(t.ShipmentTypeCode))
+                   .Where(t => shippingManager.IsShipmentTypeEnabled(t.ShipmentTypeCode))
                    .Select(t => new KeyValuePair<string, ShipmentTypeCode>(t.ShipmentTypeName, t.ShipmentTypeCode)).ToList();
 
             if (selected != null && !enabledTypes.Any(p => p.Value == selected.Value))
@@ -494,7 +490,7 @@ namespace ShipWorks.Shipping
                 {
                     try
                     {
-                        ShippingManager.EnsureShipmentLoaded(shipment);
+                        shippingManager.EnsureShipmentLoaded(shipment);
                         
                         // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
                         CustomsManager.LoadCustomsItems(shipment, false);
@@ -547,7 +543,7 @@ namespace ShipWorks.Shipping
             // For the one's that have been removed, ignore any concurrency\deleted errors
             SaveShipmentsToDatabase(removedNeedsSaved, false);
 
-            IDictionary<ShipmentEntity, Exception> errors = customsManager.EnsureCustomsLoaded(uiDisplayedShipments.Except(removedNeedsSaved), validatedAddressScope);
+            IDictionary<ShipmentEntity, Exception> errors = customsManager.EnsureCustomsLoaded(uiDisplayedShipments.Except(removedNeedsSaved));
 
             // See if we have to tell the user about the errors
             if (errors.Any())
@@ -1018,7 +1014,7 @@ namespace ShipWorks.Shipping
                 return ServiceControl;
             }
             
-            newServiceControl.Initialize();
+            newServiceControl.Initialize(lifetimeScope);
             newServiceControl.Width = serviceControlArea.Width;
             return newServiceControl;
         }
@@ -1212,7 +1208,7 @@ namespace ShipWorks.Shipping
             {
                 // Because this is coming from the rate control, and the only thing that causes rate changes from the rate control
                 // is the Express1 promo footer, we need to remove the shipment from the cache before we get rates
-                ShippingManager.RemoveShipmentFromRatesCache(uiDisplayedShipments.FirstOrDefault());
+                shippingManager.RemoveShipmentFromRatesCache(uiDisplayedShipments.FirstOrDefault());
 
                 GetRates();
             }
@@ -1488,7 +1484,7 @@ namespace ShipWorks.Shipping
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            return shippingManager.SaveShipmentsToDatabase(shipments, validatedAddressScope, forceSave);
+            return shippingManager.SaveShipmentsToDatabase(shipments, forceSave);
         }
 
         /// <summary>
@@ -1670,7 +1666,7 @@ namespace ShipWorks.Shipping
             {
                 //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
                 OrderUtility.PopulateOrderDetails(shipment);
-                ShippingManager.EnsureShipmentLoaded(shipment);
+                shippingManager.EnsureShipmentLoaded(shipment);
                 
                 shipSenseSynchronizer.Add(shipment);
             }
@@ -1990,7 +1986,7 @@ namespace ShipWorks.Shipping
                 try
                 {
                     anyAttempted = true;
-                    _e.Result = ShippingManager.GetRates(shipment);
+                    _e.Result = shippingManager.GetRates(shipment);
 
                     // Just in case it used to have an error remove it
                     ErrorManager?.Remove(shipment.ShipmentID);
@@ -2090,7 +2086,7 @@ namespace ShipWorks.Shipping
                 try
                 {
                     // Process it
-                    ShippingManager.VoidShipment(shipmentID);
+                    shippingManager.VoidShipment(shipmentID);
 
                     // Clear any previous errors
                     ErrorManager.Remove(shipmentID);
@@ -2117,7 +2113,7 @@ namespace ShipWorks.Shipping
                 try
                 {
                     // Reload it so we can show the most recent data when the grid redisplays
-                    ShippingManager.RefreshShipment(shipment);
+                    shippingManager.RefreshShipment(shipment);
                 }
                 catch (ObjectDeletedException ex)
                 {
@@ -2313,8 +2309,6 @@ namespace ShipWorks.Shipping
 
             ErrorManager.Clear();
 
-            validatedAddressScope.Dispose();
-
             // If shipments have been removed from the dlg before closing, this may not be an accurate representation of what has changed.
             loadedShipmentEntities.ForEach(shipment => messenger.Send(new ShipmentChangedMessage(this, shipment)));
         }
@@ -2357,7 +2351,6 @@ namespace ShipWorks.Shipping
             {
                 ErrorManager = null;
                 components?.Dispose();
-                validatedAddressScope?.Dispose();
 
                 uspsAccountConvertedToken.Dispose();
             }

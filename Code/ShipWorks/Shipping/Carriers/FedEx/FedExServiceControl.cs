@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Initialize the comboboxes
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             base.Initialize();
 

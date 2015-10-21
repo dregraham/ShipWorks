@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// <summary>
         /// Initialize the comboboxes
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             base.Initialize();
 

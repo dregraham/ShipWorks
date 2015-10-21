@@ -75,6 +75,9 @@ namespace ShipWorks.Core.UI
         protected virtual void RaisePropertyChanging(string propertyName) =>
             getPropertyChanging()?.Invoke(source, new PropertyChangingEventArgs(propertyName));
 
+        /// <summary>
+        /// Subscribe to the property changed stream
+        /// </summary>
         public IDisposable Subscribe(IObserver<string> observer) => eventStream.Subscribe(observer);
     }
 }

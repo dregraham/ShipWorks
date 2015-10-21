@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Initialize the combo boxes
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             base.Initialize();
 

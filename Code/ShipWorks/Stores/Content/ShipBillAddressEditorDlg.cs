@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Web.Configuration;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
-using Microsoft.Web.Services3.Addressing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Connection;
 using log4net;
 using Interapptive.Shared.UI;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Stores.Content
 {
@@ -29,23 +19,24 @@ namespace ShipWorks.Stores.Content
 
         EntityBase2 entity;
         private readonly bool enableAddressValidation;
-        private ValidatedAddressScope validatedAddressScope;
+        private readonly IValidatedAddressScope validatedAddressScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipBillAddressEditorDlg(EntityBase2 entity) : this(entity, false)
+        public ShipBillAddressEditorDlg(EntityBase2 entity) : this(entity, false, null)
         {}
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipBillAddressEditorDlg(EntityBase2 entity, bool enableShipAddressValidation)
+        public ShipBillAddressEditorDlg(EntityBase2 entity, bool enableShipAddressValidation, IValidatedAddressScope validatedAddressScope)
         {
             InitializeComponent();
 
             this.entity = entity;
-            this.enableAddressValidation = enableShipAddressValidation;
+            this.validatedAddressScope = validatedAddressScope;
+            enableAddressValidation = enableShipAddressValidation;
         }
 
         /// <summary>
@@ -53,8 +44,11 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            validatedAddressScope = new ValidatedAddressScope();
-            shipBillControl.EnableAddressValidation = enableAddressValidation;
+            if (enableAddressValidation)
+            {
+                shipBillControl.EnableAddressValidation(validatedAddressScope);
+            }
+
             shipBillControl.LoadEntity(entity);
         }
 
@@ -92,14 +86,6 @@ namespace ShipWorks.Stores.Content
             }
 
             DialogResult = DialogResult.OK;
-        }
-
-        /// <summary>
-        /// The form has closed
-        /// </summary>
-        private void OnFormClosed(object sender, FormClosedEventArgs e)
-        {
-            validatedAddressScope.Dispose();
         }
     }
 }

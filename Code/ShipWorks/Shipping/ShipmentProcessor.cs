@@ -121,7 +121,7 @@ namespace ShipWorks.Shipping
             executor.ExecuteStarting += (object s, EventArgs args) =>
             {
                 // Force the shipments to save - this weeds out any shipments early that have been edited by another user on another computer.
-                concurrencyErrors = shippingManager.SaveShipmentsToDatabase(shipments, ValidatedAddressScope.Current, true);
+                concurrencyErrors = shippingManager.SaveShipmentsToDatabase(shipments, true);
 
                 // Reset to true, so that we show the counter rate setup wizard for this batch.
                 showBestRateCounterRateSetupWizard = true;

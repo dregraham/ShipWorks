@@ -585,6 +585,7 @@
     <Compile Include="AddressValidation\AddressSelector.cs" />
     <Compile Include="AddressValidation\AddressValidationException.cs" />
     <Compile Include="AddressValidation\IValidatedAddressManager.cs" />
+    <Compile Include="AddressValidation\IValidatedAddressScope.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />
     <Compile Include="AddressValidation\AddressValidationResult.cs" />
