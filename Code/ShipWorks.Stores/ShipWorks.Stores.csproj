@@ -104,6 +104,24 @@
     <Compile Include="Platforms\LemonStand\LemonStandStatusCodeProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooAddressInfo.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooAppliedPromotion.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooBillToInfo.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooCartShipmentInfo.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooCustomField.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooGeneralInfo.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooItem.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooOrder.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooOrderListQuery.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooOrderStatus.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooOrderTotals.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooPromotions.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooResponseResourceList.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooCustomFieldsList.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooShipToInfo.cs" />
+    <Compile Include="Platforms\Yahoo\DTO\YahooStatusList.cs" />
+    <Compile Include="Platforms\Yahoo\XmlDeserializer.cs" />
+    <Compile Include="Platforms\Yahoo\YahooException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -133,8 +151,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Platforms\Yahoo\DTO\YahooItemList.cs" />
+    <Compile Include="Platforms\Yahoo\YahooDownloader.cs" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
