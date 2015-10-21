@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.WebShopManager
         /// <value>
         /// The account settings help URL.
         /// </value>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000065053";
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065053";
 
         /// <summary>
         /// Create a legacy-compatible web client configured for WebShopManager

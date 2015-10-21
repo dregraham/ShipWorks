@@ -31,6 +31,6 @@ namespace ShipWorks.Stores.Platforms.OpenSky
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000065046";
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000062791";
     }
 }

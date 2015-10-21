@@ -174,7 +174,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
             outline.AddElement("ChannelOrderNumber", () => order.Value.CommerceInterfaceOrderNumber);
         }
 
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000065045";
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065045";
 
         #region Online Update Commands
 

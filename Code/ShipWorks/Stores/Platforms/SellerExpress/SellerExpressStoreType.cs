@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.SellerExpress
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000065050";
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065050";
 
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.

@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.SellerVantage
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000065051";
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065051";
 
         /// <summary>
         /// Create a new store entity

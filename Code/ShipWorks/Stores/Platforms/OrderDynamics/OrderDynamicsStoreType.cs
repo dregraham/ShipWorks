@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.OrderDynamics
         /// </summary>
         protected override string InternalLicenseIdentifier => ((GenericModuleStoreEntity) Store).ModuleOnlineStoreCode;
 
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000065047";
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065047";
 
         /// <summary>
         /// Required module version 
