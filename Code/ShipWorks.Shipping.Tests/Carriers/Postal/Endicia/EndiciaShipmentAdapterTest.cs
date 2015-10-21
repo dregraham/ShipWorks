@@ -1,6 +1,10 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using System;
+using System.Collections.Generic;
+using Moq;
+using ShipWorks.AddressValidation;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
@@ -8,41 +12,54 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
     public class EndiciaShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;
+        private Mock<IShipmentTypeFactory> shipmentTypeFactory;
+        private Mock<ICustomsManager> customsManager;
+        private Mock<EndiciaShipmentType> shipmentTypeMock;
+        private ShipmentType shipmentType;
 
         public EndiciaShipmentAdapterTest()
         {
+            shipmentType = new EndiciaShipmentType();
             shipment = new ShipmentEntity
             {
+                ShipmentTypeCode = ShipmentTypeCode.Endicia,
                 Postal = new PostalShipmentEntity
                 {
                     Endicia = new EndiciaShipmentEntity()
                 }
             };
+
+            customsManager = new Mock<ICustomsManager>();
+            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>())).Returns(new Dictionary<ShipmentEntity, Exception>());
+
+            shipmentTypeMock = new Mock<EndiciaShipmentType>(MockBehavior.Strict);
+            shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
+            shipmentTypeMock.Setup(b => b.UpdateTotalWeight(shipment)).Verifiable();
+            shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
+            shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
+
+            shipmentTypeFactory = new Mock<IShipmentTypeFactory>();
+            shipmentTypeFactory.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(null));
-        }
+            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(null, shipmentTypeFactory.Object, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(new ShipmentEntity(), shipmentTypeFactory.Object, customsManager.Object));
 
-        [Fact]
-        public void Constructor_ThrowsArgumentNullExcpetion_WhenPostalShipmentIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(new ShipmentEntity()));
-        }
+            shipment.Postal.Endicia = null;
+            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(new ShipmentEntity(), shipmentTypeFactory.Object, customsManager.Object));
 
-        [Fact]
-        public void Constructor_ThrowsArgumentNullExcpetion_WhenEndiciaShipmentIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(new ShipmentEntity { Postal = new PostalShipmentEntity() }));
+            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(shipment, null, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() => new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, null));
         }
 
         [Fact]
         public void AccountId_ReturnsShipmentValue()
         {
             shipment.Postal.Endicia.EndiciaAccountID = 12;
-            var testObject = new EndiciaShipmentAdapter(shipment);
+            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
             Assert.Equal(12, testObject.AccountId);
         }
 
@@ -52,7 +69,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [InlineData(10009238)]
         public void AccountId_StoresSpecifiedValue_WhenValueIsValid(long value)
         {
-            var testObject = new EndiciaShipmentAdapter(shipment);
+            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
             testObject.AccountId = value;
             Assert.Equal(value, shipment.Postal.Endicia.EndiciaAccountID);
         }
@@ -60,9 +77,90 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [Fact]
         public void AccountId_StoresZero_WhenValueIsNull()
         {
-            var testObject = new EndiciaShipmentAdapter(shipment);
+            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
             testObject.AccountId = null;
             Assert.Equal(0, shipment.Postal.Endicia.EndiciaAccountID);
+        }
+
+        [Fact]
+        public void Shipment_IsNotNull()
+        {
+            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.NotNull(testObject.Shipment);
+        }
+
+        [Fact]
+        public void ShipmentTypeCode_IsEndicia()
+        {
+            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(ShipmentTypeCode.Endicia, testObject.ShipmentTypeCode);
+        }
+
+        [Fact]
+        public void SupportsAccounts_IsTrue()
+        {
+            EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            Assert.True(testObject.SupportsAccounts);
+        }
+
+        [Fact]
+        public void SupportsMultiplePackages_IsFalse()
+        {
+            EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.False(testObject.SupportsMultiplePackages);
+        }
+
+        [Fact]
+        public void SupportsMultiplePackages_DomesticIsTrue_WhenShipCountryIsUs()
+        {
+            shipment.OriginCountryCode = "US";
+            shipment.ShipCountryCode = "US";
+
+            EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.True(testObject.IsDomestic);
+        }
+
+        [Fact]
+        public void SupportsMultiplePackages_DomesticIsFalse_WhenShipCountryIsCa()
+        {
+            shipment.OriginCountryCode = "US";
+            shipment.ShipCountryCode = "CA";
+
+            EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.False(testObject.IsDomestic);
+        }
+
+        [Fact]
+        public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
+        {
+            using (ValidatedAddressScope validatedAddressScope = new ValidatedAddressScope())
+            {
+                EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+                testObject.UpdateDynamicData(validatedAddressScope);
+
+                shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
+                shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Once);
+
+                customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>()), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void UpdateDynamicData_ErrorsReturned_AreCorrect()
+        {
+            using (ValidatedAddressScope validatedAddressScope = new ValidatedAddressScope())
+            {
+                Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
+                errors.Add(shipment, new Exception("test"));
+
+                customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>())).Returns(errors);
+
+                EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+                Assert.NotNull(testObject.UpdateDynamicData(validatedAddressScope));
+                Assert.Equal(1, testObject.UpdateDynamicData(validatedAddressScope).Count);
+            }
         }
     }
 }

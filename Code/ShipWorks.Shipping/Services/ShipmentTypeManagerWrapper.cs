@@ -14,6 +14,9 @@ namespace ShipWorks.Shipping.Services
         private readonly IEnumerable<ShipmentTypeCode> allShipmentTypeCodes;
         private readonly IEnumerable<ShipmentTypeCode> noAccountShipmentTypes;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShipmentTypeManagerWrapper()
         {
             allShipmentTypeCodes = EnumHelper.GetEnumList<ShipmentTypeCode>().Select(x => x.Value);
@@ -43,7 +46,7 @@ namespace ShipWorks.Shipping.Services
         public int GetSortValue(ShipmentTypeCode shipmentTypeCode) => ShipmentTypeManager.GetSortValue(shipmentTypeCode);
 
         /// <summary>
-        /// 
+        /// Returns a list of ShipmentTypeCodes that support accounts.
         /// </summary>
         public IEnumerable<ShipmentTypeCode> ShipmentTypesSupportingAccounts
         {
