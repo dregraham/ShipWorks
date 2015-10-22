@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private OrderSelectionLoaded orderSelectionLoaded;
         private bool allowEditing;
         private ShippingAddressEditStateType destinationAddressEditableState;
-        private Visibility accountVisibility;
+        private bool supportsAccounts;
         private string domesticInternationalText;
         private ICarrierShipmentAdapter shipmentAdapter;
 
@@ -51,8 +51,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private bool forceDomesticInternationalChanged = false;
 
         private readonly IShippingManager shippingManager;
-        private readonly IMessenger messenger;
-        private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private readonly OrderSelectionChangedHandler shipmentChangedHandler;
         private readonly IDisposable subscriptions;
         private readonly IMessageHelper messageHelper;
@@ -72,30 +70,25 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Constructor
         /// </summary>
         public ShippingPanelViewModel(
-            IMessenger messenger,
             OrderSelectionChangedHandler shipmentChangedHandler,
             IShippingManager shippingManager,
-            ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
             IMessageHelper messageHelper,
             IShippingViewModelFactory shippingViewModelFactory) : this()
         {
             this.shippingManager = shippingManager;
-            this.messenger = messenger;
             this.shipmentChangedHandler = shipmentChangedHandler;
             this.messageHelper = messageHelper;
 
             listenForRateCriteriaChanged = false;
 
             subscriptions = new CompositeDisposable(
-                messenger.AsObservable<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
-                messenger.AsObservable<StoreChangedMessage>().Subscribe(OnStoreChanged),
-                messenger.AsObservable<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipmentAdapter.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
+                shipmentChangedHandler.AsObservable<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
+                shipmentChangedHandler.AsObservable<StoreChangedMessage>().Subscribe(OnStoreChanged),
+                shipmentChangedHandler.AsObservable<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipmentAdapter.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
                 shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
                 shipmentChangedHandler.ShipmentLoadedStream().Do(_ => AllowEditing = true).Subscribe(LoadOrder)
             );
-
-            this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
-
+            
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
             Origin = shippingViewModelFactory.GetAddressViewModel();
@@ -324,10 +317,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// True if the carrier supports accounts, false otherwise.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Visibility AccountVisibility
+        public bool SupportsAccounts
         {
-            get { return accountVisibility; }
-            set { handler.Set(nameof(AccountVisibility), ref accountVisibility, value); }
+            get { return supportsAccounts; }
+            set { handler.Set(nameof(SupportsAccounts), ref supportsAccounts, value); }
         }
 
         /// <summary>
@@ -335,7 +328,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void SaveToDatabase()
         {
-            if (shipmentAdapter.Shipment?.Processed ?? true)
+            if (shipmentAdapter?.Shipment?.Processed ?? true)
             {
                 return;
             }
@@ -415,7 +408,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             RequestedShippingMethod = orderSelectionLoaded.Order.RequestedShipping;
 
-            AccountVisibility = shipmentAdapter.SupportsAccounts ? Visibility.Visible : Visibility.Collapsed;
+            SupportsAccounts = shipmentAdapter.SupportsAccounts;
 
             // If the shipment type does not support accounts, and the current origin id is account, default to store origin.
             OriginAddressType = !shipmentAdapter.SupportsAccounts && shipmentAdapter.Shipment.OriginOriginID == 2 ? 0 : shipmentAdapter.Shipment.OriginOriginID;
@@ -551,7 +544,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             // Save UI values to the shipment so we can send the new values to the rates panel
             Save();
 
-            messenger.Send(new ShipmentChangedMessage(this, shipmentAdapter.Shipment));
+            shipmentChangedHandler.Send(new ShipmentChangedMessage(this, shipmentAdapter.Shipment));
         }
 
         /// <summary>
@@ -646,7 +639,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-                messenger.Send(new OrderSelectionChangingMessage(this, new[] { shipmentAdapter.Shipment.OrderID }));
+                shipmentChangedHandler.Send(new OrderSelectionChangingMessage(this, new[] { shipmentAdapter.Shipment.OrderID }));
             }
         }
 

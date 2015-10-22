@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         private readonly IDisposable subscriptions;
         private readonly IMessageHelper messageHelper;
         private readonly IValidatedAddressScope validatedAddressScope;
-        private long entityId;
+        private long? entityId;
         private string prefix;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -90,8 +90,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// </summary>
         public virtual void Load(PersonAdapter person)
         {
-            entityId = EntityUtility.GetEntityId(person.Entity);
-            prefix = person.FieldPrefix;
+            if (person.Entity != null)
+            {
+                entityId = EntityUtility.GetEntityId(person.Entity);
+                prefix = person.FieldPrefix;
+            }
+            else
+            {
+                entityId = null;
+                prefix = null;
+            }
 
             Populate(person);
         }
@@ -239,7 +247,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
                     count += validatedAddresses.Count;
                 }
 
-                validatedAddressScope.StoreAddresses(entityId, validatedAddresses, prefix);
+                validatedAddressScope.StoreAddresses(entityId.GetValueOrDefault(), validatedAddresses, prefix);
 
                 SuggestionCount = Math.Max(0, count);
                 AddressSuggestions = validatedAddresses.ToDictionary(

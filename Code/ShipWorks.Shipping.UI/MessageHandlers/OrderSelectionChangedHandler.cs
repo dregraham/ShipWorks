@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
     /// <summary>
     /// Handle wiring up the order selection changed handler
     /// </summary>
-    public class OrderSelectionChangedHandler
+    public class OrderSelectionChangedHandler : IMessenger
     {
         private readonly IMessenger messenger;
 
@@ -39,5 +39,15 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
                 .Where(x => x.OrderIdList.Intersect(x.Message.LoadedOrderSelection.Select(y => y.Order?.OrderID ?? -1)).Any())
                 .Select(x => x.Message);
         }
+
+        /// <summary>
+        /// Exposes messages as an observable stream
+        /// </summary>
+        public IObservable<T> AsObservable<T>() where T : IShipWorksMessage => messenger.AsObservable<T>();
+
+        /// <summary>
+        /// Send a message to the underlying messenger
+        /// </summary>
+        public void Send<T>(T message) where T : IShipWorksMessage => messenger.Send(message);
     }
 }

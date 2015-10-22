@@ -162,6 +162,18 @@ namespace ShipWorks.Tests.Shared
             return mockObject;
         }
 
+        public static Mock<ICarrierShipmentAdapter> WithCarrierShipmentAdapterFromChangeShipment(this AutoMock mock, Action<Mock<ICarrierShipmentAdapter>> configureAdapter)
+        {
+            var adapter = mock.Mock<ICarrierShipmentAdapter>();
+            configureAdapter(adapter);
+
+            mock.Mock<IShippingManager>()
+                .Setup(x => x.ChangeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentEntity>()))
+                .Returns(adapter.Object);
+
+            return adapter;
+        }
+
         /// <summary>
         /// Configure an IStoreManager
         /// </summary>

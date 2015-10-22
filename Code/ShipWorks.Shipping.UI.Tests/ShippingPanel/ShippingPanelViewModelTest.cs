@@ -5,7 +5,6 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using ShipWorks.Core.Messaging;
 using Moq;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
@@ -16,8 +15,6 @@ using ShipWorks.Tests.Shared;
 using Xunit;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.Shipping;
-using System.Reactive.Subjects;
-using Autofac.Core.Activators.Reflection;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
@@ -141,7 +138,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             testObject.LoadOrder(message);
 
             // Reset mocks so that tests don't have to worry about calls made during loading
-            mock.Mock<IShipmentTypeFactory>().ResetCalls();
             mock.Mock<IShippingManager>().ResetCalls();
 
             return testObject;
@@ -339,61 +335,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
+                mock.WithCarrierShipmentAdapterFromChangeShipment(x =>
+                    x.SetupGet(a => a.ShipmentTypeCode).Returns(ShipmentTypeCode.OnTrac));
+
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = ShipmentTypeCode.OnTrac;
+
                 Assert.Equal(ShipmentTypeCode.OnTrac, testObject.ShipmentType);
-            }
-        }
-
-        [Fact]
-        public void SetShipmentType_CallsEnsureShipmentLoaded_WhenChanged()
-        {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                testObject.ShipmentType = ShipmentTypeCode.OnTrac;
-
-                mock.Mock<IShippingManager>()
-                    .Verify(x => x.EnsureShipmentLoaded(shipmentEntity));
-            }
-        }
-
-        [Fact]
-        public void SetShipmentType_DoesNotCallEnsureShipmentLoaded_WhenNotChanged()
-        {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                testObject.ShipmentType = shipmentEntity.ShipmentTypeCode;
-
-                mock.Mock<IShippingManager>()
-                    .Verify(x => x.EnsureShipmentLoaded(It.IsAny<ShipmentEntity>()), Times.Never);
-            }
-        }
-
-        [Fact]
-        public void SetShipmentType_GetsShipmentType_WhenChanged()
-        {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                testObject.ShipmentType = ShipmentTypeCode.FedEx;
-
-                mock.Mock<IShipmentTypeFactory>()
-                    .Verify(x => x.Get(ShipmentTypeCode.FedEx));
-            }
-        }
-
-        [Fact]
-        public void SetShipmentType_DoesNotGetShipmentType_WhenNotChanged()
-        {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                testObject.ShipmentType = shipmentEntity.ShipmentTypeCode;
-
-                mock.Mock<IShipmentTypeFactory>()
-                    .Verify(x => x.Get(It.IsAny<ShipmentTypeCode>()), Times.Never);
             }
         }
 
@@ -404,10 +352,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                mock.WithShipmentTypeFromFactory(type =>
-                {
-                    type.SetupGet(x => x.SupportsMultiplePackages).Returns(supportsMultiplePackages);
-                });
+                mock.WithCarrierShipmentAdapterFromChangeShipment(x => 
+                    x.SetupGet(a => a.SupportsMultiplePackages).Returns(supportsMultiplePackages));
 
                 shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
@@ -500,7 +446,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 shipmentAdapter = null;
-                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock); //mock.Create<ShippingPanelViewModel>();
+                ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
 
                 testObject.SaveToDatabase();
 
@@ -548,13 +494,12 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
-
+                
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = ShipmentTypeCode.OnTrac;
 
-                testObject.SaveToDatabase();
-
-                Assert.Equal(ShipmentTypeCode.OnTrac, shipmentEntity.ShipmentTypeCode);
+                mock.Mock<IShippingManager>()
+                    .Verify(x => x.ChangeShipmentType(ShipmentTypeCode.OnTrac, shipmentEntity));
             }
         }
 
@@ -585,7 +530,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             {
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
-                Assert.Equal(Visibility.Visible, testObject.AccountVisibility);
+                Assert.True(testObject.SupportsAccounts);
             }
         }
 
@@ -602,45 +547,23 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             {
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
-                Assert.Equal(Visibility.Collapsed, testObject.AccountVisibility);
+                Assert.False(testObject.SupportsAccounts);
             }
         }
 
-        [Fact]
-        public void ShipmentTypeChanged_AccountVisibility_IsVisible_WhenShipmentType_IsUsps()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ShipmentTypeChanged_SupportsAccountsIsUpdated_WhenShipmentTypeIsChanged(bool supportsAccounts)
         {
-            shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
-                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
-                ShippingAddressEditStateType.Editable
-                );
-
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                testObject.ShipmentType = ShipmentTypeCode.BestRate;
-                testObject.ShipmentType = ShipmentTypeCode.Usps;
+                mock.WithCarrierShipmentAdapterFromChangeShipment(x => x.SetupGet(a => a.SupportsAccounts).Returns(supportsAccounts));
 
-                Assert.Equal(Visibility.Visible, testObject.AccountVisibility);
-            }
-        }
-
-        [Fact]
-        public void ShipmentTypeChanged_AccountVisibility_IsCollapsed_WhenShipmentType_IsPostalWebTools()
-        {
-            shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.PostalWebTools;
-            orderSelectionLoaded = new OrderSelectionLoaded(orderEntity,
-                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
-                ShippingAddressEditStateType.Editable
-                );
-
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = ShipmentTypeCode.Usps;
-                testObject.ShipmentType = ShipmentTypeCode.BestRate;
 
-                Assert.Equal(Visibility.Collapsed, testObject.AccountVisibility);
+                Assert.Equal(supportsAccounts, testObject.SupportsAccounts);
             }
         }
 
