@@ -1,11 +1,8 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.UI.Controls.Design;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
-using Interapptive.Shared.Utility;
-using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Shipping.UI.ValueConverters
 {

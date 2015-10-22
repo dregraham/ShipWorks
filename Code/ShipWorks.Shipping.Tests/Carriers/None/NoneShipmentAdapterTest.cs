@@ -12,10 +12,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
     public class NoneShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;
-        private Mock<IShipmentTypeFactory> shipmentTypeFactory;
-        private Mock<ICustomsManager> customsManager;
-        private Mock<NoneShipmentType> shipmentTypeMock;
-        private ShipmentType shipmentType;
+        private readonly Mock<IShipmentTypeFactory> shipmentTypeFactory;
+        private readonly Mock<ICustomsManager> customsManager;
+        private readonly Mock<NoneShipmentType> shipmentTypeMock;
+        private readonly ShipmentType shipmentType;
 
         public NoneShipmentAdapterTest()
         {
@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
             };
 
             customsManager = new Mock<ICustomsManager>();
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>())).Returns(new Dictionary<ShipmentEntity, Exception>());
+            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(new Dictionary<ShipmentEntity, Exception>());
 
             shipmentTypeMock = new Mock<NoneShipmentType>(MockBehavior.Strict);
             shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
@@ -117,33 +117,27 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            using (ValidatedAddressScope validatedAddressScope = new ValidatedAddressScope())
-            {
-                NoneShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
-                testObject.UpdateDynamicData(validatedAddressScope);
+            NoneShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            testObject.UpdateDynamicData();
 
-                shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Never);
-                shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Never);
+            shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Never);
+            shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Never);
 
-                customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>()), Times.Never);
-            }
+            customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()), Times.Never);
         }
 
         [Fact]
         public void UpdateDynamicData_ErrorsReturned_AreCorrect()
         {
-            using (ValidatedAddressScope validatedAddressScope = new ValidatedAddressScope())
-            {
-                Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
-                errors.Add(shipment, new Exception("test"));
+            Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
+            errors.Add(shipment, new Exception("test"));
 
-                customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>())).Returns(errors);
+            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-                NoneShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            NoneShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
 
-                Assert.NotNull(testObject.UpdateDynamicData(validatedAddressScope));
-                Assert.Equal(0, testObject.UpdateDynamicData(validatedAddressScope).Count);
-            }
+            Assert.NotNull(testObject.UpdateDynamicData());
+            Assert.Equal(0, testObject.UpdateDynamicData().Count);
         }
     }
 }

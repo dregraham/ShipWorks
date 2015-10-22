@@ -3,8 +3,6 @@ using ShipWorks.Shipping.Carriers.iParcel;
 using System;
 using System.Collections.Generic;
 using Moq;
-using ShipWorks.AddressValidation;
-using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.iParcel
@@ -12,10 +10,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
     public class iParcelShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;
-        private Mock<IShipmentTypeFactory> shipmentTypeFactory;
-        private Mock<ICustomsManager> customsManager;
-        private Mock<iParcelShipmentType> shipmentTypeMock;
-        private ShipmentType shipmentType;
+        private readonly Mock<IShipmentTypeFactory> shipmentTypeFactory;
+        private readonly Mock<ICustomsManager> customsManager;
+        private readonly Mock<iParcelShipmentType> shipmentTypeMock;
+        private readonly ShipmentType shipmentType;
 
         public iParcelShipmentAdapterTest()
         {
@@ -27,7 +25,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             };
 
             customsManager = new Mock<ICustomsManager>();
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>())).Returns(new Dictionary<ShipmentEntity, Exception>());
+            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(new Dictionary<ShipmentEntity, Exception>());
 
             shipmentTypeMock = new Mock<iParcelShipmentType>(MockBehavior.Strict);
             shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
@@ -42,9 +40,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            ShipmentEntity shipment = new ShipmentEntity();
-            shipment.IParcel = new IParcelShipmentEntity();
-
             Assert.Throws<ArgumentNullException>(() => new iParcelShipmentAdapter(null, shipmentTypeFactory.Object, customsManager.Object));
             Assert.Throws<ArgumentNullException>(() => new iParcelShipmentAdapter(new ShipmentEntity(), shipmentTypeFactory.Object, customsManager.Object));
             Assert.Throws<ArgumentNullException>(() => new iParcelShipmentAdapter(shipment, null, customsManager.Object));
@@ -130,33 +125,27 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            using (ValidatedAddressScope validatedAddressScope = new ValidatedAddressScope())
-            {
-                iParcelShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
-                testObject.UpdateDynamicData(validatedAddressScope);
+            iParcelShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            testObject.UpdateDynamicData();
 
-                shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
-                shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Once);
+            shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
+            shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Once);
 
-                customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>()), Times.Once);
-            }
+            customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()), Times.Once);
         }
 
         [Fact]
         public void UpdateDynamicData_ErrorsReturned_AreCorrect()
         {
-            using (ValidatedAddressScope validatedAddressScope = new ValidatedAddressScope())
-            {
-                Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
-                errors.Add(shipment, new Exception("test"));
+            Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
+            errors.Add(shipment, new Exception("test"));
 
-                customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>())).Returns(errors);
+            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-                iParcelShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            iParcelShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
 
-                Assert.NotNull(testObject.UpdateDynamicData(validatedAddressScope));
-                Assert.Equal(1, testObject.UpdateDynamicData(validatedAddressScope).Count);
-            }
+            Assert.NotNull(testObject.UpdateDynamicData());
+            Assert.Equal(1, testObject.UpdateDynamicData().Count);
         }
     }
 }

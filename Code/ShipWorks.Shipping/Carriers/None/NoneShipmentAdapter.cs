@@ -4,8 +4,6 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using ShipWorks.AddressValidation;
 
 namespace ShipWorks.Shipping.Carriers.None
 {
@@ -100,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// </summary>
         /// <param name="validatedAddressScope"></param>
         /// <returns>Dictionary of shipments and exceptions.</returns>
-        public IDictionary<ShipmentEntity, Exception> UpdateDynamicData(ValidatedAddressScope validatedAddressScope)
+        public IDictionary<ShipmentEntity, Exception> UpdateDynamicData()
         {
             return new Dictionary<ShipmentEntity, Exception>();
         }

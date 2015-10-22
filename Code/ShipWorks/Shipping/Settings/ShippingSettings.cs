@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Threading;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Messaging.Messages;
-using Autofac;
 
 namespace ShipWorks.Shipping.Settings
 {

@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                          shipmentAdapter.Object.ShipmentTypeCode == ShipmentTypeCode.Other ||
                          shipmentAdapter.Object.ShipmentTypeCode == ShipmentTypeCode.None);
             });
-            shipmentAdapter.Setup(s => s.UpdateDynamicData(It.IsAny<ValidatedAddressScope>())).Returns(new Dictionary<ShipmentEntity, Exception>());
+            shipmentAdapter.Setup(s => s.UpdateDynamicData()).Returns(new Dictionary<ShipmentEntity, Exception>());
 
             shipmentAdapterFactory = new Mock<ICarrierShipmentAdapterFactory>();
             shipmentAdapterFactory.Setup(s => s.Get(It.IsAny<ShipmentEntity>())).Returns(() => shipmentAdapter.Object);

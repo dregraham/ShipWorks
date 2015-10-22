@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Tests.Loading
                 testObject = mock.Create<ShipmentLoader>();
                 shippingConfigurator.Setup(s => s.GetAddressValidation(It.IsAny<ShipmentEntity>())).Returns(false);
 
-                OrderSelectionLoaded orderSelectionLoaded = testObject.Load(orderEntity.OrderID);
+                testObject.Load(orderEntity.OrderID);
 
                 addressValidator.Verify(av => av.ValidateAsync(It.IsAny<ShipmentEntity>()), Times.Never);
             }
@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.Tests.Loading
                 testObject = mock.Create<ShipmentLoader>();
                 shippingConfigurator.Setup(s => s.GetAddressValidation(It.IsAny<ShipmentEntity>())).Returns(true);
 
-                OrderSelectionLoaded orderSelectionLoaded = testObject.Load(orderEntity.OrderID);
+                testObject.Load(orderEntity.OrderID);
 
                 addressValidator.Verify(av => av.ValidateAsync(It.IsAny<ShipmentEntity>()), Times.Once);
             }
@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping.Tests.Loading
                 shippingConfigurator.Setup(s => s.GetAddressValidation(It.IsAny<ShipmentEntity>())).Returns(true);
                 shippingConfigurator.Setup(s => s.AutoCreateShipments).Returns(false);
 
-                OrderSelectionLoaded orderSelectionLoaded = testObject.Load(orderEntity.OrderID);
+                testObject.Load(orderEntity.OrderID);
 
                 addressValidator.Verify(av => av.ValidateAsync(It.IsAny<ShipmentEntity>()), Times.Never);
             }
@@ -180,7 +180,7 @@ namespace ShipWorks.Shipping.Tests.Loading
                 shippingConfigurator.Setup(s => s.GetAddressValidation(It.IsAny<ShipmentEntity>())).Returns(true);
                 shippingConfigurator.Setup(s => s.AutoCreateShipments).Returns(false);
 
-                OrderSelectionLoaded orderSelectionLoaded = testObject.Load(orderEntity.OrderID);
+                testObject.Load(orderEntity.OrderID);
 
                 filterHelper.Verify(s => s.EnsureFiltersUpToDate(It.IsAny<TimeSpan>()), Times.Once);
             }

@@ -6,16 +6,18 @@ using Moq;
 using ShipWorks.AddressValidation;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using Autofac;
+using Autofac.Extras.Moq;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
 {
     public class EndiciaShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;
-        private Mock<IShipmentTypeFactory> shipmentTypeFactory;
-        private Mock<ICustomsManager> customsManager;
-        private Mock<EndiciaShipmentType> shipmentTypeMock;
-        private ShipmentType shipmentType;
+        private readonly Mock<IShipmentTypeFactory> shipmentTypeFactory;
+        private readonly Mock<ICustomsManager> customsManager;
+        private readonly Mock<EndiciaShipmentType> shipmentTypeMock;
+        private readonly ShipmentType shipmentType;
 
         public EndiciaShipmentAdapterTest()
         {
@@ -30,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
             };
 
             customsManager = new Mock<ICustomsManager>();
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>())).Returns(new Dictionary<ShipmentEntity, Exception>());
+            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(new Dictionary<ShipmentEntity, Exception>());
 
             shipmentTypeMock = new Mock<EndiciaShipmentType>(MockBehavior.Strict);
             shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
@@ -134,33 +136,32 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            using (ValidatedAddressScope validatedAddressScope = new ValidatedAddressScope())
+            using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
-                testObject.UpdateDynamicData(validatedAddressScope);
+                Mock<EndiciaShipmentType> shipmentTypeMock2 = mock.WithShipmentTypeFromFactory<EndiciaShipmentType>(x => { });
+                EndiciaShipmentAdapter testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+                testObject.UpdateDynamicData();
 
-                shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
-                shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Once);
+                shipmentTypeMock2.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()));
+                shipmentTypeMock2.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()));
 
-                customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>()), Times.Once);
+                mock.Mock<ICustomsManager>()
+                    .Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()));
             }
         }
 
         [Fact]
         public void UpdateDynamicData_ErrorsReturned_AreCorrect()
         {
-            using (ValidatedAddressScope validatedAddressScope = new ValidatedAddressScope())
-            {
-                Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
-                errors.Add(shipment, new Exception("test"));
+            Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
+            errors.Add(shipment, new Exception("test"));
 
-                customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>())).Returns(errors);
+            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-                EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            EndiciaShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
 
-                Assert.NotNull(testObject.UpdateDynamicData(validatedAddressScope));
-                Assert.Equal(1, testObject.UpdateDynamicData(validatedAddressScope).Count);
-            }
+            Assert.NotNull(testObject.UpdateDynamicData());
+            Assert.Equal(1, testObject.UpdateDynamicData().Count);
         }
     }
 }

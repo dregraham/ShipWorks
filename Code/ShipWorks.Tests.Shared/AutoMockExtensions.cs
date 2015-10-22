@@ -28,9 +28,15 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Configure a shipment type that will be returned by an instance of IShipmentTypeFactory
         /// </summary>
-        public static void WithShipmentTypeFromFactory(this AutoMock mock, Action<Mock<ShipmentType>> shipmentTypeConfiguration)
+        public static Mock<ShipmentType> WithShipmentTypeFromFactory(this AutoMock mock, Action<Mock<ShipmentType>> shipmentTypeConfiguration) =>
+            WithShipmentTypeFromFactory<ShipmentType>(mock, shipmentTypeConfiguration);
+
+        /// <summary>
+        /// Configure a shipment type that will be returned by an instance of IShipmentTypeFactory
+        /// </summary>
+        public static Mock<T> WithShipmentTypeFromFactory<T>(this AutoMock mock, Action<Mock<T>> shipmentTypeConfiguration) where T : ShipmentType
         {
-            var shipmentTypeMock = mock.MockRepository.Create<ShipmentType>();
+            var shipmentTypeMock = mock.MockRepository.Create<T>();
             shipmentTypeConfiguration(shipmentTypeMock);
 
             mock.Mock<IShipmentTypeFactory>()
@@ -40,16 +46,19 @@ namespace ShipWorks.Tests.Shared
             mock.Mock<IShipmentTypeFactory>()
                 .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
                 .Returns(shipmentTypeMock.Object);
+
+            return shipmentTypeMock;
         }
 
         /// <summary>
         /// Configure a shipment type that will be injected directly; not through a factory
         /// </summary>
-        public static void WithShipmentType<T>(this AutoMock mock, Action<Mock<T>> shipmentTypeConfiguration) where T : ShipmentType
+        public static Mock<T> WithShipmentType<T>(this AutoMock mock, Action<Mock<T>> shipmentTypeConfiguration) where T : ShipmentType
         {
             var shipmentTypeMock = mock.MockRepository.Create<T>();
             shipmentTypeConfiguration(shipmentTypeMock);
             mock.Provide(shipmentTypeMock.Object);
+            return shipmentTypeMock;
         }
 
         /// <summary>

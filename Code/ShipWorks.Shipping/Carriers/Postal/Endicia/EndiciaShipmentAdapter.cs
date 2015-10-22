@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public class EndiciaShipmentAdapter : ICarrierShipmentAdapter
     {
         private readonly ShipmentEntity shipment;
-        private readonly EndiciaShipmentType shipmentType;
+        private readonly ShipmentType shipmentType;
         private readonly ICustomsManager customsManager;
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             this.shipment = shipment;
             this.customsManager = customsManager;
-            shipmentType = shipmentTypeFactory.Get(shipment) as EndiciaShipmentType;
+            shipmentType = shipmentTypeFactory.Get(shipment);
         }
 
         /// <summary>
@@ -101,14 +101,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         /// <param name="validatedAddressScope"></param>
         /// <returns>Dictionary of shipments and exceptions.</returns>
-        public IDictionary<ShipmentEntity, Exception> UpdateDynamicData(ValidatedAddressScope validatedAddressScope)
+        public IDictionary<ShipmentEntity, Exception> UpdateDynamicData()
         {
             shipmentType.UpdateDynamicShipmentData(shipment);
             shipmentType.UpdateTotalWeight(shipment);
 
-            IDictionary<ShipmentEntity, Exception> errors = customsManager.EnsureCustomsLoaded(new[] { shipment }, validatedAddressScope);
-
-            return errors;
+            return customsManager.EnsureCustomsLoaded(new[] { shipment });
         }
     }
 }

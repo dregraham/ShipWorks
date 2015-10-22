@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
                 subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int>(), new List<int> { (int)ShipmentTypeCode.Other }));
-                
+
                 Assert.DoesNotContain(ShipmentTypeCode.Other, testObject.Available);
             }
         }
@@ -80,19 +80,20 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                Subject<EnabledCarriersChangedMessage> subject = new Subject<EnabledCarriersChangedMessage>();
+                using (Subject<EnabledCarriersChangedMessage> subject = new Subject<EnabledCarriersChangedMessage>())
+                {
+                    mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
+                        .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps });
+                    mock.Mock<IMessenger>()
+                        .Setup(x => x.AsObservable<EnabledCarriersChangedMessage>())
+                        .Returns(subject);
 
-                mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
-                    .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps });
-                mock.Mock<IMessenger>()
-                    .Setup(x => x.AsObservable<EnabledCarriersChangedMessage>())
-                    .Returns(subject);
+                    ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
-                ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
+                    subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int> { (int)ShipmentTypeCode.FedEx }, new List<int>()));
 
-                subject.OnNext(new EnabledCarriersChangedMessage(null, new List<int> { (int)ShipmentTypeCode.FedEx }, new List<int>()));
-
-                Assert.Contains(ShipmentTypeCode.FedEx, testObject.Available);
+                    Assert.Contains(ShipmentTypeCode.FedEx, testObject.Available);
+                }
             }
         }
 

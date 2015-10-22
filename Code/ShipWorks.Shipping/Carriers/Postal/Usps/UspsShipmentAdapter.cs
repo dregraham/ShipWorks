@@ -101,14 +101,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         /// <param name="validatedAddressScope"></param>
         /// <returns>Dictionary of shipments and exceptions.</returns>
-        public IDictionary<ShipmentEntity, Exception> UpdateDynamicData(ValidatedAddressScope validatedAddressScope)
+        public IDictionary<ShipmentEntity, Exception> UpdateDynamicData()
         {
             shipmentType.UpdateDynamicShipmentData(shipment);
             shipmentType.UpdateTotalWeight(shipment);
 
-            IDictionary<ShipmentEntity, Exception> errors = customsManager.EnsureCustomsLoaded(new[] { shipment }, validatedAddressScope);
-
-            return errors;
+            return customsManager.EnsureCustomsLoaded(new[] { shipment });
         }
     }
 }

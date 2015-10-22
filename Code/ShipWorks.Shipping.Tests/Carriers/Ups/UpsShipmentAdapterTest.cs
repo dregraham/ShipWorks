@@ -3,10 +3,8 @@ using ShipWorks.Shipping.Carriers.Ups;
 using System;
 using System.Collections.Generic;
 using Moq;
-using ShipWorks.AddressValidation;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Ups
@@ -14,10 +12,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
     public class UpsShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;
-        private Mock<IShipmentTypeFactory> shipmentTypeFactory;
-        private Mock<ICustomsManager> customsManager;
-        private Mock<UpsShipmentType> shipmentTypeMock;
-        private ShipmentType shipmentType;
+        private readonly Mock<IShipmentTypeFactory> shipmentTypeFactory;
+        private readonly Mock<ICustomsManager> customsManager;
+        private readonly Mock<UpsShipmentType> shipmentTypeMock;
+        private readonly ShipmentType shipmentType;
 
         public UpsShipmentAdapterTest()
         {
@@ -29,7 +27,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
             };
 
             customsManager = new Mock<ICustomsManager>();
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>())).Returns(new Dictionary<ShipmentEntity, Exception>());
+            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(new Dictionary<ShipmentEntity, Exception>());
 
             shipmentTypeMock = new Mock<UpsShipmentType>(MockBehavior.Strict);
             shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
@@ -135,33 +133,27 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            using (ValidatedAddressScope validatedAddressScope = new ValidatedAddressScope())
-            {
-                UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
-                testObject.UpdateDynamicData(validatedAddressScope);
+            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            testObject.UpdateDynamicData();
 
-                shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
-                shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Once);
+            shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
+            shipmentTypeMock.Verify(b => b.UpdateTotalWeight(It.IsAny<ShipmentEntity>()), Times.Once);
 
-                customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>()), Times.Once);
-            }
+            customsManager.Verify(b => b.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>()), Times.Once);
         }
 
         [Fact]
         public void UpdateDynamicData_ErrorsReturned_AreCorrect()
         {
-            using (ValidatedAddressScope validatedAddressScope = new ValidatedAddressScope())
-            {
-                Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
-                errors.Add(shipment, new Exception("test"));
+            Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
+            errors.Add(shipment, new Exception("test"));
 
-                customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ValidatedAddressScope>())).Returns(errors);
+            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-                UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
 
-                Assert.NotNull(testObject.UpdateDynamicData(validatedAddressScope));
-                Assert.Equal(1, testObject.UpdateDynamicData(validatedAddressScope).Count);
-            }
+            Assert.NotNull(testObject.UpdateDynamicData());
+            Assert.Equal(1, testObject.UpdateDynamicData().Count);
         }
     }
 }
