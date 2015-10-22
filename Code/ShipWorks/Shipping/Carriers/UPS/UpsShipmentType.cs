@@ -799,10 +799,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (parcelIndex >= 0 && parcelIndex < shipment.Ups.Packages.Count)
             {
                 var package = shipment.Ups.Packages[parcelIndex];
-
+               
                 return new ShipmentParcel(shipment, package.UpsPackageID, package.TrackingNumber,
                     new InsuranceChoice(shipment, package, package, package),
-                    new DimensionsAdapter(package));
+                    new DimensionsAdapter(package))
+                {
+                    TotalWeight =  package.Weight + package.DimsWeight
+                };
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");
