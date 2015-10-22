@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.UI;
-using Interapptive.Shared.Utility;
-using System.Xml;
-using System.Xml.XPath;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using ShipWorks.Stores.Management;
 
@@ -31,6 +18,10 @@ namespace ShipWorks.Stores.Platforms.SellerVantage.WizardPages
         public SellerVantageAccountPage()
         {
             InitializeComponent();
+
+            SellerVantageStoreType store = (SellerVantageStoreType)StoreTypeManager.GetType(StoreTypeCode.SellerVantage);
+
+            helpLink.Url = store.AccountSettingsHelpUrl;
         }
 
         /// <summary>
