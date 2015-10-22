@@ -454,8 +454,12 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void OnColumnsReordered(object sender, EventArgs e)
         {
-            SaveGridColumnState();
-            ReloadGridColumns();
+            FilterEntityGrid grid = sender as FilterEntityGrid;
+            if (grid != null)
+            {
+                grid.SaveColumns();
+                grid.ReloadColumns();
+            }
         }
 
         /// <summary>
