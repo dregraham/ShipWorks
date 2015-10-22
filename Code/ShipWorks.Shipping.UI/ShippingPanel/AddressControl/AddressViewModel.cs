@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
     public partial class AddressViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
     {
         private readonly string[] validationProperties = { nameof(Street), nameof(CountryCode), nameof(PostalCode), nameof(StateProvCode), nameof(City) };
-        private readonly AddressValidator validator;
+        private readonly IAddressValidator validator;
         private readonly PropertyChangedHandler handler;
         private readonly IShippingOriginManager shippingOriginManager;
         private readonly IDisposable subscriptions;
@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// Constructor
         /// </summary>
         public AddressViewModel(IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper, 
-            IValidatedAddressScope validatedAddressScope, AddressValidator validator)
+            IValidatedAddressScope validatedAddressScope, IAddressValidator validator)
         {
             this.validator = validator;
             this.shippingOriginManager = shippingOriginManager;
@@ -94,6 +94,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
             {
                 entityId = EntityUtility.GetEntityId(person.Entity);
                 prefix = person.FieldPrefix;
+
+                IEnumerable<ValidatedAddressEntity> validatedAddresses = validatedAddressScope.LoadValidatedAddresses(entityId.GetValueOrDefault(), prefix);
+                AddressSuggestions = BuildDictionary(validatedAddresses);
             }
             else
             {
@@ -250,12 +253,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
                 validatedAddressScope.StoreAddresses(entityId.GetValueOrDefault(), validatedAddresses, prefix);
 
                 SuggestionCount = Math.Max(0, count);
-                AddressSuggestions = validatedAddresses.ToDictionary(
-                    x => AddressSelector.FormatAddress(x) + (x.IsOriginal ? " (Original)" : string.Empty), 
-                    x => x);
+                AddressSuggestions = BuildDictionary(validatedAddresses);
                 
                 Populate(adapter);
             });
+        }
+
+        /// <summary>
+        /// Build a dictionary of addresses for use in the UI
+        /// </summary>
+        private IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> BuildDictionary(IEnumerable<ValidatedAddressEntity> validatedAddresses)
+        {
+            return validatedAddresses.ToDictionary(
+                    x => AddressSelector.FormatAddress(x) + (x.IsOriginal ? " (Original)" : string.Empty),
+                    x => x);
         }
 
         /// <summary>

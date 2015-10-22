@@ -39,6 +39,17 @@ namespace ShipWorks.AddressValidation
                 valueMap.Add(entityId, new Dictionary<string, List<ValidatedAddressEntity>>{ { fieldPrefix, addressList } });
             }
         }
+        
+        /// <summary>
+        /// Create a function that will get a list of validated addresses
+        /// </summary>
+        public IEnumerable<ValidatedAddressEntity> LoadValidatedAddresses(long entityId, string addressPrefix)
+        {
+            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            {
+                return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, entityId, addressPrefix);
+            }
+        }
 
         /// <summary>
         /// Save the stored validated addresses to the database

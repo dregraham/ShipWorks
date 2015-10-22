@@ -23,5 +23,10 @@ namespace ShipWorks.AddressValidation
         /// Save the stored validated addresses to the database
         /// </summary>
         void FlushAddressesToDatabase(IAddressValidationDataAccess dataAccess, long entityId, string prefix);
+
+        /// <summary>
+        /// Create a function that will get a list of validated addresses
+        /// </summary>
+        IEnumerable<ValidatedAddressEntity> LoadValidatedAddresses(long entityId, string prefix);
     }
 }

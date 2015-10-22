@@ -130,9 +130,8 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<MessageHelperWrapper>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<AddressValidator>();
-            
-            builder.RegisterType<AddressValidator>();
+            builder.RegisterType<AddressValidator>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<StampsAddressValidationWebClient>()
                 .AsImplementedInterfaces();
