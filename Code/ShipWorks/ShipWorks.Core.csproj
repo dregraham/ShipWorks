@@ -682,6 +682,7 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
@@ -10381,6 +10382,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.5.sql" />
     <Content Include="Resources\add.png" />
@@ -10523,6 +10525,7 @@
     <None Include="Resources\instastore.png" />
     <None Include="Resources\choxi.png" />
     <None Include="Resources\instantestore.png" />
+    <None Include="Resources\lemonstand.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             foreach(long orderKey in orderKeys)
             {
                 ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
-
+                
                 // Check to see if shipment exists
                 if (shipment == null)
                 {

@@ -321,8 +321,10 @@ namespace ShipWorks.Actions.Tasks
         {
             taskDescriptors = new Dictionary<string, ActionTaskDescriptor>();
 
+            IEnumerable<Type> allTypes = Assembly.Load("ShipWorks.Stores").GetTypes().Union(Assembly.GetExecutingAssembly().GetTypes());
+            
             // Look for the ConditionAttribute on each type in the assembly
-            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+            foreach (Type type in allTypes)
             {
                 if (Attribute.IsDefined(type, typeof(ActionTaskAttribute)))
                 {

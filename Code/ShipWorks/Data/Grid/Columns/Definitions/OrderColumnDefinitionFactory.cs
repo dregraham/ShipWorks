@@ -171,6 +171,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.Amazon
                         },
 
+                    new GridColumnDefinition("{7edcceda-7330-4af1-82a5-15b0642907db}", true,
+                        new GridOrderNumberDisplayType(), "LemonStand Order ID", GridOrderNumberDisplayType.SampleData(StoreTypeCode.LemonStand, "123456789"),
+                        LemonStandOrderFields.LemonStandOrderID)
+                        {
+                            StoreTypeCode = StoreTypeCode.LemonStand
+                        },
+
                     new GridColumnDefinition("{94454F08-0E76-4777-96DD-F184ED77AFFD}", true,
                         new GridOrderNumberDisplayType(), "Groupon Order #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.Groupon, "AB-1234567-1234567"),
                         GrouponOrderFields.GrouponOrderID)

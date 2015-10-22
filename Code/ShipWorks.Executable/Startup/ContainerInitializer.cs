@@ -1,5 +1,6 @@
 ﻿using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.UI;
+using ShipWorks.Stores.UI.Platforms.LemonStand;
 
 namespace ShipWorks.Startup
 {
@@ -14,6 +15,6 @@ namespace ShipWorks.Startup
         /// Initialize the IoC container
         /// </summary>
         public static void Initialize() =>
-            IoC.Initialize(typeof(ShippingModule).Assembly);
+            IoC.Initialize(typeof(ShippingModule).Assembly, typeof(LemonStandStoreModule).Assembly);
     }
 }

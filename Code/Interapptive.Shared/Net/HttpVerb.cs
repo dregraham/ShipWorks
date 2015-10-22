@@ -16,6 +16,9 @@ namespace Interapptive.Shared.Net
         Post,
 
         [Description("PUT")]
-        Put
+        Put,
+
+        [Description("PATCH")]
+        Patch
     }
 }

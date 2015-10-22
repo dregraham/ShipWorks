@@ -188,6 +188,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.logAge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.logAge.FormattingEnabled = true;
             this.logAge.Items.AddRange(new object[] {
+            "1 Day",
             "1 Week",
             "1 Month",
             "Never"});

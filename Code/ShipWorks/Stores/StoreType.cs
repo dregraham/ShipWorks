@@ -26,6 +26,9 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Data.Model;
+using ShipWorks.ApplicationCore;
+using Autofac;
+using System.Linq;
 
 namespace ShipWorks.Stores
 {
@@ -202,7 +205,15 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard
         /// </summary>
-        public abstract List<WizardPage> CreateAddStoreWizardPages();
+        public virtual List<WizardPage> CreateAddStoreWizardPages()
+        {
+            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<WizardPage>(TypeCode))
+            {
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IEnumerable<WizardPage>>(TypeCode).ToList();
+            }
+
+            throw new InvalidOperationException("Invalid store type. " + TypeCode);
+        }
 
         /// <summary>
         /// Create the control that will be used to show the options for automatic creation of Online Update actions.  Return null
@@ -210,6 +221,11 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
+            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<OnlineUpdateActionControlBase>(TypeCode))
+            {
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<OnlineUpdateActionControlBase>(TypeCode);
+            }
+
             return null;
         }
 
@@ -285,7 +301,15 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create the control that is used for editing the account settings in the Store Settings window.
         /// </summary>
-        public abstract AccountSettingsControlBase CreateAccountSettingsControl();
+        public virtual AccountSettingsControlBase CreateAccountSettingsControl()
+        {
+            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<AccountSettingsControlBase>(TypeCode))
+            {
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<AccountSettingsControlBase>(TypeCode);
+            }
+
+            throw new InvalidOperationException("Invalid store type. " + TypeCode);
+        }
 
         /// <summary>
         /// Create the control used to edit the manual order number settings for the store
