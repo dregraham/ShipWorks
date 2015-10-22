@@ -25,23 +25,19 @@ namespace ShipWorks.Stores.Platforms.VirtueMart
         /// <summary>
         /// Store Type
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.VirtueMart;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.VirtueMart;
 
         /// <summary>
         /// Log request/responses as VirtueMart
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.VirtueMart;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.VirtueMart;
+
+        /// <summary>
+        /// Gets or sets the account settings help URL.
+        /// </summary>
+        /// <value>
+        /// The account settings help URL.
+        /// </value>
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/129343";
     }
 }

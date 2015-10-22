@@ -21,34 +21,16 @@ namespace ShipWorks.Stores.Platforms.nopCommerce
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.nopCommerce;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.nopCommerce;
 
         /// <summary>
         /// Log request/responses as nopCommerce
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.nopCommerce;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.nopCommerce;
 
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get
-            {
-                return "http://support.shipworks.com/solution/articles/4000022738-connecting-nopcommerce-with";
-            }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000022738";
     }
 }

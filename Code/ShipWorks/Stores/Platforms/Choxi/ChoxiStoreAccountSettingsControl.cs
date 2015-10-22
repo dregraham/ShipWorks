@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Choxi
 
             useTestServer.Visible = InterapptiveOnly.MagicKeysDown;
 
-            ChoxiStoreType store = new ChoxiStoreType(new GenericModuleStoreEntity { TypeCode = (int)StoreTypeCode.Choxi });
+            ChoxiStoreType store = (ChoxiStoreType) StoreTypeManager.GetType(StoreTypeCode.Choxi);
             helpLink.Url = store.AccountSettingsHelpUrl;
 
         }
