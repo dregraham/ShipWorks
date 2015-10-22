@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping
         /// Get the list of shipments that correspond to the given order key.  If no shipment exists for the order,
         /// one will be created if autoCreate is true.  An OrderEntity will be attached to each shipment.
         /// </summary>
-        List<ShipmentEntity> GetShipments(long orderID, bool createIfNone);
+        IEnumerable<ICarrierShipmentAdapter> GetShipments(long orderID, bool createIfNone);
 
         /// <summary>
         /// Save the shipments to the database
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensure the specified shipment is fully loaded
         /// </summary>
-        void EnsureShipmentLoaded(ShipmentEntity shipment);
+        ShipmentEntity EnsureShipmentLoaded(ShipmentEntity shipment);
 
         /// <summary>
         /// Gets the overridden store shipment.
@@ -59,6 +59,11 @@ namespace ShipWorks.Shipping
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
         RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType);
+
+        /// <summary>
+        /// Get rates for the given shipment using the appropriate ShipmentType
+        /// </summary>
+        RateGroup GetRates(ShipmentEntity shipment);
 
         /// <summary>
         /// Get rates asynchronously
@@ -81,11 +86,6 @@ namespace ShipWorks.Shipping
         /// Indicates if the given shipment type code is enabled for selection in the shipping window
         /// </summary>
         bool IsShipmentTypeEnabled(ShipmentTypeCode shipmentTypeCode);
-
-        /// <summary>
-        /// Get rates for the given shipment using the appropriate ShipmentType
-        /// </summary>
-        object GetRates(ShipmentEntity shipment);
 
         /// <summary>
         /// Void the given shipment.  If the shipment is already voided, then no action is taken and no error is reported.  The fact that

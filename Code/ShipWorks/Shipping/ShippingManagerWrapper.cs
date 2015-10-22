@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using System.Threading.Tasks;
 using System.Threading;
 using ShipWorks.Shipping.Services;
+using System.Linq;
 
 namespace ShipWorks.Shipping
 {
@@ -52,21 +53,22 @@ namespace ShipWorks.Shipping
         /// Get the list of shipments that correspond to the given order key.  If no shipment exists for the order,
         /// one will be created if autoCreate is true.  An OrderEntity will be attached to each shipment.
         /// </summary>
-        public List<ShipmentEntity> GetShipments(long orderID, bool createIfNone)
+        public IEnumerable<ICarrierShipmentAdapter> GetShipments(long orderID, bool createIfNone)
         {
-            List<ShipmentEntity>  shipments = ShippingManager.GetShipments(orderID, createIfNone);
-
-            shipments?.ForEach(EnsureShipmentLoaded);
-
-            return shipments;
+            return ShippingManager.GetShipments(orderID, createIfNone)
+                .Select(EnsureShipmentLoaded)
+                .Select(shipmentAdapterFactory.Get);
         }
 
         /// <summary>
         /// Ensure the specified shipment is fully loaded
         /// </summary>
-        public void EnsureShipmentLoaded(ShipmentEntity shipment) => 
+        public ShipmentEntity EnsureShipmentLoaded(ShipmentEntity shipment)
+        {
             ShippingManager.EnsureShipmentLoaded(shipment);
-
+            return shipment;
+        }
+        
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
@@ -179,7 +181,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
-        public object GetRates(ShipmentEntity shipment) => ShippingManager.GetRates(shipment);
+        public RateGroup GetRates(ShipmentEntity shipment) => ShippingManager.GetRates(shipment);
 
         /// <summary>
         /// Void the given shipment.  If the shipment is already voided, then no action is taken and no error is reported.  The fact that

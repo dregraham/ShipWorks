@@ -126,7 +126,8 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Configure an IShippingManager
         /// </summary>
-        public static Mock<IShippingManager> WithShippingManager(this AutoMock mock, long orderID, List<ShipmentEntity> createIfNoneShipments, List<ShipmentEntity> dontCreateIfNoneShipments)
+        public static Mock<IShippingManager> WithShippingManager(this AutoMock mock, long orderID,
+            IEnumerable<ICarrierShipmentAdapter> createIfNoneShipments, IEnumerable<ICarrierShipmentAdapter> dontCreateIfNoneShipments)
         {
             Mock<IShippingManager> mockObject = mock.Mock<IShippingManager>();
 

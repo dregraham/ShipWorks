@@ -52,28 +52,25 @@ namespace ShipWorks.Shipping.Loading
             {
                 bool createIfNone = shippingConfiguration.AutoCreateShipments && shippingConfiguration.UserHasPermission(PermissionType.ShipmentsCreateEditProcess, orderID);
 
-                List<ShipmentEntity> shipments = shippingManager.GetShipments(orderID, createIfNone);
-                ShipmentEntity firstShipment = shipments?.FirstOrDefault();
+                IEnumerable<ICarrierShipmentAdapter> shipments = shippingManager.GetShipments(orderID, createIfNone);
+                ICarrierShipmentAdapter firstShipment = shipments.FirstOrDefault();
 
-                if (firstShipment != null && shippingConfiguration.GetAddressValidation(firstShipment))
+                if (firstShipment?.Shipment != null && shippingConfiguration.GetAddressValidation(firstShipment.Shipment))
                 {
-                    addressValidator.ValidateAsync(firstShipment);
+                    addressValidator.ValidateAsync(firstShipment.Shipment);
                 }
 
                 ShippingAddressEditStateType destinationAddressEditable = ShippingAddressEditStateType.Editable;
-                OrderEntity order = firstShipment?.Order;
+                OrderEntity order = firstShipment?.Shipment?.Order;
 
                 if (order != null)
                 {
                     order.Store = storeManager.GetStore(order.StoreID);
 
-                    destinationAddressEditable = storeTypeManager.GetType(order.Store).ShippingAddressEditableState(firstShipment);
+                    destinationAddressEditable = storeTypeManager.GetType(order.Store).ShippingAddressEditableState(firstShipment?.Shipment);
                 }
-
-                List<ICarrierShipmentAdapter> shipmentAdapters = new List<ICarrierShipmentAdapter>();
-                shipments?.ForEach(s => shipmentAdapters.Add(shipmentAdapterFactory.Get(s)));
-
-                return new OrderSelectionLoaded(order, shipmentAdapters, destinationAddressEditable);
+                
+                return new OrderSelectionLoaded(order, shipments, destinationAddressEditable);
             }
             catch (Exception ex)
             {

@@ -68,7 +68,7 @@
 
                     <ComboBox SelectedValuePath="Value"
                               DisplayMemberPath="Description"
-                              Width="225"
+                              Width="150"
                               HorizontalAlignment="Left"
                               FontSize="14"
                               Margin="8,0,0,4"

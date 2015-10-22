@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping
 
             //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
             shipments.ForEach(OrderUtility.PopulateOrderDetails);
-            shipments.ForEach(shippingManager.EnsureShipmentLoaded);
+            shipments.ForEach(x => shippingManager.EnsureShipmentLoaded(x));
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
             uspsAccountConvertedToken = messenger.AsObservable<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
