@@ -191,6 +191,7 @@
     </Compile>
     <Compile Include="ShippingPanel\ShippingPanelRegistration.cs" />
     <Compile Include="ShippingPanel\ShippingPanelViewModel.cs" />
+    <Compile Include="ShippingPanel\ShippingPanelViewModel.Properties.cs" />
     <Compile Include="ShippingPanel\ShippingViewModelFactory.cs" />
     <Compile Include="ShippingPanel\Styles\ExpanderState.cs" />
     <Compile Include="ShippingPanel\ValueConverters\OriginAddressListConverter.cs" />

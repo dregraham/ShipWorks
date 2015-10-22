@@ -3,18 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Autofac.Features.OwnedInstances;
-using ShipWorks.Core.Messaging;
-using ShipWorks.AddressValidation;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
-using System.Windows;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.UI.MessageHandlers;
@@ -28,23 +21,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     /// <summary>
     /// Main view model for the shipment panel
     /// </summary>
-    public class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
+    public partial class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
     {
-        private ShippingPanelLoadedShipmentResult loadedShipmentResult;
-        private bool supportsMultiplePackages;
-        private ShipmentTypeCode selectedShipmentType;
-        private ShipmentTypeCode initialShipmentTypeCode;
-        private string requestedShippingMethod;
-        private long originAddressType;
-        private long initialOriginAddressType;
-        private long accountId;
         private readonly PropertyChangedHandler handler;
-        private OrderSelectionLoaded orderSelectionLoaded;
-        private bool allowEditing;
-        private ShippingAddressEditStateType destinationAddressEditableState;
-        private bool supportsAccounts;
-        private string domesticInternationalText;
         private ICarrierShipmentAdapter shipmentAdapter;
+        private OrderSelectionLoaded orderSelectionLoaded;
 
         private bool listenForRateCriteriaChanged = false;
         private bool forceRateCriteriaChanged = false;
@@ -81,16 +62,24 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             listenForRateCriteriaChanged = false;
 
+            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
+
             subscriptions = new CompositeDisposable(
                 shipmentChangedHandler.AsObservable<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
                 shipmentChangedHandler.AsObservable<StoreChangedMessage>().Subscribe(OnStoreChanged),
                 shipmentChangedHandler.AsObservable<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipmentAdapter.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
                 shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
-                shipmentChangedHandler.ShipmentLoadedStream().Do(_ => AllowEditing = true).Subscribe(LoadOrder)
+                shipmentChangedHandler.ShipmentLoadedStream().Do(_ => AllowEditing = true).Subscribe(LoadOrder),
+                handler.Where(x => x == nameof(ShipmentType))
+                    .Where(x => !(shipmentAdapter.Shipment?.Processed ?? true))
+                    .Subscribe(_ => {
+                        shipmentAdapter = shippingManager.ChangeShipmentType(ShipmentType, shipmentAdapter.Shipment);
+                        Populate();
+                    }),
+                handler.Where(x => x == nameof(OriginAddressType))
+                    .Subscribe(_ => Origin.SetAddressFromOrigin(OriginAddressType, shipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType))
             );
             
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
-
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
 
@@ -107,7 +96,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             // Merge the two address view models together so that we can respond to their property changed events
             Observable.Merge(
-                (new List<AddressViewModel>() { Origin, Destination }).Select(
+                (new List<AddressViewModel> { Origin, Destination }).Select(
                     o => Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
                         h => o.PropertyChanged += h,
                         h => o.PropertyChanged -= h
@@ -166,163 +155,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             //        OnRateCriteriaPropertyChanged(null, evt.EventArgs);
             //    });
         }
-
-        /// <summary>
-        /// Command to create a label
-        /// </summary>
-        public ICommand CreateLabelCommand { get; }
-
-        /// <summary>
-        /// Selected shipment type code for the current shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ShipmentTypeCode ShipmentType
-        {
-            get { return selectedShipmentType; }
-            set
-            {
-                if (handler.Set(nameof(ShipmentType), ref selectedShipmentType, value) && (shipmentAdapter.Shipment?.Processed ?? true) == false)
-                {
-                    shipmentAdapter = shippingManager.ChangeShipmentType(ShipmentType, shipmentAdapter.Shipment);
-                    Populate();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Initial shipment type code for the current shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ShipmentTypeCode InitialShipmentTypeCode
-        {
-            get { return initialShipmentTypeCode; }
-            set { handler.Set(nameof(InitialShipmentTypeCode), ref initialShipmentTypeCode, value); }
-        }
-
-        /// <summary>
-        /// Returns "Domestic" or "International" depending on the shipments to/from fields.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string DomesticInternationalText
-        {
-            get { return domesticInternationalText; }
-            set { handler.Set(nameof(DomesticInternationalText), ref domesticInternationalText, value); }
-        }
-
-        /// <summary>
-        /// Method of shipping requested by the customer
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string RequestedShippingMethod
-        {
-            get { return requestedShippingMethod; }
-            set { handler.Set(nameof(RequestedShippingMethod), ref requestedShippingMethod, value); }
-        }
-
-        /// <summary>
-        /// The ShippingPanelLoadedShipmentResult for the selected order
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ShippingPanelLoadedShipmentResult LoadedShipmentResult
-        {
-            get { return loadedShipmentResult; }
-            set { handler.Set(nameof(LoadedShipmentResult), ref loadedShipmentResult, value); }
-        }
-
-        /// <summary>
-        /// Are multiple packages supported
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool SupportsMultiplePackages
-        {
-            get { return supportsMultiplePackages; }
-            set { handler.Set(nameof(SupportsMultiplePackages), ref supportsMultiplePackages, value); }
-        }
-
-        /// <summary>
-        /// Is the loaded shipment processed?
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool AllowEditing
-        {
-            get { return allowEditing; }
-            set { handler.Set(nameof(AllowEditing), ref allowEditing, value); }
-        }
-
-        /// <summary>
-        /// Is the loaded shipment destination address editable?
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ShippingAddressEditStateType DestinationAddressEditableState
-        {
-            get { return destinationAddressEditableState; }
-            set
-            {
-                handler.Set(nameof(DestinationAddressEditableState), ref destinationAddressEditableState, value);
-            }
-        }
-
-        /// <summary>
-        /// Origin address type that should be used
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public long OriginAddressType
-        {
-            get { return originAddressType; }
-            set
-            {
-                if (handler.Set(nameof(OriginAddressType), ref originAddressType, value))
-                {
-                    Origin.SetAddressFromOrigin(OriginAddressType, shipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Original origin address type
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public long InitialOriginAddressType
-        {
-            get { return initialOriginAddressType; }
-            set { handler.Set(nameof(InitialOriginAddressType), ref initialOriginAddressType, value); }
-        }
-
-        /// <summary>
-        /// Id of the account for the shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public long AccountId
-        {
-            get { return accountId; }
-            set { handler.Set(nameof(AccountId), ref accountId, value); }
-        }
-
-        /// <summary>
-        /// The origin address view model.
-        /// </summary>
-        public AddressViewModel Origin { get; }
-
-        /// <summary>
-        /// The destination address view model.
-        /// </summary>
-        public AddressViewModel Destination { get; }
-
-        /// <summary>
-        /// The Shipment view model.
-        /// </summary>
-        public ShipmentViewModel ShipmentViewModel { get; set; }
-
-        /// <summary>
-        /// True if the carrier supports accounts, false otherwise.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool SupportsAccounts
-        {
-            get { return supportsAccounts; }
-            set { handler.Set(nameof(SupportsAccounts), ref supportsAccounts, value); }
-        }
-
+        
         /// <summary>
         /// Save the current shipment to the database
         /// </summary>

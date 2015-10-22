@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:tc="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
+             xmlns:vc="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
              xmlns:shippingshared="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shared"
              xmlns:shipping="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shipping"
              xmlns:shippingcore="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Core"
@@ -30,15 +30,16 @@
                 <ResourceDictionary Source="Styles/ShipWorksExpanderStyle.xaml"/>
                 <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <tc:InvertBooleanConverter x:Key="InvertBoolean" />
-            <tc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
-            <tc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
-            <tc:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
-            <tc:EnumDescriptionConverter x:Key="EnumDescription"></tc:EnumDescriptionConverter>
+            <vc:InvertBooleanConverter x:Key="InvertBoolean" />
+            <vc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+            <vc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
+            <vc:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
+            <vc:EnumDescriptionConverter x:Key="EnumDescription"></vc:EnumDescriptionConverter>
             <valueConverters:ShipmentTypeListConverter x:Key="ShipmentTypeList" />
             <valueConverters:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
             <valueConverters:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
             <valueConverters:OriginAddressListConverter x:Key="OriginAddressList" />
+            <vc:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <Thickness x:Key="SectionMargin" Left="0" Top="6" Right="0" Bottom="0" />
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Gray" />
@@ -118,11 +119,11 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <TextBlock Grid.Row="0" Grid.Column="0"
-                                        Visibility="{Binding AccountVisibility}"
+                                        Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
                                         Style="{StaticResource GridLabel}">Account:</TextBlock>
                                     <ComboBox Grid.Row="0" Grid.Column="1"
                                         x:Name="AccountDropDown"
-                                        Visibility="{Binding AccountVisibility}"
+                                        Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
                                         props:SelectDefaultWhenValueIsNull.RelativeIndex="First"
                                         props:UpdateWhenMessageReceived.MessageType="{x:Type messages:ShippingAccountsChangedMessage}"
                                         SelectedValue="{Binding AccountId}"
