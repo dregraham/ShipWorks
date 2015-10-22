@@ -26,13 +26,13 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
         /// Gets a stream of order changing messages
         /// </summary>
         /// <returns></returns>
-        public IObservable<OrderSelectionChangingMessage> OrderChangingStream() =>
+        public virtual IObservable<OrderSelectionChangingMessage> OrderChangingStream() =>
             messenger.AsObservable<OrderSelectionChangingMessage>();
 
         /// <summary>
         /// Gets a stream of the most recent order changed messages
         /// </summary>
-        public IObservable<OrderSelectionChangedMessage> ShipmentLoadedStream()
+        public virtual IObservable<OrderSelectionChangedMessage> ShipmentLoadedStream()
         {
             return messenger.AsObservable<OrderSelectionChangingMessage>()
                 .CombineLatest(messenger.AsObservable<OrderSelectionChangedMessage>(), (x, y) => new { OrderIdList = x.OrderIdList, Message = y })
@@ -43,11 +43,11 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
         /// <summary>
         /// Exposes messages as an observable stream
         /// </summary>
-        public IObservable<T> AsObservable<T>() where T : IShipWorksMessage => messenger.AsObservable<T>();
+        public virtual IObservable<T> AsObservable<T>() where T : IShipWorksMessage => messenger.AsObservable<T>();
 
         /// <summary>
         /// Send a message to the underlying messenger
         /// </summary>
-        public void Send<T>(T message) where T : IShipWorksMessage => messenger.Send(message);
+        public virtual void Send<T>(T message) where T : IShipWorksMessage => messenger.Send(message);
     }
 }

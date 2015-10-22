@@ -377,7 +377,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             // Save UI values to the shipment so we can send the new values to the rates panel
             Save();
 
-            shipmentChangedHandler.Send(new ShipmentChangedMessage(this, shipmentAdapter.Shipment));
+            shipmentChangedHandler.Send(new ShipmentChangedMessage(this, shipmentAdapter));
         }
 
         /// <summary>

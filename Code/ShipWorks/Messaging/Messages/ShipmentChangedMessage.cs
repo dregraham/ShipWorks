@@ -14,12 +14,11 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentChangedMessage(object sender, ShipmentEntity shipment)
+        public ShipmentChangedMessage(object sender, ICarrierShipmentAdapter shipment)
         {
             Sender = sender;
-
-            ICarrierShipmentAdapterFactory shipmentAdapterFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
-            ShipmentAdapter = shipmentAdapterFactory.Get(shipment);
+            
+            ShipmentAdapter = shipment;
         }
 
         /// <summary>

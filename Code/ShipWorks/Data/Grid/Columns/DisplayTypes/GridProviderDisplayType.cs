@@ -18,6 +18,9 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.ApplicationCore;
+using Autofac;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -146,8 +149,11 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             CustomsManager.LoadCustomsItems(shipment, false);
 
             Program.MainForm.ForceHeartbeat();
-            
-            messenger.Send(new ShipmentChangedMessage(this, shipment));
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                messenger.Send(new ShipmentChangedMessage(this, lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>().Get(shipment)));
+            }
         }
     }
 }

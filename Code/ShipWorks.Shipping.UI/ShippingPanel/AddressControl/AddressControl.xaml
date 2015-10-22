@@ -148,11 +148,6 @@
             <ListBox Padding="25,6,10,6"
                      ItemsSource="{Binding AddressSuggestions}"
                      DisplayMemberPath="Key">
-                <!--<ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding }" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>-->
             </ListBox>
         </Popup>
     </StackPanel>

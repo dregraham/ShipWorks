@@ -38,6 +38,7 @@ using Timer = System.Windows.Forms.Timer;
 using System.Threading.Tasks;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping
 {
@@ -2310,7 +2311,8 @@ namespace ShipWorks.Shipping
             ErrorManager.Clear();
 
             // If shipments have been removed from the dlg before closing, this may not be an accurate representation of what has changed.
-            loadedShipmentEntities.ForEach(shipment => messenger.Send(new ShipmentChangedMessage(this, shipment)));
+            ICarrierShipmentAdapterFactory adapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
+            loadedShipmentEntities.ForEach(shipment => messenger.Send(new ShipmentChangedMessage(this, adapterFactory.Get(shipment))));
         }
 
         /// <summary>
