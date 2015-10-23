@@ -1143,6 +1143,7 @@
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
     <Compile Include="Stores\Content\IOrderUtility.cs" />
     <Compile Include="Stores\Content\OrderUtilityWrapper.cs" />
+    <Compile Include="Stores\IStoreTypeManager.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonLatestExpectedDeliveryDateCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonEarliestExpectedDeliveryDateCondition.cs" />
     <Compile Include="Stores\IStoreManager.cs" />

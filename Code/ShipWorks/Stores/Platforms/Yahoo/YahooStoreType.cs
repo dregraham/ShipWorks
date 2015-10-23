@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using log4net;
+using Quartz.Util;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email.Accounts;
 using ShipWorks.UI.Wizard;
@@ -47,19 +48,31 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
-            get 
+            get
             {
-                EmailAccountEntity account = EmailAccountManager.GetAccount(((YahooStoreEntity) Store).YahooEmailAccountID);
+                string storeID = ((YahooStoreEntity) Store).YahooStoreID;
 
-                // If the account was deleted we have to create a made up license that obviously will not be activated to them
-                if (account == null)
+                if (storeID.IsNullOrWhiteSpace())
                 {
-                    return $"{Guid.NewGuid()}@noaccount.com";
-                }
+                    EmailAccountEntity account =
+                        EmailAccountManager.GetAccount(((YahooStoreEntity) Store).YahooEmailAccountID);
 
-                return account.IncomingUsername;
+                    // If the account was deleted we have to create a made up license that obviously will not be activated to them
+                    if (account == null)
+                    {
+                        return $"{Guid.NewGuid()}@noaccount.com";
+                    }
+
+                    return account.IncomingUsername;
+                }
+                else
+                {
+                    return storeID;
+                }
             }
         }
+
+        public string AccountSettingsHelpUrl => "http://www.shipworks.com/shipworks/help/Yahoo_Email_Account.html";
 
         /// <summary>
         /// Create a new default initialized instance of the store type
@@ -72,7 +85,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
             store.YahooEmailAccountID = 0;
             store.TrackingUpdatePassword = "";
-
+            store.YahooStoreID = "";
+            store.AccessToken = "";
+            
             return store;
         }
 
