@@ -178,6 +178,8 @@ namespace ShipWorks.Data.Grid
         /// </summary>
         protected override void DrawVirtualCell(RenderingContext context, GridColumn baseColumn, object value, Font font, Image image, Rectangle bounds, bool selected, TextFormattingInformation textFormat, Color foreColor)
         {
+            Checked = selected;
+
             GridColumnFormattedValue formattedValue = GetFormattedValue(baseColumn);
 
             bool disposeFont = false;
