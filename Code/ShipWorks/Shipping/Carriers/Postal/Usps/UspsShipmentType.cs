@@ -898,7 +898,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Determines whether country is eligible for free international delivery confirmation.
+        /// Returns a list of countries eligible for free international delivery confirmation.
         /// </summary>
         /// <returns></returns>
         protected override List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()

@@ -599,7 +599,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public bool IsFreeInternationalDeliveryConfirmation(string countryCode, PostalServiceType serviceType, PostalPackagingType packagingType)
         {
-            if (CountriesEligibleForFreeInternationalDeliveryConfirmation().Contains(countryCode))
+            if (CountriesEligibleForFreeInternationalDeliveryConfirmation().Contains(countryCode, StringComparer.OrdinalIgnoreCase))
             {
                 if (packagingType == PostalPackagingType.FlatRateSmallBox)
                 {
@@ -628,9 +628,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             return false;
         }
-        
+
         /// <summary>
-        /// Determines whether country is eligible for free international delivery confirmation.
+        /// Returns a list of countries eligible for free international delivery confirmation.
         /// </summary>
         protected virtual List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
         {
