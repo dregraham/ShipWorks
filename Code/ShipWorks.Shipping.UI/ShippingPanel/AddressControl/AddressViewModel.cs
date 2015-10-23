@@ -26,11 +26,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         private readonly IAddressValidator validator;
         private readonly PropertyChangedHandler handler;
         private readonly IShippingOriginManager shippingOriginManager;
-        private IDisposable addressValidationSubscriptions;
         private readonly IMessageHelper messageHelper;
         private readonly IValidatedAddressScope validatedAddressScope;
+        private readonly IAddressSelector addressSelector;
+        private IDisposable addressValidationSubscriptions;
         private long? entityId;
         private string prefix;
+        private AddressAdapter lastValidatedAddress;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -47,12 +49,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// Constructor
         /// </summary>
         public AddressViewModel(IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
-            IValidatedAddressScope validatedAddressScope, IAddressValidator validator)
+            IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
         {
             this.validator = validator;
             this.shippingOriginManager = shippingOriginManager;
             this.messageHelper = messageHelper;
             this.validatedAddressScope = validatedAddressScope;
+            this.addressSelector = addressSelector;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
@@ -87,23 +90,23 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// </summary>
         public virtual void Load(PersonAdapter person)
         {
+            Populate(person);
+
             if (person.Entity != null)
             {
                 entityId = EntityUtility.GetEntityId(person.Entity);
                 prefix = person.FieldPrefix;
 
                 IEnumerable<ValidatedAddressEntity> validatedAddresses = validatedAddressScope.LoadValidatedAddresses(entityId.GetValueOrDefault(), prefix);
+                AddressSuggestions = BuildDictionary(validatedAddresses);
 
-
-                SetValidationDetails(person, validatedAddresses);
+                SetValidationDetails(person);
             }
             else
             {
                 entityId = null;
                 prefix = null;
             }
-
-            Populate(person);
         }
 
         /// <summary>
@@ -126,12 +129,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// <summary>
         /// Set address validation details
         /// </summary>
-        private void SetValidationDetails(PersonAdapter person, IEnumerable<ValidatedAddressEntity> validatedAddresses)
+        private void SetValidationDetails(PersonAdapter person)
         {
-            AddressSuggestions = BuildDictionary(validatedAddresses);
             ValidationMessage = person.AddressValidationError;
             SuggestionCount = person.AddressValidationSuggestionCount;
             ValidationStatus = (AddressValidationStatusType)person.AddressValidationStatus;
+
+            lastValidatedAddress = new AddressAdapter();
+            person.CopyTo(lastValidatedAddress);
+            person.ConvertTo<AddressAdapter>().CopyValidationDataTo(lastValidatedAddress);
         }
 
         /// <summary>
@@ -187,11 +193,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
                 }
 
                 validatedAddressScope.StoreAddresses(entityId.GetValueOrDefault(), validatedAddresses, prefix);
+                AddressSuggestions = BuildDictionary(validatedAddresses);
 
                 SuggestionCount = Math.Max(0, count);
 
                 Populate(adapter);
-                SetValidationDetails(adapter, validatedAddresses);
+                SetValidationDetails(adapter);
             });
         }
 
@@ -202,9 +209,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         {
             addressValidationSubscriptions?.Dispose();
 
-            Populate(new PersonAdapter(addressSuggestion, string.Empty));
-            ValidationStatus = addressSuggestion.IsOriginal ? 
-                AddressValidationStatusType.SuggestionIgnored : AddressValidationStatusType.SuggestionSelected;
+            PersonAdapter person = new PersonAdapter(new ValidatedAddressEntity(), string.Empty);
+            SaveToEntity(person);
+            
+            addressSelector.SelectAddress(person.ConvertTo<AddressAdapter>(), addressSuggestion);
+
+            Populate(person);
+            SetValidationDetails(person);
+            //ValidationStatus = addressSuggestion.IsOriginal ? 
+            //    AddressValidationStatusType.SuggestionIgnored : AddressValidationStatusType.SuggestionSelected;
 
             SetupAddressValidationMessagePropertyHandlers();
         }
