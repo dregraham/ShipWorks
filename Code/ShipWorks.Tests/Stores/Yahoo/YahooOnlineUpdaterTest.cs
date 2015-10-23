@@ -8,6 +8,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Platforms.Yahoo;
+using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
 
 namespace ShipWorks.Tests.Stores.Yahoo
 {
@@ -38,7 +39,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Endicia;
             shipmentEntity.Postal = postalShipmentEntity;
 
-            string carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("Dhl", carrierCode);
         }
@@ -50,7 +51,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
             shipmentEntity.Postal = postalShipmentEntity;
 
-            string carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("Dhl", carrierCode);
         }
@@ -62,7 +63,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
             shipmentEntity.Postal = postalShipmentEntity;
 
-            string carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("Consolidator", carrierCode);
         }
@@ -74,7 +75,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
             shipmentEntity.Postal = postalShipmentEntity;
 
-            string carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("Usps", carrierCode);
         }
@@ -86,7 +87,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
             shipmentEntity.Postal = postalShipmentEntity;
 
-            string carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("Usps", carrierCode);
         }
@@ -98,7 +99,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
             shipmentEntity.Other = otherShipmentEntity;
 
-            string carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("Usps", carrierCode);
         }
@@ -110,7 +111,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
             shipmentEntity.Other = otherShipmentEntity;
 
-            string carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("Ups", carrierCode);
         }
@@ -122,7 +123,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
             shipmentEntity.Other = otherShipmentEntity;
 
-            string carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("Fedex", carrierCode);
         }
@@ -134,7 +135,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
             shipmentEntity.Other = otherShipmentEntity;
 
-            string carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("DHL", carrierCode);
         }
@@ -146,7 +147,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
             shipmentEntity.Ups = upsEntity;
 
-            string carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("Usps", carrierCode);
         }
@@ -159,12 +160,12 @@ namespace ShipWorks.Tests.Stores.Yahoo
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
             shipmentEntity.Ups = upsEntity;
 
-            string carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            string carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("Ups", carrierCode);
 
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.UpsWorldShip;
-            carrierCode = YahooOnlineUpdater.GetShipperString(shipmentEntity);
+            carrierCode = YahooEmailOnlineUpdater.GetShipperString(shipmentEntity);
 
             Assert.Equal("Ups", carrierCode);
         }

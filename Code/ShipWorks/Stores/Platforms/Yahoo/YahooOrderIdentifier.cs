@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Content;
+﻿using ShipWorks.Stores.Content;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Yahoo
@@ -13,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
     public class YahooOrderIdentifier : OrderIdentifier
     {
         // Yahoo's Order ID
-        string yahooOrderID = "";
+        readonly string yahooOrderID = "";
 
         /// <summary>
         /// Constructor
@@ -45,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override string ToString()
         {
-            return string.Format("YahooOrderID:{0}", yahooOrderID);
+            return $"YahooOrderID:{yahooOrderID}";
         }
 
     }

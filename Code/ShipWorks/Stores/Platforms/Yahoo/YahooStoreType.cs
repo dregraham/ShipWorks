@@ -1,27 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email.Accounts;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.Yahoo.WizardPages;
-using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
 using ShipWorks.Stores.Management;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Grid;
+using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
+using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages;
 
 namespace ShipWorks.Stores.Platforms.Yahoo
 {
@@ -47,10 +39,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// The type code of the store.
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.Yahoo; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Yahoo;
 
         /// <summary>
         /// License identifier to uniquely identify the store
@@ -64,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 // If the account was deleted we have to create a made up license that obviously will not be activated to them
                 if (account == null)
                 {
-                    return string.Format("{0}@noaccount.com", Guid.NewGuid());
+                    return $"{Guid.NewGuid()}@noaccount.com";
                 }
 
                 return account.IncomingUsername;
@@ -136,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override StoreDownloader CreateDownloader()
         {
-            return new YahooDownloader((YahooStoreEntity) Store);
+            return new YahooEmailDownloader((YahooStoreEntity) Store);
         }
 
         /// <summary>
@@ -144,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            return new YahooAccountSettingsControl();
+            return new YahooEmailAccountSettingsControl();
         }
 
         /// <summary>
@@ -152,7 +141,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override StoreSettingsControlBase CreateStoreSettingsControl()
         {
-            return new YahooStoreSettingsControl();
+            return new YahooEmailStoreSettingsControl();
         }
 
         /// <summary>
@@ -233,7 +222,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
             try
             {
-                YahooOnlineUpdater updater = new YahooOnlineUpdater();
+                YahooEmailOnlineUpdater updater = new YahooEmailOnlineUpdater();
                 EmailOutboundEntity email = updater.GenerateOrderShipmentUpdateEmail(orderID);
 
                 if (email != null)

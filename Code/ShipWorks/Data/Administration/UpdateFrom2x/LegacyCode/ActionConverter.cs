@@ -29,7 +29,7 @@ using ShipWorks.Stores.Platforms.Volusion.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.OrderMotion.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.CommerceInterface.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.NetworkSolutions.CoreExtensions.Actions;
@@ -324,7 +324,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 case "MarketWorksParcelPromoteTask": return CreateTaskType<MarketplaceAdvisorPromoteParcelTask>(store);
                 case "MarketWorksOrderFlagsTask": return LoadMarketworksFlagsTask(CreateTaskType<MarketplaceAdvisorChangeOrderFlagsTask>(store), xTask);
                 case "MarketWorksParcelFlagsTask": return LoadMarketworksFlagsTask(CreateTaskType<MarketplaceAdvisorChangeParcelFlagsTask>(store), xTask);
-                case "YahooShipmentUpdateTask": return CreateTaskType<YahooShipmentUploadTask>(store);
+                case "YahooShipmentUpdateTask": return CreateTaskType<YahooEmailShipmentUploadTask>(store);
                 case "AmazonShipmentUpdateTask": return CreateTaskType<AmazonShipmentUploadTask>(store);
                 case "AuctionSoundShipmentUpdateTask": return CreateTaskType<GenericStoreShipmentUploadTask>(store);
                 case "ClickCartProShipmentUpdateTask": return LoadGenericOrderUpdateTask(CreateTaskType<GenericStoreOrderUpdateTask>(store), xTask);
