@@ -146,6 +146,8 @@
     <Compile Include="Custom\EntityClasses\UserEntity.cs" />
     <Compile Include="Custom\EntityPersistedAction.cs" />
     <Compile Include="Custom\EntityPersistedEvent.cs" />
+    <Compile Include="EntityClasses\ExcludedPackageTypeEntity.cs" />
+    <Compile Include="EntityClasses\ExcludedServiceTypeEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Custom\EntityClasses\FilterNodeEntity.cs" />
     <AppDesigner Include="Properties\" />
@@ -1182,13 +1184,33 @@
     <Compile Include=".\RelationClasses\GrouponOrderItemRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
+    <Compile Include="RelationClasses\ExcludedPackageTypeRelations.cs" />
+    <Compile Include="RelationClasses\ExcludedServiceTypeRelations.cs" />
+    <Compile Include=".\EntityClasses\LemonStandStoreEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\LemonStandStoreRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\LemonStandOrderEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\LemonStandOrderRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\LemonStandOrderItemRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\LemonStandOrderItemEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\ExcludedPackageTypeEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
     <Compile Include=".\EntityClasses\ExcludedServiceTypeEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\ExcludedPackageTypeRelations.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\EntityClasses\ExcludedPackageTypeEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\ExcludedServiceTypeRelations.cs">

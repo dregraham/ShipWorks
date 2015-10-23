@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Stores
 {
@@ -70,11 +71,20 @@ namespace ShipWorks.Stores
             return GetType(typeCode, null);
         }
 
+
+        /// <summary>
+        /// Get the ShipmentType based on the given type code
+        /// </summary>
+        public static StoreType GetType(StoreTypeCode typeCode, StoreEntity store)
+        {
+            return GetType(typeCode, store, IoC.UnsafeGlobalLifetimeScope);
+        }
+
         /// <summary>
         /// Return the StoreType for the given store type.  If store is not null,
         /// then any "instance" methods of the StoreType will use it.
         /// </summary>
-        private static StoreType GetType(StoreTypeCode typeCode, StoreEntity store)
+        private static StoreType GetType(StoreTypeCode typeCode, StoreEntity store, ILifetimeScope lifetimeScope)
         {
             switch (typeCode)
             {
@@ -146,7 +156,12 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.OpenSky: return new Platforms.OpenSky.OpenSkyStoreType(store);
             }
 
-            throw new InvalidOperationException("Invalid store type.");
+            if (lifetimeScope.IsRegisteredWithKey<StoreType>(typeCode))
+            {
+                return lifetimeScope.ResolveKeyed<StoreType>(typeCode, new TypedParameter(typeof(StoreEntity), store));
+            }
+
+            throw new InvalidOperationException("Invalid store type. " + typeCode);
         }
 
         /// <summary>

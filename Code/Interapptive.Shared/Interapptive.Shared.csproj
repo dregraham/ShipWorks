@@ -115,8 +115,8 @@
     <Compile Include="Collections\ArrayUtility.cs" />
     <Compile Include="Collections\CollectionChangedEvent.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
-    <Compile Include="Utility\ActionRetry.cs" />
     <Compile Include="InterapptiveOnly.cs" />
+    <Compile Include="Utility\ActionRetry.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
     <Compile Include="Collections\LruCache.cs" />
     <Compile Include="Collections\LruCacheItemRemovedEvent.cs" />

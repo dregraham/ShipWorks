@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms.GenericModule;
+﻿using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.ZenCart
@@ -26,23 +21,16 @@ namespace ShipWorks.Stores.Platforms.ZenCart
         /// <summary>
         /// Gets the store typecode for this store
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.ZenCart;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.ZenCart;
 
         /// <summary>
         /// Log request/responses as ZenCart
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.ZenCart;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.ZenCart;
+
+        /// <summary>
+        /// Gets the account settings help URL.
+        /// </summary>
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/129354";
     }
 }
