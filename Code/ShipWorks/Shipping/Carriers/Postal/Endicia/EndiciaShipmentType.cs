@@ -269,7 +269,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // If we don't know the packaging or country, it doesn't matter
             if (!string.IsNullOrWhiteSpace(countryCode) && packaging != null)
             {
-                if (PostalUtility.IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
+                if (IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
                 {
                     availablePostalConfirmationTypes.Add(PostalConfirmationType.Delivery);
                     return availablePostalConfirmationTypes;

@@ -137,9 +137,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
             postal.SortType = (int) PostalSortType.Nonpresorted;
             postal.EntryFacility = (int) PostalEntryFacility.Other;
 
-            postal.Memo1 = string.Empty;
-            postal.Memo2 = string.Empty;
-            postal.Memo3 = string.Empty;
+            postal.Memo1 = String.Empty;
+            postal.Memo2 = String.Empty;
+            postal.Memo3 = String.Empty;
 
             postal.NoPostage = false;
         }
@@ -321,7 +321,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
-            return string.Format("USPS {0}", EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service));
+            return String.Format("USPS {0}", EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service));
         }
 
         /// <summary>
@@ -595,6 +595,58 @@ namespace ShipWorks.Shipping.Carriers.Postal
             adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.CriticalMail, PostalPackagingType.LargeEnvelope));
 
             return adultSignatureAllowed;
+        }
+
+        /// <summary>
+        /// Indicates if the combination of country, service, and packaging qualifies for the free international delivery confirmation
+        /// </summary>
+        public bool IsFreeInternationalDeliveryConfirmation(string countryCode, PostalServiceType serviceType, PostalPackagingType packagingType)
+        {
+            if (CountriesEligibleForFreeInternationalDeliveryConfirmation().Contains(countryCode, StringComparer.OrdinalIgnoreCase))
+            {
+                if (packagingType == PostalPackagingType.FlatRateSmallBox)
+                {
+                    return true;
+                }
+
+                if (serviceType == PostalServiceType.InternationalPriority)
+                {
+                    switch (packagingType)
+                    {
+                        case PostalPackagingType.FlatRateEnvelope:
+                        case PostalPackagingType.FlatRateLegalEnvelope:
+                        case PostalPackagingType.FlatRatePaddedEnvelope:
+                            return true;
+                    }
+                }
+
+                if (serviceType == PostalServiceType.InternationalFirst)
+                {
+                    if (!PostalUtility.IsEnvelopeOrFlat(packagingType))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns a list of countries eligible for free international delivery confirmation.
+        /// </summary>
+        protected virtual List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
+        {
+            // Allowable country codes include Australia, Belgium, Brazil, Canada, Croatia, Denmark, Estonia, Finland,
+            // France, Germany, Gibraltar, Great Britain, Hungary, Northern Ireland, Israel, Italy, Latvia, Lithuania, Luxembourg, Malaysia, 
+            // Malta, Netherlands, New Zealand, Portugal, Singapore, Spain, Switzerland
+            List<string> eligibleCountryCodes = new List<string>
+            {
+                "AU", "BE", "BR", "CA", "HR", "DK", "FR", "DE", "GB", "NB", "IL", "NL", "NZ", "ES", "CH",
+                "EE", "FI", "GI", "HU", "IT", "LV", "LT", "LU", "MY", "MT", "PT", "SG"
+            };
+
+            return eligibleCountryCodes;
         }
     }
 }
