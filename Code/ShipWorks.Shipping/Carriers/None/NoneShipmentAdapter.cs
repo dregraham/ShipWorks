@@ -96,7 +96,6 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <summary>
         /// Updates shipment dynamic data, total weight, etc
         /// </summary>
-        /// <param name="validatedAddressScope"></param>
         /// <returns>Dictionary of shipments and exceptions.</returns>
         public IDictionary<ShipmentEntity, Exception> UpdateDynamicData()
         {
