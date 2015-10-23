@@ -98,6 +98,7 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Yahoo\YahooStoreModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

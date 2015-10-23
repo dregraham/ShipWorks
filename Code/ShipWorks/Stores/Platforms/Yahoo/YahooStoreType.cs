@@ -11,6 +11,7 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Email;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages;
@@ -82,9 +83,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             return new List<WizardPage>
                 {
-                    new YahooEmailAccountPage(),
-                    new YahooProductWeightsPage(),
-                    new YahooOnlineUpdatePage()
+                    new YahooAccountPageHost()
                 };
         }
 

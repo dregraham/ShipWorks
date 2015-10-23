@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages
         {
             if (statusUpdate.Checked)
             {
-                return new List<ActionTask> { new ActionTaskDescriptorBinding(typeof(YahooShipmentUploadTask), store).CreateInstance() };
+                return new List<ActionTask> { new ActionTaskDescriptorBinding(typeof(YahooEmailShipmentUploadTask), store).CreateInstance() };
             }
 
             return null;

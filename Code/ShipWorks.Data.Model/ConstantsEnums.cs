@@ -10738,6 +10738,10 @@ namespace ShipWorks.Data.Model
 		YahooEmailAccountID,
 		///<summary>TrackingUpdatePassword. </summary>
 		TrackingUpdatePassword,
+		///<summary>YahooStoreID. </summary>
+		YahooStoreID,
+		///<summary>AccessToken. </summary>
+		AccessToken,
 		/// <summary></summary>
 		AmountOfFields
 	}

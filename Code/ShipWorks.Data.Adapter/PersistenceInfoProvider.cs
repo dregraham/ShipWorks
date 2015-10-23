@@ -3130,10 +3130,12 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits YahooStoreEntity's mappings</summary>
 		private void InitYahooStoreEntityMappings()
 		{
-			base.AddElementMapping( "YahooStoreEntity", "ShipWorksLocal", @"dbo", "YahooStore", 3 );
+			base.AddElementMapping( "YahooStoreEntity", "ShipWorksLocal", @"dbo", "YahooStore", 5 );
 			base.AddElementFieldMapping( "YahooStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "YahooStoreEntity", "YahooEmailAccountID", "YahooEmailAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "YahooStoreEntity", "TrackingUpdatePassword", "TrackingUpdatePassword", false, (int)SqlDbType.VarChar, 100, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "YahooStoreEntity", "YahooStoreID", "YahooStoreID", false, (int)SqlDbType.VarChar, 100, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "YahooStoreEntity", "AccessToken", "AccessToken", false, (int)SqlDbType.VarChar, 200, 0, 0, false, "", null, typeof(System.String), 4 );
 		}
 
 	}

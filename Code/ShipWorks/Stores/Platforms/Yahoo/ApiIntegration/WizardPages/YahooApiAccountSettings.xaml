@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages.YahooApiAccountSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="480">
+    <Grid>
+        <Label x:Name="label" Content="Please enter your Yahoo store ID and access token" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="StoreIdTextBox" HorizontalAlignment="Left" Height="26" Margin="111,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="359"/>
+        <Label x:Name="label1" Content="Store ID:" HorizontalAlignment="Left" Margin="51,37,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label2" Content="Access Token:" HorizontalAlignment="Left" Margin="24,68,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="accessTokenTextBox" HorizontalAlignment="Left" Height="23" Margin="111,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="359"/>
+        <Label x:Name="label3" Content="For help adding your Yahoo store," HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="199,105,0,0" TextWrapping="Wrap" Text="click here" VerticalAlignment="Top">
+            <Hyperlink NavigateUri="http://support.shipworks.com/support/home">click here</Hyperlink>    
+        </TextBlock>
+
+    </Grid>
+</UserControl>

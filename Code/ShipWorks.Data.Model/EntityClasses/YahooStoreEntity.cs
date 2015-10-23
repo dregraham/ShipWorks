@@ -512,6 +512,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("TrackingUpdatePassword", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("YahooStoreID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("AccessToken", fieldHashtable);
 		}
 		#endregion
 
@@ -648,6 +654,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)YahooStoreFieldIndex.TrackingUpdatePassword, true); }
 			set	{ SetValue((int)YahooStoreFieldIndex.TrackingUpdatePassword, value); }
+		}
+
+		/// <summary> The YahooStoreID property of the Entity YahooStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "YahooStore"."YahooStoreID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String YahooStoreID
+		{
+			get { return (System.String)GetValue((int)YahooStoreFieldIndex.YahooStoreID, true); }
+			set	{ SetValue((int)YahooStoreFieldIndex.YahooStoreID, value); }
+		}
+
+		/// <summary> The AccessToken property of the Entity YahooStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "YahooStore"."AccessToken"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 200<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AccessToken
+		{
+			get { return (System.String)GetValue((int)YahooStoreFieldIndex.AccessToken, true); }
+			set	{ SetValue((int)YahooStoreFieldIndex.AccessToken, value); }
 		}
 
 

@@ -23012,6 +23012,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.TrackingUpdatePassword);}
 		}
+		/// <summary>Creates a new YahooStoreEntity.YahooStoreID field instance</summary>
+		public static EntityField2 YahooStoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.YahooStoreID);}
+		}
+		/// <summary>Creates a new YahooStoreEntity.AccessToken field instance</summary>
+		public static EntityField2 AccessToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.AccessToken);}
+		}
 	}
 	
 
