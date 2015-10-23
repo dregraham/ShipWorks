@@ -34,6 +34,14 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         }
 
         [Fact]
+        public void Apply_AddsVoidedToExpression()
+        {
+            predicate.Apply(pred);
+
+            Assert.True(pred.ContainsPredicate(ShipmentFields.Voided == false));
+        }
+
+        [Fact]
         public void MaximumRows_ReturnsLimitOf50()
         {
             int result = predicate.MaximumRows;
