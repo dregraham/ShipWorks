@@ -37,6 +37,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             shipmentTypeMock.Setup(b => b.UpdateTotalWeight(shipment)).Verifiable();
             shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
             shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
+            shipmentTypeMock.Setup(b => b.ShipmentTypeCode).Returns(() => shipmentType.ShipmentTypeCode);
 
             shipmentTypeFactory = new Mock<IShipmentTypeFactory>();
             shipmentTypeFactory.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
@@ -91,6 +92,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void ShipmentTypeCode_IsUsps()
         {
+            var testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(ShipmentTypeCode.Usps, testObject.ShipmentTypeCode);
+        }
+
+        [Fact]
+        public void ShipmentTypeCode_IsExpress1Usps()
+        {
+            shipment.ShipmentTypeCode = ShipmentTypeCode.Express1Usps;
             var testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
             Assert.Equal(ShipmentTypeCode.Usps, testObject.ShipmentTypeCode);
         }

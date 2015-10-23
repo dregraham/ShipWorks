@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             get
             {
-                return ShipmentTypeCode.Endicia;
+                return shipmentType.ShipmentTypeCode;
             }
         }
 
@@ -99,7 +99,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Updates shipment dynamic data, total weight, etc
         /// </summary>
-        /// <param name="validatedAddressScope"></param>
         /// <returns>Dictionary of shipments and exceptions.</returns>
         public IDictionary<ShipmentEntity, Exception> UpdateDynamicData()
         {

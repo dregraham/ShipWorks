@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
             shipmentTypeMock.Setup(b => b.UpdateTotalWeight(shipment)).Verifiable();
             shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
             shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
+            shipmentTypeMock.Setup(b => b.ShipmentTypeCode).Returns(() => shipmentType.ShipmentTypeCode);
 
             shipmentTypeFactory = new Mock<IShipmentTypeFactory>();
             shipmentTypeFactory.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
@@ -94,6 +95,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         [Fact]
         public void ShipmentTypeCode_IsEndicia()
         {
+            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(ShipmentTypeCode.Endicia, testObject.ShipmentTypeCode);
+        }
+
+        [Fact]
+        public void ShipmentTypeCode_IsExpress1Endicia()
+        {
+            shipment.ShipmentTypeCode = ShipmentTypeCode.Express1Endicia;
             var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
             Assert.Equal(ShipmentTypeCode.Endicia, testObject.ShipmentTypeCode);
         }
