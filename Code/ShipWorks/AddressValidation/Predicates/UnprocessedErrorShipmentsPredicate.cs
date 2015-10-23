@@ -21,7 +21,7 @@ namespace ShipWorks.AddressValidation.Predicates
             DateTime validationThreshold = DateTime.UtcNow.AddDays(-7);
 
             predicate.Add(ShipmentFields.ShipAddressValidationStatus == (int) AddressValidationStatusType.Error)
-                .Add(ShipmentFields.Processed == false)
+                .Add(ShipmentFields.Processed == false & ShipmentFields.Voided == false)
                 .Add(new FieldCompareSetPredicate(ShipmentFields.OrderID, null, OrderFields.OrderID, null, SetOperator.In, OrderFields.OrderDate > validationThreshold));
         }
 

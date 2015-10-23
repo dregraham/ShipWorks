@@ -424,7 +424,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
                 if (serviceType == PostalServiceType.InternationalFirst)
                 {
-                    if (!PostalUtility.IsEnvelopeOrFlat(packagingType))
+                    if (!IsEnvelopeOrFlat(packagingType))
                     {
                         return true;
                     }
@@ -445,11 +445,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             // Allowable country codes include Australia, Belgium, Brazil, Canada, Croatia, Denmark, Estonia, Finland,
             // France, Germany, Gibraltar, Great Britain, Hungary, Northern Ireland, Israel, Italy, Latvia, Lithuania, Luxembourg, Malaysia, 
-            // Malta, Netherlands, New Zealand, Portugal, Singapore, Spain, and Switzerland
+            // Malta, Netherlands, New Zealand, Portugal, Singapore, Spain, Switzerland, Poland and Mexico
             List<string> eligibleCountryCodes = new List<string>
             {
-                "AU", "BE", "BR", "CA", "HR", "DK", "FR", "DE", "GB", "NB", "IL", "NL", "NZ", "ES", "CH", 
-                "EE", "FI", "GI", "HU", "IT", "LV", "LT", "LU", "MY", "MT", "PT", "SG"
+                "AU", "BE", "BR", "CA", "HR", "DK", "FR", "DE", "GB", "NB", "IL", "NL", "NZ", "ES", "CH",
+                "EE", "FI", "GI", "HU", "IT", "LV", "LT", "LU", "MY", "MT", "PT", "SG", "PL", "MX"
             };
 
             return eligibleCountryCodes.Contains(countryCode);
