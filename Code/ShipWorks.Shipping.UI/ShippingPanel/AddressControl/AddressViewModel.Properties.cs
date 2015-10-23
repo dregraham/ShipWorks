@@ -33,6 +33,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         public ICommand ShowValidationMessageCommand { get; private set; }
 
         /// <summary>
+        /// Select a validated address suggestion
+        /// </summary>
+        public ICommand SelectAddressSuggestionCommand { get; private set; }
+
+        /// <summary>
         /// Full name
         /// </summary>
         [Obfuscation(Exclude = true)]
