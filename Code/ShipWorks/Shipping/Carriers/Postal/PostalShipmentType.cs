@@ -599,7 +599,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public bool IsFreeInternationalDeliveryConfirmation(string countryCode, PostalServiceType serviceType, PostalPackagingType packagingType)
         {
-            if (IsCountryEligibleForFreeInternationalDeliveryConfirmation().Contains(countryCode))
+            if (CountriesEligibleForFreeInternationalDeliveryConfirmation().Contains(countryCode))
             {
                 if (packagingType == PostalPackagingType.FlatRateSmallBox)
                 {
@@ -628,13 +628,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             return false;
         }
-
-
+        
         /// <summary>
         /// Determines whether country is eligible for free international delivery confirmation.
         /// </summary>
-        /// <returns></returns>
-        protected virtual List<string> IsCountryEligibleForFreeInternationalDeliveryConfirmation()
+        protected virtual List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
         {
             // Allowable country codes include Australia, Belgium, Brazil, Canada, Croatia, Denmark, Estonia, Finland,
             // France, Germany, Gibraltar, Great Britain, Hungary, Northern Ireland, Israel, Italy, Latvia, Lithuania, Luxembourg, Malaysia, 

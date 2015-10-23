@@ -901,9 +901,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Determines whether country is eligible for free international delivery confirmation.
         /// </summary>
         /// <returns></returns>
-        protected override List<string> IsCountryEligibleForFreeInternationalDeliveryConfirmation()
+        protected override List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
         {
-            return base.IsCountryEligibleForFreeInternationalDeliveryConfirmation().Union(new[] { "MX", "PL" }).ToList();
+            return base.CountriesEligibleForFreeInternationalDeliveryConfirmation().Union(new[] { "MX", "PL" }).ToList();
         }
     }
 }
