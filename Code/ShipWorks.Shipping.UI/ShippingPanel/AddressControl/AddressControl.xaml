@@ -72,7 +72,7 @@
                         <Hyperlink Command="{Binding ValidateCommand}">Validate</Hyperlink>
                     </TextBlock>
                     <TextBlock Visibility="{Binding CanShowSuggestions, Converter={StaticResource BooleanToVisibility}}">
-                        <Hyperlink props:OpenPopupWhenClicked.Popup="{Binding ElementName=AddressPopup}"><Run Text="{Binding SuggestionCount}" /> Suggestions</Hyperlink>
+                        <Hyperlink props:PopupClickManager.OpenPopup="{Binding ElementName=AddressPopup}"><Run Text="{Binding SuggestionCount}" /> Suggestions</Hyperlink>
                     </TextBlock>
                     <TextBlock Visibility="{Binding CanShowValidationMessage, Converter={StaticResource BooleanToVisibility}}">
                         <Hyperlink Command="{Binding ShowValidationMessageCommand}">Details...</Hyperlink>
@@ -151,7 +151,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button CommandParameter="{Binding Value}"
-                                Click="OnAddressSuggestionButtonClick">
+                                props:PopupClickManager.ClosePopup="{Binding ElementName=AddressPopup}">
                             <Button.Command>
                                 <Binding Path="DataContext.SelectAddressSuggestionCommand"
                                          RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}" />

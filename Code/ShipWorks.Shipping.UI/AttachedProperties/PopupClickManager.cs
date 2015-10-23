@@ -12,28 +12,44 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
     /// <remarks>
     /// When this is used on a hyperlink, it needs to be the only (or first) hyperlink in the textblock
     /// or the positioning will be incorrect.</remarks>
-    public class OpenPopupWhenClicked : DependencyObject
+    public class PopupClickManager : DependencyObject
     {
         /// <summary>
         /// Message type dependency property
         /// </summary>
-        public static readonly DependencyProperty PopupProperty = DependencyProperty.RegisterAttached("Popup", typeof(Popup),
-                typeof(OpenPopupWhenClicked), new PropertyMetadata(null, new PropertyChangedCallback(PopupChanged)));
+        public static readonly DependencyProperty OpenPopupProperty = DependencyProperty.RegisterAttached("OpenPopup", typeof(Popup),
+                typeof(PopupClickManager), new PropertyMetadata(null, new PropertyChangedCallback(OpenPopupChanged)));
+
+        /// <summary>
+        /// Message type dependency property
+        /// </summary>
+        public static readonly DependencyProperty ClosePopupProperty = DependencyProperty.RegisterAttached("ClosePopup", typeof(Popup),
+                typeof(PopupClickManager), new PropertyMetadata(null, new PropertyChangedCallback(ClosePopupChanged)));
 
         /// <summary>
         /// Get the current value of the property
         /// </summary>
-        public static Popup GetPopup(DependencyObject d) => (Popup)d.GetValue(PopupProperty);
+        public static Popup GetOpenPopup(DependencyObject d) => (Popup)d.GetValue(OpenPopupProperty);
 
         /// <summary>
         /// Set the current value of the property
         /// </summary>
-        public static void SetPopup(DependencyObject d, Popup value) => d.SetValue(PopupProperty, value);
+        public static void SetOpenPopup(DependencyObject d, Popup value) => d.SetValue(OpenPopupProperty, value);
+
+        /// <summary>
+        /// Get the current value of the property
+        /// </summary>
+        public static Popup GetClosePopup(DependencyObject d) => (Popup)d.GetValue(ClosePopupProperty);
+
+        /// <summary>
+        /// Set the current value of the property
+        /// </summary>
+        public static void SetClosePopup(DependencyObject d, Popup value) => d.SetValue(ClosePopupProperty, value);
 
         /// <summary>
         /// Popup that should be open has changed
         /// </summary>
-        private static void PopupChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OpenPopupChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue != null)
             {
@@ -48,11 +64,26 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
 
             if (e.NewValue != null && e.OldValue == null)
             {
-                AlterClickHandler(d, link => link.Click += OnClick, button => button.Click += OnClick);
+                AlterClickHandler(d, link => link.Click += OnOpenPopupClick, button => button.Click += OnOpenPopupClick);
             }
             if (e.NewValue == null && e.OldValue != null)
             {
-                AlterClickHandler(d, link => link.Click -= OnClick, button => button.Click -= OnClick);
+                AlterClickHandler(d, link => link.Click -= OnOpenPopupClick, button => button.Click -= OnOpenPopupClick);
+            }
+        }
+
+        /// <summary>
+        /// Popup that should be Close has changed
+        /// </summary>
+        private static void ClosePopupChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null && e.OldValue == null)
+            {
+                AlterClickHandler(d, link => link.Click += OnClosePopupClick, button => button.Click += OnClosePopupClick);
+            }
+            if (e.NewValue == null && e.OldValue != null)
+            {
+                AlterClickHandler(d, link => link.Click -= OnClosePopupClick, button => button.Click -= OnClosePopupClick);
             }
         }
 
@@ -78,13 +109,26 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// <summary>
         /// Open the popup when the click event fires
         /// </summary>
-        private static void OnClick(object sender, RoutedEventArgs e)
+        private static void OnOpenPopupClick(object sender, RoutedEventArgs e)
         {
-            Popup popup = GetPopup(sender as DependencyObject);
+            Popup popup = GetOpenPopup(sender as DependencyObject);
 
             if (popup != null)
             {
                 popup.IsOpen = true;
+            }
+        }
+
+        /// <summary>
+        /// Open the popup when the click event fires
+        /// </summary>
+        private static void OnClosePopupClick(object sender, RoutedEventArgs e)
+        {
+            Popup popup = GetClosePopup(sender as DependencyObject);
+
+            if (popup != null)
+            {
+                popup.IsOpen = false;
             }
         }
 
