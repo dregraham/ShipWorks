@@ -959,6 +959,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             List<AddOnV6> addOns = new List<AddOnV6>();
 
+            PostalShipmentType shipmentType = (PostalShipmentType)ShipmentTypeManager.GetType(shipment);
+
             // For domestic, add in Delivery\Signature confirmation
             if (shipment.ShipPerson.IsDomesticCountry())
             {
@@ -987,7 +989,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             }
 
             // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
-            else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
+            else if (shipmentType.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
             {
                 addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USADC });
             }
@@ -1013,7 +1015,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             }
 
             // For APO/FPO, we have to specifically ask for customs docs
-            if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) || ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
+            if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) || shipmentType.IsCustomsRequired(shipment))
             {
                 rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "Normal4X6CP72" : "Normal4X6CN22";
             }

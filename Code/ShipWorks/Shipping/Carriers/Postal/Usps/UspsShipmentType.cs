@@ -714,7 +714,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // If we don't know the packaging or country, it doesn't matter
             if (!string.IsNullOrWhiteSpace(countryCode) && packaging != null)
             {
-                if (PostalUtility.IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
+                if (IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
                 {
                     return new List<PostalConfirmationType> { PostalConfirmationType.Delivery };
                 }
@@ -895,6 +895,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             bucket.Relations.Add(PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID);
 
             adapter.UpdateEntitiesDirectly(new UspsShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
+
+        /// <summary>
+        /// Determines whether country is eligible for free international delivery confirmation.
+        /// </summary>
+        /// <returns></returns>
+        protected override List<string> IsCountryEligibleForFreeInternationalDeliveryConfirmation()
+        {
+            return base.IsCountryEligibleForFreeInternationalDeliveryConfirmation().Union(new[] { "MX", "PL" }).ToList();
         }
     }
 }
