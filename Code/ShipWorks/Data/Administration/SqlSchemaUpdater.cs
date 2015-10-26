@@ -302,7 +302,7 @@ namespace ShipWorks.Data.Administration
 
                             // If we were upgrading from this version, Regenerate scheduled actions 
                             // To fix issue caused by breaking out assemblies
-                            if (installed < new Version(4, 6, 0, 0))
+                            if (installed < new Version(4, 5, 0, 0))
                             {
                                 // Grab all of the actions that are enabled and schedule based
                                 ActionManager.InitializeForCurrentSession();
