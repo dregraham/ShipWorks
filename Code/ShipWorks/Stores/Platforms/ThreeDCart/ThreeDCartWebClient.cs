@@ -377,8 +377,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <returns>List of orders matching criteria, sorted by LastUpdate ascending </returns>
         public List<XmlNode> GetOrders(ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria)
         {
-            // Track if we should send the invoice number prefix
-            bool sendPrefix = false;
             List<XmlNode> ordersToReturn = new List<XmlNode>();
             RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetOrders, null, progressReporter);
 
@@ -405,6 +403,20 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             XmlNodeList ordersToGet = ordersResultXml.SelectNodes("//runQueryRecord");
 
+            FetchOrders(ordersToGet, ordersToReturn);
+            
+            return SortOrders(ordersToReturn, orderSearchCriteria).ToList();
+        }
+
+        /// <summary>
+        /// Get all of the order info from 3D Cart
+        /// </summary>
+        private void FetchOrders(XmlNodeList ordersToGet, List<XmlNode> ordersToReturn)
+        {
+            // Track if we should send the invoice number prefix
+            bool sendPrefix = false;
+
+            RequestThrottleParameters requestThrottleArgs;
             foreach (XmlNode orderNode in ordersToGet)
             {
                 // Get the invoice number (without prefix).  We'll be using this for the async user state unique id
@@ -422,7 +434,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     {
                         orderResultXml = api.getOrder(store.StoreDomain, store.ApiUserKey, 1, 1, false, invoiceNumberToSend, string.Empty, string.Empty, string.Empty, string.Empty);
                     });
-                  
+
                     // Check to see if orders were returned, if they returned an error
                     // Call getOrders again with the prefix and then set sendPrefix to true
                     // see FD#603416
@@ -449,7 +461,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 ordersToReturn.Add(orderResultXml);
             }
+        }
 
+        /// <summary>
+        /// Returns a list of sorted orders
+        /// </summary>
+        private IEnumerable<XmlNode> SortOrders(List<XmlNode> ordersToReturn, ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria)
+        {
             // Now sort the list so that the oldest orders are first
             IOrderedEnumerable<XmlNode> sortedOrders;
             if (orderSearchCriteria.OrderDateSearchType == ThreeDCartWebClientOrderDateSearchType.ModifiedDate)
@@ -461,7 +479,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             else
             {
                 sortedOrders = from XmlNode node in ordersToReturn
-                               orderby DateTime.Parse(node["Date"].InnerText).Date +  
+                               orderby DateTime.Parse(node["Date"].InnerText).Date +
                                        (node["Time"] != null ? DateTime.Parse(node["Time"].InnerText).TimeOfDay : DateTime.MinValue.TimeOfDay)
                                select node;
             }
