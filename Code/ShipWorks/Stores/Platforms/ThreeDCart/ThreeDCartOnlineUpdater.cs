@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 if (!order.IsManual)
                 {
-                    ThreeDCartWebClient client = new ThreeDCartWebClient(threeDCartStore);
+                    ThreeDCartWebClient client = new ThreeDCartWebClient(threeDCartStore, null);
                     client.UpdateOrderStatus(order.OrderNumber, order.OrderNumberComplete, statusCode);
 
                     // Update the local database with the new status
@@ -142,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
             }
 
-            ThreeDCartWebClient webClient = new ThreeDCartWebClient(threeDCartStore);
+            ThreeDCartWebClient webClient = new ThreeDCartWebClient(threeDCartStore, null);
             webClient.UploadOrderShipmentDetails(shipment);
         }
     }

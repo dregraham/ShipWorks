@@ -54,51 +54,91 @@ namespace ShipWorks.Stores.Communication.Throttling
             {
                 try
                 {
-                    TWebClientReturnType response = webClientMethod((TWebClientRequestType)requestThrottleParams.Request);
+                    TWebClientReturnType response = webClientMethod((TWebClientRequestType) requestThrottleParams.Request);
 
                     return response;
                 }
                 catch (RequestThrottledException)
                 {
-                    TimeSpan timeToSleep = requestThrottleParams.RetryInterval;
-
-                    string oldDetail = null;
-
-                    // If it's that short, don't notify we are waiting
-                    if (requestThrottleParams.Progress != null && timeToSleep > TimeSpan.FromSeconds(2))
-                    {
-                        oldDetail = requestThrottleParams.Progress.Detail;
-                        requestThrottleParams.Progress.Detail = oldDetail + string.Format("\r\n{0} is limiting download speeds...\r\n", storeName);
-
-                        if (timeToSleep > TimeSpan.FromMinutes(1))
-                        {
-                            requestThrottleParams.Progress.Detail += string.Format("(ShipWorks can try again at {0})", (DateTime.Now + timeToSleep).ToShortTimeString());
-                        }
-                        else if (timeToSleep > TimeSpan.FromSeconds(2))
-                        {
-                            // Round up to the nearest 10 seconds
-                            requestThrottleParams.Progress.Detail += string.Format("(ShipWorks can try again in {0} seconds)", (int)timeToSleep.TotalSeconds);
-                        }
-                    }
-
-                    logger.InfoFormat("{0} is currently over the API rate limit, pausing for {1}.", storeName, timeToSleep);
-
-                    // If we don't have a progress reporter, just do a simple thread sleep
-                    if (requestThrottleParams.Progress == null)
-                    {
-                        Thread.Sleep(timeToSleep);
-                    }
-                    else
-                    {
-                        // we have a progress reporter, so do a more complex but cancellable sleep
-                        CancellableWait(requestThrottleParams.Progress, timeToSleep);
-                    }
-
-                    if (requestThrottleParams.Progress != null && oldDetail != null)
-                    {
-                        requestThrottleParams.Progress.Detail = oldDetail;
-                    }
+                    HandleRequestThrottleException(requestThrottleParams);
                 }
+            }
+        }
+
+        /// <summary>
+        /// ExecuteRequest will make a throttled call to webClientMethod and return the result.
+        /// If the throttler detects that the number of calls has been reached, the throttler will wait the 
+        /// desiered amount of time before making the call to webClientMethod again.  It will continue to make
+        /// the calls until a successful call is made, the user clicks cancel, or a cancel exception is thrown.
+        /// </summary>
+        /// <param name="requestThrottleParams">Throttling request parameters</param>
+        /// <param name="webClientMethod">Method that will be executed to </param>
+        /// <returns>Restul from the api call</returns>
+        public virtual void ExecuteRequest(RequestThrottleParameters requestThrottleParams, Action webClientMethod)
+        {
+            if (requestThrottleParams == null)
+            {
+                throw new ArgumentNullException("requestThrottleParams");
+            }
+            if (webClientMethod == null)
+            {
+                throw new ArgumentNullException("webClientMethod");
+            }
+
+            while (true)
+            {
+                try
+                {
+                    webClientMethod();
+
+                    return;
+                }
+                catch (RequestThrottledException)
+                {
+                    HandleRequestThrottleException(requestThrottleParams);
+                }
+            }
+        }
+
+        private void HandleRequestThrottleException(RequestThrottleParameters requestThrottleParams)
+        {
+            TimeSpan timeToSleep = requestThrottleParams.RetryInterval;
+
+            string oldDetail = null;
+
+            // If it's that short, don't notify we are waiting
+            if (requestThrottleParams.Progress != null && timeToSleep > TimeSpan.FromSeconds(2))
+            {
+                oldDetail = requestThrottleParams.Progress.Detail;
+                requestThrottleParams.Progress.Detail = oldDetail + string.Format("\r\n{0} is limiting download speeds...\r\n", storeName);
+
+                if (timeToSleep > TimeSpan.FromMinutes(1))
+                {
+                    requestThrottleParams.Progress.Detail += string.Format("(ShipWorks can try again at {0})", (DateTime.Now + timeToSleep).ToShortTimeString());
+                }
+                else if (timeToSleep > TimeSpan.FromSeconds(2))
+                {
+                    // Round up to the nearest 10 seconds
+                    requestThrottleParams.Progress.Detail += string.Format("(ShipWorks can try again in {0} seconds)", (int) timeToSleep.TotalSeconds);
+                }
+            }
+
+            logger.InfoFormat("{0} is currently over the API rate limit, pausing for {1}.", storeName, timeToSleep);
+
+            // If we don't have a progress reporter, just do a simple thread sleep
+            if (requestThrottleParams.Progress == null)
+            {
+                Thread.Sleep(timeToSleep);
+            }
+            else
+            {
+                // we have a progress reporter, so do a more complex but cancellable sleep
+                CancellableWait(requestThrottleParams.Progress, timeToSleep);
+            }
+
+            if (requestThrottleParams.Progress != null && oldDetail != null)
+            {
+                requestThrottleParams.Progress.Detail = oldDetail;
             }
         }
 

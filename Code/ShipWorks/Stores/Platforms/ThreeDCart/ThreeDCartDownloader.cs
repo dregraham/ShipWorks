@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 if (webClient == null)
                 {
                     //Create the web client used for downloading
-                    webClient = new ThreeDCartWebClient((ThreeDCartStoreEntity)Store);
+                    webClient = new ThreeDCartWebClient((ThreeDCartStoreEntity)Store, Progress);
                 }
 
                 return webClient;
