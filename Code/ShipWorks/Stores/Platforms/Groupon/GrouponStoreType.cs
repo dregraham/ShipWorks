@@ -218,6 +218,17 @@ namespace ShipWorks.Stores.Platforms.Groupon
         }
 
         /// <summary>
+        /// Create the customer Order Item Xml for the order item provided
+        /// </summary>
+        public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
+        {
+            var item = new Lazy<GrouponOrderItemEntity>(() => (GrouponOrderItemEntity)itemSource());
+
+            ElementOutline outline = container.AddElement("Groupon");
+            outline.AddElement("BOMSKU", () => item.Value.BomSKU);
+        }
+
+        /// <summary>
         /// Creates the OrderIdentifier for locating Volusion orders
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)

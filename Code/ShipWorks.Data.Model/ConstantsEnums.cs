@@ -4946,6 +4946,8 @@ namespace ShipWorks.Data.Model
 		Token,
 		///<summary>StoreURL. </summary>
 		StoreURL,
+		///<summary>StatusCodes. </summary>
+		StatusCodes,
 		/// <summary></summary>
 		AmountOfFields
 	}

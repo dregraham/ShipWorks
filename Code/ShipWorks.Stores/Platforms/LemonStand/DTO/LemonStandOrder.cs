@@ -48,29 +48,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
         [JsonProperty("id")]
         public string ID { get; set; }
 
-        [JsonProperty("shop_order_id")]
-        public string ShopOrderId { get; set; }
-
-        [JsonProperty("shop_order_status_id")]
-        public string ShopOrderStatusId { get; set; }
-
-        [JsonProperty("shop_customer_id")]
-        public string ShopCustomerId { get; set; }
-
         [JsonProperty("status")]
         public string Status { get; set; }
 
         [JsonProperty("number")]
         public string Number { get; set; }
 
-        [JsonProperty("subtotal_paid")]
-        public string SubtotalPaid { get; set; }
-
         [JsonProperty("total")]
         public string Total { get; set; }
-
-        [JsonProperty("status_updated_at")]
-        public string StatusUpdatedAt { get; set; }
 
         [JsonProperty("created_at")]
         public string CreatedAt { get; set; }
@@ -89,5 +74,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 
         [JsonProperty("total_shipping_tax_paid")]
         public string TotalShippingTaxPaid { get; set; }
+
+        [JsonProperty("shop_order_status_id")]
+        public string ShopOrderStatusID { get; set; }
     }
 }

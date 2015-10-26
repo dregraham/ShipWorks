@@ -4201,7 +4201,7 @@ CREATE TABLE [dbo].[FilterNodeUpdatePending]
 (
 [FilterNodeContentID] [bigint] NOT NULL,
 [FilterTarget] [int] NOT NULL,
-[ColumnMask] [varbinary] (75) NOT NULL,
+[ColumnMask] [varbinary] (100) NOT NULL,
 [JoinMask] [int] NOT NULL,
 [Position] [int] NOT NULL
 )
@@ -5448,6 +5448,7 @@ CREATE TABLE [dbo].[LemonStandStore]
 	[StoreID] [bigint] NOT NULL,
 	[Token] [varchar](100) NOT NULL,
 	[StoreURL] [varchar](255) NOT NULL,
+	[StatusCodes] [xml] NULL,
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandStore] on [dbo].[LemonStandStore]'

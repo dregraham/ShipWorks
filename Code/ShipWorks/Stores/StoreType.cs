@@ -221,6 +221,11 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
+            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<OnlineUpdateActionControlBase>(TypeCode))
+            {
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<OnlineUpdateActionControlBase>(TypeCode);
+            }
+
             return null;
         }
 

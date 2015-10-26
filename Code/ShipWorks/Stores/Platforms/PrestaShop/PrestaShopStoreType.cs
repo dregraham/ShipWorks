@@ -21,31 +21,16 @@ namespace ShipWorks.Stores.Platforms.PrestaShop
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.PrestaShop;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.PrestaShop;
 
         /// <summary>
         /// Log request/responses as PrestaShop
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.PrestaShop;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.PrestaShop;
 
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000043804-connecting-prestashop"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000043804";
     }
 }

@@ -48,6 +48,10 @@
       <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
       <Private>True</Private>
@@ -103,6 +107,18 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.Designer.cs">
+      <DependentUpon>LemonStandOrderUpdateTaskEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdateActionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdateActionControl.Designer.cs">
+      <DependentUpon>LemonStandOnlineUpdateActionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\LemonStand\LemonStandAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -120,6 +136,12 @@
     <Compile Include="StoresManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.resx">
+      <DependentUpon>LemonStandOrderUpdateTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\LemonStand\LemonStandOnlineUpdateActionControl.resx">
+      <DependentUpon>LemonStandOnlineUpdateActionControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\LemonStand\LemonStandAccountSettingsControl.resx">
       <DependentUpon>LemonStandAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>

@@ -1258,6 +1258,10 @@
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartWebClientApiCall.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartWebClientRequestThrottle.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartWebClientRequestThrottledException.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartWebClientThrottleWaitCancelException.cs" />
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinder.cs" />
@@ -10435,6 +10439,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.5.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
