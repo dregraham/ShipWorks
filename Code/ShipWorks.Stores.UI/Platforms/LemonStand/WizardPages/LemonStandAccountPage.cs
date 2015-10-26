@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.LemonStand;
@@ -10,11 +11,21 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand.WizardPages
 {
     public partial class LemonStandAccountPage : AddStoreWizardPage
     {
+        private readonly ILog log;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LemonStandAccountPage"/> class.
         /// </summary>
-        public LemonStandAccountPage()
+        public LemonStandAccountPage() :this(LogManager.GetLogger(typeof(LemonStandAccountPage)))
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LemonStandAccountPage"/> class.
+        /// </summary>
+        private LemonStandAccountPage(ILog log)
+        {
+            this.log = log;
             InitializeComponent();
         }
 
@@ -57,6 +68,8 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand.WizardPages
                 }
                 catch (Exception ex)
                 {
+                    log.Error("Error validating access token", ex);
+
                     if (ex.Message.Equals("The remote server returned an error: (401) Unauthorized."))
                     {
                         MessageHelper.ShowError(this, "Invalid access token");
