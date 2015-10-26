@@ -9,21 +9,15 @@ namespace ShipWorks.Shipping.UI.ValueConverters
     /// <summary>
     /// Convert an enum into it's description
     /// </summary>
-    public class EnumDescriptionConverter : IValueConverter 
+    public class EnumDescriptionConverter : IValueConverter
     {
         /// <summary>
         /// Convert an enum into it's description
         /// </summary>
         public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!DesignModeDetector.IsDesignerHosted())
-            {
-                return EnumHelper.GetDescription(value as Enum);
-            }
-            else
-            {
-                return "Designer enum description.";
-            }
+            return !DesignModeDetector.IsDesignerHosted() ? 
+                EnumHelper.GetDescription(value as Enum) : "Designer enum description.";
         }
 
         /// <summary>

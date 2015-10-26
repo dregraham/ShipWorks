@@ -10,11 +10,8 @@ namespace ShipWorks.AddressValidation
     public interface IAddressSelector
     {
         /// <summary>
-        /// Select the specified address into 
+        /// Select the specified address into an existing address
         /// </summary>
-        /// <param name="addressToUpdate"></param>
-        /// <param name="selectedAddress"></param>
-        /// <returns></returns>
-        Task SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress);
+        Task<AddressAdapter> SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress);
     }
 }

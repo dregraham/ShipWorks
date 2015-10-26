@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -10,7 +9,6 @@ using ShipWorks.Filters;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Security;
 using Xunit;
@@ -211,7 +209,8 @@ namespace ShipWorks.Shipping.Tests.Loading
             shippingManager = mock.WithShippingManager(orderEntity.OrderID, 
                 new List<ICarrierShipmentAdapter> { mock.Create<ICarrierShipmentAdapter>() }, 
                 Enumerable.Empty<ICarrierShipmentAdapter>());
-            storeType = mock.WithTestStoreType(orderEntity.Store);
+
+            storeType = mock.WithTestStoreType();
 
             mock.WithStoreTypeManager(storeType.Object); 
 

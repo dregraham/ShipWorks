@@ -564,39 +564,5 @@ namespace Interapptive.Shared.Business
             get { return GetField<int>("MilitaryAddress"); }
             set { SetField("MilitaryAddress", value); }
         }
-
-        /// <summary>
-        /// Save the full name to the specified person
-        /// </summary>
-        public void SaveFullName(PersonAdapter person, string value)
-        {
-            PersonName name = PersonName.Parse(value);
-
-            int maxFirst = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonFirst);
-            if (name.First.Length > maxFirst)
-            {
-                name.Middle = name.First.Substring(maxFirst) + name.Middle;
-                name.First = name.First.Substring(0, maxFirst);
-            }
-
-            int maxMiddle = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonMiddle);
-            if (name.Middle.Length > maxMiddle)
-            {
-                name.Last = name.Middle.Substring(maxMiddle) + name.Last;
-                name.Middle = name.Middle.Substring(0, maxMiddle);
-            }
-
-            int maxLast = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonLast);
-            if (name.Last.Length > maxLast)
-            {
-                name.Last = name.Last.Substring(0, maxLast);
-            }
-
-            person.FirstName = name.First;
-            person.MiddleName = name.Middle;
-            person.LastName = name.LastWithSuffix;
-            person.UnparsedName = name.UnparsedName;
-            person.NameParseStatus = name.ParseStatus;
-        }
     }
 }

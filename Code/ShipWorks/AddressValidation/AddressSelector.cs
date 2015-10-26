@@ -273,7 +273,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Select an address to copy into the entity's shipping address
         /// </summary>
-        public async Task SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress)
+        public async Task<AddressAdapter> SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress)
         {
             OnAddressSelecting();
 
@@ -289,6 +289,8 @@ namespace ShipWorks.AddressValidation
                 (int)AddressValidationStatusType.SuggestionSelected;
 
             OnAddressSelected(addressToUpdate, originalAddress);
+
+            return addressToUpdate;
         }
 
         /// <summary>

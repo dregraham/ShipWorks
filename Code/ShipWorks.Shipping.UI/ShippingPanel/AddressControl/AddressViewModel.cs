@@ -205,19 +205,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// <summary>
         /// Select the specified address suggestion
         /// </summary>
-        private void SelectAddressSuggestion(ValidatedAddressEntity addressSuggestion)
+        private async void SelectAddressSuggestion(ValidatedAddressEntity addressSuggestion)
         {
             addressValidationSubscriptions?.Dispose();
 
             PersonAdapter person = new PersonAdapter(new ValidatedAddressEntity(), string.Empty);
             SaveToEntity(person);
             
-            addressSelector.SelectAddress(person.ConvertTo<AddressAdapter>(), addressSuggestion);
+            AddressAdapter changedAddress = await addressSelector.SelectAddress(person.ConvertTo<AddressAdapter>(), addressSuggestion);
+            PersonAdapter changedPerson = changedAddress.ConvertTo<PersonAdapter>();
 
-            Populate(person);
-            SetValidationDetails(person);
-            //ValidationStatus = addressSuggestion.IsOriginal ? 
-            //    AddressValidationStatusType.SuggestionIgnored : AddressValidationStatusType.SuggestionSelected;
+            Populate(changedPerson);
+            SetValidationDetails(changedPerson);
 
             SetupAddressValidationMessagePropertyHandlers();
         }
