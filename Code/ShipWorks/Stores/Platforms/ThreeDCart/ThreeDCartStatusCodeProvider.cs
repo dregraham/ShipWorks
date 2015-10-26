@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 Dictionary<int, string> codeMap = new Dictionary<int, string>();
 
-                ThreeDCartWebClient client = new ThreeDCartWebClient((ThreeDCartStoreEntity)Store);
+                ThreeDCartWebClient client = new ThreeDCartWebClient((ThreeDCartStoreEntity)Store, null);
                 foreach (ThreeDCartOrderStatus orderStatus in client.OrderStatuses)
                 {
                     codeMap.Add(orderStatus.StatusID, orderStatus.StatusText);

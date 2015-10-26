@@ -97,7 +97,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
             {
                 try
                 {
-                    ManagedInstallerClass.InstallHelper(new[] { "/u", "/LogFile=", Assembly.GetExecutingAssembly().Location });
+                    ManagedInstallerClass.InstallHelper(new[] { "/u", "/LogFile=", Program.AppFileName });
                 }
                 catch (InstallException ex)
                 {

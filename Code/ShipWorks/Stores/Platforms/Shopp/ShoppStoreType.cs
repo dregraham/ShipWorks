@@ -21,31 +21,16 @@ namespace ShipWorks.Stores.Platforms.Shopp
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.Shopp;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Shopp;
 
         /// <summary>
         /// Log request/responses as Shopp
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.Shopp;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.Shopp;
 
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/categories/105240/folders/261287/articles/4000022263-connecting-to"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000022263";
     }
 }

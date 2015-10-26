@@ -65,7 +65,7 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Provide methhod for background process to register thread to clean up logs
+        /// Provide method for background process to register thread to clean up logs
         /// </summary>
         public static void RegisterLogCleanup()
         {
