@@ -189,32 +189,34 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// </summary>
         private async void ValidateAddress()
         {
-            PersonAdapter adapter = new PersonAdapter();
-            SaveToEntity(adapter);
-            ValidatedAddressData validationData = await validator.ValidateAsync(adapter.ConvertTo<AddressAdapter>(), true);
-
-            List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>();
-            int count = 0;
-
-            if (validationData.Original != null)
+            if (!entityId.HasValue)
             {
-                validatedAddresses.Add(validationData.Original);
-                count = -1;
+                return;
             }
 
-            if (validationData.Suggestions != null)
+            long currentEntityId = entityId.Value;
+
+            PersonAdapter personAdapter = new PersonAdapter();
+            AddressAdapter addressAdapter = new AddressAdapter();
+
+            SaveToEntity(personAdapter);
+            personAdapter.CopyTo(addressAdapter);
+            
+            ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, true);
+
+            // See if the loaded address has chagned since we started validating
+            if (currentEntityId != entityId)
             {
-                validatedAddresses.AddRange(validationData.Suggestions);
-                count += validatedAddresses.Count;
+                return;
             }
+            
+            addressAdapter.CopyTo(personAdapter);
 
-            validatedAddressScope.StoreAddresses(entityId.GetValueOrDefault(), validatedAddresses, prefix);
-            AddressSuggestions = BuildDictionary(validatedAddresses);
-
-            SuggestionCount = Math.Max(0, count);
-
-            PopulateAddress(adapter);
-            PopulateValidationDetails(adapter);
+            validatedAddressScope.StoreAddresses(entityId.Value, validationData.AllAddresses, prefix);
+            AddressSuggestions = BuildDictionary(validationData.AllAddresses);
+            
+            PopulateAddress(personAdapter);
+            PopulateValidationDetails(personAdapter);
         }
 
         /// <summary>

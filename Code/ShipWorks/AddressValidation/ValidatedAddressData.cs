@@ -12,10 +12,18 @@ namespace ShipWorks.AddressValidation
         private static readonly ValidatedAddressData empty = 
             new ValidatedAddressData(null, Enumerable.Empty<ValidatedAddressEntity>());
 
+        private static readonly ValidatedAddressData notSet =
+            new ValidatedAddressData(null, Enumerable.Empty<ValidatedAddressEntity>());
+
         /// <summary>
         /// Empty validation results
         /// </summary>
         public static ValidatedAddressData Empty => empty;
+
+        /// <summary>
+        /// Validation results that have not been explicitly set
+        /// </summary>
+        public static ValidatedAddressData NotSet => NotSet;
 
         /// <summary>
         /// Constructor
@@ -23,7 +31,15 @@ namespace ShipWorks.AddressValidation
         public ValidatedAddressData(ValidatedAddressEntity original, IEnumerable<ValidatedAddressEntity> suggestions)
         {
             Original = original;
-            Suggestions = suggestions.ToList();
+
+            List<ValidatedAddressEntity> allAddresses = new List<ValidatedAddressEntity>();
+            if (Original != null)
+            {
+                allAddresses.Add(Original);
+            }
+
+            Suggestions = suggestions?.ToList() ?? Enumerable.Empty<ValidatedAddressEntity>();
+            AllAddresses = allAddresses.Concat(Suggestions);
         }
 
         /// <summary>
@@ -35,5 +51,10 @@ namespace ShipWorks.AddressValidation
         /// List of suggested alternative addresses
         /// </summary>
         public IEnumerable<ValidatedAddressEntity> Suggestions { get; private set; }
+        
+        /// <summary>
+        /// All addresses, with the original first
+        /// </summary>
+        public IEnumerable<ValidatedAddressEntity> AllAddresses { get; private set; }
     }
 }

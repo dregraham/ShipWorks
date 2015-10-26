@@ -161,6 +161,7 @@ namespace Interapptive.Shared.Business
 
             destinationAddress.AddressValidationStatus = AddressValidationStatus;
             destinationAddress.AddressValidationError = AddressValidationError;
+            destinationAddress.AddressValidationSuggestionCount = AddressValidationSuggestionCount;
         }
 
         /// <summary>

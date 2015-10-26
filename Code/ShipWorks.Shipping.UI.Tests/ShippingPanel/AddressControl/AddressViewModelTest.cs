@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Tests.Shared;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -74,7 +75,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
                 AddressValidationStatus = (int)AddressValidationStatusType.HasSuggestions,
                 AddressValidationError = "Foo bar"
             });
-            
+
             Assert.NotEqual(testObject.SuggestionCount, 3);
             Assert.NotEqual(testObject.ValidationStatus, AddressValidationStatusType.HasSuggestions);
             Assert.NotEqual(testObject.ValidationMessage, "Foo bar");
@@ -108,23 +109,21 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             mock.Mock<IValidatedAddressScope>()
                 .Setup(x => x.LoadValidatedAddresses(It.IsAny<long>(), It.IsAny<string>()))
                 .Returns(new[] { validatedAddress1, validatedAddress2 });
-
             mock.Mock<IAddressSelector>()
                 .Setup(x => x.FormatAddress(validatedAddress1))
-                .Returns("Foo")
-                .Verifiable();
+                .Returns("Foo");
             mock.Mock<IAddressSelector>()
                 .Setup(x => x.FormatAddress(validatedAddress2))
-                .Returns("Bar")
-                .Verifiable();
+                .Returns("Bar");
 
             var testObject = mock.Create<AddressViewModel>();
 
             testObject.Load(new PersonAdapter(new ShipmentEntity(), "Ship"));
 
-            mock.VerifyAll = true;
+            Assert.Contains(new KeyValuePair<string, ValidatedAddressEntity>("Foo", validatedAddress1), testObject.AddressSuggestions);
+            Assert.Contains(new KeyValuePair<string, ValidatedAddressEntity>("Bar", validatedAddress2), testObject.AddressSuggestions);
         }
-        
+
         [Fact]
         public void Load_SetsValidationDetails_WhenPersonIsFromEntity()
         {
@@ -280,6 +279,174 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             Assert.Equal("314-555-1234", testObject.Phone);
             Assert.Equal("Stuff", testObject.ValidationMessage);
             Assert.Equal(3, testObject.SuggestionCount);
+        }
+
+        [Fact]
+        public void ValidateCommand_DoesNotCallValidator_WhenLoadedWithNonEntityAddress()
+        {
+            var testObject = mock.Create<AddressViewModel>();
+            testObject.Load(new PersonAdapter());
+
+            testObject.ValidateCommand.Execute(null);
+
+            mock.Mock<IAddressValidator>()
+                .Verify(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [Fact]
+        public void ValidateCommand_SendsCurrentValues_ToValidator()
+        {
+            AddressAdapter address = null;
+            mock.Mock<IAddressValidator>()
+                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<bool>()))
+                .ReturnsAsync(ValidatedAddressData.Empty)
+                .Callback((AddressAdapter a, bool _) => address = a);
+
+            var testObject = mock.Create<AddressViewModel>();
+            testObject.Load(new PersonAdapter(new ShipmentEntity(), string.Empty));
+
+            testObject.Street = "1 Main";
+            testObject.City = "Foo";
+            testObject.StateProvCode = "Bar";
+            testObject.CountryCode = "Baz";
+            testObject.PostalCode = "12345";
+
+            testObject.ValidateCommand.Execute(null);
+
+            Assert.Equal("1 Main", address.Street1);
+            Assert.Equal("Foo", address.City);
+            Assert.Equal("Bar", address.StateProvCode);
+            Assert.Equal("Baz", address.CountryCode);
+            Assert.Equal("12345", address.PostalCode);
+        }
+
+        [Fact]
+        public void ValidateCommand_StoresReturnedAddresses_InValidatedAddressScope()
+        {
+            var original = new ValidatedAddressEntity();
+            var address1 = new ValidatedAddressEntity();
+            var data = new ValidatedAddressData(original, new[] { address1 });
+
+            mock.Mock<IAddressSelector>()
+                .Setup(x => x.FormatAddress(It.IsAny<ValidatedAddressEntity>()))
+                .Returns((ValidatedAddressEntity x) => x.GetHashCode().ToString());
+            mock.Mock<IAddressValidator>()
+                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<bool>()))
+                .ReturnsAsync(data);
+
+            var testObject = mock.Create<AddressViewModel>();
+            testObject.Load(new PersonAdapter(new ShipmentEntity { ShipmentID = 3 }, "Ship"));
+
+            testObject.ValidateCommand.Execute(null);
+
+            mock.Mock<IValidatedAddressScope>()
+                .Verify(x => x.StoreAddresses(3, data.AllAddresses, "Ship"));
+        }
+
+        [Fact]
+        public void ValidateCommand_SetsValidationDetails_AfterValidation()
+        {
+            var data = new ValidatedAddressData(new ValidatedAddressEntity(),
+                new[] { new ValidatedAddressEntity(), new ValidatedAddressEntity() });
+
+            mock.Mock<IAddressSelector>()
+                .Setup(x => x.FormatAddress(It.IsAny<ValidatedAddressEntity>()))
+                .Returns((ValidatedAddressEntity x) => x.GetHashCode().ToString());
+            mock.Mock<IAddressValidator>()
+                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<bool>()))
+                .ReturnsAsync(data)
+                .Callback((AddressAdapter a, bool _) =>
+                {
+                    a.AddressValidationError = "Foo";
+                    a.AddressValidationSuggestionCount = 6;
+                    a.AddressValidationStatus = (int)AddressValidationStatusType.Error;
+                });
+
+            var testObject = mock.Create<AddressViewModel>();
+            testObject.Load(new PersonAdapter(new ShipmentEntity { ShipmentID = 3 }, "Ship"));
+
+            testObject.ValidateCommand.Execute(null);
+
+            Assert.Equal("Foo", testObject.ValidationMessage);
+            Assert.Equal(6, testObject.SuggestionCount);
+            Assert.Equal(AddressValidationStatusType.Error, testObject.ValidationStatus);
+        }
+
+        [Fact]
+        public void ValidateCommand_SetsAddressDetails_AfterValidation()
+        {
+            var data = new ValidatedAddressData(new ValidatedAddressEntity(),
+                new[] { new ValidatedAddressEntity(), new ValidatedAddressEntity() });
+
+            mock.Mock<IAddressSelector>()
+                .Setup(x => x.FormatAddress(It.IsAny<ValidatedAddressEntity>()))
+                .Returns((ValidatedAddressEntity x) => x.GetHashCode().ToString());
+            mock.Mock<IAddressValidator>()
+                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<bool>()))
+                .ReturnsAsync(data)
+                .Callback((AddressAdapter a, bool _) =>
+                {
+                    a.Street1 = "2 Main";
+                    a.City = "Foo2";
+                    a.StateProvCode = "Bar2";
+                    a.CountryCode = "Baz2";
+                    a.PostalCode = "22345";
+                });
+
+            var testObject = mock.Create<AddressViewModel>();
+            testObject.Load(new PersonAdapter(new ShipmentEntity { ShipmentID = 3 }, "Ship"));
+            testObject.Street = "1 Main";
+            testObject.City = "Foo";
+            testObject.StateProvCode = "Bar";
+            testObject.CountryCode = "Baz";
+            testObject.PostalCode = "12345";
+
+            testObject.ValidateCommand.Execute(null);
+
+            Assert.Equal("2 Main", testObject.Street);
+            Assert.Equal("Foo2", testObject.City);
+            Assert.Equal("Bar2", testObject.StateProvCode);
+            Assert.Equal("Baz2", testObject.CountryCode);
+            Assert.Equal("22345", testObject.PostalCode);
+        }
+
+        [Fact]
+        public void ValidateCommand_DoesNotUpdateDetails_WhenLoadedAddressChangesDuringValidation()
+        {
+            AddressViewModel testObject = null;
+            mock.Mock<IAddressSelector>()
+                .Setup(x => x.FormatAddress(It.IsAny<ValidatedAddressEntity>()))
+                .Returns((ValidatedAddressEntity x) => x.GetHashCode().ToString());
+            mock.Mock<IAddressValidator>()
+                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<bool>()))
+                .ReturnsAsync(ValidatedAddressData.Empty)
+                .Callback((AddressAdapter a, bool _) =>
+                {
+                    a.Street1 = "2 Main";
+                    a.City = "Foo2";
+                    a.StateProvCode = "Bar2";
+                    a.CountryCode = "Baz2";
+                    a.PostalCode = "22345";
+
+                    // Simulate another process loading a new address during validation
+                    testObject.Load(new PersonAdapter(new ShipmentEntity { ShipmentID = 7 }, "Ship"));
+                });
+
+            testObject = mock.Create<AddressViewModel>();
+            testObject.Load(new PersonAdapter(new ShipmentEntity { ShipmentID = 3 }, "Ship"));
+            testObject.Street = "1 Main";
+            testObject.City = "Foo";
+            testObject.StateProvCode = "Bar";
+            testObject.CountryCode = "Baz";
+            testObject.PostalCode = "12345";
+
+            testObject.ValidateCommand.Execute(null);
+
+            Assert.NotEqual("2 Main", testObject.Street);
+            Assert.NotEqual("Foo2", testObject.City);
+            Assert.NotEqual("Bar2", testObject.StateProvCode);
+            Assert.NotEqual("Baz2", testObject.CountryCode);
+            Assert.NotEqual("22345", testObject.PostalCode);
         }
 
         public void Dispose()
