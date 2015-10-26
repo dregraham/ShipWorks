@@ -100,6 +100,9 @@ namespace ShipWorks.Stores.Communication.Throttling
             }
         }
 
+        /// <summary>
+        /// Handle the retry logic when a throttling exception occurs.
+        /// </summary>
         private void HandleRequestThrottleException(RequestThrottleParameters requestThrottleParams)
         {
             TimeSpan timeToSleep = requestThrottleParams.RetryInterval;
