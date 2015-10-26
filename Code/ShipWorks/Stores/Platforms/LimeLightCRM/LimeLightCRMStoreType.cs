@@ -21,24 +21,12 @@ namespace ShipWorks.Stores.Platforms.LimeLightCRM
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.LimeLightCRM;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.LimeLightCRM;
 
         /// <summary>
         /// Log request/responses as Lime Light CRM
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.LimeLightCRM;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.LimeLightCRM;
 
         /// <summary>
         /// Create a custom web client for Lime Light CRM
@@ -51,12 +39,6 @@ namespace ShipWorks.Stores.Platforms.LimeLightCRM
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get
-            {
-                return "http://support.shipworks.com/solution/articles/4000022724-connecting-lime-light-crm-with";
-            }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000022724";
     }
 }

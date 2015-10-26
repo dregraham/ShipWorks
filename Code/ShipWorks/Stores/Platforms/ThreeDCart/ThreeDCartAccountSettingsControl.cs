@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 try
                 {
-                    ThreeDCartWebClient webClient = new ThreeDCartWebClient(threeDCartStore);
+                    ThreeDCartWebClient webClient = new ThreeDCartWebClient(threeDCartStore, null);
                     webClient.TestConnection();
 
                     ThreeDCartStatusCodeProvider statusProvider = new ThreeDCartStatusCodeProvider(threeDCartStore);

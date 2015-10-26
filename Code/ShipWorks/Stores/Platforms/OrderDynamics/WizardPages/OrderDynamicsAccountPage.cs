@@ -31,6 +31,10 @@ namespace ShipWorks.Stores.Platforms.OrderDynamics.WizardPages
         public OrderDynamicsAccountPage()
         {
             InitializeComponent();
+
+            OrderDynamicsStoreType store = (OrderDynamicsStoreType) StoreTypeManager.GetType(StoreTypeCode.OrderDynamics);
+
+            helpLink.Url = store.AccountSettingsHelpUrl;
         }
 
         /// <summary>

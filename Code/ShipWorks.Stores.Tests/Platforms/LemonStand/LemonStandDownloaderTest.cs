@@ -4,12 +4,13 @@ using System.Linq;
 using System.Reflection;
 using Moq;
 using Newtonsoft.Json.Linq;
-using ShipWorks.Stores.Platforms.LemonStand;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.LemonStand;
+using ShipWorks.Tests.Stores.LemonStand;
 using Xunit;
 
-namespace ShipWorks.Tests.Stores.LemonStand
+namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 {
     /// <summary>
     /// Performs unit testing on the LemonStandDownloader class.
@@ -17,20 +18,20 @@ namespace ShipWorks.Tests.Stores.LemonStand
     /// </summary>
     public class LemonStandDownloaderTest
     {
-        Mock<ILemonStandWebClient> webClient = new Mock<ILemonStandWebClient>();
-        Mock<ISqlAdapterRetry> adapter = new Mock<ISqlAdapterRetry>();
-        LemonStandStoreEntity store = new LemonStandStoreEntity();
+        readonly Mock<ILemonStandWebClient> webClient = new Mock<ILemonStandWebClient>();
+        readonly Mock<ISqlAdapterRetry> adapter = new Mock<ISqlAdapterRetry>();
+        readonly LemonStandStoreEntity store = new LemonStandStoreEntity();
         
         private FakeLemonStandDownloader testObject;
-        private string lemonStandOrders;
-        private string singleOrder;
-        private string shipment;
-        private string customer;
-        private string product;
-        private string invoice;
-        private string badDataOrder;
-        private string missingDataOrder;
-        private string missingItems;
+        private readonly string lemonStandOrders;
+        private readonly string singleOrder;
+        private readonly string shipment;
+        private readonly string customer;
+        private readonly string product;
+        private readonly string invoice;
+        private readonly string badDataOrder;
+        private readonly string missingDataOrder;
+        private readonly string missingItems;
         
         public LemonStandDownloaderTest()
         { 
@@ -59,10 +60,11 @@ namespace ShipWorks.Tests.Stores.LemonStand
             string txt = string.Empty;
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourceName))
             {
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    txt = reader.ReadToEnd();
-                }
+                if (stream != null)
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        txt = reader.ReadToEnd();
+                    }
             }
 
             return txt;

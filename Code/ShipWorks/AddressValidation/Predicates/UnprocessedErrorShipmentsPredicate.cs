@@ -22,6 +22,7 @@ namespace ShipWorks.AddressValidation.Predicates
 
             predicate.Add(ShipmentFields.ShipAddressValidationStatus == (int) AddressValidationStatusType.Error)
                 .Add(ShipmentFields.Processed == false)
+                .Add(ShipmentFields.Voided == false)
                 .Add(new FieldCompareSetPredicate(ShipmentFields.OrderID, null, OrderFields.OrderID, null, SetOperator.In, OrderFields.OrderDate > validationThreshold));
         }
 

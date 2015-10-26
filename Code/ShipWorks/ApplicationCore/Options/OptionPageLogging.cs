@@ -55,17 +55,20 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void SetMaxAgeSeletion(int maxLogAgeDays)
         {
-            if (maxLogAgeDays == 0)
+            switch (maxLogAgeDays)
             {
-                logAge.SelectedIndex = 2;
-            }
-            else if (maxLogAgeDays == 30)
-            {
-                logAge.SelectedIndex = 1;
-            }
-            else
-            {
-                logAge.SelectedIndex = 0;
+                case 0:
+                    logAge.SelectedIndex = 3;
+                    break;
+                case 30:
+                    logAge.SelectedIndex = 2;
+                    break;
+                case 7:
+                    logAge.SelectedIndex = 1;
+                    break;
+                default:
+                    logAge.SelectedIndex = 0;
+                    break;
             }
         }
 
@@ -77,8 +80,10 @@ namespace ShipWorks.ApplicationCore.Options
             switch (logAge.SelectedIndex)
             {
                 case 0:
-                    return 7;
+                    return 1;
                 case 1:
+                    return 7;
+                case 2:
                     return 30;
                 default:
                     return 0;

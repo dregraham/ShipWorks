@@ -224,7 +224,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac),
-                new DimensionsAdapter(shipment.OnTrac));
+                new DimensionsAdapter(shipment.OnTrac))
+            {
+                TotalWeight = shipment.TotalWeight
+            };
         }
 
         /// <summary>
