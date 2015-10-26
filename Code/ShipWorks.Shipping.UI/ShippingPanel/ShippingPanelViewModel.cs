@@ -124,7 +124,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 {
                     // Reset forceDomesticInternationalChanged so that we don't force it on the next round.
                     forceDomesticInternationalChanged = false;
-                    Save();
+
+                    Destination.SaveToEntity(shipmentAdapter.Shipment.ShipPerson);
+                    Origin.SaveToEntity(shipmentAdapter.Shipment.OriginPerson);
+
                     DomesticInternationalText = shipmentAdapter.IsDomestic ? "Domestic" : "International";
                 });
 
