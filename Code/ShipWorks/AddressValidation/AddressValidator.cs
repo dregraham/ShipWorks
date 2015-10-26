@@ -155,6 +155,25 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
+        /// Validates an address with no prefix on the specified entity
+        /// </summary>
+        public async Task<ValidatedAddressData> ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress)
+        {
+            ValidatedAddressEntity original = null;
+            IEnumerable<ValidatedAddressEntity> suggestions = null;
+
+            await ValidateAsync(addressAdapter, canAdjustAddress, (x, y) =>
+            {
+                original = x;
+                suggestions = y;
+            });
+            
+            return original == null ? 
+                ValidatedAddressData.Empty :
+                new ValidatedAddressData(original, suggestions);
+        }
+
+        /// <summary>
         /// Can the given status be validated
         /// </summary>
         public bool CanValidate(AddressValidationStatusType status) => ShouldValidateAddress(status);

@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
             SetupAddressValidationMessagePropertyHandlers();
 
             AddressSuggestions = Enumerable.Empty<KeyValuePair<string, ValidatedAddressEntity>>();
-            ValidateCommand = new RelayCommand(async () => await ValidateAddress());
+            ValidateCommand = new RelayCommand(ValidateAddress);
             ShowValidationMessageCommand = new RelayCommand(ShowValidationMessage);
             SelectAddressSuggestionCommand = new RelayCommand<ValidatedAddressEntity>(SelectAddressSuggestion);
         }
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
                 IEnumerable<ValidatedAddressEntity> validatedAddresses = validatedAddressScope.LoadValidatedAddresses(entityId.GetValueOrDefault(), prefix);
                 AddressSuggestions = BuildDictionary(validatedAddresses);
 
-                SetValidationDetails(person);
+                PopulateValidationDetails(person);
             }
             else
             {
@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// <summary>
         /// Set address validation details
         /// </summary>
-        private void SetValidationDetails(PersonAdapter person)
+        private void PopulateValidationDetails(PersonAdapter person)
         {
             ValidationMessage = person.AddressValidationError;
             SuggestionCount = person.AddressValidationSuggestionCount;
@@ -145,13 +145,29 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// </summary>
         private void Populate(PersonAdapter person)
         {
-            FullName = new PersonName(person).FullName;
-            Company = person.Company;
+            PopulateAddress(person);
+            PopulatePerson(person);
+        }
+
+        /// <summary>
+        /// Populates the address UI properties
+        /// </summary>
+        private void PopulateAddress(PersonAdapter person)
+        {
             Street = person.StreetAll;
             City = person.City;
             StateProvCode = Geography.GetStateProvName(person.StateProvCode);
             PostalCode = person.PostalCode;
             CountryCode = person.CountryCode;
+        }
+
+        /// <summary>
+        /// Populates the person UI properties
+        /// </summary>
+        private void PopulatePerson(PersonAdapter person)
+        {
+            FullName = new PersonName(person).FullName;
+            Company = person.Company;
             Email = person.Email;
             Phone = person.Phone;
         }
@@ -171,35 +187,34 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// <summary>
         /// Validate the currently entered address
         /// </summary>
-        private async Task ValidateAddress()
+        private async void ValidateAddress()
         {
             PersonAdapter adapter = new PersonAdapter();
             SaveToEntity(adapter);
-            await validator.ValidateAsync(adapter.ConvertTo<AddressAdapter>(), true, (addressEntity, entities) =>
+            ValidatedAddressData validationData = await validator.ValidateAsync(adapter.ConvertTo<AddressAdapter>(), true);
+
+            List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>();
+            int count = 0;
+
+            if (validationData.Original != null)
             {
-                List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>();
-                int count = 0;
+                validatedAddresses.Add(validationData.Original);
+                count = -1;
+            }
 
-                if (addressEntity != null)
-                {
-                    validatedAddresses.Add(addressEntity);
-                    count = -1;
-                }
+            if (validationData.Suggestions != null)
+            {
+                validatedAddresses.AddRange(validationData.Suggestions);
+                count += validatedAddresses.Count;
+            }
 
-                if (entities != null)
-                {
-                    validatedAddresses.AddRange(entities);
-                    count += validatedAddresses.Count;
-                }
+            validatedAddressScope.StoreAddresses(entityId.GetValueOrDefault(), validatedAddresses, prefix);
+            AddressSuggestions = BuildDictionary(validatedAddresses);
 
-                validatedAddressScope.StoreAddresses(entityId.GetValueOrDefault(), validatedAddresses, prefix);
-                AddressSuggestions = BuildDictionary(validatedAddresses);
+            SuggestionCount = Math.Max(0, count);
 
-                SuggestionCount = Math.Max(0, count);
-
-                Populate(adapter);
-                SetValidationDetails(adapter);
-            });
+            PopulateAddress(adapter);
+            PopulateValidationDetails(adapter);
         }
 
         /// <summary>
@@ -215,8 +230,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
             AddressAdapter changedAddress = await addressSelector.SelectAddress(person.ConvertTo<AddressAdapter>(), addressSuggestion);
             PersonAdapter changedPerson = changedAddress.ConvertTo<PersonAdapter>();
 
-            Populate(changedPerson);
-            SetValidationDetails(changedPerson);
+            PopulateAddress(changedPerson);
+            ValidationStatus = (AddressValidationStatusType) changedPerson.AddressValidationStatus;
 
             SetupAddressValidationMessagePropertyHandlers();
         }
@@ -227,7 +242,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         private IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> BuildDictionary(IEnumerable<ValidatedAddressEntity> validatedAddresses)
         {
             return validatedAddresses.ToDictionary(
-                    x => AddressSelector.FormatAddress(x) + (x.IsOriginal ? " (Original)" : string.Empty),
+                    x => addressSelector.FormatAddress(x),
                     x => x);
         }
 

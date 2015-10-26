@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Tests.Shared;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
@@ -18,6 +19,122 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
         public AddressViewModelTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+        }
+
+        [Fact]
+        public void Load_PopulatesAllProperties()
+        {
+            PersonAdapter person = new PersonAdapter
+            {
+                Street1 = "1 Main",
+                City = "Foo",
+                StateProvCode = "Bar",
+                CountryCode = "Baz",
+                PostalCode = "12345",
+                FirstName = "John",
+                LastName = "Doe",
+                Company = "Foo Company",
+                Email = "bar@example.com",
+                Phone = "314-555-1234"
+            };
+
+            var testObject = mock.Create<AddressViewModel>();
+            testObject.Load(person);
+
+            Assert.Equal(testObject.Street, "1 Main");
+            Assert.Equal(testObject.City, "Foo");
+            Assert.Equal(testObject.StateProvCode, "Bar");
+            Assert.Equal(testObject.CountryCode, "Baz");
+            Assert.Equal(testObject.PostalCode, "12345");
+            Assert.Equal(testObject.FullName, "John Doe");
+            Assert.Equal(testObject.Company, "Foo Company");
+            Assert.Equal(testObject.Email, "bar@example.com");
+            Assert.Equal(testObject.Phone, "314-555-1234");
+        }
+
+        [Fact]
+        public void Load_DoesNotGetAddressSuggestions_WhenPersonIsNotFromEntity()
+        {
+            var testObject = mock.Create<AddressViewModel>();
+
+            testObject.Load(new PersonAdapter());
+
+            mock.Mock<IValidatedAddressScope>()
+                .Verify(x => x.LoadValidatedAddresses(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public void Load_DoesNotSetValidationDetails_WhenPersonIsNotFromEntity()
+        {
+            var testObject = mock.Create<AddressViewModel>();
+
+            testObject.Load(new PersonAdapter
+            {
+                AddressValidationSuggestionCount = 3,
+                AddressValidationStatus = (int)AddressValidationStatusType.HasSuggestions,
+                AddressValidationError = "Foo bar"
+            });
+            
+            Assert.NotEqual(testObject.SuggestionCount, 3);
+            Assert.NotEqual(testObject.ValidationStatus, AddressValidationStatusType.HasSuggestions);
+            Assert.NotEqual(testObject.ValidationMessage, "Foo bar");
+        }
+
+        [Fact]
+        public void Load_GetsAddressSuggestions_WhenPersonIsFromEntity()
+        {
+            var shipment = new ShipmentEntity
+            {
+                ShipmentID = 12,
+                ShipAddressValidationSuggestionCount = 3,
+                ShipAddressValidationStatus = (int)AddressValidationStatusType.HasSuggestions,
+                ShipAddressValidationError = "Foo bar"
+            };
+            var testObject = mock.Create<AddressViewModel>();
+
+            testObject.Load(new PersonAdapter(shipment, "Ship"));
+
+            Assert.Equal(testObject.SuggestionCount, 3);
+            Assert.Equal(testObject.ValidationStatus, AddressValidationStatusType.HasSuggestions);
+            Assert.Equal(testObject.ValidationMessage, "Foo bar");
+        }
+
+        [Fact]
+        public void Load_FormatsAddressSuggestions_WhenPersonIsFromEntity()
+        {
+            ValidatedAddressEntity validatedAddress1 = new ValidatedAddressEntity();
+            ValidatedAddressEntity validatedAddress2 = new ValidatedAddressEntity();
+
+            mock.Mock<IValidatedAddressScope>()
+                .Setup(x => x.LoadValidatedAddresses(It.IsAny<long>(), It.IsAny<string>()))
+                .Returns(new[] { validatedAddress1, validatedAddress2 });
+
+            mock.Mock<IAddressSelector>()
+                .Setup(x => x.FormatAddress(validatedAddress1))
+                .Returns("Foo")
+                .Verifiable();
+            mock.Mock<IAddressSelector>()
+                .Setup(x => x.FormatAddress(validatedAddress2))
+                .Returns("Bar")
+                .Verifiable();
+
+            var testObject = mock.Create<AddressViewModel>();
+
+            testObject.Load(new PersonAdapter(new ShipmentEntity(), "Ship"));
+
+            mock.VerifyAll = true;
+        }
+        
+        [Fact]
+        public void Load_SetsValidationDetails_WhenPersonIsFromEntity()
+        {
+            var shipment = new ShipmentEntity { ShipmentID = 12 };
+            var testObject = mock.Create<AddressViewModel>();
+
+            testObject.Load(new PersonAdapter(shipment, "Ship"));
+
+            mock.Mock<IValidatedAddressScope>()
+                .Verify(x => x.LoadValidatedAddresses(12, "Ship"));
         }
 
         [Fact]
@@ -72,7 +189,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             var testObject = mock.Create<AddressViewModel>();
             testObject.SelectAddressSuggestionCommand.Execute(testAddressSuggestion);
 
-            mock.Mock<IAddressSelector>().VerifyAll();
+            mock.VerifyAll = true;
         }
 
         [Fact]
@@ -110,10 +227,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
                 StateProvCode = "Bar2",
                 CountryCode = "Baz2",
                 PostalCode = "22345",
-                AddressValidationError = "Stuff",
                 AddressValidationStatus = (int)AddressValidationStatusType.SuggestionIgnored
             };
-            
+
             mock.Mock<IAddressSelector>()
                 .Setup(x => x.SelectAddress(It.IsAny<AddressAdapter>(), It.IsAny<ValidatedAddressEntity>()))
                 .ReturnsAsync(address);
@@ -132,7 +248,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             Assert.Equal("Bar2", testObject.StateProvCode);
             Assert.Equal("Baz2", testObject.CountryCode);
             Assert.Equal("22345", testObject.PostalCode);
-            Assert.Equal("Stuff", testObject.ValidationMessage);
             Assert.Equal(AddressValidationStatusType.SuggestionIgnored, testObject.ValidationStatus);
         }
 
@@ -141,7 +256,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
         {
             AddressAdapter address = new AddressAdapter
             {
-                AddressValidationSuggestionCount = 0
+                AddressValidationSuggestionCount = 0,
+                AddressValidationError = "Foo bar"
             };
 
             mock.Mock<IAddressSelector>()
@@ -154,6 +270,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             testObject.Email = "bar@example.com";
             testObject.Phone = "314-555-1234";
             testObject.SuggestionCount = 3;
+            testObject.ValidationMessage = "Stuff";
 
             testObject.SelectAddressSuggestionCommand.Execute(new ValidatedAddressEntity());
 
@@ -161,6 +278,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             Assert.Equal("Foo Company", testObject.Company);
             Assert.Equal("bar@example.com", testObject.Email);
             Assert.Equal("314-555-1234", testObject.Phone);
+            Assert.Equal("Stuff", testObject.ValidationMessage);
             Assert.Equal(3, testObject.SuggestionCount);
         }
 

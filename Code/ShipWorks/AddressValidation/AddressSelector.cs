@@ -264,8 +264,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private MenuItem CreateMenuItem(ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter)
         {
-            string title = FormatAddress(validatedAddress) +
-                (validatedAddress.IsOriginal ? " (Original)" : string.Empty);
+            string title = FormatAddress(validatedAddress);
 
             return new MenuItem(title, async (sender, args) => await SelectAddress(entityAdapter, validatedAddress));
         }
@@ -347,7 +346,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Format the address for display in the menu
         /// </summary>
-        public static string FormatAddress(ValidatedAddressEntity address)
+        public string FormatAddress(ValidatedAddressEntity address)
         {
             StringBuilder format = new StringBuilder();
             AddAddressPart(format, address.Street1);
@@ -356,6 +355,12 @@ namespace ShipWorks.AddressValidation
             AddAddressPart(format, address.City);
             AddAddressPart(format, address.StateProvCode);
             AddAddressPart(format, address.PostalCode);
+
+            if (address.IsOriginal)
+            {
+                format.Append(" (Original)");
+            }
+
             return format.ToString();
         }
 

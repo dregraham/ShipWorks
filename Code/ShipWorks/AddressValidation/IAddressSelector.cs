@@ -13,5 +13,10 @@ namespace ShipWorks.AddressValidation
         /// Select the specified address into an existing address
         /// </summary>
         Task<AddressAdapter> SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress);
+        
+        /// <summary>
+        /// Format the address for display in the menu
+        /// </summary>
+        string FormatAddress(ValidatedAddressEntity x);
     }
 }
