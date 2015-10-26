@@ -33,6 +33,8 @@ namespace ShipWorks.Stores.Platforms.PayPal
         public PayPalCredentialsControl()
         {
             InitializeComponent();
+
+            linkHelp.Url = PayPalStoreType.AccountSettingsHelpUrl;
         }
 
         /// <summary>

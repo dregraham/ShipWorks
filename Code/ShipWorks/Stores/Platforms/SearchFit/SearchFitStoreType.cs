@@ -36,24 +36,12 @@ namespace ShipWorks.Stores.Platforms.SearchFit
         /// <summary>
         /// Identifying typecode for SearchFit
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.SearchFit;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.SearchFit;
 
         /// <summary>
         /// Log source
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.SearchFit;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.SearchFit;
 
         /// <summary>
         /// Get the required module version
@@ -92,5 +80,9 @@ namespace ShipWorks.Stores.Platforms.SearchFit
             return client;
         }
 
+        /// <summary>
+        /// Gets the account settings help URL.
+        /// </summary>
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000065049";
     }
 }

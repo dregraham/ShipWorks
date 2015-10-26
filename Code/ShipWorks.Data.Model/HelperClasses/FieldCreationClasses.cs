@@ -9894,6 +9894,676 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity LemonStandOrderEntity</summary>
+	public partial class LemonStandOrderFields
+	{
+		/// <summary>Creates a new LemonStandOrderEntity.OrderID_Order field instance</summary>
+		public static EntityField2 OrderID_Order
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.OrderID_Order);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.CustomerID field instance</summary>
+		public static EntityField2 CustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.CustomerID);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.OrderNumber field instance</summary>
+		public static EntityField2 OrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.OrderNumber);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.OrderNumberComplete field instance</summary>
+		public static EntityField2 OrderNumberComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.OrderNumberComplete);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.OrderDate field instance</summary>
+		public static EntityField2 OrderDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.OrderDate);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.OrderTotal field instance</summary>
+		public static EntityField2 OrderTotal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.OrderTotal);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.OnlineLastModified field instance</summary>
+		public static EntityField2 OnlineLastModified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.OnlineLastModified);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.OnlineCustomerID field instance</summary>
+		public static EntityField2 OnlineCustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.OnlineCustomerID);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.OnlineStatus field instance</summary>
+		public static EntityField2 OnlineStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.OnlineStatus);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.OnlineStatusCode field instance</summary>
+		public static EntityField2 OnlineStatusCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.OnlineStatusCode);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.RequestedShipping field instance</summary>
+		public static EntityField2 RequestedShipping
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.RequestedShipping);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillFirstName field instance</summary>
+		public static EntityField2 BillFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillFirstName);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillMiddleName field instance</summary>
+		public static EntityField2 BillMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillMiddleName);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillLastName field instance</summary>
+		public static EntityField2 BillLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillLastName);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillCompany field instance</summary>
+		public static EntityField2 BillCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillCompany);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillStreet1 field instance</summary>
+		public static EntityField2 BillStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillStreet1);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillStreet2 field instance</summary>
+		public static EntityField2 BillStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillStreet2);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillStreet3 field instance</summary>
+		public static EntityField2 BillStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillStreet3);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillCity field instance</summary>
+		public static EntityField2 BillCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillCity);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillStateProvCode field instance</summary>
+		public static EntityField2 BillStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillStateProvCode);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillPostalCode field instance</summary>
+		public static EntityField2 BillPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillPostalCode);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillCountryCode field instance</summary>
+		public static EntityField2 BillCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillCountryCode);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillPhone field instance</summary>
+		public static EntityField2 BillPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillPhone);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillFax field instance</summary>
+		public static EntityField2 BillFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillFax);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillEmail field instance</summary>
+		public static EntityField2 BillEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillEmail);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillWebsite field instance</summary>
+		public static EntityField2 BillWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillWebsite);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillMilitaryAddress);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipFirstName field instance</summary>
+		public static EntityField2 ShipFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipFirstName);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipMiddleName field instance</summary>
+		public static EntityField2 ShipMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipMiddleName);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipLastName field instance</summary>
+		public static EntityField2 ShipLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipLastName);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipCompany field instance</summary>
+		public static EntityField2 ShipCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipCompany);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipStreet1 field instance</summary>
+		public static EntityField2 ShipStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipStreet1);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipStreet2 field instance</summary>
+		public static EntityField2 ShipStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipStreet2);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipStreet3 field instance</summary>
+		public static EntityField2 ShipStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipStreet3);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipCity field instance</summary>
+		public static EntityField2 ShipCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipCity);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipStateProvCode field instance</summary>
+		public static EntityField2 ShipStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipStateProvCode);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipPostalCode field instance</summary>
+		public static EntityField2 ShipPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipPostalCode);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipCountryCode field instance</summary>
+		public static EntityField2 ShipCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipCountryCode);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipPhone field instance</summary>
+		public static EntityField2 ShipPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipPhone);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipFax field instance</summary>
+		public static EntityField2 ShipFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipFax);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipEmail field instance</summary>
+		public static EntityField2 ShipEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipEmail);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipWebsite field instance</summary>
+		public static EntityField2 ShipWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipAddressValidationStatus);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipAddressValidationError field instance</summary>
+		public static EntityField2 ShipAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipAddressValidationError);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipResidentialStatus field instance</summary>
+		public static EntityField2 ShipResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipResidentialStatus);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipPOBox field instance</summary>
+		public static EntityField2 ShipPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipPOBox);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipUSTerritory);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipMilitaryAddress field instance</summary>
+		public static EntityField2 ShipMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipMilitaryAddress);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.RollupItemCount field instance</summary>
+		public static EntityField2 RollupItemCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.RollupItemCount);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.RollupItemName field instance</summary>
+		public static EntityField2 RollupItemName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.RollupItemName);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.RollupItemCode field instance</summary>
+		public static EntityField2 RollupItemCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.RollupItemCode);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.RollupItemSKU field instance</summary>
+		public static EntityField2 RollupItemSKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.RollupItemSKU);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.RollupItemLocation field instance</summary>
+		public static EntityField2 RollupItemLocation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.RollupItemLocation);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.RollupItemQuantity field instance</summary>
+		public static EntityField2 RollupItemQuantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.RollupItemQuantity);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.RollupItemTotalWeight field instance</summary>
+		public static EntityField2 RollupItemTotalWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.RollupItemTotalWeight);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.RollupNoteCount field instance</summary>
+		public static EntityField2 RollupNoteCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.RollupNoteCount);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillNameParseStatus field instance</summary>
+		public static EntityField2 BillNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillNameParseStatus);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.BillUnparsedName field instance</summary>
+		public static EntityField2 BillUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.BillUnparsedName);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipNameParseStatus field instance</summary>
+		public static EntityField2 ShipNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipNameParseStatus);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipUnparsedName field instance</summary>
+		public static EntityField2 ShipUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipUnparsedName);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipSenseHashKey field instance</summary>
+		public static EntityField2 ShipSenseHashKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipSenseHashKey);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipSenseRecognitionStatus);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.LemonStandOrderID field instance</summary>
+		public static EntityField2 LemonStandOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.LemonStandOrderID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity LemonStandOrderItemEntity</summary>
+	public partial class LemonStandOrderItemFields
+	{
+		/// <summary>Creates a new LemonStandOrderItemEntity.OrderItemID_OrderItem field instance</summary>
+		public static EntityField2 OrderItemID_OrderItem
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.OrderItemID_OrderItem);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Code);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.ISBN field instance</summary>
+		public static EntityField2 ISBN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.ISBN);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.UPC field instance</summary>
+		public static EntityField2 UPC
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.UPC);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Description);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Location field instance</summary>
+		public static EntityField2 Location
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Location);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Image field instance</summary>
+		public static EntityField2 Image
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Image);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Thumbnail field instance</summary>
+		public static EntityField2 Thumbnail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Thumbnail);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.UnitPrice field instance</summary>
+		public static EntityField2 UnitPrice
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.UnitPrice);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.UnitCost field instance</summary>
+		public static EntityField2 UnitCost
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.UnitCost);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Quantity);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.OrderItemID);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.UrlName field instance</summary>
+		public static EntityField2 UrlName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.UrlName);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.ShortDescription field instance</summary>
+		public static EntityField2 ShortDescription
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.ShortDescription);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.Category field instance</summary>
+		public static EntityField2 Category
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Category);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity LemonStandStoreEntity</summary>
+	public partial class LemonStandStoreFields
+	{
+		/// <summary>Creates a new LemonStandStoreEntity.StoreID_Store field instance</summary>
+		public static EntityField2 StoreID_Store
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.StoreID_Store);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.License field instance</summary>
+		public static EntityField2 License
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.License);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.Edition field instance</summary>
+		public static EntityField2 Edition
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.Edition);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.TypeCode field instance</summary>
+		public static EntityField2 TypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.TypeCode);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.Enabled field instance</summary>
+		public static EntityField2 Enabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.Enabled);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.SetupComplete field instance</summary>
+		public static EntityField2 SetupComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.SetupComplete);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.StoreName field instance</summary>
+		public static EntityField2 StoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.StoreName);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.Company);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.City);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.Fax field instance</summary>
+		public static EntityField2 Fax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.Fax);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.Email);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.Website field instance</summary>
+		public static EntityField2 Website
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.Website);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.AutoDownload field instance</summary>
+		public static EntityField2 AutoDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.AutoDownload);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.AutoDownloadMinutes field instance</summary>
+		public static EntityField2 AutoDownloadMinutes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.AutoDownloadMinutes);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.AutoDownloadOnlyAway field instance</summary>
+		public static EntityField2 AutoDownloadOnlyAway
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.AutoDownloadOnlyAway);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.AddressValidationSetting field instance</summary>
+		public static EntityField2 AddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.AddressValidationSetting);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.ComputerDownloadPolicy field instance</summary>
+		public static EntityField2 ComputerDownloadPolicy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.ComputerDownloadPolicy);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.DefaultEmailAccountID field instance</summary>
+		public static EntityField2 DefaultEmailAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.DefaultEmailAccountID);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.ManualOrderPrefix field instance</summary>
+		public static EntityField2 ManualOrderPrefix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.ManualOrderPrefix);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.ManualOrderPostfix field instance</summary>
+		public static EntityField2 ManualOrderPostfix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.ManualOrderPostfix);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.InitialDownloadDays field instance</summary>
+		public static EntityField2 InitialDownloadDays
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.InitialDownloadDays);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.InitialDownloadOrder field instance</summary>
+		public static EntityField2 InitialDownloadOrder
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.Token field instance</summary>
+		public static EntityField2 Token
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.Token);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.StoreURL field instance</summary>
+		public static EntityField2 StoreURL
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.StoreURL);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.StatusCodes field instance</summary>
+		public static EntityField2 StatusCodes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.StatusCodes);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity MagentoOrderEntity</summary>
 	public partial class MagentoOrderFields
 	{

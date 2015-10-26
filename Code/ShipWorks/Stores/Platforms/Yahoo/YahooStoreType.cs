@@ -71,6 +71,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             }
         }
 
+       
         /// <summary>
         /// Create a new default initialized instance of the store type
         /// </summary>
@@ -224,6 +225,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             executor.ExecuteAsync(UploadShipmentDetailsCallback, context.SelectedKeys, generatedEmail);
         }
 
+        
+
         /// <summary>
         /// The worker thread function that does the actual details uploading
         /// </summary>
@@ -250,5 +253,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 issueAdder.Add(orderID, ex);
             }
         }
+
+        public static string AccountSettingsHelpUrl => "http://www.shipworks.com/shipworks/help/Yahoo_Email_Account.html";
     }
 }

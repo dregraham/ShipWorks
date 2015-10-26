@@ -951,11 +951,41 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         private static RateV14 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
             PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
-            PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
 
             RateV14 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = ConvertServiceType(UspsUtility.GetApiServiceType(serviceType));
             rate.PrintLayout = "Normal4x6";
+            
+            PostalShipmentType shipmentType = (PostalShipmentType)ShipmentTypeManager.GetType(shipment);
+
+            List<AddOnV6> addOns = GetAddons(shipmentType, shipment);
+            if (addOns.Count > 0)
+            {
+                rate.AddOns = addOns.ToArray();
+            }
+
+            // For APO/FPO, we have to specifically ask for customs docs
+            if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) || shipmentType.IsCustomsRequired(shipment))
+            {
+                rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "Normal4X6CP72" : "Normal4X6CN22";
+            }
+
+            if (shipment.ReturnShipment)
+            {
+                // Swapping out Normal with Return indicates a return label
+                rate.PrintLayout = rate.PrintLayout.Replace("Normal", "Return");
+            }
+
+            return rate;
+        }
+
+        /// <summary>
+        /// Gets the addons
+        /// </summary>
+        private static List<AddOnV6> GetAddons(PostalShipmentType shipmentType, ShipmentEntity shipment)
+        {
+            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
+            PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
 
             List<AddOnV6> addOns = new List<AddOnV6>();
 
@@ -987,7 +1017,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             }
 
             // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
-            else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
+            else if (shipmentType.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
             {
                 addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USADC });
             }
@@ -1007,24 +1037,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.SCAHP });
             }
 
-            if (addOns.Count > 0)
-            {
-                rate.AddOns = addOns.ToArray();
-            }
-
-            // For APO/FPO, we have to specifically ask for customs docs
-            if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) || ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
-            {
-                rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "Normal4X6CP72" : "Normal4X6CN22";
-            }
-
-            if (shipment.ReturnShipment)
-            {
-                // Swapping out Normal with Return indicates a return label
-                rate.PrintLayout = rate.PrintLayout.Replace("Normal", "Return");
-            }
-
-            return rate;
+            return addOns;
         }
 
         /// <summary>
