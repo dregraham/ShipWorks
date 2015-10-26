@@ -327,8 +327,7 @@ namespace ShipWorks.Data.Administration
                                                 scheduledTrigger.SaveExtraState(action, adapter);
                                             }
                                         }
-
-
+                                        
                                         ActionManager.SaveAction(action, adapter);
                                     }
 
