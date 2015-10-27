@@ -79,6 +79,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ActionTaskEntity:
 					toReturn = this.ActionTask;
 					break;
+				case ShipWorks.Data.Model.EntityType.AmazonAccountEntity:
+					toReturn = this.AmazonAccount;
+					break;
 				case ShipWorks.Data.Model.EntityType.AmazonASINEntity:
 					toReturn = this.AmazonASIN;
 					break;
@@ -87,6 +90,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.AmazonOrderItemEntity:
 					toReturn = this.AmazonOrderItem;
+					break;
+				case ShipWorks.Data.Model.EntityType.AmazonShipmentEntity:
+					toReturn = this.AmazonShipment;
 					break;
 				case ShipWorks.Data.Model.EntityType.AmazonStoreEntity:
 					toReturn = this.AmazonStore;
@@ -614,6 +620,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<ActionTaskEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonAccountEntity instances in the database.</summary>
+		public DataSource2<AmazonAccountEntity> AmazonAccount
+		{
+			get { return new DataSource2<AmazonAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting AmazonASINEntity instances in the database.</summary>
 		public DataSource2<AmazonASINEntity> AmazonASIN
 		{
@@ -630,6 +642,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<AmazonOrderItemEntity> AmazonOrderItem
 		{
 			get { return new DataSource2<AmazonOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonShipmentEntity instances in the database.</summary>
+		public DataSource2<AmazonShipmentEntity> AmazonShipment
+		{
+			get { return new DataSource2<AmazonShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting AmazonStoreEntity instances in the database.</summary>

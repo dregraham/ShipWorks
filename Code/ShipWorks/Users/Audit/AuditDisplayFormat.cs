@@ -209,6 +209,13 @@ namespace ShipWorks.Users.Audit
                         IParcelAccountEntity account = iParcelAccountManager.GetAccount(entityID);
                         return account != null ? account.Description : "(Deleted)";
                     }
+
+                case EntityType.AmazonAccountEntity:
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        AccountManagerBase<AmazonAccountEntity> accountManager = scope.Resolve<AccountManagerBase<AmazonAccountEntity>>();
+                        return accountManager.GetAccount(entityID)?.Description ?? "(Deleted)";
+                    }
             }
 
             throw new InvalidOperationException("No formatting specified for entity " + entityType);

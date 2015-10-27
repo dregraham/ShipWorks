@@ -85,6 +85,42 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Carriers\Amazon\AmazonAccountEditorDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonAccountEditorDlg.Designer.cs">
+      <DependentUpon>AmazonAccountEditorDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonAccountManagerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonAccountManagerControl.Designer.cs">
+      <DependentUpon>AmazonAccountManagerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonOptionsControl.Designer.cs">
+      <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonServiceControl.Designer.cs">
+      <DependentUpon>AmazonServiceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonSettingsControl.Designer.cs">
+      <DependentUpon>AmazonSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonShipmentSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonShipmentSetupWizard.Designer.cs">
+      <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingModule.cs" />
   </ItemGroup>
@@ -119,6 +155,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonAccountEditorDlg.resx">
+      <DependentUpon>AmazonAccountEditorDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonAccountManagerControl.resx">
+      <DependentUpon>AmazonAccountManagerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonOptionsControl.resx">
+      <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonServiceControl.resx">
+      <DependentUpon>AmazonServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonSettingsControl.resx">
+      <DependentUpon>AmazonSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonShipmentSetupWizard.resx">
+      <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
@@ -126,9 +182,6 @@
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Carriers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

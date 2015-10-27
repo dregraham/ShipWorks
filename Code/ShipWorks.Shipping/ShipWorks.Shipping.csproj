@@ -80,6 +80,27 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Carriers\Amazon\AmazonAccountEditorViewModel.cs" />
+    <Compile Include="Carriers\Amazon\AmazonAccountManager.cs" />
+    <Compile Include="Carriers\Amazon\AmazonCredentials.cs" />
+    <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipperException.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonRates.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\AmazonRateTag.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
+    <Compile Include="Carriers\Amazon\Api\IAmazonRates.cs" />
+    <Compile Include="Carriers\Amazon\Api\IAmazonShippingWebClient.cs" />
+    <Compile Include="Carriers\Amazon\Api\OperationResponse.cs" />
+    <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonAccountManager.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonCredentials.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +137,6 @@
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Carriers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
