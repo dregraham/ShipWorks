@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public TemporarilyUnavailableCarrierList TemporarilyUnavailableCarrierList { get; set; }
 
         [XmlElement(ElementName = "TermsAndConditionsNotAcceptedCarrierList")]
-        public List<TermsAndConditionsNotAcceptedCarrier> TermsAndConditionsNotAcceptedCarrierList { get; set; }
+        public TermsAndConditionsNotAcceptedCarrierList TermsAndConditionsNotAcceptedCarrierList { get; set; }
     }
 
     [XmlRoot(ElementName = "Rate")]

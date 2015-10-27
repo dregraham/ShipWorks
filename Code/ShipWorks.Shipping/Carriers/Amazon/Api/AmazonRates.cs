@@ -50,16 +50,40 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             RateGroup rateGroup = GetRateGroupFromResponse(response);
 
-            if (response.GetEligibleShippingServicesResult.TermsAndConditionsNotAcceptedCarrierList != null)
-            {
-                List<TermsAndConditionsNotAcceptedCarrier> carriers =
-                    response.GetEligibleShippingServicesResult.TermsAndConditionsNotAcceptedCarrierList;
 
-                foreach (TermsAndConditionsNotAcceptedCarrier carrier in carriers)
-                {
-                    rateGroup.AddFootnoteFactory(new InformationFootnoteFactory($"Terms and conditions have not been accepted for {carrier.CarrierName}. Accepting these terms and conditions can be done through Amazon."));
-                }
+            //Currently no carriers are returned in the not accepted list
+            //Uncomment out block below and comment block below that to display footnotes for carriers that have been accepted for testing purposes
+
+            List<ShippingService> carriers =
+                response.GetEligibleShippingServicesResult.ShippingServiceList.ShippingService;
+
+
+            var results = from c in carriers
+                          group c by c.CarrierName
+                          into r
+                          select new { CarrierName = r.Key, Result = r.ToList() };
+
+            foreach (var carrier in results)
+            {
+                rateGroup.AddFootnoteFactory(new InformationFootnoteFactory($"Terms and conditions have not been accepted for {carrier.CarrierName}. Accepting these terms and conditions can be done through Amazon."));
             }
+
+
+            //if (response.GetEligibleShippingServicesResult.TermsAndConditionsNotAcceptedCarrierList != null)
+            //{
+            //    List<string> carriers =
+            //        response.GetEligibleShippingServicesResult.TermsAndConditionsNotAcceptedCarrierList.TermsAndConditionsNotAcceptedCarrier.CarrierName;
+
+            //    var results = from c in carriers
+            //                  group c by c
+            //                  into r
+            //                  select new { CarrierName = r.Key, Result = r.ToList() };
+
+            //    foreach (var carrier in results)
+            //    {
+            //        rateGroup.AddFootnoteFactory(new InformationFootnoteFactory($"Terms and conditions have not been accepted for {carrier.CarrierName}. Accepting these terms and conditions can be done through Amazon."));
+            //    }
+            //}
 
             return rateGroup;
         }
