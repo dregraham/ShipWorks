@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (172 + 0));
+			base.InitClass( (173 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -67,6 +67,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAmazonASINEntityInfos();
 			InitAmazonOrderEntityInfos();
 			InitAmazonOrderItemEntityInfos();
+			InitAmazonProfileEntityInfos();
 			InitAmazonShipmentEntityInfos();
 			InitAmazonStoreEntityInfos();
 			InitAmeriCommerceStoreEntityInfos();
@@ -369,6 +370,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonOrderItemEntity", "AmazonOrderItemCode", typeof(System.String), false, false, false, false,  (int)AmazonOrderItemFieldIndex.AmazonOrderItemCode, 64, 0, 0);
 			base.AddElementFieldInfo("AmazonOrderItemEntity", "ASIN", typeof(System.String), false, false, false, false,  (int)AmazonOrderItemFieldIndex.ASIN, 255, 0, 0);
 			base.AddElementFieldInfo("AmazonOrderItemEntity", "ConditionNote", typeof(System.String), false, false, false, false,  (int)AmazonOrderItemFieldIndex.ConditionNote, 255, 0, 0);
+		}
+		/// <summary>Inits AmazonProfileEntity's FieldInfo objects</summary>
+		private void InitAmazonProfileEntityInfos()
+		{
+			base.AddElementFieldInfo("AmazonProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AmazonProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("AmazonProfileEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AmazonProfileFieldIndex.InsuranceValue, 0, 4, 19);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsShippingProfileID", typeof(System.Int64), false, false, false, false,  (int)AmazonProfileFieldIndex.DimsShippingProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AmazonProfileFieldIndex.DimsLength, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsWidth", typeof(System.Double), false, false, false, false,  (int)AmazonProfileFieldIndex.DimsWidth, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)AmazonProfileFieldIndex.DimsHeight, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AmazonProfileFieldIndex.DimsWeight, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)AmazonProfileFieldIndex.DimsAddWeight, 0, 0, 0);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(System.Int32), false, false, false, false,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
+			base.AddElementFieldInfo("AmazonProfileEntity", "CarrierWillPickUp", typeof(System.Boolean), false, false, false, false,  (int)AmazonProfileFieldIndex.CarrierWillPickUp, 0, 0, 0);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeclaredValue, 0, 4, 19);
 		}
 		/// <summary>Inits AmazonShipmentEntity's FieldInfo objects</summary>
 		private void InitAmazonShipmentEntityInfos()

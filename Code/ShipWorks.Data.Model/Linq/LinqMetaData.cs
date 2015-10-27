@@ -91,6 +91,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.AmazonOrderItemEntity:
 					toReturn = this.AmazonOrderItem;
 					break;
+				case ShipWorks.Data.Model.EntityType.AmazonProfileEntity:
+					toReturn = this.AmazonProfile;
+					break;
 				case ShipWorks.Data.Model.EntityType.AmazonShipmentEntity:
 					toReturn = this.AmazonShipment;
 					break;
@@ -642,6 +645,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<AmazonOrderItemEntity> AmazonOrderItem
 		{
 			get { return new DataSource2<AmazonOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonProfileEntity instances in the database.</summary>
+		public DataSource2<AmazonProfileEntity> AmazonProfile
+		{
+			get { return new DataSource2<AmazonProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting AmazonShipmentEntity instances in the database.</summary>
