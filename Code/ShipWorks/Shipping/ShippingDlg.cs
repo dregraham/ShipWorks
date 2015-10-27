@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Collections;
@@ -28,7 +26,6 @@ using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Setup;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -37,12 +34,10 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Processing;
-using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using log4net;
@@ -335,6 +330,7 @@ namespace ShipWorks.Shipping
 
             List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = ShipmentTypeManager.ShipmentTypes
                    .Where(t => ShippingManager.IsShipmentTypeEnabled(t.ShipmentTypeCode))
+                   .Where(t => uiDisplayedShipments.All(s => t.IsAllowedFor(s)))
                    .Select(t => new KeyValuePair<string, ShipmentTypeCode>(t.ShipmentTypeName, t.ShipmentTypeCode)).ToList();
 
             if (selected != null && !enabledTypes.Any(p => p.Value == selected.Value))
@@ -343,7 +339,7 @@ namespace ShipWorks.Shipping
                 SortShipmentTypes(enabledTypes);
             }
 
-            comboShipmentType.SelectedIndexChanged -= this.OnChangeShipmentType;
+            comboShipmentType.SelectedIndexChanged -= OnChangeShipmentType;
             comboShipmentType.DataSource = enabledTypes;
 
             if (multiValued)
@@ -798,6 +794,8 @@ namespace ShipWorks.Shipping
                 ClearRates(string.Empty);
                 GetRates();
             }
+
+            LoadShipmentTypeCombo();
 
             shipSenseSynchronizer.Add(loadedShipmentEntities);
         }
