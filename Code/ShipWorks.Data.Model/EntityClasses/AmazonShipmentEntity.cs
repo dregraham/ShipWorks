@@ -518,6 +518,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("AmazonUniqueShipmentID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("SendDateMustArriveBy", fieldHashtable);
 		}
 		#endregion
 
@@ -822,6 +825,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)AmazonShipmentFieldIndex.AmazonUniqueShipmentID, true); }
 			set	{ SetValue((int)AmazonShipmentFieldIndex.AmazonUniqueShipmentID, value); }
+		}
+
+		/// <summary> The SendDateMustArriveBy property of the Entity AmazonShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonShipment"."SendDateMustArriveBy"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean SendDateMustArriveBy
+		{
+			get { return (System.Boolean)GetValue((int)AmazonShipmentFieldIndex.SendDateMustArriveBy, true); }
+			set	{ SetValue((int)AmazonShipmentFieldIndex.SendDateMustArriveBy, value); }
 		}
 
 

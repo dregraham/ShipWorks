@@ -14,6 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public double Weight { get; set; }
         public CurrencyAmount Insurance { get; set; }
         public DateTime? MustArriveByDate { get; set; }
+        public bool SendDateMustArriveBy { get; set; }
         public ShippingServiceOptions ShippingServiceOptions { get; set; }
     }
 

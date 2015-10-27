@@ -114,6 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     Width = shipment.Amazon.DimsWidth
                 },
                 MustArriveByDate = shipment.Amazon.DateMustArriveBy,
+                SendDateMustArriveBy = shipment.Amazon.SendDateMustArriveBy,
                 ShipFromAddress = new Address()
                 {
                     AddressLine1 = shipment.OriginStreet1,

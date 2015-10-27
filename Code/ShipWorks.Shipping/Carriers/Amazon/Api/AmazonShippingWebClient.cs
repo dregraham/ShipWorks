@@ -108,8 +108,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             int i = 1;
             foreach (Item item in requestDetails.ItemList)
             {
-                string orderItemIdParameter = String.Format("ShipmentRequestDetails.ItemList.Item.{0}.OrderItemId", i);
-                string quantityParameter = String.Format("ShipmentRequestDetails.ItemList.Item.{0}.Quantity", i);
+                string orderItemIdParameter = $"ShipmentRequestDetails.ItemList.Item.{i}.OrderItemId";
+                string quantityParameter = $"ShipmentRequestDetails.ItemList.Item.{i}.Quantity";
 
                 request.Variables.Add(orderItemIdParameter,item.OrderItemId);
                 request.Variables.Add(quantityParameter,item.Quantity.ToString());
@@ -161,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp", requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLower());
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience", requestDetails.ShippingServiceOptions.DeliveryExperience);
 
-            if (requestDetails.MustArriveByDate != null)
+            if (requestDetails.MustArriveByDate != null && requestDetails.SendDateMustArriveBy)
             {
                 request.Variables.Add("ShipmentRequestDetails.MustArriveByDate", FormatDate(requestDetails.MustArriveByDate.Value));
             }
@@ -190,7 +190,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 .Select(v => v.Name + "=" + AmazonMwsSignature.Encode(v.Value, false))
                 .Aggregate((x,y) => x + "&" + y);
 
-            string parameterString = String.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
+            string parameterString = $"{verbString}\n{request.Uri.Host}\n{endpointPath}\n{queryString}";
 
             // sign the string and add it to the request
             string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(mwsSettings.InterapptiveSecretKey), SigningAlgorithm.SHA256);
@@ -210,7 +210,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             AddSignature(request, amazonMwsApiCall, mwsSettings);
             
             // add a User Agent header
-            request.Headers.Add("x-amazon-user-agent", String.Format("ShipWorks/{0} (Language=.NET)", Assembly.GetExecutingAssembly().GetName().Version));
+            request.Headers.Add("x-amazon-user-agent",
+                $"ShipWorks/{Assembly.GetExecutingAssembly().GetName().Version} (Language=.NET)");
 
             // business logic failures are handled through status codes
             request.AllowHttpStatusCodes(new HttpStatusCode[] { HttpStatusCode.BadRequest });

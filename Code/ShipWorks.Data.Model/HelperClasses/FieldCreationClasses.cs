@@ -1097,6 +1097,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.AmazonUniqueShipmentID);}
 		}
+		/// <summary>Creates a new AmazonShipmentEntity.SendDateMustArriveBy field instance</summary>
+		public static EntityField2 SendDateMustArriveBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.SendDateMustArriveBy);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonStoreEntity</summary>

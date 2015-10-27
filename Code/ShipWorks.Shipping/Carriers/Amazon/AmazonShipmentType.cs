@@ -124,6 +124,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             amazonShipment.DimsWeight = shipment.ContentWeight;
             amazonShipment.CarrierWillPickUp = false;
+            amazonShipment.SendDateMustArriveBy = false;
 
             base.ConfigureNewShipment(shipment);
         }

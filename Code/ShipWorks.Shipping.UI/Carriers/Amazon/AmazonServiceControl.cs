@@ -103,6 +103,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             carrierWillPickUp.DataBindings.Add(nameof(carrierWillPickUp.Checked), viewModel, nameof(viewModel.CarrierWillPickUp), false, DataSourceUpdateMode.OnPropertyChanged);
             carrierWillPickUp.DataBindings.Add(nameof(carrierWillPickUp.CheckState), viewModel, nameof(viewModel.CarrierWillPickUpCheckState), false, DataSourceUpdateMode.OnPropertyChanged);
 
+            sendDeliverBy.DataBindings.Clear();
+            sendDeliverBy.DataBindings.Add(nameof(sendDeliverBy.Checked), viewModel, nameof(viewModel.SendDeliverBy), false, DataSourceUpdateMode.OnPropertyChanged);
+            sendDeliverBy.DataBindings.Add(nameof(sendDeliverBy.CheckState), viewModel, nameof(viewModel.SendDeliverByCheckState), false, DataSourceUpdateMode.OnPropertyChanged);
+
             mustArriveByDate.DataBindings.Clear();
             mustArriveByDate.DataBindings.Add(nameof(mustArriveByDate.Text), viewModel, nameof(viewModel.DateMustArriveBy), false, DataSourceUpdateMode.OnPropertyChanged);
             mustArriveByDate.DataBindings.Add(nameof(mustArriveByDate.MultiValued), viewModel, nameof(viewModel.DateMustArriveByIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);

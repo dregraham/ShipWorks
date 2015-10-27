@@ -382,7 +382,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits AmazonShipmentEntity's mappings</summary>
 		private void InitAmazonShipmentEntityMappings()
 		{
-			base.AddElementMapping( "AmazonShipmentEntity", "ShipWorksLocal", @"dbo", "AmazonShipment", 18 );
+			base.AddElementMapping( "AmazonShipmentEntity", "ShipWorksLocal", @"dbo", "AmazonShipment", 19 );
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "AmazonAccountID", "AmazonAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "CarrierName", "CarrierName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -401,6 +401,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "CarrierWillPickUp", "CarrierWillPickUp", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 15 );
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "DeclaredValue", "DeclaredValue", true, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 16 );
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "AmazonUniqueShipmentID", "AmazonUniqueShipmentID", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 17 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "SendDateMustArriveBy", "SendDateMustArriveBy", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 18 );
 		}
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
 		private void InitAmazonStoreEntityMappings()
