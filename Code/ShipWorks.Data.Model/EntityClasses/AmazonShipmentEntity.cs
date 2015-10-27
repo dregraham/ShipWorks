@@ -39,7 +39,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#region Class Member Declarations
 
 
-		private AmazonAccountEntity _amazonAccount;
+
 		private ShipmentEntity _shipment;
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -53,8 +53,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name AmazonAccount</summary>
-			public static readonly string AmazonAccount = "AmazonAccount";
+
 
 
 			/// <summary>Member name Shipment</summary>
@@ -119,11 +118,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-				_amazonAccount = (AmazonAccountEntity)info.GetValue("_amazonAccount", typeof(AmazonAccountEntity));
-				if(_amazonAccount!=null)
-				{
-					_amazonAccount.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
+
 				_shipment = (ShipmentEntity)info.GetValue("_shipment", typeof(ShipmentEntity));
 				if(_shipment!=null)
 				{
@@ -145,9 +140,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case AmazonShipmentFieldIndex.ShipmentID:
 					DesetupSyncShipment(true, false);
-					break;
-				case AmazonShipmentFieldIndex.AmazonAccountID:
-					DesetupSyncAmazonAccount(true, false);
 					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -171,9 +163,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "AmazonAccount":
-					this.AmazonAccount = (AmazonAccountEntity)entity;
-					break;
+
 
 
 				case "Shipment":
@@ -200,9 +190,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "AmazonAccount":
-					toReturn.Add(AmazonShipmentEntity.Relations.AmazonAccountEntityUsingAmazonAccountID);
-					break;
+
 
 
 				case "Shipment":
@@ -243,9 +231,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "AmazonAccount":
-					SetupSyncAmazonAccount(relatedEntity);
-					break;
+
 
 				case "Shipment":
 					SetupSyncShipment(relatedEntity);
@@ -264,9 +250,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "AmazonAccount":
-					DesetupSyncAmazonAccount(false, true);
-					break;
+
 
 				case "Shipment":
 					DesetupSyncShipment(false, true);
@@ -292,10 +276,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_amazonAccount!=null)
-			{
-				toReturn.Add(_amazonAccount);
-			}
+
 			if(_shipment!=null)
 			{
 				toReturn.Add(_shipment);
@@ -326,7 +307,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-				info.AddValue("_amazonAccount", (!this.MarkedForDeletion?_amazonAccount:null));
+
 				info.AddValue("_shipment", (!this.MarkedForDeletion?_shipment:null));
 			}
 			
@@ -364,15 +345,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'AmazonAccount' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoAmazonAccount()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AmazonAccountFields.AmazonAccountID, null, ComparisonOperator.Equal, this.AmazonAccountID));
-			return bucket;
-		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entity of type 'Shipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
@@ -450,7 +422,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("AmazonAccount", _amazonAccount);
+
 
 
 			toReturn.Add("Shipment", _shipment);
@@ -462,10 +434,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 
-			if(_amazonAccount!=null)
-			{
-				_amazonAccount.ActiveContext = base.ActiveContext;
-			}
+
 			if(_shipment!=null)
 			{
 				_shipment.ActiveContext = base.ActiveContext;
@@ -478,7 +447,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			_amazonAccount = null;
+
 			_shipment = null;
 			PerformDependencyInjection();
 			
@@ -552,38 +521,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
-		/// <summary> Removes the sync logic for member _amazonAccount</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncAmazonAccount(bool signalRelatedEntity, bool resetFKFields)
-		{
-			base.PerformDesetupSyncRelatedEntity( _amazonAccount, new PropertyChangedEventHandler( OnAmazonAccountPropertyChanged ), "AmazonAccount", AmazonShipmentEntity.Relations.AmazonAccountEntityUsingAmazonAccountID, true, signalRelatedEntity, "AmazonShipment", resetFKFields, new int[] { (int)AmazonShipmentFieldIndex.AmazonAccountID } );		
-			_amazonAccount = null;
-		}
-
-		/// <summary> setups the sync logic for member _amazonAccount</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncAmazonAccount(IEntity2 relatedEntity)
-		{
-			if(_amazonAccount!=relatedEntity)
-			{
-				DesetupSyncAmazonAccount(true, true);
-				_amazonAccount = (AmazonAccountEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _amazonAccount, new PropertyChangedEventHandler( OnAmazonAccountPropertyChanged ), "AmazonAccount", AmazonShipmentEntity.Relations.AmazonAccountEntityUsingAmazonAccountID, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnAmazonAccountPropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
 
 		/// <summary> Removes the sync logic for member _shipment</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
@@ -652,17 +589,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AmazonAccount' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathAmazonAccount
-		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AmazonAccountEntityFactory))),
-					(IEntityRelation)GetRelationsForField("AmazonAccount")[0], (int)ShipWorks.Data.Model.EntityType.AmazonShipmentEntity, (int)ShipWorks.Data.Model.EntityType.AmazonAccountEntity, 0, null, null, null, null, "AmazonAccount", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
-			}
-		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Shipment' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
@@ -900,40 +826,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Gets / sets related entity of type 'AmazonAccountEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
-		public virtual AmazonAccountEntity AmazonAccount
-		{
-			get
-			{
-				return _amazonAccount;
-			}
-			set
-			{
-				if(base.IsDeserializing)
-				{
-					SetupSyncAmazonAccount(value);
-				}
-				else
-				{
-					if(value==null)
-					{
-						if(_amazonAccount != null)
-						{
-							_amazonAccount.UnsetRelatedEntity(this, "AmazonShipment");
-						}
-					}
-					else
-					{
-						if(_amazonAccount!=value)
-						{
-							((IEntity2)value).SetRelatedEntity(this, "AmazonShipment");
-						}
-					}
-				}
-			}
-		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity
 		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>

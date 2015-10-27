@@ -374,7 +374,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitAmazonShipmentEntityInfos()
 		{
 			base.AddElementFieldInfo("AmazonShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)AmazonShipmentFieldIndex.ShipmentID, 0, 0, 19);
-			base.AddElementFieldInfo("AmazonShipmentEntity", "AmazonAccountID", typeof(System.Int64), false, true, false, false,  (int)AmazonShipmentFieldIndex.AmazonAccountID, 0, 0, 19);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "AmazonAccountID", typeof(System.Int64), false, false, false, false,  (int)AmazonShipmentFieldIndex.AmazonAccountID, 0, 0, 19);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "CarrierName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.CarrierName, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceName, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceID", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceID, 50, 0, 0);

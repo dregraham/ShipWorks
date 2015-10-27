@@ -37,7 +37,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private EntityCollection<AmazonShipmentEntity> _amazonShipment;
+
 
 
 
@@ -54,8 +54,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public static partial class MemberNames
 		{
 
-			/// <summary>Member name AmazonShipment</summary>
-			public static readonly string AmazonShipment = "AmazonShipment";
+
 
 
 		}
@@ -116,7 +115,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_amazonShipment = (EntityCollection<AmazonShipmentEntity>)info.GetValue("_amazonShipment", typeof(EntityCollection<AmazonShipmentEntity>));
+
 
 
 
@@ -157,9 +156,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(propertyName)
 			{
 
-				case "AmazonShipment":
-					this.AmazonShipment.Add((AmazonShipmentEntity)entity);
-					break;
+
 
 
 				default:
@@ -184,9 +181,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(fieldName)
 			{
 
-				case "AmazonShipment":
-					toReturn.Add(AmazonAccountEntity.Relations.AmazonShipmentEntityUsingAmazonAccountID);
-					break;
+
 
 
 				default:
@@ -225,9 +220,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(fieldName)
 			{
 
-				case "AmazonShipment":
-					this.AmazonShipment.Add((AmazonShipmentEntity)relatedEntity);
-					break;
+
 
 				default:
 					break;
@@ -244,9 +237,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(fieldName)
 			{
 
-				case "AmazonShipment":
-					base.PerformRelatedEntityRemoval(this.AmazonShipment, relatedEntity, signalRelatedEntityManyToOne);
-					break;
+
 
 				default:
 					break;
@@ -278,7 +269,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-			toReturn.Add(this.AmazonShipment);
+
 
 			return toReturn;
 		}
@@ -293,7 +284,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_amazonShipment", ((_amazonShipment!=null) && (_amazonShipment.Count>0) && !this.MarkedForDeletion)?_amazonShipment:null);
+
 
 
 
@@ -331,15 +322,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entities of type 'AmazonShipment' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoAmazonShipment()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AmazonShipmentFields.AmazonAccountID, null, ComparisonOperator.Equal, this.AmazonAccountID));
-			return bucket;
-		}
 
 
 
@@ -371,7 +353,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-			collectionsQueue.Enqueue(this._amazonShipment);
+
 
 		}
 		
@@ -380,7 +362,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
-			this._amazonShipment = (EntityCollection<AmazonShipmentEntity>) collectionsQueue.Dequeue();
+
 
 		}
 		
@@ -388,10 +370,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>true if the entity has populated member collections.</returns>
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
-			if (this._amazonShipment != null)
-			{
-				return true;
-			}
+
 
 			return base.HasPopulatedMemberEntityCollections();
 		}
@@ -402,7 +381,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
-			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<AmazonShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AmazonShipmentEntityFactory))) : null);
+
 
 		}
 #endif
@@ -414,7 +393,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 
-			toReturn.Add("AmazonShipment", _amazonShipment);
+
 
 
 			return toReturn;
@@ -423,10 +402,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Adds the internals to the active context. </summary>
 		protected override void AddInternalsToContext()
 		{
-			if(_amazonShipment!=null)
-			{
-				_amazonShipment.ActiveContext = base.ActiveContext;
-			}
+
 
 
 
@@ -436,7 +412,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected virtual void InitClassMembers()
 		{
 
-			_amazonShipment = null;
+
 
 
 
@@ -549,17 +525,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AmazonShipment' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathAmazonShipment
-		{
-			get
-			{
-				return new PrefetchPathElement2( new EntityCollection<AmazonShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AmazonShipmentEntityFactory))),
-					(IEntityRelation)GetRelationsForField("AmazonShipment")[0], (int)ShipWorks.Data.Model.EntityType.AmazonAccountEntity, (int)ShipWorks.Data.Model.EntityType.AmazonShipmentEntity, 0, null, null, null, null, "AmazonShipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
-			}
-		}
 
 
 
@@ -797,21 +762,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)AmazonAccountFieldIndex.Website, value); }
 		}
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'AmazonShipmentEntity' which are related to this entity via a relation of type '1:n'.
-		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
-		[TypeContainedAttribute(typeof(AmazonShipmentEntity))]
-		public virtual EntityCollection<AmazonShipmentEntity> AmazonShipment
-		{
-			get
-			{
-				if(_amazonShipment==null)
-				{
-					_amazonShipment = new EntityCollection<AmazonShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AmazonShipmentEntityFactory)));
-					_amazonShipment.SetContainingEntityInfo(this, "AmazonAccount");
-				}
-				return _amazonShipment;
-			}
-		}
 
 
 

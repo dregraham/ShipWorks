@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.AmazonShipmentEntityUsingAmazonAccountID);
+
 
 
 			return toReturn;
@@ -38,20 +38,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 		#region Class Property Declarations
 
-		/// <summary>Returns a new IEntityRelation object, between AmazonAccountEntity and AmazonShipmentEntity over the 1:n relation they have, using the relation between the fields:
-		/// AmazonAccount.AmazonAccountID - AmazonShipment.AmazonAccountID
-		/// </summary>
-		public virtual IEntityRelation AmazonShipmentEntityUsingAmazonAccountID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "AmazonShipment" , true);
-				relation.AddEntityFieldPair(AmazonAccountFields.AmazonAccountID, AmazonShipmentFields.AmazonAccountID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonAccountEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonShipmentEntity", false);
-				return relation;
-			}
-		}
 
 
 
