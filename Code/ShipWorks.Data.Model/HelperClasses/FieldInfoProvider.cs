@@ -387,11 +387,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsWeight, 0, 0, 38);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DateMustArriveBy", typeof(System.DateTime), false, false, false, false,  (int)AmazonShipmentFieldIndex.DateMustArriveBy, 0, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "SendDateMustArriveBy", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.SendDateMustArriveBy, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DeliveryExperience", typeof(System.Int32), false, false, false, false,  (int)AmazonShipmentFieldIndex.DeliveryExperience, 0, 0, 10);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "CarrierWillPickUp", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.CarrierWillPickUp, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AmazonShipmentFieldIndex.DeclaredValue, 0, 4, 19);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "AmazonUniqueShipmentID", typeof(System.String), false, false, false, true,  (int)AmazonShipmentFieldIndex.AmazonUniqueShipmentID, 50, 0, 0);
-			base.AddElementFieldInfo("AmazonShipmentEntity", "SendDateMustArriveBy", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.SendDateMustArriveBy, 0, 0, 0);
 		}
 		/// <summary>Inits AmazonStoreEntity's FieldInfo objects</summary>
 		private void InitAmazonStoreEntityInfos()
@@ -541,6 +541,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ChannelAdvisorOrderEntity", "FlagDescription", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderFieldIndex.FlagDescription, 80, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorOrderEntity", "FlagType", typeof(System.Int32), false, false, false, false,  (int)ChannelAdvisorOrderFieldIndex.FlagType, 0, 0, 10);
 			base.AddElementFieldInfo("ChannelAdvisorOrderEntity", "MarketplaceNames", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderFieldIndex.MarketplaceNames, 1024, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorOrderEntity", "IsPrime", typeof(System.Int32), false, false, false, false,  (int)ChannelAdvisorOrderFieldIndex.IsPrime, 0, 0, 10);
 		}
 		/// <summary>Inits ChannelAdvisorOrderItemEntity's FieldInfo objects</summary>
 		private void InitChannelAdvisorOrderItemEntityInfos()

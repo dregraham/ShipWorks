@@ -533,6 +533,8 @@ namespace ShipWorks.Data.Model
 		DimsAddWeight,
 		///<summary>DateMustArriveBy. </summary>
 		DateMustArriveBy,
+		///<summary>SendDateMustArriveBy. </summary>
+		SendDateMustArriveBy,
 		///<summary>DeliveryExperience. </summary>
 		DeliveryExperience,
 		///<summary>CarrierWillPickUp. </summary>
@@ -541,8 +543,6 @@ namespace ShipWorks.Data.Model
 		DeclaredValue,
 		///<summary>AmazonUniqueShipmentID. </summary>
 		AmazonUniqueShipmentID,
-		///<summary>SendDateMustArriveBy. </summary>
-		SendDateMustArriveBy,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1335,6 +1335,8 @@ namespace ShipWorks.Data.Model
 		FlagType,
 		///<summary>MarketplaceNames. </summary>
 		MarketplaceNames,
+		///<summary>IsPrime. </summary>
+		IsPrime,
 		/// <summary></summary>
 		AmountOfFields
 	}
