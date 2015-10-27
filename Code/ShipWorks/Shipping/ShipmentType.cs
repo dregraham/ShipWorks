@@ -213,6 +213,11 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Checks whether this shipment type is allowed for the given shipment
+        /// </summary>
+        public virtual bool IsAllowedFor(ShipmentEntity shipment) => true;
+
+        /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
         public virtual bool HasAccounts
