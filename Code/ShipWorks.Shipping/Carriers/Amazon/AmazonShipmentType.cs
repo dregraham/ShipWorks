@@ -12,6 +12,9 @@ using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -22,15 +25,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     {
         readonly IAmazonAccountManager accountManager;
         readonly Func<IAmazonRates> amazonRatesFactory;
+        private readonly IOrderManager orderManager;
+        private readonly IStoreManager storeManager;
         readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, Func<IAmazonRates> amazonRatesFactory)
+        public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, Func<IAmazonRates> amazonRatesFactory, IOrderManager orderManager, IStoreManager storeManager)
         {
             this.accountManager = accountManager;
             this.amazonRatesFactory = amazonRatesFactory;
+            this.orderManager = orderManager;
+            this.storeManager = storeManager;
             this.dateTimeProvider = dateTimeProvider;
         }
 
@@ -175,6 +182,25 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
                 return ratingField;
             }
+        }
+
+        /// <summary>
+        /// Checks whether this shipment type is allowed for the given shipment
+        /// </summary>
+        public override bool IsAllowedFor(ShipmentEntity shipment)
+        {
+            orderManager.PopulateOrderDetails(shipment);
+            
+            long storeId = shipment.Order.StoreID;
+
+            StoreEntity storeEntity = storeManager.GetStore(storeId);
+
+            if (storeEntity?.TypeCode != (int) StoreTypeCode.Amazon)
+            {
+                return false;
+            }
+
+            return ((AmazonOrderEntity) shipment.Order).IsPrime == (int) AmazonMwsIsPrime.Yes;
         }
     }
 }
