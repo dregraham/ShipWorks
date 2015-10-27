@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 ExecuteRequest(new HttpVariableRequestSubmitter(), AmazonMwsApiCall.ListMarketplaceParticipations, mwsSettings);
                 return AmazonValidateCredentialsResponse.Succeeded();
             }
-            catch (AmazonException ex)
+            catch (AmazonShipperException ex)
             {
                 // Something must be wrong with the credentails 
                 return AmazonValidateCredentialsResponse.Failed(ex.Message);
