@@ -26,9 +26,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly PropertyChangedHandler handler;
         private ICarrierShipmentAdapter shipmentAdapter;
         private OrderSelectionLoaded orderSelectionLoaded;
-
-        private bool listenForRateCriteriaChanged = false;
-        private bool forceRateCriteriaChanged = false;
+        
         private bool forceDomesticInternationalChanged = false;
 
         private readonly IShippingManager shippingManager;
@@ -59,9 +57,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.shippingManager = shippingManager;
             this.shipmentChangedHandler = shipmentChangedHandler;
             this.messageHelper = messageHelper;
-
-            listenForRateCriteriaChanged = false;
-
+            
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
             subscriptions = new CompositeDisposable(
@@ -234,7 +230,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void Populate()
         {
-            listenForRateCriteriaChanged = false;
             InitialShipmentTypeCode = shipmentAdapter.ShipmentTypeCode;
 
             // Set the shipment type without going back through the shipment changed machinery
@@ -258,9 +253,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             AllowEditing = !shipmentAdapter.Shipment.Processed;
 
             DestinationAddressEditableState = orderSelectionLoaded.DestinationAddressEditable;
-
-            listenForRateCriteriaChanged = true;
-
+            
             Origin.SetAddressFromOrigin(OriginAddressType, shipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
 
             DomesticInternationalText = "Domestic";

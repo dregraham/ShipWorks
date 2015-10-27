@@ -91,6 +91,9 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<AddressSelector>()
+                .AsImplementedInterfaces();
+
             builder.RegisterType<ShippingProfileManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

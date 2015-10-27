@@ -135,7 +135,7 @@ namespace ShipWorks.AddressValidation
 
                 addressAdapter.AddressValidationSuggestionCount = validationResult.AddressValidationResults.Count;
 
-                if (validationResult.AddressValidationResults.Count > 0)
+                if (validationResult.AddressValidationResults.Any())
                 {
                     saveAction(originalAddress, validationResult.AddressValidationResults.Select(address => CreateEntityFromValidationResult(address, "Ship")));
                 }
@@ -152,6 +152,25 @@ namespace ShipWorks.AddressValidation
                 addressAdapter.AddressValidationStatus = (int)AddressValidationStatusType.Error;
                 saveAction(null, new List<ValidatedAddressEntity>());
             }
+        }
+
+        /// <summary>
+        /// Validates an address with no prefix on the specified entity
+        /// </summary>
+        public async Task<ValidatedAddressData> ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress)
+        {
+            ValidatedAddressData data = ValidatedAddressData.NotSet;
+            ValidatedAddressEntity original = null;
+            IEnumerable<ValidatedAddressEntity> suggestions = null;
+
+            await ValidateAsync(addressAdapter, canAdjustAddress, (x, y) =>
+            {
+                data = original == null ?
+                ValidatedAddressData.Empty :
+                new ValidatedAddressData(original, suggestions);
+            });
+
+            return data;
         }
 
         /// <summary>

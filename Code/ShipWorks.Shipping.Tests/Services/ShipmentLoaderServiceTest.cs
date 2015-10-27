@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using Xunit;
@@ -18,21 +15,16 @@ namespace ShipWorks.Shipping.Tests.Services
 {
     public class ShipmentLoaderServiceTest
     {
-        private ShipmentLoaderService testObject;
+        private readonly ShipmentLoaderService testObject;
 
-        private OrderEntity orderEntity;
-        private ShipmentEntity shipmentEntity;
+        private readonly OrderEntity orderEntity;
+        private readonly ShipmentEntity shipmentEntity;
 
-        private Mock<IShipmentLoader> shipmentLoader;
-        private IMessenger messenger;
+        private readonly Mock<IShipmentLoader> shipmentLoader;
+        private readonly IMessenger messenger;
 
-        private Mock<IShippingConfiguration> shippingConfigurator;
-        private Mock<IShippingManager> shippingManager;
-        private Mock<IFilterHelper> filterHelper;
-        private Mock<IValidator<ShipmentEntity>> addressValidator;
-
-        private Mock<ICarrierShipmentAdapterFactory> shipmentAdapterFactory;
-        private Mock<ICarrierShipmentAdapter> shipmentAdapter;
+        private readonly Mock<ICarrierShipmentAdapterFactory> shipmentAdapterFactory;
+        private readonly Mock<ICarrierShipmentAdapter> shipmentAdapter;
         private OrderSelectionLoaded orderSelectionLoaded;
 
         public ShipmentLoaderServiceTest()

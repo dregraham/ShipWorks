@@ -584,9 +584,11 @@
     <Compile Include="AddressValidation\AddressSelectedEventArgs.cs" />
     <Compile Include="AddressValidation\AddressSelector.cs" />
     <Compile Include="AddressValidation\AddressValidationException.cs" />
+    <Compile Include="AddressValidation\IAddressSelector.cs" />
     <Compile Include="AddressValidation\IAddressValidator.cs" />
     <Compile Include="AddressValidation\IValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\IValidatedAddressScope.cs" />
+    <Compile Include="AddressValidation\PersonAdapterExtensions.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />
     <Compile Include="AddressValidation\AddressValidationResult.cs" />
@@ -606,6 +608,7 @@
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedPendingShipmentsPredicate.cs" />
     <Compile Include="AddressValidation\StampsAddressValidationWebClient.cs" />
+    <Compile Include="AddressValidation\ValidatedAddressData.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManagerWrapper.cs" />
     <Compile Include="AddressValidation\ValidatedOrderShipAddress.cs" />
     <Compile Include="AddressValidation\ValidatedShipmentShipAddress.cs" />
@@ -861,7 +864,6 @@
     <Compile Include="Messaging\Messages\UspsAccountCreatedMessage.cs" />
     <Compile Include="Messaging\Messages\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Messaging\Messenger.cs" />
-    <Compile Include="Messaging\MessengerToken.cs" />
     <Compile Include="Shipping\AddressConversions.cs" />
     <Compile Include="Shipping\BilledType.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />

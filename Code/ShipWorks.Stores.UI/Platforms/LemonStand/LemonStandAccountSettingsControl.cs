@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand
 
             lemonStandStore.StoreURL = storeURLTextBox.Text;
             lemonStandStore.Token = accessTokenTextBox.Text;
-           
+
             // see if we need to test the settings because they changed in some way
             if (ConnectionVerificationNeeded(lemonStandStore))
             {
@@ -80,14 +80,8 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand
                     {
                         log.Error("Error validating access token", ex);
 
-                        if (ex.Message.Equals("The remote server returned an error: (401) Unauthorized."))
-                        {
-                            MessageHelper.ShowError(this, "Invalid access token");
-                        }
-                        else
-                        {
-                            MessageHelper.ShowError(this, "Invalid store URL");
-                        }
+                        string message = ex.Message.Equals("The remote server returned an error: (401) Unauthorized.") ? "Invalid access token" : "Invalid store URL";
+                        MessageHelper.ShowError(this, message);
 
                         return false;
                     }
@@ -120,8 +114,8 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand
         /// </summary>
         protected virtual bool ConnectionVerificationNeeded(LemonStandStoreEntity store)
         {
-            return (store.Fields[(int) LemonStandStoreFieldIndex.Token].IsChanged ||
-                    store.Fields[(int) LemonStandStoreFieldIndex.StoreURL].IsChanged);
+            return (store.Fields[(int)LemonStandStoreFieldIndex.Token].IsChanged ||
+                    store.Fields[(int)LemonStandStoreFieldIndex.StoreURL].IsChanged);
         }
     }
 }

@@ -207,6 +207,7 @@
     <Compile Include="AddressValidation\Predicates\FakePredicateExpression.cs" />
     <Compile Include="AddressValidation\Predicates\OrdersWithShipValidationStatusPredicateTest.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicateTest.cs" />
+    <Compile Include="AddressValidation\ValidatedAddressDataTest.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManagerTest.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashSubmitterTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />

@@ -13,13 +13,14 @@ using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.AddressValidation
 {
     /// <summary>
     /// Responsible for displaying possible validated addresses
     /// </summary>
-    public class AddressSelector
+    public class AddressSelector : IAddressSelector
     {
         private readonly string addressPrefix;
 
@@ -32,6 +33,14 @@ namespace ShipWorks.AddressValidation
         /// An address is about to be selected from the list of options
         /// </summary>
         public event EventHandler AddressSelecting;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AddressSelector() : this(string.Empty)
+        {
+
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddressSelector"/> class.
@@ -218,7 +227,7 @@ namespace ShipWorks.AddressValidation
                 suggestedAddresses.Count == 1 &&
                 StoreManager.GetAllStores().All(store => store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidateAndApply))
             {
-                menuItems.Add(new MenuItem("Always Fix Addresses For All Stores", (sender, args) => AlwaysFixAddressesSelected(owner, suggestedAddresses.First(), entityAdapter)));
+                menuItems.Add(new MenuItem("Always Fix Addresses For All Stores", async (sender, args) => await AlwaysFixAddressesSelected(owner, suggestedAddresses.First(), entityAdapter)));
             }
 
             return new ContextMenu(menuItems.ToArray());
@@ -227,7 +236,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Select the address and set AutoFix to be default for all stores.
         /// </summary>
-        private void AlwaysFixAddressesSelected(Control owner, ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter)
+        private async Task AlwaysFixAddressesSelected(Control owner, ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter)
         {
             DialogResult isSureResult = MessageHelper.ShowQuestion(owner, "Are you sure you want to always fix addresses for all stores?");
             if (isSureResult != DialogResult.OK)
@@ -235,7 +244,7 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            SelectAddress(entityAdapter, validatedAddress);
+            await SelectAddress(entityAdapter, validatedAddress);
 
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
@@ -255,20 +264,19 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private MenuItem CreateMenuItem(ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter)
         {
-            string title = FormatAddress(validatedAddress) +
-                (validatedAddress.IsOriginal ? " (Original)" : string.Empty);
+            string title = FormatAddress(validatedAddress);
 
-            return new MenuItem(title, (sender, args) => SelectAddress(entityAdapter, validatedAddress));
+            return new MenuItem(title, async (sender, args) => await SelectAddress(entityAdapter, validatedAddress));
         }
 
         /// <summary>
         /// Select an address to copy into the entity's shipping address
         /// </summary>
-        private void SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress)
+        public async Task<AddressAdapter> SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress)
         {
             OnAddressSelecting();
 
-            UpdateSelectedAddressIfRequred(selectedAddress);
+            await UpdateSelectedAddressIfRequred(selectedAddress);
 
             AddressAdapter originalAddress = new AddressAdapter();
             addressToUpdate.CopyTo(originalAddress);
@@ -280,19 +288,21 @@ namespace ShipWorks.AddressValidation
                 (int)AddressValidationStatusType.SuggestionSelected;
 
             OnAddressSelected(addressToUpdate, originalAddress);
+
+            return addressToUpdate;
         }
 
         /// <summary>
         /// When a suggested address is selected, it might not have a value for residential or PO Box
         /// </summary>
-        private static void UpdateSelectedAddressIfRequred(ValidatedAddressEntity selectedAddress)
+        private static Task UpdateSelectedAddressIfRequred(ValidatedAddressEntity selectedAddress)
         {
             if (!selectedAddress.IsOriginal &&
                 selectedAddress.ResidentialStatus == (int)ValidationDetailStatusType.Unknown &&
                 selectedAddress.POBox == (int)ValidationDetailStatusType.Unknown)
             {
                 AddressValidator addressValidator = new AddressValidator();
-                Task task = addressValidator.ValidateAsync(selectedAddress, string.Empty, true, (entity, entities) =>
+                return addressValidator.ValidateAsync(selectedAddress, string.Empty, true, (entity, entities) =>
                 {
                     // If we have updated statuses save them.
                     if ((selectedAddress.ResidentialStatus != (int)ValidationDetailStatusType.Unknown ||
@@ -306,9 +316,9 @@ namespace ShipWorks.AddressValidation
                         }
                     }
                 });
-
-                task.Wait();
             }
+
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>
@@ -336,7 +346,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Format the address for display in the menu
         /// </summary>
-        public static string FormatAddress(ValidatedAddressEntity address)
+        public string FormatAddress(ValidatedAddressEntity address)
         {
             StringBuilder format = new StringBuilder();
             AddAddressPart(format, address.Street1);
@@ -345,6 +355,12 @@ namespace ShipWorks.AddressValidation
             AddAddressPart(format, address.City);
             AddAddressPart(format, address.StateProvCode);
             AddAddressPart(format, address.PostalCode);
+
+            if (address.IsOriginal)
+            {
+                format.Append(" (Original)");
+            }
+
             return format.ToString();
         }
 

@@ -126,6 +126,25 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
+        /// Copy the address values from this adapter to a person adapter
+        /// </summary>
+        public void CopyTo(PersonAdapter destinationAddress)
+        {
+            destinationAddress.Street1 = Street1;
+            destinationAddress.Street2 = Street2;
+            destinationAddress.Street3 = Street3;
+
+            destinationAddress.City = City;
+            destinationAddress.StateProvCode = StateProvCode;
+            destinationAddress.PostalCode = PostalCode;
+            destinationAddress.CountryCode = CountryCode;
+
+            destinationAddress.AddressValidationStatus = AddressValidationStatus;
+            destinationAddress.AddressValidationError = AddressValidationError;
+            destinationAddress.AddressValidationSuggestionCount = AddressValidationSuggestionCount;
+        }
+
+        /// <summary>
         /// Copies validation data from one address to another
         /// </summary>
         public static void CopyValidationData(AddressAdapter fromAddress, AddressAdapter toAddress)

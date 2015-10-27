@@ -99,13 +99,10 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Configure an TestStoreType
         /// </summary>
-        public static Mock<TestStoreType> WithTestStoreType(this AutoMock mock, StoreEntity store)
+        public static Mock<TestStoreType> WithTestStoreType(this AutoMock mock)
         {
-            Mock<TestStoreType> storeTypeMock = new Mock<TestStoreType>();
+            Mock<TestStoreType> storeTypeMock = mock.MockRepository.Create<TestStoreType>();
             storeTypeMock.Setup(s => s.ShippingAddressEditableState(It.IsAny<ShipmentEntity>())).Returns(ShippingAddressEditStateType.Editable);
-
-            //Mock<TestStoreType> mockObject = mock.Mock<TestStoreType>(new NamedParameter("store", store));
-            //mockObject.Setup(s => s.ShippingAddressEditableState(It.IsAny<ShipmentEntity>())).Returns(ShippingAddressEditStateType.Editable);
 
             return storeTypeMock;
         }
@@ -163,6 +160,9 @@ namespace ShipWorks.Tests.Shared
             return mockObject;
         }
 
+        /// <summary>
+        /// Return a shipment adapter when IShippingManager.ChangeShipmentType is called
+        /// </summary>
         public static Mock<ICarrierShipmentAdapter> WithCarrierShipmentAdapterFromChangeShipment(this AutoMock mock, Action<Mock<ICarrierShipmentAdapter>> configureAdapter)
         {
             var adapter = mock.Mock<ICarrierShipmentAdapter>();

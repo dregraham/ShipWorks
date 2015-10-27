@@ -72,7 +72,7 @@
                         <Hyperlink Command="{Binding ValidateCommand}">Validate</Hyperlink>
                     </TextBlock>
                     <TextBlock Visibility="{Binding CanShowSuggestions, Converter={StaticResource BooleanToVisibility}}">
-                        <Hyperlink props:OpenPopupWhenClicked.Popup="{Binding ElementName=AddressPopup}"><Run Text="{Binding SuggestionCount}" /> Suggestions</Hyperlink>
+                        <Hyperlink props:PopupClickManager.OpenPopup="{Binding ElementName=AddressPopup}"><Run Text="{Binding SuggestionCount}" /> Suggestions</Hyperlink>
                     </TextBlock>
                     <TextBlock Visibility="{Binding CanShowValidationMessage, Converter={StaticResource BooleanToVisibility}}">
                         <Hyperlink Command="{Binding ShowValidationMessageCommand}">Details...</Hyperlink>
@@ -145,10 +145,22 @@
             <Popup.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="3" ShadowDepth="6" />
             </Popup.Effect>
-            <ListBox Padding="25,6,10,6"
-                     ItemsSource="{Binding AddressSuggestions}"
-                     DisplayMemberPath="Key">
-            </ListBox>
+            <ItemsControl Padding="25,6,10,6"
+                          Background="LightGray"
+                          ItemsSource="{Binding AddressSuggestions}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button CommandParameter="{Binding Value}"
+                                props:PopupClickManager.ClosePopup="{Binding ElementName=AddressPopup}">
+                            <Button.Command>
+                                <Binding Path="DataContext.SelectAddressSuggestionCommand"
+                                         RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}" />
+                            </Button.Command>
+                            <TextBlock Text="{Binding Key}" />
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Popup>
     </StackPanel>
 </UserControl>
