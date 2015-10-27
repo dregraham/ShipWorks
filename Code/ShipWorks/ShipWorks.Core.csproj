@@ -782,6 +782,12 @@
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
     <Compile Include="Shipping\CarrierConfiguredMessage.cs" />
     <Compile Include="Shipping\Carriers\AccountManagerBase.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.Designer.cs">
+      <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />
@@ -7484,6 +7490,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>ShippingIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.resx">
+      <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.resx">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>

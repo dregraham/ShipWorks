@@ -36,8 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
-            // TODO: Create and return actual footnote
-            return new RateFootnoteControl();
+            return new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl(carrierNames);
         }
 
         /// <summary>
