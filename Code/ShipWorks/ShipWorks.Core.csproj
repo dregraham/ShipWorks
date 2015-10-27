@@ -1184,6 +1184,8 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountSettings.xaml.cs">
       <DependentUpon>YahooApiAccountSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiWebClient.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooOrderStatus.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\CoreExtensions\Actions\YahooEmailShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.cs">
       <SubType>UserControl</SubType>

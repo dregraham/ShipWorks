@@ -124,7 +124,7 @@ namespace ShipWorks.Stores.Management
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageStoreType);
+            this.mainPanel.Controls.Add(this.wizardPageSettings);
             this.mainPanel.Size = new System.Drawing.Size(548, 500);
             // 
             // etchBottom
@@ -282,7 +282,7 @@ namespace ShipWorks.Stores.Management
             this.wizardPageFinished.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageFinished.Location = new System.Drawing.Point(0, 0);
             this.wizardPageFinished.Name = "wizardPageFinished";
-            this.wizardPageFinished.Size = new System.Drawing.Size(548, 307);
+            this.wizardPageFinished.Size = new System.Drawing.Size(548, 500);
             this.wizardPageFinished.TabIndex = 0;
             this.wizardPageFinished.Title = "Setup Complete";
             this.wizardPageFinished.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoComplete);

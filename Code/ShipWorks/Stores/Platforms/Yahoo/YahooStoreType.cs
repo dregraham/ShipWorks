@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using log4net;
 using Quartz.Util;
 using ShipWorks.Data.Model.EntityClasses;
@@ -11,7 +14,12 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Email;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
@@ -72,6 +80,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             }
         }
 
+        /// <summary>
+        /// Gets or sets the account settings help URL.
+        /// </summary>
+        /// <value>
+        /// The account settings help URL.
+        /// </value>
         public string AccountSettingsHelpUrl => "http://www.shipworks.com/shipworks/help/Yahoo_Email_Account.html";
 
         /// <summary>
@@ -83,6 +97,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
             InitializeStoreDefaults(store);
 
+            store.StoreName = "My Yahoo Store";
             store.YahooEmailAccountID = 0;
             store.TrackingUpdatePassword = "";
             store.YahooStoreID = "";
@@ -102,14 +117,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 };
         }
 
-        /// <summary>
-        /// Create the control for creating online update tasks for the Yahoo add store wizard
-        /// </summary>
-        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
-        {
-            return new YahooOnlineUpdateActionControl();
-        }
-
+        public override InitialDownloadPolicy InitialDownloadPolicy
+            =>
+                new InitialDownloadPolicy(InitialDownloadRestrictionType.OrderNumber)
+                {
+                    //DefaultStartingOrderNumber = 1000
+                };
+        
         /// <summary>
         /// Create the identifier to uniquely identify the order
         /// </summary>
@@ -253,5 +267,79 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 issueAdder.Add(orderID, ex);
             }
         }
+
+#region Api Integration
+
+        /// <summary>
+        /// Creates the initial filters from yahoo's online statuses, if using the Api integration
+        /// </summary>
+        /// <returns>The list of initial filters</returns>
+        public override List<FilterEntity> CreateInitialFilters()
+        {
+            List<FilterEntity> filters = new List<FilterEntity>();
+
+            if (!((YahooStoreEntity)Store).AccessToken.IsNullOrWhiteSpace())
+            {
+                Type type = typeof (YahooOrderStatus);
+                
+                foreach (YahooOrderStatus status in Enum.GetValues(type))
+                {
+                    // We want to display the status with spaces, so get the description attribute
+                    string description = ((DescriptionAttribute)type.GetMember(status.ToString())[0].GetCustomAttributes(typeof(DescriptionAttribute), false)[0]).Description;
+                    
+                    filters.Add(CreateOrderStatusFilter(description));
+                }
+            }
+
+            return filters;
+        }
+
+        /// <summary>
+        /// Creates an order status filter for the given order status
+        /// </summary>
+        /// <param name="orderStatus">The order status to create a filter for</param>
+        /// <returns>A filter entity for the given order status</returns>
+        private FilterEntity CreateOrderStatusFilter(string orderStatus)
+        {
+            // [All]
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
+
+            //      [Store] == this store
+            StoreCondition storeCondition = new StoreCondition
+            {
+                Operator = EqualityOperator.Equals,
+                Value = Store.StoreID
+            };
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+            // [AND]
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+            ConditionGroupContainer shippedDefinition = new ConditionGroupContainer();
+            definition.RootContainer.SecondGroup = shippedDefinition;
+
+            //      [Any]
+            shippedDefinition.FirstGroup = new ConditionGroup { JoinType = ConditionJoinType.Any };
+
+            OnlineStatusCondition onlineStatus = new OnlineStatusCondition
+            {
+                Operator = StringOperator.Equals,
+                TargetValue = orderStatus
+            };
+            shippedDefinition.FirstGroup.Conditions.Add(onlineStatus);
+
+            return new FilterEntity
+            {
+                Name = orderStatus,
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int)FilterTarget.Orders
+            };
+        }
+
+
+
+
+        #endregion
     }
 }

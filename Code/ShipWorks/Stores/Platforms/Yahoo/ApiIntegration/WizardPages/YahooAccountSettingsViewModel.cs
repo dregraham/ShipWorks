@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Net;
 using System.Reflection;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
@@ -62,6 +63,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
             if (string.IsNullOrEmpty(AccessToken))
             {
                 return "Please enter your Access Token";
+            }
+            
+            YahooApiWebClient client = new YahooApiWebClient(store);
+
+            try
+            {
+                client.ValidateCredentials();
+            }
+            catch (WebException ex)
+            {
+                return ex.Message;
             }
 
             return string.Empty;
