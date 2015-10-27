@@ -57,6 +57,47 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         }
 
         /// <summary>
+        /// Cancel Shipment
+        /// </summary>
+        public CancelShipmentResponse CancelShipment(AmazonMwsWebClientSettings mwsSettings, string amazonShipmentId)
+        {
+            AmazonMwsApiCall call = AmazonMwsApiCall.CancelShipment;
+
+            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+
+            // Add the service
+            request.Variables.Add("ShipmentId", amazonShipmentId);
+            
+            // Get Response
+            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
+
+            // Deserialize 
+            return DeserializeResponse<CancelShipmentResponse>(response.ReadResult());
+        }
+
+        /// <summary>
+        /// Create Shipment
+        /// </summary>
+        public CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings, string shippingServiceId)
+        {
+            AmazonMwsApiCall call = AmazonMwsApiCall.CreateShipment;
+
+            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+
+            // Add the service
+            request.Variables.Add("ShippingServiceId", shippingServiceId);
+
+            // Add Shipment Information XML
+            AddShipmentRequestDetails(request, requestDetails);
+
+            // Get Response
+            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
+
+            // Deserialize 
+            return DeserializeResponse<CreateShipmentResponse>(response.ReadResult());
+        }
+
+        /// <summary>
         /// Deserializes the response XML
         /// </summary>
         /// <typeparam name="T"></typeparam>
