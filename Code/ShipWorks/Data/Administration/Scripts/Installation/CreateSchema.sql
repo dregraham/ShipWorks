@@ -1,3 +1,4 @@
+
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -30,6 +31,8 @@ GO
 PRINT N'Creating primary key [PK_AmazonAccount] on [dbo].[AmazonAccount]'
 GO
 ALTER TABLE [dbo].[AmazonAccount] ADD CONSTRAINT [PK_AmazonAccount] PRIMARY KEY CLUSTERED  ([AmazonAccountID])
+GO
+ALTER TABLE [dbo].[AmazonAccount] ENABLE CHANGE_TRACKING
 GO
 SET NUMERIC_ROUNDABORT OFF
 GO
@@ -1640,7 +1643,7 @@ CREATE TABLE [dbo].[PostalShipment]
 [Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[NoPostage] [bit] NOT NULL CONSTRAINT [DF_PostalProfile_NoPostage] DEFAULT ((0))
+[NoPostage] [bit] NOT NULL CONSTRAINT [DF_PostalShipment_NoPostage] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_PostalShipment] on [dbo].[PostalShipment]'
