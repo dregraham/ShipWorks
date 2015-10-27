@@ -48,7 +48,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
 
-            return GetRateGroupFromResponse(response);
+            RateGroup rateGroup = GetRateGroupFromResponse(response);
+
+            if (response.GetEligibleShippingServicesResult.TermsAndConditionsNotAcceptedCarrierList != null)
+            {
+                List<TermsAndConditionsNotAcceptedCarrier> carriers =
+                    response.GetEligibleShippingServicesResult.TermsAndConditionsNotAcceptedCarrierList;
+
+                foreach (TermsAndConditionsNotAcceptedCarrier carrier in carriers)
+                {
+                    rateGroup.AddFootnoteFactory(new InformationFootnoteFactory($"Terms and conditions have not been accepted for {carrier.CarrierName}. Accepting these terms and conditions can be done through Amazon."));
+                }
+            }
+
+            return rateGroup;
         }
 
         /// <summary>
