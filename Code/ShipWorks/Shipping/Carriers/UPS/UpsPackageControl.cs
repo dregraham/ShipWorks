@@ -302,7 +302,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     // Load the data from each selected package
                     foreach (UpsPackageEntity package in packages)
                     {
-                        packagingType.ApplyMultiValue((UpsPackagingType) package.PackagingType);
+                        packagingType.ApplyMultiValue(package.PackagingType);
                         weight.ApplyMultiWeight(package.Weight);
 
                         dimensionsToLoad.Add(new DimensionsAdapter(package));
