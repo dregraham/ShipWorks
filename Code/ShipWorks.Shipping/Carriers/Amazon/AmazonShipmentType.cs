@@ -16,6 +16,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -27,19 +28,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IAmazonAccountManager accountManager;
         private readonly Func<IAmazonRates> amazonRatesFactory;
         private readonly IStoreManager storeManager;
+        private readonly IOrderManager orderManager;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly Func<IAmazonLabelService> amazonLabelServiceFactory;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, 
-            Func<IAmazonRates> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, IStoreManager storeManager)
+            Func<IAmazonRates> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, IStoreManager storeManager, IOrderManager orderManager)
         {
             this.accountManager = accountManager;
             this.amazonRatesFactory = amazonRatesFactory;
             this.amazonLabelServiceFactory = amazonLabelServiceFactory;
             this.storeManager = storeManager;
+            this.orderManager = orderManager;
             this.dateTimeProvider = dateTimeProvider;
         }
 
@@ -190,6 +193,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public override bool IsAllowedFor(ShipmentEntity shipment)
         {
             StoreEntity storeEntity = storeManager.GetRelatedStore(shipment.ShipmentID);
+            orderManager.PopulateOrderDetails(shipment);
 
             if (storeEntity?.TypeCode != (int)StoreTypeCode.Amazon)
             {
