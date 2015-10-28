@@ -103,6 +103,7 @@
     <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
     <Compile Include="Carriers\Amazon\IAmazonAccountManager.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCredentials.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonLabelService.cs" />
     <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
