@@ -12,6 +12,7 @@ using System.IO;
 using System.Reflection;
 using System.Linq.Expressions;
 using System.Collections.Generic;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using Xunit;
 
@@ -204,7 +205,71 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 Assert.Equal("Bar", ((AmazonRateTag)rateResult.Tag).ShippingServiceOfferId);
             }
         }
+
+        [Fact]
+        public void GetRates_ReturnsTermsAndConditionsFootNoteFactory_WhenApiResponseHasTermsAndConditionsCarriers()
+        {
+            TermsAndConditionsNotAcceptedCarrier tAndC = new TermsAndConditionsNotAcceptedCarrier { CarrierName = new List<string>() { "FEDEX", "UPS" } };
+            TermsAndConditionsNotAcceptedCarrier tAndC2 = new TermsAndConditionsNotAcceptedCarrier { CarrierName = new List<string>() { "USPS" } };
+            GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
+
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IAmazonShippingWebClient>()
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
+                    .Returns(response);
+
+                AmazonRates testObject = mock.Create<AmazonRates>();
+
+                RateGroup result = testObject.GetRates(SampleShipment);
+
+                Assert.Equal(0, result.Rates.Count);
+                Assert.Equal(1, result.FootnoteFactories.OfType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory>().Count());
+            }
+        }
+
+        [Fact]
+        public void GetRates_TermsAndConditionsFootNoteFactory_CreatesCorrectFootnoteControl_WhenApiResponseHasTermsAndConditionsCarriers()
+        {
+            TermsAndConditionsNotAcceptedCarrier tAndC = new TermsAndConditionsNotAcceptedCarrier { CarrierName = new List<string>() { "FEDEX", "UPS" } };
+            TermsAndConditionsNotAcceptedCarrier tAndC2 = new TermsAndConditionsNotAcceptedCarrier { CarrierName = new List<string>() { "USPS" } };
+            GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
+
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IAmazonShippingWebClient>()
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
+                    .Returns(response);
+
+                AmazonRates testObject = mock.Create<AmazonRates>();
+
+                RateGroup result = testObject.GetRates(SampleShipment);
+
+                AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl footnoteControl = result.FootnoteFactories.OfType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory>().First().CreateFootnote(null) as AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl;
+                Assert.Equal(3, footnoteControl.CarrierNames.Count);
+                Assert.True(footnoteControl.CarrierNames.Contains("FEDEX"));
+                Assert.True(footnoteControl.CarrierNames.Contains("UPS"));
+                Assert.True(footnoteControl.CarrierNames.Contains("USPS"));
+            }
+        }
         
+        private static GetEligibleShippingServicesResponse GetEligibleShippingServicesResponse(TermsAndConditionsNotAcceptedCarrier tAndC, TermsAndConditionsNotAcceptedCarrier tAndC2)
+        {
+
+            GetEligibleShippingServicesResponse response = new GetEligibleShippingServicesResponse
+            {
+                GetEligibleShippingServicesResult = new GetEligibleShippingServicesResult
+                {
+                    ShippingServiceList = new ShippingServiceList {ShippingService = new List<ShippingService>()},
+                    TermsAndConditionsNotAcceptedCarrierList = new List<TermsAndConditionsNotAcceptedCarrier>()
+                    {
+                        tAndC, tAndC2
+                    }
+                }
+            };
+            return response;
+        }
+
         private void VerifyApiRequest(Action<ShipmentEntity, AmazonOrderEntity> configureInput, Expression<Func<ShipmentRequestDetails, bool>> verifyCall)
         {
             ShipmentEntity shipment = SampleShipment;

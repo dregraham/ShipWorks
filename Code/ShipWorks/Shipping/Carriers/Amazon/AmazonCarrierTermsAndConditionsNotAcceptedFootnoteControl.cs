@@ -19,7 +19,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl(List<string> carrierNames)
         {
             InitializeComponent();
-            carrierNamesMessageLabel.Text = $"Terms and conditions have not been accepted for {string.Join(", ", carrierNames)}.";
+
+            // Property used for unit testing.
+            CarrierNames = carrierNames;
+
+            carrierNamesMessageLabel.Text = $"Terms and conditions have not been accepted for {string.Join(", ", CarrierNames)}.";
         }
+
+        /// <summary>
+        /// List of carrier names the control received.
+        /// Used for unit testing.
+        /// </summary>
+        public List<string> CarrierNames { private set; get; }
     }
 }

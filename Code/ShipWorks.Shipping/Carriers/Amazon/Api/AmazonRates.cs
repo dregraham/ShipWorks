@@ -85,8 +85,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// Return the logo of that carrier returns Null if we cannot
         /// find a match for the carrier
         /// </summary>
-        /// <param name="shippingService"></param>
-        /// <returns></returns>
         private static Image GetProviderLogo(string carrier)
         {
             switch (carrier.ToLower())
