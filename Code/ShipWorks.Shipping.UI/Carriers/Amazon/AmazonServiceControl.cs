@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             service.DataBindings.Clear();
             service.DataBindings.Add(nameof(service.DataSource), viewModel, nameof(viewModel.ServicesAvailable), false, DataSourceUpdateMode.OnPropertyChanged);
-            service.DataBindings.Add(nameof(service.SelectedItem), viewModel, nameof(viewModel.ShippingServiceName), false, DataSourceUpdateMode.OnPropertyChanged);
+            service.DataBindings.Add(nameof(service.SelectedItem), viewModel, nameof(viewModel.ShippingService), false, DataSourceUpdateMode.OnPropertyChanged);
             service.DataBindings.Add(nameof(service.MultiValued), viewModel, nameof(viewModel.ServiceIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
         }
 

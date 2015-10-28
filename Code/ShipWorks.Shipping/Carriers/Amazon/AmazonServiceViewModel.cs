@@ -27,9 +27,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private CheckboxMultiValueBinder<ShipmentEntity> carrierWillPickUpBinder;
         private CheckboxMultiValueBinder<ShipmentEntity> sendDeliverByBinder;
         private IMultiValue<AmazonDeliveryExperienceType> deliveryExperienceBinder;
-        private GenericMultiValueBinder<ShipmentEntity, string> shippingServiceNameBinder;
+        private GenericMultiValueBinder<ShipmentEntity, KeyValuePair<string, AmazonRateTag>> shippingServiceBinder;
         private List<KeyValuePair<string,AmazonRateTag>> servicesAvailable;
-        private List<ShipmentEntity> loadedShipments;
 
         /// <summary>
         /// Constructor
@@ -47,9 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             List<KeyValuePair<string, AmazonRateTag>> services = rateGroup.Rates.Select(r => new KeyValuePair<string, AmazonRateTag>(r.Description, (AmazonRateTag) r.Tag)).ToList();
             services.Insert(0, new KeyValuePair<string, AmazonRateTag>("Please select a service", null));
-
-
-
+            
             ServicesAvailable = services;
         }
 
@@ -86,10 +83,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 entity => (AmazonDeliveryExperienceType)entity.Amazon.DeliveryExperience,
                 (entity, value) => entity.Amazon.DeliveryExperience = (int)value);
 
-            shippingServiceNameBinder = new GenericMultiValueBinder<ShipmentEntity, string>(shipments,
-                nameof(ShippingServiceName),
-                entity => entity.Amazon.ShippingServiceName,
-                (entity, value) => entity.Amazon.ShippingServiceName = value);
+            shippingServiceBinder = new GenericMultiValueBinder<ShipmentEntity, KeyValuePair<string, AmazonRateTag>>(shipments,
+                nameof(ShippingService),
+                entity => ServicesAvailable.FirstOrDefault(s => s.Key == entity.Amazon.ShippingServiceName),
+                (entity, value) =>
+                {
+                    entity.Amazon.ShippingServiceName = value.Value == null ? string.Empty : value.Key;
+                    entity.Amazon.ShippingServiceID = value.Value?.ShippingServiceId;
+                    entity.Amazon.ShippingServiceOfferID = value.Value?.ShippingServiceOfferId;
+                });
 
             // Wire up the property changed event so we can update rates.
             dateMustArriveBy.PropertyChanged += OnPropertyChanged;
@@ -97,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             carrierWillPickUpBinder.PropertyChanged += OnPropertyChanged;
             sendDeliverByBinder.PropertyChanged += OnPropertyChanged;
             deliveryExperienceBinder.PropertyChanged += OnPropertyChanged;
-            shippingServiceNameBinder.PropertyChanged += OnPropertyChanged;
+            shippingServiceBinder.PropertyChanged += OnPropertyChanged;
         }
 
         /// <summary>
@@ -116,7 +118,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             carrierWillPickUpBinder.Save();
             sendDeliverByBinder.Save();
             deliveryExperienceBinder.Save();
-            shippingServiceNameBinder.Save();
+            shippingServiceBinder.Save();
         }
 
         /// <summary>
@@ -231,20 +233,23 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// ShippingServiceName display text
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ShippingServiceName
+        public KeyValuePair<string, AmazonRateTag> ShippingService
         {
             get
             {
-                return shippingServiceNameBinder.PropertyValue;
+                return shippingServiceBinder.PropertyValue;
             }
-            set { shippingServiceNameBinder.PropertyValue = value; }
+            set
+            {
+                shippingServiceBinder.PropertyValue = value;
+            }
         }
 
         /// <summary>
         /// ShippingServiceName is multi valued.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool ServiceIsMultiValued => shippingServiceNameBinder.IsMultiValued;
+        public bool ServiceIsMultiValued => shippingServiceBinder.IsMultiValued;
 
         /// <summary>
         /// ShippingServiceName display text
@@ -268,7 +273,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void SelectRate(AmazonRateTag rateTag)
         {
-            throw new NotImplementedException("Cannot set the necessary properties on the ViewModel because they don't exist, but the class is being worked on in a different task");
+            ShippingService = ServicesAvailable.FirstOrDefault(s => s.Value == rateTag);
         }
     }
 }
