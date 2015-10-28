@@ -50,11 +50,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             RateGroup rateGroup = GetRateGroupFromResponse(response);
 
-            List<TermsAndConditionsNotAcceptedCarrier> carriers = response.GetEligibleShippingServicesResult.TermsAndConditionsNotAcceptedCarrierList;
+            List<string> carriers = response.GetEligibleShippingServicesResult.TermsAndConditionsNotAcceptedCarrierList.TermsAndConditionsNotAcceptedCarrier.CarrierName;
             if (carriers != null && carriers.Any())
             {
-                List<string> carrierNames = carriers.SelectMany(x => x.CarrierName).Distinct().ToList();
-                
+                List<string> carrierNames = carriers.Distinct().ToList();
+
                 rateGroup.AddFootnoteFactory(new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new AmazonShipmentType(null, null, null, null, null), carrierNames));
             }
 

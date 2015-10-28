@@ -209,8 +209,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         [Fact]
         public void GetRates_ReturnsTermsAndConditionsFootNoteFactory_WhenApiResponseHasTermsAndConditionsCarriers()
         {
-            TermsAndConditionsNotAcceptedCarrier tAndC = new TermsAndConditionsNotAcceptedCarrier { CarrierName = new List<string>() { "FEDEX", "UPS" } };
-            TermsAndConditionsNotAcceptedCarrier tAndC2 = new TermsAndConditionsNotAcceptedCarrier { CarrierName = new List<string>() { "USPS" } };
+            List<string> tAndC = new List<string>() { "FEDEX", "UPS" };
+            List<string> tAndC2 = new List<string>() { "USPS" };
             GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
 
             using (var mock = AutoMock.GetLoose())
@@ -231,8 +231,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         [Fact]
         public void GetRates_TermsAndConditionsFootNoteFactory_CreatesCorrectFootnoteControl_WhenApiResponseHasTermsAndConditionsCarriers()
         {
-            TermsAndConditionsNotAcceptedCarrier tAndC = new TermsAndConditionsNotAcceptedCarrier { CarrierName = new List<string>() { "FEDEX", "UPS" } };
-            TermsAndConditionsNotAcceptedCarrier tAndC2 = new TermsAndConditionsNotAcceptedCarrier { CarrierName = new List<string>() { "USPS" } };
+            List<string> tAndC = new List<string>() { "FEDEX", "UPS" };
+            List<string> tAndC2 = new List<string>() { "USPS" };
             GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
 
             using (var mock = AutoMock.GetLoose())
@@ -252,18 +252,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 Assert.True(footnoteControl.CarrierNames.Contains("USPS"));
             }
         }
-        
-        private static GetEligibleShippingServicesResponse GetEligibleShippingServicesResponse(TermsAndConditionsNotAcceptedCarrier tAndC, TermsAndConditionsNotAcceptedCarrier tAndC2)
+
+        private static GetEligibleShippingServicesResponse GetEligibleShippingServicesResponse(List<string> tAndC, List<string> tAndC2)
         {
+            tAndC.AddRange(tAndC2);
 
             GetEligibleShippingServicesResponse response = new GetEligibleShippingServicesResponse
             {
                 GetEligibleShippingServicesResult = new GetEligibleShippingServicesResult
                 {
                     ShippingServiceList = new ShippingServiceList {ShippingService = new List<ShippingService>()},
-                    TermsAndConditionsNotAcceptedCarrierList = new List<TermsAndConditionsNotAcceptedCarrier>()
+                    TermsAndConditionsNotAcceptedCarrierList = new TermsAndConditionsNotAcceptedCarrierList()
                     {
-                        tAndC, tAndC2
+                        TermsAndConditionsNotAcceptedCarrier = new TermsAndConditionsNotAcceptedCarrier()
+                        {
+                            CarrierName = tAndC
+                        }
                     }
                 }
             };
