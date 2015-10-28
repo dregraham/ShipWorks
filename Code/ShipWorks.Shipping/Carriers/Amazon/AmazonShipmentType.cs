@@ -13,7 +13,6 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
@@ -25,18 +24,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentType : ShipmentType
     {
-        readonly IAmazonAccountManager accountManager;
-        readonly Func<IAmazonRates> amazonRatesFactory;
+        private readonly IAmazonAccountManager accountManager;
+        private readonly Func<IAmazonRates> amazonRatesFactory;
         private readonly IStoreManager storeManager;
-        readonly IDateTimeProvider dateTimeProvider;
+        private readonly IDateTimeProvider dateTimeProvider;
+        private readonly Func<IAmazonLabelService> amazonLabelServiceFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, Func<IAmazonRates> amazonRatesFactory, IStoreManager storeManager)
+        public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, 
+            Func<IAmazonRates> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, IStoreManager storeManager)
         {
             this.accountManager = accountManager;
             this.amazonRatesFactory = amazonRatesFactory;
+            this.amazonLabelServiceFactory = amazonLabelServiceFactory;
             this.storeManager = storeManager;
             this.dateTimeProvider = dateTimeProvider;
         }
@@ -85,10 +87,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Process the shipment
         /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException();
-        }
+        public override void ProcessShipment(ShipmentEntity shipment) =>
+            amazonLabelServiceFactory().Create(shipment);
 
         /// <summary>
         /// Create the XML input to the XSL engine
@@ -189,7 +189,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override bool IsAllowedFor(ShipmentEntity shipment)
         {
-            
             StoreEntity storeEntity = storeManager.GetRelatedStore(shipment.ShipmentID);
 
             if (storeEntity?.TypeCode != (int)StoreTypeCode.Amazon)
