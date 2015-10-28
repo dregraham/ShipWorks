@@ -16,6 +16,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public partial class AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl : RateFootnoteControl
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl" /> class.
+        /// </summary>
         public AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl(List<string> carrierNames)
         {
             InitializeComponent();
