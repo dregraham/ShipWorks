@@ -29,20 +29,11 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl));
-            this.carrierNamesMessageLabel = new System.Windows.Forms.Label();
             this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.howToFixMessageLabel = new System.Windows.Forms.Label();
+            this.additionalRatesAvailableLabel = new System.Windows.Forms.Label();
+            this.openDialogLink = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
-            // 
-            // carrierNamesMessageLabel
-            // 
-            this.carrierNamesMessageLabel.AutoSize = true;
-            this.carrierNamesMessageLabel.Location = new System.Drawing.Point(25, 7);
-            this.carrierNamesMessageLabel.Name = "carrierNamesMessageLabel";
-            this.carrierNamesMessageLabel.Size = new System.Drawing.Size(263, 13);
-            this.carrierNamesMessageLabel.TabIndex = 9;
-            this.carrierNamesMessageLabel.Text = "Terms and conditions have not been accepted for {0}.";
             // 
             // pictureBox
             // 
@@ -53,24 +44,35 @@
             this.pictureBox.TabIndex = 11;
             this.pictureBox.TabStop = false;
             // 
-            // howToFixMessageLabel
+            // additionalRatesAvailableLabel
             // 
-            this.howToFixMessageLabel.AutoSize = true;
-            this.howToFixMessageLabel.Location = new System.Drawing.Point(25, 24);
-            this.howToFixMessageLabel.Name = "howToFixMessageLabel";
-            this.howToFixMessageLabel.Size = new System.Drawing.Size(330, 13);
-            this.howToFixMessageLabel.TabIndex = 12;
-            this.howToFixMessageLabel.Text = "Accepting these terms and conditions can be done through Amazon.";
+            this.additionalRatesAvailableLabel.AutoSize = true;
+            this.additionalRatesAvailableLabel.Location = new System.Drawing.Point(27, 5);
+            this.additionalRatesAvailableLabel.Name = "additionalRatesAvailableLabel";
+            this.additionalRatesAvailableLabel.Size = new System.Drawing.Size(209, 13);
+            this.additionalRatesAvailableLabel.TabIndex = 12;
+            this.additionalRatesAvailableLabel.Text = "Additional rates are available. For more info";
+            // 
+            // openDialogLink
+            // 
+            this.openDialogLink.AutoSize = true;
+            this.openDialogLink.Location = new System.Drawing.Point(242, 5);
+            this.openDialogLink.Name = "openDialogLink";
+            this.openDialogLink.Size = new System.Drawing.Size(53, 13);
+            this.openDialogLink.TabIndex = 13;
+            this.openDialogLink.TabStop = true;
+            this.openDialogLink.Text = "click here";
+            this.openDialogLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.openDialogLink_LinkClicked);
             // 
             // AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.howToFixMessageLabel);
+            this.Controls.Add(this.openDialogLink);
+            this.Controls.Add(this.additionalRatesAvailableLabel);
             this.Controls.Add(this.pictureBox);
-            this.Controls.Add(this.carrierNamesMessageLabel);
             this.Name = "AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl";
-            this.Size = new System.Drawing.Size(396, 44);
+            this.Size = new System.Drawing.Size(396, 25);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -80,7 +82,7 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBox;
-        private System.Windows.Forms.Label carrierNamesMessageLabel;
-        private System.Windows.Forms.Label howToFixMessageLabel;
+        private System.Windows.Forms.Label additionalRatesAvailableLabel;
+        private System.Windows.Forms.LinkLabel openDialogLink;
     }
 }

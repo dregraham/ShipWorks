@@ -22,8 +22,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             // Property used for unit testing.
             CarrierNames = carrierNames;
-
-            carrierNamesMessageLabel.Text = $"Terms and conditions have not been accepted for {string.Join(", ", CarrierNames)}.";
         }
 
         /// <summary>
@@ -31,5 +29,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Used for unit testing.
         /// </summary>
         public List<string> CarrierNames { private set; get; }
+
+        private void openDialogLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            AmazonCarrierTermsAndConditionsNotAcceptedDialog dialog = new AmazonCarrierTermsAndConditionsNotAcceptedDialog(CarrierNames);
+            dialog.ShowDialog();
+        }
     }
 }

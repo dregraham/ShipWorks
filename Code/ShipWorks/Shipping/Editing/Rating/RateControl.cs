@@ -539,7 +539,7 @@ namespace ShipWorks.Shipping.Editing.Rating
 
                 panelFootnote.Controls.Add(footnote);
                 footnote.Location = new Point(0, y);
-
+                footnote.Width = panelFootnote.Width;
                 footnote.RateCriteriaChanged += OnFootnoteRateCriteriaChanged;
                 y += footnote.Height;
             }
