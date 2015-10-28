@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.UI.Controls.MultiValueBinders;
 using System.Reflection;
 using ShipWorks.Core.UI;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -245,6 +246,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 handler.Set(nameof(ServicesAvailable), ref servicesAvailable, value);
                 servicesAvailable = value; 
             }
+        }
+
+        /// <summary>
+        /// Select a specific rate
+        /// </summary>
+        public void SelectRate(AmazonRateTag rateTag)
+        {
+            throw new NotImplementedException("Cannot set the necessary properties on the ViewModel because they don't exist, but the class is being worked on in a different task");
         }
     }
 }
