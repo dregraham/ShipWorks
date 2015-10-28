@@ -250,6 +250,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             // service
             // 
+            this.service.DisplayMember = "Key";
             this.service.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.service.FormattingEnabled = true;
             this.service.Location = new System.Drawing.Point(91, 7);
@@ -257,6 +258,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.service.PromptText = "(Multiple Values)";
             this.service.Size = new System.Drawing.Size(220, 21);
             this.service.TabIndex = 6;
+            this.service.ValueMember = "Value";
             // 
             // labelDeliveryConf
             // 
