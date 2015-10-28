@@ -25,18 +25,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     {
         readonly IAmazonAccountManager accountManager;
         readonly Func<IAmazonRates> amazonRatesFactory;
-        private readonly IOrderManager orderManager;
         private readonly IStoreManager storeManager;
         readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, Func<IAmazonRates> amazonRatesFactory, IOrderManager orderManager, IStoreManager storeManager)
+        public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, Func<IAmazonRates> amazonRatesFactory, IStoreManager storeManager)
         {
             this.accountManager = accountManager;
             this.amazonRatesFactory = amazonRatesFactory;
-            this.orderManager = orderManager;
             this.storeManager = storeManager;
             this.dateTimeProvider = dateTimeProvider;
         }
@@ -189,11 +187,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override bool IsAllowedFor(ShipmentEntity shipment)
         {
-            orderManager.PopulateOrderDetails(shipment);
-            
-            long storeId = shipment.Order.StoreID;
-
-            StoreEntity storeEntity = storeManager.GetStore(storeId);
+            StoreEntity storeEntity = storeManager.GetRelatedStore(shipment.ShipmentID);
 
             if (storeEntity?.TypeCode != (int) StoreTypeCode.Amazon)
             {

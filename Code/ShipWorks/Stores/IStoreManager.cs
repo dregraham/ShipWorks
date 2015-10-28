@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 
 namespace ShipWorks.Stores
 {
@@ -19,8 +20,8 @@ namespace ShipWorks.Stores
         IEnumerable<StoreEntity> GetEnabledStores();
 
         /// <summary>
-        /// Get the store with the given ID.  If it does not exist, null is returned
+        /// Gets the related store.  If it does not exist, null is returned
         /// </summary>
-        StoreEntity GetStore(long storeID);
+        StoreEntity GetRelatedStore(long entityId);
     }
 }

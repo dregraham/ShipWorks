@@ -12,14 +12,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
     public class AmazonShipmentTypeTest
     {
         [Fact]
-        public void IsAllowedFor_DelegatesToOrderManager_ToPopulateOrderDetails()
+        public void IsAllowedFor_DelegatesToStoreManager_ToPopulateOrderDetails()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentEntity shipment = new ShipmentEntity();
-                mock.Mock<IOrderManager>()
-                    .Setup(o => o.PopulateOrderDetails(shipment))
-                    .Callback<ShipmentEntity>(s => s.Order = new AmazonOrderEntity())
+                ShipmentEntity shipment = new ShipmentEntity { ShipmentID = 12 };
+                mock.Mock<IStoreManager>()
+                    .Setup(m => m.GetRelatedStore(12))
+                    .Returns(new StoreEntity { TypeCode = (int) StoreTypeCode.Ebay})
                     .Verifiable();
 
                 AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
@@ -36,12 +36,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IStoreManager>()
-                    .Setup(m => m.GetStore(12))
+                    .Setup(m => m.GetRelatedStore(13))
                     .Returns(new StoreEntity { TypeCode = (int)StoreTypeCode.Ebay });
 
                 AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
 
-                Assert.False(testObject.IsAllowedFor(new ShipmentEntity { Order = new OrderEntity { StoreID = 12 } }));
+                Assert.False(testObject.IsAllowedFor(new ShipmentEntity { ShipmentID = 13 }));
             }
         }
 
@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IStoreManager>()
-                    .Setup(m => m.GetStore(It.IsAny<long>()))
+                    .Setup(m => m.GetRelatedStore(It.IsAny<long>()))
                     .Returns(new StoreEntity { TypeCode = (int) StoreTypeCode.Amazon });
                 
                 AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
