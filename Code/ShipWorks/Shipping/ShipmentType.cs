@@ -334,7 +334,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
-        public virtual SettingsControlBase CreateSettingsControl()
+        protected virtual SettingsControlBase CreateSettingsControl()
         {
             return null;
         }
@@ -352,11 +352,21 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create the UserControl that is used to edit a profile for the service
         /// </summary>
-        public virtual ShippingProfileControlBase CreateProfileControl()
+        protected virtual ShippingProfileControlBase CreateProfileControl()
         {
             return null;
         }
-        
+
+        /// <summary>
+        /// Create the UserControl that is used to edit a profile for the service
+        /// </summary>
+        public virtual ShippingProfileControlBase CreateProfileControl(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<ShippingProfileControlBase>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<ShippingProfileControlBase>(ShipmentTypeCode) :
+                CreateProfileControl();
+        }
+
         /// <summary>
         /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have 
         /// been excluded for this shipment type. The integer values are intended to correspond to 

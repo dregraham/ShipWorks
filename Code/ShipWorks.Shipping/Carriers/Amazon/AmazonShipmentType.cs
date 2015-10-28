@@ -15,6 +15,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Carriers.Amazon.Enums;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -190,17 +192,83 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public override bool IsAllowedFor(ShipmentEntity shipment)
         {
             orderManager.PopulateOrderDetails(shipment);
-            
+
             long storeId = shipment.Order.StoreID;
 
             StoreEntity storeEntity = storeManager.GetStore(storeId);
 
-            if (storeEntity?.TypeCode != (int) StoreTypeCode.Amazon)
+            if (storeEntity?.TypeCode != (int)StoreTypeCode.Amazon)
             {
                 return false;
             }
 
-            return ((AmazonOrderEntity) shipment.Order).IsPrime == (int) AmazonMwsIsPrime.Yes;
+            return ((AmazonOrderEntity)shipment.Order).IsPrime == (int)AmazonMwsIsPrime.Yes;
+        }
+
+        /// <summary>
+        /// Ensure the carrier specific profile data is created and loaded for the given profile
+        /// </summary>
+        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
+        {
+            base.LoadProfileData(profile, refreshIfPresent);
+            ShipmentTypeDataService.LoadProfileData(profile, "Amazon", typeof(AmazonProfileEntity), refreshIfPresent);
+        }
+
+        /// <summary>
+        /// Get the default profile for the shipment type
+        /// </summary>
+        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        {
+            base.ConfigurePrimaryProfile(profile);
+
+            AmazonProfileEntity amazon = profile.Amazon;
+
+            amazon.CarrierWillPickUp = false;
+            amazon.DeliveryExperience = (int) AmazonDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
+            amazon.Weight = 0;
+            amazon.SendDateMustArriveBy = false;
+
+            amazon.DimsProfileID = 0;
+            amazon.DimsLength = 0;
+            amazon.DimsWidth = 0;
+            amazon.DimsHeight = 0;
+            amazon.DimsWeight = 0;
+            amazon.DimsAddWeight = true;
+        }
+
+        /// <summary>
+        /// Apply the given shipping profile to the shipment
+        /// </summary>
+        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        {
+            base.ApplyProfile(shipment, profile);
+            
+            if (shipment.Amazon == null)
+            {
+                return;
+            }
+
+            AmazonShipmentEntity amazonShipment = shipment.Amazon;
+            AmazonProfileEntity amazonProfile = profile.Amazon;
+
+            ShippingProfileUtility.ApplyProfileValue(amazonProfile.CarrierWillPickUp, amazonShipment, AmazonShipmentFields.CarrierWillPickUp);
+            ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
+            ShippingProfileUtility.ApplyProfileValue(amazonProfile.SendDateMustArriveBy, amazonShipment, AmazonShipmentFields.SendDateMustArriveBy);
+
+            if (amazonProfile.Weight != null && amazonProfile.Weight.Value != 0)
+            {
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.Weight, shipment, ShipmentFields.ContentWeight);
+            }
+
+            ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsProfileID, amazonShipment, AmazonShipmentFields.DimsProfileID);
+            if (amazonProfile.DimsProfileID != null)
+            {
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsLength, amazonShipment, AmazonShipmentFields.DimsLength);
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsWidth, amazonShipment, AmazonShipmentFields.DimsWidth);
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsHeight, amazonShipment, AmazonShipmentFields.DimsHeight);
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsWeight, amazonShipment, AmazonShipmentFields.DimsWeight);
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsAddWeight, amazonShipment, AmazonShipmentFields.DimsAddWeight);
+            }
         }
     }
 }

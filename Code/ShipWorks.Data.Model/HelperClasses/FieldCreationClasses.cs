@@ -1012,15 +1012,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.ShippingProfileID);}
 		}
-		/// <summary>Creates a new AmazonProfileEntity.InsuranceValue field instance</summary>
-		public static EntityField2 InsuranceValue
+		/// <summary>Creates a new AmazonProfileEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.InsuranceValue);}
-		}
-		/// <summary>Creates a new AmazonProfileEntity.DimsShippingProfileID field instance</summary>
-		public static EntityField2 DimsShippingProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DimsShippingProfileID);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DimsProfileID);}
 		}
 		/// <summary>Creates a new AmazonProfileEntity.DimsLength field instance</summary>
 		public static EntityField2 DimsLength
@@ -1057,10 +1052,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.CarrierWillPickUp);}
 		}
-		/// <summary>Creates a new AmazonProfileEntity.DeclaredValue field instance</summary>
-		public static EntityField2 DeclaredValue
+		/// <summary>Creates a new AmazonProfileEntity.Weight field instance</summary>
+		public static EntityField2 Weight
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DeclaredValue);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new AmazonProfileEntity.SendDateMustArriveBy field instance</summary>
+		public static EntityField2 SendDateMustArriveBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.SendDateMustArriveBy);}
 		}
 	}
 

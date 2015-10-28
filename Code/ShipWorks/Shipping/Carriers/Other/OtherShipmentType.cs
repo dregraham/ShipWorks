@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Create the control needed to edit the profile settings for the type
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new OtherProfileControl();
         }

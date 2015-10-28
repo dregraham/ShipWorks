@@ -507,10 +507,8 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
-		///<summary>InsuranceValue. </summary>
-		InsuranceValue,
-		///<summary>DimsShippingProfileID. </summary>
-		DimsShippingProfileID,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
 		///<summary>DimsLength. </summary>
 		DimsLength,
 		///<summary>DimsWidth. </summary>
@@ -525,8 +523,10 @@ namespace ShipWorks.Data.Model
 		DeliveryExperience,
 		///<summary>CarrierWillPickUp. </summary>
 		CarrierWillPickUp,
-		///<summary>DeclaredValue. </summary>
-		DeclaredValue,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>SendDateMustArriveBy. </summary>
+		SendDateMustArriveBy,
 		/// <summary></summary>
 		AmountOfFields
 	}

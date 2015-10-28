@@ -1,5 +1,6 @@
 
 
+
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -693,40 +694,6 @@ PRINT N'Creating index [IX_Order_ShipUSTerritory] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Order_ShipUSTerritory] ON [dbo].[Order] ([ShipUSTerritory] DESC)
 GO
-PRINT N'Adding [Order].[IX_Store_OrderNumberComplete_IsManual] Index'
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Store_OrderNumberComplete_IsManual] ON [dbo].[Order]
-(
-	[StoreID] ASC,
-	[OrderNumberComplete] ASC,
-	[IsManual] ASC
-)
-GO
-PRINT N'Adding [Order].[IX_Order_DestinationResidential] Index'
-GO
--- Intended to match the conditions on the US Residential filter in ShipWorks
-CREATE NONCLUSTERED INDEX [IX_Order_DestinationResidential] ON [dbo].[Order]
-(
-	[ShipResidentialStatus] ASC,
-	[ShipPOBox] ASC,
-	[ShipUSTerritory] ASC,
-	[ShipMilitaryAddress] ASC
-)
-WHERE ShipResidentialStatus = 1 AND ShipPOBox = 2 AND ShipUSTerritory = 2 AND ShipMilitaryAddress = 2
-GO
-PRINT N'Adding [Order].[IX_Order_DestinationCommercial] Index'
-GO
--- Intended to match the conditions on the US Commercial filter in ShipWorks
-CREATE NONCLUSTERED INDEX [IX_Order_DestinationCommercial] ON [dbo].[Order]
-(
-	[ShipResidentialStatus] ASC,
-	[ShipPOBox] ASC,
-	[ShipUSTerritory] ASC,
-	[ShipMilitaryAddress] ASC
-)
-WHERE ShipResidentialStatus = 2 AND ShipPOBox = 2 AND ShipUSTerritory = 2 AND ShipMilitaryAddress = 2
-GO
-
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[Order]'
@@ -1742,16 +1709,16 @@ GO
 CREATE TABLE [dbo].[AmazonProfile]
 (
 [ShippingProfileID] [bigint] NOT NULL,
-[InsuranceValue] [money] NOT NULL CONSTRAINT [DF_AmazonProfile_InsuranceValue] DEFAULT ((0)),
-[DimsShippingProfileID] [bigint] NOT NULL CONSTRAINT [DF_AmazonProfile_DimsShippingProfileID] DEFAULT ((0)),
-[DimsLength] [float] NOT NULL CONSTRAINT [DF_AmazonProfile_DimsLength] DEFAULT ((0)),
-[DimsWidth] [float] NOT NULL CONSTRAINT [DF_AmazonProfile_DimsWidth] DEFAULT ((0)),
-[DimsHeight] [float] NOT NULL CONSTRAINT [DF_AmazonProfile_DimsHeight] DEFAULT ((0)),
-[DimsWeight] [float] NOT NULL CONSTRAINT [DF_AmazonProfile_DimsWeight] DEFAULT ((0)),
-[DimsAddWeight] [bit] NOT NULL CONSTRAINT [DF_AmazonProfile_DimsAddWeight] DEFAULT ((0)),
-[DeliveryExperience] [int] NOT NULL CONSTRAINT [DF_AmazonProfile_DeliveryExperience] DEFAULT ((0)),
-[CarrierWillPickUp] [bit] NOT NULL CONSTRAINT [DF_AmazonProfile_CarrierWillPickUp] DEFAULT ((0)),
-[DeclaredValue] [money] NULL
+[DimsProfileID] [bigint] NULL,
+[DimsLength] [float] NULL,
+[DimsWidth] [float] NULL,
+[DimsHeight] [float] NULL,
+[DimsWeight] [float] NULL,
+[DimsAddWeight] [bit] NULL,
+[DeliveryExperience] [int] NULL,
+[CarrierWillPickUp] [bit] NULL,
+[Weight] [float] NULL,
+[SendDateMustArriveBy] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonProfile] on [dbo].[AmazonProfile]'

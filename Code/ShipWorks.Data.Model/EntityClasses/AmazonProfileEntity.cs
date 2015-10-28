@@ -469,10 +469,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShippingProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("DimsShippingProfileID", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("DimsLength", fieldHashtable);
@@ -496,7 +493,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CarrierWillPickUp", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("DeclaredValue", fieldHashtable);
+			_fieldsCustomProperties.Add("Weight", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("SendDateMustArriveBy", fieldHashtable);
 		}
 		#endregion
 
@@ -506,7 +506,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncShippingProfile(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _shippingProfile, new PropertyChangedEventHandler( OnShippingProfilePropertyChanged ), "ShippingProfile", AmazonProfileEntity.Relations.ShippingProfileEntityUsingShippingProfileID, true, signalRelatedEntity, "AmazonProfile", false, new int[] { (int)AmazonProfileFieldIndex.ShippingProfileID } );
+			base.PerformDesetupSyncRelatedEntity( _shippingProfile, new PropertyChangedEventHandler( OnShippingProfilePropertyChanged ), "ShippingProfile", AmazonProfileEntity.Relations.ShippingProfileEntityUsingShippingProfileID, true, signalRelatedEntity, "Amazon", false, new int[] { (int)AmazonProfileFieldIndex.ShippingProfileID } );
 			_shippingProfile = null;
 		}
 		
@@ -616,36 +616,25 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)AmazonProfileFieldIndex.ShippingProfileID, value); }
 		}
 
-		/// <summary> The InsuranceValue property of the Entity AmazonProfile<br/><br/>
+		/// <summary> The DimsProfileID property of the Entity AmazonProfile<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."InsuranceValue"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Decimal InsuranceValue
-		{
-			get { return (System.Decimal)GetValue((int)AmazonProfileFieldIndex.InsuranceValue, true); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.InsuranceValue, value); }
-		}
-
-		/// <summary> The DimsShippingProfileID property of the Entity AmazonProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsShippingProfileID"<br/>
+		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 DimsShippingProfileID
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> DimsProfileID
 		{
-			get { return (System.Int64)GetValue((int)AmazonProfileFieldIndex.DimsShippingProfileID, true); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.DimsShippingProfileID, value); }
+			get { return (Nullable<System.Int64>)GetValue((int)AmazonProfileFieldIndex.DimsProfileID, false); }
+			set	{ SetValue((int)AmazonProfileFieldIndex.DimsProfileID, value); }
 		}
 
 		/// <summary> The DimsLength property of the Entity AmazonProfile<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsLength"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Double DimsLength
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Double> DimsLength
 		{
-			get { return (System.Double)GetValue((int)AmazonProfileFieldIndex.DimsLength, true); }
+			get { return (Nullable<System.Double>)GetValue((int)AmazonProfileFieldIndex.DimsLength, false); }
 			set	{ SetValue((int)AmazonProfileFieldIndex.DimsLength, value); }
 		}
 
@@ -653,10 +642,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsWidth"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Double DimsWidth
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Double> DimsWidth
 		{
-			get { return (System.Double)GetValue((int)AmazonProfileFieldIndex.DimsWidth, true); }
+			get { return (Nullable<System.Double>)GetValue((int)AmazonProfileFieldIndex.DimsWidth, false); }
 			set	{ SetValue((int)AmazonProfileFieldIndex.DimsWidth, value); }
 		}
 
@@ -664,10 +653,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsHeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Double DimsHeight
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Double> DimsHeight
 		{
-			get { return (System.Double)GetValue((int)AmazonProfileFieldIndex.DimsHeight, true); }
+			get { return (Nullable<System.Double>)GetValue((int)AmazonProfileFieldIndex.DimsHeight, false); }
 			set	{ SetValue((int)AmazonProfileFieldIndex.DimsHeight, value); }
 		}
 
@@ -675,10 +664,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Double DimsWeight
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Double> DimsWeight
 		{
-			get { return (System.Double)GetValue((int)AmazonProfileFieldIndex.DimsWeight, true); }
+			get { return (Nullable<System.Double>)GetValue((int)AmazonProfileFieldIndex.DimsWeight, false); }
 			set	{ SetValue((int)AmazonProfileFieldIndex.DimsWeight, value); }
 		}
 
@@ -686,10 +675,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsAddWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean DimsAddWeight
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> DimsAddWeight
 		{
-			get { return (System.Boolean)GetValue((int)AmazonProfileFieldIndex.DimsAddWeight, true); }
+			get { return (Nullable<System.Boolean>)GetValue((int)AmazonProfileFieldIndex.DimsAddWeight, false); }
 			set	{ SetValue((int)AmazonProfileFieldIndex.DimsAddWeight, value); }
 		}
 
@@ -697,10 +686,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonProfile"."DeliveryExperience"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 DeliveryExperience
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> DeliveryExperience
 		{
-			get { return (System.Int32)GetValue((int)AmazonProfileFieldIndex.DeliveryExperience, true); }
+			get { return (Nullable<System.Int32>)GetValue((int)AmazonProfileFieldIndex.DeliveryExperience, false); }
 			set	{ SetValue((int)AmazonProfileFieldIndex.DeliveryExperience, value); }
 		}
 
@@ -708,22 +697,33 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonProfile"."CarrierWillPickUp"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean CarrierWillPickUp
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> CarrierWillPickUp
 		{
-			get { return (System.Boolean)GetValue((int)AmazonProfileFieldIndex.CarrierWillPickUp, true); }
+			get { return (Nullable<System.Boolean>)GetValue((int)AmazonProfileFieldIndex.CarrierWillPickUp, false); }
 			set	{ SetValue((int)AmazonProfileFieldIndex.CarrierWillPickUp, value); }
 		}
 
-		/// <summary> The DeclaredValue property of the Entity AmazonProfile<br/><br/>
+		/// <summary> The Weight property of the Entity AmazonProfile<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."DeclaredValue"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
+		/// <remarks>Mapped on  table field: "AmazonProfile"."Weight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Decimal> DeclaredValue
+		public virtual Nullable<System.Double> Weight
 		{
-			get { return (Nullable<System.Decimal>)GetValue((int)AmazonProfileFieldIndex.DeclaredValue, false); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.DeclaredValue, value); }
+			get { return (Nullable<System.Double>)GetValue((int)AmazonProfileFieldIndex.Weight, false); }
+			set	{ SetValue((int)AmazonProfileFieldIndex.Weight, value); }
+		}
+
+		/// <summary> The SendDateMustArriveBy property of the Entity AmazonProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonProfile"."SendDateMustArriveBy"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> SendDateMustArriveBy
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)AmazonProfileFieldIndex.SendDateMustArriveBy, false); }
+			set	{ SetValue((int)AmazonProfileFieldIndex.SendDateMustArriveBy, value); }
 		}
 
 
@@ -745,7 +745,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					SetupSyncShippingProfile(value);
 					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
 					{
-						value.SetRelatedEntity(this, "AmazonProfile");
+						value.SetRelatedEntity(this, "Amazon");
 					}
 				}
 				else
@@ -764,7 +764,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 						if(_shippingProfile!=value)
 						{
 							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "AmazonProfile");
+							relatedEntity.SetRelatedEntity(this, "Amazon");
 							SetupSyncShippingProfile(relatedEntity);
 						}
 					}
