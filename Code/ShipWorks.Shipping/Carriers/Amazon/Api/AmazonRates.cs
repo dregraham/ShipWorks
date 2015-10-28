@@ -19,16 +19,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
         private readonly IOrderManager orderManager;
+        private readonly AmazonShipmentType amazonShipmentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRates"/> class.
         /// </summary>
         /// <param name="webClient">The web client.</param>
-        public AmazonRates(IAmazonShippingWebClient webClient,  IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager)
+        /// <param name="amazonShipmentType"></param>
+        public AmazonRates(IAmazonShippingWebClient webClient,  IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager, AmazonShipmentType amazonShipmentType)
         {
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
             this.orderManager = orderManager;
+            this.amazonShipmentType = amazonShipmentType;
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             {
                 List<string> carrierNames = carriers.Distinct().ToList();
 
-                rateGroup.AddFootnoteFactory(new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new AmazonShipmentType(null, null, null, null, null), carrierNames));
+                rateGroup.AddFootnoteFactory(new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(amazonShipmentType, carrierNames));
             }
 
             return rateGroup;
