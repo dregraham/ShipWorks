@@ -1137,11 +1137,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DateMustArriveBy);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.SendDateMustArriveBy field instance</summary>
-		public static EntityField2 SendDateMustArriveBy
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.SendDateMustArriveBy);}
-		}
 		/// <summary>Creates a new AmazonShipmentEntity.DeliveryExperience field instance</summary>
 		public static EntityField2 DeliveryExperience
 		{
@@ -1161,6 +1156,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AmazonUniqueShipmentID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.AmazonUniqueShipmentID);}
+		}
+		/// <summary>Creates a new AmazonShipmentEntity.SendDateMustArriveBy field instance</summary>
+		public static EntityField2 SendDateMustArriveBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.SendDateMustArriveBy);}
 		}
 	}
 
