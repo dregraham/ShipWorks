@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
     /// <summary>
-    /// Shows a list of carriers that need terms and conditions to be accepted.
+    /// Shows a message indicating that additional rates are available, and a link to open a dialog box that shows a the list of carriers
+    /// for which the terms and conditions have not been accepted
     /// </summary>
     public partial class AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl : RateFootnoteControl
     {
@@ -33,6 +27,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public List<string> CarrierNames { private set; get; }
 
+        /// <summary>
+        /// Creates and opens an <see cref="AmazonCarrierTermsAndConditionsNotAcceptedDialog"/>
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="LinkLabelLinkClickedEventArgs"/> instance containing the event data.</param>
         private void openDialogLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             AmazonCarrierTermsAndConditionsNotAcceptedDialog dialog = new AmazonCarrierTermsAndConditionsNotAcceptedDialog(CarrierNames);
