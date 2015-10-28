@@ -490,7 +490,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 bool? isPoBox = null;
                 bool isPoBoxSpecified;
                 Address[] candidates = null;
-                StatusCodes statusCodes;
+                StatusCodes statusCodes = null;
             	RateV18[] rates;
                 string badAddressMessage = null;
                 
@@ -549,7 +549,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     IsPoBox = isPoBox,
                     MatchedAddress = address,
                     Candidates = candidates.ToList(),
-                    BadAddressMessage = badAddressMessage
+                    BadAddressMessage = badAddressMessage,
+                    StatusCodes = statusCodes
                 };
             }
         }

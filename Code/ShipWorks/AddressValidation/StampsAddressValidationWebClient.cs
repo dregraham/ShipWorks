@@ -39,7 +39,7 @@ namespace ShipWorks.AddressValidation
 
                 if (uspsResult.IsSuccessfulMatch)
                 {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult.IsPoBox, uspsResult.ResidentialIndicator));
+                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
                 }
                 else
                 {
@@ -48,7 +48,7 @@ namespace ShipWorks.AddressValidation
 
                 foreach (Address address in uspsResult.Candidates)
                 {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, uspsResult.IsPoBox, uspsResult.ResidentialIndicator));
+                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, uspsResult));
                 }
             }
             catch (UspsException ex)
@@ -62,7 +62,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Create an AddressValidationResult from a Stamps.com address
         /// </summary>
-        private static AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, bool? isPoBox, ResidentialDeliveryIndicatorType residentialStatus)
+        private static AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult)
         {
             AddressValidationResult addressValidationResult = new AddressValidationResult
             {
@@ -74,14 +74,20 @@ namespace ShipWorks.AddressValidation
                 PostalCode = GetPostalCode(address) ?? string.Empty,
                 CountryCode = address.Country ?? string.Empty,
                 IsValid = isValid,
-                POBox = ConvertPoBox(isPoBox),
-                ResidentialStatus = ConvertResidentialStatus(residentialStatus)
+                POBox = ConvertPoBox(uspsResult.IsPoBox),
+                ResidentialStatus = ConvertResidentialStatus(uspsResult.ResidentialIndicator),
+                AddressType = ConvertAddressType(uspsResult)
             };
 
             addressValidationResult.ParseStreet1();
             addressValidationResult.ApplyAddressCasing();
 
             return addressValidationResult;
+        }
+
+        private static AddressType ConvertAddressType(UspsAddressValidationResults uspsResult)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>

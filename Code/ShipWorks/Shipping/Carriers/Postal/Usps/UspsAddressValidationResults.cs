@@ -42,5 +42,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Gets or sets the message.
         /// </summary>
         public string BadAddressMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status codes.
+        /// </summary>
+        public StatusCodes StatusCodes { get; set; }
     }
 }
