@@ -105,6 +105,7 @@
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonAccountEditorViewModelTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonCredentialsTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonLabelServiceTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactoryTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonServiceViewModelTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentTypeTest.cs" />

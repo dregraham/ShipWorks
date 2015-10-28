@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// Initializes a new instance of the <see cref="AmazonRates"/> class.
         /// </summary>
         /// <param name="webClient">The web client.</param>
-        public AmazonRates(IAmazonShippingWebClient webClient,  IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager)
+        public AmazonRates(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager)
         {
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
