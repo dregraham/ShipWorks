@@ -121,6 +121,13 @@
     <Compile Include="Carriers\Amazon\AmazonShipmentSetupWizard.Designer.cs">
       <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Carriers\Amazon\AmazonProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonProfileControl.Designer.cs">
+      <DependentUpon>AmazonProfileControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonShippingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingModule.cs" />
   </ItemGroup>
@@ -172,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Amazon\AmazonShipmentSetupWizard.resx">
       <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonProfileControl.resx">
+      <DependentUpon>AmazonProfileControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

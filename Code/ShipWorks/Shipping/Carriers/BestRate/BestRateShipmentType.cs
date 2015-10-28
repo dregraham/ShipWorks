@@ -151,7 +151,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Create the UserControl that is used to edit a profile for the service
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new BestRateProfileControl();
         }
@@ -365,7 +365,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             return new BestRateSettingsControl();
         }

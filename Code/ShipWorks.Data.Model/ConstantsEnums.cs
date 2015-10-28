@@ -500,6 +500,39 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonProfile.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum AmazonProfileFieldIndex:int
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>DeliveryExperience. </summary>
+		DeliveryExperience,
+		///<summary>CarrierWillPickUp. </summary>
+		CarrierWillPickUp,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>SendDateMustArriveBy. </summary>
+		SendDateMustArriveBy,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonShipment.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -10872,6 +10905,8 @@ namespace ShipWorks.Data.Model
 		AmazonOrderEntity,
 		///<summary>AmazonOrderItem</summary>
 		AmazonOrderItemEntity,
+		///<summary>AmazonProfile</summary>
+		AmazonProfileEntity,
 		///<summary>AmazonShipment</summary>
 		AmazonShipmentEntity,
 		///<summary>AmazonStore</summary>
