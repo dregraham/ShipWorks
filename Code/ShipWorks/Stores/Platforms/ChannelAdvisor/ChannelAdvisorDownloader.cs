@@ -210,8 +210,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                     if (!string.IsNullOrEmpty(carrier) || !string.IsNullOrEmpty(shippingClass))
                     {
-                        order.RequestedShipping = string.Format("{0} - {1}", carrier, shippingClass);
+                        order.RequestedShipping = $"{carrier} - {shippingClass}";
                     }
+
+                    order.IsPrime = (int) GetIsPrime(shippingClass);
                 }
             }
 
@@ -241,6 +243,24 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ChannelAdvisorDownloader.LoadOrder");
             retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+        }
+
+        /// <summary>
+        /// Gets the prime status based on the shippingClass
+        /// </summary>
+        public static ChannelAdvisorIsAmazonPrime GetIsPrime(string shippingClass)
+        {
+            if (string.IsNullOrEmpty(shippingClass))
+            {
+                return ChannelAdvisorIsAmazonPrime.Unknown;
+            }
+
+            if (shippingClass.IndexOf("Amazon", StringComparison.OrdinalIgnoreCase) >= 0 &&
+                shippingClass.IndexOf("Prime", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return ChannelAdvisorIsAmazonPrime.Yes;
+            }
+            return ChannelAdvisorIsAmazonPrime.No;
         }
 
         /// <summary>

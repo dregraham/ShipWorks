@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             {
                 List<string> carrierNames = carriers.SelectMany(x => x.CarrierName).Distinct().ToList();
                 
-                rateGroup.AddFootnoteFactory(new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new AmazonShipmentType(null, null, null), carrierNames));
+                rateGroup.AddFootnoteFactory(new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new AmazonShipmentType(null, null, null, null, null), carrierNames));
             }
 
             return rateGroup;

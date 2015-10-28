@@ -20,6 +20,7 @@ CREATE TABLE [dbo].[AmazonShipment]
 [DimsWeight] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsWeight] DEFAULT ((0)),
 [DimsAddWeight] [bit] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsAddWeight] DEFAULT ((0)),
 [DateMustArriveBy] [datetime] NOT NULL,
+[SendDateMustArriveBy] [bit] NOT NULL CONSTRAINT [DF_AmazonShipment_SendDateMustArriveBy] DEFAULT ((0)),
 [DeliveryExperience] [int] NOT NULL CONSTRAINT [DF_AmazonShipment_DeliveryExperience] DEFAULT ((0)),
 [CarrierWillPickUp] [bit] NOT NULL CONSTRAINT [DF_AmazonShipment_CarrierWillPickUp] DEFAULT ((0)),
 [DeclaredValue] [money] NULL,

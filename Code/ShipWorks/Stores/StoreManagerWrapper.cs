@@ -24,5 +24,13 @@ namespace ShipWorks.Stores
         {
             return StoreManager.GetEnabledStores();
         }
+
+        /// <summary>
+        /// Get the store with the given ID.  If it does not exist, null is returned
+        /// </summary>
+        public StoreEntity GetStore(long storeID)
+        {
+            return StoreManager.GetStore(storeID);
+        }
     }
 }

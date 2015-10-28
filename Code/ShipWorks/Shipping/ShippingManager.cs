@@ -239,19 +239,18 @@ namespace ShipWorks.Shipping
             PersonAdapter.Copy(store, "", shipment, "Origin");
             shipment.OriginFirstName = store.StoreName;
 
-            ShipmentTypeCode shipmentTypeCode = DetermineInitialShipmentType(order);
-
+            ShipmentType shipmentType = DetermineInitialShipmentType(shipment);
+            
             // Save the record
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 // Apply the determined shipment type
-                shipment.ShipmentType = (int)shipmentTypeCode;
+                shipment.ShipmentType = (int)shipmentType.ShipmentTypeCode;
 
                 // Save the shipment
                 adapter.SaveAndRefetch(shipment);
-
+                
                 // Apply the default values to the shipment
-                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
                 shipmentType.LoadShipmentData(shipment, false);
                 shipmentType.UpdateDynamicShipmentData(shipment);
 
@@ -292,22 +291,25 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Determine what the initial shipment type for the given order should be, given the shipping settings rules
         /// </summary>
-        private static ShipmentTypeCode DetermineInitialShipmentType(OrderEntity order)
+        private static ShipmentType DetermineInitialShipmentType(ShipmentEntity shipment)
         {
+            ShipmentTypeCode initialShipmentType = (ShipmentTypeCode)ShippingSettings.Fetch().DefaultType;
+
             // Go through each rule and see if we can find one that is applicable
             foreach (ShippingProviderRuleEntity rule in ShippingProviderRuleManager.GetRules())
             {
                 long? filterContentID = FilterHelper.GetFilterNodeContentID(rule.FilterNodeID);
                 if (filterContentID != null)
                 {
-                    if (FilterHelper.IsObjectInFilterContent(order.OrderID, filterContentID.Value))
+                    if (FilterHelper.IsObjectInFilterContent(shipment.OrderID, filterContentID.Value))
                     {
-                        return (ShipmentTypeCode)rule.ShipmentType;
+                        initialShipmentType = (ShipmentTypeCode)rule.ShipmentType;
                     }
                 }
             }
 
-            return (ShipmentTypeCode)ShippingSettings.Fetch().DefaultType;
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(initialShipmentType);
+            return shipmentType.IsAllowedFor(shipment) ? shipmentType : ShipmentTypeManager.GetType(ShipmentTypeCode.None);
         }
 
         /// <summary>

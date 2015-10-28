@@ -93,6 +93,8 @@
     <Compile Include="Carriers\Amazon\Api\AmazonRates.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\AmazonRateTag.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\CancelShipmentResponse.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\CreateShipmentResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonRates.cs" />

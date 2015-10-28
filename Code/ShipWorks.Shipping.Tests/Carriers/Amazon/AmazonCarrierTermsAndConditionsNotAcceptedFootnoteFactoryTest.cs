@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Assert.Throws<ArgumentNullException>(() => new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new AmazonShipmentType(null, null, null), null));
+                Assert.Throws<ArgumentNullException>(() => new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new AmazonShipmentType(null, null, null, null, null), null));
             }
         }
 
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentType shipmentType = new AmazonShipmentType(null, null, null);
+                ShipmentType shipmentType = new AmazonShipmentType(null, null, null, null, null);
                 AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory testObject = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(shipmentType, new List<string>());
 
                 Assert.Equal(shipmentType, testObject.ShipmentType);
@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                ShipmentType shipmentType = new AmazonShipmentType(null, null, null);
+                ShipmentType shipmentType = new AmazonShipmentType(null, null, null, null, null);
                 List<string> carrierNames = new List<string>() {"asdf", "xxx"};
 
                 AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory testObject = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(shipmentType, carrierNames);
