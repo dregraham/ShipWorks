@@ -64,6 +64,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
 
             builder.RegisterType<AmazonProfileControl>()
                 .Keyed<ShippingProfileControlBase>(ShipmentTypeCode.Amazon);
+
+            builder.RegisterType<AmazonLabelService>()
+                .AsImplementedInterfaces();
         }
     }
 }
