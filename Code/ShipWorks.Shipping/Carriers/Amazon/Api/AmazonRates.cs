@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             RateGroup rateGroup = GetRateGroupFromResponse(response);
 
-            List<string> carriers = response.GetEligibleShippingServicesResult.TermsAndConditionsNotAcceptedCarrierList.TermsAndConditionsNotAcceptedCarrier.CarrierName;
+            List<string> carriers = response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier.CarrierName;
             if (carriers != null && carriers.Any())
             {
                 List<string> carrierNames = carriers.Distinct().ToList();
