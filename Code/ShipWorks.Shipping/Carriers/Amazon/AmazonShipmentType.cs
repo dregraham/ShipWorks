@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.Linq;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,6 +14,7 @@ using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Shipping.Profiles;
@@ -108,12 +110,47 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
+            Lazy<List<TemplateLabelData>> labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+
+            // Add the labels content
+            container.AddElement(
+                "Labels",
+                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
+                ElementOutline.If(() => shipment().Processed));
+
             ElementOutline outline = container.AddElement("Amazon");
+
             outline.AddElement("Carrier", () => loaded().Amazon.CarrierName);
             outline.AddElement("Service", () => loaded().Amazon.ShippingServiceName);
             outline.AddElement("AmazonUniqueShipmentID", () => loaded().Amazon.AmazonUniqueShipmentID);
             outline.AddElement("ShippingServiceID", () => loaded().Amazon.ShippingServiceID);
             outline.AddElement("ShippingServiceOfferID", () => loaded().Amazon.ShippingServiceOfferID);
+        }
+
+        /// <summary>
+        /// Load all the label data for the given shipmentID
+        /// </summary>
+        static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
+        {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            List<TemplateLabelData> labelData = new List<TemplateLabelData>();
+
+            // Get the resource list for our shipment
+            List<DataResourceReference> resources =
+                DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID);
+
+            if (resources.Count > 0)
+            {
+                // Add our standard label output
+                DataResourceReference labelResource = resources.Single(i => i.Label == "LabelPrimary");
+                labelData.Add(new TemplateLabelData(null, "Label", TemplateLabelCategory.Primary, labelResource));
+            }
+
+            return labelData;
         }
 
         /// <summary>

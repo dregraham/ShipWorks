@@ -1,11 +1,11 @@
 ﻿using System;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using Interapptive.Shared.Net;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Xml.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 
@@ -100,10 +100,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Deserializes the response XML
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <param name="xml"></param>
-        /// <returns></returns>
         private static T DeserializeResponse<T>(string xml)
         {
             try
@@ -112,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
             catch (Exception ex)
             {
-                throw new AmazonShipperException(ex.Message, (AmazonShipperException)ex.InnerException);
+                throw new AmazonShipperException(ex.Message, ex);
             }
         }
 
@@ -277,15 +273,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     logger.LogResponse(response.ReadResult());
 
                     // check response for errors
-                    AmazonMwsResponseHandler.RaiseErrors(amazonMwsApiCall, response, mwsSettings);
+                    RaiseErrors(amazonMwsApiCall, response, mwsSettings);
 
                     return response;
                 }
-            }
-            catch (AmazonException ex)
-            {
-                // Found an error in the respons, throw it as an AmazonShipperException
-                throw new AmazonShipperException(ex.Message, (AmazonShipperException)ex.InnerException);
             }
             catch (Exception ex)
             {
@@ -308,6 +299,36 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private static string Decrypt(string encrypted)
         {
             return SecureText.Decrypt(encrypted, "Interapptive");
+        }
+
+        /// <summary>
+        /// Raise AmazonShipperException for errors returned to us in the response XML
+        /// </summary>
+        private static void RaiseErrors(AmazonMwsApiCall api, IHttpResponseReader reader, IAmazonMwsWebClientSettings mwsSettings)
+        {
+            XNamespace ns = mwsSettings.GetApiNamespace(api);
+
+            string responseText = reader.ReadResult();
+            XDocument xdoc = XDocument.Parse(responseText);
+
+            var error = (from e in xdoc.Descendants(ns + "Error")
+                         select new
+                         {
+                             Code = (string)e.Element(ns + "Code"),
+                             Message = (string)e.Element(ns + "Message")
+                         }).FirstOrDefault();
+
+            if (error != null)
+            {
+                if (error.Message != null)
+                {
+                    // If a message is provided send it
+                    throw new AmazonShipperException(error.Message);
+                }
+
+                // No message was provided so we use the error code
+                throw new AmazonShipperException(error.Code);
+            }
         }
     }
 }

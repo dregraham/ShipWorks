@@ -671,6 +671,10 @@ namespace ShipWorks.Shipping
             {
                 return "Best Rate";
             }
+            else if (shipmentTypeCode == ShipmentTypeCode.Amazon)
+            {
+                return "Amazon";
+            }
 
             Debug.Fail("Unhandled shipping type in GetCarrierName");
 
