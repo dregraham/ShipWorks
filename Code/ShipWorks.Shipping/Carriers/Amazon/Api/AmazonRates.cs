@@ -53,21 +53,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             RateGroup rateGroup = GetRateGroupFromResponse(response);
 
-            List<string> carriers = response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier.CarrierName;
-            if (carriers != null && carriers.Any())
-            {
-                List<string> carrierNames = carriers.Distinct().ToList();
-
-                rateGroup.AddFootnoteFactory(new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(amazonShipmentType, carrierNames));
-            }
-
             return rateGroup;
         }
 
         /// <summary>
         /// Gets the rate group from response.
         /// </summary>
-        private static RateGroup GetRateGroupFromResponse(GetEligibleShippingServicesResponse response)
+        private RateGroup GetRateGroupFromResponse(GetEligibleShippingServicesResponse response)
         {
             List<RateResult> rateResults = new List<RateResult>();
 
@@ -80,7 +72,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 rateResults.Add(rateResult);
             }
 
-            return new RateGroup(rateResults);
+            RateGroup rateGroup = new RateGroup(rateResults);
+
+            // Add terms and conditions footnote if needed
+            List <string> carriers = response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier.CarrierName;
+            if (carriers != null && carriers.Any())
+            {
+                List<string> carrierNames = carriers.Distinct().ToList();
+
+                rateGroup.AddFootnoteFactory(new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(amazonShipmentType, carrierNames));
+            }
+
+            return rateGroup;
         }
 
         /// <summary>
