@@ -487,7 +487,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(DateTime.Now.AddDays(1), testObject.DateMustArriveBy);
+                Assert.Equal(DateTime.Now.AddDays(1).Date, testObject.DateMustArriveBy.Date);
             }
         }
 

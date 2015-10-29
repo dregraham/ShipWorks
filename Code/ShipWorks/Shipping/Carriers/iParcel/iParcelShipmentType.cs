@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Create the UserControl that is used to edit a profile for the service
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new iParcelProfileControl();
         }
@@ -518,7 +518,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
         /// <returns>An iParcelSettingsControl object.</returns>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             iParcelSettingsControl settingsControl = new iParcelSettingsControl();
             settingsControl.Initialize(ShipmentTypeCode);

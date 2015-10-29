@@ -26,11 +26,11 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Get the store with the given ID.  If it does not exist, null is returned
+        /// A little more efficient way to get the store by checking to see if the order is in cache first.  Will return zero if not found.
         /// </summary>
-        public StoreEntity GetStore(long storeID)
+        public StoreEntity GetRelatedStore(long entityId)
         {
-            return StoreManager.GetStore(storeID);
+            return StoreManager.GetRelatedStore(entityId);
         }
     }
 }

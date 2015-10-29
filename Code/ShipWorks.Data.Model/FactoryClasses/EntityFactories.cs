@@ -489,6 +489,47 @@ namespace ShipWorks.Data.Model.FactoryClasses
 
 		#endregion
 	}	
+	/// <summary>Factory to create new, empty AmazonProfileEntity objects.</summary>
+	[Serializable]
+	public partial class AmazonProfileEntityFactory : EntityFactoryBase2 {
+		/// <summary>CTor</summary>
+		public AmazonProfileEntityFactory() : base("AmazonProfileEntity", ShipWorks.Data.Model.EntityType.AmazonProfileEntity) { }
+
+		/// <summary>Creates a new, empty AmazonProfileEntity object.</summary>
+		/// <returns>A new, empty AmazonProfileEntity object.</returns>
+		public override IEntity2 Create() {
+			IEntity2 toReturn = new AmazonProfileEntity();
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonProfile
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new AmazonProfileEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new AmazonProfileEntity(fields);
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonProfileUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
+		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
+		public override IEntityCollection2 CreateEntityCollection()
+		{
+			return new EntityCollection<AmazonProfileEntity>(this);
+		}
+		
+
+		#region Included Code
+
+		#endregion
+	}	
 	/// <summary>Factory to create new, empty AmazonShipmentEntity objects.</summary>
 	[Serializable]
 	public partial class AmazonShipmentEntityFactory : EntityFactoryBase2 {
@@ -7149,6 +7190,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.AmazonOrderItemEntity:
 					factoryToUse = new AmazonOrderItemEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.AmazonProfileEntity:
+					factoryToUse = new AmazonProfileEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.AmazonShipmentEntity:
 					factoryToUse = new AmazonShipmentEntityFactory();

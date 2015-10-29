@@ -1,4 +1,6 @@
 
+
+
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -692,40 +694,6 @@ PRINT N'Creating index [IX_Order_ShipUSTerritory] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Order_ShipUSTerritory] ON [dbo].[Order] ([ShipUSTerritory] DESC)
 GO
-PRINT N'Adding [Order].[IX_Store_OrderNumberComplete_IsManual] Index'
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Store_OrderNumberComplete_IsManual] ON [dbo].[Order]
-(
-	[StoreID] ASC,
-	[OrderNumberComplete] ASC,
-	[IsManual] ASC
-)
-GO
-PRINT N'Adding [Order].[IX_Order_DestinationResidential] Index'
-GO
--- Intended to match the conditions on the US Residential filter in ShipWorks
-CREATE NONCLUSTERED INDEX [IX_Order_DestinationResidential] ON [dbo].[Order]
-(
-	[ShipResidentialStatus] ASC,
-	[ShipPOBox] ASC,
-	[ShipUSTerritory] ASC,
-	[ShipMilitaryAddress] ASC
-)
-WHERE ShipResidentialStatus = 1 AND ShipPOBox = 2 AND ShipUSTerritory = 2 AND ShipMilitaryAddress = 2
-GO
-PRINT N'Adding [Order].[IX_Order_DestinationCommercial] Index'
-GO
--- Intended to match the conditions on the US Commercial filter in ShipWorks
-CREATE NONCLUSTERED INDEX [IX_Order_DestinationCommercial] ON [dbo].[Order]
-(
-	[ShipResidentialStatus] ASC,
-	[ShipPOBox] ASC,
-	[ShipUSTerritory] ASC,
-	[ShipMilitaryAddress] ASC
-)
-WHERE ShipResidentialStatus = 2 AND ShipPOBox = 2 AND ShipUSTerritory = 2 AND ShipMilitaryAddress = 2
-GO
-
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[Order]'
@@ -1732,6 +1700,31 @@ GO
 PRINT N'Creating primary key [PK_AmazonShipment] on [dbo].[AmazonShipment]'
 GO
 ALTER TABLE [dbo].[AmazonShipment] ADD CONSTRAINT [PK_AmazonShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+GO
+SET NUMERIC_ROUNDABORT OFF
+GO
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+GO
+PRINT N'Creating [dbo].[AmazonProfile]'
+GO
+CREATE TABLE [dbo].[AmazonProfile]
+(
+[ShippingProfileID] [bigint] NOT NULL,
+[DimsProfileID] [bigint] NULL,
+[DimsLength] [float] NULL,
+[DimsWidth] [float] NULL,
+[DimsHeight] [float] NULL,
+[DimsWeight] [float] NULL,
+[DimsAddWeight] [bit] NULL,
+[DeliveryExperience] [int] NULL,
+[CarrierWillPickUp] [bit] NULL,
+[Weight] [float] NULL,
+[SendDateMustArriveBy] [bit] NULL
+)
+GO
+PRINT N'Creating primary key [PK_AmazonProfile] on [dbo].[AmazonProfile]'
+GO
+ALTER TABLE [dbo].[AmazonProfile] ADD CONSTRAINT [PK_AmazonProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
 PRINT N'Creating [dbo].[FedExShipment]'
 GO
@@ -5119,6 +5112,10 @@ GO
 PRINT N'Adding foreign keys to [dbo].[AmazonShipment]'
 GO
 ALTER TABLE [dbo].[AmazonShipment] ADD CONSTRAINT [FK_AmazonShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[AmazonProfile]'
+GO
+ALTER TABLE [dbo].[AmazonProfile] ADD CONSTRAINT [FK_AmazonProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[FilterSequence]'
 GO

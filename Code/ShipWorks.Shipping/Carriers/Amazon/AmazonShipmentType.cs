@@ -13,8 +13,10 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -23,21 +25,24 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentType : ShipmentType
     {
-        readonly IAmazonAccountManager accountManager;
-        readonly Func<IAmazonRates> amazonRatesFactory;
-        private readonly IOrderManager orderManager;
+        private readonly IAmazonAccountManager accountManager;
+        private readonly Func<IAmazonRates> amazonRatesFactory;
         private readonly IStoreManager storeManager;
-        readonly IDateTimeProvider dateTimeProvider;
-
+        private readonly IOrderManager orderManager;
+        private readonly IDateTimeProvider dateTimeProvider;
+        private readonly Func<IAmazonLabelService> amazonLabelServiceFactory;
+        
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, Func<IAmazonRates> amazonRatesFactory, IOrderManager orderManager, IStoreManager storeManager)
+        public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, 
+            Func<IAmazonRates> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, IStoreManager storeManager, IOrderManager orderManager)
         {
             this.accountManager = accountManager;
             this.amazonRatesFactory = amazonRatesFactory;
-            this.orderManager = orderManager;
+            this.amazonLabelServiceFactory = amazonLabelServiceFactory;
             this.storeManager = storeManager;
+            this.orderManager = orderManager;
             this.dateTimeProvider = dateTimeProvider;
         }
 
@@ -85,10 +90,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Process the shipment
         /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException();
-        }
+        public override void ProcessShipment(ShipmentEntity shipment) =>
+            amazonLabelServiceFactory().Create(shipment);
 
         /// <summary>
         /// Create the XML input to the XSL engine
@@ -189,18 +192,81 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override bool IsAllowedFor(ShipmentEntity shipment)
         {
+            StoreEntity storeEntity = storeManager.GetRelatedStore(shipment.ShipmentID);
             orderManager.PopulateOrderDetails(shipment);
-            
-            long storeId = shipment.Order.StoreID;
 
-            StoreEntity storeEntity = storeManager.GetStore(storeId);
-
-            if (storeEntity?.TypeCode != (int) StoreTypeCode.Amazon)
+            if (storeEntity?.TypeCode != (int)StoreTypeCode.Amazon)
             {
                 return false;
             }
 
-            return ((AmazonOrderEntity) shipment.Order).IsPrime == (int) AmazonMwsIsPrime.Yes;
+            return ((AmazonOrderEntity)shipment.Order).IsPrime == (int)AmazonMwsIsPrime.Yes;
+        }
+
+        /// <summary>
+        /// Ensure the carrier specific profile data is created and loaded for the given profile
+        /// </summary>
+        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
+        {
+            base.LoadProfileData(profile, refreshIfPresent);
+            ShipmentTypeDataService.LoadProfileData(profile, "Amazon", typeof(AmazonProfileEntity), refreshIfPresent);
+        }
+
+        /// <summary>
+        /// Get the default profile for the shipment type
+        /// </summary>
+        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        {
+            base.ConfigurePrimaryProfile(profile);
+
+            AmazonProfileEntity amazon = profile.Amazon;
+
+            amazon.CarrierWillPickUp = false;
+            amazon.DeliveryExperience = (int) AmazonDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
+            amazon.Weight = 0;
+            amazon.SendDateMustArriveBy = false;
+
+            amazon.DimsProfileID = 0;
+            amazon.DimsLength = 0;
+            amazon.DimsWidth = 0;
+            amazon.DimsHeight = 0;
+            amazon.DimsWeight = 0;
+            amazon.DimsAddWeight = true;
+        }
+
+        /// <summary>
+        /// Apply the given shipping profile to the shipment
+        /// </summary>
+        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        {
+            base.ApplyProfile(shipment, profile);
+            
+            if (shipment.Amazon == null)
+            {
+                return;
+            }
+
+            AmazonShipmentEntity amazonShipment = shipment.Amazon;
+            AmazonProfileEntity amazonProfile = profile.Amazon;
+
+            ShippingProfileUtility.ApplyProfileValue(amazonProfile.CarrierWillPickUp, amazonShipment, AmazonShipmentFields.CarrierWillPickUp);
+            ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
+            ShippingProfileUtility.ApplyProfileValue(amazonProfile.SendDateMustArriveBy, amazonShipment, AmazonShipmentFields.SendDateMustArriveBy);
+
+            if (amazonProfile.Weight != null && amazonProfile.Weight.Value != 0)
+            {
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.Weight, shipment, ShipmentFields.ContentWeight);
+            }
+
+            ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsProfileID, amazonShipment, AmazonShipmentFields.DimsProfileID);
+            if (amazonProfile.DimsProfileID != null)
+            {
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsLength, amazonShipment, AmazonShipmentFields.DimsLength);
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsWidth, amazonShipment, AmazonShipmentFields.DimsWidth);
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsHeight, amazonShipment, AmazonShipmentFields.DimsHeight);
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsWeight, amazonShipment, AmazonShipmentFields.DimsWeight);
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsAddWeight, amazonShipment, AmazonShipmentFields.DimsAddWeight);
+            }
         }
     }
 }

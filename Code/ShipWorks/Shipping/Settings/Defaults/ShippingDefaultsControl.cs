@@ -12,6 +12,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using log4net;
 using Interapptive.Shared.UI;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Settings.Defaults
 {
@@ -111,9 +113,12 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// </summary>
         private void OnLinkDefaultProfile(object sender, EventArgs e)
         {
-            using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(shipmentType.GetPrimaryProfile()))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
+                    new TypedParameter(typeof(ShippingProfileEntity), shipmentType.GetPrimaryProfile())
+                );
+                profileEditor.ShowDialog(this);
             }
 
             if (ProfileEdited != null)

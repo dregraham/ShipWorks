@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.UI.Controls;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -117,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             service.DataBindings.Clear();
             service.DataBindings.Add(nameof(service.DataSource), viewModel, nameof(viewModel.ServicesAvailable), false, DataSourceUpdateMode.OnPropertyChanged);
-            service.DataBindings.Add(nameof(service.SelectedItem), viewModel, nameof(viewModel.ShippingServiceName), false, DataSourceUpdateMode.OnPropertyChanged);
+            service.DataBindings.Add(nameof(service.SelectedItem), viewModel, nameof(viewModel.ShippingService), false, DataSourceUpdateMode.OnPropertyChanged);
             service.DataBindings.Add(nameof(service.MultiValued), viewModel, nameof(viewModel.ServiceIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
@@ -227,6 +224,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 RaiseRateCriteriaChanged();
             }
+        }
+
+        /// <summary>
+        /// Handle rate selection from the grid
+        /// </summary>
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
+        {
+            base.OnRateSelected(sender, e);
+
+            AmazonRateTag rateTag = e.Rate?.Tag as AmazonRateTag;
+            if (rateTag == null)
+            {
+                return;
+            }
+
+            viewModel.SelectRate(rateTag);
         }
     }
 }

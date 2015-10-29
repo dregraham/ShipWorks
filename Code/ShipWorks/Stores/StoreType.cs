@@ -151,6 +151,8 @@ namespace ShipWorks.Stores
             newOrder.BillAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
             newOrder.BillAddressValidationSuggestionCount = 0;
 
+            newOrder.RequestedShipping = string.Empty;
+
             return newOrder;
         }
 

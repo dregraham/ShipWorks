@@ -97,6 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 case "fedex":
                     return EnumHelper.GetImage(ShipmentTypeCode.FedEx);
                 case "usps":
+                case "stamps_dot_com":
                     return EnumHelper.GetImage(ShipmentTypeCode.Usps);
                 default:
                     return EnumHelper.GetImage(ShipmentTypeCode.None);

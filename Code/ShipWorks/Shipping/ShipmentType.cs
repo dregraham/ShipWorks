@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Editions;
 using log4net;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -18,9 +15,6 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipSense;
-using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
-using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -31,17 +25,12 @@ using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Stores;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.HelperClasses;
-using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
 using ShipWorks.Shipping.Tracking;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
-using System.Security.Cryptography;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
 using Interapptive.Shared.Business.Geography;
@@ -334,7 +323,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
-        public virtual SettingsControlBase CreateSettingsControl()
+        protected virtual SettingsControlBase CreateSettingsControl()
         {
             return null;
         }
@@ -352,11 +341,21 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create the UserControl that is used to edit a profile for the service
         /// </summary>
-        public virtual ShippingProfileControlBase CreateProfileControl()
+        protected virtual ShippingProfileControlBase CreateProfileControl()
         {
             return null;
         }
-        
+
+        /// <summary>
+        /// Create the UserControl that is used to edit a profile for the service
+        /// </summary>
+        public virtual ShippingProfileControlBase CreateProfileControl(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<ShippingProfileControlBase>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<ShippingProfileControlBase>(ShipmentTypeCode) :
+                CreateProfileControl();
+        }
+
         /// <summary>
         /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have 
         /// been excluded for this shipment type. The integer values are intended to correspond to 
