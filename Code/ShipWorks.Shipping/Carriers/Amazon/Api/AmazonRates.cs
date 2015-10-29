@@ -17,16 +17,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
         private readonly IOrderManager orderManager;
+        private readonly AmazonShipmentType amazonShipmentType;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRates"/> class.
         /// </summary>
-        public AmazonRates(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory)
+        public AmazonRates(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory, AmazonShipmentType amazonShipmentType)
         {
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
             this.orderManager = orderManager;
+            this.requestFactory = requestFactory;
+            this.amazonShipmentType = amazonShipmentType;
         }
 
         /// <summary>
