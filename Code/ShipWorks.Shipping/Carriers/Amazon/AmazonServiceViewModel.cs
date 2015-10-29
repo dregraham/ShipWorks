@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonServiceViewModel : INotifyPropertyChanged
     {
+        private readonly IMessenger messenger;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private GenericMultiValueBinder<ShipmentEntity, DateTime> dateMustArriveBy;
@@ -33,20 +34,24 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonServiceViewModel()
+        public AmazonServiceViewModel(IMessenger messenger)
         {
+            this.messenger = messenger;
             handler = new PropertyChangedHandler(() => PropertyChanged);
 
-            Messenger.Current.Handle<AmazonRatesRetrievedMessage>(this, OnAmazonRatesRetrieved);
+            messenger.Handle<AmazonRatesRetrievedMessage>(this, OnAmazonRatesRetrieved);
         }
 
+        /// <summary>
+        /// Called when [amazon rates retrieved].
+        /// </summary>
         private void OnAmazonRatesRetrieved(AmazonRatesRetrievedMessage amazonRatesRetrievedMessage)
         {
             RateGroup rateGroup = amazonRatesRetrievedMessage.RateGroup;
 
             List<KeyValuePair<string, AmazonRateTag>> services = rateGroup.Rates.Select(r => new KeyValuePair<string, AmazonRateTag>(r.Description, (AmazonRateTag) r.Tag)).ToList();
             services.Insert(0, new KeyValuePair<string, AmazonRateTag>("Please select a service", null));
-            
+
             ServicesAvailable = services;
         }
 

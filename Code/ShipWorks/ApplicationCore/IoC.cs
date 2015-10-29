@@ -5,6 +5,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using System.Reflection;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -59,6 +60,10 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterGeneric(typeof(AccountManagerBase<>))
                 .AsSelf()
+                .SingleInstance();
+
+            builder.Register(context => Messenger.Current)
+                .AsImplementedInterfaces()
                 .SingleInstance();
 
             builder.RegisterAssemblyModules(assemblies);

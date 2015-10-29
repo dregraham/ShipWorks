@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
@@ -142,8 +143,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Gets the rates.
         /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment) => 
-            GetCachedRates<AmazonShipperException>(shipment, GetRatesFromApi);
+        public override RateGroup GetRates(ShipmentEntity shipment)
+        {
+            RateGroup rateGroup = GetCachedRates<AmazonShipperException>(shipment, GetRatesFromApi);
+
+            Messenger.Current.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
+
+            return rateGroup;
+        }
 
         /// <summary>
         /// Gets rates from the Amazon API
