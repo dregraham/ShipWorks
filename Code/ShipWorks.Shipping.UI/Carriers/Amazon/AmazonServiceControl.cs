@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public partial class AmazonServiceControl : ServiceControlBase
     {
         private readonly AmazonServiceViewModel viewModel;
+        private readonly AmazonShipmentType amazonShipmentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonServiceControl"/> class.
@@ -26,10 +27,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         /// <param name="viewModel">The view model for this control.</param>
-        public AmazonServiceControl(RateControl rateControl, AmazonServiceViewModel viewModel) 
+        /// <param name="amazonShipmentType">AmazonShipmentType</param>
+        public AmazonServiceControl(RateControl rateControl, AmazonServiceViewModel viewModel, AmazonShipmentType amazonShipmentType) 
             : base(ShipmentTypeCode.Amazon, rateControl)
         {
             this.viewModel = viewModel;
+            this.amazonShipmentType = amazonShipmentType;
             InitializeComponent();
         }
 
@@ -129,14 +132,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 if (e.PropertyName == nameof(viewModel.ServicesAvailable))
                 {
-                    service.Invoke((MethodInvoker) delegate { service.DataSource = viewModel.ServicesAvailable; });
+                service.Invoke((MethodInvoker)delegate { service.DataSource = viewModel.ServicesAvailable; });
                     return;
                 }
             }
 
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            if (e.PropertyName == nameof(viewModel.ShippingService))
+            {
+                RaiseShipmentServiceChanged();
+            }
 
-            if (shipmentType.RatingFields.FieldsContainName(e.PropertyName))
+            if (amazonShipmentType.RatingFields.FieldsContainName(e.PropertyName))
             {
                 RaiseRateCriteriaChanged();
             }

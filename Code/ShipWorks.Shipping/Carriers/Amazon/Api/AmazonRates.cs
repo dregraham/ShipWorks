@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using Address = ShipWorks.Shipping.Carriers.Amazon.Api.DTOs.Address;
-using System.Drawing;
-using System.Linq;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
@@ -43,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             {
                 throw new AmazonShipperException("Not an Amazon Order");
             }
-            
+
             ShipmentRequestDetails requestDetails = CreateGetRatesRequest(shipment, order);
 
             GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
@@ -128,7 +127,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     PostalCode = shipment.OriginPostalCode,
                     StateOrProvinceCode = shipment.OriginStateProvCode,
                     Email = shipment.OriginEmail
-                    
                 },
                 ShippingServiceOptions = new ShippingServiceOptions()
                 {
