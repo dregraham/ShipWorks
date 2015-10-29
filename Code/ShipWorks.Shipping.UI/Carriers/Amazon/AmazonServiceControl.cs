@@ -125,10 +125,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(viewModel.ServicesAvailable))
+            if (service.IsHandleCreated)
             {
-                service.Invoke((MethodInvoker)delegate { service.DataSource = viewModel.ServicesAvailable; });
-                return;
+                if (e.PropertyName == nameof(viewModel.ServicesAvailable))
+                {
+                    service.Invoke((MethodInvoker) delegate { service.DataSource = viewModel.ServicesAvailable; });
+                    return;
+                }
             }
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
