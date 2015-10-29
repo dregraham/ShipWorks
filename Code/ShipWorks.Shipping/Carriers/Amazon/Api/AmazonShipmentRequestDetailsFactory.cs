@@ -52,7 +52,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 ShippingServiceOptions = new ShippingServiceOptions()
                 {
                     CarrierWillPickUp = shipment.Amazon.CarrierWillPickUp,
-                    DeliveryExperience = EnumHelper.GetApiValue((AmazonDeliveryExperienceType)shipment.Amazon.DeliveryExperience)
+                    DeliveryExperience = EnumHelper.GetApiValue((AmazonDeliveryExperienceType)shipment.Amazon.DeliveryExperience),
+                    DeclaredValue = new DeclaredValue()
+                    {
+                        Amount = shipment.Amazon.InsuranceValue,
+                        CurrencyCode = "USD"
+                    }
                 },
                 Weight = shipment.TotalWeight
             };

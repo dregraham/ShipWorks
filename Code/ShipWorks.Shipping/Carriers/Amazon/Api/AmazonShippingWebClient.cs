@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using Interapptive.Shared.Net;
@@ -187,16 +188,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
             
             // Package Info
-            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Length", requestDetails.PackageDimensions.Length.ToString());
-            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Width", requestDetails.PackageDimensions.Width.ToString());
-            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Height", requestDetails.PackageDimensions.Height.ToString());
+            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Length", requestDetails.PackageDimensions.Length.ToString(CultureInfo.InvariantCulture));
+            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Width", requestDetails.PackageDimensions.Width.ToString(CultureInfo.InvariantCulture));
+            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Height", requestDetails.PackageDimensions.Height.ToString(CultureInfo.InvariantCulture));
             request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Unit", "inches");
-            request.Variables.Add("ShipmentRequestDetails.Weight.Value", (requestDetails.Weight * 16).ToString());
+            request.Variables.Add("ShipmentRequestDetails.Weight.Value", (requestDetails.Weight * 16).ToString(CultureInfo.InvariantCulture));
             request.Variables.Add("ShipmentRequestDetails.Weight.Unit", "ounces");
 
             // ShippingServiceOptions
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp", requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLower());
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience", requestDetails.ShippingServiceOptions.DeliveryExperience);
+
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.Amount", requestDetails.ShippingServiceOptions.DeclaredValue.Amount.ToString(CultureInfo.InvariantCulture));
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode", requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
 
             if (requestDetails.MustArriveByDate != null && requestDetails.SendDateMustArriveBy)
             {
