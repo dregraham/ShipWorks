@@ -95,7 +95,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
 
             // Deserialize 
-            return DeserializeResponse<CreateShipmentResponse>(response.ReadResult());
+            CreateShipmentResponse createShipmentResponse = DeserializeResponse<CreateShipmentResponse>(response.ReadResult());
+
+            return ValidateCreateShipmentResponse(createShipmentResponse);
+        }
+
+        /// <summary>
+        /// Validate the CreateShipmentResponse to ensure that it contains a label
+        /// </summary>
+        public CreateShipmentResponse ValidateCreateShipmentResponse(CreateShipmentResponse createShipmentResponse)
+        {
+            if (createShipmentResponse?.CreateShipmentResult?.Shipment?.Label?.FileContents == null)
+            {
+                throw new AmazonShipperException("Amazon failed to return a label for the Shipment.");
+            }
+            return createShipmentResponse;
         }
 
         /// <summary>
@@ -135,26 +149,56 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Adds Shipment Details to the request
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="requestDetails"></param>
         private static void AddShipmentRequestDetails(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
             // Order ID
             request.Variables.Add("ShipmentRequestDetails.AmazonOrderId", requestDetails.AmazonOrderId);
             
-            // Item Info
-            int i = 1;
-            foreach (Item item in requestDetails.ItemList)
+            AddItemInfo(request,requestDetails);
+            AddFromAddressInfo(request, requestDetails);
+            AddPackageInfo(request, requestDetails);
+            AddShippingServiceOptions(request, requestDetails);
+        }
+
+        /// <summary>
+        /// Add the shipping service options to the request
+        /// </summary>
+        private static void AddShippingServiceOptions(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        {
+            // ShippingServiceOptions
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp", requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLower());
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience", requestDetails.ShippingServiceOptions.DeliveryExperience);
+
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.Amount", requestDetails.ShippingServiceOptions.DeclaredValue.Amount.ToString(CultureInfo.InvariantCulture));
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode", requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
+
+            if (requestDetails.MustArriveByDate != null && requestDetails.SendDateMustArriveBy)
             {
-                string orderItemIdParameter = $"ShipmentRequestDetails.ItemList.Item.{i}.OrderItemId";
-                string quantityParameter = $"ShipmentRequestDetails.ItemList.Item.{i}.Quantity";
-
-                request.Variables.Add(orderItemIdParameter,item.OrderItemId);
-                request.Variables.Add(quantityParameter,item.Quantity.ToString());
-
-                i++;
+                request.Variables.Add("ShipmentRequestDetails.MustArriveByDate", FormatDate(requestDetails.MustArriveByDate.Value));
             }
+        }
 
+        /// <summary>
+        /// Add the package info to the request
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="requestDetails"></param>
+        private static void AddPackageInfo(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        {
+            // Package Info
+            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Length", requestDetails.PackageDimensions.Length.ToString(CultureInfo.InvariantCulture));
+            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Width", requestDetails.PackageDimensions.Width.ToString(CultureInfo.InvariantCulture));
+            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Height", requestDetails.PackageDimensions.Height.ToString(CultureInfo.InvariantCulture));
+            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Unit", "inches");
+            request.Variables.Add("ShipmentRequestDetails.Weight.Value", (requestDetails.Weight * 16).ToString(CultureInfo.InvariantCulture));
+            request.Variables.Add("ShipmentRequestDetails.Weight.Unit", "ounces");
+        }
+
+        /// <summary>
+        /// Add the from address to the request
+        /// </summary>
+        private static void AddFromAddressInfo(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        {
             // From Address Info
             if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.Name))
             {
@@ -186,28 +230,27 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             {
                 request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Phone", requestDetails.ShipFromAddress.Phone);
             }
-            
-            // Package Info
-            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Length", requestDetails.PackageDimensions.Length.ToString(CultureInfo.InvariantCulture));
-            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Width", requestDetails.PackageDimensions.Width.ToString(CultureInfo.InvariantCulture));
-            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Height", requestDetails.PackageDimensions.Height.ToString(CultureInfo.InvariantCulture));
-            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Unit", "inches");
-            request.Variables.Add("ShipmentRequestDetails.Weight.Value", (requestDetails.Weight * 16).ToString(CultureInfo.InvariantCulture));
-            request.Variables.Add("ShipmentRequestDetails.Weight.Unit", "ounces");
-
-            // ShippingServiceOptions
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp", requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLower());
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience", requestDetails.ShippingServiceOptions.DeliveryExperience);
-
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.Amount", requestDetails.ShippingServiceOptions.DeclaredValue.Amount.ToString(CultureInfo.InvariantCulture));
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode", requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
-
-            if (requestDetails.MustArriveByDate != null && requestDetails.SendDateMustArriveBy)
-            {
-                request.Variables.Add("ShipmentRequestDetails.MustArriveByDate", FormatDate(requestDetails.MustArriveByDate.Value));
-            }
         }
 
+        /// <summary>
+        /// Adds item information to the request
+        /// </summary>
+        private static void AddItemInfo(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        {
+            // Item Info
+            int i = 1;
+            foreach (Item item in requestDetails.ItemList)
+            {
+                string orderItemIdParameter = $"ShipmentRequestDetails.ItemList.Item.{i}.OrderItemId";
+                string quantityParameter = $"ShipmentRequestDetails.ItemList.Item.{i}.Quantity";
+
+                request.Variables.Add(orderItemIdParameter, item.OrderItemId);
+                request.Variables.Add(quantityParameter, item.Quantity.ToString());
+
+                i++;
+            }
+        }
+        
         /// <summary>
         /// Adds Signature to the request
         /// Required by Amazon MWS Api
@@ -257,6 +300,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             // business logic failures are handled through status codes
             request.AllowHttpStatusCodes(new HttpStatusCode[] { HttpStatusCode.BadRequest });
 
+            IHttpResponseReader response;
+
             try
             {
                 ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Amazon, mwsSettings.GetActionName(amazonMwsApiCall));
@@ -271,21 +316,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     logger.LogRequestSupplement(feedRequest.GetPostContent(), "FeedDocument", "xml");
                 }
 
-                using (IHttpResponseReader response = request.GetResponse())
+                using (response = request.GetResponse())
                 {
                     // log the response
                     logger.LogResponse(response.ReadResult());
 
                     // check response for errors
                     RaiseErrors(amazonMwsApiCall, response, mwsSettings);
-
-                    return response;
                 }
             }
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(AmazonShipperException));
             }
+
+            return response;
         }
 
         /// <summary>

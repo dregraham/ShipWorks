@@ -36,7 +36,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Create the label
         /// </summary>
-        /// <param name="shipment"></param>
         public void Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
@@ -49,16 +48,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             AmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
-
+            ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
+            
             try
             {
-                CreateShipmentResponse labelResponse = webClient.CreateShipment(requestFactory.Create(shipment, order), settings, shipment.Amazon.ShippingServiceID);
-
+                CreateShipmentResponse labelResponse = webClient.CreateShipment(requestDetails, settings, shipment.Amazon.ShippingServiceID);
+                
                 // Save shipment info
-                SaveShipmentInfoToEntity(labelResponse, shipment);
+                SaveShipmentInfoToEntity(labelResponse.CreateShipmentResult.Shipment, shipment);
 
                 // Save the label
-                SaveLabel(labelResponse, shipment);
+                SaveLabel(labelResponse.CreateShipmentResult.Shipment.Label.FileContents, shipment.ShipmentID);
+                
             }
             catch (AmazonShipperException ex)
             {
@@ -82,44 +83,37 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Save the shipment info to the entity
         /// </summary>
-        public void SaveShipmentInfoToEntity(CreateShipmentResponse labelResponse, ShipmentEntity shipment)
+        public void SaveShipmentInfoToEntity(Shipment amazonShipment, ShipmentEntity shipment)
         {
-            // Get the Amazon Shipment info
-            Shipment amazonShipment = labelResponse.CreateShipmentResult.Shipment;
-
             // Save shipment info to shipment entity
             shipment.TrackingNumber = amazonShipment.TrackingId;
             shipment.ShipmentCost = amazonShipment.ShippingService.Rate.Amount;
             shipment.Amazon.AmazonUniqueShipmentID = amazonShipment.ShipmentId;
         }
-
-
+        
         /// <summary>
-        /// Save a label of the given name ot the database from the specified label document
+        /// Save a label of the given name to the database from the specified fileContents
         /// </summary>
-        private static void SaveLabel(CreateShipmentResponse labelResponse, ShipmentEntity shipment)
+        private static void SaveLabel(FileContents fileContents, long shipmentID)
         {
-            // Grab the Amazon Shipment info
-            Shipment amazonShipment = labelResponse.CreateShipmentResult.Shipment;
-
             // Decompress the label string
-            byte[] label = GZipUtility.Decompress(Convert.FromBase64String(amazonShipment.Label.FileContents.Contents));
+            byte[] labelBytes = GZipUtility.Decompress(Convert.FromBase64String(fileContents.Contents));
 
             // If its a pdf we need to convert it
-            if (amazonShipment.Label.FileContents.FileType == "application/pdf")
+            if (fileContents.FileType == "application/pdf")
             {
-                using (MemoryStream pdfBytes = new MemoryStream(label))
+                using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
                 {
                     using (PdfDocument pdf = new PdfDocument(pdfBytes))
                     {
-                        DataResourceManager.CreateFromPdf(pdf, shipment.ShipmentID, "LabelPrimary");
+                        DataResourceManager.CreateFromPdf(pdf, shipmentID, "LabelPrimary");
                     }
                 }
             }
             else
             {
                 //Convert the string into an image stream
-                DataResourceManager.CreateFromBytes(label, shipment.ShipmentID, "LabelPrimary");
+                DataResourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary");
             }
         }
     }
