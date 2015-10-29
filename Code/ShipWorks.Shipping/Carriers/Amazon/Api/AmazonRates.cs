@@ -2,9 +2,7 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using Address = ShipWorks.Shipping.Carriers.Amazon.Api.DTOs.Address;
 using System.Drawing;
 using System.Linq;
 using ShipWorks.Stores.Content;
@@ -19,19 +17,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
         private readonly IOrderManager orderManager;
-        private readonly AmazonShipmentType amazonShipmentType;
+        private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRates"/> class.
         /// </summary>
-        /// <param name="webClient">The web client.</param>
-        /// <param name="amazonShipmentType"></param>
-        public AmazonRates(IAmazonShippingWebClient webClient,  IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager, AmazonShipmentType amazonShipmentType)
+        public AmazonRates(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory)
         {
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
             this.orderManager = orderManager;
-            this.amazonShipmentType = amazonShipmentType;
         }
 
         /// <summary>
@@ -46,8 +41,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             {
                 throw new AmazonShipperException("Not an Amazon Order");
             }
-
-            ShipmentRequestDetails requestDetails = CreateGetRatesRequest(shipment, order);
+            
+            ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
 
             GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
 
@@ -105,66 +100,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 default:
                     return EnumHelper.GetImage(ShipmentTypeCode.None);
             }
-        }
-
-        /// <summary>
-        /// Creates the get rates request.
-        /// </summary>
-        private ShipmentRequestDetails CreateGetRatesRequest(ShipmentEntity shipment, AmazonOrderEntity order)
-        {
-            return new ShipmentRequestDetails()
-            {
-                AmazonOrderId = order.AmazonOrderID,
-                Insurance = shipment.Amazon.DeclaredValue.HasValue ?
-                    new CurrencyAmount()
-                    {
-                        Amount = shipment.Amazon.DeclaredValue.Value,
-                        CurrencyCode = "USD"
-                    } : null,
-                ItemList = GetItemList(order),
-                PackageDimensions = new PackageDimensions()
-                {
-                    Height = shipment.Amazon.DimsHeight,
-                    Length = shipment.Amazon.DimsLength,
-                    Width = shipment.Amazon.DimsWidth
-                },
-                MustArriveByDate = shipment.Amazon.DateMustArriveBy,
-                SendDateMustArriveBy = shipment.Amazon.SendDateMustArriveBy,
-                ShipFromAddress = new Address()
-                {
-                    AddressLine1 = shipment.OriginStreet1,
-                    AddressLine2 = shipment.OriginStreet2,
-                    AddressLine3 = shipment.OriginStreet3,
-                    City = shipment.OriginCity,
-                    CountryCode = shipment.OriginCountryCode,
-                    Phone = shipment.OriginPhone,
-                    Name = shipment.OriginUnparsedName,
-                    PostalCode = shipment.OriginPostalCode,
-                    StateOrProvinceCode = shipment.OriginStateProvCode,
-                    Email = shipment.OriginEmail
-                },
-                ShippingServiceOptions = new ShippingServiceOptions()
-                {
-                    CarrierWillPickUp = shipment.Amazon.CarrierWillPickUp,
-                    DeliveryExperience = EnumHelper.GetApiValue((AmazonDeliveryExperienceType) shipment.Amazon.DeliveryExperience)
-                },
-                Weight = shipment.TotalWeight
-            };
-        }
-
-        /// <summary>
-        /// Gets the item list.
-        /// </summary>
-        private static List<Item> GetItemList(OrderEntity order)
-        {
-            return order.OrderItems
-                .OfType<AmazonOrderItemEntity>()
-                .Select(x => new Item
-                {
-                    OrderItemId = x.AmazonOrderItemCode,
-                    Quantity = (int) x.Quantity
-                })
-                .ToList();
         }
     }
 }

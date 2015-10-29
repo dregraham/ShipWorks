@@ -67,6 +67,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
 
             builder.RegisterType<AmazonLabelService>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<IAmazonShipmentRequestDetailsFactory>()
+                .As<IAmazonShipmentRequestDetailsFactory>();
         }
     }
 }

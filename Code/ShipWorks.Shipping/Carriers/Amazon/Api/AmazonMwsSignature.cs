@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <returns></returns>
         private static string ReplaceAll(string s, Regex p, string r)
         {
-            int n = s == null ? 0 : s.Length;
+            int n = s?.Length ?? 0;
             if (n == 0)
             {
                 return s;

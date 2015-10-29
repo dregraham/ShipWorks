@@ -11,5 +11,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Create a label
         /// </summary>
         void Create(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Voids the shipment
+        /// </summary>
+        void Void(ShipmentEntity shipment);
     }
 }

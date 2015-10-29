@@ -98,6 +98,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             amazonLabelServiceFactory().Create(shipment);
 
         /// <summary>
+        /// Void the shipment
+        /// </summary>
+        public override void VoidShipment(ShipmentEntity shipment) =>
+            amazonLabelServiceFactory().Void(shipment);
+
+        /// <summary>
         /// Create the XML input to the XSL engine
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)

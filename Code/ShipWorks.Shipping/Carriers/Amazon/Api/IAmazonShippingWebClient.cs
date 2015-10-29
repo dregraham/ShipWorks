@@ -23,5 +23,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// Create a shipment
         /// </summary>
         CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings, string shippingServiceId);
+
+        /// <summary>
+        /// Voids the shipment
+        /// </summary>
+        CancelShipmentResponse CancelShipment(AmazonMwsWebClientSettings mwsSettings, string amazonShipmentId);
     }
 }
