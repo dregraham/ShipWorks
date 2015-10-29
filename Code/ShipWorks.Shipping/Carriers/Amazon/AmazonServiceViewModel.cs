@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private IMultiValue<AmazonDeliveryExperienceType> deliveryExperienceBinder;
         private GenericMultiValueBinder<ShipmentEntity, KeyValuePair<string, AmazonRateTag>> shippingServiceBinder;
         private List<KeyValuePair<string,AmazonRateTag>> servicesAvailable;
-        private MessengerToken amazonRatesRetrievedMessengerToken;
+        private readonly MessengerToken amazonRatesRetrievedMessengerToken;
 
         /// <summary>
         /// Constructor
@@ -206,7 +206,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
             set
             {
-                dateMustArriveBy.PropertyValue = value; 
+                dateMustArriveBy.PropertyValue = value;
             }
         }
 
@@ -226,7 +226,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 return weightBinder.PropertyValue;
             }
-            set     { weightBinder.PropertyValue = value; }
+            set
+            {
+                weightBinder.PropertyValue = value;
+            }
         }
 
         /// <summary>
@@ -248,6 +251,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             set
             {
                 shippingServiceBinder.PropertyValue = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(ShippingService)));
             }
         }
 
