@@ -290,7 +290,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 if (amazonRatesRetrievedMessengerToken != null)
                 {
-                    Messenger.Current.Remove(amazonRatesRetrievedMessengerToken);
+                    messenger.Remove(amazonRatesRetrievedMessengerToken);
                 }
             }
         }
