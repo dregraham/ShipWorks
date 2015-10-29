@@ -199,10 +199,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override bool IsAllowedFor(ShipmentEntity shipment)
         {
-            StoreEntity storeEntity = storeManager.GetRelatedStore(shipment.ShipmentID);
             orderManager.PopulateOrderDetails(shipment);
+            
+            long storeId = shipment.Order.StoreID;
 
-            if (storeEntity?.TypeCode != (int)StoreTypeCode.Amazon)
+            StoreEntity storeEntity = storeManager.GetStore(storeId);
+
+            if (storeEntity?.TypeCode != (int) StoreTypeCode.Amazon)
             {
                 return false;
             }

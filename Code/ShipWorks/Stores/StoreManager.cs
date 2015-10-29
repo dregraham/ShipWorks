@@ -233,7 +233,7 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// A little more efficient way to get the store by checking to see if the order is in cache first.  Will return zero if not found.
+        /// A little more effecient way to get the store by checking to see if the order is in cache first.  Will return zero if not found.
         /// </summary>
         public static StoreEntity GetRelatedStore(long entityID)
         {
