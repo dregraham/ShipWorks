@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// <summary>
     /// View model for the AmazonServiceControl
     /// </summary>
-    public class AmazonServiceViewModel : INotifyPropertyChanged
+    public class AmazonServiceViewModel : INotifyPropertyChanged, IDisposable
     {
         private readonly IMessenger messenger;
         private readonly PropertyChangedHandler handler;
@@ -30,6 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private IMultiValue<AmazonDeliveryExperienceType> deliveryExperienceBinder;
         private GenericMultiValueBinder<ShipmentEntity, KeyValuePair<string, AmazonRateTag>> shippingServiceBinder;
         private List<KeyValuePair<string,AmazonRateTag>> servicesAvailable;
+        private MessengerToken amazonRatesRetrievedMessengerToken;
 
         /// <summary>
         /// Constructor
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.messenger = messenger;
             handler = new PropertyChangedHandler(() => PropertyChanged);
 
-            messenger.Handle<AmazonRatesRetrievedMessage>(this, OnAmazonRatesRetrieved);
+            amazonRatesRetrievedMessengerToken = messenger.Handle<AmazonRatesRetrievedMessage>(this, OnAmazonRatesRetrieved);
         }
 
         /// <summary>
@@ -269,7 +270,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             set
             {
                 handler.Set(nameof(ServicesAvailable), ref servicesAvailable, value);
-                servicesAvailable = value; 
             }
         }
 
@@ -279,6 +279,29 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public void SelectRate(AmazonRateTag rateTag)
         {
             ShippingService = ServicesAvailable.FirstOrDefault(s => s.Value == rateTag);
+        }
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (amazonRatesRetrievedMessengerToken != null)
+                {
+                    Messenger.Current.Remove(amazonRatesRetrievedMessengerToken);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }
