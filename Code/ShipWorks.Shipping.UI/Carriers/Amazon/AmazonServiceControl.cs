@@ -116,6 +116,27 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             service.DataBindings.Add(nameof(service.DataSource), viewModel, nameof(viewModel.ServicesAvailable), false, DataSourceUpdateMode.OnPropertyChanged);
             service.DataBindings.Add(nameof(service.SelectedItem), viewModel, nameof(viewModel.ShippingService), false, DataSourceUpdateMode.OnPropertyChanged);
             service.DataBindings.Add(nameof(service.MultiValued), viewModel, nameof(viewModel.ServiceIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
+            
+            viewModel.PropertyChanged += OnViewModelPropertyChanged;
+        }
+        
+        /// <summary>
+        /// Handle the view model property changed event
+        /// </summary>
+        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(viewModel.ServicesAvailable))
+            {
+                service.Invoke((MethodInvoker)delegate { service.DataSource = viewModel.ServicesAvailable; });
+                return;
+            }
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+
+            if (shipmentType.RatingFields.FieldsContainName(e.PropertyName))
+            {
+                RaiseRateCriteriaChanged();
+            }
         }
 
         /// <summary>
@@ -210,20 +231,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             sectionShipment.ExtraText = text;
-        }
-
-        /// <summary>
-        /// Event handler for view model property changed.
-        /// If property name matches a rating field name, RaiseRateCriteriaChanged() is called. 
-        /// </summary>
-        protected void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-        {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
-            
-            if (shipmentType.RatingFields.FieldsContainName(propertyChangedEventArgs.PropertyName))
-            {
-                RaiseRateCriteriaChanged();
-            }
         }
 
         /// <summary>
