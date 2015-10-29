@@ -31,59 +31,86 @@
             this.carrierNamesMessageLabel = new System.Windows.Forms.Label();
             this.howToFixMessageLabel = new System.Windows.Forms.Label();
             this.carriersLabel = new System.Windows.Forms.Label();
+            this.okButton = new System.Windows.Forms.Button();
+            this.infoPictureBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.infoPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // carrierNamesMessageLabel
             // 
-            this.carrierNamesMessageLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.carrierNamesMessageLabel.AutoSize = true;
-            this.carrierNamesMessageLabel.Location = new System.Drawing.Point(12, 9);
+            this.carrierNamesMessageLabel.Location = new System.Drawing.Point(102, 14);
             this.carrierNamesMessageLabel.MaximumSize = new System.Drawing.Size(400, 0);
             this.carrierNamesMessageLabel.MinimumSize = new System.Drawing.Size(100, 0);
             this.carrierNamesMessageLabel.Name = "carrierNamesMessageLabel";
-            this.carrierNamesMessageLabel.Size = new System.Drawing.Size(246, 13);
+            this.carrierNamesMessageLabel.Size = new System.Drawing.Size(312, 13);
             this.carrierNamesMessageLabel.TabIndex = 10;
-            this.carrierNamesMessageLabel.Text = "Terms and conditions have not been accepted for:";
+            this.carrierNamesMessageLabel.Text = "Terms and conditions have not been accepted for these carriers:";
             // 
             // howToFixMessageLabel
             // 
-            this.howToFixMessageLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.howToFixMessageLabel.AutoSize = true;
-            this.howToFixMessageLabel.Location = new System.Drawing.Point(12, 84);
-            this.howToFixMessageLabel.MaximumSize = new System.Drawing.Size(330, 0);
+            this.howToFixMessageLabel.Location = new System.Drawing.Point(102, 46);
             this.howToFixMessageLabel.Name = "howToFixMessageLabel";
-            this.howToFixMessageLabel.Size = new System.Drawing.Size(330, 13);
+            this.howToFixMessageLabel.Size = new System.Drawing.Size(325, 33);
             this.howToFixMessageLabel.TabIndex = 13;
-            this.howToFixMessageLabel.Text = "Accepting these terms and conditions can be done through Amazon.";
+            this.howToFixMessageLabel.Text = "Please accept the terms and conditions for these carriers using your\r\nAmazon Sell" +
+    "er Central Account";
             // 
             // carriersLabel
             // 
-            this.carriersLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.carriersLabel.AutoSize = true;
-            this.carriersLabel.Location = new System.Drawing.Point(26, 25);
-            this.carriersLabel.MaximumSize = new System.Drawing.Size(400, 0);
+            this.carriersLabel.Location = new System.Drawing.Point(126, 25);
+            this.carriersLabel.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.carriersLabel.MinimumSize = new System.Drawing.Size(100, 0);
             this.carriersLabel.Name = "carriersLabel";
             this.carriersLabel.Size = new System.Drawing.Size(100, 13);
             this.carriersLabel.TabIndex = 14;
             this.carriersLabel.Text = "Carriers";
             // 
+            // okButton
+            // 
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.okButton.Location = new System.Drawing.Point(444, 77);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 22);
+            this.okButton.TabIndex = 15;
+            this.okButton.Text = "OK";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // infoPictureBox
+            // 
+            this.infoPictureBox.BackgroundImage = global::ShipWorks.Properties.Resources.amazon_large;
+            this.infoPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.infoPictureBox.Location = new System.Drawing.Point(12, 46);
+            this.infoPictureBox.Name = "infoPictureBox";
+            this.infoPictureBox.Size = new System.Drawing.Size(79, 33);
+            this.infoPictureBox.TabIndex = 17;
+            this.infoPictureBox.TabStop = false;
+            // 
             // AmazonCarrierTermsAndConditionsNotAcceptedDialog
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(504, 106);
-            this.Controls.Add(this.carriersLabel);
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.CancelButton = this.okButton;
+            this.ClientSize = new System.Drawing.Size(531, 108);
+            this.ControlBox = false;
             this.Controls.Add(this.howToFixMessageLabel);
+            this.Controls.Add(this.infoPictureBox);
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.carriersLabel);
             this.Controls.Add(this.carrierNamesMessageLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AmazonCarrierTermsAndConditionsNotAcceptedDialog";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Terms and conditions not accepted";
+            ((System.ComponentModel.ISupportInitialize)(this.infoPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -94,5 +121,7 @@
         private System.Windows.Forms.Label carrierNamesMessageLabel;
         private System.Windows.Forms.Label howToFixMessageLabel;
         private System.Windows.Forms.Label carriersLabel;
+        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.PictureBox infoPictureBox;
     }
 }

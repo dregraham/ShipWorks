@@ -21,7 +21,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             carriersLabel.Text = $"{string.Join("\n", CarrierNames)}";
 
+            carriersLabel.Top = carrierNamesMessageLabel.Bottom + 5;
+
             howToFixMessageLabel.Top = carriersLabel.Bottom + 5;
+
+            okButton.Top = howToFixMessageLabel.Bottom + 5;
+
+            infoPictureBox.Top = ((carrierNamesMessageLabel.Bottom + howToFixMessageLabel.Top) / 2) - infoPictureBox.Height / 2;
+
+            Height = howToFixMessageLabel.Bottom + 60;
         }
 
         /// <summary>
@@ -31,5 +39,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// The carrier names.
         /// </value>
         public List<string> CarrierNames { private set; get; }
+
+        private void button1_Click(object sender, System.EventArgs e)
+        {
+            Close();
+        }
     }
 }
