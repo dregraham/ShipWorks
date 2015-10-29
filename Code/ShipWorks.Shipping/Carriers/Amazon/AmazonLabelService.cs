@@ -77,7 +77,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             AmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
-            webClient.CancelShipment(settings, shipment.Amazon.AmazonUniqueShipmentID);
+            try
+            {
+                webClient.CancelShipment(settings, shipment.Amazon.AmazonUniqueShipmentID);
+            }
+            catch (AmazonShipperException ex)
+            {
+                // something went wrong
+                throw new ShippingException(ex.Message);
+            }
         }
 
         /// <summary>

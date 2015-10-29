@@ -298,8 +298,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 $"ShipWorks/{Assembly.GetExecutingAssembly().GetName().Version} (Language=.NET)");
 
             // business logic failures are handled through status codes
-            request.AllowHttpStatusCodes(new HttpStatusCode[] { HttpStatusCode.BadRequest });
-
+            request.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.NotFound, HttpStatusCode.Forbidden);
+            
             IHttpResponseReader response;
 
             try
@@ -308,13 +308,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
                 // log the request
                 logger.LogRequest(request);
-
-                // Feed uploads are a combination of querystring params AND POST data, which isn't handled by typical request logging
-                AmazonMwsFeedRequestSubmitter feedRequest = request as AmazonMwsFeedRequestSubmitter;
-                if (feedRequest != null)
-                {
-                    logger.LogRequestSupplement(feedRequest.GetPostContent(), "FeedDocument", "xml");
-                }
 
                 using (response = request.GetResponse())
                 {
