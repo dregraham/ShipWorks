@@ -82,6 +82,7 @@
     </Compile>
     <Compile Include="Carriers\Amazon\AmazonAccountEditorViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonAccountManager.cs" />
+    <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\AmazonCredentials.cs" />
     <Compile Include="Carriers\Amazon\AmazonLabelService.cs" />
     <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactory.cs" />

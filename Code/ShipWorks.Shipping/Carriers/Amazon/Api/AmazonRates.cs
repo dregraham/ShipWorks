@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using Address = ShipWorks.Shipping.Carriers.Amazon.Api.DTOs.Address;
+using System.Drawing;
+using System.Linq;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
@@ -18,16 +19,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
         private readonly IOrderManager orderManager;
+        private readonly AmazonShipmentType amazonShipmentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRates"/> class.
         /// </summary>
         /// <param name="webClient">The web client.</param>
-        public AmazonRates(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager)
+        /// <param name="amazonShipmentType"></param>
+        public AmazonRates(IAmazonShippingWebClient webClient,  IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager, AmazonShipmentType amazonShipmentType)
         {
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
             this.orderManager = orderManager;
+            this.amazonShipmentType = amazonShipmentType;
         }
 
         /// <summary>
@@ -47,13 +51,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
 
-            return GetRateGroupFromResponse(response);
+            RateGroup rateGroup = GetRateGroupFromResponse(response);
+
+            return rateGroup;
         }
 
         /// <summary>
         /// Gets the rate group from response.
         /// </summary>
-        private static RateGroup GetRateGroupFromResponse(GetEligibleShippingServicesResponse response)
+        private RateGroup GetRateGroupFromResponse(GetEligibleShippingServicesResponse response)
         {
             List<RateResult> rateResults = new List<RateResult>();
 
@@ -66,7 +72,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 rateResults.Add(rateResult);
             }
 
-            return new RateGroup(rateResults);
+            RateGroup rateGroup = new RateGroup(rateResults);
+
+            // Add terms and conditions footnote if needed
+            List <string> carriers = response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier.CarrierName;
+            if (carriers != null && carriers.Any())
+            {
+                List<string> carrierNames = carriers.Distinct().ToList();
+
+                rateGroup.AddFootnoteFactory(new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(amazonShipmentType, carrierNames));
+            }
+
+            return rateGroup;
         }
 
         /// <summary>
@@ -74,8 +91,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// Return the logo of that carrier returns Null if we cannot
         /// find a match for the carrier
         /// </summary>
-        /// <param name="shippingService"></param>
-        /// <returns></returns>
         private static Image GetProviderLogo(string carrier)
         {
             switch (carrier.ToLower())
