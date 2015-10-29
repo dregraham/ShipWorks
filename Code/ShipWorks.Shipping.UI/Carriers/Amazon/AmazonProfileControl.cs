@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
-using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
@@ -35,14 +31,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             dimensionsControl.Initialize();
             EnumHelper.BindComboBox<AmazonDeliveryExperienceType>(deliveryExperience);
 
-
             AmazonProfileEntity amazonProfile = profile.Amazon;
-
-            //if (ShippingSettings.Fetch().AmazonInsuranceProvider == (int)InsuranceProvider.Carrier)
-            //{
-            //    insuranceControl.UseInsuranceBoxLabel = "Amazon Declared Value";
-            //    insuranceControl.InsuredValueLabel = "Declared value:";
-            //}
 
             //Shipment
             AddValueMapping(amazonProfile, AmazonProfileFields.CarrierWillPickUp, carrierWillPickUpState, carrierWillPickUp, labelCarrierWillPickUp);
@@ -50,7 +39,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             AddValueMapping(amazonProfile, AmazonProfileFields.SendDateMustArriveBy, sendDeliverByDateState, sendDeliverByDate, labelSendDeliverByDate);
             AddValueMapping(amazonProfile, AmazonProfileFields.Weight, weightState, weight, labelWeight);
             AddValueMapping(amazonProfile, AmazonProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
-            
+
             //Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
         }
