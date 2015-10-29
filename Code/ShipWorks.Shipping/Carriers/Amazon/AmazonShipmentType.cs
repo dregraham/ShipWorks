@@ -278,5 +278,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsAddWeight, amazonShipment, AmazonShipmentFields.DimsAddWeight);
             }
         }
+
+        /// <summary>
+        /// Updates the total weight of the shipment
+        /// </summary>
+        public override void UpdateTotalWeight(ShipmentEntity shipment)
+        {
+            shipment.TotalWeight = shipment.ContentWeight;
+
+            if (shipment.Amazon.DimsAddWeight)
+            {
+                shipment.TotalWeight += shipment.Amazon.DimsWeight;
+            }
+        }
     }
 }
