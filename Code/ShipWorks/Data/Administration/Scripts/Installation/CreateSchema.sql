@@ -1235,6 +1235,10 @@ PRINT N'Creating index [IX_ChannelAdvisorOrder_OnlineStatus] on [dbo].[ChannelAd
 GO
 CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_OnlineShippingStatus] ON [dbo].[ChannelAdvisorOrder] ([OnlineShippingStatus])
 GO
+PRINT N'Creating index [IX_ChannelAdvisorOrder_IsPrime] on [dbo].[ChannelAdvisorOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_IsPrime] ON [dbo].[ChannelAdvisorOrder]([IsPrime])
+GO
 PRINT N'Creating [dbo].[ChannelAdvisorOrderItem]'
 GO
 CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
