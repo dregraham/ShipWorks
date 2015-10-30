@@ -10,12 +10,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void ValidateCreateShipmentResponse_ThrowsAmazonShipperExceptionWhen_ShipmentResponseIsNull()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                IAmazonShippingWebClient client = mock.Create<IAmazonShippingWebClient>();
+            IAmazonShippingWebClient client = new AmazonShippingWebClient();
                 
-                Assert.Throws<AmazonShipperException>(() => client.ValidateCreateShipmentResponse(null));
-            }
+            Assert.Throws<AmazonShipperException>(() => client.ValidateCreateShipmentResponse(null));
         }
     }
 }
