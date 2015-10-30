@@ -313,15 +313,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 {
                     // log the response
                     logger.LogResponse(response.ReadResult());
-
-                    // check response for errors
-                    RaiseErrors(amazonMwsApiCall, response, mwsSettings);
                 }
             }
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(AmazonShipperException));
             }
+
+            // check response for errors
+            RaiseErrors(amazonMwsApiCall, response, mwsSettings);
 
             return response;
         }
@@ -362,14 +362,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             if (error != null)
             {
-                if (error.Message != null)
-                {
-                    // If a message is provided send it
-                    throw new AmazonShipperException(error.Message);
-                }
-
                 // No message was provided so we use the error code
-                throw new AmazonShipperException(error.Code);
+                throw new AmazonShipperException(error.Message, error.Code);
             }
         }
     }
