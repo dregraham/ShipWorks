@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Other
     /// <summary>
     /// "Other" (custom) ShipmentType implementation
     /// </summary>
-    class OtherShipmentType : ShipmentType
+    public class OtherShipmentType : ShipmentType
     {
         /// <summary>
         /// The ShipmentTypeCode enumeration value

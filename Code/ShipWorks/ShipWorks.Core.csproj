@@ -1122,6 +1122,7 @@
     <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shipping\IShipmentTypeManager.cs" />
     <Compile Include="Shipping\IShippingDialogInteraction.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />
@@ -1148,6 +1149,7 @@
     <Compile Include="Shipping\Settings\ShippingSettingsWrapper.cs" />
     <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
+    <Compile Include="Shipping\ShipmentTypeManagerWrapper.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
     <Compile Include="Stores\Content\IOrderUtility.cs" />
     <Compile Include="Stores\Content\OrderUtilityWrapper.cs" />
