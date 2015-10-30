@@ -109,6 +109,7 @@
     <Compile Include="Carriers\Amazon\AmazonLabelServiceTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactoryTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonServiceViewModelTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipmentRequestDetailsFactoryTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentTypeTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingWebClientTest.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRateTests.cs" />

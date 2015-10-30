@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 // Sometimes Amazon does not give us an error message
                 // If the error message is empty then we will provide 
                 // our own message based on the code.
-                if (Code != null && message == "")
+                if (Code != null && string.IsNullOrEmpty(message))
                 {
                     switch (Code.ToLower())
                     {
