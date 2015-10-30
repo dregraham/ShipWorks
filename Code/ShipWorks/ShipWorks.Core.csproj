@@ -1176,6 +1176,7 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\Enums\ChannelAdvisorIsAmazonPrime.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />

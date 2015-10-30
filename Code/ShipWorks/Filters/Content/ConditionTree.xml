@@ -97,6 +97,7 @@
         <Condition identifier="ChannelAdvisorOrder.PaymentStatus" />
         <Condition identifier="ChannelAdvisorOrder.CheckoutStatus" />
         <Condition identifier="ChannelAdvisorOrder.FlagType" />
+        <Condition identifier="ChannelAdvisorOrder.IsPrime" />
         <Condition identifier="CommerceInterfaceOrder.CommerceInterfaceOrderNumber" />
         <Condition identifier="EbayOrder.EbayBuyerID" />
         <Condition identifier="EbayOrder.SellingManagerRecord" />

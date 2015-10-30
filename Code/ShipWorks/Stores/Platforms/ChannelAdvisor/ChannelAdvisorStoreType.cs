@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             entity.FlagDescription = "";
             entity.FlagType = (int) ChannelAdvisorFlagType.NoFlag;
             entity.MarketplaceNames = "";
-
+            
             return entity;
         }
 
