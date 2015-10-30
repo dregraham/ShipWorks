@@ -158,6 +158,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             if (e.PropertyName == nameof(viewModel.ShippingService))
             {
                 RaiseShipmentServiceChanged();
+                UpdateSectionDescription();
             }
 
             if (amazonShipmentType.RatingFields.FieldsContainName(e.PropertyName))
@@ -224,40 +225,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Important parts of the shipment details have changed
-        /// </summary>
-        private void OnShipmentDetailsChanged(object sender, EventArgs e)
-        {
-            UpdateSectionDescription();
-        }
-
-        /// <summary>
         /// Update the description of the section
         /// </summary>
         private void UpdateSectionDescription()
         {
-            string text = string.Empty;
-
-            if (service.MultiValued) // || carrier.MultiValued)
+            if (service.MultiValued)
             {
-                text = "(Multiple)";
+                sectionShipment.ExtraText = "(Multiple Services)";
             }
             else
             {
-                text = service.Text;
-
-                if (service.Text.Length > 0)
-                {
-                    if (text.Length > 0)
-                    {
-                        text += ", ";
-                    }
-
-                    text += service.Text;
-                }
+                sectionShipment.ExtraText = service.Text;
             }
-
-            sectionShipment.ExtraText = text;
         }
 
         /// <summary>
