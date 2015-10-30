@@ -6,6 +6,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using System.Reflection;
 using Interapptive.Shared.Messaging;
+using ShipWorks.Data;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -51,6 +52,10 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterType<OrderManager>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<DataResourceManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

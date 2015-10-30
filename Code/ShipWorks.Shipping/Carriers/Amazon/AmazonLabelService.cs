@@ -21,16 +21,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
+        private readonly IDataResourceManager resourceManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonLabelService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory)
+        public AmazonLabelService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory, IDataResourceManager resourceManager)
         {
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
             this.orderManager = orderManager;
             this.requestFactory = requestFactory;
+            this.resourceManager = resourceManager;
         }
 
         /// <summary>
@@ -102,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Save a label of the given name to the database from the specified fileContents
         /// </summary>
-        private static void SaveLabel(FileContents fileContents, long shipmentID)
+        private void SaveLabel(FileContents fileContents, long shipmentID)
         {
             // Decompress the label string
             byte[] labelBytes = GZipUtility.Decompress(Convert.FromBase64String(fileContents.Contents));
@@ -114,14 +116,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 {
                     using (PdfDocument pdf = new PdfDocument(pdfBytes))
                     {
-                        DataResourceManager.CreateFromPdf(pdf, shipmentID, "LabelPrimary");
+                        resourceManager.CreateFromPdf(pdf, shipmentID, "LabelPrimary");
                     }
                 }
             }
             else
             {
                 //Convert the string into an image stream
-                DataResourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary");
+                resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary");
             }
         }
     }

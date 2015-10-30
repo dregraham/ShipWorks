@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -468,7 +469,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(new DateTime(2000, 1, 1), testObject.DateMustArriveBy);
+                Assert.Equal(new DateTime(2000, 1, 1).ToString("(MM/dd/yyyy)"), testObject.DateMustArriveBy);
             }
         }
 
@@ -487,7 +488,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(DateTime.Now.AddDays(1).Date, testObject.DateMustArriveBy.Date);
+                Assert.Equal(DateTime.Now.AddDays(1).Date.ToString("(MM/dd/yyyy)"), testObject.DateMustArriveBy);
             }
         }
 
@@ -500,31 +501,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(Enumerable.Empty<ShipmentEntity>().ToList());
 
-                Assert.Equal(DateTime.Now.AddDays(1), testObject.DateMustArriveBy);
-            }
-        }
-
-        [Fact]
-        public void MustArriveByDateSaves_WithMixedValues()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                AmazonServiceViewModel testObject = mock.Create<AmazonServiceViewModel>();
-
-                List<ShipmentEntity> shipments = new List<ShipmentEntity>()
-                {
-                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DateMustArriveBy = new DateTime(2000, 1, 1)}},
-                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DateMustArriveBy = new DateTime(2100, 12, 12)}}
-                };
-
-                testObject.Load(shipments);
-
-                testObject.DateMustArriveBy = new DateTime(2015, 8, 21);
-                testObject.Save(shipments);
-
-                Assert.Equal(new DateTime(2015, 8, 21), testObject.DateMustArriveBy);
-
-                shipments.ForEach(s => Assert.Equal((new DateTime(2015, 8, 21)).Date.AddHours(12), s.Amazon.DateMustArriveBy));
+                Assert.Equal(DateTime.Now.AddDays(1).ToString("(MM/dd/yyyy)"), testObject.DateMustArriveBy);
             }
         }
 
