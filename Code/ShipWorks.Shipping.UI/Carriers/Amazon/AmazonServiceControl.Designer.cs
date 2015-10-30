@@ -34,7 +34,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.components = new System.ComponentModel.Container();
             this.weight = new ShipWorks.UI.Controls.WeightControl();
             this.labelWeight = new System.Windows.Forms.Label();
-            this.mustArriveByDate = new ShipWorks.UI.Controls.MultiValueDateTimePicker();
             this.button1 = new System.Windows.Forms.Button();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
@@ -43,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
             this.label2 = new System.Windows.Forms.Label();
             this.labelDimensions = new System.Windows.Forms.Label();
-            this.labelMustArriveByDate = new System.Windows.Forms.Label();
+            this.mustArriveByDate = new System.Windows.Forms.Label();
             this.deliveryConfirmation = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelDeliveryConf = new System.Windows.Forms.Label();
@@ -70,8 +69,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             // sectionRecipient
             // 
-            this.sectionRecipient.Location = new System.Drawing.Point(3, 404);
-            this.sectionRecipient.Size = new System.Drawing.Size(279, 24);
+            // 
+            // sectionRecipient.ContentPanel
+            // 
+            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
+            this.sectionRecipient.Location = new System.Drawing.Point(3, 341);
+            this.sectionRecipient.Size = new System.Drawing.Size(262, 24);
             this.sectionRecipient.TabIndex = 1;
             this.sectionRecipient.Visible = false;
             // 
@@ -79,12 +85,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.personControl.Size = new System.Drawing.Size(272, 330);
+            this.personControl.Size = new System.Drawing.Size(255, 330);
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 462);
-            this.sectionReturns.Size = new System.Drawing.Size(279, 24);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 399);
+            this.sectionReturns.Size = new System.Drawing.Size(262, 24);
             this.sectionReturns.Visible = false;
             // 
             // sectionShipment
@@ -96,7 +102,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.sectionShipment.ContentPanel.Controls.Add(this.weight);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelWeight);
             this.sectionShipment.ContentPanel.Controls.Add(this.mustArriveByDate);
-            this.sectionShipment.ContentPanel.Controls.Add(this.labelMustArriveByDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelDimensions);
             this.sectionShipment.ContentPanel.Controls.Add(this.dimensionsControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelCarrierWillPickUp);
@@ -108,19 +113,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.Location = new System.Drawing.Point(3, 34);
-            this.sectionShipment.Size = new System.Drawing.Size(279, 365);
+            this.sectionShipment.Size = new System.Drawing.Size(262, 302);
             // 
             // sectionLabelOptions
             // 
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 433);
-            this.sectionLabelOptions.Size = new System.Drawing.Size(279, 24);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 370);
+            this.sectionLabelOptions.Size = new System.Drawing.Size(262, 24);
             this.sectionLabelOptions.Visible = false;
             // 
             // weight
             // 
             this.weight.BackColor = System.Drawing.Color.Transparent;
             this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.weight.Location = new System.Drawing.Point(91, 74);
+            this.weight.Location = new System.Drawing.Point(91, 33);
             this.weight.Name = "weight";
             this.weight.RangeMax = 300D;
             this.weight.RangeMin = 0D;
@@ -132,19 +137,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             this.labelWeight.AutoSize = true;
             this.labelWeight.BackColor = System.Drawing.Color.Transparent;
-            this.labelWeight.Location = new System.Drawing.Point(40, 76);
+            this.labelWeight.Location = new System.Drawing.Point(40, 37);
             this.labelWeight.Name = "labelWeight";
             this.labelWeight.Size = new System.Drawing.Size(45, 13);
             this.labelWeight.TabIndex = 6;
             this.labelWeight.Text = "Weight:";
-            // 
-            // mustArriveByDate
-            // 
-            this.mustArriveByDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.mustArriveByDate.Location = new System.Drawing.Point(91, 37);
-            this.mustArriveByDate.Name = "mustArriveByDate";
-            this.mustArriveByDate.Size = new System.Drawing.Size(124, 21);
-            this.mustArriveByDate.TabIndex = 5;
             // 
             // button1
             // 
@@ -172,7 +169,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
-            this.sectionFrom.Size = new System.Drawing.Size(279, 24);
+            this.sectionFrom.Size = new System.Drawing.Size(262, 24);
             this.sectionFrom.TabIndex = 0;
             // 
             // originControl
@@ -183,7 +180,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.originControl.Location = new System.Drawing.Point(0, 5);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
-            this.originControl.Size = new System.Drawing.Size(275, 0);
+            this.originControl.Size = new System.Drawing.Size(258, 0);
             this.originControl.TabIndex = 1;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
@@ -193,9 +190,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             | System.Windows.Forms.AnchorStyles.Right)));
             this.insuranceControl.BackColor = System.Drawing.Color.Transparent;
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceControl.Location = new System.Drawing.Point(22, 254);
+            this.insuranceControl.Location = new System.Drawing.Point(22, 198);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(30, 48);
+            this.insuranceControl.Size = new System.Drawing.Size(164, 48);
             this.insuranceControl.TabIndex = 12;
             // 
             // dimensionsControl
@@ -203,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.dimensionsControl.BackColor = System.Drawing.Color.White;
             this.dimensionsControl.Cleared = false;
             this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dimensionsControl.Location = new System.Drawing.Point(88, 99);
+            this.dimensionsControl.Location = new System.Drawing.Point(88, 56);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 77);
             this.dimensionsControl.TabIndex = 6;
@@ -222,27 +219,27 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             this.labelDimensions.AutoSize = true;
             this.labelDimensions.BackColor = System.Drawing.Color.White;
-            this.labelDimensions.Location = new System.Drawing.Point(21, 106);
+            this.labelDimensions.Location = new System.Drawing.Point(21, 63);
             this.labelDimensions.Name = "labelDimensions";
             this.labelDimensions.Size = new System.Drawing.Size(64, 13);
             this.labelDimensions.TabIndex = 7;
             this.labelDimensions.Text = "Dimensions:";
             // 
-            // labelMustArriveByDate
+            // mustArriveByDate
             // 
-            this.labelMustArriveByDate.BackColor = System.Drawing.Color.White;
-            this.labelMustArriveByDate.Location = new System.Drawing.Point(19, 32);
-            this.labelMustArriveByDate.Name = "labelMustArriveByDate";
-            this.labelMustArriveByDate.Size = new System.Drawing.Size(66, 31);
-            this.labelMustArriveByDate.TabIndex = 8;
-            this.labelMustArriveByDate.Text = "Must arrive  by date:";
-            this.labelMustArriveByDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.mustArriveByDate.BackColor = System.Drawing.Color.White;
+            this.mustArriveByDate.Location = new System.Drawing.Point(225, 179);
+            this.mustArriveByDate.Name = "mustArriveByDate";
+            this.mustArriveByDate.Size = new System.Drawing.Size(73, 17);
+            this.mustArriveByDate.TabIndex = 8;
+            this.mustArriveByDate.Text = "(01/01/0001)";
+            this.mustArriveByDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // deliveryConfirmation
             // 
             this.deliveryConfirmation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deliveryConfirmation.FormattingEnabled = true;
-            this.deliveryConfirmation.Location = new System.Drawing.Point(91, 176);
+            this.deliveryConfirmation.Location = new System.Drawing.Point(91, 133);
             this.deliveryConfirmation.Name = "deliveryConfirmation";
             this.deliveryConfirmation.PromptText = "(Multiple Values)";
             this.deliveryConfirmation.Size = new System.Drawing.Size(220, 21);
@@ -264,7 +261,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             this.labelDeliveryConf.AutoSize = true;
             this.labelDeliveryConf.BackColor = System.Drawing.Color.White;
-            this.labelDeliveryConf.Location = new System.Drawing.Point(13, 178);
+            this.labelDeliveryConf.Location = new System.Drawing.Point(13, 136);
             this.labelDeliveryConf.Name = "labelDeliveryConf";
             this.labelDeliveryConf.Size = new System.Drawing.Size(72, 13);
             this.labelDeliveryConf.TabIndex = 7;
@@ -284,7 +281,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             this.carrierWillPickUp.AutoSize = true;
             this.carrierWillPickUp.BackColor = System.Drawing.Color.White;
-            this.carrierWillPickUp.Location = new System.Drawing.Point(91, 204);
+            this.carrierWillPickUp.Location = new System.Drawing.Point(91, 161);
             this.carrierWillPickUp.Name = "carrierWillPickUp";
             this.carrierWillPickUp.Size = new System.Drawing.Size(177, 17);
             this.carrierWillPickUp.TabIndex = 8;
@@ -295,7 +292,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             this.sendDeliverBy.AutoSize = true;
             this.sendDeliverBy.BackColor = System.Drawing.Color.White;
-            this.sendDeliverBy.Location = new System.Drawing.Point(91, 230);
+            this.sendDeliverBy.Location = new System.Drawing.Point(91, 180);
             this.sendDeliverBy.Name = "sendDeliverBy";
             this.sendDeliverBy.Size = new System.Drawing.Size(142, 17);
             this.sendDeliverBy.TabIndex = 8;
@@ -306,7 +303,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             this.labelCarrierWillPickUp.AutoSize = true;
             this.labelCarrierWillPickUp.BackColor = System.Drawing.Color.White;
-            this.labelCarrierWillPickUp.Location = new System.Drawing.Point(5, 204);
+            this.labelCarrierWillPickUp.Location = new System.Drawing.Point(5, 161);
             this.labelCarrierWillPickUp.Name = "labelCarrierWillPickUp";
             this.labelCarrierWillPickUp.Size = new System.Drawing.Size(80, 13);
             this.labelCarrierWillPickUp.TabIndex = 9;
@@ -316,7 +313,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             this.labelDeliverBy.AutoSize = true;
             this.labelDeliverBy.BackColor = System.Drawing.Color.White;
-            this.labelDeliverBy.Location = new System.Drawing.Point(10, 230);
+            this.labelDeliverBy.Location = new System.Drawing.Point(10, 180);
             this.labelDeliverBy.Name = "labelDeliverBy";
             this.labelDeliverBy.Size = new System.Drawing.Size(75, 13);
             this.labelDeliverBy.TabIndex = 9;
@@ -328,7 +325,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.AutoScroll = true;
             this.Controls.Add(this.sectionFrom);
             this.Name = "AmazonServiceControl";
-            this.Size = new System.Drawing.Size(285, 440);
+            this.Size = new System.Drawing.Size(268, 440);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
@@ -357,14 +354,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private ShipWorks.UI.Controls.MultiValueDateTimePicker mustArriveByDate;
         private System.Windows.Forms.Label labelWeight;
         private ShipWorks.UI.Controls.WeightControl weight;
         private ShipWorks.UI.Controls.CollapsibleGroupControl sectionFrom;
         private ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl originControl;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private Insurance.InsuranceSelectionControl insuranceControl;
-        private System.Windows.Forms.Label labelMustArriveByDate;
+        private System.Windows.Forms.Label mustArriveByDate;
         private System.Windows.Forms.Label labelDimensions;
         private Editing.DimensionsControl dimensionsControl;
         private System.Windows.Forms.Label label2;

@@ -109,7 +109,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             mustArriveByDate.DataBindings.Clear();
             mustArriveByDate.DataBindings.Add(nameof(mustArriveByDate.Text), viewModel, nameof(viewModel.DateMustArriveBy), false, DataSourceUpdateMode.OnPropertyChanged);
-            mustArriveByDate.DataBindings.Add(nameof(mustArriveByDate.MultiValued), viewModel, nameof(viewModel.DateMustArriveByIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
 
             weight.DataBindings.Clear();
             weight.DataBindings.Add(nameof(weight.Weight), viewModel, nameof(viewModel.ContentWeight), false, DataSourceUpdateMode.OnPropertyChanged);

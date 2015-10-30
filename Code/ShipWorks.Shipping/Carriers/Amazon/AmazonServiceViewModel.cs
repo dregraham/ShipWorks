@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
@@ -119,7 +120,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void Save(List<ShipmentEntity> shipments)
         {
-            dateMustArriveBy.Save();
             weightBinder.Save();
             carrierWillPickUpBinder.Save();
             sendDeliverByBinder.Save();
@@ -193,20 +193,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// DateMustArriveBy display text
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public DateTime DateMustArriveBy
+        public string DateMustArriveBy
         {
             get
             {
                 if (dateMustArriveBy.PropertyValue >= new DateTime(1980, 1, 1))
                 {
-                    return dateMustArriveBy.PropertyValue;
+                    return dateMustArriveBy.PropertyValue.ToString("(MM/dd/yyyy)");
                 }
 
-                return DateTime.Now.AddDays(1);
-            }
-            set
-            {
-                dateMustArriveBy.PropertyValue = value;
+                return DateTime.Now.AddDays(1).ToString("(MM/dd/yyyy)");
             }
         }
 
