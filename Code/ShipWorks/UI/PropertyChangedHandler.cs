@@ -9,6 +9,7 @@ namespace ShipWorks.Core.UI
     public class PropertyChangedHandler
     {
         private readonly Func<PropertyChangedEventHandler> getPropertyChanged;
+        private readonly object lockObject = new object();
 
         /// <summary>
         /// Constructor
@@ -23,12 +24,16 @@ namespace ShipWorks.Core.UI
         /// </summary>
         public bool Set<T>(string name, ref T field, T value)
         {
-            if (Equals(field, value))
+            lock (lockObject)
             {
-                return false;
+                if (Equals(field, value))
+                {
+                    return false;
+                }
+
+                field = value;
             }
 
-            field = value;
             OnPropertyChanged(name);
 
             return true;

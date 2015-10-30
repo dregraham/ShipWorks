@@ -66,10 +66,10 @@ namespace ShipWorks.UI.Controls.MultiValueBinders
             // If it's not multi valued, set the Text property
             if (DistinctPropertyValues.Any() && !IsMultiValued)
             {
-                PropertyValue = DistinctPropertyValues.First();
+                propertyValue = DistinctPropertyValues.First();
             }
         }
-
+        
         /// <summary>
         /// The text value to display.
         /// </summary>

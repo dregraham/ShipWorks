@@ -43,6 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             base.Initialize();
 
+
             EnumHelper.BindComboBox<AmazonDeliveryExperienceType>(deliveryConfirmation);
 
             originControl.Initialize(ShipmentTypeCode.Amazon);
@@ -56,6 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
+            viewModel.PropertyChanged -= OnViewModelPropertyChanged;
 
             List<ShipmentEntity> shipmentsAsList = shipments.ToList();
             base.LoadShipments(shipmentsAsList, enableEditing, enableShippingAddress);
@@ -73,7 +75,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             UpdateSectionDescription();
 
             viewModel.PropertyChanged += OnViewModelPropertyChanged;
-
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
         }
@@ -118,10 +119,23 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             service.DataBindings.Add(nameof(service.DataSource), viewModel, nameof(viewModel.ServicesAvailable), false, DataSourceUpdateMode.OnPropertyChanged);
             service.DataBindings.Add(nameof(service.SelectedItem), viewModel, nameof(viewModel.ShippingService), false, DataSourceUpdateMode.OnPropertyChanged);
             service.DataBindings.Add(nameof(service.MultiValued), viewModel, nameof(viewModel.ServiceIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
-            
-            viewModel.PropertyChanged += OnViewModelPropertyChanged;
+            service.SelectedValueChanged += OnServiceSelectedValueChanged;
         }
-        
+
+        /// <summary>
+        /// Handles the service drop down selection changed so that we can update the rate control
+        /// </summary>
+        private void OnServiceSelectedValueChanged(object sender, EventArgs e)
+        {
+            AmazonRateTag newValue = (AmazonRateTag)service.SelectedItem;
+
+            if (newValue?.ShippingServiceId != viewModel?.ShippingService?.ShippingServiceId)
+            {
+                RateResult rateResult = RateControl.RateGroup.Rates.FirstOrDefault(r => ((AmazonRateTag)r.Tag).ShippingServiceId == newValue.ShippingServiceId);
+                RateControl.SelectRate(rateResult);
+            }
+        }
+
         /// <summary>
         /// Handle the view model property changed event
         /// </summary>
@@ -131,7 +145,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 if (e.PropertyName == nameof(viewModel.ServicesAvailable))
                 {
-                service.Invoke((MethodInvoker)delegate { service.DataSource = viewModel.ServicesAvailable; });
+                    service.Invoke((MethodInvoker) delegate
+                    {
+                        AmazonRateTag previousValue = viewModel.ShippingService;
+                        service.BindDataSourceAndPreserveSelection(viewModel.ServicesAvailable);
+                        service.SelectedValue = previousValue.ShippingServiceId;
+                    });
                     return;
                 }
             }
@@ -255,6 +274,35 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             viewModel.SelectRate(rateTag);
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (!service.MultiValued && service.SelectedValue != null)
+            {
+                // Update the selected rate in the rate control to coincide with the service change
+                AmazonRateTag selectedRateTag = service.SelectedItem as AmazonRateTag;
+
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    AmazonRateTag rateTag = r.Tag as AmazonRateTag;
+                    if (string.IsNullOrWhiteSpace(rateTag?.Description))
+                    {
+                        return false;
+                    }
+
+                    return rateTag.ShippingServiceId == selectedRateTag?.ShippingServiceId;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
         }
     }
 }
