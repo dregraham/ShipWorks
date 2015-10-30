@@ -158,7 +158,7 @@
             this.sendDeliverByDate.Location = new System.Drawing.Point(148, 155);
             this.sendDeliverByDate.Name = "sendDeliverByDate";
             this.sendDeliverByDate.Size = new System.Drawing.Size(142, 17);
-            this.sendDeliverByDate.TabIndex = 81;
+            this.sendDeliverByDate.TabIndex = 4;
             this.sendDeliverByDate.Text = "Deliver by required date";
             this.sendDeliverByDate.UseVisualStyleBackColor = true;
             // 
@@ -192,7 +192,7 @@
             this.deliveryExperience.Name = "deliveryExperience";
             this.deliveryExperience.PromptText = "(Multiple Values)";
             this.deliveryExperience.Size = new System.Drawing.Size(220, 21);
-            this.deliveryExperience.TabIndex = 78;
+            this.deliveryExperience.TabIndex = 5;
             // 
             // labelDeliveryExperience
             // 
@@ -236,7 +236,7 @@
             this.dimensionsControl.Location = new System.Drawing.Point(145, 48);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
-            this.dimensionsControl.TabIndex = 72;
+            this.dimensionsControl.TabIndex = 2;
             // 
             // labelDimensions
             // 
@@ -269,7 +269,7 @@
             this.weight.RangeMax = 400D;
             this.weight.RangeMin = 0D;
             this.weight.Size = new System.Drawing.Size(218, 23);
-            this.weight.TabIndex = 68;
+            this.weight.TabIndex = 1;
             this.weight.Weight = 0D;
             // 
             // labelWeight

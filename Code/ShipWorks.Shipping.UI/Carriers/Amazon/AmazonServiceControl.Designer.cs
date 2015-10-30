@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.dimensionsControl.Location = new System.Drawing.Point(88, 56);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 77);
-            this.dimensionsControl.TabIndex = 6;
+            this.dimensionsControl.TabIndex = 8;
             // 
             // label2
             // 
@@ -243,7 +243,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.deliveryConfirmation.Name = "deliveryConfirmation";
             this.deliveryConfirmation.PromptText = "(Multiple Values)";
             this.deliveryConfirmation.Size = new System.Drawing.Size(220, 21);
-            this.deliveryConfirmation.TabIndex = 6;
+            this.deliveryConfirmation.TabIndex = 9;
             // 
             // service
             // 
@@ -284,7 +284,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.carrierWillPickUp.Location = new System.Drawing.Point(91, 161);
             this.carrierWillPickUp.Name = "carrierWillPickUp";
             this.carrierWillPickUp.Size = new System.Drawing.Size(177, 17);
-            this.carrierWillPickUp.TabIndex = 8;
+            this.carrierWillPickUp.TabIndex = 10;
             this.carrierWillPickUp.Text = "Carrier will pick up the shipment";
             this.carrierWillPickUp.UseVisualStyleBackColor = false;
             // 
@@ -295,7 +295,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.sendDeliverBy.Location = new System.Drawing.Point(91, 180);
             this.sendDeliverBy.Name = "sendDeliverBy";
             this.sendDeliverBy.Size = new System.Drawing.Size(142, 17);
-            this.sendDeliverBy.TabIndex = 8;
+            this.sendDeliverBy.TabIndex = 11;
             this.sendDeliverBy.Text = "Deliver by required date";
             this.sendDeliverBy.UseVisualStyleBackColor = false;
             // 
