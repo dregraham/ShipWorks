@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters
 
         public override string GenerateSql(SqlGenerationContext context)
         {
-            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, ChannelAdvisorOrderFields.IsPrime, SqlGenerationScopeType.AnyChild))
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, ChannelAdvisorOrderFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 return scope.Adorn(base.GenerateSql(context.GetColumnReference(ChannelAdvisorOrderFields.IsPrime), context));
             }
