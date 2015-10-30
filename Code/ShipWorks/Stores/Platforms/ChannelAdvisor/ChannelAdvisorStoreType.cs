@@ -344,6 +344,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             outline.AddElement("OrderID", () => order.Value.CustomOrderIdentifier);
             outline.AddElement("FlagStyle", () => order.Value.FlagStyle);
             outline.AddElement("FlagDescription", () => order.Value.FlagDescription);
+            outline.AddElement("IsPrime", () => order.Value.IsPrime);
         }
 
         /// <summary>
