@@ -43,7 +43,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             base.Initialize();
 
-
             EnumHelper.BindComboBox<AmazonDeliveryExperienceType>(deliveryConfirmation);
 
             originControl.Initialize(ShipmentTypeCode.Amazon);
@@ -96,6 +95,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void CreateUiBindings()
         {
+            dimensionsControl.DimensionsChanged += DimensionsControl_DimensionsChanged;
+
+
             deliveryConfirmation.DataBindings.Clear();
             deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.PropertyValue), false, DataSourceUpdateMode.OnPropertyChanged);
             deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.MultiValued), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.IsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -122,6 +124,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             service.SelectedValueChanged += OnServiceSelectedValueChanged;
         }
 
+        private void DimensionsControl_DimensionsChanged(object sender, EventArgs e)
+        {
+            RaiseRateCriteriaChanged();
+        }
+
         /// <summary>
         /// Handles the service drop down selection changed so that we can update the rate control
         /// </summary>
@@ -131,7 +138,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (newValue?.ShippingServiceId != viewModel?.ShippingService?.ShippingServiceId)
             {
-                RateResult rateResult = RateControl.RateGroup.Rates.FirstOrDefault(r => ((AmazonRateTag)r.Tag).ShippingServiceId == newValue.ShippingServiceId);
+                RateResult rateResult = RateControl.RateGroup.Rates.FirstOrDefault(r => ((AmazonRateTag)r.Tag).ShippingServiceId == newValue?.ShippingServiceId);
                 RateControl.SelectRate(rateResult);
             }
         }
@@ -157,8 +164,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (e.PropertyName == nameof(viewModel.ShippingService))
             {
-                RaiseShipmentServiceChanged();
-                UpdateSectionDescription();
+                this.Invoke((MethodInvoker)delegate
+                {
+                    RaiseShipmentServiceChanged();
+                    UpdateSectionDescription();
+                });
+                return;
             }
 
             if (amazonShipmentType.RatingFields.FieldsContainName(e.PropertyName))

@@ -5,6 +5,7 @@ using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Drawing;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
@@ -62,18 +63,27 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             List<RateResult> rateResults = new List<RateResult>();
 
             ShippingServiceList serviceList = response.GetEligibleShippingServicesResult.ShippingServiceList;
-            foreach (ShippingService shippingService in serviceList.ShippingService.Where(x => x.Rate != null))
-            {
-                AmazonRateTag tag = new AmazonRateTag()
-                {
-                    Description = shippingService.ShippingServiceName ?? "Unknown",
-                    ShippingServiceId = shippingService.ShippingServiceId,
-                    ShippingServiceOfferId = shippingService.ShippingServiceOfferId
-                };
 
-                RateResult rateResult = new RateResult(shippingService.ShippingServiceName ?? "Unknown", "", shippingService.Rate.Amount, tag);
-                rateResult.ProviderLogo = GetProviderLogo(shippingService.CarrierName ?? string.Empty);
-                rateResults.Add(rateResult);
+            if (serviceList.ShippingService.None() || serviceList.ShippingService.All(x => x.Rate == null))
+            {
+                // Return an empty list of rates so that the rate control can display the appropriate text.
+                return new RateGroup(rateResults);
+            }
+            else
+            {
+                foreach (ShippingService shippingService in serviceList.ShippingService.Where(x => x.Rate != null))
+                {
+                    AmazonRateTag tag = new AmazonRateTag()
+                    {
+                        Description = shippingService.ShippingServiceName ?? "Unknown",
+                        ShippingServiceId = shippingService.ShippingServiceId,
+                        ShippingServiceOfferId = shippingService.ShippingServiceOfferId
+                    };
+
+                    RateResult rateResult = new RateResult(shippingService.ShippingServiceName ?? "Unknown", "", shippingService.Rate.Amount, tag);
+                    rateResult.ProviderLogo = GetProviderLogo(shippingService.CarrierName ?? string.Empty);
+                    rateResults.Add(rateResult);
+                }
             }
 
             RateGroup rateGroup = new RateGroup(rateResults);

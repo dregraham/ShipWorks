@@ -53,7 +53,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             List<AmazonRateTag> services = rateGroup.Rates.Select(r => (AmazonRateTag)r.Tag).ToList();
 
-            if (!shippingServiceBinder.IsMultiValued && services.All(s => s.ShippingServiceId != ShippingService.ShippingServiceId))
+            if (!services.Any())
+            {
+                AmazonRateTag selectedRateTag = new AmazonRateTag() {Description = "No rates are available for the shipment.", ShippingServiceId = null, ShippingServiceOfferId = null};
+                services.Insert(0, selectedRateTag);
+                ShippingService = selectedRateTag;
+            }
+            else if (!shippingServiceBinder.IsMultiValued && services.All(s => s.ShippingServiceId != ShippingService.ShippingServiceId))
             {
                 services.Insert(0, new AmazonRateTag() { Description = "Please select a service", ShippingServiceId = null, ShippingServiceOfferId = null });
             }
@@ -135,8 +141,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Event for property changed handling
         /// </summary>
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e) => 
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
             PropertyChanged?.Invoke(sender, e);
+        }
 
         /// <summary>
         /// Save
