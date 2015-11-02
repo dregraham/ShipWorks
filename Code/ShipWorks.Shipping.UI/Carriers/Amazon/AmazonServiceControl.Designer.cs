@@ -69,15 +69,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             // sectionRecipient
             // 
-            // 
-            // sectionRecipient.ContentPanel
-            // 
-            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.Location = new System.Drawing.Point(3, 341);
-            this.sectionRecipient.Size = new System.Drawing.Size(262, 24);
+            this.sectionRecipient.Size = new System.Drawing.Size(454, 24);
             this.sectionRecipient.TabIndex = 1;
             this.sectionRecipient.Visible = false;
             // 
@@ -85,12 +78,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.personControl.Size = new System.Drawing.Size(255, 330);
+            this.personControl.Size = new System.Drawing.Size(447, 330);
             // 
             // sectionReturns
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 399);
-            this.sectionReturns.Size = new System.Drawing.Size(262, 24);
+            this.sectionReturns.Size = new System.Drawing.Size(454, 24);
             this.sectionReturns.Visible = false;
             // 
             // sectionShipment
@@ -113,12 +106,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.Location = new System.Drawing.Point(3, 34);
-            this.sectionShipment.Size = new System.Drawing.Size(262, 302);
+            this.sectionShipment.Size = new System.Drawing.Size(454, 302);
             // 
             // sectionLabelOptions
             // 
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 370);
-            this.sectionLabelOptions.Size = new System.Drawing.Size(262, 24);
+            this.sectionLabelOptions.Size = new System.Drawing.Size(454, 24);
             this.sectionLabelOptions.Visible = false;
             // 
             // weight
@@ -169,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
-            this.sectionFrom.Size = new System.Drawing.Size(262, 24);
+            this.sectionFrom.Size = new System.Drawing.Size(454, 24);
             this.sectionFrom.TabIndex = 0;
             // 
             // originControl
@@ -180,7 +173,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.originControl.Location = new System.Drawing.Point(0, 5);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
-            this.originControl.Size = new System.Drawing.Size(258, 0);
+            this.originControl.Size = new System.Drawing.Size(450, 0);
             this.originControl.TabIndex = 1;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
@@ -192,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(22, 198);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(164, 48);
+            this.insuranceControl.Size = new System.Drawing.Size(425, 48);
             this.insuranceControl.TabIndex = 12;
             // 
             // dimensionsControl
@@ -325,7 +318,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.AutoScroll = true;
             this.Controls.Add(this.sectionFrom);
             this.Name = "AmazonServiceControl";
-            this.Size = new System.Drawing.Size(268, 440);
+            this.Size = new System.Drawing.Size(460, 440);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
