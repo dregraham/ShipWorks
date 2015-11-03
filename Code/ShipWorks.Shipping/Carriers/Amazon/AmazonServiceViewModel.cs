@@ -13,6 +13,7 @@ using Interapptive.Shared.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -21,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonServiceViewModel : INotifyPropertyChanged, IDisposable
     {
-        private readonly IMessenger messenger;
+        private readonly IObservable<IShipWorksMessage> messenger;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private GenericMultiValueBinder<ShipmentEntity, DateTime> dateMustArriveBy;
@@ -31,17 +32,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private IMultiValue<AmazonDeliveryExperienceType> deliveryExperienceBinder;
         private GenericMultiValueBinder<ShipmentEntity, AmazonRateTag> shippingServiceBinder;
         private List<AmazonRateTag> servicesAvailable;
-        private readonly MessengerToken amazonRatesRetrievedMessengerToken;
+        private readonly IDisposable amazonRatesRetrievedIDisposable;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonServiceViewModel(IMessenger messenger)
+        public AmazonServiceViewModel(IObservable<IShipWorksMessage> messenger)
         {
             this.messenger = messenger;
             handler = new PropertyChangedHandler(() => PropertyChanged);
 
-            amazonRatesRetrievedMessengerToken = messenger.Handle<AmazonRatesRetrievedMessage>(this, OnAmazonRatesRetrieved);
+            amazonRatesRetrievedIDisposable = messenger.OfType<AmazonRatesRetrievedMessage>().Subscribe(OnAmazonRatesRetrieved);
         }
 
         /// <summary>
@@ -321,10 +322,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             if (disposing)
             {
-                if (amazonRatesRetrievedMessengerToken != null)
-                {
-                    messenger.Remove(amazonRatesRetrievedMessengerToken);
-                }
+                amazonRatesRetrievedIDisposable?.Dispose();
             }
         }
 

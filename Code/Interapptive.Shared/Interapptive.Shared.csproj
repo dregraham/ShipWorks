@@ -295,7 +295,6 @@
     <Compile Include="Messaging\IMessenger.cs" />
     <Compile Include="Messaging\IShipWorksMessage.cs" />
     <Compile Include="Messaging\Messenger.cs" />
-    <Compile Include="Messaging\MessengerToken.cs" />
     <Compile Include="MyComputer.cs" />
     <Compile Include="Net\CertificateRequest.cs" />
     <Compile Include="Net\CertificateSecurityLevel.cs" />
