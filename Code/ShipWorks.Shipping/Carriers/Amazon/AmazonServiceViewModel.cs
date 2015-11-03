@@ -50,23 +50,23 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnAmazonRatesRetrieved(AmazonRatesRetrievedMessage amazonRatesRetrievedMessage)
         {
-            AmazonRateTag selectedRateTag = ShippingService;
             RateGroup rateGroup = amazonRatesRetrievedMessage.RateGroup;
+
             List<AmazonRateTag> services = rateGroup.Rates.Select(r => (AmazonRateTag)r.Tag).ToList();
 
             if (!services.Any())
             {
-                selectedRateTag = new AmazonRateTag() {Description = "No rates are available for the shipment.", ShippingServiceId = null, ShippingServiceOfferId = null};
+                AmazonRateTag selectedRateTag = new AmazonRateTag() {Description = "No rates are available for the shipment.", ShippingServiceId = null, ShippingServiceOfferId = null};
                 services.Insert(0, selectedRateTag);
+                ShippingService = selectedRateTag;
             }
             else if (!shippingServiceBinder.IsMultiValued && services.All(s => s.ShippingServiceId != ShippingService.ShippingServiceId))
             {
-                selectedRateTag = new AmazonRateTag() { Description = "Please select a service", ShippingServiceId = null, ShippingServiceOfferId = null };
-                services.Insert(0, selectedRateTag);
+                services.Insert(0, new AmazonRateTag() { Description = "Please select a service", ShippingServiceId = null, ShippingServiceOfferId = null });
             }
 
             ServicesAvailable = services;
-            ShippingService = selectedRateTag;
+            shippingServiceBinder.PropertyValue = ShippingService;
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             shippingServiceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonRateTag>(shipments,
                 nameof(ShippingService),
-                entity => ServicesAvailable.FirstOrDefault(s => s?.ShippingServiceId == entity.Amazon.ShippingServiceID),
+                entity => ServicesAvailable.FirstOrDefault(s => s.ShippingServiceId == entity.Amazon.ShippingServiceID),
                 (entity, value) =>
                 {
                     if (value?.ShippingServiceId != entity.Amazon.ShippingServiceID)
@@ -266,8 +266,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         [Obfuscation(Exclude = true)]
         public bool ContentWeightIsMultiValued => weightBinder.IsMultiValued;
 
-        private AmazonRateTag shippingService;
-
         /// <summary>
         /// ShippingServiceName display text
         /// </summary>
@@ -276,12 +274,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             get
             {
-                return shippingService;
+                return shippingServiceBinder.PropertyValue;
             }
             set
             {
-                handler.Set(nameof(ShippingService), ref shippingService, value);
                 shippingServiceBinder.PropertyValue = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(ShippingService)));
             }
         }
 
