@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private GenericMultiValueBinder<ShipmentEntity, DateTime> dateMustArriveBy;
         private GenericMultiValueBinder<ShipmentEntity, double> weightBinder;
         private CheckboxMultiValueBinder<ShipmentEntity> carrierWillPickUpBinder;
-        private CheckboxMultiValueBinder<ShipmentEntity> sendDeliverByBinder;
+        private CheckboxMultiValueBinder<ShipmentEntity> sendDateMustArriveByBinder;
         private IMultiValue<AmazonDeliveryExperienceType> deliveryExperienceBinder;
         private GenericMultiValueBinder<ShipmentEntity, AmazonRateTag> shippingServiceBinder;
         private List<AmazonRateTag> servicesAvailable;
@@ -102,8 +102,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 entity => entity.Amazon.CarrierWillPickUp,
                 (entity, value) => entity.Amazon.CarrierWillPickUp = value);
 
-            sendDeliverByBinder = new CheckboxMultiValueBinder<ShipmentEntity>(shipments,
-                nameof(SendDeliverBy),
+            sendDateMustArriveByBinder = new CheckboxMultiValueBinder<ShipmentEntity>(shipments,
+                nameof(SendDateMustArriveBy),
                 entity => entity.Amazon.SendDateMustArriveBy,
                 (entity, value) => entity.Amazon.SendDateMustArriveBy = value);
 
@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             dateMustArriveBy.PropertyChanged += OnPropertyChanged;
             weightBinder.PropertyChanged += OnPropertyChanged;
             carrierWillPickUpBinder.PropertyChanged += OnPropertyChanged;
-            sendDeliverByBinder.PropertyChanged += OnPropertyChanged;
+            sendDateMustArriveByBinder.PropertyChanged += OnPropertyChanged;
             deliveryExperienceBinder.PropertyChanged += OnPropertyChanged;
             shippingServiceBinder.PropertyChanged += OnPropertyChanged;
         }
@@ -156,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             weightBinder.Save();
             carrierWillPickUpBinder.Save();
-            sendDeliverByBinder.Save();
+            sendDateMustArriveByBinder.Save();
             deliveryExperienceBinder.Save();
             shippingServiceBinder.Save();
         }
@@ -165,15 +165,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// SendDeliverBy display text
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool SendDeliverBy
+        public bool SendDateMustArriveBy
         {
             get
             {
-                return sendDeliverByBinder.PropertyValue;
+                return sendDateMustArriveByBinder.PropertyValue;
             }
             set
             {
-                sendDeliverByBinder.PropertyValue = value;
+                sendDateMustArriveByBinder.PropertyValue = value;
             }
         }
 
@@ -181,13 +181,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// SendDeliverBy is multi valued.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool SendDeliverByIsMultiValued => sendDeliverByBinder.IsMultiValued;
+        public bool SendDeliverByIsMultiValued => sendDateMustArriveByBinder.IsMultiValued;
 
         /// <summary>
         /// SendDeliverByCheckState is multi valued.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public CheckState SendDeliverByCheckState => sendDeliverByBinder.CheckStateValue;
+        public CheckState SendDeliverByCheckState => sendDateMustArriveByBinder.CheckStateValue;
 
         /// <summary>
         /// CarrierWillPickUp display text
