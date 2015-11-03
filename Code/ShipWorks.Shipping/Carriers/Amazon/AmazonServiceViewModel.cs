@@ -56,13 +56,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (!services.Any())
             {
-                AmazonRateTag selectedRateTag = new AmazonRateTag {Description = "No rates are available for the shipment.", ShippingServiceId = null, ShippingServiceOfferId = null};
+                AmazonRateTag selectedRateTag = new AmazonRateTag {Description = "No rates are available for the shipment.", ShippingServiceId = "-1", ShippingServiceOfferId = null};
                 services.Insert(0, selectedRateTag);
                 ShippingService = selectedRateTag;
             }
             else if (!shippingServiceBinder.IsMultiValued && services.All(s => s.ShippingServiceId != ShippingService.ShippingServiceId))
             {
-                services.Insert(0, new AmazonRateTag() { Description = "Please select a service", ShippingServiceId = null, ShippingServiceOfferId = null });
+                AmazonRateTag selectedRateTag = new AmazonRateTag { Description = "Please select a service", ShippingServiceId = "-2", ShippingServiceOfferId = null };
+                services.Insert(0, selectedRateTag);
+                ShippingService = selectedRateTag;
             }
 
             ServicesAvailable = services;
