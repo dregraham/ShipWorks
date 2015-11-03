@@ -31,35 +31,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         }
 
         [Fact]
-        public void Create_ReturnsAmazonMwsWebClientSettings_FromShipment()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                AmazonAccountEntity amazonAccount = new AmazonAccountEntity()
-                {
-                    AmazonAccountID = 123,
-                    MerchantID = "testMerchantID",
-                    AuthToken = "abc123"
-                };
-
-                AmazonShipmentEntity shipment = new AmazonShipmentEntity()
-                {
-                    AmazonAccountID = 123
-                };
-
-                mock.Mock<IAmazonAccountManager>()
-                    .Setup(a => a.GetAccount(123))
-                    .Returns(amazonAccount);
-                
-                AmazonMwsWebClientSettingsFactory settingsFactory = mock.Create<AmazonMwsWebClientSettingsFactory>();
-
-                AmazonMwsWebClientSettings testObject = settingsFactory.Create(shipment);
-
-                Assert.Equal("testMerchantID", testObject.Connection.MerchantId);
-            }
-        }
-
-        [Fact]
         public void Create_ThrowsException_WhenOrderIsNull()
         {
             using (var mock = AutoMock.GetLoose())

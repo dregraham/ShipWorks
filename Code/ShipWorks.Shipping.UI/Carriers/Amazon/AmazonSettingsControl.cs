@@ -6,10 +6,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
     public partial class AmazonSettingsControl : SettingsControlBase
     {
-        public AmazonSettingsControl(IAmazonAccountManager accountManager)
+        public AmazonSettingsControl()
         {
             InitializeComponent();
-            accountManagerControl.AccountManager = accountManager;
         }
 
 
@@ -17,9 +16,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         /// Load the settings into the control
         /// </summary>
         public override void LoadSettings()
-        {
-            accountManagerControl.Initialize();
-                        
+        {                        
             //TODO Set insurance provider based on database field for Amazon Insurance
             //ShippingSettingsEntity settings = ShippingSettings.Fetch();
             //insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.;

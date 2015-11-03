@@ -85,18 +85,6 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
-    <Compile Include="Carriers\Amazon\AmazonAccountEditorDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Carriers\Amazon\AmazonAccountEditorDlg.Designer.cs">
-      <DependentUpon>AmazonAccountEditorDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Carriers\Amazon\AmazonAccountManagerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Carriers\Amazon\AmazonAccountManagerControl.Designer.cs">
-      <DependentUpon>AmazonAccountManagerControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Carriers\Amazon\AmazonOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -162,12 +150,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Carriers\Amazon\AmazonAccountEditorDlg.resx">
-      <DependentUpon>AmazonAccountEditorDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Carriers\Amazon\AmazonAccountManagerControl.resx">
-      <DependentUpon>AmazonAccountManagerControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Amazon\AmazonOptionsControl.resx">
       <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -183,6 +165,7 @@
     <EmbeddedResource Include="Carriers\Amazon\AmazonProfileControl.resx">
       <DependentUpon>AmazonProfileControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

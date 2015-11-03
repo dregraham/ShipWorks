@@ -28,7 +28,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentType : ShipmentType
     {
-        private readonly IAmazonAccountManager accountManager;
         private readonly Func<IAmazonRates> amazonRatesFactory;
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
@@ -38,10 +37,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, 
+        public AmazonShipmentType(IDateTimeProvider dateTimeProvider, 
             Func<IAmazonRates> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, IStoreManager storeManager, IOrderManager orderManager)
         {
-            this.accountManager = accountManager;
             this.amazonRatesFactory = amazonRatesFactory;
             this.amazonLabelServiceFactory = amazonLabelServiceFactory;
             this.storeManager = storeManager;
@@ -174,10 +172,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             Debug.Assert(amazonOrder != null);
 
             amazonShipment.DateMustArriveBy = amazonOrder?.LatestExpectedDeliveryDate ?? dateTimeProvider.Now.AddDays(2);
-
-            // TODO: This should probably be removed when we have amazon profiles...
-            long accountID = accountManager.Accounts.Any() ? accountManager.Accounts.First().AmazonAccountID : 0;
-            amazonShipment.AmazonAccountID = accountID;
 
             amazonShipment.DimsWeight = shipment.ContentWeight;
             amazonShipment.CarrierWillPickUp = false;

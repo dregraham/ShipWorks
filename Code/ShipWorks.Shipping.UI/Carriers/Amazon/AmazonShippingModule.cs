@@ -20,17 +20,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<AmazonCredentials>()
-                .AsSelf()
-                .As<IAmazonCredentials>();
-
             builder.RegisterType<AmazonShipmentSetupWizard>()
                 .Keyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Amazon)
                 .InstancePerLifetimeScope();
-
-            builder.RegisterType<AmazonAccountEditorDlg>();
-            builder.RegisterType<AmazonAccountEditorViewModel>();
-
+            
             builder.RegisterType<AmazonSettingsControl>()
                 .Keyed<SettingsControlBase>(ShipmentTypeCode.Amazon)
                 .InstancePerLifetimeScope();
@@ -38,11 +31,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<AmazonShipmentType>()
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Amazon)
-                .SingleInstance();
-
-            builder.RegisterType<AmazonAccountManager>()
-                .AsImplementedInterfaces()
-                .As<AccountManagerBase<AmazonAccountEntity>>()
                 .SingleInstance();
 
             builder.RegisterType<AmazonServiceControl>()

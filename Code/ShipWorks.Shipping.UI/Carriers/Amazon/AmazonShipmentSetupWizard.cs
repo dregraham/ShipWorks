@@ -7,6 +7,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
+using ShipWorks.Data.Connection;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -16,8 +18,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public partial class AmazonShipmentSetupWizard : ShipmentTypeSetupWizardForm
     {
         private readonly AmazonShipmentType shipmentType;
-        private readonly AmazonCredentials credentialViewModel;
-        private readonly IAmazonAccountManager accountManager;
         private readonly IShippingSettings shippingSettings;
         private ShippingWizardPageFinish shippingWizardPageFinish;
 
@@ -33,14 +33,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Constructor
         /// </summary>
         /// <param name="shipmentType"></param>
-        /// <param name="credentialViewModel"></param>
-        /// <param name="accountManager"></param>
         /// <param name="shippingSettings"></param>
-        public AmazonShipmentSetupWizard(AmazonShipmentType shipmentType, AmazonCredentials credentialViewModel, IAmazonAccountManager accountManager, IShippingSettings shippingSettings) : this()
+        public AmazonShipmentSetupWizard(AmazonShipmentType shipmentType, IShippingSettings shippingSettings) : this()
         {
             this.shipmentType = shipmentType;
-            this.credentialViewModel = credentialViewModel;
-            this.accountManager = accountManager;
             this.shippingSettings = shippingSettings;
         }
 
@@ -49,15 +45,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            merchantId.DataBindings.Add(nameof(merchantId.Text), credentialViewModel, nameof(credentialViewModel.MerchantId));
-            authToken.DataBindings.Add(nameof(authToken.Text), credentialViewModel, nameof(credentialViewModel.AuthToken)); //, false, DataSourceUpdateMode.OnPropertyChanged);
-
             Pages.Add(new ShippingWizardPageDefaults(shipmentType));
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(CreateFinishPage());
-
-            credentialViewModel.PopulateFromStore();
         }
 
         /// <summary>
@@ -71,24 +62,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Stepping next from the credentials page
-        /// </summary>
-        private void OnNextStepCredentials(object sender, WizardStepEventArgs e)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-
-            credentialViewModel.Validate();
-
-            Cursor.Current = Cursors.Default;
-
-            if (!credentialViewModel.Success)
-            {
-                MessageHelper.ShowError(this, credentialViewModel.Message);
-                e.NextPage = CurrentPage;
-            }
-        }
-
-        /// <summary>
         /// Next pressed on contact screen
         /// </summary>
         private void OnStepNextContactInfo(object sender, WizardStepEventArgs e)
@@ -96,6 +69,53 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             if (!contactInformation.ValidateRequiredFields())
             {
                 e.NextPage = CurrentPage;
+            }
+
+            PersonAdapter shipper = new PersonAdapter();
+
+            contactInformation.SaveToEntity(shipper);
+
+            ShippingOriginEntity shippingOrigin = new ShippingOriginEntity();
+
+            shippingOrigin.Description = shipper.Street1;
+            shippingOrigin.FirstName = shipper.FirstName;
+            shippingOrigin.LastName = shipper.LastName;
+            shippingOrigin.MiddleName = shipper.MiddleName;
+            shippingOrigin.Company = shipper.Company;
+            shippingOrigin.Street1 = shipper.Street1;
+            shippingOrigin.Street2 = shipper.Street2;
+            shippingOrigin.Street3 = shipper.Street3;
+            shippingOrigin.City = shipper.City;
+            shippingOrigin.StateProvCode = shipper.StateProvCode;
+            shippingOrigin.PostalCode = shipper.PostalCode;
+            shippingOrigin.CountryCode = shipper.CountryCode;
+            shippingOrigin.Phone = shipper.Phone;
+            shippingOrigin.Fax = shipper.Fax;
+            shippingOrigin.Email = shipper.Email;
+            shippingOrigin.Website = shipper.Website;
+
+            try
+            {
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.SaveAndRefetch(shippingOrigin);
+                }
+            }
+            catch (ORMQueryExecutionException ex)
+            {
+                if (ex.Message.Contains("IX_ShippingOrigin_Description"))
+                {
+                    MessageHelper.ShowMessage(this, "A shipper with the selected name or description already exists.");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            catch (ORMConcurrencyException)
+            {
+                MessageHelper.ShowError(this, "Your changes cannot be saved because another use has deleted the shipper.");
+                DialogResult = DialogResult.Abort;
             }
         }
 
@@ -106,36 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <param name="e"></param>
         private void OnSteppingIntoFinish(object sender, WizardSteppingIntoEventArgs e)
         {
-            AmazonAccountEntity account = new AmazonAccountEntity();
-            credentialViewModel.PopulateAccount(account);
-            contactInformation.SaveToEntity(new PersonAdapter(account, string.Empty));
-            account.Description = accountManager.GetDefaultDescription(account);
-
-            accountManager.SaveAccount(account);
-
             shippingSettings.MarkAsConfigured(ShipmentTypeCode.Amazon);
-
-            //TODO: Enable this logic when we implement profiles for Amazon
-            //// If this is the only account, update this shipment type profiles with this account
-            //List<AmazonAccountEntity> accounts = accountManager.Accounts.ToList();
-
-            //if (accounts.Count == 1)
-            //{
-            //    AmazonAccountEntity accountEntity = accounts.First();
-
-            //    // Update any profiles to use this account if this is the only account
-            //    // in the system. This is to account for the situation where there a multiple
-            //    // profiles that may be associated with a previous account that has since
-            //    // been deleted. 
-            //    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.OnTrac))
-            //    {
-            //        if (shippingProfileEntity.OnTrac.OnTracAccountID.HasValue)
-            //        {
-            //            shippingProfileEntity.OnTrac.OnTracAccountID = accountEntity.OnTracAccountID;
-            //            ShippingProfileManager.SaveProfile(shippingProfileEntity);
-            //        }
-            //    }
-            //}
         }
     }
 }

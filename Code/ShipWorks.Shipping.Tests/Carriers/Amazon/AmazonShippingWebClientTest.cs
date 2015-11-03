@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             IAmazonShippingWebClient client = new AmazonShippingWebClient();
                 
-            Assert.Throws<AmazonShipperException>(() => client.ValidateCreateShipmentResponse(null));
+            Assert.Throws<AmazonShippingException>(() => client.ValidateCreateShipmentResponse(null));
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using System;
 
@@ -10,11 +12,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonMwsWebClientSettingsFactory : IAmazonMwsWebClientSettingsFactory
     {
-        IAmazonAccountManager accountManager;
+        private readonly IOrderManager orderManager;
+        private readonly IStoreManager storeManager;
 
-        public AmazonMwsWebClientSettingsFactory(IAmazonAccountManager accountManager)
+        public AmazonMwsWebClientSettingsFactory(IOrderManager orderManager, IStoreManager storeManager)
         {
-            this.accountManager = accountManager;
+            this.orderManager = orderManager;
+            this.storeManager = storeManager;
         }
 
         /// <summary>
@@ -25,15 +29,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public AmazonMwsWebClientSettings Create(AmazonShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+                        
+            orderManager.PopulateOrderDetails(shipment.Shipment);
 
-            AmazonAccountEntity account = accountManager.GetAccount(shipment.AmazonAccountID);
+            long storeId = shipment.Shipment.Order.StoreID;
 
-            if (account == null)
-            {
-                throw new AmazonShippingException("Amazon shipping account no longer exists");
-            }
+            StoreEntity storeEntity = storeManager.GetStore(storeId);
 
-            return new AmazonMwsWebClientSettings(new AmazonMwsConnection(account.MerchantID, account.AuthToken, "US"));
+            return Create((AmazonStoreEntity)storeEntity);
         }
 
         /// <summary>

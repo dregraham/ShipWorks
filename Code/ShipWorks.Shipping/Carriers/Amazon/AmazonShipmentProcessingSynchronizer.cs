@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -10,15 +11,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private readonly IAmazonAccountManager amazonAccountManager;
+        private readonly IShippingSettings shippingSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonShipmentProcessingSynchronizer"/> class.
         /// </summary>
-        /// <param name="amazonAccountManager">The account manager.</param>
-        public AmazonShipmentProcessingSynchronizer(IAmazonAccountManager amazonAccountManager)
+        public AmazonShipmentProcessingSynchronizer(IShippingSettings shippingSettings)
         {
-            this.amazonAccountManager = amazonAccountManager;
+            this.shippingSettings = shippingSettings;
         }
 
         /// <summary>
@@ -29,7 +29,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </value>
         public bool HasAccounts
         {
-            get { return amazonAccountManager.Accounts.Any(); }
+            get
+            {
+                // No accounts for Amazon, return true if Amazon has been configured
+                return shippingSettings.GetConfiguredTypes().Contains((int)ShipmentTypeCode.Amazon);
+            }
         }
 
         /// <summary>
@@ -40,15 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <param name="shipment">The shipment.</param>
         public void SaveAccountToShipment(ShipmentEntity shipment)
         {
-            if (amazonAccountManager.Accounts.Any())
-            {
-                // Grab the first account in the repository to set the account ID
-                shipment.Amazon.AmazonAccountID = amazonAccountManager.Accounts.First().AmazonAccountID;
-            }
-            else
-            {
-                throw new AmazonException("An Amazon account must be created to process this shipment.");
-            }
+            // Do nothing - there aren't any accounts for Amazon
         }
 
         /// <summary>
@@ -57,10 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void ReplaceInvalidAccount(ShipmentEntity shipment)
         {
-            if (HasAccounts && amazonAccountManager.GetAccount(shipment.Amazon.AmazonAccountID) == null)
-            {
-                SaveAccountToShipment(shipment);
-            }
+            // Do nothing - there aren't any accounts for Amazon
         }
     }
 }

@@ -69,6 +69,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             // sectionRecipient
             // 
+            // 
+            // sectionRecipient.ContentPanel
+            // 
+            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.Location = new System.Drawing.Point(3, 341);
             this.sectionRecipient.Size = new System.Drawing.Size(454, 24);
             this.sectionRecipient.TabIndex = 1;
@@ -185,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(22, 198);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(425, 48);
+            this.insuranceControl.Size = new System.Drawing.Size(494, 48);
             this.insuranceControl.TabIndex = 12;
             // 
             // dimensionsControl

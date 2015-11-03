@@ -30,35 +30,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         /// </summary>
         private void InitializeComponent()
         {
-            this.accountManagerControl = new ShipWorks.Shipping.Carriers.Amazon.AmazonAccountManagerControl();
-            this.managerLabel = new System.Windows.Forms.Label();
             this.labelShipmentProtection = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.insuranceProviderChooser = new ShipWorks.Shipping.Insurance.InsuranceProviderChooser();
             this.amazonOptionsControl1 = new ShipWorks.Shipping.Carriers.Amazon.AmazonOptionsControl();
-            this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // accountManagerControl
-            // 
-            this.accountManagerControl.AccountManager = null;
-            this.accountManagerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountManagerControl.Location = new System.Drawing.Point(19, 21);
-            this.accountManagerControl.Name = "accountManagerControl";
-            this.accountManagerControl.Size = new System.Drawing.Size(400, 168);
-            this.accountManagerControl.TabIndex = 0;
-            // 
-            // managerLabel
-            // 
-            this.managerLabel.AutoSize = true;
-            this.managerLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.managerLabel.Location = new System.Drawing.Point(5, 5);
-            this.managerLabel.Name = "managerLabel";
-            this.managerLabel.Size = new System.Drawing.Size(108, 13);
-            this.managerLabel.TabIndex = 21;
-            this.managerLabel.Text = "Amazon Accounts";
             // 
             // labelShipmentProtection
             // 
@@ -69,15 +46,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             this.labelShipmentProtection.Size = new System.Drawing.Size(123, 13);
             this.labelShipmentProtection.TabIndex = 22;
             this.labelShipmentProtection.Text = "Shipment Protection";
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.accountManagerControl);
-            this.panel1.Controls.Add(this.managerLabel);
-            this.panel1.Location = new System.Drawing.Point(5, 47);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(425, 195);
-            this.panel1.TabIndex = 23;
             // 
             // panel2
             // 
@@ -112,11 +80,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.amazonOptionsControl1);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
             this.Name = "AmazonSettingsControl";
             this.Size = new System.Drawing.Size(445, 359);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
@@ -124,11 +89,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         }
 
         #endregion
-
-        private AmazonAccountManagerControl accountManagerControl;
-        private System.Windows.Forms.Label managerLabel;
         private System.Windows.Forms.Label labelShipmentProtection;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private Insurance.InsuranceProviderChooser insuranceProviderChooser;
         private AmazonOptionsControl amazonOptionsControl1;
