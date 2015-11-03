@@ -56,14 +56,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (173 + 0));
+			base.InitClass( (172 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
 			InitActionQueueSelectionEntityInfos();
 			InitActionQueueStepEntityInfos();
 			InitActionTaskEntityInfos();
-			InitAmazonAccountEntityInfos();
 			InitAmazonASINEntityInfos();
 			InitAmazonOrderEntityInfos();
 			InitAmazonOrderItemEntityInfos();
@@ -321,29 +320,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ActionTaskEntity", "FlowSuccess", typeof(System.Int32), false, false, false, false,  (int)ActionTaskFieldIndex.FlowSuccess, 0, 0, 10);
 			base.AddElementFieldInfo("ActionTaskEntity", "FlowSkipped", typeof(System.Int32), false, false, false, false,  (int)ActionTaskFieldIndex.FlowSkipped, 0, 0, 10);
 			base.AddElementFieldInfo("ActionTaskEntity", "FlowError", typeof(System.Int32), false, false, false, false,  (int)ActionTaskFieldIndex.FlowError, 0, 0, 10);
-		}
-		/// <summary>Inits AmazonAccountEntity's FieldInfo objects</summary>
-		private void InitAmazonAccountEntityInfos()
-		{
-			base.AddElementFieldInfo("AmazonAccountEntity", "AmazonAccountID", typeof(System.Int64), true, false, true, false,  (int)AmazonAccountFieldIndex.AmazonAccountID, 0, 0, 19);
-			base.AddElementFieldInfo("AmazonAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)AmazonAccountFieldIndex.RowVersion, 0, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "MerchantID", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.MerchantID, 50, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "AuthToken", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.AuthToken, 100, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.Description, 50, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.FirstName, 30, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.MiddleName, 30, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "LastName", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.LastName, 30, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "Company", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.Company, 30, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "Street1", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.Street1, 60, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "Street2", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.Street2, 60, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "Street3", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.Street3, 60, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "City", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.City, 50, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "StateProvCode", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.StateProvCode, 50, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "PostalCode", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.PostalCode, 20, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.CountryCode, 50, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.Phone, 25, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.Email, 100, 0, 0);
-			base.AddElementFieldInfo("AmazonAccountEntity", "Website", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.Website, 50, 0, 0);
 		}
 		/// <summary>Inits AmazonASINEntity's FieldInfo objects</summary>
 		private void InitAmazonASINEntityInfos()

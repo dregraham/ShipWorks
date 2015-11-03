@@ -190,7 +190,6 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "LemonStandStoreEntity": return EntityType.LemonStandStoreEntity;
 				case "LemonStandOrderEntity": return EntityType.LemonStandOrderEntity;
 				case "LemonStandOrderItemEntity": return EntityType.LemonStandOrderItemEntity;
-				case "AmazonAccountEntity": return EntityType.AmazonAccountEntity;
 				case "AmazonShipmentEntity": return EntityType.AmazonShipmentEntity;
 				case "AmazonProfileEntity": return EntityType.AmazonProfileEntity;
 				}
