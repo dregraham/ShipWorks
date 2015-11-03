@@ -10871,9 +10871,9 @@
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\TrackingLink\settings.xml" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Notes\settings.xml" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Notes\template.xsl" />
-    <Content Include="Templates\Distribution\Source\System\Snippets\TrackingLink\template.xsl">
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\TrackingLink\template.xsl">
       <SubType>Designer</SubType>
-    </Content>
+    </EmbeddedResource>
     <Content Include="Templates\Distribution\Source\System\Utility\XML Source\settings.xml" />
     <Content Include="Templates\Distribution\Source\System\Utility\XML Source\template.xsl" />
     <EmbeddedResource Include="Templates\Management\Skeletons\snippet.xsl" />

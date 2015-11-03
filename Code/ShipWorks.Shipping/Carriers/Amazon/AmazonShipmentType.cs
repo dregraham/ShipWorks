@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -19,6 +21,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -32,6 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly Func<IAmazonRates> amazonRatesFactory;
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
+        private readonly IShippingManager shippingManager;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly Func<IAmazonLabelService> amazonLabelServiceFactory;
         
@@ -39,13 +43,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Constructor
         /// </summary>
         public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, 
-            Func<IAmazonRates> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, IStoreManager storeManager, IOrderManager orderManager)
+            Func<IAmazonRates> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, 
+            IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager)
         {
             this.accountManager = accountManager;
             this.amazonRatesFactory = amazonRatesFactory;
             this.amazonLabelServiceFactory = amazonLabelServiceFactory;
             this.storeManager = storeManager;
             this.orderManager = orderManager;
+            this.shippingManager = shippingManager;
             this.dateTimeProvider = dateTimeProvider;
         }
 
@@ -336,6 +342,45 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 shipment.TotalWeight += shipment.Amazon.DimsWeight;
             }
+        }
+
+        /// <summary>
+        /// Tracks the shipment.
+        /// </summary>
+        public override TrackingResult TrackShipment(ShipmentEntity shipment)
+        {
+            if (string.IsNullOrWhiteSpace(shipment.TrackingNumber))
+            {
+                return new TrackingResult { Summary = "No tracking number found..." };
+            }
+
+            string trackingLink = string.Empty;
+
+            string serviceUsed = shippingManager.GetServiceUsed(shipment);
+            if (serviceUsed.IndexOf("ups", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                trackingLink = $"http://wwwapps.ups.com/WebTracking/processInputRequest?HTMLVersion=5.0&amp;loc=en_US&amp;Requester=UPSHome&amp;tracknum={shipment.TrackingNumber}&amp;AgreeToTermsAndConditions=yes&amp;track.x=46&amp;track.y=9";
+            }
+            else if (serviceUsed.IndexOf("DHL SM", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                trackingLink = $"http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber={shipment.TrackingNumber}";
+            }
+            else if (serviceUsed.IndexOf("USPS", StringComparison.OrdinalIgnoreCase) >= 0 || serviceUsed.IndexOf("SmartPost", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                trackingLink = $"https://tools.usps.com/go/TrackConfirmAction.action?tLabels={shipment.TrackingNumber}";
+            }
+            else if (serviceUsed.IndexOf("FedEx", StringComparison.OrdinalIgnoreCase) >= 0 && serviceUsed.IndexOf("FIMS", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                trackingLink = $"http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID={shipment.TrackingNumber}";
+            }
+            else if (serviceUsed.IndexOf("FedEx", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                trackingLink = $"http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers={shipment.TrackingNumber}";
+            }
+
+            return string.IsNullOrWhiteSpace(trackingLink) ?
+                new TrackingResult { Summary = "No tracking information available..." } :
+                new TrackingResult { Summary = $"<a href ={trackingLink}> Click here for tracking</a>" };
         }
     }
 }
