@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void CreateUiBindings()
         {
-            dimensionsControl.DimensionsChanged += DimensionsControl_DimensionsChanged;
+            dimensionsControl.DimensionsChanged += OnDimensionsChanged;
             
             deliveryConfirmation.DataBindings.Clear();
             deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.PropertyValue), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             carrierWillPickUp.DataBindings.Add(nameof(carrierWillPickUp.CheckState), viewModel, nameof(viewModel.CarrierWillPickUpCheckState), false, DataSourceUpdateMode.OnPropertyChanged);
 
             sendDeliverBy.DataBindings.Clear();
-            sendDeliverBy.DataBindings.Add(nameof(sendDeliverBy.Checked), viewModel, nameof(viewModel.SendDeliverBy), false, DataSourceUpdateMode.OnPropertyChanged);
+            sendDeliverBy.DataBindings.Add(nameof(sendDeliverBy.Checked), viewModel, nameof(viewModel.SendDateMustArriveBy), false, DataSourceUpdateMode.OnPropertyChanged);
             sendDeliverBy.DataBindings.Add(nameof(sendDeliverBy.CheckState), viewModel, nameof(viewModel.SendDeliverByCheckState), false, DataSourceUpdateMode.OnPropertyChanged);
 
             mustArriveByDate.DataBindings.Clear();
@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Handle when dimensions have changed
         /// </summary>
-        private void DimensionsControl_DimensionsChanged(object sender, EventArgs e)
+        private void OnDimensionsChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
         }
