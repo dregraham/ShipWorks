@@ -134,12 +134,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnServiceSelectedValueChanged(object sender, EventArgs e)
         {
-            AmazonRateTag newValue = (AmazonRateTag) service.SelectedItem;
+            AmazonRateTag newValue = (AmazonRateTag)service.SelectedItem;
 
             if (newValue?.ShippingServiceId != viewModel?.ShippingService?.ShippingServiceId)
             {
-                viewModel.ShippingService = newValue;
-                RateResult rateResult = RateControl.RateGroup.Rates.FirstOrDefault(r => ((AmazonRateTag) r.Tag).ShippingServiceId == newValue?.ShippingServiceId);
+                RateResult rateResult = RateControl.RateGroup.Rates.FirstOrDefault(r => ((AmazonRateTag)r.Tag).ShippingServiceId == newValue?.ShippingServiceId);
                 RateControl.SelectRate(rateResult);
             }
         }
@@ -153,9 +152,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 if (e.PropertyName == nameof(viewModel.ServicesAvailable))
                 {
-                    this.Invoke((MethodInvoker)delegate
+                    service.Invoke((MethodInvoker) delegate
                     {
+                        AmazonRateTag previousValue = viewModel.ShippingService;
                         service.BindDataSourceAndPreserveSelection(viewModel.ServicesAvailable);
+                        service.SelectedValue = previousValue.ShippingServiceId ?? string.Empty;
                     });
                     return;
                 }
@@ -173,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (amazonShipmentType.RatingFields.FieldsContainName(e.PropertyName))
             {
-                    RaiseRateCriteriaChanged();
+                RaiseRateCriteriaChanged();
             }
         }
 

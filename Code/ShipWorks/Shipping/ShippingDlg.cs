@@ -43,6 +43,7 @@ using ShipWorks.Users.Security;
 using log4net;
 using ShipWorks.Shipping.Policies;
 using Timer = System.Windows.Forms.Timer;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping
 {
@@ -107,7 +108,7 @@ namespace ShipWorks.Shipping
         private const int shipSenseChangedDebounceTime = 500;
         private bool shipSenseNeedsUpdated = false;
         private readonly CarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
-        private MessengerToken uspsAccountConvertedToken;
+        private IDisposable uspsAccountConvertedToken;
         private ILifetimeScope lifetimeScope;
 
         /// <summary>
@@ -165,7 +166,7 @@ namespace ShipWorks.Shipping
             shipments.ForEach(ShippingManager.EnsureShipmentLoaded);
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
-            uspsAccountConvertedToken = Messenger.Current.Handle<UspsAutomaticExpeditedChangedMessage>(this, OnStampsUspsAutomaticExpeditedChanged);
+            uspsAccountConvertedToken = Messenger.Current.OfType<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
 
             carrierConfigurationShipmentRefresher = new CarrierConfigurationShipmentRefresher(Messenger.Current, this, 
                 new ShippingProfileManagerWrapper(), new ShippingManagerWrapper());
@@ -2915,7 +2916,7 @@ namespace ShipWorks.Shipping
                     validatedAddressScope.Dispose();
                 }
 
-                Messenger.Current.Remove(uspsAccountConvertedToken);
+                uspsAccountConvertedToken?.Dispose();
             }
 
             base.Dispose(disposing);
