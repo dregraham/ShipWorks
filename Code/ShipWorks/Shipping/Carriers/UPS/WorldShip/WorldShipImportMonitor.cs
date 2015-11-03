@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
@@ -178,6 +179,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Runs on the background thread to import shipments that had been processed in WorldShip
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static void ImportFromWorldShip(object state)
         {
             // Don't do in a transaction, we'll get each row in a transaction later
@@ -296,6 +299,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// Updates shipping information received from WorldShip for a shipment(s)
         /// </summary>
         /// <param name="worldShipProcessedGrouping">The WorldShipProcessedGrouping for a shipment</param>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static void ProcessEntry(WorldShipProcessedGrouping worldShipProcessedGrouping)
         {
             // The shipment id used for updating tango

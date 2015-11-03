@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.IO.Text;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -393,6 +394,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Creates the Amazon Feed Xml for submitting and returns the path it is written to
         /// </summary>
+        [NDependIgnoreLongMethod]
         private string CreateFulfillmentFeed(List<ShipmentEntity> shipments)
         {
             using (TextWriter textWriter = new EncodingStringWriter(Encoding.UTF8))
@@ -612,6 +614,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Executes a request 
         /// </summary>
+        [NDependIgnoreLongMethod]
         private IHttpResponseReader ExecuteRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall)
         {
             try

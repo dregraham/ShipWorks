@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Interapptive.Shared;
 
 namespace ShipWorks.UI.Controls.Colors
 {
@@ -55,11 +56,12 @@ namespace ShipWorks.UI.Controls.Colors
          base.Dispose( disposing );
       }
 
-      /// <summary>
-      /// Required method for Designer support - do not modify
-      /// the contents of this method with the code editor.
-      /// </summary>
-      private void InitializeComponent()
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        [NDependIgnoreLongMethod]
+        private void InitializeComponent()
       {
           this.cancel = new System.Windows.Forms.Button();
           this.ok = new System.Windows.Forms.Button();

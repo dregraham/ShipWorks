@@ -288,6 +288,7 @@ namespace Interapptive.Shared.Data
         /// <param name="database">Name of the datbase to connect to</param>
         /// <param name="userName">User name used to connect to the database</param>
         /// <exception cref="T:OdbcManagerException" />
+        [NDependIgnoreTooManyParams]
         public void CreateDsn(string dsnName, string description, string server, string driverName, bool trustedConnection, string database, string userName)
         {
             // Add value to odbc data sources

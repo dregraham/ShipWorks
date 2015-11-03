@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -14,6 +15,8 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
         /// Creates a list of ShipSenseOrderItemKey instances for the given order items. The ShipSenseOrderItemKey instances
         /// will be configured with the names/values of the properties and attributes provided.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public IEnumerable<ShipSenseOrderItemKey> GetKeys(IEnumerable<OrderItemEntity> orderItems, List<string> propertyNames, List<string> attributeNames)
         {
             List<ShipSenseOrderItemKey> keys = new List<ShipSenseOrderItemKey>();

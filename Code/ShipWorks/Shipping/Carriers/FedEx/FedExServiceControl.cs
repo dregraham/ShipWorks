@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Editing;
@@ -21,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// The Service tab control for FedEx
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FedExServiceControl : ServiceControlBase
     {
         bool updatingPayorChoices = false;
@@ -151,6 +153,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Load all the shipment details
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadShipmentDetails()
         {
             bool allDomestic = true;
@@ -491,6 +494,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();

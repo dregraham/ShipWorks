@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Services.Protocols;
+using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using RestSharp.Validation;
@@ -146,6 +147,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// This method removes invalid properties on the shipment for the service type.
         /// </summary>
         /// <param name="shipmentEntity"></param>
+        [NDependIgnoreComplexMethodAttribute]
         private static void CleanShipmentForShipmentServiceType(ShipmentEntity shipmentEntity)
         {
             FedExShipmentEntity fedExShipmentEntity = shipmentEntity.FedEx;
@@ -216,6 +218,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// valid for SmartPost
         /// </summary>
         /// <param name="fedExShipmentEntity"></param>
+        [NDependIgnoreLongMethod]
         private static void CleanAndValidateShipmentForSmartPost(FedExShipmentEntity fedExShipmentEntity)
         {
             if (fedExShipmentEntity.Shipment.Insurance && fedExShipmentEntity.Shipment.InsuranceProvider == (int)Insurance.InsuranceProvider.Carrier)
@@ -839,6 +842,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="transitDays">The transit days.</param>
+        [NDependIgnoreComplexMethodAttribute]
         private static ServiceLevelType GetServiceLevel(FedExServiceType serviceType, int transitDays)
         {
             switch (serviceType)
@@ -879,6 +883,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get the integer number of days for the given fedex transit time value
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         private static int GetTransitDays(TransitTimeType transitTime)
         {
             switch (transitTime)
@@ -911,6 +916,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get our own FedExServiceType value for the given rate detail
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail, ShipmentEntity shipment)
         {
             switch (rateDetail.ServiceType)

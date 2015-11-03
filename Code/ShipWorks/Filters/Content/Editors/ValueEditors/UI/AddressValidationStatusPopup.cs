@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
 using ShipWorks.UI;
@@ -101,6 +102,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// <summary>
         /// Initialize Component
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void InitializeComponent()
         {
             this.statusPanel = new Panel();

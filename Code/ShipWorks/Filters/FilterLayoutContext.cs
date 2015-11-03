@@ -19,6 +19,7 @@ using System.Diagnostics;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Filters.Content.SqlGeneration;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
@@ -33,6 +34,7 @@ namespace ShipWorks.Filters
     /// <summary>
     /// Provides functionality for effeciently loading filter layouts
     /// </summary>
+    [NDependIgnoreLongTypes]
     public class FilterLayoutContext
     {
         // Logger
@@ -813,6 +815,7 @@ namespace ShipWorks.Filters
         /// Adds the given node as a child of the specified parent.  If move is true, then the node is moved to the target location.  Any soft-links from the 
         /// original location are deleted.  If move is false, a copy is made, and all original nodes are left as they were.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private List<FilterNodeEntity> SetNodeToParent(FilterNodeEntity filterNode, FilterNodeEntity parentNode, int position, bool move, SqlAdapter adapter)
         {
             FilterEntity filter = filterNode.Filter;
@@ -1072,6 +1075,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Delete the specified link using the given adapter
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void DeleteLink(FilterSequenceEntity sequence, SqlAdapter adapter)
         {
             FilterEntity filter = sequence.Filter;

@@ -26,6 +26,7 @@ using ShipWorks.Users.Security;
 using ShipWorks.Stores.Content;
 using ShipWorks.Data.Administration;
 using System.Data.SqlClient;
+using Interapptive.Shared;
 using ShipWorks.Stores;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Nudges;
@@ -165,6 +166,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Delete the given store 
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void DeleteStore(StoreEntity store, SqlAdapter adapter)
         {
             // At first I was just doing the following:

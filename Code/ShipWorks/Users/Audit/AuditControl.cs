@@ -32,6 +32,7 @@ using System.Threading;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
 using System.Globalization;
+using Interapptive.Shared;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Utility;
 using ShipWorks.Data.Caching;
@@ -592,6 +593,7 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// The thread that runs in the background to generate the search criteria object for the related to axis
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ThreadRelatedToCriteria()
         {
             try

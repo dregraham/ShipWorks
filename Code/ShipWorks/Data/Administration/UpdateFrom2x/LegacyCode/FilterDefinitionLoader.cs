@@ -28,6 +28,7 @@ using ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores;
 using System.Data.SqlClient;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized.Utility;
@@ -43,6 +44,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
     /// <summary>
     /// Responsible for loading a v2 filter XML into a v3 FilterDefinition
     /// </summary>
+    [NDependIgnoreLongTypes]
     public static class FilterDefinitionLoader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FilterDefinitionLoader));
@@ -191,6 +193,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Parse the given v2Condition and create its 3x counterpart
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static Condition LoadCondition(XElement v2Condition, FilterTarget target)
         {
             string conditionType = (string) v2Condition.Element("Type");
@@ -297,6 +301,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create a replica of a v2 "Emailed With" condition
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreateEmailedWithCondition(XElement v2Condition, FilterTarget target)
         {
             StringOperator stringOperator = ParseV2StringOperator((string) v2Condition.Element("Operator"));
@@ -398,6 +403,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create condition to match V2 PayPal payment status condition
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreatePayPalPaymentStatusCondition(XElement v2Condition, FilterTarget target)
         {
             PayPalPaymentStatusCondition condition = new PayPalPaymentStatusCondition();
@@ -429,6 +435,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create the Online Status condition to match v2 volusion
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreateVolusionOnlineStatusCondition(XElement v2Condition, FilterTarget target)
         {
             string code = (string) v2Condition.Element("TargetValue");
@@ -464,6 +471,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create the Online Status condition to match v2 infopia
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreateInfopiaOnlineStatusCondition(XElement v2Condition, FilterTarget target)
         {
             string code = (string) v2Condition.Element("TargetValue");
@@ -496,6 +504,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Read a condition to match an "Online Status" condition from the given v2 store type
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static Condition ReadOnlineStatusCondition(XElement v2Condition, StoreTypeCode storeType)
         {
             string code = (string) v2Condition.Element("TargetValue");
@@ -600,6 +610,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create condition to match v2 Payment Method condition
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreateEbayPaymentMethodCondition(XElement v2Condition, FilterTarget target)
         {
             int v2Method = (int) v2Condition.Element("TargetValue");
@@ -712,6 +723,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create condition to match v2 status condition
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreateShipmentStatusCondition(XElement v2Condition)
         {
             ShipmentStatusType statusType = ShipmentStatusType.Processed;

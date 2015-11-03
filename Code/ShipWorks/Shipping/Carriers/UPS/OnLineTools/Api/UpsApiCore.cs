@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using System.Xml;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Templates.Tokens;
@@ -181,10 +182,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         {
             return upsPackagingCodes[packagingType];
         }
-        
+
         /// <summary>
         /// Generate the packages XML for either rating or label generation.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void WritePackagesXml(UpsShipmentEntity ups, XmlTextWriter xmlWriter, bool forLabels, 
             UpsPackageWeightElementWriter weightElementWriter, UpsPackageServiceOptionsElementWriter serviceOptionsElementWriter)
         {

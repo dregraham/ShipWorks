@@ -12,6 +12,7 @@ using System.Xml;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Reflection;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Settings;
@@ -30,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// Wizard for setting up UPS OLT for the first time
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class UpsSetupWizard : ShipmentTypeSetupWizardForm
     {
         ShipmentType shipmentType;
@@ -101,6 +103,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Otherwise, if the user clicks next, pages for the currently selection option would be set, but if they click back
         /// and choose the other option, it's pages wouldn't be in the collection.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ResetWizardPagesCollection()
         {
             Pages.Clear();
@@ -243,6 +246,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Stepping next from the welcome page
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
             string accountNumber = EnteredAccountNumber();
@@ -496,6 +500,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Get the global instanced UPS access key
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool GetUpsAccessKey()
         {
             // Create the client for connecting to the UPS server
@@ -569,6 +574,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Get a UserId and Password
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool ProcessRegistration(int tries, bool showErrorMessage)
         {
             // Create the client for connecting to the UPS server

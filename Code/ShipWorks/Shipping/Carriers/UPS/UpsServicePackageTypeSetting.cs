@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using System;
+using Interapptive.Shared;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -45,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="declaredValueAllowed">Bool that represents whether Declared Value is allowed to be set.  For example, MI does not allow it.</param>
         /// <param name="dryIceAllowed">Bool that represents whether dry ice is allowed.  For example, Ground does not allow it.</param>
         /// <param name="verbalConfirmationAllowed">Bool that represents whether verbal confirmation is allowed.  For example, Ground does not allow it.</param>
+        [NDependIgnoreTooManyParams]
         public UpsServicePackageTypeSetting(UpsServiceType serviceType, UpsPackagingType packageType, WeightUnitOfMeasure weightUnitOfMeasure, float minWeight,
                                             float maxWeight, int maxPackages, bool declaredValueAllowed, bool dryIceAllowed, bool verbalConfirmationAllowed)
         {
@@ -189,6 +191,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="dryIceRegulationSet"></param>
         /// <param name="verbalConfirmationEnabled"></param>
         /// <exception cref="ShippingException" />
+        [NDependIgnoreTooManyParams]
+        [NDependIgnoreComplexMethodAttribute]
         private static void Validate(UpsServiceType upsServiceType, UpsPackagingType upsPackageType, float weightInPounds, int numberOfPackages, bool dryIceEnabled, double dryIceWeight, UpsDryIceRegulationSet dryIceRegulationSet, bool verbalConfirmationEnabled)
         {
             // Find the setting entry for the given service type and package type
@@ -273,6 +277,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// This is the list of allowed service/packge types, along with approved weight and packge counts
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static List<UpsServicePackageTypeSetting> GetServicePackageSettings()
         {
             // In v16 (2013), Tube is no longer valid for SurePost.  So find out what version we are running, and don't add Tube

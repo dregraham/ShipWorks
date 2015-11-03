@@ -23,6 +23,7 @@ using ShipWorks.Data.Connection;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using Interapptive.Shared;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.UI;
 using Interapptive.Shared.Business;
@@ -53,6 +54,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Process the confirm phase (1) of the ups shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static XmlDocument ProcessShipConfirm(ShipmentEntity shipment)
         {
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository());
@@ -310,10 +313,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             return UpsWebClient.ProcessRequest(xmlWriter, new TrustingCertificateInspector());
         }
-        
+
         /// <summary>
         /// Writes the Billing payment info for the shipment IF it's an International shipment.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void WriteInternationalBilling(UpsShipmentEntity ups, UpsAccountEntity account, XmlWriter xmlWriter)
         {
             if (!ShipmentTypeManager.GetType(ups.Shipment).IsDomestic(ups.Shipment))
@@ -386,6 +390,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Write the ShipmentCharge needed for the specific shipment charge type selected
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void WriteInternationalBillingDutiesTaxesShipmentCharge(UpsShipmentEntity ups, UpsAccountEntity account, XmlWriter xmlWriter)
         {
             UpsShipmentChargeType upsShipmentChargeType = (UpsShipmentChargeType)ups.ShipmentChargeType;
@@ -441,6 +446,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Writes the Billing payment info for the shipment IF it's a domestic shipment.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void WriteDomesticBilling(UpsShipmentEntity ups, UpsAccountEntity account, XmlWriter xmlWriter)
         {
             if (ShipmentTypeManager.GetType(ups.Shipment).IsDomestic(ups.Shipment))
@@ -531,6 +537,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Write the XML for generating UPS commercial invoice
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void WriteInternationalFormsXml(UpsAccountEntity account, UpsShipmentEntity ups, XmlTextWriter xmlWriter)
         {
             bool isSurePost = UpsUtility.IsUpsSurePostService((UpsServiceType)ups.Service);
@@ -706,6 +713,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Writes the appropriate Postal CN22 xml
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void WritePostalCN22(UpsShipmentEntity ups, XmlTextWriter xmlWriter)
         {
             UpsServiceType serviceType = (UpsServiceType)ups.Service;
@@ -967,6 +975,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Process the accept phase of the ship request
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void ProcessShipAccept(ShipmentEntity shipment, XPathNavigator shipConfirmNavigator)
         {
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository());

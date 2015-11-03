@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.UI.Utility;
@@ -63,6 +64,7 @@ namespace ShipWorks.Users.Security
         /// <summary>
         /// Load which permissions the checkboxes represent.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadBindings()
         {
             bindingController = new PermissionBindingController();

@@ -323,6 +323,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Gets the list of any missing permissions minimally required to run ShipWorks
         /// </summary>
+        [NDependIgnoreLongMethod]
         public List<string> DetermineMissingPermissions(SqlSessionPermissionSet permissionSet)
         {
             List<string> missing = new List<string>();

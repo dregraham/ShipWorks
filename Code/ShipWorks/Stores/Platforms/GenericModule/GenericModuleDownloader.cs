@@ -18,6 +18,7 @@ using log4net;
 using Interapptive.Shared.Business;
 using ShipWorks.ApplicationCore;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Import.Xml;
 
@@ -60,6 +61,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Begin order download
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override void Download()
         {
             try

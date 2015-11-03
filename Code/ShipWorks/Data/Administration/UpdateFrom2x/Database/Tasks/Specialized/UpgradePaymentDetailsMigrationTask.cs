@@ -7,6 +7,7 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using System.Data;
 using System.Transactions;
+using Interapptive.Shared;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
 {
@@ -113,6 +114,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// <summary>
         /// Save all PaymentDetails to the database, in the ShipWorks 3 table
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void SaveToDatabase(SqlConnection con, List<PaymentDetail> details)
         {
             string masterDatabaseName = (string)MigrationContext.Current.PropertyBag["MasterDatabase"];
