@@ -61,13 +61,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private RateGroup GetRateGroupFromResponse(GetEligibleShippingServicesResponse response)
         {
             List<RateResult> rateResults = new List<RateResult>();
+            RateGroup rateGroup;
 
             ShippingServiceList serviceList = response.GetEligibleShippingServicesResult.ShippingServiceList;
 
             if (serviceList.ShippingService.None() || serviceList.ShippingService.All(x => x.Rate == null))
             {
                 // Return an empty list of rates so that the rate control can display the appropriate text.
-                return new RateGroup(rateResults);
+                rateGroup = new RateGroup(rateResults);
             }
             else
             {
@@ -84,12 +85,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     rateResult.ProviderLogo = GetProviderLogo(shippingService.CarrierName ?? string.Empty);
                     rateResults.Add(rateResult);
                 }
+
+                rateGroup = new RateGroup(rateResults);
             }
 
-            RateGroup rateGroup = new RateGroup(rateResults);
-
             // Add terms and conditions footnote if needed
-            List <string> carriers = response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier.CarrierName;
+            List<string> carriers = response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier.CarrierName;
             if (carriers != null && carriers.Any())
             {
                 List<string> carrierNames = carriers.Distinct().ToList();
