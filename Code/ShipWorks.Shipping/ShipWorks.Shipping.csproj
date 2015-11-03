@@ -125,8 +125,6 @@
     <Compile Include="Carriers\Amazon\IAmazonCredentials.cs" />
     <Compile Include="Carriers\Amazon\IAmazonLabelService.cs" />
     <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
-    <Compile Include="Carriers\Amazon\IObservableMessenger.cs" />
-    <Compile Include="Carriers\Amazon\ObservableMessenger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
