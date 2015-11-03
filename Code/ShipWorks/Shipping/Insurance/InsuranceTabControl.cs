@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -81,6 +82,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         /// <param name="shipments">The list of shipments</param>
         /// <returns>True if the the view or edit control can be shown.  False otherwise.</returns>
+        [NDependIgnoreLongMethod]
         private bool IsValid(List<ShipmentEntity> shipments)
         {
             if (!shipments.Any())

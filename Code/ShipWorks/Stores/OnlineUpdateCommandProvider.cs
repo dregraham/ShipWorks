@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using ShipWorks.Data.Utility;
 using System.Windows.Forms;
 using System.ComponentModel;
+using Interapptive.Shared;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -69,6 +70,8 @@ namespace ShipWorks.Stores
         /// Execute the command.  Returns true if all headers were processed by the command, or false if some could not be processed because they did not
         /// match the store type supported by the command.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public void ExecuteCommandAsync(MenuCommand command, Control owner, IEnumerable<long> selectedKeys, MenuCommandCompleteEventHandler callback)
         {
             OnlineUpdateCommandSet commandSet = FindCommandSet(command);

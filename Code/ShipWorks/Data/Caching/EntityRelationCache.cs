@@ -21,6 +21,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using System.Data;
 using System.Data.SqlClient;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.ExecutionMode;
 
@@ -97,6 +98,8 @@ namespace ShipWorks.Data.Caching
         /// <summary>
         /// Translate the given list of ID's into all the keys they relate to of the given target type.  If fetchIsMissing is false, and ANY keys in the list are not cached, then null is returned.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public List<long> GetRelatedKeys(List<long> idList, EntityType relateToType, bool fetchIfMissing, SortDefinition sort)
         {
             if (idList == null)

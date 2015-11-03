@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -126,6 +127,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipment">The shipment.</param>
         /// <param name="brokerExceptions"></param>
         /// <returns>A list of RateResults composed of the single best rate for each account.</returns>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public virtual RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
             List<TAccount> accounts = new List<TAccount>();

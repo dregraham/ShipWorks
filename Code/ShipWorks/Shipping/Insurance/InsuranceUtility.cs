@@ -20,6 +20,7 @@ using log4net;
 using Interapptive.Shared.Net;
 using System.Drawing;
 using System.Xml;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -286,6 +287,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Get the shipworks cost for the given shipment with the specified declared value
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void FillInShipWorksCost(InsuranceCost cost, ShipmentEntity shipment, decimal declaredValue)
         {
             decimal adjustedValue = declaredValue;

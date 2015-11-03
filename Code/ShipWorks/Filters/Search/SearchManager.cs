@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Data.Adapter.Custom;
@@ -76,6 +77,7 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Create the single-instance search filter in the database.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void CreateSearchPlaceholder(FilterTarget target)
         {
             using (SqlAdapter adapter = new SqlAdapter())

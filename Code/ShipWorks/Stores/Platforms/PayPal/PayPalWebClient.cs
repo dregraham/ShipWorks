@@ -15,6 +15,7 @@ using log4net;
 using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore;
 using System.Security.Cryptography;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Platforms.PayPal
 {
@@ -395,6 +396,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// specifies whether or not to remove transaction types for which we can't get 
         /// details on. 
         /// </summary>
+        [NDependIgnoreLongMethod]
         public List<PaymentTransactionSearchResultType> GetTransactions(DateTime rangeStart, DateTime rangeEnd, bool filter)
         {
             TransactionSearchRequestType searchRequest = new TransactionSearchRequestType();

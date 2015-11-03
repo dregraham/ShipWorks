@@ -25,6 +25,7 @@ using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using ShipWorks.UI;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Appearance;
 using Interapptive.Shared.UI;
 using ShipWorks.Data;
@@ -36,6 +37,7 @@ namespace ShipWorks.Filters.Controls
     /// <summary>
     /// Control for displaying filters in a hierarchical tree display.
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FilterTree : UserControl
     {
         // Logger
@@ -119,6 +121,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Initialize the filter tree's context menu
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void InitializeContextMenu()
         {
             editionGuiHelper = new ShipWorks.Editions.EditionGuiHelper(this.components);

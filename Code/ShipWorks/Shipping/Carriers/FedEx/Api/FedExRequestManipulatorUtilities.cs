@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -158,6 +159,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get the API service type based on our internal value
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         public static WebServices.Ship.ServiceType GetApiServiceType(FedExServiceType serviceType)
         {
             switch (serviceType)

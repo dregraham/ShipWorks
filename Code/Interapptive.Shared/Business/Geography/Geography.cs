@@ -188,6 +188,7 @@ namespace Interapptive.Shared.Business.Geography
         /// <summary>
         /// Load the state list
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void LoadStates()
         {
             states.Add("Alabama", "AL");

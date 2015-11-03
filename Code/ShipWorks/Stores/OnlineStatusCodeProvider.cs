@@ -12,6 +12,7 @@ using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using System.IO;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores
 {
@@ -62,6 +63,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Update status codes from the online store
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void UpdateFromOnlineStore()
         {
             Dictionary<string, string> updates = new Dictionary<string, string>();

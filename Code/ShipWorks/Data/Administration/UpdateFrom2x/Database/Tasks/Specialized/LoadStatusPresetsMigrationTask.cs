@@ -6,6 +6,7 @@ using System.Transactions;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using System.Data;
+using Interapptive.Shared;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
@@ -53,6 +54,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// Execute the task
         /// </summary>
         /// <returns></returns>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         protected override int Run()
         {
             Progress.Detail = "Configuring Order Status Presets...";

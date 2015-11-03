@@ -14,6 +14,7 @@ using ShipWorks.Stores.Platforms.Ebay;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using System.Transactions;
+using Interapptive.Shared;
 using ShipWorks.Users.Audit;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.Utility;
@@ -120,6 +121,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// <summary>
         /// Update all the EffectiveXXX fields for eBay
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void UpdateEbayEffectiveFields(ProgressItem progress)
         {
             if (Post2xMigrationUtility.IsStepComplete(Post2xMigrationStep.UpdateEbayEffectiveFields))

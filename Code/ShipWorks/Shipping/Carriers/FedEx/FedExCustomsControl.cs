@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Utility;
@@ -21,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// Customized customs control for FedEx
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FedExCustomsControl : CustomsControlBase
     {
         private MessengerToken fedExServiceChangedToken;
@@ -54,6 +56,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Load the shipment data into the control
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing)
         {
             base.LoadShipments(shipments, enableEditing);
@@ -209,6 +212,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Save the data in the control to the shipments
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public override void SaveToShipments()
         {
             base.SaveToShipments();

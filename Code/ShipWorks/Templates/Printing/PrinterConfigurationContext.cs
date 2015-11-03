@@ -426,6 +426,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Changes to the specified PaperSource
         /// </summary>
+        [NDependIgnoreTooManyParams]
         private static NativePaperSettings SetPaperSettings(
             string printer,
             int paperSource,
@@ -620,6 +621,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Sets the default paper size
         /// </summary>
+        [NDependIgnoreTooManyParams]
         [DllImport(@"ShipWorks.Native.dll", SetLastError = true, BestFitMapping = false)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool PrintSetPaperSettings(

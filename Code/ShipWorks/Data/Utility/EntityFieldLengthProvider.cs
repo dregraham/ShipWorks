@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ComponentFactory.Krypton.Toolkit;
+using Interapptive.Shared;
 using ShipWorks.Templates.Tokens;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -213,6 +214,8 @@ namespace ShipWorks.Data.Utility
         /// <summary>
         /// Get the entity field associated with the given source
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static EntityField2 GetSourceField(EntityFieldLengthSource source)
         {
             switch (source)

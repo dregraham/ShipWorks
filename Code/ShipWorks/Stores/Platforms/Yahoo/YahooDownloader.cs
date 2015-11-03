@@ -22,6 +22,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Platforms.Yahoo
 {
@@ -202,6 +203,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Extract the order from the XML
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadOrder(XPathNavigator xpath)
         {
             // Get the OrderID

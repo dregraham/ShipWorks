@@ -16,6 +16,7 @@ using ShipWorks.Stores.Content;
 using System.Diagnostics;
 using ShipWorks.Data.Model.HelperClasses;
 using System.Globalization;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 
@@ -151,6 +152,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Loads a single order from the correctly positioned xpathnavigator
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadOrder(AmazonMwsClient client, XPathNamespaceNavigator xpath)
         {
             string amazonOrderID = XPathUtility.Evaluate(xpath, "amz:AmazonOrderId", "");
@@ -262,6 +264,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Loads the order items of an amazon order
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadOrderItems(AmazonMwsClient client, AmazonOrderEntity order)
         {
             foreach (XPathNamespaceNavigator navigator in client.GetOrderItems(order.AmazonOrderID))
@@ -412,6 +415,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Populates the Shipping Address
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void LoadAddresses(AmazonOrderEntity order, XPathNamespaceNavigator xpath)
         {
             bool addressExists = xpath.SelectSingleNode("amz:ShippingAddress") != null;

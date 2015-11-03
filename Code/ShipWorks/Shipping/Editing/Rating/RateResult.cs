@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
@@ -61,6 +62,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public RateResult(string description, string days, decimal amount, decimal? duties, decimal? taxes, decimal? shipping, object tag) : 
             this(description, days, amount, tag)
         {

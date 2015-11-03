@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Data.SqlClient;
+using Interapptive.Shared;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Users;
@@ -75,6 +76,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Initialization
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
             ordersControl.Initialize(ordersLayoutID, GridColumnDefinitionSet.OrderPanel, (GridColumnLayout layout) =>

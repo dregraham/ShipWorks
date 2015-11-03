@@ -17,6 +17,7 @@ using log4net;
 using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared.Utility;
 using System.Transactions;
+using Interapptive.Shared;
 using ShipWorks.Data.Connection;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Distribution;
@@ -130,6 +131,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// <summary>
         /// Method meant to be called from an async invoker to update the database in the background
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void AsyncImportTemplates(ProgressProvider progressProvider, string path)
         {
             var progressImport = progressProvider.ProgressItems.Add("Import Templates");

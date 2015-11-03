@@ -17,6 +17,7 @@ using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Shipping.Settings;
 using Autofac;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Editing.Rating
@@ -190,6 +191,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
+        [NDependIgnoreLongMethod]
         private void FetchRates(ShipmentEntity shipment, bool ignoreCache)
         {
             using (BackgroundWorker ratesWorker = new BackgroundWorker())

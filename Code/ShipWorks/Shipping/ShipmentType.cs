@@ -44,6 +44,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using System.Security.Cryptography;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Shipping.Carriers;
 
@@ -496,6 +497,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Attempts to apply ShipSense values to the given shipment.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ApplyShipSense(ShipmentEntity shipment)
         {
             if (!ShouldApplyShipSense)
@@ -1014,8 +1016,10 @@ namespace ShipWorks.Shipping
         public abstract IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment);
 
         protected RatingFields ratingField = null;
+
         public virtual RatingFields RatingFields
         {
+            [NDependIgnoreLongMethod]
             get
             {
                 if (ratingField != null)
@@ -1193,6 +1197,7 @@ namespace ShipWorks.Shipping
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address.
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         protected virtual bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
             bool requiresCustoms = !IsDomestic(shipment);

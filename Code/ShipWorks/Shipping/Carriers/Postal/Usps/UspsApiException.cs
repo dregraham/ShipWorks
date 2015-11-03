@@ -4,6 +4,7 @@ using System.Web.Services.Protocols;
 using System.Globalization;
 using System.Xml;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -29,6 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override string Message
         {
+            [NDependIgnoreLongMethod]
             get
             {
                 switch (code)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
@@ -349,6 +350,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Generate CA specific template item elements
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
         {
             var item = new Lazy<ChannelAdvisorOrderItemEntity>(() => (ChannelAdvisorOrderItemEntity) itemSource());

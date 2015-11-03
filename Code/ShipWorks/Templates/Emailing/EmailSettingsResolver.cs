@@ -7,6 +7,7 @@ using ShipWorks.Templates.Processing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Templates.Emailing
@@ -31,6 +32,7 @@ namespace ShipWorks.Templates.Emailing
         /// Determine what settings to use for the given template and result set.  If more than one store is a possiblity,
         /// the ResolveSettings event is raised.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public long? DetermineStore(TemplateEntity template, IList<TemplateResult> results)
         {
             // Make sure the event is handled

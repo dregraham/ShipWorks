@@ -13,6 +13,7 @@ using ShipWorks.ApplicationCore;
 using System.Threading;
 using System.Windows.Forms;
 using System.Linq;
+using Interapptive.Shared;
 
 namespace ShipWorks.Templates.Processing
 {
@@ -142,6 +143,7 @@ namespace ShipWorks.Templates.Processing
         /// <summary>
         /// The compiled and loaded XslCompiledTransform.  Will be null of the XSL is not valid.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public TemplateResult Transform(TemplateXPathNavigator xmlSource)
         {
             if (!IsValid)
