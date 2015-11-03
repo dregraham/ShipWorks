@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (account == null)
             {
-                throw new AmazonShipperException("Amazon shipping account no longer exists");
+                throw new AmazonShippingException("Amazon shipping account no longer exists");
             }
 
             return new AmazonMwsWebClientSettings(new AmazonMwsConnection(account.MerchantID, account.AuthToken, "US"));

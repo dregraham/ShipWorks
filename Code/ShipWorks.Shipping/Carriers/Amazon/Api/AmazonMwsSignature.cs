@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
             catch (NotSupportedException e)
             {
-                throw new AmazonShipperException("Unsupported Signature Encoding", e);
+                throw new AmazonShippingException("Unsupported Signature Encoding", e);
             }
             value = ReplaceAll(value, asteriskPtn, "%2A");
             value = ReplaceAll(value, pct7EPtn, "~");

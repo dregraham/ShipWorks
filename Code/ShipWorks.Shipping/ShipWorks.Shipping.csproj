@@ -90,7 +90,7 @@
     <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipperException.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRates.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShipmentRequestDetailsFactory.cs" />

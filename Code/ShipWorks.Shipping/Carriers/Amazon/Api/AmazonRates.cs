@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             if (order == null)
             {
-                throw new AmazonShipperException("Not an Amazon Order");
+                throw new AmazonShippingException("Not an Amazon Order");
             }
             
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);

@@ -6,27 +6,27 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// Base class for AmazonShipperExceptions
     /// </summary>
     [Serializable]
-    public class AmazonShipperException : Exception
+    public class AmazonShippingException : ShippingException
     {
         private string message;
 
-        public AmazonShipperException()
+        public AmazonShippingException()
             : this(null, null, null)
         {}
 
-        public AmazonShipperException(string message)
+        public AmazonShippingException(string message)
             : this(message, null, null)
         { }
 
-        public AmazonShipperException(string message, Exception ex)
+        public AmazonShippingException(string message, Exception ex)
             : this(message, null, ex)
         { }
 
-        public AmazonShipperException(string message, string code)
+        public AmazonShippingException(string message, string code)
             : this(message, code, null)
         {}
 
-        public AmazonShipperException(string message, string code, Exception innerException)
+        public AmazonShippingException(string message, string code, Exception innerException)
             : base(message, innerException)
         {
             this.message = message;
@@ -92,8 +92,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                             message = "";
                             break;
                     }
-                }   
-
+                }
                 return message;
             }
         }
