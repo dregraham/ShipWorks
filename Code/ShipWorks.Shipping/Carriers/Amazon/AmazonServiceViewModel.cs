@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (!services.Any())
             {
-                AmazonRateTag selectedRateTag = new AmazonRateTag {Description = "No rates are available for the shipment.", ShippingServiceId = "-1", ShippingServiceOfferId = null};
+                AmazonRateTag selectedRateTag = new AmazonRateTag { Description = "No rates are available for the shipment.", ShippingServiceId = "-1", ShippingServiceOfferId = null };
                 services.Insert(0, selectedRateTag);
                 ShippingService = selectedRateTag;
             }
@@ -112,25 +112,37 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 entity => (AmazonDeliveryExperienceType)entity.Amazon.DeliveryExperience,
                 (entity, value) => entity.Amazon.DeliveryExperience = (int)value);
 
-            shippingServiceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonRateTag>(shipments,
-                nameof(ShippingService),
-                entity => ServicesAvailable.FirstOrDefault(s => s.ShippingServiceId == entity.Amazon.ShippingServiceID),
-                (entity, value) =>
-                {
-                    if (value?.ShippingServiceId != entity.Amazon.ShippingServiceID)
-                    {
-                        entity.Amazon.ShippingServiceName = value?.Description?? string.Empty;
-                        entity.Amazon.ShippingServiceID = value?.ShippingServiceId ?? string.Empty;
-                        entity.Amazon.ShippingServiceOfferID = value?.ShippingServiceOfferId ?? string.Empty;
-                    }
-                });
-
-            ShippingService = new AmazonRateTag()
+            if (shipments.Skip(1).Any())
             {
-                Description = shipments.Select(s => s.Amazon?.ShippingServiceName)?.FirstOrDefault(),
-                ShippingServiceId = shipments.Select(s => s.Amazon?.ShippingServiceID)?.FirstOrDefault(),
-                ShippingServiceOfferId = shipments.Select(s => s.Amazon?.ShippingServiceOfferID)?.FirstOrDefault()
-            };
+                // Because of the way Amazon services work, we will always show "multiple" when multiple shipments are loaded,
+                // even if the services are the same
+                shippingServiceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonRateTag>(shipments,
+                    nameof(ShippingService),
+                    entity => new AmazonRateTag(),
+                    (entity, value) => { });
+            }
+            else
+            {
+                shippingServiceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonRateTag>(shipments,
+                    nameof(ShippingService),
+                    entity => ServicesAvailable.FirstOrDefault(s => s.ShippingServiceId == entity.Amazon.ShippingServiceID),
+                    (entity, value) =>
+                    {
+                        if (value?.ShippingServiceId != entity.Amazon.ShippingServiceID)
+                        {
+                            entity.Amazon.ShippingServiceName = value?.Description ?? string.Empty;
+                            entity.Amazon.ShippingServiceID = value?.ShippingServiceId ?? string.Empty;
+                            entity.Amazon.ShippingServiceOfferID = value?.ShippingServiceOfferId ?? string.Empty;
+                        }
+                    });
+
+                ShippingService = new AmazonRateTag()
+                {
+                    Description = shipments.Select(s => s.Amazon?.ShippingServiceName)?.FirstOrDefault(),
+                    ShippingServiceId = shipments.Select(s => s.Amazon?.ShippingServiceID)?.FirstOrDefault(),
+                    ShippingServiceOfferId = shipments.Select(s => s.Amazon?.ShippingServiceOfferID)?.FirstOrDefault()
+                };
+            }
 
             // Wire up the property changed event so we can update rates.
             dateMustArriveBy.PropertyChanged += OnPropertyChanged;
