@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,6 +12,8 @@ using ShipWorks.Core.UI;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Reactive.Linq;
+using System.Reactive.Concurrency;
+using System.Threading;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -22,7 +22,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonServiceViewModel : INotifyPropertyChanged, IDisposable
     {
-        private readonly IObservable<IShipWorksMessage> messenger;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private GenericMultiValueBinder<ShipmentEntity, DateTime> dateMustArriveBy;
@@ -39,10 +38,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public AmazonServiceViewModel(IObservable<IShipWorksMessage> messenger)
         {
-            this.messenger = messenger;
             handler = new PropertyChangedHandler(() => PropertyChanged);
 
-            amazonRatesRetrievedIDisposable = messenger.OfType<AmazonRatesRetrievedMessage>().Subscribe(OnAmazonRatesRetrieved);
+            amazonRatesRetrievedIDisposable = messenger.OfType<AmazonRatesRetrievedMessage>()
+                .ObserveOn(SynchronizationContext.Current)
+                .Subscribe(OnAmazonRatesRetrieved);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (!services.Any())
             {
-                AmazonRateTag selectedRateTag = new AmazonRateTag() {Description = "No rates are available for the shipment.", ShippingServiceId = null, ShippingServiceOfferId = null};
+                AmazonRateTag selectedRateTag = new AmazonRateTag {Description = "No rates are available for the shipment.", ShippingServiceId = null, ShippingServiceOfferId = null};
                 services.Insert(0, selectedRateTag);
                 ShippingService = selectedRateTag;
             }
