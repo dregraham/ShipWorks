@@ -16,6 +16,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Templates.Printing;
 using log4net;
 using Autofac;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -33,7 +34,7 @@ namespace ShipWorks.Shipping.Settings
         // switching between service types.
         ShipmentTypeSettingsControl.Page settingsTabPage = ShipmentTypeSettingsControl.Page.Settings;
         private bool usedDisabledGeneralShipRule;
-        private MessengerToken uspsAccountCreatedToken;
+        private IDisposable uspsAccountCreatedToken;
         private ILifetimeScope lifetimeScope;
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace ShipWorks.Shipping.Settings
             this.lifetimeScope = lifetimeScope;
             WindowStateSaver.Manage(this);
 
-            uspsAccountCreatedToken = Messenger.Current.Handle<UspsAccountCreatedMessage>(this, OnUspsAccountCreated);
+            uspsAccountCreatedToken = Messenger.Current.OfType<UspsAccountCreatedMessage>().Subscribe(OnUspsAccountCreated);
         }
 
         /// <summary>
@@ -441,7 +442,7 @@ namespace ShipWorks.Shipping.Settings
                     components.Dispose();
                 }
 
-                Messenger.Current.Remove(uspsAccountCreatedToken);
+                uspsAccountCreatedToken.Dispose();
 
                 // Dispose all the controls we created
                 foreach (ShipmentTypeSettingsControl settingsControl in settingsMap.Values)

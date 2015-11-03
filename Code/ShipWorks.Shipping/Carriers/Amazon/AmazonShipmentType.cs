@@ -197,7 +197,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            RateGroup rateGroup = GetCachedRates<AmazonShipperException>(shipment, GetRatesFromApi);
+            RateGroup rateGroup = GetCachedRates<AmazonShippingException>(shipment, GetRatesFromApi);
 
             Messenger.Current.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
 
@@ -241,6 +241,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsWeight);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.ShippingServiceID);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.ShippingServiceName);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.SendDateMustArriveBy);
 
                 return ratingField;
             }

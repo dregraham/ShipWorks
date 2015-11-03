@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 ExecuteRequest(new HttpVariableRequestSubmitter(), AmazonMwsApiCall.ListMarketplaceParticipations, mwsSettings);
                 return AmazonValidateCredentialsResponse.Succeeded();
             }
-            catch (AmazonShipperException ex)
+            catch (AmazonShippingException ex)
             {
                 // Something must be wrong with the credentails 
                 return AmazonValidateCredentialsResponse.Failed(ex.Message);
@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         {
             if (createShipmentResponse?.CreateShipmentResult?.Shipment?.Label?.FileContents == null)
             {
-                throw new AmazonShipperException("Amazon failed to return a label for the Shipment.");
+                throw new AmazonShippingException("Amazon failed to return a label for the Shipment.");
             }
             return createShipmentResponse;
         }
@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
             catch (Exception ex)
             {
-                throw new AmazonShipperException(ex.Message, ex);
+                throw new AmazonShippingException(ex.Message, ex);
             }
         }
 
@@ -317,7 +317,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(AmazonShipperException));
+                throw WebHelper.TranslateWebException(ex, typeof(AmazonShippingException));
             }
 
             // check response for errors
@@ -363,7 +363,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             if (error != null)
             {
                 // No message was provided so we use the error code
-                throw new AmazonShipperException(error.Message, error.Code);
+                throw new AmazonShippingException(error.Message, error.Code);
             }
         }
     }

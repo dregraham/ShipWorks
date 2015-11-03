@@ -51,24 +51,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
-            
-            try
-            {
-                CreateShipmentResponse labelResponse = webClient.CreateShipment(requestDetails, settings, shipment.Amazon.ShippingServiceID);
-                
-                // Save shipment info
-                SaveShipmentInfoToEntity(labelResponse.CreateShipmentResult.Shipment, shipment);
 
-                // Save the label
-                SaveLabel(labelResponse.CreateShipmentResult.Shipment.Label.FileContents, shipment.ShipmentID);
+            CreateShipmentResponse labelResponse = webClient.CreateShipment(requestDetails, settings, shipment.Amazon.ShippingServiceID);
                 
-            }
-            catch (AmazonShipperException ex)
-            {
-                // something went wrong
-                throw new ShippingException(ex.Message);
-            }
+            // Save shipment info
+            SaveShipmentInfoToEntity(labelResponse.CreateShipmentResult.Shipment, shipment);
 
+            // Save the label
+            SaveLabel(labelResponse.CreateShipmentResult.Shipment.Label.FileContents, shipment.ShipmentID);
         }
 
         /// <summary>
@@ -79,15 +69,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             AmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
-            try
-            {
-                webClient.CancelShipment(settings, shipment.Amazon.AmazonUniqueShipmentID);
-            }
-            catch (AmazonShipperException ex)
-            {
-                // something went wrong
-                throw new ShippingException(ex.Message);
-            }
+
+            webClient.CancelShipment(settings, shipment.Amazon.AmazonUniqueShipmentID);
         }
 
         /// <summary>
