@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 services.Insert(0, selectedRateTag);
                 ShippingService = selectedRateTag;
             }
-            else if (!shippingServiceBinder.IsMultiValued && services.All(s => s.ShippingServiceId != ShippingService.ShippingServiceId))
+            else if (!shippingServiceBinder.IsMultiValued && services.All(s => s.ShippingServiceId != ShippingService?.ShippingServiceId))
             {
                 AmazonRateTag selectedRateTag = new AmazonRateTag { Description = "Please select a service", ShippingServiceId = "-2", ShippingServiceOfferId = null };
                 services.Insert(0, selectedRateTag);
