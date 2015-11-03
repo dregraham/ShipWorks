@@ -331,13 +331,11 @@ namespace ShipWorks.Tests.Shipping
         {
             var messenger = new TestMessenger();
             mock.Provide(messenger);
-
-            //messengerMock.Setup(x => x.Handle(It.IsAny<object>(), It.IsAny<Action<CarrierConfiguredMessage>>())).Returns(token);
+            
             var refresher = mock.Create<CarrierConfigurationShipmentRefresher>();
             refresher.Dispose();
 
             Assert.False(messenger.Subject.HasObservers);
-            //messengerMock.Verify(x => x.Remove(token));
         }
 
         private CarrierConfigurationShipmentRefresher CreateRefresher()
