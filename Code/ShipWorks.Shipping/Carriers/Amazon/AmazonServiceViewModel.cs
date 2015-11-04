@@ -58,13 +58,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (!services.Any())
             {
-                AmazonRateTag selectedRateTag = new AmazonRateTag { Description = "No rates are available for the shipment.", ShippingServiceId = "-1", ShippingServiceOfferId = null };
+                AmazonRateTag selectedRateTag = new AmazonRateTag { Description = "No rates are available for the shipment.", ShippingServiceId = "-1", ShippingServiceOfferId = null, CarrierName = null };
                 services.Insert(0, selectedRateTag);
                 ShippingService = selectedRateTag;
             }
             else if (!shippingServiceBinder.IsMultiValued && services.All(s => s.ShippingServiceId != ShippingService?.ShippingServiceId))
             {
-                AmazonRateTag selectedRateTag = new AmazonRateTag { Description = "Please select a service", ShippingServiceId = "-2", ShippingServiceOfferId = null };
+                AmazonRateTag selectedRateTag = new AmazonRateTag { Description = "Please select a service", ShippingServiceId = "-2", ShippingServiceOfferId = null, CarrierName = null};
                 services.Insert(0, selectedRateTag);
                 ShippingService = selectedRateTag;
             }
@@ -154,7 +154,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 {
                     Description = "Loading services...",
                     ShippingServiceId = null,
-                    ShippingServiceOfferId = null
+                    ShippingServiceOfferId = null,
+                    CarrierName = null
                 }
             };
 
@@ -168,6 +169,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                         entity.Amazon.ShippingServiceName = value?.Description ?? string.Empty;
                         entity.Amazon.ShippingServiceID = value?.ShippingServiceId ?? string.Empty;
                         entity.Amazon.ShippingServiceOfferID = value?.ShippingServiceOfferId ?? string.Empty;
+                        entity.Amazon.CarrierName = value?.CarrierName ?? string.Empty;
                     }
                 },
                 (entity) => entity.Processed);
@@ -215,7 +217,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 Description = shipment.Amazon.ShippingServiceName,
                 ShippingServiceId = shipment.Amazon.ShippingServiceID,
-                ShippingServiceOfferId = shipment.Amazon.ShippingServiceOfferID
+                ShippingServiceOfferId = shipment.Amazon.ShippingServiceOfferID,
+                CarrierName = shipment.Amazon.CarrierName
             };
 
 
