@@ -22,6 +22,9 @@ namespace ShipWorks.Shipping.UI
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ShippingProfileEditorDlg>();
+
+            builder.RegisterType<ShippingManagerWrapper>()
+                .AsImplementedInterfaces();
         }
     }
 }

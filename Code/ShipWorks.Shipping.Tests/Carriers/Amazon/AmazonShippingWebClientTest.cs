@@ -1,5 +1,4 @@
-﻿using Autofac.Extras.Moq;
-using ShipWorks.Shipping.Carriers.Amazon;
+﻿using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using Xunit;
 

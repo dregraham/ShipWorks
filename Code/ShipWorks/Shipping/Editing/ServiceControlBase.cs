@@ -537,13 +537,8 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// One or more shipments have been created by the control
         /// </summary>
-        protected void RaiseShipmentsAdded(List<ShipmentEntity> shipments)
-        {
-            if (ShipmentsAdded != null)
-            {
-                ShipmentsAdded(this, new ShipmentsAddedRemovedEventArgs(shipments));
-            }
-        }
+        protected void RaiseShipmentsAdded(List<ShipmentEntity> shipments) =>
+            ShipmentsAdded?.Invoke(this, new ShipmentsAddedRemovedEventArgs(shipments));
 
         /// <summary>
         /// Synchronizes the selected rate in the rate control.
@@ -554,24 +549,14 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// User has changed the recipient state\country
         /// </summary>
-        private void OnRecipientDestinationChanged(object sender, EventArgs e)
-        {
-            if (RecipientDestinationChanged != null)
-            {
-                RecipientDestinationChanged(this, EventArgs.Empty);
-            }
-        }
+        private void OnRecipientDestinationChanged(object sender, EventArgs e) => 
+            RecipientDestinationChanged?.Invoke(this, EventArgs.Empty);
 
         /// <summary>
         /// User has changed the recipient state\country
         /// </summary>
-        protected void OnOriginDestinationChanged(object sender, EventArgs e)
-        {
-            if (OriginDestinationChanged != null)
-            {
-                OriginDestinationChanged(this, EventArgs.Empty);
-            }
-        }
+        protected void OnOriginDestinationChanged(object sender, EventArgs e) => 
+            OriginDestinationChanged?.Invoke(this, EventArgs.Empty);
 
         /// <summary>
         /// Something changed about the data typed in for the person
@@ -618,24 +603,12 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Raises the shipment service changed Event
         /// </summary>
-        protected void RaiseShipmentServiceChanged()
-        {
-            if (ShipmentServiceChanged != null)
-            {
-                ShipmentServiceChanged(this, EventArgs.Empty);
-            }
-        }
+        protected void RaiseShipmentServiceChanged() => ShipmentServiceChanged?.Invoke(this, EventArgs.Empty);
 
         /// <summary>
         /// Raises the shipment type changed event.
         /// </summary>
-        protected void RaiseShipmentTypeChanged()
-        {
-            if (ShipmentTypeChanged != null)
-            {
-                ShipmentTypeChanged(this, EventArgs.Empty);
-            }
-        }
+        protected void RaiseShipmentTypeChanged() => ShipmentTypeChanged?.Invoke(this, EventArgs.Empty);
 
 		/// <summary>
 		/// Show the knowledge base article for thermal settings
@@ -644,5 +617,10 @@ namespace ShipWorks.Shipping.Editing
         {
             WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/140916-what-printer-should-i", this);
         }
+
+        /// <summary>
+        /// Pre select a rate
+        /// </summary>
+        public virtual void PreSelectRate(RateSelectedEventArgs args) => OnConfigureRateClick(this, args);
     }
 }

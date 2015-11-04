@@ -264,10 +264,7 @@ namespace ShipWorks.Templates.Processing
         /// <summary>
         /// Since we compile templates from memory, this is the BaseURI that is assigned (as opposed to when you compile from a physical file or web URL, that file or URL is the base)
         /// </summary>
-        public static string XslBaseUri
-        {
-            get { return @"Z:\__shipworks\__templates\__baseuri\"; }
-        }
+        public static string XslBaseUri => @"Z:\__shipworks\__templates\__baseuri\";
 
         /// <summary>
         /// Templates and tokens can reference other templates using xsl:import.  This is a list of all templates

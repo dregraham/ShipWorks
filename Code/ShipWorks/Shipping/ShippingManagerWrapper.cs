@@ -25,5 +25,12 @@ namespace ShipWorks.Shipping
         /// </summary>
         public bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.IsShipmentTypeConfigured(shipmentTypeCode);
+
+        /// <summary>
+        /// Gets the service used.
+        /// </summary>
+        public string GetServiceUsed(ShipmentEntity shipment) =>
+            ShippingManager.GetServiceUsed(shipment);
+
     }
 }

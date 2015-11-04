@@ -10,6 +10,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -20,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     {
         private readonly AmazonServiceViewModel viewModel;
         private readonly AmazonShipmentType amazonShipmentType;
+        private IDisposable propertyChangedSubscriptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonServiceControl"/> class.
@@ -28,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         /// <param name="viewModel">The view model for this control.</param>
         /// <param name="amazonShipmentType">AmazonShipmentType</param>
-        public AmazonServiceControl(RateControl rateControl, AmazonServiceViewModel viewModel, AmazonShipmentType amazonShipmentType) 
+        public AmazonServiceControl(RateControl rateControl, AmazonServiceViewModel viewModel, AmazonShipmentType amazonShipmentType)
             : base(ShipmentTypeCode.Amazon, rateControl)
         {
             this.viewModel = viewModel;
@@ -56,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
-            viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+            propertyChangedSubscriptions?.Dispose();
 
             List<ShipmentEntity> shipmentsAsList = shipments.ToList();
             base.LoadShipments(shipmentsAsList, enableEditing, enableShippingAddress);
@@ -73,10 +77,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             UpdateSectionDescription();
 
-            viewModel.PropertyChanged += OnViewModelPropertyChanged;
+            propertyChangedSubscriptions = SubscribeToPropertyChangedEvent();
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
         }
+
         /// <summary>
         /// Loads available dimensions for shipments
         /// </summary>
@@ -95,9 +100,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void CreateUiBindings()
         {
-            dimensionsControl.DimensionsChanged += DimensionsControl_DimensionsChanged;
-
-
+            dimensionsControl.DimensionsChanged += OnDimensionsChanged;
+            
             deliveryConfirmation.DataBindings.Clear();
             deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.PropertyValue), false, DataSourceUpdateMode.OnPropertyChanged);
             deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.MultiValued), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.IsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -107,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             carrierWillPickUp.DataBindings.Add(nameof(carrierWillPickUp.CheckState), viewModel, nameof(viewModel.CarrierWillPickUpCheckState), false, DataSourceUpdateMode.OnPropertyChanged);
 
             sendDeliverBy.DataBindings.Clear();
-            sendDeliverBy.DataBindings.Add(nameof(sendDeliverBy.Checked), viewModel, nameof(viewModel.SendDeliverBy), false, DataSourceUpdateMode.OnPropertyChanged);
+            sendDeliverBy.DataBindings.Add(nameof(sendDeliverBy.Checked), viewModel, nameof(viewModel.SendDateMustArriveBy), false, DataSourceUpdateMode.OnPropertyChanged);
             sendDeliverBy.DataBindings.Add(nameof(sendDeliverBy.CheckState), viewModel, nameof(viewModel.SendDeliverByCheckState), false, DataSourceUpdateMode.OnPropertyChanged);
 
             mustArriveByDate.DataBindings.Clear();
@@ -124,7 +128,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             service.SelectedValueChanged += OnServiceSelectedValueChanged;
         }
 
-        private void DimensionsControl_DimensionsChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Handle when dimensions have changed
+        /// </summary>
+        private void OnDimensionsChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
         }
@@ -134,48 +141,56 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnServiceSelectedValueChanged(object sender, EventArgs e)
         {
-            AmazonRateTag newValue = (AmazonRateTag) service.SelectedItem;
+            AmazonRateTag newValue = (AmazonRateTag)service.SelectedItem;
 
             if (newValue?.ShippingServiceId != viewModel?.ShippingService?.ShippingServiceId)
             {
-                viewModel.ShippingService = newValue;
-                RateResult rateResult = RateControl.RateGroup.Rates.FirstOrDefault(r => ((AmazonRateTag) r.Tag).ShippingServiceId == newValue?.ShippingServiceId);
+                RateResult rateResult = RateControl.RateGroup.Rates.FirstOrDefault(r => ((AmazonRateTag)r.Tag).ShippingServiceId == newValue?.ShippingServiceId);
                 RateControl.SelectRate(rateResult);
             }
         }
 
         /// <summary>
-        /// Handle the view model property changed event
+        /// Subscribe to all the property changed events
         /// </summary>
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private IDisposable SubscribeToPropertyChangedEvent()
         {
-            if (service.IsHandleCreated)
-            {
-                if (e.PropertyName == nameof(viewModel.ServicesAvailable))
-                {
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        service.BindDataSourceAndPreserveSelection(viewModel.ServicesAvailable);
-                    });
-                    return;
-                }
-            }
+            IObservable<string> events = Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+                    x => viewModel.PropertyChanged += x, 
+                    x => viewModel.PropertyChanged -= x)
+                .Select(x => x.EventArgs.PropertyName);
 
-            if (e.PropertyName == nameof(viewModel.ShippingService))
-            {
-                this.Invoke((MethodInvoker)delegate
-                {
-                    RaiseShipmentServiceChanged();
-                    UpdateSectionDescription();
-                });
-                return;
-            }
-
-            if (amazonShipmentType.RatingFields.FieldsContainName(e.PropertyName))
-            {
-                    RaiseRateCriteriaChanged();
-            }
+            return new CompositeDisposable(
+                events.Where(x => x == nameof(viewModel.ServicesAvailable)).Subscribe(OnServicesAvailableChanged),
+                events.Where(x => x == nameof(viewModel.ShippingService)).Subscribe(OnShippingServiceChanged),
+                events.Where(amazonShipmentType.RatingFields.FieldsContainName).Subscribe(OnRatingFieldChanged)
+            );
         }
+
+        /// <summary>
+        /// The available services have changed
+        /// </summary>
+        /// <param name="propertyName"></param>
+        private void OnServicesAvailableChanged(string propertyName)
+        {
+            AmazonRateTag previousValue = viewModel.ShippingService;
+            service.BindDataSourceAndPreserveSelection(viewModel.ServicesAvailable);
+            service.SelectedValue = previousValue?.ShippingServiceId ?? string.Empty;
+        }
+
+        /// <summary>
+        /// The selected service has changed
+        /// </summary>
+        private void OnShippingServiceChanged(string propertyName)
+        {
+            RaiseShipmentServiceChanged();
+            UpdateSectionDescription();
+        }
+
+        /// <summary>
+        /// A rating field has changed
+        /// </summary>
+        private void OnRatingFieldChanged(string propertyName) => RaiseRateCriteriaChanged();
 
         /// <summary>
         /// Update the insurance display for the given shipments
@@ -293,5 +308,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 RateControl.ClearSelection();
             }
         }
+
+        /// <summary>
+        /// Pre select a rate
+        /// </summary>
+        public override void PreSelectRate(RateSelectedEventArgs args) =>
+            viewModel.ShippingService = args.Rate.Tag as AmazonRateTag;
     }
 }
