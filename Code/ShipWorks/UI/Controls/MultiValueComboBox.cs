@@ -223,7 +223,6 @@ namespace ShipWorks.UI.Controls
                     SelectedIndex = 0;
                 }
             }
-
         }
     }
 }

@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// when this method is called.
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment) => 
-            $"{shipment.Amazon.CarrierName} {shipment.Amazon.ShippingServiceName}";
+            shipment.Amazon.ShippingServiceName;
 
         /// <summary>
         /// Get detailed information about the parcel in a generic way that can be used accross shipment types
@@ -230,17 +230,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ratingField = base.RatingFields;
 
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.AmazonAccountID);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.CarrierName);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.CarrierWillPickUp);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DateMustArriveBy);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DeclaredValue);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DeliveryExperience);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsAddWeight);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsHeight);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsLength);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsWeight);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.ShippingServiceID);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.ShippingServiceName);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.SendDateMustArriveBy);
 
                 return ratingField;
