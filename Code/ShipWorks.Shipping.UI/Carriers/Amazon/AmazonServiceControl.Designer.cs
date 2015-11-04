@@ -16,6 +16,7 @@
             if (disposing)
             {
                 propertyChangedSubscriptions?.Dispose();
+                viewModel?.Dispose();
 
                 if (components != null)
                 {
