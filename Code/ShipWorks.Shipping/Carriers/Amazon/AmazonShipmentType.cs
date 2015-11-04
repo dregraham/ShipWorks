@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Gets the package adapter for the shipment.
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment) =>
-            new List<IPackageAdapter> { new NullPackageAdapter() };
+            new [] { new AmazonPackageAdapter(shipment) };
 
         /// <summary>
         /// Ensures that the carrier specific data for the shipment, such as the FedEx data, are loaded for the shipment.  If the data
@@ -340,8 +340,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 shipment.TotalWeight += shipment.Amazon.DimsWeight;
             }
         }
-
-
+        
         /// <summary>
         /// Tracks the shipment.
         /// </summary>
