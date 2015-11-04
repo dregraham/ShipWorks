@@ -45,6 +45,7 @@ namespace ShipWorks.UI.Controls.MultiValueBinders
         private readonly Func<TDataSource, TProperty> selectFunc;
         private readonly Action<TDataSource, TProperty> updateFunc;
         private readonly string propertyName;
+        private readonly Func<TDataSource, bool> readOnly;
 
         /// <summary>
         /// Constructor
@@ -52,13 +53,14 @@ namespace ShipWorks.UI.Controls.MultiValueBinders
         /// <param name="dataSource">Generic list of items on which to bind.</param>
         /// <param name="selectFunc">Function that returns a property value of TDataSource.  This is used to determine if the dataSource has distinct values. </param>
         /// <param name="updateFunc">Action that updates each of the items in dataSource.</param>
-        public GenericMultiValueBinder(IEnumerable<TDataSource> dataSource, string propertyName, Func<TDataSource, TProperty> selectFunc, Action<TDataSource, TProperty> updateFunc)
+        public GenericMultiValueBinder(IEnumerable<TDataSource> dataSource, string propertyName, Func<TDataSource, TProperty> selectFunc, Action<TDataSource, TProperty> updateFunc, Func<TDataSource, bool> readOnly)
         {
             handler = new PropertyChangedHandler(() => PropertyChanged);
             this.dataSource = dataSource;
             this.selectFunc = selectFunc;
             this.updateFunc = updateFunc;
             this.propertyName = propertyName;
+            this.readOnly = readOnly;
 
             // Determine if the dataSource is multivalued.
             IsMultiValued = DistinctPropertyValues.Count() > 1;
@@ -129,7 +131,14 @@ namespace ShipWorks.UI.Controls.MultiValueBinders
         {
             if (!IsMultiValued)
             {
-                dataSource.ToList().ForEach(s => updateFunc(s, PropertyValue));
+                dataSource.ToList().ForEach(s =>
+                    {
+                        if (!readOnly(s))
+                        {
+                            updateFunc(s, PropertyValue);
+                        }
+                    }
+                );
 
                 IsMultiValued = DistinctPropertyValues.Count() > 1;
             }
