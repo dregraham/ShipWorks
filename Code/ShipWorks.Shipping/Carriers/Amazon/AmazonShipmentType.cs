@@ -345,12 +345,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
         }
 
+
         /// <summary>
         /// Tracks the shipment.
         /// </summary>
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
         {
-            if (string.IsNullOrWhiteSpace(shipment.TrackingNumber))
+            if (string.IsNullOrWhiteSpace(shipment?.TrackingNumber))
             {
                 return new TrackingResult { Summary = "No tracking number found..." };
             }
