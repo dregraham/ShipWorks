@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             ServicesAvailable = new List<AmazonRateTag>
             {
-                new AmazonRateTag()
+                new AmazonRateTag
                 {
                     Description = "Loading services...",
                     ShippingServiceId = null,
