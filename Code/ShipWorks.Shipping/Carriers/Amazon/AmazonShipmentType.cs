@@ -224,17 +224,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ratingField = base.RatingFields;
 
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.AmazonAccountID);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.CarrierName);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.CarrierWillPickUp);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DateMustArriveBy);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DeclaredValue);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DeliveryExperience);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsAddWeight);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsHeight);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsLength);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsWeight);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.ShippingServiceID);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.ShippingServiceName);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.SendDateMustArriveBy);
 
                 return ratingField;
