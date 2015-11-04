@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// when this method is called.
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment) => 
-            $"{shipment.Amazon.CarrierName} {shipment.Amazon.ShippingServiceName}";
+            shipment.Amazon.ShippingServiceName;
 
         /// <summary>
         /// Get detailed information about the parcel in a generic way that can be used accross shipment types
