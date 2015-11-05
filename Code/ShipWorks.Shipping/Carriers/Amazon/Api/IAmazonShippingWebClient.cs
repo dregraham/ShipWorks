@@ -12,22 +12,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Validate the given credentials
         /// </summary>
-        AmazonValidateCredentialsResponse ValidateCredentials(AmazonMwsWebClientSettings mwsSettings);
+        AmazonValidateCredentialsResponse ValidateCredentials(IAmazonMwsWebClientSettings mwsSettings);
 
         /// <summary>
         /// Gets the rates.
         /// </summary>
-        GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings);
+        GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings);
 
         /// <summary>
         /// Create a shipment
         /// </summary>
-        CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings, string shippingServiceId);
+        CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings, string shippingServiceId);
 
         /// <summary>
         /// Voids the shipment
         /// </summary>
-        CancelShipmentResponse CancelShipment(AmazonMwsWebClientSettings mwsSettings, string amazonShipmentId);
+        CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, string amazonShipmentId);
 
         /// <summary>
         /// Validates the CreateShipmentREsponse

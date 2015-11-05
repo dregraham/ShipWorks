@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        public AmazonMwsWebClientSettings Create(AmazonShipmentEntity shipment)
+        public IAmazonMwsWebClientSettings Create(AmazonShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 

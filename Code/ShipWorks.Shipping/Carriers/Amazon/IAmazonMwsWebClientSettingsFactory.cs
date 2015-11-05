@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        AmazonMwsWebClientSettings Create(AmazonShipmentEntity shipment);
+        IAmazonMwsWebClientSettings Create(AmazonShipmentEntity shipment);
 
         /// <summary>
         /// Creates AmazonMwsClientSettings based on store

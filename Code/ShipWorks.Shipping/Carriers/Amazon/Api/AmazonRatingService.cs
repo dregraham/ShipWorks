@@ -8,6 +8,7 @@ using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -21,17 +22,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly IOrderManager orderManager;
         private readonly AmazonShipmentType amazonShipmentType;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
+        private IEnumerable<IAmazonRateGroupFilter> rateFilters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRatingService"/> class.
         /// </summary>
-        public AmazonRatingService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory, AmazonShipmentType amazonShipmentType)
+        public AmazonRatingService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory,
+            IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory, AmazonShipmentType amazonShipmentType,
+            IEnumerable<IAmazonRateGroupFilter> rateFilters)
         {
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
             this.orderManager = orderManager;
             this.requestFactory = requestFactory;
             this.amazonShipmentType = amazonShipmentType;
+            this.rateFilters = rateFilters;
         }
 
         /// <summary>
@@ -58,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             RateGroup rateGroup = GetRateGroupFromResponse(response);
 
-            return rateGroup;
+            return rateFilters.Aggregate(rateGroup, (rates, filter) => filter.Filter(rates));
         }
 
         /// <summary>

@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             using (var mock = AutoMock.GetLoose())
             {
                 AmazonStoreEntity amazonStore = new AmazonStoreEntity()
-                {   
+                {
                     AmazonApiRegion = "US",
                     MerchantID = "testMerchantID",
                     AuthToken = "abc123"
@@ -50,10 +50,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 mock.Mock<IAmazonAccountManager>()
                     .Setup(a => a.GetAccount(123))
                     .Returns(amazonAccount);
-                
+
                 AmazonMwsWebClientSettingsFactory settingsFactory = mock.Create<AmazonMwsWebClientSettingsFactory>();
 
-                AmazonMwsWebClientSettings testObject = settingsFactory.Create(shipment);
+                IAmazonMwsWebClientSettings testObject = settingsFactory.Create(shipment);
 
                 Assert.Equal("testMerchantID", testObject.Connection.MerchantId);
             }

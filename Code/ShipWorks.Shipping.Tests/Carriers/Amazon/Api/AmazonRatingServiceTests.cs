@@ -13,31 +13,37 @@ using System.Reflection;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 using ShipWorks.Shipping.Carriers.Amazon;
-using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 {
-    public class AmazonRatingServiceTests
+    public class AmazonRatingServiceTests : IDisposable
     {
+        AutoMock mock;
+
+        public AmazonRatingServiceTests()
+        {
+            mock = AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
+            mock.Mock<IAmazonRateGroupFilter>()
+                .Setup(x => x.Filter(It.IsAny<RateGroup>()))
+                .Returns<RateGroup>(x => x);
+        }
+
         [Fact]
         public void GetRates_ReturnsThreeRates_WhenApiResponseHasThreeServices()
         {
             GetEligibleShippingServicesResponse response = ResponseWithServices(() => Enumerable.Range(1, 3)
                 .Select(x => new ShippingService { Rate = new Rate { Amount = x } }));
 
-            using (var mock = AutoMock.GetLoose())
-            {
-                mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
-                    .Returns(response);
+            mock.Mock<IAmazonShippingWebClient>()
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Returns(response);
 
-                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+            AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
-                RateGroup result = testObject.GetRates(SampleShipment);
+            RateGroup result = testObject.GetRates(SampleShipment);
 
-                Assert.Equal(3, result.Rates.Count);
-            }
+            Assert.Equal(3, result.Rates.Count);
         }
 
         [Fact]
@@ -45,41 +51,36 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         {
             GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService());
 
-            using (var mock = AutoMock.GetLoose())
-            {
-                mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
+            mock.Mock<IAmazonShippingWebClient>()
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
                     .Returns(response);
 
-                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+            AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
-                RateGroup result = testObject.GetRates(SampleShipment);
+            RateGroup result = testObject.GetRates(SampleShipment);
 
-                Assert.Equal(0, result.Rates.Count);
-            }
+            Assert.Equal(0, result.Rates.Count);
         }
 
         [Fact]
         public void GetRates_ReturnsRateWithDefaultCarrierName_WhenApiReturnsOneServiceWithNullCarrierName()
         {
-            GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService {
+            GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService
+            {
                 Rate = new Rate { Amount = 1 },
                 ShippingServiceName = null
             });
 
-            using (var mock = AutoMock.GetLoose())
-            {
-                mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
-                    .Returns(response);
+            mock.Mock<IAmazonShippingWebClient>()
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Returns(response);
 
-                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+            AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
-                RateGroup result = testObject.GetRates(SampleShipment);
-                RateResult rateResult = result.Rates.FirstOrDefault();
+            RateGroup result = testObject.GetRates(SampleShipment);
+            RateResult rateResult = result.Rates.FirstOrDefault();
 
-                Assert.Equal("Unknown", rateResult.Description);
-            }
+            Assert.Equal("Unknown", rateResult.Description);
         }
 
         [Fact]
@@ -93,22 +94,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 ShippingServiceOfferId = "Bar"
             });
 
-            using (var mock = AutoMock.GetLoose())
-            {
-                mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
-                    .Returns(response);
+            mock.Mock<IAmazonShippingWebClient>()
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Returns(response);
 
-                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+            AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
-                RateGroup result = testObject.GetRates(SampleShipment);
-                RateResult rateResult = result.Rates.FirstOrDefault();
+            RateGroup result = testObject.GetRates(SampleShipment);
+            RateResult rateResult = result.Rates.FirstOrDefault();
 
-                Assert.Equal("UPS", rateResult.Description);
-                Assert.Equal(2.34m, rateResult.Amount);
-                Assert.Equal("Foo", ((AmazonRateTag)rateResult.Tag).ShippingServiceId);
-                Assert.Equal("Bar", ((AmazonRateTag)rateResult.Tag).ShippingServiceOfferId);
-            }
+            Assert.Equal("UPS", rateResult.Description);
+            Assert.Equal(2.34m, rateResult.Amount);
+            Assert.Equal("Foo", ((AmazonRateTag)rateResult.Tag).ShippingServiceId);
+            Assert.Equal("Bar", ((AmazonRateTag)rateResult.Tag).ShippingServiceOfferId);
         }
 
         [Fact]
@@ -118,19 +116,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             List<string> tAndC2 = new List<string>() { "USPS" };
             GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
 
-            using (var mock = AutoMock.GetLoose())
-            {
-                mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
-                    .Returns(response);
+            mock.Mock<IAmazonShippingWebClient>()
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Returns(response);
 
-                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+            AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
-                RateGroup result = testObject.GetRates(SampleShipment);
+            RateGroup result = testObject.GetRates(SampleShipment);
 
-                Assert.Equal(0, result.Rates.Count);
-                Assert.Equal(1, result.FootnoteFactories.OfType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory>().Count());
-            }
+            Assert.Equal(0, result.Rates.Count);
+            Assert.Equal(1, result.FootnoteFactories.OfType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory>().Count());
         }
 
         [Fact]
@@ -140,22 +135,48 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             List<string> tAndC2 = new List<string>() { "USPS" };
             GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
 
-            using (var mock = AutoMock.GetLoose())
+            mock.Mock<IAmazonShippingWebClient>()
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Returns(response);
+
+            AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+
+            RateGroup result = testObject.GetRates(SampleShipment);
+
+            AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl footnoteControl = result.FootnoteFactories.OfType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory>().First().CreateFootnote(null) as AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl;
+            Assert.Equal(3, footnoteControl.CarrierNames.Count);
+            Assert.True(footnoteControl.CarrierNames.Contains("FEDEX"));
+            Assert.True(footnoteControl.CarrierNames.Contains("UPS"));
+            Assert.True(footnoteControl.CarrierNames.Contains("USPS"));
+        }
+
+        [Fact]
+        public void GetRates_RatesArePassedToFilters()
+        {
+            RateGroup filteredRate = null;
+
+            GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService
             {
-                mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
-                    .Returns(response);
+                Rate = new Rate { Amount = 2.34m },
+                ShippingServiceName = "UPS",
+                ShippingServiceId = "Foo",
+                ShippingServiceOfferId = "Bar"
+            });
 
-                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+            mock.Mock<IAmazonRateGroupFilter>()
+                .Setup(x => x.Filter(It.IsAny<RateGroup>()))
+                .Callback<RateGroup>(x => filteredRate = x);
 
-                RateGroup result = testObject.GetRates(SampleShipment);
+            mock.Mock<IAmazonShippingWebClient>()
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Returns(response);
 
-                AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl footnoteControl = result.FootnoteFactories.OfType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory>().First().CreateFootnote(null) as AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl;
-                Assert.Equal(3, footnoteControl.CarrierNames.Count);
-                Assert.True(footnoteControl.CarrierNames.Contains("FEDEX"));
-                Assert.True(footnoteControl.CarrierNames.Contains("UPS"));
-                Assert.True(footnoteControl.CarrierNames.Contains("USPS"));
-            }
+            AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+
+            testObject.GetRates(SampleShipment);
+
+            Assert.Equal(1, filteredRate.Rates.Count);
+            Assert.Equal(2.34m, filteredRate.Rates.First().Amount);
         }
 
         private static GetEligibleShippingServicesResponse GetEligibleShippingServicesResponse(List<string> tAndC, List<string> tAndC2)
@@ -166,7 +187,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             {
                 GetEligibleShippingServicesResult = new GetEligibleShippingServicesResult
                 {
-                    ShippingServiceList = new ShippingServiceList {ShippingService = new List<ShippingService>()},
+                    ShippingServiceList = new ShippingServiceList { ShippingService = new List<ShippingService>() },
                     TermsAndConditionsNotAcceptedCarrierList = new TermsAndConditionsNotAcceptedCarrierList()
                     {
                         TermsAndConditionsNotAcceptedCarrier = new TermsAndConditionsNotAcceptedCarrier()
@@ -187,7 +208,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
                     .Returns(ResponseWithService(new ShippingService()));
 
                 AmazonRatingService testObject = mock.Create<AmazonRatingService>();
@@ -195,7 +216,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 testObject.GetRates(shipment);
 
                 mock.Mock<IAmazonShippingWebClient>()
-                    .Verify(x => x.GetRates(It.Is(verifyCall), It.IsAny<AmazonMwsWebClientSettings>()));
+                    .Verify(x => x.GetRates(It.Is(verifyCall), It.IsAny<IAmazonMwsWebClientSettings>()));
             }
         }
 
@@ -261,5 +282,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             }
             return xml;
         }
+
+        public void Dispose() => mock?.Dispose();
     }
 }

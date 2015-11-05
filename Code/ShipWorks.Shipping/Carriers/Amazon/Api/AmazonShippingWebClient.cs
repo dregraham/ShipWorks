@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Validate the given credentials
         /// </summary>
-        public AmazonValidateCredentialsResponse ValidateCredentials(AmazonMwsWebClientSettings mwsSettings)
+        public AmazonValidateCredentialsResponse ValidateCredentials(IAmazonMwsWebClientSettings mwsSettings)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
             catch (AmazonShippingException ex)
             {
-                // Something must be wrong with the credentails 
+                // Something must be wrong with the credentails
                 return AmazonValidateCredentialsResponse.Failed(ex.Message);
             }
         }
@@ -41,26 +41,26 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="requestDetails"></param>
         /// <param name="mwsSettings"></param>
         /// <returns></returns>
-        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings)
+        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.GetEligibleShippingServices;
 
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-            
+
             // Add Shipment Information XML
             AddShipmentRequestDetails(request, requestDetails);
-            
+
             // Get Response
             IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
-            
-            // Deserialize 
+
+            // Deserialize
             return DeserializeResponse<GetEligibleShippingServicesResponse>(response.ReadResult());
         }
 
         /// <summary>
         /// Cancel Shipment
         /// </summary>
-        public CancelShipmentResponse CancelShipment(AmazonMwsWebClientSettings mwsSettings, string amazonShipmentId)
+        public CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, string amazonShipmentId)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CancelShipment;
 
@@ -68,18 +68,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             // Add the service
             request.Variables.Add("ShipmentId", amazonShipmentId);
-            
+
             // Get Response
             IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
 
-            // Deserialize 
+            // Deserialize
             return DeserializeResponse<CancelShipmentResponse>(response.ReadResult());
         }
 
         /// <summary>
         /// Create Shipment
         /// </summary>
-        public CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings, string shippingServiceId)
+        public CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings, string shippingServiceId)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CreateShipment;
 
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             // Get Response
             IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
 
-            // Deserialize 
+            // Deserialize
             CreateShipmentResponse createShipmentResponse = DeserializeResponse<CreateShipmentResponse>(response.ReadResult());
 
             return ValidateCreateShipmentResponse(createShipmentResponse);
@@ -133,19 +133,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="request"></param>
         /// <param name="amazonMwsApiCall"></param>
         /// <param name="mwsSettings"></param>
-        private static void ConfigureRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall,  AmazonMwsWebClientSettings mwsSettings)
+        private static void ConfigureRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
         {
             string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
 
             request.Uri = new Uri(mwsSettings.Endpoint + endpointPath);
             request.VariableEncodingCasing = QueryStringEncodingCasing.Upper;
-            
+
             request.Variables.Add("AWSAccessKeyId", Decrypt(mwsSettings.InterapptiveAccessKeyID));
             request.Variables.Add("Action", mwsSettings.GetActionName(amazonMwsApiCall));
             request.Variables.Add("MWSAuthToken", mwsSettings.Connection.AuthToken);
             request.Variables.Add("SellerId", mwsSettings.Connection.MerchantId);
         }
-        
+
         /// <summary>
         /// Adds Shipment Details to the request
         /// </summary>
@@ -153,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         {
             // Order ID
             request.Variables.Add("ShipmentRequestDetails.AmazonOrderId", requestDetails.AmazonOrderId);
-            
+
             AddItemInfo(request,requestDetails);
             AddFromAddressInfo(request, requestDetails);
             AddPackageInfo(request, requestDetails);
@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 i++;
             }
         }
-        
+
         /// <summary>
         /// Adds Signature to the request
         /// Required by Amazon MWS Api
@@ -258,7 +258,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="request"></param>
         /// <param name="amazonMwsApiCall"></param>
         /// <param name="mwsSettings"></param>
-        private static void AddSignature(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, AmazonMwsWebClientSettings mwsSettings)
+        private static void AddSignature(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
         {
             request.Variables.Add("SignatureMethod", "HmacSHA256");
             request.Variables.Add("SignatureVersion", "2");
@@ -282,9 +282,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         }
 
         /// <summary>
-        /// Executes a request 
+        /// Executes a request
         /// </summary>
-        private IHttpResponseReader ExecuteRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, AmazonMwsWebClientSettings mwsSettings)
+        private IHttpResponseReader ExecuteRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
         {
             // Adds our amazon credentials and other parameters
             // required for each api call
@@ -292,14 +292,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             // Signes the request
             AddSignature(request, amazonMwsApiCall, mwsSettings);
-            
+
             // add a User Agent header
             request.Headers.Add("x-amazon-user-agent",
                 $"ShipWorks/{Assembly.GetExecutingAssembly().GetName().Version} (Language=.NET)");
 
             // business logic failures are handled through status codes
             request.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.NotFound, HttpStatusCode.Forbidden);
-            
+
             IHttpResponseReader response;
 
             try
