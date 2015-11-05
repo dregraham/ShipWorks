@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -51,6 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             merchantId.DataBindings.Add(nameof(merchantId.Text), credentialViewModel, nameof(credentialViewModel.MerchantId));
             authToken.DataBindings.Add(nameof(authToken.Text), credentialViewModel, nameof(credentialViewModel.AuthToken)); //, false, DataSourceUpdateMode.OnPropertyChanged);
+            HelpLink.LinkClicked += (x, y) => WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000066194", this);
 
             Pages.Add(new ShippingWizardPageDefaults(shipmentType));
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));

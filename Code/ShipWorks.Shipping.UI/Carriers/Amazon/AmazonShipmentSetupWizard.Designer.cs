@@ -42,8 +42,8 @@
             this.labelAuthToken = new System.Windows.Forms.Label();
             this.labelMerchantId = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.HelpLink = new System.Windows.Forms.LinkLabel();
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
-            this.labelInfo1 = new System.Windows.Forms.Label();
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
             this.contactInformation = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.mainPanel.SuspendLayout();
@@ -80,7 +80,7 @@
             // 
             // pictureBox
             // 
-            //this.pictureBox.Image = global::ShipWorks.Properties.Resources.amazon_large;
+            this.pictureBox.Image = global::ShipWorks.Properties.Resources.amazon_large;
             this.pictureBox.Location = new System.Drawing.Point(389, 3);
             this.pictureBox.Size = new System.Drawing.Size(165, 50);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -150,7 +150,7 @@
             // 
             // wizardPageWelcome
             // 
-            this.wizardPageWelcome.Controls.Add(this.labelInfo1);
+            this.wizardPageWelcome.Controls.Add(this.HelpLink);
             this.wizardPageWelcome.Description = "Setup ShipWorks to work with your Amazon account.";
             this.wizardPageWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -159,16 +159,6 @@
             this.wizardPageWelcome.Size = new System.Drawing.Size(557, 437);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup Amazon Shipping";
-            // 
-            // labelInfo1
-            // 
-            this.labelInfo1.Location = new System.Drawing.Point(20, 9);
-            this.labelInfo1.Name = "labelInfo1";
-            this.labelInfo1.Size = new System.Drawing.Size(454, 47);
-            this.labelInfo1.TabIndex = 4;
-            this.labelInfo1.Text = "This wizard will assist you in configuring your Amazon account for use with ShipW" +
-    "orks. This enables you to begin shipping, tracking, and printing labels with you" +
-    "r Amazon account.";
             // 
             // wizardPageContactInfo
             // 
@@ -230,6 +220,24 @@
             this.wizardPageWelcome.ResumeLayout(false);
             this.wizardPageContactInfo.ResumeLayout(false);
             this.ResumeLayout(false);
+            // 
+            // HelpLink
+            // 
+            this.HelpLink.AutoSize = true;
+            this.HelpLink.LinkArea = new System.Windows.Forms.LinkArea(295, 27);
+            this.HelpLink.Location = new System.Drawing.Point(20, 10);
+            this.HelpLink.Name = "HelpLink";
+            this.HelpLink.Size = new System.Drawing.Size(473, 85);
+            this.HelpLink.TabIndex = 0;
+            this.HelpLink.TabStop = true;
+            this.HelpLink.Text = "This wizard will assist you in configuring your Amazon account for use with ShipWorks. This \n" +
+                                "enables you to begin shipping, tracking, and printing labels with your Amazon account. \n\n" +
+
+                                "To enable Amazon Shipping services in ShipWorks you must link your USPS and / or UPS \n" +
+                                  "account in Seller Central. Click here for instructions to find out how to link your existing \n" +
+                                  "account(s).";
+
+            this.HelpLink.UseCompatibleTextRendering = true;
 
         }
 
@@ -242,8 +250,8 @@
         private System.Windows.Forms.Label labelAuthToken;
         private System.Windows.Forms.Label labelMerchantId;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label labelInfo1;
         private ShipWorks.UI.Wizard.WizardPage wizardPageContactInfo;
         private Data.Controls.AutofillPersonControl contactInformation;
+        private System.Windows.Forms.LinkLabel HelpLink;
     }
 }
