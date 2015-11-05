@@ -50,6 +50,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
@@ -112,6 +116,7 @@
     <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
+    <Compile Include="Carriers\Amazon\AmazonUspsLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRatingService.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShipmentRequestDetailsFactory.cs" />

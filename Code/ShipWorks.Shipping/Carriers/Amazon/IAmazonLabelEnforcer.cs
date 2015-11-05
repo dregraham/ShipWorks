@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Is Amazon allowed for the given shipment
         /// </summary>
-        EnforcementResult IsAllowed(ShipmentEntity shipment);
+        EnforcementResult CheckRestriction(ShipmentEntity shipment);
 
         /// <summary>
         /// Verify that the processed shipment is valid
