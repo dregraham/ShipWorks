@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void EnforceLabelPolicies(ShipmentEntity shipment)
         {
-            EnforcementResult result = labelEnforcers.Select(x => x.IsAllowed(shipment))
+            EnforcementResult result = labelEnforcers.Select(x => x.CheckRestriction(shipment))
                 .FirstOrDefault(x => x != EnforcementResult.Success);
 
             if (result != null)

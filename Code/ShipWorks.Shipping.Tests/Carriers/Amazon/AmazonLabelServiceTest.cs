@@ -93,9 +93,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var enforcer1 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
             var enforcer2 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
 
-            enforcer1.Setup(x => x.IsAllowed(It.IsAny<ShipmentEntity>()))
+            enforcer1.Setup(x => x.CheckRestriction(It.IsAny<ShipmentEntity>()))
                 .Returns(EnforcementResult.Success);
-            enforcer2.Setup(x => x.IsAllowed(It.IsAny<ShipmentEntity>()))
+            enforcer2.Setup(x => x.CheckRestriction(It.IsAny<ShipmentEntity>()))
                 .Returns(EnforcementResult.Success);
 
             labelEnforcers.AddRange(new[] { enforcer1.Object, enforcer2.Object });
@@ -109,15 +109,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var testObject = mock.Create<AmazonLabelService>();
             testObject.Create(defaultShipment);
 
-            enforcer1.Verify(x => x.IsAllowed(defaultShipment));
-            enforcer2.Verify(x => x.IsAllowed(defaultShipment));
+            enforcer1.Verify(x => x.CheckRestriction(defaultShipment));
+            enforcer2.Verify(x => x.CheckRestriction(defaultShipment));
         }
 
         [Fact]
         public void Create_ThrowsShippingException_WhenIsAllowedFails()
         {
             var enforcer = mock.Mock<IAmazonLabelEnforcer>();
-            enforcer.Setup(x => x.IsAllowed(It.IsAny<ShipmentEntity>()))
+            enforcer.Setup(x => x.CheckRestriction(It.IsAny<ShipmentEntity>()))
                 .Returns(new EnforcementResult("Failed!"));
 
             labelEnforcers.Add(enforcer.Object);
@@ -133,9 +133,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var enforcer1 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
             var enforcer2 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
 
-            enforcer1.Setup(x => x.IsAllowed(It.IsAny<ShipmentEntity>()))
+            enforcer1.Setup(x => x.CheckRestriction(It.IsAny<ShipmentEntity>()))
                 .Returns(new EnforcementResult("Foo!!!"));
-            enforcer2.Setup(x => x.IsAllowed(It.IsAny<ShipmentEntity>()))
+            enforcer2.Setup(x => x.CheckRestriction(It.IsAny<ShipmentEntity>()))
                 .Returns(EnforcementResult.Success);
 
             labelEnforcers.AddRange(new[] { enforcer1.Object, enforcer2.Object });
@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var testObject = mock.Create<AmazonLabelService>();
             Assert.Throws<AmazonShippingException>(() => testObject.Create(defaultShipment));
 
-            enforcer2.Verify(x => x.IsAllowed(It.IsAny<ShipmentEntity>()), Times.Never);
+            enforcer2.Verify(x => x.CheckRestriction(It.IsAny<ShipmentEntity>()), Times.Never);
         }
 
         [Fact]
@@ -198,11 +198,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var enforcer1 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
             var enforcer2 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
 
-            enforcer1.Setup(x => x.IsAllowed(It.IsAny<ShipmentEntity>()))
+            enforcer1.Setup(x => x.CheckRestriction(It.IsAny<ShipmentEntity>()))
                 .Returns(EnforcementResult.Success);
             enforcer1.Setup(x => x.VerifyShipment(shipment))
                 .Verifiable();
-            enforcer2.Setup(x => x.IsAllowed(It.IsAny<ShipmentEntity>()))
+            enforcer2.Setup(x => x.CheckRestriction(It.IsAny<ShipmentEntity>()))
                 .Returns(EnforcementResult.Success);
             enforcer2.Setup(x => x.VerifyShipment(shipment))
                 .Verifiable();
