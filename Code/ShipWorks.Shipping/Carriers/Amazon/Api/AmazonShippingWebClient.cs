@@ -142,8 +142,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             
             request.Variables.Add("AWSAccessKeyId", Decrypt(mwsSettings.InterapptiveAccessKeyID));
             request.Variables.Add("Action", mwsSettings.GetActionName(amazonMwsApiCall));
-            request.Variables.Add("MWSAuthToken", mwsSettings.Connection.AuthToken);
-            request.Variables.Add("SellerId", mwsSettings.Connection.MerchantId);
+            request.Variables.Add("MWSAuthToken", mwsSettings.Credentials.AuthToken);
+            request.Variables.Add("SellerId", mwsSettings.Credentials.MerchantID);
         }
         
         /// <summary>

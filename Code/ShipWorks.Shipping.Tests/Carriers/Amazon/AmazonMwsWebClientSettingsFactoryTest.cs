@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
                 AmazonMwsWebClientSettings testObject = settingsFactory.Create(new AmazonShipmentEntity());
 
-                Assert.Equal("testMerchantID", testObject.Connection.MerchantId);
+                Assert.Equal("testMerchantID", testObject.Credentials.MerchantID);
             }
         }
 

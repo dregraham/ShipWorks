@@ -21,27 +21,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Creates an instance of AmazonMwsWebClientSettings from an AmazonShipmentEntity
         /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
         public AmazonMwsWebClientSettings Create(AmazonShipmentEntity amazonShipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(amazonShipment, nameof(amazonShipment));
 
-            StoreEntity store = storeManager.GetRelatedStore(amazonShipment.Shipment);
-
-            return Create((IAmazonCredentials)store);
-        }
-
-        /// <summary>
-        /// Creates an instance of AmazonMwsWebClientSettings from an AmazonStoreEntity
-        /// </summary>
-        /// <param name="store"></param>
-        /// <returns></returns>
-        private AmazonMwsWebClientSettings Create(IAmazonCredentials store)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-
-            return new AmazonMwsWebClientSettings(new AmazonMwsConnection(store.MerchantID, store.AuthToken, store.Region));
+            IAmazonCredentials amazonCredentials = (IAmazonCredentials)storeManager.GetRelatedStore(amazonShipment.Shipment);
+            
+            return new AmazonMwsWebClientSettings(amazonCredentials);
         }
     }
 }
