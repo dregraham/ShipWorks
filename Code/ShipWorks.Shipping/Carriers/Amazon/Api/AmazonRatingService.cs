@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly IOrderManager orderManager;
         private readonly AmazonShipmentType amazonShipmentType;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
-        private IEnumerable<IAmazonRateGroupFilter> rateFilters;
+        private readonly IEnumerable<IAmazonRateGroupFilter> rateFilters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRatingService"/> class.

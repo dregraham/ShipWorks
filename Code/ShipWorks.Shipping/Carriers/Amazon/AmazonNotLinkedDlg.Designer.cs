@@ -81,7 +81,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "AmazonNotLinkedDlg";
             this.ShowInTaskbar = false;
-            this.Text = "Amazon account not linked";
+            this.Text = "Amazon Account Not Linked";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

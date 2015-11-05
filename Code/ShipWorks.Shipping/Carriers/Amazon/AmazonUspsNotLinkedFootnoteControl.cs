@@ -19,6 +19,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public AmazonUspsNotLinkedFootnoteControl(string accountTypeToDisplay)
         {
+            InitializeComponent();
+
             this.accountTypeToDisplay = accountTypeToDisplay;
             infoLink.Text = string.Format(infoLink.Text, accountTypeToDisplay);
 
@@ -31,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private void SetLinkArea()
         {
             int startLink = infoLink.Text.IndexOf("here", StringComparison.OrdinalIgnoreCase);
-            int linkLength = infoLink.Text.Length - startLink;
+            int linkLength = infoLink.Text.Length - startLink - 1;
             infoLink.LinkArea = new LinkArea(startLink, linkLength);
         }
 

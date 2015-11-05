@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private void SetLinkArea()
         {
             int startLink = MessageLink.Text.IndexOf("linked correctly", StringComparison.OrdinalIgnoreCase);
-            int linkLength = MessageLink.Text.Length - startLink;
+            int linkLength = MessageLink.Text.Length - startLink - 1;
             MessageLink.LinkArea = new LinkArea(startLink, linkLength);
         }
 
