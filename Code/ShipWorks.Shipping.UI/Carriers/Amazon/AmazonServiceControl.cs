@@ -100,6 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void CreateUiBindings()
         {
+            originControl.OriginChanged += (s, e) => RaiseRateCriteriaChanged();
             dimensionsControl.DimensionsChanged += OnDimensionsChanged;
             dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
             weight.WeightChanged += OnShipSenseFieldChanged;
