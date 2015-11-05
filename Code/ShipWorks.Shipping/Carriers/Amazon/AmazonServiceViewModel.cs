@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private GenericMultiValueBinder<ShipmentEntity, double> weightBinder;
         private CheckboxMultiValueBinder<ShipmentEntity> carrierWillPickUpBinder;
         private CheckboxMultiValueBinder<ShipmentEntity> sendDateMustArriveByBinder;
-        private IMultiValue<AmazonDeliveryExperienceType> deliveryExperienceBinder;
+        private IMultiValue<AmazonDeliveryExperienceType?> deliveryExperienceBinder;
         private GenericMultiValueBinder<ShipmentEntity, AmazonRateTag> shippingServiceBinder;
         private List<AmazonRateTag> servicesAvailable;
         private readonly IDisposable amazonRatesRetrievedIDisposable;
@@ -64,9 +64,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
             else if (!shippingServiceBinder.IsMultiValued && services.All(s => s.ShippingServiceId != ShippingService?.ShippingServiceId))
             {
-                AmazonRateTag selectedRateTag = new AmazonRateTag { Description = "Please select a service", ShippingServiceId = "-2", ShippingServiceOfferId = null, CarrierName = null};
-                services.Insert(0, selectedRateTag);
-                ShippingService = selectedRateTag;
+                // The selected service id is no longer valid in the rates returned, so select the first one in the list.
+                ShippingService = services.First();
             }
 
             ServicesAvailable = services;
@@ -103,10 +102,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 (entity, value) => entity.Amazon.SendDateMustArriveBy = value,
                 (entity) => entity.Processed);
 
-            deliveryExperienceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType>(shipments,
+            deliveryExperienceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType?>(shipments,
                 nameof(DeliveryExperience),
-                entity => (AmazonDeliveryExperienceType)entity.Amazon.DeliveryExperience,
-                (entity, value) => entity.Amazon.DeliveryExperience = (int)value,
+                entity => (AmazonDeliveryExperienceType?)entity.Amazon.DeliveryExperience,
+                (entity, value) => entity.Amazon.DeliveryExperience = (int)value.GetValueOrDefault(),
                 (entity) => entity.Processed);
 
             SetupServices(shipments);
@@ -121,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Setups the servicebinder, available services, and 
+        /// Setups the servicebinder, available services, and
         /// </summary>
         private void SetupServices(List<ShipmentEntity> shipments)
         {
@@ -303,7 +302,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// DeliveryExperience display text
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IMultiValue<AmazonDeliveryExperienceType> DeliveryExperience => deliveryExperienceBinder;
+        public IMultiValue<AmazonDeliveryExperienceType?> DeliveryExperience => deliveryExperienceBinder;
 
         /// <summary>
         /// DateMustArriveBy display text

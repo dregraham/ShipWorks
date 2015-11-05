@@ -100,10 +100,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void CreateUiBindings()
         {
+            originControl.OriginChanged += (s, e) => RaiseRateCriteriaChanged();
             dimensionsControl.DimensionsChanged += OnDimensionsChanged;
-            
+            dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
+            weight.WeightChanged += OnShipSenseFieldChanged;
+
             deliveryConfirmation.DataBindings.Clear();
-            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.PropertyValue), false, DataSourceUpdateMode.OnPropertyChanged);
+            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.PropertyValue), true, DataSourceUpdateMode.OnPropertyChanged);
             deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.MultiValued), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.IsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
 
             carrierWillPickUp.DataBindings.Clear();
@@ -156,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private IDisposable SubscribeToPropertyChangedEvent()
         {
             IObservable<string> events = Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
-                    x => viewModel.PropertyChanged += x, 
+                    x => viewModel.PropertyChanged += x,
                     x => viewModel.PropertyChanged -= x)
                 .Select(x => x.EventArgs.PropertyName);
 
@@ -314,5 +317,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override void PreSelectRate(RateSelectedEventArgs args) =>
             viewModel.ShippingService = args.Rate.Tag as AmazonRateTag;
+
+        /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e) => RaiseShipSenseFieldChanged();
     }
 }

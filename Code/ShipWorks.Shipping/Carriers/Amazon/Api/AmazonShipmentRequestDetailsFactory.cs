@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     City = shipment.OriginCity,
                     CountryCode = shipment.OriginCountryCode,
                     Phone = shipment.OriginPhone,
-                    Name = shipment.OriginUnparsedName,
+                    Name = shipment.OriginPerson.ParsedName.FullName,
                     PostalCode = shipment.OriginPostalCode,
                     StateOrProvinceCode = shipment.OriginStateProvCode,
                     Email = shipment.OriginEmail
