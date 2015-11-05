@@ -442,7 +442,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "AmazonStoreEntity", "MarketplaceID", "MarketplaceID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 15 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "ExcludeFBA", "ExcludeFBA", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 16 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "DomainName", "DomainName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 17 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "AmazonShippingToken", "AmazonShippingToken", false, (int)SqlDbType.NVarChar, 350, 0, 0, false, "", null, typeof(System.String), 18 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "AmazonShippingToken", "AmazonShippingToken", false, (int)SqlDbType.NVarChar, 500, 0, 0, false, "", null, typeof(System.String), 18 );
 		}
 		/// <summary>Inits AmeriCommerceStoreEntity's mappings</summary>
 		private void InitAmeriCommerceStoreEntityMappings()
