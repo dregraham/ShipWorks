@@ -766,6 +766,8 @@ namespace ShipWorks.Shipping
             {
                 StoreEntity store = StoreManager.GetStore(shipment.Order.StoreID);
 
+                PersonAdapter.Copy(store, "", person);
+
                 person.ParsedName = PersonName.Parse(store.StoreName);
 
                 return true;
