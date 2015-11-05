@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
 {
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
             return new List<IRateGroupFilter>
             {
                 new BestRateServiceLevelFilter((ServiceLevelType)shipment.BestRate.ServiceLevel),
-                new BestRateServiceTypeFilter(), 
+                new BestRateServiceTypeFilter(),
                 new BestRateNonExistentShipmentTypeFootnoteFilter(),
                 new BestRateExpress1PromotionFootnoteFilter(),
                 new CounterRatesInvalidStoreAddressFootnoteFilter()

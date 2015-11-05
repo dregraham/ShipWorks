@@ -125,11 +125,14 @@
     <Compile Include="Carriers\Amazon\Api\IAmazonShipmentRequestDetailsFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\Api\OperationResponse.cs" />
+    <Compile Include="Carriers\Amazon\EnforcementResult.cs" />
     <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
     <Compile Include="Carriers\Amazon\IAmazonAccountManager.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCredentials.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\IAmazonLabelService.cs" />
     <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
