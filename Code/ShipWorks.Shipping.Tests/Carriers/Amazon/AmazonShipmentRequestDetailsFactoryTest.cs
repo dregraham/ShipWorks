@@ -1,4 +1,5 @@
 ﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
@@ -29,12 +30,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             }
         };
         readonly AmazonShipmentRequestDetailsFactory amazonShipmentRequestDetailsFactory = new AmazonShipmentRequestDetailsFactory();
-        
+
         [Fact]
         public void CreateReturns_ShipmentRequestDetailsWith_DeclaredValue()
         {
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
-            
+
             Assert.Equal(testObject.Insurance.Amount, 4);
         }
 
@@ -64,6 +65,32 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Assert.Equal(testObject.ShipFromAddress.AddressLine1, "123");
             Assert.Equal(testObject.ShipFromAddress.AddressLine2, "456");
             Assert.Equal(testObject.ShipFromAddress.AddressLine3, "789");
+        }
+
+        [Fact]
+        public void CreateReturns_NameIsCopied_WhenParseStatusIsUnknown()
+        {
+            shipmentEntity.OriginNameParseStatus = (int)PersonNameParseStatus.Unknown;
+            shipmentEntity.OriginUnparsedName = string.Empty;
+            shipmentEntity.OriginFirstName = "Foo";
+            shipmentEntity.OriginLastName = "Bar";
+
+            ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
+
+            Assert.Equal(testObject.ShipFromAddress.Name, "Foo Bar");
+        }
+
+        [Fact]
+        public void CreateReturns_NameIsCopied_WhenParseStatusIsSimple()
+        {
+            shipmentEntity.OriginNameParseStatus = (int)PersonNameParseStatus.Simple;
+            shipmentEntity.OriginUnparsedName = "Foo Bar";
+            shipmentEntity.OriginFirstName = "Foo";
+            shipmentEntity.OriginLastName = "Bar";
+
+            ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
+
+            Assert.Equal(testObject.ShipFromAddress.Name, "Foo Bar");
         }
 
         [Fact]
