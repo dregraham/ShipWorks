@@ -1,9 +1,8 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
-using System;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -30,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             StoreEntity store = storeManager.GetRelatedStore(amazonShipment.Shipment);
 
-            return Create((AmazonStoreEntity)store);
+            return Create((IAmazonCredentials)store);
         }
 
         /// <summary>
@@ -38,11 +37,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         /// <param name="store"></param>
         /// <returns></returns>
-        private AmazonMwsWebClientSettings Create(AmazonStoreEntity store)
+        private AmazonMwsWebClientSettings Create(IAmazonCredentials store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
-            return new AmazonMwsWebClientSettings(new AmazonMwsConnection(store.MerchantID, store.AuthToken, store.AmazonApiRegion));
+            return new AmazonMwsWebClientSettings(new AmazonMwsConnection(store.MerchantID, store.AuthToken, store.Region));
         }
     }
 }
