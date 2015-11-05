@@ -286,7 +286,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                     new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.NoTracking}},
                     new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithAdultSignature}}
                 };
-                
+
                 testObject.Load(shipments);
 
                 Assert.True(testObject.DeliveryExperience.IsMultiValued);
@@ -332,7 +332,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
         }
 
         [Fact]
-        public void DeliveryConfirmation_WithMixedValues_ReturnsNoTracking()
+        public void DeliveryConfirmation_WithMixedValues_ReturnsNull()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -346,12 +346,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience.PropertyValue);
+                Assert.Equal(null, testObject.DeliveryExperience.PropertyValue);
             }
         }
 
         [Fact]
-        public void DeliveryConfirmation_WithEmptyShipmentList_ReturnsDeliveryConfirmation()
+        public void DeliveryConfirmation_WithEmptyShipmentList_ReturnsNull()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -359,7 +359,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(Enumerable.Empty<ShipmentEntity>().ToList());
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience.PropertyValue);
+                Assert.Equal(null, testObject.DeliveryExperience.PropertyValue);
             }
         }
 
