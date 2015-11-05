@@ -123,6 +123,7 @@
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
     <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteFactory.cs" />
+    <Compile Include="Carriers\Amazon\AmazonUpsLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsNotLinkedFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
