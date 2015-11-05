@@ -379,11 +379,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsWeight, 0, 0, 38);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DateMustArriveBy", typeof(System.DateTime), false, false, false, false,  (int)AmazonShipmentFieldIndex.DateMustArriveBy, 0, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "SendDateMustArriveBy", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.SendDateMustArriveBy, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DeliveryExperience", typeof(System.Int32), false, false, false, false,  (int)AmazonShipmentFieldIndex.DeliveryExperience, 0, 0, 10);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "CarrierWillPickUp", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.CarrierWillPickUp, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AmazonShipmentFieldIndex.DeclaredValue, 0, 4, 19);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "AmazonUniqueShipmentID", typeof(System.String), false, false, false, true,  (int)AmazonShipmentFieldIndex.AmazonUniqueShipmentID, 50, 0, 0);
-			base.AddElementFieldInfo("AmazonShipmentEntity", "SendDateMustArriveBy", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.SendDateMustArriveBy, 0, 0, 0);
 		}
 		/// <summary>Inits AmazonStoreEntity's FieldInfo objects</summary>
 		private void InitAmazonStoreEntityInfos()
@@ -557,6 +557,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "ProfileID", typeof(System.Int32), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.ProfileID, 0, 0, 10);
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AttributesToDownload", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AttributesToDownload, 2147483647, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "ConsolidatorAsUsps", typeof(System.Boolean), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.ConsolidatorAsUsps, 0, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonMerchantID", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonMerchantID, 50, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonAuthToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonAuthToken, 100, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonShippingToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonShippingToken, 500, 0, 0);
 		}
 		/// <summary>Inits ClickCartProOrderEntity's FieldInfo objects</summary>
 		private void InitClickCartProOrderEntityInfos()

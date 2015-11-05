@@ -1233,7 +1233,11 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [AccountKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ProfileID] [int] NOT NULL,
 [AttributesToDownload] [xml] NOT NULL,
-[ConsolidatorAsUsps] [bit] NOT NULL
+[ConsolidatorAsUsps] [bit] NOT NULL,
+[AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AmazonShippingToken] [nvarchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
