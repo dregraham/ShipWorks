@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         /// <param name="showSingleAccountDialog">if set to <c>true</c> [show single account dialog].</param>
         public UspsRatePromotionFootnoteFactory(ShipmentType shipmentType, ShipmentEntity shipment, bool showSingleAccountDialog)
         {
-            ShipmentType = shipmentType;
+            ShipmentTypeCode = shipmentType.ShipmentTypeCode;
             Shipment = shipment;
             ShowSingleAccountDialog = showSingleAccountDialog;
         }
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         /// <summary>
         /// Gets the corresponding shipment type for the factory.
         /// </summary>
-        public ShipmentType ShipmentType { get; private set; }
+        public ShipmentTypeCode ShipmentTypeCode { get; private set; }
 
         /// <summary>
         /// Gets or sets the shipment.

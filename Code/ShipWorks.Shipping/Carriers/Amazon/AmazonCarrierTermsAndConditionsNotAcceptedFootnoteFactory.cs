@@ -22,14 +22,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             MethodConditions.EnsureArgumentIsNotNull(shipmentType, nameof(shipmentType));
             MethodConditions.EnsureArgumentIsNotNull(carrierNames, nameof(carrierNames));
 
-            this.ShipmentType = shipmentType;
+            this.ShipmentTypeCode = shipmentType.ShipmentTypeCode;
             this.carrierNames = carrierNames;
         }
 
         /// <summary>
         /// Gets the corresponding shipment type for the factory.
         /// </summary>
-        public ShipmentType ShipmentType { get; }
+        public ShipmentTypeCode ShipmentTypeCode { get; }
 
         /// <summary>
         /// Creates a footnote control.

@@ -14,13 +14,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <param name="shipmentType">Type of shipment that instantiated this factory</param>
         public Express1NotQualifiedRateFootnoteFactory(ShipmentType shipmentType)
         {
-            ShipmentType = shipmentType;
+            ShipmentTypeCode = shipmentType.ShipmentTypeCode;
         }
 
         /// <summary>
         /// Gets the corresponding shipment type for the factory.
         /// </summary>
-        public ShipmentType ShipmentType { get; private set; }
+        public ShipmentTypeCode ShipmentTypeCode { get; private set; }
 
         /// <summary>
         /// Notes that this factory should not be used in BestRate
