@@ -179,6 +179,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             AmazonRateTag previousValue = viewModel.ShippingService;
             service.BindDataSourceAndPreserveSelection(viewModel.ServicesAvailable);
             service.SelectedValue = previousValue?.ShippingServiceId ?? string.Empty;
+            service.Enabled = !viewModel.ServiceIsMultiValued && viewModel.ServicesAvailable.Count > 1;
         }
 
         /// <summary>

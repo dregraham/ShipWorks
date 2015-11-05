@@ -252,6 +252,8 @@
             this.service.Size = new System.Drawing.Size(220, 21);
             this.service.TabIndex = 6;
             this.service.ValueMember = "ShippingServiceId";
+            this.service.EnabledWhenMultivalued = false;
+            this.service.Enabled = false;
             // 
             // labelDeliveryConf
             // 
