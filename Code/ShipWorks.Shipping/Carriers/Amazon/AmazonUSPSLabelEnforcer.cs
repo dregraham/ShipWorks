@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (store == null)
             {
-                throw new ShippingException("");
+                throw new ShippingException("Amazon as shipping carrier can only be used on orders from an Amazon store");
             }
 
             JToken token = SecureText.Decrypt(store.AmazonShippingToken, "AmazonShippingToken");
@@ -55,20 +55,23 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             string sdcTracking = shipment.TrackingNumber.Substring(5, 2);
 
-            if (!sdcTracking.Equals("11", StringComparison.Ordinal) && !sdcTracking.Equals("16", StringComparison.Ordinal) && shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM"))
+            if (sdcTracking.Equals("11", StringComparison.Ordinal) || sdcTracking.Equals("16", StringComparison.Ordinal) ||
+                !shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM"))
             {
-                AmazonStoreEntity store = StoreManager.GetRelatedStore(shipment.OrderID) as AmazonStoreEntity;
-
-                if (store == null)
-                {
-                    throw new ShippingException("");
-                }
-
-                string token =
-                    $"{{\"ErrorDate\":\"{SqlSession.Current.GetLocalDate()}\", \"ErrorReason\":\"ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your Stamps.com account is linked correctly in Amazon Seller Central.\"}}";
-
-                store.AmazonShippingToken = SecureText.Encrypt(token, "AmazonShippingToken");
+                return;
             }
+
+            AmazonStoreEntity store = StoreManager.GetRelatedStore(shipment.OrderID) as AmazonStoreEntity;
+
+            if (store == null)
+            {
+                throw new ShippingException("Amazon as shipping carrier can only be used on orders from an Amazon store");
+            }
+
+            string token =
+                $"{{\"ErrorDate\":\"{SqlSession.Current.GetLocalDate()}\", \"ErrorReason\":\"ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your Stamps.com account is linked correctly in Amazon Seller Central.\"}}";
+
+            store.AmazonShippingToken = SecureText.Encrypt(token, "AmazonShippingToken");
         }
     }
 }

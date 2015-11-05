@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (store == null)
             {
-                throw new ShippingException("");
+                throw new ShippingException("Amazon as shipping carrier can only be used on orders from an Amazon store");
             }
 
             JToken token = SecureText.Decrypt(store.AmazonShippingToken, "AmazonShippingToken");
@@ -69,24 +69,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             string upsTracking = shipment.TrackingNumber;
-
-            bool containsAccountNumber = false;
-
-            foreach (IEntity2 account in accountRepository.Accounts)
+            
+            if (accountRepository.Accounts.Cast<UpsAccountEntity>().Any(account => upsTracking.Contains(account.AccountNumber)))
             {
-                UpsAccountEntity upsAccount = (UpsAccountEntity) account;
-                
-                if (upsTracking.Contains(upsAccount.AccountNumber))
-                {
-                    return;
-                }
+                return;
             }
             
             AmazonStoreEntity store = StoreManager.GetRelatedStore(shipment.OrderID) as AmazonStoreEntity;
 
             if (store == null)
             {
-                throw new ShippingException("");
+                throw new ShippingException("Amazon as shipping carrier can only be used on orders from an Amazon store");
             }
 
             string token =
