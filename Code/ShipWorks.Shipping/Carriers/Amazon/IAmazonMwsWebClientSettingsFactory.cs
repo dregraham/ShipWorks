@@ -14,21 +14,5 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <param name="shipment"></param>
         /// <returns></returns>
         AmazonMwsWebClientSettings Create(AmazonShipmentEntity shipment);
-
-        /// <summary>
-        /// Creates AmazonMwsClientSettings based on store
-        /// </summary>
-        /// <param name="store"></param>
-        /// <returns></returns>
-        AmazonMwsWebClientSettings Create(AmazonStoreEntity store);
-
-        /// <summary>
-        /// Creates AmazonMwsClientSettings based on credentials
-        /// </summary>
-        /// <param name="merchantId"></param>
-        /// <param name="authToken"></param>
-        /// <param name="apiRegion"></param>
-        /// <returns></returns>
-        AmazonMwsWebClientSettings Create(string merchantId, string authToken, string apiRegion);
     }
 }

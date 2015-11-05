@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -23,6 +24,11 @@ namespace ShipWorks.Stores
         public IEnumerable<StoreEntity> GetEnabledStores()
         {
             return StoreManager.GetEnabledStores();
+        }
+
+        public StoreEntity GetRelatedStore(ShipmentEntity shipment)
+        {
+            return StoreManager.GetRelatedStore(shipment.ShipmentID);
         }
 
         /// <summary>
