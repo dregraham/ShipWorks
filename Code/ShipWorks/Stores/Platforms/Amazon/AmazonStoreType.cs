@@ -356,7 +356,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
             storeEntity.MarketplaceID = "";
             storeEntity.ExcludeFBA = true;
             storeEntity.DomainName = string.Empty;
-            
+            storeEntity.AmazonShippingToken = SecureText.Encrypt(@"{""ErrorDate"":""1/1/2001"", ""ErrorReason"":""""}", "AmazonShippingToken");
+
             // Assign the default weight downloading priority
             List<AmazonWeightField> weightPriority = new List<AmazonWeightField>()
             {

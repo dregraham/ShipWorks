@@ -1307,6 +1307,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.DomainName);}
 		}
+		/// <summary>Creates a new AmazonStoreEntity.AmazonShippingToken field instance</summary>
+		public static EntityField2 AmazonShippingToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AmazonShippingToken);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmeriCommerceStoreEntity</summary>

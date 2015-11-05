@@ -634,6 +634,8 @@ namespace ShipWorks.Data.Model
 		ExcludeFBA,
 		///<summary>DomainName. </summary>
 		DomainName,
+		///<summary>AmazonShippingToken. </summary>
+		AmazonShippingToken,
 		/// <summary></summary>
 		AmountOfFields
 	}
