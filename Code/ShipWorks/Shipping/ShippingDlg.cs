@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping
         // List of shipment types that were "Activated" at the time the UI was loaded.  This is important b\c if it got activated after we loaded the UI from another machine,
         // and we used the "live" value, then we'd think a shipment was currently loaded when really it wasn't.
         private List<ShipmentTypeCode> uiActivatedShipmentTypes = new List<ShipmentTypeCode>();
-        
+
         // If the user is processing with best rate and counter rates, they have the option to ignore signing up for
         // counter rates during the current batch.  This variable will be for tracking that flag.
         private bool showBestRateCounterRateSetupWizard = true;
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping
         private const int getRatesDebounceTime = 500;
 
         private ShipmentEntity clonedShipmentEntityForRates;
-        
+
         private RateSelectedEventArgs preSelectedRateEventArgs;
         private ValidatedAddressScope validatedAddressScope;
 
@@ -168,7 +168,7 @@ namespace ShipWorks.Shipping
 
             uspsAccountConvertedToken = Messenger.Current.OfType<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
 
-            carrierConfigurationShipmentRefresher = new CarrierConfigurationShipmentRefresher(Messenger.Current, this, 
+            carrierConfigurationShipmentRefresher = new CarrierConfigurationShipmentRefresher(Messenger.Current, this,
                 new ShippingProfileManagerWrapper(), new ShippingManagerWrapper());
         }
 
@@ -442,10 +442,10 @@ namespace ShipWorks.Shipping
         private void UpdateSelectedShipmentCount()
         {
             int selectedShipmentCount = shipmentControl.SelectedShipments.Count();
-            
+
             labelProcessing.Text = string.Format("Shipments ({0} selected)", selectedShipmentCount);
             menuProcessSelected.Text = string.Format("Create Label ({0} shipment{1})", selectedShipmentCount, selectedShipmentCount > 1 ? "s" : "");
-            
+
             string plural = selectedShipmentCount > 1 ? "s" : "";
 
             processDropDownButton.Text = "Create Label" + plural;
@@ -470,7 +470,7 @@ namespace ShipWorks.Shipping
                 // have been manually altered across shipment types
                 shipSenseNeedsUpdated = true;
                 SynchronizeWithShipSense();
-            
+
                 // Reload the displayed shipments so that they show the new shipment type UI
                 LoadSelectedShipments(true);
             }
@@ -495,7 +495,7 @@ namespace ShipWorks.Shipping
                 return serviceControlArea.Controls[0] as ServiceControlBase;
             }
         }
-        
+
         /// <summary>
         /// Gets the customs control that is currently displayed
         /// </summary>
@@ -571,7 +571,7 @@ namespace ShipWorks.Shipping
                     try
                     {
                         ShippingManager.EnsureShipmentLoaded(shipment);
-                        
+
                         // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
                         CustomsManager.LoadCustomsItems(shipment, false);
 
@@ -588,7 +588,7 @@ namespace ShipWorks.Shipping
                     catch (InvalidOperationException ex)
                     {
                         // If a processed shipment has been deleted by another SW instance and the user tries to load it here,
-                        // the New Shipment creation procedure can be initiated.  This can result in 
+                        // the New Shipment creation procedure can be initiated.  This can result in
                         // an InvalidOperationException.  It can only mean the base shipment entity has been deleted.
                         if (ex.Data.Contains("UpdateDynamicData"))
                         {
@@ -733,11 +733,11 @@ namespace ShipWorks.Shipping
             // To have editing enabled, it's necessary for shipments to be unprocessed and to have permissions for all of them
             bool enableEditing = !loadedShipmentEntities.Any(s => s.Processed) &&
                 loadedShipmentEntities.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID));
-            
+
             bool enableShippingAddress = ShouldEnableShippingAddress(enableEditing);
 
             ShipmentType shipmentType = loadedShipmentEntities.Any() ? GetShipmentType(loadedShipmentEntities) : null;
-            
+
             UpdateComboShipmentType(shipmentType, enableEditing);
 
             UpdateRequestedShipping(loadedShipmentEntities);
@@ -779,10 +779,10 @@ namespace ShipWorks.Shipping
             {
                 shipmentControl.RefreshAndResort();
             }
-            
+
             if (preSelectedRateEventArgs != null)
             {
-                // A rate has been preselected outside of this dialog, so trigger the 
+                // A rate has been preselected outside of this dialog, so trigger the
                 // service control event handler to load the correct service type
                 ServiceControl.PreSelectRate(preSelectedRateEventArgs);
 
@@ -806,8 +806,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private bool DeselectRowsIfCanceled(bool canceled, bool resortWhenDone)
         {
-            // If we canceled rate a list of all rows that are selected that weren't loaded and un-select them.  
-            // There could be selected and not loaded rows for rows that had been deleted too, but those will get 
+            // If we canceled rate a list of all rows that are selected that weren't loaded and un-select them.
+            // There could be selected and not loaded rows for rows that had been deleted too, but those will get
             // wiped out when we do the RefreshAndRestore.
             if (!canceled)
             {
@@ -1125,8 +1125,8 @@ namespace ShipWorks.Shipping
                 return null;
             }
 
-            ServiceControlBase newServiceControl = shipmentType == null ? 
-                new MultiSelectServiceControl(rateControl) : 
+            ServiceControlBase newServiceControl = shipmentType == null ?
+                new MultiSelectServiceControl(rateControl) :
                 shipmentType.CreateServiceControl(rateControl, lifetimeScope);
 
             if (newServiceControl == null)
@@ -1135,7 +1135,7 @@ namespace ShipWorks.Shipping
             }
 
             // If the type we need didn't change, then don't change it
-            if (!forceRecreateServiceControl && 
+            if (!forceRecreateServiceControl &&
                 ServiceControl != null &&
                 ServiceControl.GetType() == newServiceControl.GetType() &&
                 ServiceControl.ShipmentTypeCode == newServiceControl.ShipmentTypeCode)
@@ -1144,7 +1144,7 @@ namespace ShipWorks.Shipping
                 newServiceControl.Dispose();
                 return ServiceControl;
             }
-            
+
             newServiceControl.Initialize();
             newServiceControl.Width = serviceControlArea.Width;
             return newServiceControl;
@@ -1172,7 +1172,7 @@ namespace ShipWorks.Shipping
                 List<KeyValuePair<string, ShipmentTypeCode>> dataSource = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
                 if (dataSource.Select(d => d.Value).All(v => v != shipmentTypeCode))
                 {
-                    // The combo box does not have the shipment type in it, so we need to reload 
+                    // The combo box does not have the shipment type in it, so we need to reload
                     // it; this is probably due to an account being created via best rate that
                     // was previously a globally excluded shipment type
                     LoadShipmentTypeCombo();
@@ -1309,11 +1309,11 @@ namespace ShipWorks.Shipping
                 }
                 else
                 {
-                    // We know only one shipment Type is selected at this point, so we can use the first shipment entity to 
+                    // We know only one shipment Type is selected at this point, so we can use the first shipment entity to
                     // grab the shipment type and apply any applicable policies to the rate control
                     ShippingPolicies.Current.Apply((ShipmentTypeCode)this.loadedShipmentEntities.First().ShipmentType, rateControl);
                     rateControl.LoadRates(rateGroup);
-                    
+
                     ServiceControl.SyncSelectedRate();
                 }
             }
@@ -1402,7 +1402,7 @@ namespace ShipWorks.Shipping
                     {
                         // Refresh the shipment control, so any status changes are reflected
                         shipmentControl.RefreshAndResort();
-                        
+
                         if (CustomsControl != null)
                         {
                             // Refresh the items in the customs control after synching with ShipSense. This
@@ -1541,7 +1541,7 @@ namespace ShipWorks.Shipping
             else
             {
                 // If we didn't successfully save, we need to reload the grid completely instead of just updating the customs display.
-                // Don't want to do it directly, as we're in the middle of a change event - and reloading the UI out from undering could 
+                // Don't want to do it directly, as we're in the middle of a change event - and reloading the UI out from undering could
                 // really goof that up.
                 BeginInvoke(new MethodInvoker(() => LoadSelectedShipments(true)));
             }
@@ -1586,7 +1586,7 @@ namespace ShipWorks.Shipping
                     if (ServiceControl != null)
                     {
                         ServiceControl.RefreshContentWeight();
-                    }                    
+                    }
                 }
             }
 
@@ -1887,7 +1887,7 @@ namespace ShipWorks.Shipping
                 //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
                 OrderUtility.PopulateOrderDetails(shipment);
                 ShippingManager.EnsureShipmentLoaded(shipment);
-                
+
                 shipSenseSynchronizer.Add(shipment);
             }
         }
@@ -1992,7 +1992,7 @@ namespace ShipWorks.Shipping
             executor.PropagateException = true;
 
             // What to do before it gets started (but is on the background thread)
-            executor.ExecuteStarting += (object s, EventArgs args) => 
+            executor.ExecuteStarting += (object s, EventArgs args) =>
                 FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
 
             // Some of the printing will be delayed b\c we are waiting for label sheets to fill up
@@ -2014,7 +2014,7 @@ namespace ShipWorks.Shipping
                 {
                     return;
                 }
-                
+
                 if (args.ErrorException is PrintingException)
                 {
                     if (!(args.ErrorException is PrintingNoTemplateOutputException))
@@ -2145,7 +2145,7 @@ namespace ShipWorks.Shipping
 
                 // The list of shipments to get rates for.  A cloned collection to changes in the background don't have thread issues with the foreground
                 ShipmentEntity uiShipment = uiDisplayedShipments.First();
-                clonedShipmentEntityForRates = EntityUtility.CloneEntity(uiShipment);   
+                clonedShipmentEntityForRates = EntityUtility.CloneEntity(uiShipment);
             }
 
             getRatesTimer.Start();
@@ -2234,7 +2234,7 @@ namespace ShipWorks.Shipping
             shipSenseChangedTimer.Stop();
             SynchronizeWithShipSense();
         }
-        
+
         /// <summary>
         /// Void the selected shipments that are processed, and have not yet been already voided.
         /// </summary>
@@ -2252,7 +2252,7 @@ namespace ShipWorks.Shipping
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
             SaveChangesToUIDisplayedShipments();
 
-            // Filter out the ones we know to be already processed, or are not ready. We need to process a copy of the shipments, since its going 
+            // Filter out the ones we know to be already processed, or are not ready. We need to process a copy of the shipments, since its going
             // to be on the background thread.  Otherwise the UI could try to draw at the exact same time a shipment was being edited or saved.
             List<ShipmentEntity> shipments = EntityUtility.CloneEntityCollection(shipmentControl.SelectedShipments.Where(s => s.Processed && !s.Voided));
 
@@ -2409,7 +2409,7 @@ namespace ShipWorks.Shipping
             {
                 return;
             }
-            
+
             // Check for shipment type process shipment nudges
             ShowShipmentTypeProcessingNudges(shipments);
 
@@ -2464,7 +2464,7 @@ namespace ShipWorks.Shipping
                 {
                     WorldShipUtility.LaunchWorldShip(this);
                 }
-                
+
                 LoadSelectedShipments(true);
 
                 // We want to update the synchronizer with the KB entry of the latest processed
@@ -2504,8 +2504,8 @@ namespace ShipWorks.Shipping
 
                     orderHashes.Add(shipment.Order.ShipSenseHashKey);
 
-                    Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int) ShipmentTypeCode.BestRate ? 
-                        (Func<CounterRatesProcessingArgs, DialogResult>) BestRateCounterRatesProcessing : 
+                    Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int) ShipmentTypeCode.BestRate ?
+                        (Func<CounterRatesProcessingArgs, DialogResult>) BestRateCounterRatesProcessing :
                         CounterRatesProcessing;
 
                     ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, ratesProcessing, selectedRate, lifetimeScope);
@@ -2626,7 +2626,7 @@ namespace ShipWorks.Shipping
         /// <returns></returns>
         private DialogResult CounterRatesProcessing(CounterRatesProcessingArgs counterRatesProcessingArgs)
         {
-            // This is for a specific shipment type, so we're always going to need to show the wizard 
+            // This is for a specific shipment type, so we're always going to need to show the wizard
             // since the user explicitly chose to process with this provider
             ShipmentType shipmentType = ShipmentTypeManager.GetType(counterRatesProcessingArgs.Shipment);
 
@@ -2750,7 +2750,7 @@ namespace ShipWorks.Shipping
                 if (setupWizardDialogResult == DialogResult.OK)
                 {
                     showBestRateCounterRateSetupWizard = !rateProcessingSetupWizard.IgnoreAllCounterRates;
-                    
+
                     counterRatesProcessingArgs.SelectedShipmentType = rateProcessingSetupWizard.SelectedShipmentType;
                     counterRatesProcessingArgs.SelectedRate = rateProcessingSetupWizard.SelectedRate;
 
@@ -2903,7 +2903,7 @@ namespace ShipWorks.Shipping
             {
                 if (carrierConfigurationShipmentRefresher != null)
                 {
-                    carrierConfigurationShipmentRefresher.Dispose();    
+                    carrierConfigurationShipmentRefresher.Dispose();
                 }
 
                 if (components != null)

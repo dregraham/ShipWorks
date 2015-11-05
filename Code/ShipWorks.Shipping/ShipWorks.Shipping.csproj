@@ -106,6 +106,7 @@
     <Compile Include="Carriers\Amazon\AmazonCredentials.cs" />
     <Compile Include="Carriers\Amazon\AmazonLabelService.cs" />
     <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Carriers\Amazon\AmazonPackageAdapter.cs" />
     <Compile Include="Carriers\Amazon\AmazonRatesRetrievedMessage.cs" />
     <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
