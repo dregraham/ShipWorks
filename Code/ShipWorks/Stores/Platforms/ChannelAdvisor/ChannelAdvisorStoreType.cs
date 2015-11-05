@@ -84,6 +84,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             caStore.ProfileID = 0;
             caStore.AttributesToDownload = "<Attributes></Attributes>";
             caStore.ConsolidatorAsUsps = false;
+            caStore.AmazonApiRegion = "";
+            caStore.AmazonAuthToken = "";
+            caStore.AmazonMerchantID = "";
+            caStore.AmazonShippingToken = SecureText.Encrypt(@"{""ErrorDate"":""1/1/2001"", ""ErrorReason"":""""}", "AmazonShippingToken");
 
             return caStore; 
         }

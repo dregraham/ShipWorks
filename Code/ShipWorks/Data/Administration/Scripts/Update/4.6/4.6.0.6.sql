@@ -30,7 +30,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_ChannelAdvisorStore]
 )
 GO
 INSERT INTO [dbo].[tmp_rg_xx_ChannelAdvisorStore]([StoreID], [AccountKey], [ProfileID], [AttributesToDownload], [ConsolidatorAsUsps], [AmazonMerchantID], [AmazonAuthToken], [AmazonApiRegion], [AmazonShippingToken]) 
-SELECT [StoreID], [AccountKey], [ProfileID], [AttributesToDownload], [ConsolidatorAsUsps], '', '', '', 'EQz7Xib9kyERqbpYh2kanA3PEQW9w8fJuqnqv2NvwnKbskplppGJhWdhMSNtviyV0ydWlVaqjGVf2i1bFdcGC0AEZ7oIt/Ef6Ylk4ND+JhohkEzm5QOu+r/YLUSW1pNpDjs3edufn//xPGrxbvHb1y/HiKB4xop2oarh3PNoYaZIyIbQYJAv75H7btreUkEkiY4QBu2CwwOH5yjb58nELqPjn4dKJ6LN5PZ7+dRuxfT9ccV7rAj411vUieNtZlcTRkLyK+NDZu0AslwnC3/1wgJmdta8fXzH5sYtPBHIAN2HSzugrrguODS0iy5w9o8m' FROM [dbo].[ChannelAdvisorStore]
+SELECT [StoreID], [AccountKey], [ProfileID], [AttributesToDownload], [ConsolidatorAsUsps], '', '', '', 'hlkH7XeEA5GJOefdipC2s6DY+ZF7GWI3nazovu5UYESp9FqfeIiKcfyOzL9Mdsy0' FROM [dbo].[ChannelAdvisorStore]
 GO
 DROP TABLE [dbo].[ChannelAdvisorStore]
 GO
