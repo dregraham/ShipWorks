@@ -346,12 +346,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience.PropertyValue);
+                Assert.Equal(null, testObject.DeliveryExperience.PropertyValue);
             }
         }
 
         [Fact]
-        public void DeliveryConfirmation_WithEmptyShipmentList_ReturnsDeliveryConfirmation()
+        public void DeliveryConfirmation_WithEmptyShipmentList_ReturnsNull()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -359,7 +359,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(Enumerable.Empty<ShipmentEntity>().ToList());
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience.PropertyValue);
+                Assert.Equal(null, testObject.DeliveryExperience.PropertyValue);
             }
         }
 

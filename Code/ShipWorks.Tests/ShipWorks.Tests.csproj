@@ -498,11 +498,13 @@
     <Compile Include="SqlServer\FilterTests.cs" />
     <Compile Include="Stores\Amazon\AmazonMwsResponseHandlerTest.cs" />
     <Compile Include="Stores\Amazon\AmazonMwsWebClientSettingsTest.cs" />
+    <Compile Include="Stores\Amazon\AmazonOrderEntityTest.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />
     <Compile Include="Stores\BigCommerce\BigCommerceProductImageCacheTest.cs" />
     <Compile Include="Stores\BrightPearl\BrightPearlUtilityTest.cs" />
     <Compile Include="Stores\BuyDotcom\BuyDotComOnlineUpdaterTest.cs" />
+    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOrderEntityTest.cs" />
     <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorDownloaderTest.cs" />
     <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOnlineUpdaterTest.cs" />
     <Compile Include="Stores\eBay\EbayOnlineUpdaterTest.cs" />

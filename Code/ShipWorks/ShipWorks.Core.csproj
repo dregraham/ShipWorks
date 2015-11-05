@@ -1176,7 +1176,6 @@
     <Compile Include="Stores\IStoreManager.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsConnection.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsIsPrime.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsResponseHandler.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsWebClientSettings.cs" />
@@ -1200,7 +1199,6 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\Enums\ChannelAdvisorIsAmazonPrime.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />

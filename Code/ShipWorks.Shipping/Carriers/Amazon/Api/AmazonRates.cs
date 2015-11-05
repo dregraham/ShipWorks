@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -41,15 +41,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         {
             orderManager.PopulateOrderDetails(shipment);
             AmazonOrderEntity order = shipment.Order as AmazonOrderEntity;
+            IAmazonOrder amazonOrder = order as IAmazonOrder;
 
-            if (order == null)
-            {
-                throw new AmazonShippingException("Not an Amazon Order");
-            }
-
-            if (order.IsPrime != (int)AmazonMwsIsPrime.Yes)
+            if (amazonOrder?.IsPrime == true)
             {
                 throw new AmazonShippingException("Not an Amazon Prime Order");
+            }
+
+            if (amazonOrder == null)
+            {
+                throw new AmazonShippingException("Not an Amazon Order");
             }
 
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);

@@ -18,11 +18,11 @@ using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -250,17 +250,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public override bool IsAllowedFor(ShipmentEntity shipment)
         {
             orderManager.PopulateOrderDetails(shipment);
-            
-            long storeId = shipment.Order.StoreID;
 
-            StoreEntity storeEntity = storeManager.GetStore(storeId);
+            IAmazonOrder order = shipment.Order as IAmazonOrder;
 
-            if (storeEntity?.TypeCode != (int) StoreTypeCode.Amazon)
-            {
-                return false;
-            }
+            IAmazonCredentials amazonCredentials = storeManager.GetStore(shipment.Order.StoreID) as IAmazonCredentials;
 
-            return ((AmazonOrderEntity)shipment.Order).IsPrime == (int)AmazonMwsIsPrime.Yes;
+            return order != null && order.IsPrime && amazonCredentials != null;
         }
 
         /// <summary>
