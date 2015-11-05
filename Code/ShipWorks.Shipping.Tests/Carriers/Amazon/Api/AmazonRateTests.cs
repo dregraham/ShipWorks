@@ -235,6 +235,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     Order = new AmazonOrderEntity()
                     {
                         AmazonOrderID = "10",
+                        IsPrime = (int)AmazonMwsIsPrime.Yes
                     },
                     Amazon = new AmazonShipmentEntity()
                     {

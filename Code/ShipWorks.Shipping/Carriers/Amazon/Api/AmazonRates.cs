@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -45,7 +46,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             {
                 throw new AmazonShippingException("Not an Amazon Order");
             }
-            
+
+            if (order.IsPrime != (int)AmazonMwsIsPrime.Yes)
+            {
+                throw new AmazonShippingException("Not an Amazon Prime Order");
+            }
+
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
 
             GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
