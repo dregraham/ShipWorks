@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             mock.Mock<IStoreManager>()
                 .Setup(m => m.GetStore(It.IsAny<long>()))
-                .Returns(new StoreEntity { TypeCode = (int) StoreTypeCode.Amazon });
+                .Returns(new AmazonStoreEntity { TypeCode = (int) StoreTypeCode.Amazon });
 
             AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
 

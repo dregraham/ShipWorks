@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             AmazonOrderEntity order = shipment.Order as AmazonOrderEntity;
             IAmazonOrder amazonOrder = order as IAmazonOrder;
 
-            if (amazonOrder?.IsPrime == true)
+            if (amazonOrder?.IsPrime == false)
             {
                 throw new AmazonShippingException("Not an Amazon Prime Order");
             }
