@@ -37,7 +37,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         string IAmazonCredentials.ShippingToken
         {
-            get { return ""; }
+            get { return AmazonShippingToken; }
         }
     }
 }
