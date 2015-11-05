@@ -63,8 +63,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment) =>
-            new [] { new AmazonPackageAdapter(shipment) };
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            if (shipment.Amazon == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            return new[] {new AmazonPackageAdapter(shipment)};
+        }
 
         /// <summary>
         /// Ensures that the carrier specific data for the shipment, such as the FedEx data, are loaded for the shipment.  If the data
