@@ -64,9 +64,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
             else if (!shippingServiceBinder.IsMultiValued && services.All(s => s.ShippingServiceId != ShippingService?.ShippingServiceId))
             {
-                AmazonRateTag selectedRateTag = new AmazonRateTag { Description = "Please select a service", ShippingServiceId = "-2", ShippingServiceOfferId = null, CarrierName = null};
-                services.Insert(0, selectedRateTag);
-                ShippingService = selectedRateTag;
+                // The selected service id is no longer valid in the rates returned, so select the first one in the list.
+                ShippingService = services.First();
             }
 
             ServicesAvailable = services;
