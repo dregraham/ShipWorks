@@ -4,6 +4,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -15,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Creates the ShipmentRequestDetails.
         /// </summary>
-        public ShipmentRequestDetails Create(ShipmentEntity shipment, AmazonOrderEntity order)
+        public ShipmentRequestDetails Create(ShipmentEntity shipment, IAmazonOrder order)
         {
             return new ShipmentRequestDetails()
             {
@@ -66,10 +67,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Gets the item list.
         /// </summary>
-        private static List<Item> GetItemList(OrderEntity order)
+        private static List<Item> GetItemList(IAmazonOrder order)
         {
-            return order.OrderItems
-                .OfType<AmazonOrderItemEntity>()
+            return order.AmazonOrderItems
                 .Select(x => new Item
                 {
                     OrderItemId = x.AmazonOrderItemCode,

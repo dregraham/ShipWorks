@@ -27,5 +27,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             get { return IsPrime == (int)ChannelAdvisorIsAmazonPrime.Yes; }
         }
+
+        /// <summary>
+        /// List of IAmazonOrderItem representing the Amazon order items
+        /// </summary>
+        public IEnumerable<IAmazonOrderItem> AmazonOrderItems
+        {
+            get { return OrderItems.Select(s => s as IAmazonOrderItem); }
+        }
     }
 }

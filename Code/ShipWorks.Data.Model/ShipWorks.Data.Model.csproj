@@ -123,6 +123,8 @@
     <Compile Include="Custom\EntityClasses\ActionFilterTriggerEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionQueueEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionTaskEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ChannelAdvisorOrderItemEntity.cs" />
+    <Compile Include="Custom\EntityClasses\AmazonOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\ChannelAdvisorStoreEntity.cs" />
     <Compile Include="Custom\EntityClasses\AmazonStoreEntity.cs" />
     <Compile Include="Custom\EntityClasses\ChannelAdvisorOrderEntity.cs" />

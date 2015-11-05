@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -11,6 +12,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Creates the ShipmentRequestDetails.
         /// </summary>
-        ShipmentRequestDetails Create(ShipmentEntity shipment, AmazonOrderEntity order);
+        ShipmentRequestDetails Create(ShipmentEntity shipment, IAmazonOrder order);
     }
 }

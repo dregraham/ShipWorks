@@ -40,8 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         public RateGroup GetRates(ShipmentEntity shipment)
         {
             orderManager.PopulateOrderDetails(shipment);
-            AmazonOrderEntity order = shipment.Order as AmazonOrderEntity;
-            IAmazonOrder amazonOrder = order as IAmazonOrder;
+            IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
 
             if (amazonOrder?.IsPrime == false)
             {
@@ -53,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 throw new AmazonShippingException("Not an Amazon Order");
             }
 
-            ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
+            ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, amazonOrder);
 
             GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
 

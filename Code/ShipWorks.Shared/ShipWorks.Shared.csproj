@@ -107,6 +107,7 @@
     <Compile Include="Shipping\ShipmentTypeIconAttribute.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonCredentials.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOrder.cs" />
+    <Compile Include="Stores\Platforms\Amazon\IAmazonOrderItem.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsIsPrime.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\Enums\ChannelAdvisorIsAmazonPrime.cs" />
     <Compile Include="Stores\StoreTypeCode.cs" />

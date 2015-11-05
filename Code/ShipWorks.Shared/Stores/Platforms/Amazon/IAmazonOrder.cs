@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace ShipWorks.Stores.Platforms.Amazon
 {
     /// <summary>
@@ -15,5 +17,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// The Amazon Order ID from Amazon
         /// </summary>
         string AmazonOrderID { get; }
+
+        /// <summary>
+        /// List of IAmazonOrderItem representing the Amazon order items
+        /// </summary>
+        IEnumerable<IAmazonOrderItem> AmazonOrderItems { get; }
     }
 }
