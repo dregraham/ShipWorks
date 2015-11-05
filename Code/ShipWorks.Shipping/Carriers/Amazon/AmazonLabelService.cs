@@ -9,6 +9,8 @@ using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -22,17 +24,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IDataResourceManager resourceManager;
+        private readonly IEnumerable<IAmazonLabelEnforcer> labelEnforcers;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonLabelService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory, IDataResourceManager resourceManager)
+        public AmazonLabelService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory,
+            IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
+            IDataResourceManager resourceManager, IEnumerable<IAmazonLabelEnforcer> labelEnforcers)
         {
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
             this.orderManager = orderManager;
             this.requestFactory = requestFactory;
             this.resourceManager = resourceManager;
+            this.labelEnforcers = labelEnforcers;
         }
 
         /// <summary>
@@ -49,6 +55,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 throw new ShippingException("Amazon shipping can only be used for Amazon orders");
             }
 
+            EnforceLabelPolicies(shipment);
+
             IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
 
@@ -59,6 +67,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             // Save the label
             SaveLabel(labelResponse.CreateShipmentResult.Shipment.Label.FileContents, shipment.ShipmentID);
+
+            VerifyShipment(shipment);
         }
 
         /// <summary>
@@ -107,6 +117,31 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 //Convert the string into an image stream
                 resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary");
+            }
+        }
+
+        /// <summary>
+        /// Enforce label policies for Amazon
+        /// </summary>
+        private void EnforceLabelPolicies(ShipmentEntity shipment)
+        {
+            EnforcementResult result = labelEnforcers.Select(x => x.IsAllowed(shipment))
+                .FirstOrDefault(x => x != EnforcementResult.Success);
+
+            if (result != null)
+            {
+                throw new AmazonShippingException(result.FailureReason);
+            }
+        }
+
+        /// <summary>
+        /// Verify the shipment with all registered enforcers
+        /// </summary>
+        private void VerifyShipment(ShipmentEntity shipment)
+        {
+            foreach (IAmazonLabelEnforcer enforcer in labelEnforcers)
+            {
+                enforcer.VerifyShipment(shipment);
             }
         }
     }

@@ -3,7 +3,7 @@
     /// <summary>
     /// Result of enforcing whether an amazon label is allowed to be created
     /// </summary>
-    public struct EnforcementResult
+    public class EnforcementResult
     {
         private static readonly EnforcementResult success = new EnforcementResult(true, string.Empty);
 
