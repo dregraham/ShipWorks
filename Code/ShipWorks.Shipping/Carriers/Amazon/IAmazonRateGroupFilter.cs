@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Editing.Rating;
+﻿using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.NotQualified;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {

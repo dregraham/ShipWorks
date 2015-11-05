@@ -70,6 +70,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
 
             builder.RegisterType<AmazonShipmentRequestDetailsFactory>()
                 .As<IAmazonShipmentRequestDetailsFactory>();
+
+            builder.RegisterType<AmazonUspsRateFilter>()
+                .AsImplementedInterfaces();
         }
     }
 }
