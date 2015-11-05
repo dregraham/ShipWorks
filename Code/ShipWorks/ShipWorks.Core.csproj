@@ -1182,6 +1182,12 @@
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
     <Compile Include="Stores\Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.Designer.cs">
+      <DependentUpon>ChannelAdvisorAmazonSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -7794,6 +7800,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\EnumCheckboxControl.resx">
       <DependentUpon>EnumCheckboxControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.resx">
+      <DependentUpon>ChannelAdvisorAmazonSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorConsolidatorSettingsControl.cs</DependentUpon>
