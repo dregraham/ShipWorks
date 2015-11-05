@@ -113,7 +113,7 @@
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
-    <Compile Include="Carriers\Amazon\Api\AmazonRates.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonRatingService.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShipmentRequestDetailsFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\AmazonRateTag.cs" />
@@ -121,7 +121,7 @@
     <Compile Include="Carriers\Amazon\Api\DTOs\CreateShipmentResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
-    <Compile Include="Carriers\Amazon\Api\IAmazonRates.cs" />
+    <Compile Include="Carriers\Amazon\Api\IAmazonRatingService.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonShipmentRequestDetailsFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\Api\OperationResponse.cs" />

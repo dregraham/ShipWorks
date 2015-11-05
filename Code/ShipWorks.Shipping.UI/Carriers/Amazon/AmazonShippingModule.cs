@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.Amazon)
                 .SingleInstance();
 
-            builder.RegisterType<AmazonRates>()
+            builder.RegisterType<AmazonRatingService>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<AmazonMwsWebClientSettingsFactory>()

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
@@ -10,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
     /// <summary>
     /// Gets Amazon Rates
     /// </summary>
-    public interface IAmazonRates
+    public interface IAmazonRatingService
     {
         /// <summary>
         /// Gets the rates.

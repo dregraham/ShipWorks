@@ -18,7 +18,7 @@ using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 {
-    public class AmazonRateTests
+    public class AmazonRatingServiceTests
     {
         [Fact]
         public void GetRates_ReturnsThreeRates_WhenApiResponseHasThreeServices()
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
                     .Returns(response);
 
-                AmazonRates testObject = mock.Create<AmazonRates>();
+                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
                 RateGroup result = testObject.GetRates(SampleShipment);
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
                     .Returns(response);
 
-                AmazonRates testObject = mock.Create<AmazonRates>();
+                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
                 RateGroup result = testObject.GetRates(SampleShipment);
 
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
                     .Returns(response);
 
-                AmazonRates testObject = mock.Create<AmazonRates>();
+                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
                 RateGroup result = testObject.GetRates(SampleShipment);
                 RateResult rateResult = result.Rates.FirstOrDefault();
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
                     .Returns(response);
 
-                AmazonRates testObject = mock.Create<AmazonRates>();
+                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
                 RateGroup result = testObject.GetRates(SampleShipment);
                 RateResult rateResult = result.Rates.FirstOrDefault();
@@ -124,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
                     .Returns(response);
 
-                AmazonRates testObject = mock.Create<AmazonRates>();
+                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
                 RateGroup result = testObject.GetRates(SampleShipment);
 
@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
                     .Returns(response);
 
-                AmazonRates testObject = mock.Create<AmazonRates>();
+                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
                 RateGroup result = testObject.GetRates(SampleShipment);
 
@@ -190,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
                     .Returns(ResponseWithService(new ShippingService()));
 
-                AmazonRates testObject = mock.Create<AmazonRates>();
+                AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
                 testObject.GetRates(shipment);
 
