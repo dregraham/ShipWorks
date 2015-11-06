@@ -94,7 +94,7 @@
             // insuranceControl
             // 
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceControl.Location = new System.Drawing.Point(45, 21);
+            this.insuranceControl.Location = new System.Drawing.Point(53, 21);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(316, 52);
             this.insuranceControl.TabIndex = 97;
@@ -156,7 +156,7 @@
             this.labelDeliveryExperience.BackColor = System.Drawing.Color.Transparent;
             this.labelDeliveryExperience.Location = new System.Drawing.Point(70, 131);
             this.labelDeliveryExperience.Name = "labelDeliveryExperience";
-            this.labelDeliveryExperience.Size = new System.Drawing.Size(106, 13);
+            this.labelDeliveryExperience.Size = new System.Drawing.Size(72, 13);
             this.labelDeliveryExperience.TabIndex = 76;
             this.labelDeliveryExperience.Text = "Confirmation:";
             // 
