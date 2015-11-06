@@ -123,11 +123,11 @@
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
     <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteFactory.cs" />
-    <Compile Include="Carriers\Amazon\AmazonUspsNotLinkedFootnoteControl.cs">
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Carriers\Amazon\AmazonUspsNotLinkedFootnoteControl.Designer.cs">
-      <DependentUpon>AmazonUspsNotLinkedFootnoteControl.cs</DependentUpon>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.Designer.cs">
+      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Amazon\AmazonUspsLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsRateFilter.cs" />
@@ -193,8 +193,8 @@
     <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedDlg.resx">
       <DependentUpon>AmazonNotLinkedDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Carriers\Amazon\AmazonUspsNotLinkedFootnoteControl.resx">
-      <DependentUpon>AmazonUspsNotLinkedFootnoteControl.cs</DependentUpon>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.resx">
+      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

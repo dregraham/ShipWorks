@@ -1,27 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Editing.Rating;
+﻿using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
+    /// <summary>
+    /// Creates a AmazonUspsNotLinkedFootnoteControl
+    /// </summary>
     public class AmazonNotLinkedFootnoteFactory : IRateFootnoteFactory
     {
         private readonly string accountTypeToDisplay;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AmazonNotLinkedFootnoteFactory"/> class.
+        /// </summary>
+        /// <param name="accountTypeToDisplay">The name of the shipping service account to display in the user facing messaging</param>
         public AmazonNotLinkedFootnoteFactory(string accountTypeToDisplay)
         {
             this.accountTypeToDisplay = accountTypeToDisplay;
         }
 
-        public ShipmentTypeCode ShipmentTypeCode=> ShipmentTypeCode.Amazon;
+        /// <summary>
+        /// Returns Amazon ShipmentTypeCode
+        /// </summary>
+        public ShipmentTypeCode ShipmentTypeCode => 
+            ShipmentTypeCode.Amazon;
 
-
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
-        {
-            return new AmazonUspsNotLinkedFootnoteControl(accountTypeToDisplay);
-        }
+        /// <summary>
+        /// Creates the footnote.
+        /// </summary>
+        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters) => 
+            new AmazonNotLinkedFootnoteControl(accountTypeToDisplay);
 
         /// <summary>
         /// Notes that this factory should or should not be used in BestRate
@@ -29,5 +36,4 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public bool AllowedForBestRate => true;
     }
-    
 }
