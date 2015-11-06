@@ -472,12 +472,8 @@ namespace ShipWorks.Data.Model
 		DimsAddWeight,
 		///<summary>DeliveryExperience. </summary>
 		DeliveryExperience,
-		///<summary>CarrierWillPickUp. </summary>
-		CarrierWillPickUp,
 		///<summary>Weight. </summary>
 		Weight,
-		///<summary>SendDateMustArriveBy. </summary>
-		SendDateMustArriveBy,
 		/// <summary></summary>
 		AmountOfFields
 	}

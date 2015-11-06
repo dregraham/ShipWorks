@@ -74,7 +74,7 @@
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
             this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
-            this.sectionRecipient.Location = new System.Drawing.Point(3, 280);
+            this.sectionRecipient.Location = new System.Drawing.Point(3, 277);
             this.sectionRecipient.Size = new System.Drawing.Size(454, 24);
             this.sectionRecipient.TabIndex = 1;
             this.sectionRecipient.Visible = false;
@@ -87,7 +87,7 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 338);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 335);
             this.sectionReturns.Size = new System.Drawing.Size(454, 24);
             this.sectionReturns.Visible = false;
             // 
@@ -106,11 +106,11 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.Location = new System.Drawing.Point(3, 34);
-            this.sectionShipment.Size = new System.Drawing.Size(454, 241);
+            this.sectionShipment.Size = new System.Drawing.Size(454, 238);
             // 
             // sectionLabelOptions
             // 
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 309);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 306);
             this.sectionLabelOptions.Size = new System.Drawing.Size(454, 24);
             this.sectionLabelOptions.Visible = false;
             // 
@@ -185,7 +185,7 @@
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(22, 160);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(701, 48);
+            this.insuranceControl.Size = new System.Drawing.Size(770, 48);
             this.insuranceControl.TabIndex = 12;
             // 
             // dimensionsControl

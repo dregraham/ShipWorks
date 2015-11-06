@@ -86,7 +86,7 @@
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
             this.groupInsurance.Location = new System.Drawing.Point(3, 173);
             this.groupInsurance.Name = "groupInsurance";
-            this.groupInsurance.Size = new System.Drawing.Size(405, 82);
+            this.groupInsurance.Size = new System.Drawing.Size(405, 76);
             this.groupInsurance.TabIndex = 11;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
@@ -94,7 +94,7 @@
             // insuranceControl
             // 
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceControl.Location = new System.Drawing.Point(45, 21);
+            this.insuranceControl.Location = new System.Drawing.Point(53, 21);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(316, 52);
             this.insuranceControl.TabIndex = 97;
@@ -116,7 +116,7 @@
             this.kryptonBorderEdge10.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge10.Location = new System.Drawing.Point(29, 20);
             this.kryptonBorderEdge10.Name = "kryptonBorderEdge10";
-            this.kryptonBorderEdge10.Size = new System.Drawing.Size(1, 52);
+            this.kryptonBorderEdge10.Size = new System.Drawing.Size(1, 46);
             this.kryptonBorderEdge10.Text = "kryptonBorderEdge1";
             // 
             // groupShipment
@@ -154,11 +154,11 @@
             // 
             this.labelDeliveryExperience.AutoSize = true;
             this.labelDeliveryExperience.BackColor = System.Drawing.Color.Transparent;
-            this.labelDeliveryExperience.Location = new System.Drawing.Point(36, 131);
+            this.labelDeliveryExperience.Location = new System.Drawing.Point(70, 131);
             this.labelDeliveryExperience.Name = "labelDeliveryExperience";
-            this.labelDeliveryExperience.Size = new System.Drawing.Size(106, 13);
+            this.labelDeliveryExperience.Size = new System.Drawing.Size(72, 13);
             this.labelDeliveryExperience.TabIndex = 76;
-            this.labelDeliveryExperience.Text = "Delivery experience:";
+            this.labelDeliveryExperience.Text = "Confirmation:";
             // 
             // deliveryExperienceState
             // 

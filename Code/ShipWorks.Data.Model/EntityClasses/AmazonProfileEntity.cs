@@ -490,13 +490,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DeliveryExperience", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("CarrierWillPickUp", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Weight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("SendDateMustArriveBy", fieldHashtable);
 		}
 		#endregion
 
@@ -693,17 +687,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)AmazonProfileFieldIndex.DeliveryExperience, value); }
 		}
 
-		/// <summary> The CarrierWillPickUp property of the Entity AmazonProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."CarrierWillPickUp"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> CarrierWillPickUp
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)AmazonProfileFieldIndex.CarrierWillPickUp, false); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.CarrierWillPickUp, value); }
-		}
-
 		/// <summary> The Weight property of the Entity AmazonProfile<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonProfile"."Weight"<br/>
@@ -713,17 +696,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Double>)GetValue((int)AmazonProfileFieldIndex.Weight, false); }
 			set	{ SetValue((int)AmazonProfileFieldIndex.Weight, value); }
-		}
-
-		/// <summary> The SendDateMustArriveBy property of the Entity AmazonProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."SendDateMustArriveBy"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> SendDateMustArriveBy
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)AmazonProfileFieldIndex.SendDateMustArriveBy, false); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.SendDateMustArriveBy, value); }
 		}
 
 
