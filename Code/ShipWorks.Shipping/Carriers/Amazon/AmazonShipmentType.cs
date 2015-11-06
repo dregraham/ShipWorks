@@ -363,7 +363,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             return string.IsNullOrWhiteSpace(trackingLink) ?
                 new TrackingResult { Summary = "No tracking information available..." } :
-                new TrackingResult { Summary = $"<a href ={trackingLink}> Click here for tracking</a>" };
+                new TrackingResult { Summary = $"<a style='background-color:#FAFAFA; color:#2266AA;' href ={trackingLink}> Click here for tracking</a>" };
         }
     }
 }

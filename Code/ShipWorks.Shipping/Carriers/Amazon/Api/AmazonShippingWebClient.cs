@@ -172,11 +172,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.Amount", requestDetails.ShippingServiceOptions.DeclaredValue.Amount.ToString(CultureInfo.InvariantCulture));
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode", requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
-
-            if (requestDetails.MustArriveByDate != null && requestDetails.SendDateMustArriveBy)
-            {
-                request.Variables.Add("ShipmentRequestDetails.MustArriveByDate", FormatDate(requestDetails.MustArriveByDate.Value));
-            }
         }
 
         /// <summary>

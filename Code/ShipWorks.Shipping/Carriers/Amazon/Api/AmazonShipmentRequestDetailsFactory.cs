@@ -50,6 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 },
                 ShippingServiceOptions = new ShippingServiceOptions()
                 {
+                    CarrierWillPickUp = false,
                     DeliveryExperience = EnumHelper.GetApiValue((AmazonDeliveryExperienceType)shipment.Amazon.DeliveryExperience),
                     DeclaredValue = new DeclaredValue()
                     {

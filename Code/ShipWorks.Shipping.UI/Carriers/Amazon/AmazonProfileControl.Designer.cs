@@ -86,7 +86,7 @@
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
             this.groupInsurance.Location = new System.Drawing.Point(3, 173);
             this.groupInsurance.Name = "groupInsurance";
-            this.groupInsurance.Size = new System.Drawing.Size(405, 82);
+            this.groupInsurance.Size = new System.Drawing.Size(405, 76);
             this.groupInsurance.TabIndex = 11;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
@@ -116,7 +116,7 @@
             this.kryptonBorderEdge10.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge10.Location = new System.Drawing.Point(29, 20);
             this.kryptonBorderEdge10.Name = "kryptonBorderEdge10";
-            this.kryptonBorderEdge10.Size = new System.Drawing.Size(1, 52);
+            this.kryptonBorderEdge10.Size = new System.Drawing.Size(1, 46);
             this.kryptonBorderEdge10.Text = "kryptonBorderEdge1";
             // 
             // groupShipment
