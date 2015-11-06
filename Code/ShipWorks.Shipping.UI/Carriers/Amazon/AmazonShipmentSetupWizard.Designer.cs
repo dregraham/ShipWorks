@@ -84,7 +84,7 @@
             // HelpLink
             // 
             this.HelpLink.AutoSize = true;
-            this.HelpLink.LinkArea = new System.Windows.Forms.LinkArea(295, 27);
+            this.HelpLink.LinkArea = new System.Windows.Forms.LinkArea(299, 27);
             this.HelpLink.Location = new System.Drawing.Point(20, 10);
             this.HelpLink.Name = "HelpLink";
             this.HelpLink.Size = new System.Drawing.Size(473, 85);
