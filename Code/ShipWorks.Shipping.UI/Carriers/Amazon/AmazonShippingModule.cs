@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Amazon;
@@ -10,12 +11,18 @@ using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
+    /// <summary>
+    /// Service registrations for the Amazon shipping carrier
+    /// </summary>
     public class AmazonShippingModule : Module
     {
+        /// <summary>
+        /// Load the registrations
+        /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-            
+
             builder.RegisterType<AmazonShippingWebClient>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -71,11 +78,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<AmazonShipmentRequestDetailsFactory>()
                 .As<IAmazonShipmentRequestDetailsFactory>();
 
-            builder.RegisterType<AmazonUspsRateFilter>()
+            if (!(InterapptiveOnly.IsInterapptiveUser ^ InterapptiveOnly.MagicKeysDown))
+            {
+                builder.RegisterType<AmazonUspsRateFilter>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<AmazonUpsRateFilter>()
-                .AsImplementedInterfaces();
+                builder.RegisterType<AmazonUpsRateFilter>()
+                    .AsImplementedInterfaces();
+            }
         }
     }
 }
