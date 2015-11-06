@@ -39,35 +39,59 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void IsAllowedFor_ReturnsFalse_WhenStoreTypeIsNotAmazon()
+        public void IsAllowedFor_ReturnsFalse_WhenStoreDoesNotImplementIAmazonCredentials()
         {
             mock.Mock<IStoreManager>()
-                .Setup(m => m.GetStore(12))
-                .Returns(new StoreEntity { TypeCode = (int) StoreTypeCode.Ebay });
+                .Setup(m => m.GetStore(It.IsAny<long>()))
+                .Returns(new EbayStoreEntity { TypeCode = (int)StoreTypeCode.Ebay });
 
             AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
 
-            Assert.False(testObject.IsAllowedFor(new ShipmentEntity { Order = new OrderEntity { StoreID = 12 } }));
+            Assert.False(testObject.IsAllowedFor(new ShipmentEntity { Order = new EbayOrderEntity() }));
         }
 
         [Theory]
         [InlineData(AmazonMwsIsPrime.Yes, true)]
         [InlineData(AmazonMwsIsPrime.No, false)]
         [InlineData(AmazonMwsIsPrime.Unknown, false)]
-        public void IsAllowedFor_ReturnsTrue_OnlyWhenAmazonOrderIsPrime(AmazonMwsIsPrime isPrime, bool expected)
+        public void IsAllowedFor_AmazonStoreAndOrders_ReturnsTrue_OnlyWhenAmazonOrderIsPrime(AmazonMwsIsPrime isPrime, bool expected)
         {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Order = new AmazonOrderEntity {IsPrime = (int) isPrime}
+            };
+
             mock.Mock<IStoreManager>()
                 .Setup(m => m.GetStore(It.IsAny<long>()))
                 .Returns(new AmazonStoreEntity { TypeCode = (int) StoreTypeCode.Amazon });
 
             AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
 
-            Assert.Equal(expected, testObject.IsAllowedFor(new ShipmentEntity
-            {
-                Order = new AmazonOrderEntity { IsPrime = (int) isPrime }
-            }));
+            bool actualValue = testObject.IsAllowedFor(shipment);
+            Assert.Equal(expected, actualValue);
         }
 
+        [Theory]
+        [InlineData(AmazonMwsIsPrime.Yes, true)]
+        [InlineData(AmazonMwsIsPrime.No, false)]
+        [InlineData(AmazonMwsIsPrime.Unknown, false)]
+        public void IsAllowedFor_ChannelAdvisorStoreAndOrders_ReturnsTrue_OnlyWhenAmazonOrderIsPrime(AmazonMwsIsPrime isPrime, bool expected)
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Order = new ChannelAdvisorOrderEntity { IsPrime = (int)isPrime }
+            };
+
+            mock.Mock<IStoreManager>()
+                .Setup(m => m.GetStore(It.IsAny<long>()))
+                .Returns(new ChannelAdvisorStoreEntity { TypeCode = (int)StoreTypeCode.ChannelAdvisor });
+
+            AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
+
+            bool actualValue = testObject.IsAllowedFor(shipment);
+            Assert.Equal(expected, actualValue);
+        }
+        
         [Fact]
         public void TrackShipment_NoTrackingFound_NoTrackingNumber()
         {

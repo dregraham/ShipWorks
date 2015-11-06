@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
                 AmazonRates testObject = mock.Create<AmazonRates>();
 
-                RateGroup result = testObject.GetRates(SampleShipment);
+                RateGroup result = testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes));
 
                 Assert.Equal(3, result.Rates.Count);
             }
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
                 AmazonRates testObject = mock.Create<AmazonRates>();
 
-                RateGroup result = testObject.GetRates(SampleShipment);
+                RateGroup result = testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes));
 
                 Assert.Equal(0, result.Rates.Count);
             }
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
                 AmazonRates testObject = mock.Create<AmazonRates>();
 
-                RateGroup result = testObject.GetRates(SampleShipment);
+                RateGroup result = testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes));
                 RateResult rateResult = result.Rates.FirstOrDefault();
 
                 Assert.Equal("Unknown", rateResult.Description);
@@ -101,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
                 AmazonRates testObject = mock.Create<AmazonRates>();
 
-                RateGroup result = testObject.GetRates(SampleShipment);
+                RateGroup result = testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes));
                 RateResult rateResult = result.Rates.FirstOrDefault();
 
                 Assert.Equal("UPS", rateResult.Description);
@@ -126,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
                 AmazonRates testObject = mock.Create<AmazonRates>();
 
-                RateGroup result = testObject.GetRates(SampleShipment);
+                RateGroup result = testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes));
 
                 Assert.Equal(0, result.Rates.Count);
                 Assert.Equal(1, result.FootnoteFactories.OfType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory>().Count());
@@ -148,13 +148,37 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
                 AmazonRates testObject = mock.Create<AmazonRates>();
 
-                RateGroup result = testObject.GetRates(SampleShipment);
+                RateGroup result = testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes));
 
                 AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl footnoteControl = result.FootnoteFactories.OfType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory>().First().CreateFootnote(null) as AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl;
                 Assert.Equal(3, footnoteControl.CarrierNames.Count);
                 Assert.True(footnoteControl.CarrierNames.Contains("FEDEX"));
                 Assert.True(footnoteControl.CarrierNames.Contains("UPS"));
                 Assert.True(footnoteControl.CarrierNames.Contains("USPS"));
+            }
+        }
+
+        [Theory]
+        [InlineData(AmazonMwsIsPrime.No)]
+        [InlineData(AmazonMwsIsPrime.Unknown)]
+        public void GetRates_ReturnsAmazonShippingException_WhenNotPrimeOrder(AmazonMwsIsPrime isPrime)
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                AmazonRates testObject = mock.Create<AmazonRates>();
+
+                Assert.Throws<AmazonShippingException>(() => testObject.GetRates(SampleShipmentAmazonOrer(isPrime)));
+            }
+        }
+
+        [Fact]
+        public void GetRates_ReturnsAmazonShippingException_WhenOrderIsNotIAmazonOrder()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                AmazonRates testObject = mock.Create<AmazonRates>();
+
+                Assert.Throws<AmazonShippingException>(() => testObject.GetRates(SampleShipmentNotIAmazonOrder));
             }
         }
 
@@ -181,7 +205,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
         private void VerifyApiRequest(Action<ShipmentEntity, AmazonOrderEntity> configureInput, Expression<Func<ShipmentRequestDetails, bool>> verifyCall)
         {
-            ShipmentEntity shipment = SampleShipment;
+            ShipmentEntity shipment = SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes);
             configureInput(shipment, shipment.Order as AmazonOrderEntity);
 
             using (var mock = AutoMock.GetLoose())
@@ -226,16 +250,35 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             }
         }
 
-        public ShipmentEntity SampleShipment
+        public ShipmentEntity SampleShipmentAmazonOrer(AmazonMwsIsPrime isPrime)
+        {
+            return new ShipmentEntity()
+            {
+                Order = new AmazonOrderEntity()
+                {
+                    AmazonOrderID = "10",
+                    IsPrime = (int) isPrime
+                },
+                Amazon = new AmazonShipmentEntity()
+                {
+                    DeclaredValue = 12,
+                    DimsHeight = 1,
+                    DimsLength = 1,
+                    DimsWidth = 1,
+                    DimsWeight = 1
+                }
+            };
+        }
+
+        public ShipmentEntity SampleShipmentNotIAmazonOrder
         {
             get
             {
                 return new ShipmentEntity()
                 {
-                    Order = new AmazonOrderEntity()
+                    Order = new EbayOrderEntity()
                     {
-                        AmazonOrderID = "10",
-                        IsPrime = (int)AmazonMwsIsPrime.Yes
+                        Store = new EbayStoreEntity()
                     },
                     Amazon = new AmazonShipmentEntity()
                     {
@@ -247,6 +290,26 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     }
                 };
             }
+        }
+
+        public ShipmentEntity SampleShipmentChannelAdvisorOrder(AmazonMwsIsPrime isPrime)
+        {
+            return new ShipmentEntity()
+            {
+                Order = new ChannelAdvisorOrderEntity()
+                {
+                    IsPrime = (int) isPrime,
+                    Store = new ChannelAdvisorStoreEntity()
+                },
+                Amazon = new AmazonShipmentEntity()
+                {
+                    DeclaredValue = 12,
+                    DimsHeight = 1,
+                    DimsLength = 1,
+                    DimsWidth = 1,
+                    DimsWeight = 1
+                }
+            };
         }
 
         private string GetEmbeddedResourceXml(string embeddedResourceName)
