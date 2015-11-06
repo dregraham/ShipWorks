@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Transactions;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
@@ -35,7 +34,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// <summary>
         /// Copy constructor
         /// </summary>
-        public LoadStatusPresetsMigrationTask(LoadStatusPresetsMigrationTask toCopy) 
+        public LoadStatusPresetsMigrationTask(LoadStatusPresetsMigrationTask toCopy)
             : base (toCopy)
         {
 
@@ -82,7 +81,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                                 allStatuses.Add(new Tuple<long, List<string>, List<string>>(storeID, parsedOrderStatuses, parsedItemStatuses));
 
                                 // remember the store's default order and item statuses
-                                Tuple<long, string, string> storeDefault = new Tuple<long, string, string>(storeID, parsedOrderStatuses.Count == 0 ? "" : parsedOrderStatuses.FirstOrDefault(), 
+                                Tuple<long, string, string> storeDefault = new Tuple<long, string, string>(storeID, parsedOrderStatuses.Count == 0 ? "" : parsedOrderStatuses.FirstOrDefault(),
                                                                                                                     parsedItemStatuses.Count == 0 ? "" : parsedItemStatuses.FirstOrDefault());
                                 v2Defaults.Add(storeDefault);
                             }
@@ -135,72 +134,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                             SqlCommandProvider.ExecuteNonQuery(cmd);
                         });
 
-                        // add store-specific 
-                        allStatuses.ForEach(tuple =>
-                        {
-                            long storeID = tuple.Item1;
-                            List<string> storeOrderStatuses = tuple.Item2;
-                            List<string> storeItemStatuses = tuple.Item3;
-
-                            string storeDefaultOrderStatus = v2Defaults.First(t => t.Item1 == storeID).Item2;
-                            bool storeDefaultOrderStatusAdded = false;
-
-                            string storeDefaultItemStatus = v2Defaults.First(t => t.Item1 == storeID).Item3;
-                            bool storeDefaultItemStatusAdded = false;
-
-                            storeOrderStatuses.ForEach(status =>
-                            {
-                                cmd.Parameters["@StoreID"].Value = storeID;
-                                cmd.Parameters["@StatusTarget"].Value = (int)StatusPresetTarget.Order;
-                                cmd.Parameters["@StatusText"].Value = status;
-                                cmd.Parameters["@IsDefault"].Value = (status == storeDefaultOrderStatus);
-
-                                if ((bool)cmd.Parameters["@IsDefault"].Value)
-                                {
-                                    storeDefaultOrderStatusAdded = true;
-                                }
-
-                                SqlCommandProvider.ExecuteNonQuery(cmd);
-                            });
-
-                            storeItemStatuses.ForEach(status =>
-                            {
-                                cmd.Parameters["@StoreID"].Value = storeID;
-                                cmd.Parameters["@StatusTarget"].Value = (int)StatusPresetTarget.OrderItem;
-                                cmd.Parameters["@StatusText"].Value = status;
-                                cmd.Parameters["@IsDefault"].Value = (status == storeDefaultItemStatus);
-
-                                if ((bool)cmd.Parameters["@IsDefault"].Value)
-                                {
-                                    storeDefaultItemStatusAdded = true;
-                                }
-
-                                SqlCommandProvider.ExecuteNonQuery(cmd);
-                            });
-                            
-
-                            // if a Store's V2 default statuses end up being V3 Shared statuses, they wouldn't have been added int he prior loops.  Add them now.
-                            if (!storeDefaultOrderStatusAdded)
-                            {
-                                cmd.Parameters["@StoreID"].Value = storeID;
-                                cmd.Parameters["@StatusTarget"].Value = (int)StatusPresetTarget.Order;
-                                cmd.Parameters["@StatusText"].Value = storeDefaultOrderStatus;
-                                cmd.Parameters["@IsDefault"].Value = true;
-
-                                SqlCommandProvider.ExecuteNonQuery(cmd);
-                            }
-
-                            if (!storeDefaultItemStatusAdded)
-                            {
-                                cmd.Parameters["@StoreID"].Value = storeID;
-                                cmd.Parameters["@StatusTarget"].Value = (int)StatusPresetTarget.OrderItem;
-                                cmd.Parameters["@StatusText"].Value = storeDefaultItemStatus;
-                                cmd.Parameters["@IsDefault"].Value = true;
-
-                                SqlCommandProvider.ExecuteNonQuery(cmd);
-                            }
-
-                        });
+                        // add store-specific
+                        allStatuses.ForEach(tuple => UpdateAllStatuses(tuple, v2Defaults, cmd));
                     }
 
                     // commit the transaction
@@ -209,6 +144,62 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
             }
 
             return 1;
+        }
+
+        /// <summary>
+        /// Update all the statuses
+        /// </summary>
+        private static void UpdateAllStatuses(Tuple<long, List<string>, List<string>> tuple, List<Tuple<long, string, string>> v2Defaults, SqlCommand cmd)
+        {
+            long storeID = tuple.Item1;
+            List<string> storeOrderStatuses = tuple.Item2;
+            List<string> storeItemStatuses = tuple.Item3;
+
+            string storeDefaultOrderStatus = v2Defaults.First(t => t.Item1 == storeID).Item2;
+            bool storeDefaultOrderStatusAdded = storeOrderStatuses.Any(status => status == storeDefaultOrderStatus);
+
+            string storeDefaultItemStatus = v2Defaults.First(t => t.Item1 == storeID).Item3;
+            bool storeDefaultItemStatusAdded = storeItemStatuses.Any(status => status == storeDefaultItemStatus);
+
+            storeOrderStatuses.ForEach(status =>
+                UpdateStoreDetailStatuses(status, cmd, storeID, storeDefaultOrderStatus));
+
+            storeItemStatuses.ForEach(status =>
+                UpdateStoreDetailStatuses(status, cmd, storeID, storeDefaultItemStatus));
+
+            // if a Store's V2 default statuses end up being V3 Shared statuses, they wouldn't have been added int he prior loops.  Add them now.
+            if (!storeDefaultOrderStatusAdded)
+            {
+                cmd.Parameters["@StoreID"].Value = storeID;
+                cmd.Parameters["@StatusTarget"].Value = (int)StatusPresetTarget.Order;
+                cmd.Parameters["@StatusText"].Value = storeDefaultOrderStatus;
+                cmd.Parameters["@IsDefault"].Value = true;
+
+                SqlCommandProvider.ExecuteNonQuery(cmd);
+            }
+
+            if (!storeDefaultItemStatusAdded)
+            {
+                cmd.Parameters["@StoreID"].Value = storeID;
+                cmd.Parameters["@StatusTarget"].Value = (int)StatusPresetTarget.OrderItem;
+                cmd.Parameters["@StatusText"].Value = storeDefaultItemStatus;
+                cmd.Parameters["@IsDefault"].Value = true;
+
+                SqlCommandProvider.ExecuteNonQuery(cmd);
+            }
+        }
+
+        /// <summary>
+        /// Update statuses of store details
+        /// </summary>
+        private static void UpdateStoreDetailStatuses(string status, SqlCommand cmd, long storeID, string storeDefaultOrderStatus)
+        {
+            cmd.Parameters["@StoreID"].Value = storeID;
+            cmd.Parameters["@StatusTarget"].Value = (int)StatusPresetTarget.Order;
+            cmd.Parameters["@StatusText"].Value = status;
+            cmd.Parameters["@IsDefault"].Value = (status == storeDefaultOrderStatus);
+
+            SqlCommandProvider.ExecuteNonQuery(cmd);
         }
 
         /// <summary>
@@ -233,7 +224,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// <summary>
         /// Calculate an estimate
         /// </summary>
-        protected override int RunEstimate(System.Data.SqlClient.SqlConnection con)
+        protected override int RunEstimate(SqlConnection con)
         {
             // yeah, considering to be just a single step
             return 1;

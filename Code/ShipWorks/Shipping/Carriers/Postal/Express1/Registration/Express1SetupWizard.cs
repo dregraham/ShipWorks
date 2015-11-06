@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         private readonly PostalOptionsControlBase optionsControl;
         private readonly PostalAccountManagerControlBase accountControl;
         private readonly IExpress1PurchasePostageDlg postageDialog;
-                
+
         private readonly Express1Registration registration;
         private readonly IEnumerable<IEntity2> existingExpress1Accounts;
         private int initialPersonCreditCardHeight;
@@ -37,19 +37,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Usps), the caller needs to provide
         /// the appropriate controls and postage dialog that are specific to the Express1 partner.
         /// </summary>
-        public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog, PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, IEnumerable<IEntity2> existingExpress1Accounts) : 
-            this(postageDialog, accountControl, optionsControl, registration, false, existingExpress1Accounts)
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Express1SetupWizard"/> class. Since this wizard is intended to be
-        /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Usps), the caller needs to provide
-        /// the appropriate controls and postage dialog that are specific to the Express1 partner.
-        /// </summary>
-        public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog, PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, bool forceAccountOnly, IEnumerable<IEntity2> existingExpress1Accounts)
+        public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog, PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, IEnumerable<IEntity2> existingExpress1Accounts)
         {
             if (postageDialog == null)
-            {  
+            {
                 throw new ArgumentNullException("postageDialog");
             }
 
@@ -95,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             cardExpireMonth.SelectedIndex = 0;
             cardExpireYear.SelectedIndex = 0;
 
-            this.ForceAccountOnly = forceAccountOnly;
+            this.ForceAccountOnly = false;
             this.existingExpress1Accounts = existingExpress1Accounts ?? new List<IEntity2>();
         }
 
@@ -201,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         }
 
         /// <summary>
-        ///  
+        ///
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -284,7 +275,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             if (errors.Any())
             {
                 // This is the same error formatting as the person control uses
-                MessageHelper.ShowInformation(this, "The following issues were found:" + 
+                MessageHelper.ShowInformation(this, "The following issues were found:" +
                     Environment.NewLine +
                     errors.Select(x => "    " + x.Message).Combine(Environment.NewLine));
                 e.NextPage = CurrentPage;
@@ -378,7 +369,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                 e.NextPage = CurrentPage;
             }
         }
-    
+
         /// <summary>
         /// Buy postage for the account
         /// </summary>
@@ -424,7 +415,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             if (DialogResult != DialogResult.OK)
             {
                 // The user closed/canceled before completing the wizard, so we need to clean up the
-                // account that may have been created since the account is saved in ShipWorks as 
+                // account that may have been created since the account is saved in ShipWorks as
                 // soon as possible
                 registration.DeleteAccount();
             }

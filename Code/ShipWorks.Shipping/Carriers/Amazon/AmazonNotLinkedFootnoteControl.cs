@@ -10,14 +10,14 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
-    public partial class AmazonUspsNotLinkedFootnoteControl : RateFootnoteControl
+    public partial class AmazonNotLinkedFootnoteControl : RateFootnoteControl
     {
         private readonly string accountTypeToDisplay;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AmazonUspsNotLinkedFootnoteControl"/> class.
+        /// Initializes a new instance of the <see cref="AmazonNotLinkedFootnoteControl"/> class.
         /// </summary>
-        public AmazonUspsNotLinkedFootnoteControl(string accountTypeToDisplay)
+        public AmazonNotLinkedFootnoteControl(string accountTypeToDisplay)
         {
             InitializeComponent();
 
@@ -38,13 +38,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AmazonUspsNotLinkedFootnoteControl"/> class.
+        /// Initializes a new instance of the <see cref="AmazonNotLinkedFootnoteControl"/> class.
         /// </summary>
-        public AmazonUspsNotLinkedFootnoteControl()
+        public AmazonNotLinkedFootnoteControl()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Called when [click information link] - Shows the dialog
+        /// </summary>
         private void OnClickInfoLink(object sender, LinkLabelLinkClickedEventArgs e)
         {
             AmazonNotLinkedDlg dlg = new AmazonNotLinkedDlg(accountTypeToDisplay);

@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Shipping.Carriers.Amazon
 {
-    partial class AmazonUspsNotLinkedFootnoteControl
+    partial class AmazonNotLinkedFootnoteControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AmazonUspsNotLinkedFootnoteControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AmazonNotLinkedFootnoteControl));
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.infoLink = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -62,7 +62,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.infoLink);
             this.Controls.Add(this.pictureBox);
-            this.Name = "AmazonUspsNotLinkedFootnoteControl";
+            this.Name = "AmazonNotLinkedFootnoteControl";
             this.Size = new System.Drawing.Size(396, 28);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
