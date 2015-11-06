@@ -6,6 +6,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using System.Reflection;
 using Interapptive.Shared.Messaging;
+using ShipWorks.Common;
 using ShipWorks.Data;
 
 namespace ShipWorks.ApplicationCore

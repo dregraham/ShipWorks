@@ -1,7 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 
@@ -12,6 +11,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonUspsLabelEnforcer : IAmazonLabelEnforcer
     {
+        private readonly IStoreManager storeManager;
+        private readonly IDateTimeProvider dateTimeProvider;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AmazonUspsLabelEnforcer"/> class.
+        /// </summary>
+        /// <param name="storeManager">The store manager.</param>
+        /// <param name="dateTimeProvider">The date time provider.</param>
+        public AmazonUspsLabelEnforcer(IStoreManager storeManager, IDateTimeProvider dateTimeProvider)
+        {
+            this.storeManager = storeManager;
+            this.dateTimeProvider = dateTimeProvider;
+        }
+
         /// <summary>
         /// Is Amazon allowed for the given shipment
         /// </summary>
@@ -22,21 +35,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            AmazonStoreEntity store = StoreManager.GetRelatedStore(shipment.OrderID) as AmazonStoreEntity;
-
-            if (store == null)
-            {
-                throw new ShippingException("Amazon as shipping carrier can only be used on orders from an Amazon store");
-            }
-
-            JToken token = SecureText.Decrypt(store.AmazonShippingToken, "AmazonShippingToken");
+            AmazonStoreEntity store = GetStore(shipment);
+            
+            JToken token = JToken.Parse(SecureText.Decrypt(store.AmazonShippingToken, "AmazonShippingToken"));
 
             JToken errorDate = token.SelectToken("ErrorDate");
             JToken errorReason = token.SelectToken("ErrorReason");
-
+            
             DateTime errorDateTime = DateTime.Parse(errorDate.ToString());
 
-            if (errorDateTime == SqlSession.Current.GetLocalDate())
+            if (errorDateTime.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
             {
                 return new EnforcementResult(errorReason.ToString());
             }
@@ -55,23 +63,33 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             string sdcTracking = shipment.TrackingNumber.Substring(5, 2);
 
-            if (sdcTracking.Equals("11", StringComparison.Ordinal) || sdcTracking.Equals("16", StringComparison.Ordinal) ||
-                !shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM"))
-            {
-                return;
-            }
+            AmazonStoreEntity store = GetStore(shipment);
 
-            AmazonStoreEntity store = StoreManager.GetRelatedStore(shipment.OrderID) as AmazonStoreEntity;
+            if (!sdcTracking.Equals("11", StringComparison.Ordinal) && !sdcTracking.Equals("16", StringComparison.Ordinal) && shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM"))
+            {
+                string token =
+                    $"{{\"ErrorDate\":\"{dateTimeProvider.CurrentSqlServerDateTime.Date}\", \"ErrorReason\":\"ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your Stamps.com account is linked correctly in Amazon Seller Central.\"}}";
+
+                store.AmazonShippingToken = SecureText.Encrypt(token, "AmazonShippingToken");
+            }
+        }
+
+        /// <summary>
+        /// Gets the store.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns></returns>
+        /// <exception cref="ShippingException"></exception>
+        private AmazonStoreEntity GetStore(ShipmentEntity shipment)
+        {
+            AmazonStoreEntity store = storeManager.GetRelatedStore(shipment.ShipmentID) as AmazonStoreEntity;
 
             if (store == null)
             {
                 throw new ShippingException("Amazon as shipping carrier can only be used on orders from an Amazon store");
             }
 
-            string token =
-                $"{{\"ErrorDate\":\"{SqlSession.Current.GetLocalDate()}\", \"ErrorReason\":\"ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your Stamps.com account is linked correctly in Amazon Seller Central.\"}}";
-
-            store.AmazonShippingToken = SecureText.Encrypt(token, "AmazonShippingToken");
+            return store;
         }
     }
 }
