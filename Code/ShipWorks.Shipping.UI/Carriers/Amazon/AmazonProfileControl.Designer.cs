@@ -154,11 +154,11 @@
             // 
             this.labelDeliveryExperience.AutoSize = true;
             this.labelDeliveryExperience.BackColor = System.Drawing.Color.Transparent;
-            this.labelDeliveryExperience.Location = new System.Drawing.Point(36, 131);
+            this.labelDeliveryExperience.Location = new System.Drawing.Point(70, 131);
             this.labelDeliveryExperience.Name = "labelDeliveryExperience";
             this.labelDeliveryExperience.Size = new System.Drawing.Size(106, 13);
             this.labelDeliveryExperience.TabIndex = 76;
-            this.labelDeliveryExperience.Text = "Delivery experience:";
+            this.labelDeliveryExperience.Text = "Confirmation:";
             // 
             // deliveryExperienceState
             // 
