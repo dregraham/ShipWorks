@@ -16,13 +16,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
     public class AmazonUpsLabelEnforcerTest
     {
-        private ShipmentEntity amazonShipment;
-        private ShipmentEntity nonAmazonShipment;
-        private Mock<IStoreManager> storeManager;
-        private Mock<IDateTimeProvider> dateTimeProvider;
-        private Mock<ICarrierAccountRepository<IEntity2>> accountRepository;
-        private AmazonStoreEntity store;
-        private AmazonUpsLabelEnforcer testObject;
+        private readonly ShipmentEntity amazonShipment;
+        private readonly ShipmentEntity nonAmazonShipment;
+        private readonly Mock<IStoreManager> storeManager;
+        private readonly Mock<IDateTimeProvider> dateTimeProvider;
+        private readonly Mock<ICarrierAccountRepository<UpsAccountEntity>> accountRepository;
+        private readonly AmazonStoreEntity store;
+        private readonly AmazonUpsLabelEnforcer testObject;
 
         public AmazonUpsLabelEnforcerTest()
         {
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             dateTimeProvider = new Mock<IDateTimeProvider>();
             dateTimeProvider.Setup(x => x.CurrentSqlServerDateTime).Returns(DateTime.Today);
 
-            accountRepository = new Mock<ICarrierAccountRepository<IEntity2>>();
+            accountRepository = new Mock<ICarrierAccountRepository<UpsAccountEntity>>();
             accountRepository.Setup(x => x.Accounts).Returns(accounts);
 
             testObject = new AmazonUpsLabelEnforcer(accountRepository.Object, storeManager.Object, dateTimeProvider.Object);

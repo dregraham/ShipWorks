@@ -10,12 +10,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
     public class AmazonUspsLabelEnforcerTest
     {
-        private ShipmentEntity amazonShipment;
-        private ShipmentEntity nonAmazonShipment;
+        private readonly ShipmentEntity amazonShipment;
+        private readonly ShipmentEntity nonAmazonShipment;
         private Mock<IStoreManager> storeManager;
-        private Mock<IDateTimeProvider> dateTimeProvider; 
-        private AmazonStoreEntity store;
-        private AmazonUspsLabelEnforcer testObject;
+        private readonly Mock<IDateTimeProvider> dateTimeProvider; 
+        private readonly AmazonStoreEntity store;
+        private readonly AmazonUspsLabelEnforcer testObject;
 
         public AmazonUspsLabelEnforcerTest()
         {

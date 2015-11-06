@@ -14,13 +14,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public class AmazonUpsLabelEnforcer : IAmazonLabelEnforcer
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
-        private IStoreManager storeManager;
-        private IDateTimeProvider dateTimeProvider;
+        private readonly IStoreManager storeManager;
+        private readonly IDateTimeProvider dateTimeProvider;
 
-        /// Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AmazonUpsLabelEnforcer"/> class.
         /// </summary>
-        /// <param name="accountRepository"></param>
-        public AmazonUpsLabelEnforcer(ICarrierAccountRepository<UpsAccountEntity> accountRepository)
+        /// <param name="accountRepository">The account repository.</param>
+        /// <param name="storeManager">The store manager.</param>
+        /// <param name="dateTimeProvider">The date time provider.</param>
+        public AmazonUpsLabelEnforcer(ICarrierAccountRepository<UpsAccountEntity> accountRepository, IStoreManager storeManager, IDateTimeProvider dateTimeProvider)
         {
             this.accountRepository = accountRepository;
             this.storeManager = storeManager;
