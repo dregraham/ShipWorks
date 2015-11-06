@@ -12,9 +12,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Enums
     [AuditDisplayFormat(AuditDisplayFormat.Formats.AmazonDeliveryExperienceType)]
     public enum AmazonDeliveryExperienceType
     {
-        [Description("No Tracking")]
-        [ApiValue("NoTracking")]
-        NoTracking = 0,
+        // There are currently no services that support NoTracking
+        //[Description("No Tracking")]
+        //[ApiValue("NoTracking")]
+        //NoTracking = 0,
 
         [Description("Delivery Confirmation With Signature")]
         [ApiValue("DeliveryConfirmationWithSignature")]

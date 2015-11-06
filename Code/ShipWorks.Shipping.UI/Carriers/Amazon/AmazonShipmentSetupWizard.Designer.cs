@@ -36,6 +36,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AmazonShipmentSetupWizard));
             this.wizardPageCredentials = new ShipWorks.UI.Wizard.WizardPage();
             this.merchantId = new System.Windows.Forms.TextBox();
             this.authToken = new System.Windows.Forms.TextBox();
@@ -56,9 +57,7 @@
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(389, 509);
-            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -70,7 +69,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageContactInfo);
+            this.mainPanel.Controls.Add(this.wizardPageWelcome);
             this.mainPanel.Size = new System.Drawing.Size(557, 437);
             // 
             // etchBottom
@@ -80,7 +79,7 @@
             // 
             // pictureBox
             // 
-            this.pictureBox.Image = global::ShipWorks.Properties.Resources.amazon_large;
+            this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
             this.pictureBox.Location = new System.Drawing.Point(389, 3);
             this.pictureBox.Size = new System.Drawing.Size(165, 50);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -135,7 +134,7 @@
             this.labelMerchantId.AutoSize = true;
             this.labelMerchantId.Location = new System.Drawing.Point(62, 36);
             this.labelMerchantId.Name = "labelMerchantId";
-            this.labelMerchantId.Size = new System.Drawing.Size(50, 13);
+            this.labelMerchantId.Size = new System.Drawing.Size(51, 13);
             this.labelMerchantId.TabIndex = 169;
             this.labelMerchantId.Text = "Seller ID:";
             // 
@@ -147,6 +146,18 @@
             this.label1.Size = new System.Drawing.Size(279, 13);
             this.label1.TabIndex = 166;
             this.label1.Text = "Enter the Seller ID and Auth Token provided by Amazon.";
+            // 
+            // HelpLink
+            // 
+            this.HelpLink.AutoSize = true;
+            this.HelpLink.LinkArea = new System.Windows.Forms.LinkArea(297, 27);
+            this.HelpLink.Location = new System.Drawing.Point(20, 10);
+            this.HelpLink.Name = "HelpLink";
+            this.HelpLink.Size = new System.Drawing.Size(473, 85);
+            this.HelpLink.TabIndex = 0;
+            this.HelpLink.TabStop = true;
+            this.HelpLink.Text = resources.GetString("HelpLink.Text");
+            this.HelpLink.UseCompatibleTextRendering = true;
             // 
             // wizardPageWelcome
             // 
@@ -201,7 +212,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(557, 544);
-            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "AmazonShipmentSetupWizard";
             this.NextVisible = true;
@@ -218,26 +228,9 @@
             this.wizardPageCredentials.ResumeLayout(false);
             this.wizardPageCredentials.PerformLayout();
             this.wizardPageWelcome.ResumeLayout(false);
+            this.wizardPageWelcome.PerformLayout();
             this.wizardPageContactInfo.ResumeLayout(false);
             this.ResumeLayout(false);
-            // 
-            // HelpLink
-            // 
-            this.HelpLink.AutoSize = true;
-            this.HelpLink.LinkArea = new System.Windows.Forms.LinkArea(295, 27);
-            this.HelpLink.Location = new System.Drawing.Point(20, 10);
-            this.HelpLink.Name = "HelpLink";
-            this.HelpLink.Size = new System.Drawing.Size(473, 85);
-            this.HelpLink.TabIndex = 0;
-            this.HelpLink.TabStop = true;
-            this.HelpLink.Text = "This wizard will assist you in configuring your Amazon account for use with ShipWorks. This \n" +
-                                "enables you to begin shipping, tracking, and printing labels with your Amazon account. \n\n" +
-
-                                "To enable Amazon Shipping services in ShipWorks you must link your USPS and / or UPS \n" +
-                                  "account in Seller Central. Click here for instructions to find out how to link your existing \n" +
-                                  "account(s).";
-
-            this.HelpLink.UseCompatibleTextRendering = true;
 
         }
 
