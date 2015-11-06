@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
 using Xunit;
+using Autofac.Extras.Moq;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
@@ -14,10 +15,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
     {
         readonly RateResult uspsRate;
         readonly RateResult stampsRate;
-
+        readonly AutoMock mock;
 
         public AmazonUspsRateFilterTest()
         {
+            mock = AutoMock.GetLoose();
             stampsRate = new RateResult("Stamps Rate", "", 0, new AmazonRateTag() { CarrierName = "stamps" });
             uspsRate = new RateResult("u s p s Rate", "", 0, new AmazonRateTag() { CarrierName = "usps" });
         }
@@ -25,7 +27,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Filter_FooterNotAdded_NoUspsCarrier()
         {
-            AmazonUspsRateFilter testObject = new AmazonUspsRateFilter();
+            AmazonUspsRateFilter testObject = mock.Create<AmazonUspsRateFilter>();
             RateGroup rateGroup = new RateGroup(new List<RateResult>() { stampsRate });
 
             RateGroup filterredRateGroup = testObject.Filter(rateGroup);
@@ -36,7 +38,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Filter_FooterAdded_HasUspsCarrier()
         {
-            AmazonUspsRateFilter testObject = new AmazonUspsRateFilter();
+            AmazonUspsRateFilter testObject = mock.Create<AmazonUspsRateFilter>();
             RateGroup rateGroup = new RateGroup(new List<RateResult>() { stampsRate, uspsRate });
 
             RateGroup filterredRateGroup = testObject.Filter(rateGroup);
@@ -47,8 +49,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Filter_UspsRateRemoved_HasUspsCarrierRate()
         {
-            AmazonUspsRateFilter testObject = new AmazonUspsRateFilter();
-            RateGroup rateGroup = new RateGroup(new List<RateResult>() { stampsRate, uspsRate });
+            AmazonUspsRateFilter testObject = mock.Create<AmazonUspsRateFilter>();
+            RateGroup rateGroup = new RateGroup(new List<RateResult> { stampsRate, uspsRate });
 
             RateGroup filterredRateGroup = testObject.Filter(rateGroup);
 

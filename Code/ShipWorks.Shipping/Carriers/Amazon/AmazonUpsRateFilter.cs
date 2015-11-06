@@ -8,14 +8,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 {
     public class AmazonUpsRateFilter : IAmazonRateGroupFilter
     {
+        private readonly Func<ShipmentTypeCode, IAmazonNotLinkedFootnoteFactory> createFootnoteFactory;
         private readonly ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonUpsRateFilter"/> class.
         /// </summary>
-        public AmazonUpsRateFilter(ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository)
+        public AmazonUpsRateFilter(ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository,
+            Func<ShipmentTypeCode, IAmazonNotLinkedFootnoteFactory> createFootnoteFactory)
         {
             this.upsAccountRepository = upsAccountRepository;
+            this.createFootnoteFactory = createFootnoteFactory;
         }
 
         /// <summary>
@@ -29,7 +32,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             RateGroup newRateGroup = rateGroup.CopyWithRates(rateGroup.Rates.Where(r => ((AmazonRateTag) r.Tag).CarrierName.IndexOf("ups", StringComparison.OrdinalIgnoreCase) == -1));
-            newRateGroup.AddFootnoteFactory(new AmazonNotLinkedFootnoteFactory(ShipmentTypeCode.UpsOnLineTools));
+            newRateGroup.AddFootnoteFactory(createFootnoteFactory(ShipmentTypeCode.UpsOnLineTools));
+            //newRateGroup.AddFootnoteFactory(new AmazonNotLinkedFootnoteFactory(ShipmentTypeCode.UpsOnLineTools));
 
             return newRateGroup;
         }

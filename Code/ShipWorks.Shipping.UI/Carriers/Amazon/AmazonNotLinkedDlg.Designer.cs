@@ -34,9 +34,9 @@
             this.okButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // MessageLink
-            // 
+            //
             this.MessageLink.LinkArea = new System.Windows.Forms.LinkArea(79, 41);
             this.MessageLink.Location = new System.Drawing.Point(50, 12);
             this.MessageLink.Name = "MessageLink";
@@ -47,9 +47,9 @@
     " correctly in Amazon Seller Central and added to ShipWorks.";
             this.MessageLink.UseCompatibleTextRendering = true;
             this.MessageLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnMessageLinkClicked);
-            // 
+            //
             // pictureBox1
-            // 
+            //
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
@@ -57,9 +57,9 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
-            // 
+            //
             // okButton
-            // 
+            //
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.Location = new System.Drawing.Point(432, 69);
             this.okButton.Name = "okButton";
@@ -68,12 +68,13 @@
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.OnClickOkButton);
-            // 
+            //
             // AmazonNotLinkedDlg
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(519, 104);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.ControlBox = false;
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.pictureBox1);

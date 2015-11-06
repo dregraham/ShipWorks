@@ -2,7 +2,6 @@
 using System.Linq;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -10,13 +9,17 @@ using ShipWorks.Stores;
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
     /// <summary>
-    /// 
+    /// Enforce label restrictions for Ups shipments through Amazon
     /// </summary>
     public class AmazonUpsLabelEnforcer : IAmazonLabelEnforcer
     {
-        private readonly ICarrierAccountRepository<IEntity2> accountRepository;
+        private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
 
-        public AmazonUpsLabelEnforcer(ICarrierAccountRepository<IEntity2> accountRepository)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="accountRepository"></param>
+        public AmazonUpsLabelEnforcer(ICarrierAccountRepository<UpsAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }
@@ -39,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             JToken token = SecureText.Decrypt(store.AmazonShippingToken, "AmazonShippingToken");
-            
+
             JToken errorReason = token.SelectToken("ErrorReason");
 
             if (accountRepository.Accounts.Any())
@@ -69,12 +72,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             string upsTracking = shipment.TrackingNumber;
-            
+
             if (accountRepository.Accounts.Cast<UpsAccountEntity>().Any(account => upsTracking.Contains(account.AccountNumber)))
             {
                 return;
             }
-            
+
             AmazonStoreEntity store = StoreManager.GetRelatedStore(shipment.OrderID) as AmazonStoreEntity;
 
             if (store == null)

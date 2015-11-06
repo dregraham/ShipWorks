@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Carriers.Amazon;
 
-namespace ShipWorks.Shipping.Carriers.Amazon
+namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
     /// <summary>
     /// Creates a AmazonUspsNotLinkedFootnoteControl
     /// </summary>
-    public class AmazonNotLinkedFootnoteFactory : IRateFootnoteFactory
+    public class AmazonNotLinkedFootnoteFactory : IAmazonNotLinkedFootnoteFactory
     {
         private readonly ShipmentTypeCode shipmentTypeCode;
 
@@ -22,13 +23,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Returns Amazon ShipmentTypeCode
         /// </summary>
-        public ShipmentTypeCode ShipmentTypeCode => 
+        public ShipmentTypeCode ShipmentTypeCode =>
             ShipmentTypeCode.Amazon;
 
         /// <summary>
         /// Creates the footnote.
         /// </summary>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters) => 
+        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters) =>
             new AmazonNotLinkedFootnoteControl(shipmentTypeCode);
 
         /// <summary>

@@ -110,26 +110,13 @@
     <Compile Include="Carriers\Amazon\AmazonCredentials.cs" />
     <Compile Include="Carriers\Amazon\AmazonLabelService.cs" />
     <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactory.cs" />
-    <Compile Include="Carriers\Amazon\AmazonNotLinkedDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Carriers\Amazon\AmazonNotLinkedDlg.Designer.cs">
-      <DependentUpon>AmazonNotLinkedDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Carriers\Amazon\AmazonPackageAdapter.cs" />
     <Compile Include="Carriers\Amazon\AmazonRatesRetrievedMessage.cs" />
     <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
-    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\AmazonUpsLabelEnforcer.cs" />
-    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.Designer.cs">
-      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Carriers\Amazon\AmazonUpsRateFilter.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsRateFilter.cs" />
@@ -153,6 +140,7 @@
     <Compile Include="Carriers\Amazon\IAmazonLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\IAmazonLabelService.cs" />
     <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -190,14 +178,6 @@
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedDlg.resx">
-      <DependentUpon>AmazonNotLinkedDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.resx">
-      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

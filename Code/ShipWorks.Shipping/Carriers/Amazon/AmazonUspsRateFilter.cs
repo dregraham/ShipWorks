@@ -7,8 +7,22 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
+    /// <summary>
+    /// Filter Usps rates for Amazon carrier, if necessary
+    /// </summary>
     public class AmazonUspsRateFilter : IAmazonRateGroupFilter
     {
+        private readonly Func<ShipmentTypeCode, IAmazonNotLinkedFootnoteFactory> createFootnoteFactory;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="createFootnoteFactory"></param>
+        public AmazonUspsRateFilter(Func<ShipmentTypeCode, IAmazonNotLinkedFootnoteFactory> createFootnoteFactory)
+        {
+            this.createFootnoteFactory = createFootnoteFactory;
+        }
+
         /// <summary>
         /// Filters the specified rate group.
         /// </summary>
@@ -21,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             RateGroup newRateGroup = rateGroup.CopyWithRates(rates.Where(r => ((AmazonRateTag)r.Tag).CarrierName.IndexOf("usps", StringComparison.OrdinalIgnoreCase) == -1));
-            newRateGroup.AddFootnoteFactory(new AmazonNotLinkedFootnoteFactory(ShipmentTypeCode.Usps));
+            newRateGroup.AddFootnoteFactory(createFootnoteFactory(ShipmentTypeCode.Usps));
 
             return newRateGroup;
         }

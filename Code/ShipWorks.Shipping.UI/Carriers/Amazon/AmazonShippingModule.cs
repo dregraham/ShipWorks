@@ -78,12 +78,22 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<AmazonShipmentRequestDetailsFactory>()
                 .As<IAmazonShipmentRequestDetailsFactory>();
 
+            builder.RegisterType<AmazonNotLinkedFootnoteFactory>()
+                .As<IAmazonNotLinkedFootnoteFactory>()
+                .ExternallyOwned();
+
             if (!(InterapptiveOnly.IsInterapptiveUser ^ InterapptiveOnly.MagicKeysDown))
             {
                 builder.RegisterType<AmazonUspsRateFilter>()
-                .AsImplementedInterfaces();
+                    .AsImplementedInterfaces();
+
+                builder.RegisterType<AmazonUspsLabelEnforcer>()
+                    .AsImplementedInterfaces();
 
                 builder.RegisterType<AmazonUpsRateFilter>()
+                    .AsImplementedInterfaces();
+
+                builder.RegisterType<AmazonUpsLabelEnforcer>()
                     .AsImplementedInterfaces();
             }
         }

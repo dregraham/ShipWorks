@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
+    /// <summary>
+    /// Control to show an account not linked dialog
+    /// </summary>
     public partial class AmazonNotLinkedFootnoteControl : RateFootnoteControl
     {
         private readonly ShipmentTypeCode shipmentTypeCode;
@@ -41,20 +38,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AmazonNotLinkedFootnoteControl"/> class.
-        /// </summary>
-        public AmazonNotLinkedFootnoteControl()
-        {
-            InitializeComponent();
-        }
-
-        /// <summary>
         /// Called when [click information link] - Shows the dialog
         /// </summary>
         private void OnClickInfoLink(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            AmazonNotLinkedDlg dlg = new AmazonNotLinkedDlg(shipmentTypeCode);
-            dlg.ShowDialog();
+            using (AmazonNotLinkedDlg dlg = new AmazonNotLinkedDlg(shipmentTypeCode))
+            {
+                dlg.ShowDialog();
+            }
         }
     }
 }

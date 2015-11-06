@@ -59,6 +59,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Divelements.SandGrid.dll</HintPath>
     </Reference>
+    <Reference Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Divelements.SandRibbon.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
@@ -113,6 +117,19 @@
     <Compile Include="Carriers\Amazon\AmazonAccountManagerControl.Designer.cs">
       <DependentUpon>AmazonAccountManagerControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedDlg.Designer.cs">
+      <DependentUpon>AmazonNotLinkedDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.Designer.cs">
+      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\AmazonOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -184,6 +201,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Amazon\AmazonAccountManagerControl.resx">
       <DependentUpon>AmazonAccountManagerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedDlg.resx">
+      <DependentUpon>AmazonNotLinkedDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.resx">
+      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Amazon\AmazonOptionsControl.resx">
       <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
