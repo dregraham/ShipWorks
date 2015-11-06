@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Gets the store.
+        /// Gets the store the shipment originated from
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns></returns>

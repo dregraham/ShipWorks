@@ -14,14 +14,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public class AmazonUpsLabelEnforcer : IAmazonLabelEnforcer
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private IStoreManager storeManager;
+        private IDateTimeProvider dateTimeProvider;
 
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="accountRepository"></param>
         public AmazonUpsLabelEnforcer(ICarrierAccountRepository<UpsAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
+            this.storeManager = storeManager;
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         /// <summary>
@@ -34,27 +37,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            AmazonStoreEntity store = StoreManager.GetRelatedStore(shipment.OrderID) as AmazonStoreEntity;
+            AmazonStoreEntity store = GetStore(shipment);
 
-            if (store == null)
-            {
-                throw new ShippingException("Amazon as shipping carrier can only be used on orders from an Amazon store");
-            }
-
-            JToken token = SecureText.Decrypt(store.AmazonShippingToken, "AmazonShippingToken");
+            JToken token = JToken.Parse(SecureText.Decrypt(store.AmazonShippingToken, "AmazonShippingToken"));
 
             JToken errorReason = token.SelectToken("ErrorReason");
-
-            if (accountRepository.Accounts.Any())
-            {
-                return new EnforcementResult(errorReason.ToString());
-            }
-
             JToken errorDate = token.SelectToken("ErrorDate");
 
             DateTime errorDateTime = DateTime.Parse(errorDate.ToString());
 
-            if (errorDateTime == SqlSession.Current.GetLocalDate())
+            if (!accountRepository.Accounts.Any() || errorDateTime.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
             {
                 return new EnforcementResult(errorReason.ToString());
             }
@@ -78,17 +70,29 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 return;
             }
 
-            AmazonStoreEntity store = StoreManager.GetRelatedStore(shipment.OrderID) as AmazonStoreEntity;
+            AmazonStoreEntity store = GetStore(shipment);
+
+            string token =
+                    $"{{\"ErrorDate\":\"{dateTimeProvider.CurrentSqlServerDateTime.Date}\", \"ErrorReason\":\"ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your UPS account is linked correctly in Amazon Seller Central.\"}}";
+
+            store.AmazonShippingToken = SecureText.Encrypt(token, "AmazonShippingToken");
+        }
+
+        /// <summary>
+        /// Gets the store the shipment originated from
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns></returns>
+        /// <exception cref="ShippingException">Amazon as shipping carrier can only be used on orders from an Amazon store</exception>
+        private AmazonStoreEntity GetStore(ShipmentEntity shipment)
+        {
+            AmazonStoreEntity store = storeManager.GetRelatedStore(shipment.ShipmentID) as AmazonStoreEntity;
 
             if (store == null)
             {
                 throw new ShippingException("Amazon as shipping carrier can only be used on orders from an Amazon store");
             }
-
-            string token =
-                $"{{\"ErrorDate\":\"{SqlSession.Current.GetLocalDate()}\", \"ErrorReason\":\"ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your UPS account is linked correctly in Amazon Seller Central.\"}}";
-
-            store.AmazonShippingToken = SecureText.Encrypt(token, "AmazonShippingToken");
+            return store;
         }
     }
 }

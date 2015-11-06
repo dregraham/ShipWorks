@@ -128,6 +128,7 @@
     <Compile Include="Carriers\Amazon\AmazonShipmentRequestDetailsFactoryTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentTypeTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingWebClientTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonUpsLabelEnforcerTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsLabelEnforcerTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsRateFilterTest.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRatingServiceTests.cs" />
