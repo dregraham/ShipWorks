@@ -1090,6 +1090,7 @@
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroup.cs" />
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroupShippingException.cs" />
     <Compile Include="Shipping\Editing\Rating\IRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Editing\Rating\RateAmountComponents.cs" />
     <Compile Include="Shipping\Editing\Rating\RateCache.cs" />
     <Compile Include="Shipping\Editing\Rating\InformationFootnoteControl.cs">
       <SubType>UserControl</SubType>
