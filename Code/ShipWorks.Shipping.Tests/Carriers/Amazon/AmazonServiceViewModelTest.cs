@@ -66,32 +66,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 List<ShipmentEntity> shipments = new List<ShipmentEntity>()
                 {
-                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.NoTracking}},
                     new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithAdultSignature}}
                 };
                 
                 testObject.Load(shipments);
 
                 Assert.True(testObject.DeliveryExperience.IsMultiValued);
-            }
-        }
-
-        [Fact]
-        public void DeliveryConfirmation_WithAllValuesNoTracking_ReturnsNoTracking()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                AmazonServiceViewModel testObject = mock.Create<AmazonServiceViewModel>();
-
-                List<ShipmentEntity> shipments = new List<ShipmentEntity>()
-                {
-                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.NoTracking}},
-                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.NoTracking}}
-                };
-
-                testObject.Load(shipments);
-
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience.PropertyValue);
             }
         }
 
@@ -123,7 +103,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 List<ShipmentEntity> shipments = new List<ShipmentEntity>()
                 {
-                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.NoTracking}},
                     new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithAdultSignature}}
                 };
 
@@ -155,7 +134,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 List<ShipmentEntity> shipments = new List<ShipmentEntity>()
                 {
-                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.NoTracking}},
                     new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithAdultSignature}}
                 };
 
@@ -167,30 +145,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                 Assert.Equal(AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, testObject.DeliveryExperience.PropertyValue);
 
                 shipments.ForEach(s => Assert.Equal((int)AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, s.Amazon.DeliveryExperience));
-            }
-        }
-
-        [Fact]
-        public void DeliveryConfirmationSaves_NoTracking_WithMixedValues()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                AmazonServiceViewModel testObject = mock.Create<AmazonServiceViewModel>();
-
-                List<ShipmentEntity> shipments = new List<ShipmentEntity>()
-                {
-                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.NoTracking}},
-                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithAdultSignature}}
-                };
-
-                testObject.Load(shipments);
-
-                testObject.DeliveryExperience.PropertyValue = AmazonDeliveryExperienceType.NoTracking;
-                testObject.Save(shipments);
-
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience.PropertyValue);
-
-                shipments.ForEach(s => Assert.Equal((int)AmazonDeliveryExperienceType.NoTracking, s.Amazon.DeliveryExperience));
             }
         }
 

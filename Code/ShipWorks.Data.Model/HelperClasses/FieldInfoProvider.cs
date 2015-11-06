@@ -358,9 +358,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsWeight, 0, 0, 38);
 			base.AddElementFieldInfo("AmazonProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
-			base.AddElementFieldInfo("AmazonProfileEntity", "CarrierWillPickUp", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AmazonProfileFieldIndex.CarrierWillPickUp, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.Weight, 0, 0, 38);
-			base.AddElementFieldInfo("AmazonProfileEntity", "SendDateMustArriveBy", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AmazonProfileFieldIndex.SendDateMustArriveBy, 0, 0, 0);
 		}
 		/// <summary>Inits AmazonShipmentEntity's FieldInfo objects</summary>
 		private void InitAmazonShipmentEntityInfos()

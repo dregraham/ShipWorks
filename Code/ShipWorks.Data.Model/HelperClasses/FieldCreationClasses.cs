@@ -947,20 +947,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DeliveryExperience);}
 		}
-		/// <summary>Creates a new AmazonProfileEntity.CarrierWillPickUp field instance</summary>
-		public static EntityField2 CarrierWillPickUp
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.CarrierWillPickUp);}
-		}
 		/// <summary>Creates a new AmazonProfileEntity.Weight field instance</summary>
 		public static EntityField2 Weight
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.Weight);}
-		}
-		/// <summary>Creates a new AmazonProfileEntity.SendDateMustArriveBy field instance</summary>
-		public static EntityField2 SendDateMustArriveBy
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.SendDateMustArriveBy);}
 		}
 	}
 

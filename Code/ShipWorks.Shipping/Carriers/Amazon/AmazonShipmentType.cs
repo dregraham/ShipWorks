@@ -267,11 +267,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             base.ConfigurePrimaryProfile(profile);
 
             AmazonProfileEntity amazon = profile.Amazon;
-
-            amazon.CarrierWillPickUp = false;
+            
             amazon.DeliveryExperience = (int) AmazonDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
             amazon.Weight = 0;
-            amazon.SendDateMustArriveBy = false;
 
             amazon.DimsProfileID = 0;
             amazon.DimsLength = 0;
