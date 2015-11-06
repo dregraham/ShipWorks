@@ -78,28 +78,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public void Load(List<ShipmentEntity> shipments)
         {
             // Build a multi value binder for each of the UI controls.
-            dateMustArriveBy = new GenericMultiValueBinder<ShipmentEntity, DateTime>(shipments,
-                nameof(DateMustArriveBy),
-                entity => entity.Amazon.DateMustArriveBy,
-                (entity, value) => entity.Amazon.DateMustArriveBy = value.Date.AddHours(12),
-                (entity) => entity.Processed);
-
             weightBinder = new GenericMultiValueBinder<ShipmentEntity, double>(shipments,
                 nameof(ContentWeight),
                 entity => entity.ContentWeight,
                 (entity, value) => entity.ContentWeight = value,
-                (entity) => entity.Processed);
-
-            carrierWillPickUpBinder = new CheckboxMultiValueBinder<ShipmentEntity>(shipments,
-                nameof(CarrierWillPickUp),
-                entity => entity.Amazon.CarrierWillPickUp,
-                (entity, value) => entity.Amazon.CarrierWillPickUp = value,
-                (entity) => entity.Processed);
-
-            sendDateMustArriveByBinder = new CheckboxMultiValueBinder<ShipmentEntity>(shipments,
-                nameof(SendDateMustArriveBy),
-                entity => entity.Amazon.SendDateMustArriveBy,
-                (entity, value) => entity.Amazon.SendDateMustArriveBy = value,
                 (entity) => entity.Processed);
 
             deliveryExperienceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType?>(shipments,

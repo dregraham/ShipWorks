@@ -34,8 +34,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     Length = shipment.Amazon.DimsLength,
                     Width = shipment.Amazon.DimsWidth
                 },
-                MustArriveByDate = shipment.Amazon.DateMustArriveBy,
-                SendDateMustArriveBy = shipment.Amazon.SendDateMustArriveBy,
                 ShipFromAddress = new Address()
                 {
                     AddressLine1 = shipment.OriginStreet1,
@@ -52,7 +50,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 },
                 ShippingServiceOptions = new ShippingServiceOptions()
                 {
-                    CarrierWillPickUp = shipment.Amazon.CarrierWillPickUp,
                     DeliveryExperience = EnumHelper.GetApiValue((AmazonDeliveryExperienceType)shipment.Amazon.DeliveryExperience),
                     DeclaredValue = new DeclaredValue()
                     {

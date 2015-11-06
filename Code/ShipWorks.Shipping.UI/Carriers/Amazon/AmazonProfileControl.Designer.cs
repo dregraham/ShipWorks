@@ -36,9 +36,6 @@
             this.insuranceState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge10 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupShipment = new System.Windows.Forms.GroupBox();
-            this.sendDeliverByDate = new System.Windows.Forms.CheckBox();
-            this.labelSendDeliverByDate = new System.Windows.Forms.Label();
-            this.sendDeliverByDateState = new System.Windows.Forms.CheckBox();
             this.deliveryExperience = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelDeliveryExperience = new System.Windows.Forms.Label();
             this.deliveryExperienceState = new System.Windows.Forms.CheckBox();
@@ -48,9 +45,6 @@
             this.weightState = new System.Windows.Forms.CheckBox();
             this.weight = new ShipWorks.UI.Controls.WeightControl();
             this.labelWeight = new System.Windows.Forms.Label();
-            this.carrierWillPickUp = new System.Windows.Forms.CheckBox();
-            this.labelCarrierWillPickUp = new System.Windows.Forms.Label();
-            this.carrierWillPickUpState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.tabControl.SuspendLayout();
@@ -90,7 +84,7 @@
             this.groupInsurance.Controls.Add(this.insuranceControl);
             this.groupInsurance.Controls.Add(this.insuranceState);
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
-            this.groupInsurance.Location = new System.Drawing.Point(3, 219);
+            this.groupInsurance.Location = new System.Drawing.Point(3, 173);
             this.groupInsurance.Name = "groupInsurance";
             this.groupInsurance.Size = new System.Drawing.Size(405, 82);
             this.groupInsurance.TabIndex = 11;
@@ -129,9 +123,6 @@
             // 
             this.groupShipment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupShipment.Controls.Add(this.sendDeliverByDate);
-            this.groupShipment.Controls.Add(this.labelSendDeliverByDate);
-            this.groupShipment.Controls.Add(this.sendDeliverByDateState);
             this.groupShipment.Controls.Add(this.deliveryExperience);
             this.groupShipment.Controls.Add(this.labelDeliveryExperience);
             this.groupShipment.Controls.Add(this.deliveryExperienceState);
@@ -141,54 +132,19 @@
             this.groupShipment.Controls.Add(this.weightState);
             this.groupShipment.Controls.Add(this.weight);
             this.groupShipment.Controls.Add(this.labelWeight);
-            this.groupShipment.Controls.Add(this.carrierWillPickUp);
-            this.groupShipment.Controls.Add(this.labelCarrierWillPickUp);
-            this.groupShipment.Controls.Add(this.carrierWillPickUpState);
             this.groupShipment.Controls.Add(this.kryptonBorderEdge);
             this.groupShipment.Location = new System.Drawing.Point(3, 6);
             this.groupShipment.Name = "groupShipment";
-            this.groupShipment.Size = new System.Drawing.Size(405, 207);
+            this.groupShipment.Size = new System.Drawing.Size(405, 161);
             this.groupShipment.TabIndex = 5;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
-            // 
-            // sendDeliverByDate
-            // 
-            this.sendDeliverByDate.AutoSize = true;
-            this.sendDeliverByDate.Location = new System.Drawing.Point(148, 155);
-            this.sendDeliverByDate.Name = "sendDeliverByDate";
-            this.sendDeliverByDate.Size = new System.Drawing.Size(142, 17);
-            this.sendDeliverByDate.TabIndex = 4;
-            this.sendDeliverByDate.Text = "Deliver by required date";
-            this.sendDeliverByDate.UseVisualStyleBackColor = true;
-            // 
-            // labelSendDeliverByDate
-            // 
-            this.labelSendDeliverByDate.AutoSize = true;
-            this.labelSendDeliverByDate.BackColor = System.Drawing.Color.Transparent;
-            this.labelSendDeliverByDate.Location = new System.Drawing.Point(67, 156);
-            this.labelSendDeliverByDate.Name = "labelSendDeliverByDate";
-            this.labelSendDeliverByDate.Size = new System.Drawing.Size(75, 13);
-            this.labelSendDeliverByDate.TabIndex = 82;
-            this.labelSendDeliverByDate.Text = "Delivery date:";
-            // 
-            // sendDeliverByDateState
-            // 
-            this.sendDeliverByDateState.AutoSize = true;
-            this.sendDeliverByDateState.Checked = true;
-            this.sendDeliverByDateState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.sendDeliverByDateState.Location = new System.Drawing.Point(9, 156);
-            this.sendDeliverByDateState.Name = "sendDeliverByDateState";
-            this.sendDeliverByDateState.Size = new System.Drawing.Size(15, 14);
-            this.sendDeliverByDateState.TabIndex = 80;
-            this.sendDeliverByDateState.Tag = "";
-            this.sendDeliverByDateState.UseVisualStyleBackColor = true;
             // 
             // deliveryExperience
             // 
             this.deliveryExperience.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deliveryExperience.FormattingEnabled = true;
-            this.deliveryExperience.Location = new System.Drawing.Point(148, 181);
+            this.deliveryExperience.Location = new System.Drawing.Point(148, 128);
             this.deliveryExperience.Name = "deliveryExperience";
             this.deliveryExperience.PromptText = "(Multiple Values)";
             this.deliveryExperience.Size = new System.Drawing.Size(220, 21);
@@ -198,7 +154,7 @@
             // 
             this.labelDeliveryExperience.AutoSize = true;
             this.labelDeliveryExperience.BackColor = System.Drawing.Color.Transparent;
-            this.labelDeliveryExperience.Location = new System.Drawing.Point(36, 184);
+            this.labelDeliveryExperience.Location = new System.Drawing.Point(36, 131);
             this.labelDeliveryExperience.Name = "labelDeliveryExperience";
             this.labelDeliveryExperience.Size = new System.Drawing.Size(106, 13);
             this.labelDeliveryExperience.TabIndex = 76;
@@ -209,7 +165,7 @@
             this.deliveryExperienceState.AutoSize = true;
             this.deliveryExperienceState.Checked = true;
             this.deliveryExperienceState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.deliveryExperienceState.Location = new System.Drawing.Point(9, 184);
+            this.deliveryExperienceState.Location = new System.Drawing.Point(9, 131);
             this.deliveryExperienceState.Name = "deliveryExperienceState";
             this.deliveryExperienceState.Size = new System.Drawing.Size(15, 14);
             this.deliveryExperienceState.TabIndex = 74;
@@ -282,38 +238,6 @@
             this.labelWeight.TabIndex = 67;
             this.labelWeight.Text = "Weight:";
             // 
-            // carrierWillPickUp
-            // 
-            this.carrierWillPickUp.AutoSize = true;
-            this.carrierWillPickUp.Location = new System.Drawing.Point(148, 128);
-            this.carrierWillPickUp.Name = "carrierWillPickUp";
-            this.carrierWillPickUp.Size = new System.Drawing.Size(177, 17);
-            this.carrierWillPickUp.TabIndex = 3;
-            this.carrierWillPickUp.Text = "Carrier will pick up the shipment";
-            this.carrierWillPickUp.UseVisualStyleBackColor = true;
-            // 
-            // labelCarrierWillPickUp
-            // 
-            this.labelCarrierWillPickUp.AutoSize = true;
-            this.labelCarrierWillPickUp.BackColor = System.Drawing.Color.Transparent;
-            this.labelCarrierWillPickUp.Location = new System.Drawing.Point(62, 129);
-            this.labelCarrierWillPickUp.Name = "labelCarrierWillPickUp";
-            this.labelCarrierWillPickUp.Size = new System.Drawing.Size(80, 13);
-            this.labelCarrierWillPickUp.TabIndex = 57;
-            this.labelCarrierWillPickUp.Text = "Carrier pick up:";
-            // 
-            // carrierWillPickUpState
-            // 
-            this.carrierWillPickUpState.AutoSize = true;
-            this.carrierWillPickUpState.Checked = true;
-            this.carrierWillPickUpState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.carrierWillPickUpState.Location = new System.Drawing.Point(9, 129);
-            this.carrierWillPickUpState.Name = "carrierWillPickUpState";
-            this.carrierWillPickUpState.Size = new System.Drawing.Size(15, 14);
-            this.carrierWillPickUpState.TabIndex = 2;
-            this.carrierWillPickUpState.Tag = "";
-            this.carrierWillPickUpState.UseVisualStyleBackColor = true;
-            // 
             // kryptonBorderEdge
             // 
             this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -322,7 +246,7 @@
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(29, 18);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 179);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 133);
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // AmazonProfileControl
@@ -348,9 +272,6 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPageSettings;
         private System.Windows.Forms.GroupBox groupShipment;
-        private System.Windows.Forms.CheckBox carrierWillPickUp;
-        private System.Windows.Forms.Label labelCarrierWillPickUp;
-        private System.Windows.Forms.CheckBox carrierWillPickUpState;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
         private System.Windows.Forms.GroupBox groupInsurance;
         private Insurance.InsuranceProfileControl insuranceControl;
@@ -366,8 +287,5 @@
         private Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge10;
         private ShipWorks.UI.Controls.MultiValueComboBox deliveryExperience;
-        private System.Windows.Forms.CheckBox sendDeliverByDate;
-        private System.Windows.Forms.Label labelSendDeliverByDate;
-        private System.Windows.Forms.CheckBox sendDeliverByDateState;
     }
 }

@@ -374,26 +374,22 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits AmazonShipmentEntity's mappings</summary>
 		private void InitAmazonShipmentEntityMappings()
 		{
-			base.AddElementMapping( "AmazonShipmentEntity", "ShipWorksLocal", @"dbo", "AmazonShipment", 19 );
+			base.AddElementMapping( "AmazonShipmentEntity", "ShipWorksLocal", @"dbo", "AmazonShipment", 15 );
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "AmazonAccountID", "AmazonAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "CarrierName", "CarrierName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShippingServiceName", "ShippingServiceName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 3 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShippingServiceID", "ShippingServiceID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 4 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShippingServiceOfferID", "ShippingServiceOfferID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 5 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "InsuranceValue", "InsuranceValue", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 6 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsProfileID", "DimsProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsLength", "DimsLength", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 8 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsWidth", "DimsWidth", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 9 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsHeight", "DimsHeight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 10 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsWeight", "DimsWeight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 11 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsAddWeight", "DimsAddWeight", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 12 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "DateMustArriveBy", "DateMustArriveBy", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 13 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "SendDateMustArriveBy", "SendDateMustArriveBy", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 14 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "DeliveryExperience", "DeliveryExperience", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 15 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "CarrierWillPickUp", "CarrierWillPickUp", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 16 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "DeclaredValue", "DeclaredValue", true, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 17 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "AmazonUniqueShipmentID", "AmazonUniqueShipmentID", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 18 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "CarrierName", "CarrierName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShippingServiceName", "ShippingServiceName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShippingServiceID", "ShippingServiceID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShippingServiceOfferID", "ShippingServiceOfferID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "InsuranceValue", "InsuranceValue", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 5 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsProfileID", "DimsProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 6 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsLength", "DimsLength", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 7 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsWidth", "DimsWidth", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 8 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsHeight", "DimsHeight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 9 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsWeight", "DimsWeight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 10 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsAddWeight", "DimsAddWeight", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 11 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "DeliveryExperience", "DeliveryExperience", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 12 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "DeclaredValue", "DeclaredValue", true, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 13 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "AmazonUniqueShipmentID", "AmazonUniqueShipmentID", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 14 );
 		}
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
 		private void InitAmazonStoreEntityMappings()
@@ -417,7 +413,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "AmazonStoreEntity", "MarketplaceID", "MarketplaceID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 15 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "ExcludeFBA", "ExcludeFBA", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 16 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "DomainName", "DomainName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 17 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "AmazonShippingToken", "AmazonShippingToken", false, (int)SqlDbType.NVarChar, 350, 0, 0, false, "", null, typeof(System.String), 18 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "AmazonShippingToken", "AmazonShippingToken", false, (int)SqlDbType.NVarChar, 500, 0, 0, false, "", null, typeof(System.String), 18 );
 		}
 		/// <summary>Inits AmeriCommerceStoreEntity's mappings</summary>
 		private void InitAmeriCommerceStoreEntityMappings()

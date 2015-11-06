@@ -109,17 +109,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.PropertyValue), true, DataSourceUpdateMode.OnPropertyChanged);
             deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.MultiValued), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.IsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
 
-            carrierWillPickUp.DataBindings.Clear();
-            carrierWillPickUp.DataBindings.Add(nameof(carrierWillPickUp.Checked), viewModel, nameof(viewModel.CarrierWillPickUp), false, DataSourceUpdateMode.OnPropertyChanged);
-            carrierWillPickUp.DataBindings.Add(nameof(carrierWillPickUp.CheckState), viewModel, nameof(viewModel.CarrierWillPickUpCheckState), false, DataSourceUpdateMode.OnPropertyChanged);
-
-            sendDeliverBy.DataBindings.Clear();
-            sendDeliverBy.DataBindings.Add(nameof(sendDeliverBy.Checked), viewModel, nameof(viewModel.SendDateMustArriveBy), false, DataSourceUpdateMode.OnPropertyChanged);
-            sendDeliverBy.DataBindings.Add(nameof(sendDeliverBy.CheckState), viewModel, nameof(viewModel.SendDeliverByCheckState), false, DataSourceUpdateMode.OnPropertyChanged);
-
-            mustArriveByDate.DataBindings.Clear();
-            mustArriveByDate.DataBindings.Add(nameof(mustArriveByDate.Text), viewModel, nameof(viewModel.DateMustArriveBy), false, DataSourceUpdateMode.OnPropertyChanged);
-
             weight.DataBindings.Clear();
             weight.DataBindings.Add(nameof(weight.Weight), viewModel, nameof(viewModel.ContentWeight), false, DataSourceUpdateMode.OnPropertyChanged);
             weight.DataBindings.Add(nameof(weight.MultiValued), viewModel, nameof(viewModel.ContentWeightIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);

@@ -469,9 +469,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipmentID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("AmazonAccountID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("CarrierName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -505,16 +502,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("DateMustArriveBy", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("SendDateMustArriveBy", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DeliveryExperience", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("CarrierWillPickUp", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("DeclaredValue", fieldHashtable);
@@ -640,17 +628,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)AmazonShipmentFieldIndex.ShipmentID, value); }
 		}
 
-		/// <summary> The AmazonAccountID property of the Entity AmazonShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "AmazonShipment"."AmazonAccountID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 AmazonAccountID
-		{
-			get { return (System.Int64)GetValue((int)AmazonShipmentFieldIndex.AmazonAccountID, true); }
-			set	{ SetValue((int)AmazonShipmentFieldIndex.AmazonAccountID, value); }
-		}
-
 		/// <summary> The CarrierName property of the Entity AmazonShipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonShipment"."CarrierName"<br/>
@@ -772,28 +749,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)AmazonShipmentFieldIndex.DimsAddWeight, value); }
 		}
 
-		/// <summary> The DateMustArriveBy property of the Entity AmazonShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "AmazonShipment"."DateMustArriveBy"<br/>
-		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.DateTime DateMustArriveBy
-		{
-			get { return (System.DateTime)GetValue((int)AmazonShipmentFieldIndex.DateMustArriveBy, true); }
-			set	{ SetValue((int)AmazonShipmentFieldIndex.DateMustArriveBy, value); }
-		}
-
-		/// <summary> The SendDateMustArriveBy property of the Entity AmazonShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "AmazonShipment"."SendDateMustArriveBy"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean SendDateMustArriveBy
-		{
-			get { return (System.Boolean)GetValue((int)AmazonShipmentFieldIndex.SendDateMustArriveBy, true); }
-			set	{ SetValue((int)AmazonShipmentFieldIndex.SendDateMustArriveBy, value); }
-		}
-
 		/// <summary> The DeliveryExperience property of the Entity AmazonShipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonShipment"."DeliveryExperience"<br/>
@@ -803,17 +758,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)AmazonShipmentFieldIndex.DeliveryExperience, true); }
 			set	{ SetValue((int)AmazonShipmentFieldIndex.DeliveryExperience, value); }
-		}
-
-		/// <summary> The CarrierWillPickUp property of the Entity AmazonShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "AmazonShipment"."CarrierWillPickUp"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean CarrierWillPickUp
-		{
-			get { return (System.Boolean)GetValue((int)AmazonShipmentFieldIndex.CarrierWillPickUp, true); }
-			set	{ SetValue((int)AmazonShipmentFieldIndex.CarrierWillPickUp, value); }
 		}
 
 		/// <summary> The DeclaredValue property of the Entity AmazonShipment<br/><br/>

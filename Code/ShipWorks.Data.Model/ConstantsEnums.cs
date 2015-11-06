@@ -491,8 +491,6 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
-		///<summary>AmazonAccountID. </summary>
-		AmazonAccountID,
 		///<summary>CarrierName. </summary>
 		CarrierName,
 		///<summary>ShippingServiceName. </summary>
@@ -515,14 +513,8 @@ namespace ShipWorks.Data.Model
 		DimsWeight,
 		///<summary>DimsAddWeight. </summary>
 		DimsAddWeight,
-		///<summary>DateMustArriveBy. </summary>
-		DateMustArriveBy,
-		///<summary>SendDateMustArriveBy. </summary>
-		SendDateMustArriveBy,
 		///<summary>DeliveryExperience. </summary>
 		DeliveryExperience,
-		///<summary>CarrierWillPickUp. </summary>
-		CarrierWillPickUp,
 		///<summary>DeclaredValue. </summary>
 		DeclaredValue,
 		///<summary>AmazonUniqueShipmentID. </summary>

@@ -34,9 +34,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             AmazonProfileEntity amazonProfile = profile.Amazon;
 
             //Shipment
-            AddValueMapping(amazonProfile, AmazonProfileFields.CarrierWillPickUp, carrierWillPickUpState, carrierWillPickUp, labelCarrierWillPickUp);
             AddValueMapping(amazonProfile, AmazonProfileFields.DeliveryExperience, deliveryExperienceState, deliveryExperience, labelDeliveryExperience);
-            AddValueMapping(amazonProfile, AmazonProfileFields.SendDateMustArriveBy, sendDeliverByDateState, sendDeliverByDate, labelSendDeliverByDate);
             AddValueMapping(amazonProfile, AmazonProfileFields.Weight, weightState, weight, labelWeight);
             AddValueMapping(amazonProfile, AmazonProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 

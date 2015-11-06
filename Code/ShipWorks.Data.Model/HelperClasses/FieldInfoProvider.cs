@@ -366,7 +366,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitAmazonShipmentEntityInfos()
 		{
 			base.AddElementFieldInfo("AmazonShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)AmazonShipmentFieldIndex.ShipmentID, 0, 0, 19);
-			base.AddElementFieldInfo("AmazonShipmentEntity", "AmazonAccountID", typeof(System.Int64), false, false, false, false,  (int)AmazonShipmentFieldIndex.AmazonAccountID, 0, 0, 19);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "CarrierName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.CarrierName, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceName, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceID", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceID, 50, 0, 0);
@@ -378,10 +377,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsHeight, 0, 0, 38);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsWeight, 0, 0, 38);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
-			base.AddElementFieldInfo("AmazonShipmentEntity", "DateMustArriveBy", typeof(System.DateTime), false, false, false, false,  (int)AmazonShipmentFieldIndex.DateMustArriveBy, 0, 0, 0);
-			base.AddElementFieldInfo("AmazonShipmentEntity", "SendDateMustArriveBy", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.SendDateMustArriveBy, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DeliveryExperience", typeof(System.Int32), false, false, false, false,  (int)AmazonShipmentFieldIndex.DeliveryExperience, 0, 0, 10);
-			base.AddElementFieldInfo("AmazonShipmentEntity", "CarrierWillPickUp", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.CarrierWillPickUp, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AmazonShipmentFieldIndex.DeclaredValue, 0, 4, 19);
 			base.AddElementFieldInfo("AmazonShipmentEntity", "AmazonUniqueShipmentID", typeof(System.String), false, false, false, true,  (int)AmazonShipmentFieldIndex.AmazonUniqueShipmentID, 50, 0, 0);
 		}
@@ -406,7 +402,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonStoreEntity", "MarketplaceID", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.MarketplaceID, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "ExcludeFBA", typeof(System.Boolean), false, false, false, false,  (int)AmazonStoreFieldIndex.ExcludeFBA, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "DomainName", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.DomainName, 50, 0, 0);
-			base.AddElementFieldInfo("AmazonStoreEntity", "AmazonShippingToken", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.AmazonShippingToken, 350, 0, 0);
+			base.AddElementFieldInfo("AmazonStoreEntity", "AmazonShippingToken", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.AmazonShippingToken, 500, 0, 0);
 		}
 		/// <summary>Inits AmeriCommerceStoreEntity's FieldInfo objects</summary>
 		private void InitAmeriCommerceStoreEntityInfos()

@@ -45,15 +45,10 @@
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
             this.label2 = new System.Windows.Forms.Label();
             this.labelDimensions = new System.Windows.Forms.Label();
-            this.mustArriveByDate = new System.Windows.Forms.Label();
             this.deliveryConfirmation = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelDeliveryConf = new System.Windows.Forms.Label();
             this.labelService = new System.Windows.Forms.Label();
-            this.carrierWillPickUp = new System.Windows.Forms.CheckBox();
-            this.sendDeliverBy = new System.Windows.Forms.CheckBox();
-            this.labelCarrierWillPickUp = new System.Windows.Forms.Label();
-            this.labelDeliverBy = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -104,13 +99,8 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.insuranceControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.weight);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelWeight);
-            this.sectionShipment.ContentPanel.Controls.Add(this.mustArriveByDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelDimensions);
             this.sectionShipment.ContentPanel.Controls.Add(this.dimensionsControl);
-            this.sectionShipment.ContentPanel.Controls.Add(this.labelCarrierWillPickUp);
-            this.sectionShipment.ContentPanel.Controls.Add(this.labelDeliverBy);
-            this.sectionShipment.ContentPanel.Controls.Add(this.carrierWillPickUp);
-            this.sectionShipment.ContentPanel.Controls.Add(this.sendDeliverBy);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelDeliveryConf);
             this.sectionShipment.ContentPanel.Controls.Add(this.deliveryConfirmation);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
@@ -195,7 +185,7 @@
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(22, 198);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(494, 48);
+            this.insuranceControl.Size = new System.Drawing.Size(563, 48);
             this.insuranceControl.TabIndex = 12;
             // 
             // dimensionsControl
@@ -227,16 +217,6 @@
             this.labelDimensions.Size = new System.Drawing.Size(64, 13);
             this.labelDimensions.TabIndex = 7;
             this.labelDimensions.Text = "Dimensions:";
-            // 
-            // mustArriveByDate
-            // 
-            this.mustArriveByDate.BackColor = System.Drawing.Color.White;
-            this.mustArriveByDate.Location = new System.Drawing.Point(225, 179);
-            this.mustArriveByDate.Name = "mustArriveByDate";
-            this.mustArriveByDate.Size = new System.Drawing.Size(73, 17);
-            this.mustArriveByDate.TabIndex = 8;
-            this.mustArriveByDate.Text = "(01/01/0001)";
-            this.mustArriveByDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // deliveryConfirmation
             // 
@@ -280,48 +260,6 @@
             this.labelService.TabIndex = 7;
             this.labelService.Text = "Service:";
             // 
-            // carrierWillPickUp
-            // 
-            this.carrierWillPickUp.AutoSize = true;
-            this.carrierWillPickUp.BackColor = System.Drawing.Color.White;
-            this.carrierWillPickUp.Location = new System.Drawing.Point(91, 161);
-            this.carrierWillPickUp.Name = "carrierWillPickUp";
-            this.carrierWillPickUp.Size = new System.Drawing.Size(177, 17);
-            this.carrierWillPickUp.TabIndex = 10;
-            this.carrierWillPickUp.Text = "Carrier will pick up the shipment";
-            this.carrierWillPickUp.UseVisualStyleBackColor = false;
-            // 
-            // sendDeliverBy
-            // 
-            this.sendDeliverBy.AutoSize = true;
-            this.sendDeliverBy.BackColor = System.Drawing.Color.White;
-            this.sendDeliverBy.Location = new System.Drawing.Point(91, 180);
-            this.sendDeliverBy.Name = "sendDeliverBy";
-            this.sendDeliverBy.Size = new System.Drawing.Size(142, 17);
-            this.sendDeliverBy.TabIndex = 11;
-            this.sendDeliverBy.Text = "Deliver by required date";
-            this.sendDeliverBy.UseVisualStyleBackColor = false;
-            // 
-            // labelCarrierWillPickUp
-            // 
-            this.labelCarrierWillPickUp.AutoSize = true;
-            this.labelCarrierWillPickUp.BackColor = System.Drawing.Color.White;
-            this.labelCarrierWillPickUp.Location = new System.Drawing.Point(5, 161);
-            this.labelCarrierWillPickUp.Name = "labelCarrierWillPickUp";
-            this.labelCarrierWillPickUp.Size = new System.Drawing.Size(80, 13);
-            this.labelCarrierWillPickUp.TabIndex = 9;
-            this.labelCarrierWillPickUp.Text = "Carrier pick up:";
-            // 
-            // labelDeliverBy
-            // 
-            this.labelDeliverBy.AutoSize = true;
-            this.labelDeliverBy.BackColor = System.Drawing.Color.White;
-            this.labelDeliverBy.Location = new System.Drawing.Point(10, 180);
-            this.labelDeliverBy.Name = "labelDeliverBy";
-            this.labelDeliverBy.Size = new System.Drawing.Size(75, 13);
-            this.labelDeliverBy.TabIndex = 9;
-            this.labelDeliverBy.Text = "Delivery date:";
-            // 
             // AmazonServiceControl
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -363,16 +301,11 @@
         private ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl originControl;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private Insurance.InsuranceSelectionControl insuranceControl;
-        private System.Windows.Forms.Label mustArriveByDate;
         private System.Windows.Forms.Label labelDimensions;
         private Editing.DimensionsControl dimensionsControl;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelDeliveryConf;
         private ShipWorks.UI.Controls.MultiValueComboBox deliveryConfirmation;
-        private System.Windows.Forms.Label labelCarrierWillPickUp;
-        private System.Windows.Forms.Label labelDeliverBy;
-        private System.Windows.Forms.CheckBox carrierWillPickUp;
-        private System.Windows.Forms.CheckBox sendDeliverBy;
         private System.Windows.Forms.Label labelService;
         private ShipWorks.UI.Controls.MultiValueComboBox service;
     }

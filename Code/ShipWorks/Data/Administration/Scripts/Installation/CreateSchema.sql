@@ -1644,7 +1644,6 @@ GO
 CREATE TABLE [dbo].[AmazonShipment]
 (
 [ShipmentID] [bigint] NOT NULL,
-[AmazonAccountID] [bigint] NOT NULL,
 [CarrierName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_CarrierName] DEFAULT (''),
 [ShippingServiceName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceName] DEFAULT (''),
 [ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceId] DEFAULT (''),
@@ -1656,10 +1655,7 @@ CREATE TABLE [dbo].[AmazonShipment]
 [DimsHeight] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsHeight] DEFAULT ((0)),
 [DimsWeight] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsWeight] DEFAULT ((0)),
 [DimsAddWeight] [bit] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsAddWeight] DEFAULT ((0)),
-[DateMustArriveBy] [datetime] NOT NULL,
-[SendDateMustArriveBy] [bit] NOT NULL CONSTRAINT [DF_AmazonShipment_SendDateMustArriveBy] DEFAULT ((0)),
 [DeliveryExperience] [int] NOT NULL CONSTRAINT [DF_AmazonShipment_DeliveryExperience] DEFAULT ((0)),
-[CarrierWillPickUp] [bit] NOT NULL CONSTRAINT [DF_AmazonShipment_CarrierWillPickUp] DEFAULT ((0)),
 [DeclaredValue] [money] NULL,
 [AmazonUniqueShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
@@ -1684,9 +1680,7 @@ CREATE TABLE [dbo].[AmazonProfile]
 [DimsWeight] [float] NULL,
 [DimsAddWeight] [bit] NULL,
 [DeliveryExperience] [int] NULL,
-[CarrierWillPickUp] [bit] NULL,
 [Weight] [float] NULL,
-[SendDateMustArriveBy] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonProfile] on [dbo].[AmazonProfile]'
@@ -6118,8 +6112,6 @@ EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'U
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'UpsShipment', 'COLUMN', N'WorldShipStatus'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'AmazonAccountID'
-GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'CarrierName'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'ShippingServiceName'
@@ -6132,11 +6124,7 @@ EXEC sp_addextendedproperty N'AuditFormat', N'3', 'SCHEMA', N'dbo', 'TABLE', N'A
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DimsAddWeight'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'7', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DateMustArriveBy'
-GO
 EXEC sp_addextendedproperty N'AuditFormat', N'129', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DeliveryExperience'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'CarrierWillPickUp'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DeclaredValue'
 GO

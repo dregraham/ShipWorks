@@ -972,11 +972,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShipmentID);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.AmazonAccountID field instance</summary>
-		public static EntityField2 AmazonAccountID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.AmazonAccountID);}
-		}
 		/// <summary>Creates a new AmazonShipmentEntity.CarrierName field instance</summary>
 		public static EntityField2 CarrierName
 		{
@@ -1032,25 +1027,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DimsAddWeight);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.DateMustArriveBy field instance</summary>
-		public static EntityField2 DateMustArriveBy
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DateMustArriveBy);}
-		}
-		/// <summary>Creates a new AmazonShipmentEntity.SendDateMustArriveBy field instance</summary>
-		public static EntityField2 SendDateMustArriveBy
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.SendDateMustArriveBy);}
-		}
 		/// <summary>Creates a new AmazonShipmentEntity.DeliveryExperience field instance</summary>
 		public static EntityField2 DeliveryExperience
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DeliveryExperience);}
-		}
-		/// <summary>Creates a new AmazonShipmentEntity.CarrierWillPickUp field instance</summary>
-		public static EntityField2 CarrierWillPickUp
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.CarrierWillPickUp);}
 		}
 		/// <summary>Creates a new AmazonShipmentEntity.DeclaredValue field instance</summary>
 		public static EntityField2 DeclaredValue

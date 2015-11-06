@@ -183,12 +183,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             // TODO: Remove or replace this if statement when we decide how to handle non-Amazon orders.
             Debug.Assert(amazonOrder != null);
-
-            amazonShipment.DateMustArriveBy = amazonOrder?.LatestExpectedDeliveryDate ?? dateTimeProvider.Now.AddDays(2);
-
             amazonShipment.DimsWeight = shipment.ContentWeight;
-            amazonShipment.CarrierWillPickUp = false;
-            amazonShipment.SendDateMustArriveBy = false;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -229,16 +224,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 }
 
                 ratingField = base.RatingFields;
-
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.AmazonAccountID);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.CarrierWillPickUp);
+                
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DeclaredValue);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DeliveryExperience);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsAddWeight);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsHeight);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsLength);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsWeight);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.SendDateMustArriveBy);
 
                 return ratingField;
             }
@@ -303,10 +295,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
             AmazonProfileEntity amazonProfile = profile.Amazon;
-
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.CarrierWillPickUp, amazonShipment, AmazonShipmentFields.CarrierWillPickUp);
+            
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
-            ShippingProfileUtility.ApplyProfileValue(amazonProfile.SendDateMustArriveBy, amazonShipment, AmazonShipmentFields.SendDateMustArriveBy);
 
             if (amazonProfile.Weight != null && amazonProfile.Weight.Value != 0)
             {
