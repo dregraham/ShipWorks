@@ -1,35 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WizardPages;
-using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data;
 using log4net;
-using ShipWorks.Data.Model;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Management;
-using ShipWorks.Actions.Tasks;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Grid;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -104,7 +93,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             entity.FlagDescription = "";
             entity.FlagType = (int) ChannelAdvisorFlagType.NoFlag;
             entity.MarketplaceNames = "";
-
+            
             return entity;
         }
 
@@ -344,6 +333,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             outline.AddElement("OrderID", () => order.Value.CustomOrderIdentifier);
             outline.AddElement("FlagStyle", () => order.Value.FlagStyle);
             outline.AddElement("FlagDescription", () => order.Value.FlagDescription);
+            outline.AddElement("IsPrime", () => EnumHelper.GetDescription((ChannelAdvisorIsAmazonPrime) order.Value.IsPrime));
         }
 
         /// <summary>
