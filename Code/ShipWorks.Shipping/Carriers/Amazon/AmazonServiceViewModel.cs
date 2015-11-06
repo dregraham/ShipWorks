@@ -25,10 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly AmazonShipmentType amazonShipmentType;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
-        private GenericMultiValueBinder<ShipmentEntity, DateTime> dateMustArriveBy;
         private GenericMultiValueBinder<ShipmentEntity, double> weightBinder;
-        private CheckboxMultiValueBinder<ShipmentEntity> carrierWillPickUpBinder;
-        private CheckboxMultiValueBinder<ShipmentEntity> sendDateMustArriveByBinder;
         private IMultiValue<AmazonDeliveryExperienceType?> deliveryExperienceBinder;
         private GenericMultiValueBinder<ShipmentEntity, AmazonRateTag> shippingServiceBinder;
         private List<AmazonRateTag> servicesAvailable;
@@ -93,10 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             SetupServices(shipments);
 
             // Wire up the property changed event so we can update rates.
-            dateMustArriveBy.PropertyChanged += OnPropertyChanged;
             weightBinder.PropertyChanged += OnPropertyChanged;
-            carrierWillPickUpBinder.PropertyChanged += OnPropertyChanged;
-            sendDateMustArriveByBinder.PropertyChanged += OnPropertyChanged;
             deliveryExperienceBinder.PropertyChanged += OnPropertyChanged;
             shippingServiceBinder.PropertyChanged += OnPropertyChanged;
         }
@@ -201,9 +195,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ShippingServiceOfferId = shipment.Amazon.ShippingServiceOfferID,
                 CarrierName = shipment.Amazon.CarrierName
             };
-
-
-
+        
         /// <summary>
         /// Event for property changed handling
         /// </summary>
@@ -218,96 +210,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public void Save(List<ShipmentEntity> shipments)
         {
             weightBinder.Save();
-            carrierWillPickUpBinder.Save();
-            sendDateMustArriveByBinder.Save();
             deliveryExperienceBinder.Save();
             shippingServiceBinder.Save();
         }
-
-        /// <summary>
-        /// SendDeliverBy display text
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool SendDateMustArriveBy
-        {
-            get
-            {
-                return sendDateMustArriveByBinder.PropertyValue;
-            }
-            set
-            {
-                sendDateMustArriveByBinder.PropertyValue = value;
-            }
-        }
-
-        /// <summary>
-        /// SendDeliverBy is multi valued.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool SendDeliverByIsMultiValued => sendDateMustArriveByBinder.IsMultiValued;
-
-        /// <summary>
-        /// SendDeliverByCheckState is multi valued.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public CheckState SendDeliverByCheckState => sendDateMustArriveByBinder.CheckStateValue;
-
-        /// <summary>
-        /// CarrierWillPickUp display text
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool CarrierWillPickUp
-        {
-            get
-            {
-                return carrierWillPickUpBinder.PropertyValue;
-            }
-            set
-            {
-                carrierWillPickUpBinder.PropertyValue = value;
-            }
-        }
-
-        /// <summary>
-        /// CarrierWillPickUp is multi valued.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool CarrierWillPickUpIsMultiValued => carrierWillPickUpBinder.IsMultiValued;
-
-        /// <summary>
-        /// CarrierWillPickUpCheckState is multi valued.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public CheckState CarrierWillPickUpCheckState => carrierWillPickUpBinder.CheckStateValue;
 
         /// <summary>
         /// DeliveryExperience display text
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IMultiValue<AmazonDeliveryExperienceType?> DeliveryExperience => deliveryExperienceBinder;
-
-        /// <summary>
-        /// DateMustArriveBy display text
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string DateMustArriveBy
-        {
-            get
-            {
-                if (dateMustArriveBy.PropertyValue >= new DateTime(1980, 1, 1))
-                {
-                    return dateMustArriveBy.PropertyValue.ToString("(MM/dd/yyyy)");
-                }
-
-                return DateTime.Now.AddDays(1).ToString("(MM/dd/yyyy)");
-            }
-        }
-
-        /// <summary>
-        /// DateMustArriveBy is multi valued.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool DateMustArriveByIsMultiValued => dateMustArriveBy.IsMultiValued;
 
         /// <summary>
         /// ContentWeight display text
