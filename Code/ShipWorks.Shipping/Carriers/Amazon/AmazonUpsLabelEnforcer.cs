@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
@@ -42,16 +43,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonStoreEntity store = GetStore(shipment);
 
-            JToken token = JToken.Parse(SecureText.Decrypt(store.AmazonShippingToken, "AmazonShippingToken"));
+            AmazonShippingToken shippingToken = new AmazonShippingToken();
+            shippingToken.Decrypt(store.AmazonShippingToken);
 
-            JToken errorReason = token.SelectToken("ErrorReason");
-            JToken errorDate = token.SelectToken("ErrorDate");
-
-            DateTime errorDateTime = DateTime.Parse(errorDate.ToString());
+            DateTime errorDateTime = DateTime.Parse(shippingToken.ErrorDate);
 
             if (!accountRepository.Accounts.Any() || errorDateTime.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
             {
-                return new EnforcementResult(errorReason.ToString());
+                return new EnforcementResult(shippingToken.ErrorReason);
             }
 
             return EnforcementResult.Success;
@@ -68,17 +67,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             string upsTracking = shipment.TrackingNumber;
 
-            if (accountRepository.Accounts.Cast<UpsAccountEntity>().Any(account => upsTracking.Contains(account.AccountNumber)))
+            if (accountRepository.Accounts.Any(account => upsTracking.Contains(account.AccountNumber)))
             {
                 return;
             }
 
             AmazonStoreEntity store = GetStore(shipment);
+            AmazonShippingToken shippingToken = new AmazonShippingToken()
+            {
+                ErrorDate = dateTimeProvider.CurrentSqlServerDateTime.Date.ToShortDateString(),
+                ErrorReason =
+                    "ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your UPS account is linked correctly in Amazon Seller Central."
+            };
 
-            string token =
-                    $"{{\"ErrorDate\":\"{dateTimeProvider.CurrentSqlServerDateTime.Date}\", \"ErrorReason\":\"ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your UPS account is linked correctly in Amazon Seller Central.\"}}";
-
-            store.AmazonShippingToken = SecureText.Encrypt(token, "AmazonShippingToken");
+            store.AmazonShippingToken = shippingToken.Encrypt();
         }
 
         /// <summary>

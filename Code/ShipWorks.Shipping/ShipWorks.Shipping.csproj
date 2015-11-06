@@ -116,6 +116,7 @@
     <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShippingToken.cs" />
     <Compile Include="Carriers\Amazon\AmazonUpsLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\AmazonUpsRateFilter.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsLabelEnforcer.cs" />

@@ -36,17 +36,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             AmazonStoreEntity store = GetStore(shipment);
-            
-            JToken token = JToken.Parse(SecureText.Decrypt(store.AmazonShippingToken, "AmazonShippingToken"));
 
-            JToken errorDate = token.SelectToken("ErrorDate");
-            JToken errorReason = token.SelectToken("ErrorReason");
+            AmazonShippingToken shippingToken = new AmazonShippingToken();
+            shippingToken.Decrypt(store.AmazonShippingToken);
             
-            DateTime errorDateTime = DateTime.Parse(errorDate.ToString());
+            DateTime errorDateTime = DateTime.Parse(shippingToken.ErrorDate);
 
             if (errorDateTime.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
             {
-                return new EnforcementResult(errorReason.ToString());
+                return new EnforcementResult(shippingToken.ErrorReason);
             }
 
             return EnforcementResult.Success;
@@ -67,10 +65,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (!sdcTracking.Equals("11", StringComparison.Ordinal) && !sdcTracking.Equals("16", StringComparison.Ordinal) && shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM"))
             {
-                string token =
-                    $"{{\"ErrorDate\":\"{dateTimeProvider.CurrentSqlServerDateTime.Date}\", \"ErrorReason\":\"ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your Stamps.com account is linked correctly in Amazon Seller Central.\"}}";
+                AmazonShippingToken shippingToken = new AmazonShippingToken()
+                {
+                    ErrorDate = dateTimeProvider.CurrentSqlServerDateTime.Date.ToShortDateString(),
+                    ErrorReason =
+                        "ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your Stamps.com account is linked correctly in Amazon Seller Central."
+                };
 
-                store.AmazonShippingToken = SecureText.Encrypt(token, "AmazonShippingToken");
+                store.AmazonShippingToken = shippingToken.Encrypt();
             }
         }
 
