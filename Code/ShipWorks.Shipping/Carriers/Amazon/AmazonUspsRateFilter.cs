@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             RateGroup newRateGroup = rateGroup.CopyWithRates(rates.Where(r => ((AmazonRateTag)r.Tag).CarrierName.IndexOf("usps", StringComparison.OrdinalIgnoreCase) == -1));
-            newRateGroup.AddFootnoteFactory(new AmazonNotLinkedFootnoteFactory("Stamps.com"));
+            newRateGroup.AddFootnoteFactory(new AmazonNotLinkedFootnoteFactory(ShipmentTypeCode.Usps));
 
             return newRateGroup;
         }

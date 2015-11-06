@@ -37,14 +37,14 @@
             // 
             // MessageLink
             // 
-            this.MessageLink.LinkArea = new System.Windows.Forms.LinkArea(65, 41);
+            this.MessageLink.LinkArea = new System.Windows.Forms.LinkArea(79, 41);
             this.MessageLink.Location = new System.Drawing.Point(50, 12);
             this.MessageLink.Name = "MessageLink";
-            this.MessageLink.Size = new System.Drawing.Size(253, 77);
+            this.MessageLink.Size = new System.Drawing.Size(462, 77);
             this.MessageLink.TabIndex = 0;
             this.MessageLink.TabStop = true;
-            this.MessageLink.Text = "Could not retrieve {0} rates. Please confirm your {0} account is linked correctly" +
-    " in Amazon Seller Central.";
+            this.MessageLink.Text = "Shipworks could not retrieve UPS rates. Please confirm your UPS account is linked" +
+    " correctly in Amazon Seller Central and added to ShipWorks.";
             this.MessageLink.UseCompatibleTextRendering = true;
             this.MessageLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnMessageLinkClicked);
             // 
@@ -61,7 +61,7 @@
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(217, 92);
+            this.okButton.Location = new System.Drawing.Point(432, 69);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 4;
@@ -73,12 +73,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(304, 127);
+            this.ClientSize = new System.Drawing.Size(519, 104);
             this.ControlBox = false;
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.MessageLink);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "AmazonNotLinkedDlg";
             this.ShowInTaskbar = false;
             this.Text = "Amazon Account Not Linked";

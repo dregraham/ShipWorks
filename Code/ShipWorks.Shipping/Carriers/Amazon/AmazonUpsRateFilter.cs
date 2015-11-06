@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             RateGroup newRateGroup = rateGroup.CopyWithRates(rateGroup.Rates.Where(r => ((AmazonRateTag) r.Tag).CarrierName.IndexOf("ups", StringComparison.OrdinalIgnoreCase) == -1));
-            newRateGroup.AddFootnoteFactory(new AmazonNotLinkedFootnoteFactory("UPS"));
+            newRateGroup.AddFootnoteFactory(new AmazonNotLinkedFootnoteFactory(ShipmentTypeCode.UpsOnLineTools));
 
             return newRateGroup;
         }

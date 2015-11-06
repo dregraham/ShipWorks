@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Editing.Rating;
+﻿using System.Diagnostics;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -7,15 +8,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonNotLinkedFootnoteFactory : IRateFootnoteFactory
     {
-        private readonly string accountTypeToDisplay;
+        private readonly ShipmentTypeCode shipmentTypeCode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonNotLinkedFootnoteFactory"/> class.
         /// </summary>
-        /// <param name="accountTypeToDisplay">The name of the shipping service account to display in the user facing messaging</param>
-        public AmazonNotLinkedFootnoteFactory(string accountTypeToDisplay)
+        public AmazonNotLinkedFootnoteFactory(ShipmentTypeCode shipmentTypeCode)
         {
-            this.accountTypeToDisplay = accountTypeToDisplay;
+            Debug.Assert(shipmentTypeCode==ShipmentTypeCode.Usps || shipmentTypeCode == ShipmentTypeCode.UpsOnLineTools);
+            this.shipmentTypeCode = shipmentTypeCode;
         }
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Creates the footnote.
         /// </summary>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters) => 
-            new AmazonNotLinkedFootnoteControl(accountTypeToDisplay);
+            new AmazonNotLinkedFootnoteControl(shipmentTypeCode);
 
         /// <summary>
         /// Notes that this factory should or should not be used in BestRate
