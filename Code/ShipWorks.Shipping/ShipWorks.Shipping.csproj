@@ -130,6 +130,7 @@
     <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.Designer.cs">
       <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Carriers\Amazon\AmazonUpsRateFilter.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsRateFilter.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
