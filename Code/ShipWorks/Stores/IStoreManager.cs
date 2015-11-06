@@ -22,5 +22,12 @@ namespace ShipWorks.Stores
         /// Get the store with the given ID.  If it does not exist, null is returned
         /// </summary>
         StoreEntity GetStore(long storeID);
+
+        /// <summary>
+        /// Gets the store associated with the given entity
+        /// </summary>
+        /// <param name="entityID">The entity ID</param>
+        /// <returns>The store entity related to the given entity ID</returns>
+        StoreEntity GetRelatedStore(long entityID);
     }
 }

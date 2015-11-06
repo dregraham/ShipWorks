@@ -359,7 +359,6 @@
     <Compile Include="Utility\ApiValueAttribute.cs" />
     <Compile Include="Utility\BreakpointTimer.cs" />
     <Compile Include="Utility\ByteUtility.cs" />
-    <Compile Include="Utility\DateTimeProvider.cs" />
     <Compile Include="Utility\DateTimeUtility.cs" />
     <Compile Include="Utility\DeprecatedAttribute.cs" />
     <Compile Include="Utility\CallbackDescriptionAttribute.cs" />

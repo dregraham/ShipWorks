@@ -32,5 +32,17 @@ namespace ShipWorks.Stores
         {
             return StoreManager.GetStore(storeID);
         }
+
+        /// <summary>
+        /// Gets the store associated with the given entity
+        /// </summary>
+        /// <param name="entityID">The entity ID</param>
+        /// <returns>
+        /// The store entity related to the given entity ID
+        /// </returns>
+        public StoreEntity GetRelatedStore(long entityID)
+        {
+            return StoreManager.GetRelatedStore(entityID);
+        }
     }
 }

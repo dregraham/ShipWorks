@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
+using ShipWorks.Common;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -12,6 +13,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonUspsLabelEnforcer : IAmazonLabelEnforcer
     {
+        private readonly IStoreManager storeManager;
+        private readonly IDateTimeProvider dateTimeProvider;
+        public AmazonUspsLabelEnforcer(IStoreManager storeManager, IDateTimeProvider dateTimeProvider)
+        {
+            this.storeManager = storeManager;
+            this.dateTimeProvider = dateTimeProvider;
+        }
+
         /// <summary>
         /// Is Amazon allowed for the given shipment
         /// </summary>
@@ -22,12 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            AmazonStoreEntity store = StoreManager.GetRelatedStore(shipment.OrderID) as AmazonStoreEntity;
-
-            if (store == null)
-            {
-                throw new ShippingException("");
-            }
+            AmazonStoreEntity store = GetStore(shipment);
 
             JToken token = SecureText.Decrypt(store.AmazonShippingToken, "AmazonShippingToken");
 
@@ -36,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             DateTime errorDateTime = DateTime.Parse(errorDate.ToString());
 
-            if (errorDateTime == SqlSession.Current.GetLocalDate())
+            if (errorDateTime.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
             {
                 return new EnforcementResult(errorReason.ToString());
             }
@@ -57,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (!sdcTracking.Equals("11", StringComparison.Ordinal) && !sdcTracking.Equals("16", StringComparison.Ordinal) && shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM"))
             {
-                AmazonStoreEntity store = StoreManager.GetRelatedStore(shipment.OrderID) as AmazonStoreEntity;
+                AmazonStoreEntity store = GetStore(shipment);
 
                 if (store == null)
                 {
@@ -65,10 +69,28 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 }
 
                 string token =
-                    $"{{\"ErrorDate\":\"{SqlSession.Current.GetLocalDate()}\", \"ErrorReason\":\"ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your Stamps.com account is linked correctly in Amazon Seller Central.\"}}";
+                    $"{{\"ErrorDate\":\"{dateTimeProvider.CurrentSqlServerDateTime.Date}\", \"ErrorReason\":\"ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your Stamps.com account is linked correctly in Amazon Seller Central.\"}}";
 
                 store.AmazonShippingToken = SecureText.Encrypt(token, "AmazonShippingToken");
             }
+        }
+
+        /// <summary>
+        /// Gets the store.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns></returns>
+        /// <exception cref="ShippingException"></exception>
+        private AmazonStoreEntity GetStore(ShipmentEntity shipment)
+        {
+            AmazonStoreEntity store = storeManager.GetRelatedStore(shipment.OrderID) as AmazonStoreEntity;
+
+            if (store == null)
+            {
+                throw new ShippingException("");
+            }
+
+            return store;
         }
     }
 }
