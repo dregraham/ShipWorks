@@ -1,6 +1,4 @@
-﻿using Interapptive.Shared.Utility;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using System;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -9,34 +7,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShippingToken
     {
-        [JsonProperty("ErrorDate")]
-        public string ErrorDate { get; set; }
+        /// <summary>
+        /// Date of the error
+        /// </summary>
+        public DateTime ErrorDate { get; set; }
 
-        [JsonProperty("ErrorReason")]
+        /// <summary>
+        /// Reason for the error
+        /// </summary>
         public string ErrorReason { get; set; }
-
-        /// <summary>
-        /// Decrypts the specified encrypted text.
-        /// </summary>
-        /// <param name="encryptedText">The encrypted text.</param>
-        /// <returns>The decrypted AmazonShippingToken</returns>
-        public string Decrypt(string encryptedText)
-        {
-            JToken decryptedText = JToken.Parse(SecureText.Decrypt(encryptedText, "AmazonShippingToken"));
-
-            ErrorDate = decryptedText.SelectToken("ErrorDate").ToString();
-            ErrorReason = decryptedText.SelectToken("ErrorReason").ToString();
-
-            return decryptedText.ToString();
-        }
-
-        /// <summary>
-        /// Encrypts and returns the current instance of this object
-        /// </summary>
-        /// <returns>The encrypted AmazonShippingToken</returns>
-        public string Encrypt()
-        {
-            return SecureText.Encrypt(JsonConvert.SerializeObject(this), "AmazonShippingToken");
-        }
     }
 }

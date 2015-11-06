@@ -1,97 +1,141 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using Moq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Stores;
 using Xunit;
+using Autofac.Extras.Moq;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
-    public class AmazonUpsLabelEnforcerTest
+    public class AmazonUpsLabelEnforcerTest : IDisposable
     {
-        private readonly ShipmentEntity amazonShipment;
-        private readonly ShipmentEntity nonAmazonShipment;
-        private readonly Mock<IStoreManager> storeManager;
-        private readonly Mock<IDateTimeProvider> dateTimeProvider;
-        private readonly Mock<ICarrierAccountRepository<UpsAccountEntity>> accountRepository;
+        readonly AutoMock mock;
         private readonly AmazonStoreEntity store;
-        private readonly AmazonUpsLabelEnforcer testObject;
 
         public AmazonUpsLabelEnforcerTest()
         {
-            amazonShipment = new ShipmentEntity()
-            {
-                ShipmentID = 1,
-                TrackingNumber = "1111111111111111"
-            };
+            mock = AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
 
-            nonAmazonShipment = new ShipmentEntity()
-            {
-                ShipmentID = 2,
-                TrackingNumber = "2222222222222222"
-            };
+            store = new AmazonStoreEntity();
 
-            store = new AmazonStoreEntity()
-            {
-                AmazonShippingToken = "hlkH7XeEA5GJOefdipC2s6DY+ZF7GWI3nazovu5UYESp9FqfeIiKcfyOzL9Mdsy0",
-            };
+            mock.Mock<IStoreManager>()
+                .Setup(x => x.GetRelatedStore(It.IsAny<long>()))
+                .Returns(store);
 
-            List<UpsAccountEntity> accounts = new List<UpsAccountEntity>
-            {
-                new UpsAccountEntity() {AccountNumber = "12345"}
-            };
-
-            storeManager = new Mock<IStoreManager>();
-            storeManager.Setup(x => x.GetRelatedStore(amazonShipment.ShipmentID)).Returns(store);
-            storeManager.Setup(x => x.GetRelatedStore(nonAmazonShipment.ShipmentID)).Returns(new StoreEntity());
-
-            dateTimeProvider = new Mock<IDateTimeProvider>();
-            dateTimeProvider.Setup(x => x.CurrentSqlServerDateTime).Returns(DateTime.Today);
-
-            accountRepository = new Mock<ICarrierAccountRepository<UpsAccountEntity>>();
-            accountRepository.Setup(x => x.Accounts).Returns(accounts);
-
-            testObject = new AmazonUpsLabelEnforcer(accountRepository.Object, storeManager.Object, dateTimeProvider.Object);
+            mock.Mock<IDateTimeProvider>()
+                .Setup(x => x.CurrentSqlServerDateTime)
+                .Returns(new DateTime(2015, 1, 1));
         }
 
         [Fact]
-        public void CheckRestriction_ReturnsSuccess_WhenAmazonShippingTokenIsNotToday_Test()
+        public void CheckRestriction_ReturnsSuccess_WhenAmazonShippingTokenIsNotTodayAndAccountsExist_Test()
         {
-            Assert.Equal(EnforcementResult.Success, testObject.CheckRestriction(amazonShipment));
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
+                .Setup(x => x.Accounts)
+                .Returns(new[] { new UpsAccountEntity() });
+
+            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
+
+            Assert.Equal(EnforcementResult.Success, testObject.CheckRestriction(new ShipmentEntity()));
+        }
+
+        [Fact]
+        public void CheckRestriction_DelegatesToStoreManager()
+        {
+            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
+            testObject.CheckRestriction(new ShipmentEntity { ShipmentID = 1234 });
+
+            mock.Mock<IStoreManager>()
+                .Verify(x => x.GetRelatedStore(1234));
         }
 
         [Fact]
         public void CheckRestriction_ReturnsEnforcementFailureWithMessage_WhenAmazonShippingTokenIsToday_Test()
         {
-            store.AmazonShippingToken =
-                SecureText.Encrypt(
-                    $"{{\"ErrorDate\":\"{dateTimeProvider.Object.CurrentSqlServerDateTime.Date}\", \"ErrorReason\":\"ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your UPS account is linked correctly in Amazon Seller Central.\"}}", "AmazonShippingToken");
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
+                .Setup(x => x.Accounts)
+                .Returns(new[] { new UpsAccountEntity() });
 
-            EnforcementResult result = testObject.CheckRestriction(amazonShipment);
+            store.SetShippingToken(new AmazonShippingToken
+            {
+                ErrorDate = new DateTime(2015,1,1),
+                ErrorReason = "Foo Bar"
+            });
+
+            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
+            EnforcementResult result = testObject.CheckRestriction(new ShipmentEntity());
 
             Assert.Equal(false, result.IsValid);
-            Assert.Equal("ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your UPS account is linked correctly in Amazon Seller Central.", result.FailureReason);
+            Assert.Equal("Foo Bar", result.FailureReason);
+        }
+
+        [Fact]
+        public void CheckRestriction_ReturnsEnforcementFailureWithMessage_WhenNoUpsAccountExists_Test()
+        {
+            store.SetShippingToken(new AmazonShippingToken
+            {
+                ErrorDate = new DateTime(2012, 1, 1),
+                ErrorReason = "Foo Bar"
+            });
+
+            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
+            EnforcementResult result = testObject.CheckRestriction(new ShipmentEntity());
+
+            Assert.Equal(false, result.IsValid);
+            Assert.Equal("Foo Bar", result.FailureReason);
         }
 
         [Fact]
         public void CheckRestriction_ThrowsShippingException_WhenGivenNonAmazonShipment_Test()
         {
-            Exception e = Assert.Throws<ShippingException>(() => testObject.CheckRestriction(nonAmazonShipment));
+            mock.Mock<IStoreManager>()
+                .Setup(x => x.GetRelatedStore(It.IsAny<long>()))
+                .Returns(new StoreEntity());
+
+            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
+
+            Exception e = Assert.Throws<ShippingException>(() => testObject.CheckRestriction(new ShipmentEntity()));
             Assert.Equal("Amazon as shipping carrier can only be used on orders from an Amazon store", e.Message);
+        }
+
+        [Fact]
+        public void VerifyShipment_DelegatesToStoreManager()
+        {
+            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
+            testObject.VerifyShipment(new ShipmentEntity { ShipmentID = 1234 });
+
+            mock.Mock<IStoreManager>()
+                .Verify(x => x.GetRelatedStore(1234));
         }
 
         [Fact]
         public void VerifyShipment_ThrowsShippingException_WhenGivenNonAmazonShipment_Test()
         {
-            Exception e = Assert.Throws<ShippingException>(() => testObject.VerifyShipment(nonAmazonShipment));
+            mock.Mock<IStoreManager>()
+                .Setup(x => x.GetRelatedStore(It.IsAny<long>()))
+                .Returns(new StoreEntity());
+
+            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
+            Exception e = Assert.Throws<ShippingException>(() => testObject.VerifyShipment(new ShipmentEntity()));
             Assert.Equal("Amazon as shipping carrier can only be used on orders from an Amazon store", e.Message);
         }
+
+        [Fact]
+        public void VerifyShipment_DoesNotSetError_WhenUpsAccountsExist()
+        {
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
+                .Setup(x => x.Accounts)
+                .Returns(new[] { new UpsAccountEntity { AccountNumber = "9922" } });
+
+            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
+            testObject.VerifyShipment(new ShipmentEntity { TrackingNumber = "12399223" });
+
+            Assert.Null(store.AmazonShippingToken);
+        }
+
+        public void Dispose() => mock?.Dispose();
     }
 }

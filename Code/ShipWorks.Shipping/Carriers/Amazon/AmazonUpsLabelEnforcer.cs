@@ -43,12 +43,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonStoreEntity store = GetStore(shipment);
 
-            AmazonShippingToken shippingToken = new AmazonShippingToken();
-            shippingToken.Decrypt(store.AmazonShippingToken);
+            AmazonShippingToken shippingToken = store.GetShippingToken();
 
-            DateTime errorDateTime = DateTime.Parse(shippingToken.ErrorDate);
-
-            if (!accountRepository.Accounts.Any() || errorDateTime.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
+            if (!accountRepository.Accounts.Any() || shippingToken.ErrorDate.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
             {
                 return new EnforcementResult(shippingToken.ErrorReason);
             }
@@ -73,14 +70,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             AmazonStoreEntity store = GetStore(shipment);
-            AmazonShippingToken shippingToken = new AmazonShippingToken()
+            AmazonShippingToken shippingToken = new AmazonShippingToken
             {
-                ErrorDate = dateTimeProvider.CurrentSqlServerDateTime.Date.ToShortDateString(),
+                ErrorDate = dateTimeProvider.CurrentSqlServerDateTime.Date,
                 ErrorReason =
                     "ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your UPS account is linked correctly in Amazon Seller Central."
             };
 
-            store.AmazonShippingToken = shippingToken.Encrypt();
+            store.SetShippingToken(shippingToken);
         }
 
         /// <summary>
@@ -97,6 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 throw new ShippingException("Amazon as shipping carrier can only be used on orders from an Amazon store");
             }
+
             return store;
         }
     }
