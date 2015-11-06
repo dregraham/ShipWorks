@@ -185,7 +185,7 @@
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(22, 160);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(632, 48);
+            this.insuranceControl.Size = new System.Drawing.Size(701, 48);
             this.insuranceControl.TabIndex = 12;
             // 
             // dimensionsControl
@@ -266,7 +266,7 @@
             this.AutoScroll = true;
             this.Controls.Add(this.sectionFrom);
             this.Name = "AmazonServiceControl";
-            this.Size = new System.Drawing.Size(460, 440);
+            this.Size = new System.Drawing.Size(460, 370);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);

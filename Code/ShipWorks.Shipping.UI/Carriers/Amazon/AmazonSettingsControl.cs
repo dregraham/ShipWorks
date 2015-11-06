@@ -1,5 +1,4 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon
@@ -10,8 +9,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         {
             InitializeComponent();
         }
-
-
+        
         /// <summary>
         /// Load the settings into the control
         /// </summary>
@@ -20,7 +18,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             //TODO Set insurance provider based on database field for Amazon Insurance
             //ShippingSettingsEntity settings = ShippingSettings.Fetch();
             //insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.;
-
         }
 
         /// <summary>

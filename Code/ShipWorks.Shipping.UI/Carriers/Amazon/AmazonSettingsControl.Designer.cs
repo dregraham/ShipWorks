@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             // 
             this.panel2.Controls.Add(this.insuranceProviderChooser);
             this.panel2.Controls.Add(this.labelShipmentProtection);
-            this.panel2.Location = new System.Drawing.Point(5, 248);
+            this.panel2.Location = new System.Drawing.Point(3, 52);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(425, 57);
             this.panel2.TabIndex = 24;
@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             this.Controls.Add(this.amazonOptionsControl1);
             this.Controls.Add(this.panel2);
             this.Name = "AmazonSettingsControl";
-            this.Size = new System.Drawing.Size(445, 359);
+            this.Size = new System.Drawing.Size(445, 119);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
