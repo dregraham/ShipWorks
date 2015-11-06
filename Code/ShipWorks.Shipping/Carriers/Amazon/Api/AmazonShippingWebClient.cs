@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             
             // Get Response
             IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
-            
+
             // Deserialize 
             return DeserializeResponse<GetEligibleShippingServicesResponse>(response.ReadResult());
         }
@@ -121,9 +121,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             {
                 return SerializationUtility.DeserializeFromXml<T>(xml);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                throw new AmazonShippingException(ex.Message, ex);
+                ErrorResponse errorResponse = SerializationUtility.DeserializeFromXml<ErrorResponse>(xml);
+                throw new AmazonShippingException(errorResponse.Error.Message, ex);
             }
         }
 
