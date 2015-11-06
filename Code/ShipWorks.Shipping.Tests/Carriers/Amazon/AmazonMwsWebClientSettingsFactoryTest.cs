@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
                 AmazonMwsWebClientSettingsFactory settingsFactory = mock.Create<AmazonMwsWebClientSettingsFactory>();
 
-                AmazonMwsWebClientSettings testObject = settingsFactory.Create(new AmazonShipmentEntity());
+                IAmazonMwsWebClientSettings testObject = settingsFactory.Create(new AmazonShipmentEntity());
 
                 Assert.Equal("testMerchantID", testObject.Credentials.MerchantID);
             }

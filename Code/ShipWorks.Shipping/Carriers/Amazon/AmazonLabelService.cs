@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 throw new ShippingException("Amazon shipping can only be used for Amazon orders");
             }
 
-            AmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
+            IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
 
             CreateShipmentResponse labelResponse = webClient.CreateShipment(requestDetails, settings, shipment.Amazon.ShippingServiceID);
@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            AmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
+            IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
 
             webClient.CancelShipment(settings, shipment.Amazon.AmazonUniqueShipmentID);
         }

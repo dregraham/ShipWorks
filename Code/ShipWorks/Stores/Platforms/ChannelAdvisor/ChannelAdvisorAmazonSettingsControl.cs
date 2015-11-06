@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Business.Geography;
-using System;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -31,10 +31,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public void LoadStore(ChannelAdvisorStoreEntity caStore)
         {
-            if (caStore == null)
-            {
-                throw new ArgumentException("ChannelAdvisorStoreEntity expected.", "store");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(caStore, nameof(caStore));
 
             countries.SelectedItem = Geography.GetCountryName(caStore.AmazonApiRegion);
             merchantID.Text = caStore.AmazonMerchantID;
@@ -46,10 +43,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public void SaveToEntity(ChannelAdvisorStoreEntity caStore)
         {
-            if (caStore == null)
-            {
-                throw new ArgumentException("ChannelAdvisorStoreEntity expected.", "store");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(caStore, nameof(caStore));
 
             caStore.AmazonApiRegion = Geography.GetCountryCode((string)countries.SelectedItem);
             caStore.AmazonMerchantID = merchantID.Text;

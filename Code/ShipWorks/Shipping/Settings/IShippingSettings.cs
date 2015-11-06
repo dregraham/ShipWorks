@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ShipWorks.Shipping.Settings
 {
     /// <summary>
@@ -13,6 +15,6 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// The list of shipment types that have been fully configured for use within ShipWorks
         /// </summary>
-        int[] GetConfiguredTypes();
+        IEnumerable<ShipmentTypeCode> GetConfiguredTypes();
     }
 }

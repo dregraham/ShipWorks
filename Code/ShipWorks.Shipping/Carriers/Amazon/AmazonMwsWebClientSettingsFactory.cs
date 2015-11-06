@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Creates an instance of AmazonMwsWebClientSettings from an AmazonShipmentEntity
         /// </summary>
-        public AmazonMwsWebClientSettings Create(AmazonShipmentEntity amazonShipment)
+        public IAmazonMwsWebClientSettings Create(AmazonShipmentEntity amazonShipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(amazonShipment, nameof(amazonShipment));
 

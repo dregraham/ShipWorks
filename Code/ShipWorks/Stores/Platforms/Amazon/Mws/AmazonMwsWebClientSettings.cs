@@ -8,13 +8,15 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     /// </summary>
     public class AmazonMwsWebClientSettings : IAmazonMwsWebClientSettings
     {
-        // mwsEntity to get settings from
-        public IAmazonCredentials Credentials;
-
         public AmazonMwsWebClientSettings(IAmazonCredentials mwsCredentials)
         {
             Credentials = mwsCredentials;
         }
+
+        /// <summary>
+        /// Amazon Mws Credentials
+        /// </summary>
+        public IAmazonCredentials Credentials { get; set; }
 
         // Default base namespace for Amazon requests and responses
         private static string endpointNamespace = "https://mws.amazonservices.com";

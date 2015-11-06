@@ -26,5 +26,26 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// Gets the XNamespace value for a particular API
         /// </summary>
         XNamespace GetApiNamespace(AmazonMwsApiCall api);
+
+        /// <summary>
+        /// The Api Endpoint
+        /// </summary>
+        string Endpoint { get; }
+
+        /// <summary>
+        /// The AccessKeyID
+        /// </summary>
+        string InterapptiveAccessKeyID { get; }
+
+        /// <summary>
+        /// The SecretKey
+        /// </summary>
+        string InterapptiveSecretKey { get; }
+
+        /// <summary>
+        /// The Amazon Credentials
+        /// </summary>
+        IAmazonCredentials Credentials { get; }
+
     }
 }

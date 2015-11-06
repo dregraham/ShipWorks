@@ -26,6 +26,9 @@ namespace ShipWorks.Stores
             return StoreManager.GetEnabledStores();
         }
 
+        /// <summary>
+        /// Get the store for the related Shipment
+        /// </summary>
         public StoreEntity GetRelatedStore(ShipmentEntity shipment)
         {
             return StoreManager.GetRelatedStore(shipment.ShipmentID);

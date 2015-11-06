@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Validate the given credentials
         /// </summary>
-        public AmazonValidateCredentialsResponse ValidateCredentials(AmazonMwsWebClientSettings mwsSettings)
+        public AmazonValidateCredentialsResponse ValidateCredentials(IAmazonMwsWebClientSettings mwsSettings)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="requestDetails"></param>
         /// <param name="mwsSettings"></param>
         /// <returns></returns>
-        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings)
+        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.GetEligibleShippingServices;
 
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Cancel Shipment
         /// </summary>
-        public CancelShipmentResponse CancelShipment(AmazonMwsWebClientSettings mwsSettings, string amazonShipmentId)
+        public CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, string amazonShipmentId)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CancelShipment;
 
@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Create Shipment
         /// </summary>
-        public CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings, string shippingServiceId)
+        public CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings, string shippingServiceId)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CreateShipment;
 
@@ -134,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="request"></param>
         /// <param name="amazonMwsApiCall"></param>
         /// <param name="mwsSettings"></param>
-        private static void ConfigureRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall,  AmazonMwsWebClientSettings mwsSettings)
+        private static void ConfigureRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
         {
             string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
 
@@ -259,7 +259,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="request"></param>
         /// <param name="amazonMwsApiCall"></param>
         /// <param name="mwsSettings"></param>
-        private static void AddSignature(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, AmazonMwsWebClientSettings mwsSettings)
+        private static void AddSignature(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
         {
             request.Variables.Add("SignatureMethod", "HmacSHA256");
             request.Variables.Add("SignatureVersion", "2");
@@ -285,7 +285,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Executes a request 
         /// </summary>
-        private IHttpResponseReader ExecuteRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, AmazonMwsWebClientSettings mwsSettings)
+        private IHttpResponseReader ExecuteRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
         {
             // Adds our amazon credentials and other parameters
             // required for each api call

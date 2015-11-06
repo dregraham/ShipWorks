@@ -27,14 +27,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <value>
         ///   <c>true</c> if [has accounts]; otherwise, <c>false</c>.
         /// </value>
-        public bool HasAccounts
-        {
-            get
-            {
-                // No accounts for Amazon, return true if Amazon has been configured
-                return shippingSettings.GetConfiguredTypes().Contains((int)ShipmentTypeCode.Amazon);
-            }
-        }
+        public bool HasAccounts =>
+            // No accounts for Amazon, return true if Amazon has been configured
+            shippingSettings.GetConfiguredTypes().Contains(ShipmentTypeCode.Amazon);
+   
+        
 
         /// <summary>
         /// Saves the first account ID found to the shipment. The presumption here is that a new 
