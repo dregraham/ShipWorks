@@ -1017,11 +1017,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DimsAddWeight);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.SendDateMustArriveBy field instance</summary>
-		public static EntityField2 SendDateMustArriveBy
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.SendDateMustArriveBy);}
-		}
 		/// <summary>Creates a new AmazonShipmentEntity.DeliveryExperience field instance</summary>
 		public static EntityField2 DeliveryExperience
 		{

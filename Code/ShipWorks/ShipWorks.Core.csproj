@@ -10433,8 +10433,6 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.0.0.sql" />
@@ -10442,12 +10440,6 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.6.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.7.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.8.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.9.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
