@@ -68,6 +68,12 @@ namespace ShipWorks.Shipping
             { typeof(SqlForeignKeyException), "The shipment has been deleted." },
         };
 
+        readonly static IEnumerable<EntityField2> stateCountryFields = new[]
+            {
+                ShipmentFields.ShipStateProvCode, ShipmentFields.ShipCountryCode,
+                ShipmentFields.OriginStateProvCode, ShipmentFields.OriginCountryCode
+            };
+
         // We load shipments asynchronously.  This flag lets us know if that's what we're currently doing, so we don't try to do
         // it reentrantly.
         private bool loadingSelectedShipments = false;
@@ -116,7 +122,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public ShippingDlg(List<ShipmentEntity> shipments, ILifetimeScope lifetimeScope)
             : this(shipments, InitialShippingTabDisplay.Shipping, lifetimeScope)
-        {}
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShippingDlg"/> class. This is intended
@@ -153,7 +159,7 @@ namespace ShipWorks.Shipping
 
             this.initialDisplay = initialDisplay;
 
-            rateControl.Initialize(new FootnoteParameters(()=> LoadSelectedShipments(false) , GetStoreForCurrentShipment));
+            rateControl.Initialize(new FootnoteParameters(() => LoadSelectedShipments(false), GetStoreForCurrentShipment));
 
             // Ensure that the rate control cannot take up more than 1/3rd the height of the dialog, even after resizing
             SetServiceControlMinimumHeight();
@@ -307,13 +313,14 @@ namespace ShipWorks.Shipping
             string requestedShippingText = GetRequestedShippingLabel(shipments);
 
             if (requestedShippingText.Length == 0)
-	        {
-		        requestedShipping.Visible = false;
-	        }else
-	        {
+            {
+                requestedShipping.Visible = false;
+            }
+            else
+            {
                 requestedShipping.Visible = true;
-		        requestedShipping.Text = String.Format("{0}{1}","Requested Shipping: ",requestedShippingText);
-	        }
+                requestedShipping.Text = String.Format("{0}{1}", "Requested Shipping: ", requestedShippingText);
+            }
         }
 
         /// <summary>
@@ -508,7 +515,7 @@ namespace ShipWorks.Shipping
                     return null;
                 }
 
-                return (CustomsControlBase) customsControlArea.Controls[0];
+                return (CustomsControlBase)customsControlArea.Controls[0];
             }
         }
 
@@ -539,7 +546,7 @@ namespace ShipWorks.Shipping
 
             // Get the list of setup shipment types up front - so in case it changes from another ShipWorks in the middle of loading,
             // all shipments of the same type are loaded in the same way.
-            uiActivatedShipmentTypes = ShippingSettings.Fetch().ActivatedTypes.Select(v => (ShipmentTypeCode) v).ToList();
+            uiActivatedShipmentTypes = ShippingSettings.Fetch().ActivatedTypes.Select(v => (ShipmentTypeCode)v).ToList();
             uiActivatedShipmentTypes.Add(ShipmentTypeCode.None);
 
             BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this, "Preparing Shipments", "ShipWorks is preparing the shipments.", "Shipment {0} of {1}");
@@ -621,15 +628,11 @@ namespace ShipWorks.Shipping
             // For the one's that have been removed, ignore any concurrency\deleted errors
             SaveShipmentsToDatabase(removedNeedsSaved, false);
 
-            IEnumerable<EntityField2> fields = new[]
-            {
-                ShipmentFields.ShipStateProvCode, ShipmentFields.ShipCountryCode,
-                ShipmentFields.OriginStateProvCode, ShipmentFields.OriginCountryCode
-            };
 
             // We also need to save changes to any whose state\country has changed, since that affects customs items requirements
             List<ShipmentEntity> destinationChangeNeedsSaved = uiDisplayedShipments.Except(removedNeedsSaved)
-                                                                                   .Where(s => fields.Select(x => s.Fields[x.FieldIndex].IsChanged).Any()).ToList();
+                                                                                   .Where(s => stateCountryFields.Select(x => s.Fields[x.FieldIndex].IsChanged).Any())
+                                                                                   .ToList();
 
             // We need to show the user if anything went wrong while doing that
             IDictionary<ShipmentEntity, Exception> errors = SaveShipmentsToDatabase(destinationChangeNeedsSaved, false);
@@ -654,40 +657,25 @@ namespace ShipWorks.Shipping
             }
 
             // Go through each one not known to be deleted and try to get it completely refreshed so we can update it's UI display
-            foreach (KeyValuePair<ShipmentEntity, Exception> pair in errors)
+            foreach (ShipmentEntity shipment in errors.Select(x => x.Key).Where(x => !x.DeletedFromDatabase))
             {
-                ShipmentEntity shipment = pair.Key;
-
-                // It we don't think its deleted, and it had a concurrency exception, try to refresh it
-                if (!shipment.DeletedFromDatabase)
+                // If we don't think its deleted, and it had a concurrency exception, try to refresh it
+                try
                 {
-                    try
-                    {
-                        ShippingManager.RefreshShipment(shipment);
-                    }
-                    catch (ObjectDeletedException)
-                    {
-                        // We can ignore this for now - we'll deal with the deleted list in a minute
-                    }
+                    ShippingManager.RefreshShipment(shipment);
+                }
+                catch (ObjectDeletedException)
+                {
+                    // We can ignore this for now - we'll deal with the deleted list in a minute
                 }
             }
 
-            // See if we have to tell the user about the errors
-            if (errors.Count > 0)
+            // See if we have to tell the user about the errors, ignoring errors from deleted shipments
+            if (errors.Any(x => !x.Key.DeletedFromDatabase))
             {
-                // See how many are in error from being deleted.
-                int deletedCount = errors.Count(p => p.Key.DeletedFromDatabase);
-
-                if (deletedCount == errors.Count)
-                {
-                    // We actually don't need to show the error message here, b\c when the grid reloads it detects the deleted\removed case and shows the message.
-                }
-                else
-                {
-                    MessageHelper.ShowError(this,
+                MessageHelper.ShowError(this,
                                             "The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                             "The shipments will be refreshed to reflect the recent changes.");
-                }
             }
 
             // Return true if it succeeded completely
@@ -870,7 +858,7 @@ namespace ShipWorks.Shipping
                 if (shipmentType != null)
                 {
                     // If the selected type is one that's not currently enabled, add it back in so it can be selected
-                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>) comboShipmentType.DataSource;
+                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
                     if (enabledTypes.All(p => p.Value != shipmentType.ShipmentTypeCode))
                     {
                         enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(shipmentType.ShipmentTypeName, shipmentType.ShipmentTypeCode));
@@ -901,7 +889,7 @@ namespace ShipWorks.Shipping
 
             // Check with the store to see if the shipping address should be editable
             ShipmentEntity loadedOrder = loadedShipmentEntities.FirstOrDefault();
-            if (loadedOrder==null)
+            if (loadedOrder == null)
             {
                 log.Warn("loadedOrder was null in ShouldEnableShippingAddress");
                 return false;
@@ -1670,7 +1658,7 @@ namespace ShipWorks.Shipping
                         // changes had been made by other users we pick up the concurrency violation.
                         if (!shipment.IsDirty)
                         {
-                            shipment.Fields[(int) ShipmentFieldIndex.ShipmentType].IsChanged = true;
+                            shipment.Fields[(int)ShipmentFieldIndex.ShipmentType].IsChanged = true;
                             shipment.Fields.IsDirty = true;
                         }
                     }
@@ -1718,16 +1706,16 @@ namespace ShipWorks.Shipping
         {
             contextMenuProfiles.Items.Clear();
 
-            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?) null :
-                (ShipmentTypeCode) comboShipmentType.SelectedValue;
+            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?)null :
+                (ShipmentTypeCode)comboShipmentType.SelectedValue;
 
             // Add each relevant profile
             if (shipmentTypeCode != null)
             {
                 foreach (ShippingProfileEntity profile in ShippingProfileManager.Profiles.OrderBy(p => p.ShipmentTypePrimary ? "zzzzz" : p.Name))
                 {
-                    if (profile.ShipmentType != (int) ShipmentTypeCode.None &&
-                        profile.ShipmentType == (int) shipmentTypeCode.Value)
+                    if (profile.ShipmentType != (int)ShipmentTypeCode.None &&
+                        profile.ShipmentType == (int)shipmentTypeCode.Value)
                     {
                         ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
                         menuItem.Tag = profile;
@@ -1761,8 +1749,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnApplyProfile(object sender, EventArgs e)
         {
-            ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
-            ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
+            ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+            ShippingProfileEntity profile = (ShippingProfileEntity)menuItem.Tag;
 
             // Save any changes that have been made thus far, so the profile changes can be made on top of that
             SaveChangesToUIDisplayedShipments();
@@ -1881,7 +1869,7 @@ namespace ShipWorks.Shipping
         {
             UpdateEditControlsSecurity();
 
-            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs) e;
+            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs)e;
             foreach (ShipmentEntity shipment in eventArgs.ShipmentsAdded)
             {
                 //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
@@ -1934,7 +1922,7 @@ namespace ShipWorks.Shipping
                 return null;
             }
 
-            return ShipmentTypeManager.GetType((ShipmentTypeCode) typeCode);
+            return ShipmentTypeManager.GetType((ShipmentTypeCode)typeCode);
         }
 
         /// <summary>
@@ -1966,16 +1954,19 @@ namespace ShipWorks.Shipping
             if (label == null)
             {
                 return "";
-            }else if (label.Length == 0)
-	        {
-		        return "N/A";
-	        }else if (label.Length > 60)
-	        {
+            }
+            else if (label.Length == 0)
+            {
+                return "N/A";
+            }
+            else if (label.Length > 60)
+            {
                 return String.Format("{0}{1}", label.Substring(0, 60), "...");
-	        }else
-	        {
+            }
+            else
+            {
                 return label;
-	        }
+            }
         }
 
         /// <summary>
@@ -2049,9 +2040,9 @@ namespace ShipWorks.Shipping
         private static void PrintTemplate(TemplateEntity template, ShipmentEntity shipment, Dictionary<TemplateEntity, List<long>> delayedPrints)
         {
             // If it's standard or thermal we can print it right away
-            if (template.Type == (int) TemplateType.Standard || template.Type == (int) TemplateType.Thermal)
+            if (template.Type == (int)TemplateType.Standard || template.Type == (int)TemplateType.Thermal)
             {
-                PrintJob printJob = PrintJob.Create(template, new List<long> {shipment.ShipmentID});
+                PrintJob printJob = PrintJob.Create(template, new List<long> { shipment.ShipmentID });
                 printJob.Print();
             }
             else
@@ -2077,7 +2068,7 @@ namespace ShipWorks.Shipping
         private static void PrintLabelTemplate(TemplateEntity template, List<long> delayedKeys, IDictionary<TemplateEntity, List<long>> delayedPrints)
         {
             // It must be a label template
-            if (template.Type != (int) TemplateType.Label)
+            if (template.Type != (int)TemplateType.Label)
             {
                 return;
             }
@@ -2086,7 +2077,7 @@ namespace ShipWorks.Shipping
 
             if (labelSheet != null)
             {
-                int cells = labelSheet.Rows*labelSheet.Columns;
+                int cells = labelSheet.Rows * labelSheet.Columns;
 
                 // To know how many cell's we'll use, we have to translate
                 int inputs = TemplateContextTranslator.Translate(delayedKeys, template).Count;
@@ -2393,7 +2384,7 @@ namespace ShipWorks.Shipping
             }
 
             // Filter out the ones we know to be already processed, or are not ready
-            shipments = shipments.Where(s => !s.Processed && s.ShipmentType != (int) ShipmentTypeCode.None);
+            shipments = shipments.Where(s => !s.Processed && s.ShipmentType != (int)ShipmentTypeCode.None);
 
             // Create clones to be processed - that way any changes made don't have race conditions with the UI trying to paint with them
             shipments = EntityUtility.CloneEntityCollection(shipments);
@@ -2504,8 +2495,8 @@ namespace ShipWorks.Shipping
 
                     orderHashes.Add(shipment.Order.ShipSenseHashKey);
 
-                    Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int) ShipmentTypeCode.BestRate ?
-                        (Func<CounterRatesProcessingArgs, DialogResult>) BestRateCounterRatesProcessing :
+                    Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int)ShipmentTypeCode.BestRate ?
+                        (Func<CounterRatesProcessingArgs, DialogResult>)BestRateCounterRatesProcessing :
                         CounterRatesProcessing;
 
                     ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, ratesProcessing, selectedRate, lifetimeScope);
@@ -2514,7 +2505,7 @@ namespace ShipWorks.Shipping
                     processingErrors.Remove(shipmentID);
 
                     // Special case - could refactor to abstract if necessary
-                    worldshipExported |= shipment.ShipmentType == (int) ShipmentTypeCode.UpsWorldShip;
+                    worldshipExported |= shipment.ShipmentType == (int)ShipmentTypeCode.UpsWorldShip;
                 }
                 catch (ORMConcurrencyException ex)
                 {
@@ -2609,7 +2600,7 @@ namespace ShipWorks.Shipping
         private void ShowShipmentTypeProcessingNudges(IEnumerable<ShipmentEntity> shipments)
         {
             // Get a distinct list of shipment types from the list of shipments to process
-            List<ShipmentTypeCode> shipmentTypeCodes = shipments.Select(s => (ShipmentTypeCode) s.ShipmentType).Distinct().ToList();
+            List<ShipmentTypeCode> shipmentTypeCodes = shipments.Select(s => (ShipmentTypeCode)s.ShipmentType).Distinct().ToList();
 
             // If there is an Endicia shipment in the list, check for ProcessEndicia nudges
             if (shipmentTypeCodes.Contains(ShipmentTypeCode.Endicia))

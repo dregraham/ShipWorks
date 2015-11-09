@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                     new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithAdultSignature}},
                     new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature}}
                 };
-                
+
                 testObject.Load(shipments);
 
                 Assert.True(testObject.DeliveryExperience.IsMultiValued);
@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
         }
 
         [Fact]
-        public void DeliveryConfirmation_WithMixedValues_ReturnsNoTracking()
+        public void DeliveryConfirmation_WithMixedValues_ReturnsNull()
         {
             using (var mock = AutoMock.GetLoose())
             {

@@ -1,4 +1,6 @@
-﻿PRINT N'Altering [dbo].[AmazonShipment]'
+﻿/*
+
+PRINT N'Altering [dbo].[AmazonShipment]'
 GO
 ALTER TABLE [AmazonShipment]
 DROP COLUMN AmazonAccountID
@@ -18,3 +20,5 @@ DROP CONSTRAINT DF_AmazonShipment_CarrierWillPickUp
 ALTER TABLE [AmazonShipment]
 DROP COLUMN CarrierWillPickup
 GO
+
+*/

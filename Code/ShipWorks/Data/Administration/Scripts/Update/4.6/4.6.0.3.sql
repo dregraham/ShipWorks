@@ -1,4 +1,5 @@
-﻿SET NUMERIC_ROUNDABORT OFF
+﻿/*
+SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
@@ -20,3 +21,5 @@ PRINT N'Creating index [IX_Shipment_ShipAddressValidationStatus] on [dbo].[Shipm
 GO
 CREATE NONCLUSTERED INDEX [IX_Shipment_ShipAddressValidationStatus] ON [dbo].[Shipment] ([ShipAddressValidationStatus] DESC) INCLUDE ([OrderID], [Processed], [Voided])
 GO
+
+*/

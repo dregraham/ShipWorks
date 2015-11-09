@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         string GetApiEndpointPath(AmazonMwsApiCall amazonMwsApiCall);
 
         /// <summary>
-        /// Gets the Action parameter value for an API call 
+        /// Gets the Action parameter value for an API call
         /// </summary>
         string GetActionName(AmazonMwsApiCall amazonMwsApiCall);
 
@@ -28,17 +28,17 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         XNamespace GetApiNamespace(AmazonMwsApiCall api);
 
         /// <summary>
-        /// The Api Endpoint
+        /// Root endpoint
         /// </summary>
         string Endpoint { get; }
 
         /// <summary>
-        /// The AccessKeyID
+        /// Gets the access key id that should be used for the current store
         /// </summary>
         string InterapptiveAccessKeyID { get; }
 
         /// <summary>
-        /// The SecretKey
+        /// Gets the secret key that should be used for the current store
         /// </summary>
         string InterapptiveSecretKey { get; }
 

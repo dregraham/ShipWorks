@@ -698,8 +698,10 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
+    <Compile Include="Data\Connection\ISqlSession.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
@@ -850,7 +852,7 @@
     <Compile Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevelComparer.cs" />
-    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\IRateGroupFilter.cs" />
+    <Compile Include="Shipping\Editing\Rating\IRateGroupFilter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilter.cs" />
     <Compile Include="Shipping\Carriers\CarrierAccountRepositoryBase.cs" />
     <Compile Include="Shipping\Carriers\CarrierDescription.cs" />
@@ -1091,6 +1093,7 @@
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroup.cs" />
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroupShippingException.cs" />
     <Compile Include="Shipping\Editing\Rating\IRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Editing\Rating\RateAmountComponents.cs" />
     <Compile Include="Shipping\Editing\Rating\RateCache.cs" />
     <Compile Include="Shipping\Editing\Rating\InformationFootnoteControl.cs">
       <SubType>UserControl</SubType>
@@ -10441,7 +10444,6 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.7.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.8.sql" />

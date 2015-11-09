@@ -108,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             // Already have a test verifying the count, so we know there is already only one item
             IRateFootnoteFactory factory = filteredRateGroup.FootnoteFactories.First();
 
-            Assert.Equal(ShipmentTypeCode.Endicia, factory.ShipmentType.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Endicia, factory.ShipmentTypeCode);
         }
 
         [Fact]
@@ -136,7 +136,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             // Already have a test verifying the count, so we know there is already only one item
             IRateFootnoteFactory factory = filteredRateGroup.FootnoteFactories.First();
 
-            Assert.Equal(ShipmentTypeCode.Usps, factory.ShipmentType.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Usps, factory.ShipmentTypeCode);
         }
     }
 }

@@ -509,6 +509,8 @@ namespace ShipWorks.Data.Model
 		DimsWeight,
 		///<summary>DimsAddWeight. </summary>
 		DimsAddWeight,
+		///<summary>SendDateMustArriveBy. </summary>
+		SendDateMustArriveBy,
 		///<summary>DeliveryExperience. </summary>
 		DeliveryExperience,
 		///<summary>DeclaredValue. </summary>

@@ -502,6 +502,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("SendDateMustArriveBy", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("DeliveryExperience", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -747,6 +750,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)AmazonShipmentFieldIndex.DimsAddWeight, true); }
 			set	{ SetValue((int)AmazonShipmentFieldIndex.DimsAddWeight, value); }
+		}
+
+		/// <summary> The SendDateMustArriveBy property of the Entity AmazonShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonShipment"."SendDateMustArriveBy"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean SendDateMustArriveBy
+		{
+			get { return (System.Boolean)GetValue((int)AmazonShipmentFieldIndex.SendDateMustArriveBy, true); }
+			set	{ SetValue((int)AmazonShipmentFieldIndex.SendDateMustArriveBy, value); }
 		}
 
 		/// <summary> The DeliveryExperience property of the Entity AmazonShipment<br/><br/>

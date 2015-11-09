@@ -50,6 +50,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
@@ -111,7 +115,13 @@
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonAccountValidator.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
-    <Compile Include="Carriers\Amazon\Api\AmazonRates.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShippingToken.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShippingTokenExtensions.cs" />
+    <Compile Include="Carriers\Amazon\AmazonUpsLabelEnforcer.cs" />
+    <Compile Include="Carriers\Amazon\AmazonUpsRateFilter.cs" />
+    <Compile Include="Carriers\Amazon\AmazonUspsLabelEnforcer.cs" />
+    <Compile Include="Carriers\Amazon\AmazonUspsRateFilter.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonRatingService.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShipmentRequestDetailsFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\AmazonRateTag.cs" />
@@ -120,13 +130,17 @@
     <Compile Include="Carriers\Amazon\Api\DTOs\ErrorResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
-    <Compile Include="Carriers\Amazon\Api\IAmazonRates.cs" />
+    <Compile Include="Carriers\Amazon\Api\IAmazonRatingService.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonShipmentRequestDetailsFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\OperationResponse.cs" />
+    <Compile Include="Carriers\Amazon\EnforcementResult.cs" />
     <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\IAmazonLabelService.cs" />
     <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonNotLinkedFootnoteFactory.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +179,7 @@
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

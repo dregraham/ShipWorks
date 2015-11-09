@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentType : ShipmentType
     {
-        private readonly Func<IAmazonRates> amazonRatesFactory;
+        private readonly Func<IAmazonRatingService> amazonRatesFactory;
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Constructor
         /// </summary>
         public AmazonShipmentType(IDateTimeProvider dateTimeProvider, 
-            Func<IAmazonRates> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, 
+            Func<IAmazonRatingService> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, 
             IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager)
         {
             this.amazonRatesFactory = amazonRatesFactory;

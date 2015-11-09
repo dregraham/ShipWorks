@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             MethodConditions.EnsureArgumentIsNotNull(amazonShipment, nameof(amazonShipment));
 
             IAmazonCredentials amazonCredentials = (IAmazonCredentials)storeManager.GetRelatedStore(amazonShipment.Shipment);
-            
+
             return new AmazonMwsWebClientSettings(amazonCredentials);
         }
 

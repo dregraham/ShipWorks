@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 ShipmentType shipmentType = mock.Create<AmazonShipmentType>();
                 AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory testObject = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(shipmentType, new List<string>());
 
-                Assert.Equal(shipmentType, testObject.ShipmentType);
+                Assert.Equal(ShipmentTypeCode.Amazon, testObject.ShipmentTypeCode);
             }
         }
 

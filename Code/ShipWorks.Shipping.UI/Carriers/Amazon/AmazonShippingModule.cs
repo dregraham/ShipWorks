@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Editing;
@@ -8,12 +9,18 @@ using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
+    /// <summary>
+    /// Service registrations for the Amazon shipping carrier
+    /// </summary>
     public class AmazonShippingModule : Module
     {
+        /// <summary>
+        /// Load the registrations
+        /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-            
+
             builder.RegisterType<AmazonShippingWebClient>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -42,7 +49,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.Amazon)
                 .SingleInstance();
 
-            builder.RegisterType<AmazonRates>()
+            builder.RegisterType<AmazonRatingService>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<AmazonMwsWebClientSettingsFactory>()
@@ -57,6 +64,25 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<AmazonShipmentRequestDetailsFactory>()
                 .As<IAmazonShipmentRequestDetailsFactory>();
 
+            builder.RegisterType<AmazonNotLinkedFootnoteFactory>()
+                .As<IAmazonNotLinkedFootnoteFactory>()
+                .ExternallyOwned();
+
+            if (!(InterapptiveOnly.IsInterapptiveUser ^ InterapptiveOnly.MagicKeysDown))
+            {
+                builder.RegisterType<AmazonUspsRateFilter>()
+                    .AsImplementedInterfaces();
+
+                builder.RegisterType<AmazonUspsLabelEnforcer>()
+                    .AsImplementedInterfaces();
+
+                builder.RegisterType<AmazonUpsRateFilter>()
+                    .AsImplementedInterfaces();
+
+                builder.RegisterType<AmazonUpsLabelEnforcer>()
+                    .AsImplementedInterfaces();
+            }
+			
             builder.RegisterType<AmazonAccountValidator>()
                 .AsImplementedInterfaces();
         }
