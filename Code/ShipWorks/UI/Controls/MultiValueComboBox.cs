@@ -31,6 +31,14 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
+        /// Disable control if multivalued and value of this is true
+        /// </summary>
+        [Category("Behavior")]
+        [DefaultValue(true)]
+        [Obfuscation(Exclude = true)]
+        public bool EnabledWhenMultivalued { get; set; } = true;
+
+        /// <summary>
         /// Get \ set whether the box represents a null value.
         /// </summary>
         [Category("Appearance")]
@@ -50,6 +58,11 @@ namespace ShipWorks.UI.Controls
                 }
 
                 isMultiValued = value;
+
+                if (!EnabledWhenMultivalued)
+                {
+                    Enabled = !isMultiValued;
+                }
 
                 if (isMultiValued)
                 {

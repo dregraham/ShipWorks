@@ -95,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             entity.FlagDescription = "";
             entity.FlagType = (int) ChannelAdvisorFlagType.NoFlag;
             entity.MarketplaceNames = "";
-
+            
             return entity;
         }
 
@@ -316,6 +316,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             outline.AddElement("OrderID", () => order.Value.CustomOrderIdentifier);
             outline.AddElement("FlagStyle", () => order.Value.FlagStyle);
             outline.AddElement("FlagDescription", () => order.Value.FlagDescription);
+            outline.AddElement("IsPrime", () => EnumHelper.GetDescription((ChannelAdvisorIsAmazonPrime) order.Value.IsPrime));
         }
 
         /// <summary>
