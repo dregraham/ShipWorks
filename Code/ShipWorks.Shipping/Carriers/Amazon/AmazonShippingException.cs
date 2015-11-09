@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     case "shippingservicenotavailable":
                         return "The shipping service specified does not exist or is not available for the specified parameters (for example, Weight).";
                     default:
-                        return string.Empty;
+                        return message;
                 }
             }
         }
