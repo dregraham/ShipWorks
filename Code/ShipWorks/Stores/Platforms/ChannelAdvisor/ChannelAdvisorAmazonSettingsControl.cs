@@ -52,15 +52,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             caStore.AmazonMerchantID = merchantID.Text;
             caStore.AmazonAuthToken = authToken.Text;
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            // If the credentials are not not blank we test them to ensure they are correct
+            if (!string.IsNullOrWhiteSpace(merchantID.Text) && !string.IsNullOrWhiteSpace(authToken.Text))
             {
-                if(lifetimeScope.IsRegistered<IAmazonAccountValidator>())
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    // Account validator is available so we validate
-                    IAmazonAccountValidator validator = lifetimeScope.Resolve<IAmazonAccountValidator>();
-                    if(!validator.ValidateAccount(caStore))
+                    if (lifetimeScope.IsRegistered<IAmazonAccountValidator>())
                     {
-                        throw new ChannelAdvisorException("Invalid Amazon credentials.", null);
+                        // Account validator is available so we validate
+                        IAmazonAccountValidator validator = lifetimeScope.Resolve<IAmazonAccountValidator>();
+                        if (!validator.ValidateAccount(caStore))
+                        {
+                            throw new ChannelAdvisorException("Invalid Amazon credentials.", null);
+                        }
                     }
                 }
             }
