@@ -20,6 +20,7 @@ using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
+using System.Diagnostics;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -175,6 +176,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
+
+            IAmazonCredentials amazonCredentials = shipment.Order as IAmazonCredentials;
+
+            Debug.Assert(amazonCredentials != null);
+            
             amazonShipment.DimsWeight = shipment.ContentWeight;
 
             base.ConfigureNewShipment(shipment);
