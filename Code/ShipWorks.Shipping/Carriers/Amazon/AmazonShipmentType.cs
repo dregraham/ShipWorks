@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment, shipment.Amazon, null),
-                new DimensionsAdapter())
+                new DimensionsAdapter(shipment.Amazon))
             {
                 TotalWeight = shipment.TotalWeight
             };
