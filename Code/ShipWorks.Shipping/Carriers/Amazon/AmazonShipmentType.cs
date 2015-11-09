@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -178,11 +175,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
-
-            AmazonOrderEntity amazonOrder = shipment.Order as AmazonOrderEntity;
-
-            // TODO: Remove or replace this if statement when we decide how to handle non-Amazon orders.
-            Debug.Assert(amazonOrder != null);
             amazonShipment.DimsWeight = shipment.ContentWeight;
 
             base.ConfigureNewShipment(shipment);

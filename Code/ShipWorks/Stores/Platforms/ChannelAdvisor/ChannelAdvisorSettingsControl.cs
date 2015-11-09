@@ -4,6 +4,7 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Shipping.Settings;
 using System.Linq;
 using ShipWorks.Shipping;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -45,10 +46,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 throw new InvalidOperationException("A non Channel Advisor store was passed to the Channel Advisor store settings control.");
             }
 
-            attributes.SaveToEntity(caStore);
-            consolidator.SaveToEntity(caStore);
-            amazon.SaveToEntity(caStore);
-
+            try
+            {
+                attributes.SaveToEntity(caStore);
+                consolidator.SaveToEntity(caStore);
+                amazon.SaveToEntity(caStore);
+            }
+            catch (ChannelAdvisorException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+                return false;
+            }
             return true;
         }
         

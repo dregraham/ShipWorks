@@ -109,6 +109,7 @@
     <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonAccountValidator.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRates.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShipmentRequestDetailsFactory.cs" />
@@ -121,11 +122,11 @@
     <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonRates.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonShipmentRequestDetailsFactory.cs" />
-    <Compile Include="Carriers\Amazon\Api\IAmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\Api\OperationResponse.cs" />
     <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
     <Compile Include="Carriers\Amazon\IAmazonLabelService.cs" />
     <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

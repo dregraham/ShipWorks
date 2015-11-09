@@ -3,6 +3,9 @@ using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using Autofac;
+using ShipWorks.Shipping.Carriers.Amazon;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -48,6 +51,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             caStore.AmazonApiRegion = Geography.GetCountryCode((string)countries.SelectedItem);
             caStore.AmazonMerchantID = merchantID.Text;
             caStore.AmazonAuthToken = authToken.Text;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                if(lifetimeScope.IsRegistered<IAmazonAccountValidator>())
+                {
+                    // Account validator is available so we validate
+                    IAmazonAccountValidator validator = lifetimeScope.Resolve<IAmazonAccountValidator>();
+                    if(!validator.ValidateAccount(caStore))
+                    {
+                        throw new ChannelAdvisorException("Invalid Amazon credentials.", null);
+                    }
+                }
+            }
         }
     }
 }

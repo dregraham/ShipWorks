@@ -29,5 +29,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             
             return new AmazonMwsWebClientSettings(amazonCredentials);
         }
+
+        /// <summary>
+        /// Creates an instance of AmazonMwsWebClientSettings from an IAmazonCredentials store
+        /// </summary>
+        public IAmazonMwsWebClientSettings Create(IAmazonCredentials amazonCredentials)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(amazonCredentials, nameof(amazonCredentials));
+
+            return new AmazonMwsWebClientSettings(amazonCredentials);
+        }
     }
 }
