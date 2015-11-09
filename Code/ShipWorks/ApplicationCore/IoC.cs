@@ -8,6 +8,7 @@ using System.Reflection;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Common;
 using ShipWorks.Data;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -73,6 +74,9 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterAssemblyModules(assemblies);
+
+            builder.RegisterType<EditionManagerWrapper>()
+                .AsImplementedInterfaces();
 
             current = builder.Build();
         }
