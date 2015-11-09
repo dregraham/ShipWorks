@@ -177,7 +177,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
 
-            IAmazonCredentials amazonCredentials = shipment.Order as IAmazonCredentials;
+            IAmazonOrder amazonCredentials = shipment.Order as IAmazonOrder;
 
             Debug.Assert(amazonCredentials != null);
             
