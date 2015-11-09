@@ -66,7 +66,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 List<ShipmentEntity> shipments = new List<ShipmentEntity>()
                 {
-                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithAdultSignature}}
+                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithAdultSignature}},
+                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature}}
                 };
                 
                 testObject.Load(shipments);
@@ -103,7 +104,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 List<ShipmentEntity> shipments = new List<ShipmentEntity>()
                 {
-                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithAdultSignature}}
+                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithAdultSignature}},
+                    new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature}}
                 };
 
                 testObject.Load(shipments);
