@@ -1,3 +1,4 @@
+
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -374,7 +375,7 @@ CREATE TABLE [dbo].[AmazonStore]
 [MarketplaceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ExcludeFBA] [bit] NOT NULL,
 [DomainName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[AmazonShippingToken] [nvarchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT (N'hlkH7XeEA5FYCRxMs0u1N6zpcqsml4KRBK3sMwKQcDgIQiHPhi/G5ai6uq+RI35z')
+[AmazonShippingToken] [nvarchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonStore_AmazonShippingToken] DEFAULT (N'hlkH7XeEA5FYCRxMs0u1N6zpcqsml4KRBK3sMwKQcDgIQiHPhi/G5ai6uq+RI35z')
 )
 GO
 PRINT N'Creating primary key [PK_AmazonStore] on [dbo].[AmazonStore]'
@@ -434,7 +435,7 @@ CREATE TABLE [dbo].[Order]
 [BillResidentialStatus] [int] NOT NULL,
 [BillPOBox] [int] NOT NULL,
 [BillUSTerritory] [int] NOT NULL,
-[BillMilitaryAddress] [int] NOT NULL,  
+[BillMilitaryAddress] [int] NOT NULL,
 [ShipFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipMiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -456,7 +457,7 @@ CREATE TABLE [dbo].[Order]
 [ShipResidentialStatus] [int] NOT NULL,
 [ShipPOBox] [int] NOT NULL,
 [ShipUSTerritory] [int] NOT NULL,
-[ShipMilitaryAddress] [int] NOT NULL,  
+[ShipMilitaryAddress] [int] NOT NULL,
 [RollupItemCount] [int] NOT NULL,
 [RollupItemName] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RollupItemCode] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -1018,7 +1019,7 @@ CREATE TABLE [dbo].[Shipment]
 [ShipResidentialStatus] [int] NOT NULL,
 [ShipPOBox] [int] NOT NULL,
 [ShipUSTerritory] [int] NOT NULL,
-[ShipMilitaryAddress] [int] NOT NULL, 
+[ShipMilitaryAddress] [int] NOT NULL,
 [ResidentialDetermination] [int] NOT NULL,
 [ResidentialResult] [bit] NOT NULL,
 [OriginOriginID] [bigint] NOT NULL,
@@ -1067,7 +1068,7 @@ CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([P
 GO
 PRINT N'Creating index [IX_Shipment_OrderID_ShipSenseStatus] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment] 
+CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment]
 (
 	[OrderID] ASC,
 	[Processed] ASC,
@@ -4672,7 +4673,7 @@ GO
 CREATE TABLE [dbo].[ExcludedServiceType](
 	[ShipmentType] [int] NOT NULL,
 	[ServiceType] [int] NOT NULL,
- CONSTRAINT [PK_ExcludedServiceType] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ExcludedServiceType] PRIMARY KEY CLUSTERED
 (
 	[ShipmentType] ASC,
 	[ServiceType] ASC
@@ -4684,7 +4685,7 @@ GO
 CREATE TABLE [dbo].[ExcludedPackageType](
 	[ShipmentType] [int] NOT NULL,
 	[PackageType] [int] NOT NULL,
- CONSTRAINT [PK_ExcludedPackageType] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ExcludedPackageType] PRIMARY KEY CLUSTERED
 (
 	[ShipmentType] ASC,
 	[PackageType] ASC
@@ -4820,7 +4821,7 @@ CREATE TABLE [dbo].[ValidatedAddress](
 	[POBox] [int] NOT NULL,
 	[USTerritory] [int] NOT NULL,
 	[MilitaryAddress] [int] NOT NULL,
- CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED
 (
 	[ValidatedAddressID] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
