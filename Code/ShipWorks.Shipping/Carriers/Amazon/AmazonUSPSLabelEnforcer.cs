@@ -3,6 +3,7 @@ using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -35,8 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            AmazonStoreEntity store = GetStore(shipment);
-
+            IAmazonCredentials store = GetStore(shipment);
             AmazonShippingToken shippingToken = store.GetShippingToken();
 
             if (shippingToken.ErrorDate.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
@@ -56,11 +56,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
+            if (!IsStampsDotComShipment(shipment))
+            {
+                return;
+            }
+
             string sdcTracking = shipment.TrackingNumber.Substring(5, 2);
 
-            AmazonStoreEntity store = GetStore(shipment);
+            IAmazonCredentials store = GetStore(shipment);
 
-            if (!sdcTracking.Equals("11", StringComparison.Ordinal) && !sdcTracking.Equals("16", StringComparison.Ordinal) && shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM"))
+            if (!sdcTracking.Equals("11", StringComparison.Ordinal) && !sdcTracking.Equals("16", StringComparison.Ordinal))
             {
                 AmazonShippingToken shippingToken = new AmazonShippingToken
                 {
@@ -79,9 +84,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <param name="shipment">The shipment.</param>
         /// <returns></returns>
         /// <exception cref="ShippingException"></exception>
-        private AmazonStoreEntity GetStore(ShipmentEntity shipment)
+        private IAmazonCredentials GetStore(ShipmentEntity shipment)
         {
-            AmazonStoreEntity store = storeManager.GetRelatedStore(shipment) as AmazonStoreEntity;
+            IAmazonCredentials store = storeManager.GetRelatedStore(shipment) as IAmazonCredentials;
 
             if (store == null)
             {
@@ -90,5 +95,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             return store;
         }
+
+        /// <summary>
+        /// Does the shipment use Stamps
+        /// </summary>
+        private static bool IsStampsDotComShipment(ShipmentEntity shipment) =>
+            shipment.Amazon.CarrierName == "STAMPS_DOT_COM";
     }
 }

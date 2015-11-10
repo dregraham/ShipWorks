@@ -1,6 +1,6 @@
 ﻿using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -14,21 +14,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Get the shipping token from the store
         /// </summary>
-        public static AmazonShippingToken GetShippingToken(this AmazonStoreEntity store)
+        public static AmazonShippingToken GetShippingToken(this IAmazonCredentials store)
         {
-            if (string.IsNullOrWhiteSpace(store.AmazonShippingToken))
+            if (string.IsNullOrWhiteSpace(store.ShippingToken))
             {
                 return new AmazonShippingToken();
             }
 
-            string decryptedToken = SecureText.Decrypt(store.AmazonShippingToken, amazonShippingTokenEncryptionKey);
+            string decryptedToken = SecureText.Decrypt(store.ShippingToken, amazonShippingTokenEncryptionKey);
             return JsonConvert.DeserializeObject<AmazonShippingToken>(decryptedToken) ?? new AmazonShippingToken();
         }
 
         /// <summary>
         /// Set the shipping token on the store
         /// </summary>
-        public static void SetShippingToken(this AmazonStoreEntity store, AmazonShippingToken shippingToken) =>
-            store.AmazonShippingToken = SecureText.Encrypt(JsonConvert.SerializeObject(shippingToken), amazonShippingTokenEncryptionKey);
+        public static void SetShippingToken(this IAmazonCredentials store, AmazonShippingToken shippingToken) =>
+            store.ShippingToken = SecureText.Encrypt(JsonConvert.SerializeObject(shippingToken), amazonShippingTokenEncryptionKey);
     }
 }

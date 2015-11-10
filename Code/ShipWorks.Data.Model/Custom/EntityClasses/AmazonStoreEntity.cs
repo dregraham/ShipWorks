@@ -1,5 +1,4 @@
-﻿using System;
-using ShipWorks.Stores.Platforms.Amazon;
+﻿using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -38,6 +37,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         string IAmazonCredentials.ShippingToken
         {
             get { return AmazonShippingToken; }
+            set { AmazonShippingToken = value; }
         }
     }
 }
