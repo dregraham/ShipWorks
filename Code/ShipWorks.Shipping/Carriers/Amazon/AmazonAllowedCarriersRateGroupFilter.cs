@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory filteredFactory =
-                new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(termsFactory.ShipmentTypeCode, termsFactory.CarrierNames.Intersect(allowedCarriers));
+                new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(termsFactory.CarrierNames.Intersect(allowedCarriers));
 
             return filteredFactory.CarrierNames.Any() ? filteredFactory : null;
         }

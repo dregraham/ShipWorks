@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac.Extras.Moq;
 using ShipWorks.Shipping.Carriers.Amazon;
 using Xunit;
 
@@ -15,37 +11,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Constructor_WithNullCarrierNames_ThrowsNullArgumentException()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var amazonShipmentType = mock.Create<AmazonShipmentType>();
-                Assert.Throws<ArgumentNullException>(() => new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(ShipmentTypeCode.Amazon, null));
-            }
+            Assert.Throws<ArgumentNullException>(() => new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(null));
         }
 
         [Fact]
-        public void ShipmentType_MatchesConstructorParam()
+        public void ShipmentType_ReturnsAmazon()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                ShipmentType shipmentType = mock.Create<AmazonShipmentType>();
-                AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory testObject = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(ShipmentTypeCode.Amazon, new List<string>());
+            AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory testObject = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new List<string>());
 
-                Assert.Equal(ShipmentTypeCode.Amazon, testObject.ShipmentTypeCode);
-            }
+            Assert.Equal(ShipmentTypeCode.Amazon, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void AllowedForBestRate_IsFalse()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                ShipmentType shipmentType = mock.Create<AmazonShipmentType>();
-                List<string> carrierNames = new List<string>() {"asdf", "xxx"};
+            List<string> carrierNames = new List<string>() { "asdf", "xxx" };
 
-                AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory testObject = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(ShipmentTypeCode.Amazon, carrierNames);
+            AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory testObject = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(carrierNames);
 
-                Assert.False(testObject.AllowedForBestRate);
-            }
+            Assert.False(testObject.AllowedForBestRate);
         }
     }
 }

@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         public void Filter_RemovesCarriersFromTandCFootnoteFactory_WhenFactoryIsInList()
         {
             AmazonShipmentType shipmentType = mock.Create<AmazonShipmentType>();
-            var factory = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(ShipmentTypeCode.Amazon, new[] { "FOO", "UPS" });
+            var factory = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new[] { "FOO", "UPS" });
 
             RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
             rateGroup.AddFootnoteFactory(factory);
@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         public void Filter_RemovesTandCFootnoteFactory_WhenFilteredCarrierListIsEmpty()
         {
             AmazonShipmentType shipmentType = mock.Create<AmazonShipmentType>();
-            var factory = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(ShipmentTypeCode.Amazon, new[] { "FOO" });
+            var factory = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new[] { "FOO" });
 
             RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
             rateGroup.AddFootnoteFactory(factory);

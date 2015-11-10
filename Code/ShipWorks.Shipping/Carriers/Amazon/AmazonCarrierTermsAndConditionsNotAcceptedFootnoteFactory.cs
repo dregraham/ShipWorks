@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
 
@@ -15,18 +12,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(ShipmentTypeCode shipmentType, IEnumerable<string> carrierNames)
+        public AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(IEnumerable<string> carrierNames)
         {
             MethodConditions.EnsureArgumentIsNotNull(carrierNames, nameof(carrierNames));
 
-            ShipmentTypeCode = shipmentType;
             CarrierNames = carrierNames;
         }
 
         /// <summary>
         /// Gets the corresponding shipment type for the factory.
         /// </summary>
-        public ShipmentTypeCode ShipmentTypeCode { get; }
+        public ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.Amazon;
 
         /// <summary>
         /// Creates a footnote control.
