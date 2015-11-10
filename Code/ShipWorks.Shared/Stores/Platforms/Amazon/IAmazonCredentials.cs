@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Stores.Platforms.Amazon
+﻿namespace ShipWorks.Stores.Platforms.Amazon
 {
     /// <summary>
     /// Implemented by store types that pull amazon orders
@@ -23,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Amazon shipping token
         /// </summary>
-        string ShippingToken { get; }
+        string ShippingToken { get; set; }
 
         /// <summary>
         /// Amazon store region

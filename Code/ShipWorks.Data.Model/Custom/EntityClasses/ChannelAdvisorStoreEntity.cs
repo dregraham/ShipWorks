@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms.Amazon;
+﻿using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -41,6 +37,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         string IAmazonCredentials.ShippingToken
         {
             get { return AmazonShippingToken; }
+            set { AmazonShippingToken = value; }
         }
     }
 }
