@@ -28,7 +28,10 @@ ALTER TABLE [dbo].[ChannelAdvisorStore] DROP CONSTRAINT [PK_ChannelAdvisorStore]
 GO
 PRINT N'Dropping constraints from [dbo].[PostalShipment]'
 GO
-ALTER TABLE [dbo].[PostalShipment] DROP CONSTRAINT [DF_PostalProfile_NoPostage]
+IF EXISTS (SELECT * FROM sys.default_constraints WHERE parent_object_id = OBJECT_ID(N'[dbo].[PostalShipment]') AND name = N'DF_PostalProfile_NoPostage')
+BEGIN
+	ALTER TABLE [dbo].[PostalShipment] DROP CONSTRAINT [DF_PostalProfile_NoPostage]
+END
 GO
 PRINT N'Dropping index [IX_ChannelAdvisorOrder_OnlineShippingStatus] from [dbo].[ChannelAdvisorOrder]'
 GO
@@ -40,15 +43,24 @@ DROP INDEX [IX_Order_ShipAddressValidationStatus] ON [dbo].[Order]
 GO
 PRINT N'Dropping index [IX_Order_DestinationCommercial] from [dbo].[Order]'
 GO
-DROP INDEX [IX_Order_DestinationCommercial] ON [dbo].[Order]
+IF EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Order]') AND name = N'IX_Order_DestinationCommercial')
+BEGIN
+	DROP INDEX [IX_Order_DestinationCommercial] ON [dbo].[Order]
+END
 GO
 PRINT N'Dropping index [IX_Order_DestinationResidential] from [dbo].[Order]'
 GO
-DROP INDEX [IX_Order_DestinationResidential] ON [dbo].[Order]
+IF EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Order]') AND name = N'IX_Order_DestinationResidential')
+BEGIN
+	DROP INDEX [IX_Order_DestinationResidential] ON [dbo].[Order]
+END
 GO
 PRINT N'Dropping index [IX_Store_OrderNumberComplete_IsManual] from [dbo].[Order]'
 GO
-DROP INDEX [IX_Store_OrderNumberComplete_IsManual] ON [dbo].[Order]
+IF EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Order]') AND name = N'IX_Store_OrderNumberComplete_IsManual')
+BEGIN
+	DROP INDEX [IX_Store_OrderNumberComplete_IsManual] ON [dbo].[Order]
+END
 GO
 PRINT N'Dropping index [IX_Shipment_ProcessedOrderID] from [dbo].[Shipment]'
 GO
@@ -192,7 +204,10 @@ CREATE NONCLUSTERED INDEX [IX_Shipment_ShipAddressValidationStatus] ON [dbo].[Sh
 GO
 PRINT N'Adding constraints to [dbo].[PostalShipment]'
 GO
-ALTER TABLE [dbo].[PostalShipment] ADD CONSTRAINT [DF_PostalShipment_NoPostage] DEFAULT ((0)) FOR [NoPostage]
+IF NOT EXISTS (SELECT * FROM sys.default_constraints WHERE parent_object_id = OBJECT_ID(N'[dbo].[PostalShipment]') AND name = N'DF_PostalShipment_NoPostage')
+BEGIN
+	ALTER TABLE [dbo].[PostalShipment] ADD CONSTRAINT [DF_PostalShipment_NoPostage] DEFAULT ((0)) FOR [NoPostage]
+END
 GO
 PRINT N'Adding foreign keys to [dbo].[AmazonShipment]'
 GO
