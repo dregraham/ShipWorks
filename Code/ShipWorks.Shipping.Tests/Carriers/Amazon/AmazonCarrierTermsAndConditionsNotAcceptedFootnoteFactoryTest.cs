@@ -13,21 +13,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
     public class AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactoryTest
     {
         [Fact]
-        public void Constructor_WithNullShipmentType_ThrowsNullArgumentException()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                Assert.Throws<ArgumentNullException>(() => new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(null, new List<string>()));
-            }
-        }
-
-        [Fact]
         public void Constructor_WithNullCarrierNames_ThrowsNullArgumentException()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 var amazonShipmentType = mock.Create<AmazonShipmentType>();
-                Assert.Throws<ArgumentNullException>(() => new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(amazonShipmentType, null));
+                Assert.Throws<ArgumentNullException>(() => new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(ShipmentTypeCode.Amazon, null));
             }
         }
 
@@ -37,7 +28,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             using (var mock = AutoMock.GetLoose())
             {
                 ShipmentType shipmentType = mock.Create<AmazonShipmentType>();
-                AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory testObject = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(shipmentType, new List<string>());
+                AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory testObject = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(ShipmentTypeCode.Amazon, new List<string>());
 
                 Assert.Equal(ShipmentTypeCode.Amazon, testObject.ShipmentTypeCode);
             }
@@ -51,7 +42,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 ShipmentType shipmentType = mock.Create<AmazonShipmentType>();
                 List<string> carrierNames = new List<string>() {"asdf", "xxx"};
 
-                AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory testObject = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(shipmentType, carrierNames);
+                AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory testObject = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(ShipmentTypeCode.Amazon, carrierNames);
 
                 Assert.False(testObject.AllowedForBestRate);
             }

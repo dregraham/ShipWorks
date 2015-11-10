@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Initializes a new instance of the <see cref="AmazonCarrierTermsAndConditionsNotAcceptedDialog"/> class.
         /// </summary>
         /// <param name="carrierNames">The carrier names.</param>
-        public AmazonCarrierTermsAndConditionsNotAcceptedDialog(List<string> carrierNames)
+        public AmazonCarrierTermsAndConditionsNotAcceptedDialog(IEnumerable<string> carrierNames)
         {
             InitializeComponent();
 
@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <value>
         /// The carrier names.
         /// </value>
-        public List<string> CarrierNames { private set; get; }
+        public IEnumerable<string> CarrierNames { private set; get; }
 
         private void button1_Click(object sender, System.EventArgs e)
         {

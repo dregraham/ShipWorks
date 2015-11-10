@@ -12,18 +12,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory : IRateFootnoteFactory
     {
-        private List<string> carrierNames;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(ShipmentType shipmentType, List<string> carrierNames)
+        public AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(ShipmentTypeCode shipmentType, IEnumerable<string> carrierNames)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipmentType, nameof(shipmentType));
             MethodConditions.EnsureArgumentIsNotNull(carrierNames, nameof(carrierNames));
 
-            this.ShipmentTypeCode = shipmentType.ShipmentTypeCode;
-            this.carrierNames = carrierNames;
+            ShipmentTypeCode = shipmentType;
+            CarrierNames = carrierNames;
         }
 
         /// <summary>
@@ -36,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
-            return new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl(carrierNames);
+            return new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl(CarrierNames);
         }
 
         /// <summary>
@@ -44,5 +41,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// For example, when using BestRate, we do not want Usps promo footnotes to display, so this will be set to false.
         /// </summary>
         public bool AllowedForBestRate => false;
+
+        /// <summary>
+        /// Carrier names for Terms and Conditions
+        /// </summary>
+        public IEnumerable<string> CarrierNames { get; }
     }
 }
