@@ -48,6 +48,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
+            // Shipping service ids should not be numbers.  If it is, the user hasn't selected a rate yet.  Let them know.
+            int badShippingServiceID;
+            if (int.TryParse(shipment.Amazon.ShippingServiceID, out badShippingServiceID))
+            {
+                throw new ShippingException("Please select a rate before attempting to create a label.");
+            }
+
             orderManager.PopulateOrderDetails(shipment);
             AmazonOrderEntity order = shipment.Order as AmazonOrderEntity;
             if (order == null)
