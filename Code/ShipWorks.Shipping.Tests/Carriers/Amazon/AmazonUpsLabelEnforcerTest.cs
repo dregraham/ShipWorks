@@ -90,23 +90,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Assert.Equal(false, result.IsValid);
             Assert.Equal("Foo Bar", result.FailureReason);
         }
-
-        [Fact]
-        public void CheckRestriction_ReturnsEnforcementFailureWithMessage_WhenNoUpsAccountExists_Test()
-        {
-            store.SetShippingToken(new AmazonShippingToken
-            {
-                ErrorDate = new DateTime(2012, 1, 1),
-                ErrorReason = "Foo Bar"
-            });
-
-            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
-            EnforcementResult result = testObject.CheckRestriction(shipment);
-
-            Assert.Equal(false, result.IsValid);
-            Assert.Equal("Foo Bar", result.FailureReason);
-        }
-
+        
         [Fact]
         public void CheckRestriction_ThrowsShippingException_WhenGivenNonAmazonShipment_Test()
         {
