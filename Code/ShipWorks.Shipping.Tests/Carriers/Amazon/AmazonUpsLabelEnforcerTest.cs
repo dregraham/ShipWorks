@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void CheckRestriction_ReturnsSuccess_WhenCarrierIsNotUPS()
+        public void CheckRestriction_ReturnsSuccess_WhenCarrierIsNotUPSAndNoAccountsExist()
         {
             shipment.Amazon.CarrierName = "STAMPS_DOT_COM";
 

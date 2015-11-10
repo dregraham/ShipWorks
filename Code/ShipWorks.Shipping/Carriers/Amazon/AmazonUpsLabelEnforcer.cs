@@ -38,15 +38,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            if (!IsUpsShipment(shipment))
-            {
-                return EnforcementResult.Success;
-            }
-
             IAmazonCredentials store = GetStore(shipment);
             AmazonShippingToken shippingToken = store.GetShippingToken();
 
-            if (!accountRepository.Accounts.Any() || shippingToken.ErrorDate.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
+            if ((IsUpsShipment(shipment) && !accountRepository.Accounts.Any()) ||
+                shippingToken.ErrorDate.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
             {
                 return new EnforcementResult(shippingToken.ErrorReason);
             }

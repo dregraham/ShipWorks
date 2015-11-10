@@ -36,11 +36,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            if (!IsStampsDotComShipment(shipment))
-            {
-                return EnforcementResult.Success;
-            }
-
             IAmazonCredentials store = GetStore(shipment);
             AmazonShippingToken shippingToken = store.GetShippingToken();
 
