@@ -40,21 +40,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void CheckRestriction_ReturnsSuccess_WhenCarrierIsNotUsps()
-        {
-            shipment.Amazon.CarrierName = "UPS";
-            store.SetShippingToken(new AmazonShippingToken
-            {
-                ErrorDate = new DateTime(2015, 1, 1),
-                ErrorReason = "Foo Bar"
-            });
-
-            AmazonUspsLabelEnforcer testObject = mock.Create<AmazonUspsLabelEnforcer>();
-
-            Assert.Equal(EnforcementResult.Success, testObject.CheckRestriction(shipment));
-        }
-
-        [Fact]
         public void CheckRestriction_DelegatesToStoreManager()
         {
             AmazonUspsLabelEnforcer testObject = mock.Create<AmazonUspsLabelEnforcer>();
