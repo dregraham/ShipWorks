@@ -29,9 +29,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Is Amazon allowed for the given shipment
         /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
-        /// <exception cref="ShippingException"></exception>
         public EnforcementResult CheckRestriction(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
