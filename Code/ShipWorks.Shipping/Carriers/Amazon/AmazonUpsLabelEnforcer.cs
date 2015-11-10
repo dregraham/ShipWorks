@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -61,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             string upsTracking = shipment.TrackingNumber;
 
-            if (accountRepository.Accounts.Any(account => upsTracking.Contains(account.AccountNumber)))
+            if (accountRepository.Accounts.Any(account => upsTracking.IndexOf(account.AccountNumber, StringComparison.OrdinalIgnoreCase) >= 0))
             {
                 return;
             }
