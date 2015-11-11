@@ -8,6 +8,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using System;
 using System.Collections.Generic;
+using Moq.Language.Flow;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
@@ -222,6 +223,42 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             enforcer2.VerifyAll();
         }
 
+        [Fact]
+        public void Void_ThrowsError_WhenAmazonUniqueShipmentIDIsNull()
+        {
+            var testObject = mock.Create<AmazonLabelService>();
+
+            var shippingException = Assert.Throws<AmazonShippingException>(() => testObject.Void(new ShipmentEntity
+            {
+                Order = new OrderEntity(),
+                Amazon = new AmazonShipmentEntity()
+            }));
+
+            Assert.Contains("AmazonUniqueShipmentID", shippingException.Message, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public void Void_CallsCancelShipment_ShenAmazonUniqueShipmentIDIsNotNull()
+        {
+            var testObject = mock.Create<AmazonLabelService>();
+
+            var AmazonUniqueShipmentID = "42";
+            
+            mock.Mock<IAmazonShippingWebClient>()
+                .Setup(webClient => webClient.CancelShipment(It.IsAny<IAmazonMwsWebClientSettings>(), "42"))
+                .Verifiable();
+
+            testObject.Void(new ShipmentEntity
+            {
+                Order = new OrderEntity(),
+                Amazon = new AmazonShipmentEntity()
+                {
+                    AmazonUniqueShipmentID = AmazonUniqueShipmentID
+                }
+            });
+
+            mock.VerifyAll = true;
+        }
         public void Dispose()
         {
             mock?.Dispose();

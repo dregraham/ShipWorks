@@ -11,6 +11,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -25,6 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IDataResourceManager resourceManager;
         private readonly IEnumerable<IAmazonLabelEnforcer> labelEnforcers;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -32,6 +34,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public AmazonLabelService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory,
             IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
             IDataResourceManager resourceManager, IEnumerable<IAmazonLabelEnforcer> labelEnforcers)
+            : this(webClient, settingsFactory, orderManager, requestFactory, resourceManager, labelEnforcers, LogManager.GetLogger(typeof(AmazonLabelService)))
+        {}
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AmazonLabelService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory,
+            IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
+            IDataResourceManager resourceManager, IEnumerable<IAmazonLabelEnforcer> labelEnforcers, ILog log)
         {
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
@@ -39,6 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.requestFactory = requestFactory;
             this.resourceManager = resourceManager;
             this.labelEnforcers = labelEnforcers;
+            this.log = log;
         }
 
         /// <summary>
@@ -78,8 +90,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
+            if (shipment.Amazon.AmazonUniqueShipmentID == null)
+            {
+                log.Error($"Attempting to void shipment with shipment id = {shipment.ShipmentID }, but AmazonUniqueShipmentID was null");
+                throw new AmazonShippingException("Amazon shipment is missing the AmazonUniqueShipmentID");
+            }
 
+            IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
+            
             webClient.CancelShipment(settings, shipment.Amazon.AmazonUniqueShipmentID);
         }
 
