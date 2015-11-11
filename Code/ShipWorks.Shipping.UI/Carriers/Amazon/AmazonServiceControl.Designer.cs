@@ -67,13 +67,6 @@
             // 
             // sectionRecipient
             // 
-            // 
-            // sectionRecipient.ContentPanel
-            // 
-            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.Location = new System.Drawing.Point(3, 277);
             this.sectionRecipient.Size = new System.Drawing.Size(454, 24);
             this.sectionRecipient.TabIndex = 1;
@@ -185,7 +178,7 @@
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(22, 160);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(770, 48);
+            this.insuranceControl.Size = new System.Drawing.Size(430, 48);
             this.insuranceControl.TabIndex = 12;
             // 
             // dimensionsControl
@@ -232,6 +225,8 @@
             // 
             this.service.DisplayMember = "Description";
             this.service.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.service.Enabled = false;
+            this.service.EnabledWhenMultivalued = false;
             this.service.FormattingEnabled = true;
             this.service.Location = new System.Drawing.Point(91, 7);
             this.service.Name = "service";
@@ -239,8 +234,6 @@
             this.service.Size = new System.Drawing.Size(220, 21);
             this.service.TabIndex = 6;
             this.service.ValueMember = "ShippingServiceId";
-            this.service.EnabledWhenMultivalued = false;
-            this.service.Enabled = false;
             // 
             // labelDeliveryConf
             // 
