@@ -18,23 +18,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         public ShipmentRequestDetails Create(ShipmentEntity shipment, IAmazonOrder order)
         {
-            return new ShipmentRequestDetails()
+            return new ShipmentRequestDetails
             {
                 AmazonOrderId = order.AmazonOrderID,
-                Insurance = shipment.Amazon.DeclaredValue.HasValue ?
-                    new CurrencyAmount()
+                Insurance = new CurrencyAmount
                     {
-                        Amount = shipment.Amazon.DeclaredValue.Value,
+                        Amount = 0,
                         CurrencyCode = "USD"
-                    } : null,
+                    },
                 ItemList = GetItemList(order),
-                PackageDimensions = new PackageDimensions()
+                PackageDimensions = new PackageDimensions
                 {
                     Height = shipment.Amazon.DimsHeight,
                     Length = shipment.Amazon.DimsLength,
                     Width = shipment.Amazon.DimsWidth
                 },
-                ShipFromAddress = new Address()
+                ShipFromAddress = new Address
                 {
                     AddressLine1 = shipment.OriginStreet1,
                     AddressLine2 = shipment.OriginStreet2,
@@ -46,15 +45,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     PostalCode = shipment.OriginPostalCode,
                     StateOrProvinceCode = shipment.OriginStateProvCode,
                     Email = shipment.OriginEmail
-
                 },
-                ShippingServiceOptions = new ShippingServiceOptions()
+                ShippingServiceOptions = new ShippingServiceOptions
                 {
                     CarrierWillPickUp = false,
                     DeliveryExperience = EnumHelper.GetApiValue((AmazonDeliveryExperienceType)shipment.Amazon.DeliveryExperience),
-                    DeclaredValue = new DeclaredValue()
+                    DeclaredValue = new DeclaredValue
                     {
-                        Amount = shipment.Amazon.InsuranceValue,
+                        Amount = 0,
                         CurrencyCode = "USD"
                     }
                 },
