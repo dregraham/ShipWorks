@@ -10,7 +10,10 @@ using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
+using Interapptive.Shared.Imaging;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -47,13 +50,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public void Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
-            // Shipping service ids should not be numbers.  If it is, the user hasn't selected a rate yet.  Let them know.
-            int badShippingServiceID;
-            if (int.TryParse(shipment.Amazon.ShippingServiceID, out badShippingServiceID))
-            {
-                throw new ShippingException("Please select a rate before attempting to create a label.");
-            }
 
             orderManager.PopulateOrderDetails(shipment);
             AmazonOrderEntity order = shipment.Order as AmazonOrderEntity;
@@ -116,15 +112,62 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 {
                     using (PdfDocument pdf = new PdfDocument(pdfBytes))
                     {
-                        resourceManager.CreateFromPdf(pdf, shipmentID, "LabelPrimary");
+                        // Convert the PDF to images and then save to database
+                        // If cropping fails we save the pdf without cropping
+                        if (!SavePdfLabel(pdf, shipmentID))
+                        {
+                            resourceManager.CreateFromPdf(pdf, shipmentID, "LabelPrimary");
+                        }
                     }
                 }
             }
             else
             {
-                //Convert the string into an image stream
+                // Save the label to the database
                 resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary");
             }
+        }
+
+        /// <summary>
+        /// Converts Ppf to Cropped label image
+        /// </summary>
+        private bool SavePdfLabel(PdfDocument pdf, long shipmentID)
+        {
+            // We need to convert the PDF into images and register each image as a resource in the database
+            List<Stream> images = pdf.ToImages().ToList();
+
+            // Try to crop the label 
+            try
+            {
+                // loop each image, if the pdf had multiple pages
+                for (int i = 0; i < images.Count - 1; i++)
+                {
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+
+                        // Create a cropped image
+                        Bitmap labelImage = EdgeDetection.Crop(images[i]);
+
+                        // Save the cropped image
+                        labelImage.Save(memoryStream, ImageFormat.Png);
+
+                        // If for some reason its a multi part label
+                        string labelName = i == 0 ? "LabelPrimary" : $"LabelPart{i}";
+
+                        // Save the label
+                        resourceManager.CreateFromBytes(memoryStream.ToArray(), shipmentID, labelName);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Something went wrong with the cropping
+                // return false and use the old method
+                // of saving a pdf
+                return false;
+            }
+            // everything worked
+            return true;
         }
 
         /// <summary>
