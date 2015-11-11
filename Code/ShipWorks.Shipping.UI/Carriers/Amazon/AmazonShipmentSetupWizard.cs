@@ -70,6 +70,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 e.NextPage = CurrentPage;
             }
+        }
+
+        /// <summary>
+        /// Finish the wizard
+        /// </summary>
+        private void OnSteppingIntoFinish(object sender, WizardSteppingIntoEventArgs e)
+        {
+            shippingSettings.MarkAsConfigured(ShipmentTypeCode.Amazon);
 
             ShippingOriginEntity origin = new ShippingOriginEntity();
 
@@ -79,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             // Get the origins description
             origin.Description = GetDefaultDescription(origin);
-            
+
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 try
@@ -101,14 +109,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Finish the wizard
-        /// </summary>
-        private void OnSteppingIntoFinish(object sender, WizardSteppingIntoEventArgs e)
-        {
-            shippingSettings.MarkAsConfigured(ShipmentTypeCode.Amazon);
         }
 
         /// <summary>
