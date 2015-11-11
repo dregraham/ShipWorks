@@ -21,10 +21,8 @@ namespace Interapptive.Shared.Imaging
             Bitmap image = new Bitmap(stream);
 
             //get image data
-            BitmapData bitmapData = image.LockBits(new Rectangle(Point.Empty, image.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-            int[] imagePixels = new int[image.Height * image.Width];
-            Marshal.Copy(bitmapData.Scan0, imagePixels, 0, imagePixels.Length);
-            image.UnlockBits(bitmapData);
+            int[] imagePixels;
+            BitmapData bitmapData = Initialize(image, out imagePixels);
 
             int left = bitmapData.Width;
             int top = bitmapData.Height;
@@ -122,7 +120,18 @@ namespace Interapptive.Shared.Imaging
             
             return CreateCroppedImage(width,height, imgData);
         }
-        
+
+        private static BitmapData Initialize(Bitmap image, out int[] imagePixels)
+        {
+            BitmapData bitmapData = image.LockBits(new Rectangle(Point.Empty, image.Size), ImageLockMode.ReadOnly,
+                PixelFormat.Format32bppArgb);
+            imagePixels = new int[image.Height*image.Width];
+            Marshal.Copy(bitmapData.Scan0, imagePixels, 0, imagePixels.Length);
+            image.UnlockBits(bitmapData);
+            return bitmapData;
+        }
+
+
         /// <summary>
         /// Creates a new image using the cropped image data
         /// </summary>
