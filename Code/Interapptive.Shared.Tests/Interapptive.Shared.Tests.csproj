@@ -75,6 +75,7 @@
     <Compile Include="Business\PersonAdapterTest.cs" />
     <Compile Include="Collections\CollectionChangedEventArgsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\CaseInsensitiveEqualityComparerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

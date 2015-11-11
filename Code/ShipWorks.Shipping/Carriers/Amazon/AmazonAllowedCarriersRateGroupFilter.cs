@@ -1,8 +1,7 @@
-﻿using System;
-using ShipWorks.Shipping.Editing.Rating;
+﻿using ShipWorks.Shipping.Editing.Rating;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -44,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory filteredFactory =
-                new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(termsFactory.CarrierNames.Intersect(allowedCarriers, new UpperCaseEqualityComparer()));
+                new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(termsFactory.CarrierNames.Intersect(allowedCarriers, new CaseInsensitiveEqualityComparer()));
 
             return filteredFactory.CarrierNames.Any() ? filteredFactory : null;
         }
@@ -56,24 +55,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             AmazonRateTag tag = rateResult.Tag as AmazonRateTag;
             return allowedCarriers.Contains(tag?.CarrierName?.ToUpper());
-        }
-
-        /// <summary>
-        /// Equality comparer that ignores case
-        /// </summary>
-        private class UpperCaseEqualityComparer : IEqualityComparer<string>
-        {
-            /// <summary>
-            /// Tests equality between two strings
-            /// </summary>
-            public bool Equals(string x, string y) =>
-                string.Equals(x, y, StringComparison.OrdinalIgnoreCase);
-
-            /// <summary>
-            /// Get the hash code of a string
-            /// </summary>
-            public int GetHashCode(string obj) =>
-                obj.ToUpper().GetHashCode();
         }
     }
 }
