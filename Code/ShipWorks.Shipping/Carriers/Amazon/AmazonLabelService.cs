@@ -2,6 +2,7 @@
 using System.IO;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Pdf;
+using Interapptive.Shared.Imaging;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
@@ -10,6 +11,8 @@ using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -105,18 +108,46 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // If its a pdf we need to convert it
             if (fileContents.FileType == "application/pdf")
             {
-                using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
-                {
-                    using (PdfDocument pdf = new PdfDocument(pdfBytes))
-                    {
-                        resourceManager.CreateFromPdf(pdf, shipmentID, "LabelPrimary");
-                    }
-                }
+                // Convert the PDF to images and then save to database
+                SavePdfLabel(labelBytes, shipmentID);
             }
             else
             {
-                //Convert the string into an image stream
+                // Save the label to the database
                 resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary");
+            }
+        }
+
+        /// <summary>
+        /// Converts Ppf to Cropped label image
+        /// </summary>
+        /// <param name="labelBytes"></param>
+        private void SavePdfLabel(byte[] labelBytes, long shipmentID)
+        {
+            using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
+            using (PdfDocument pdf = new PdfDocument(pdfBytes))
+            {
+                // We need to convert the PDF into images and register each image as a resource in the database
+                List<Stream> images = pdf.ToImages().ToList();
+
+                // loop each image, if the pdf had multiple pages
+                for (int i = 0; i < images.Count; i++)
+                {
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        // Create a cropped image
+                        Bitmap labelImage = EdgeDetection.Crop(images[i]);
+
+                        // Save the cropped image
+                        labelImage.Save(memoryStream, ImageFormat.Png);
+
+                        // If for some reason its a multi part label
+                        string labelName = i == 0 ? "LabelPrimary" : $"LabelPart{i}";
+
+                        // Save the label
+                        resourceManager.CreateFromBytes(memoryStream.ToArray(), shipmentID, labelName);
+                    }
+                }
             }
         }
 

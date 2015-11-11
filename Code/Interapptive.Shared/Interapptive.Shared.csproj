@@ -131,6 +131,7 @@
     <Compile Include="Collections\ArrayUtility.cs" />
     <Compile Include="Collections\CollectionChangedEvent.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
+    <Compile Include="Imaging\EdgeDetection.cs" />
     <Compile Include="InterapptiveOnly.cs" />
     <Compile Include="Utility\ActionRetry.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
