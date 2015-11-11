@@ -123,8 +123,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
             catch (InvalidOperationException ex)
             {
-                ErrorResponse errorResponse = SerializationUtility.DeserializeFromXml<ErrorResponse>(xml);
-                throw new AmazonShippingException(errorResponse.Error.Message, ex);
+                if (xml.Contains("ErrorResponse"))
+                {
+                    ErrorResponse errorResponse = SerializationUtility.DeserializeFromXml<ErrorResponse>(xml);
+                    throw new AmazonShippingException(errorResponse.Error.Message, ex);
+                }
+                
+                throw new AmazonShippingException($"Error Deserializing {typeof(T).Name}", ex);
             }
         }
 
