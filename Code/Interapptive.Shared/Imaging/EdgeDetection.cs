@@ -35,19 +35,19 @@ namespace Interapptive.Shared.Imaging
                 int color = imagePixels[i] & 0xffffff;
                 if (color != 0xffffff)
                 {
-                    int r = i / bitmapData.Width;
-                    int c = i % bitmapData.Width;
+                    int row = i / bitmapData.Width;
+                    int column = i % bitmapData.Width;
 
-                    if (left > c)
+                    if (left > column)
                     {
-                        left = c;
+                        left = column;
                     }
-                    if (right < c)
+                    if (right < column)
                     {
-                        right = c;
+                        right = column;
                     }
-                    bottom = r;
-                    top = r;
+                    bottom = row;
+                    top = row;
                     break;
                 }
             }
@@ -58,49 +58,49 @@ namespace Interapptive.Shared.Imaging
                 int color = imagePixels[i] & 0xffffff;
                 if (color != 0xffffff)
                 {
-                    int r = i / bitmapData.Width;
-                    int c = i % bitmapData.Width;
+                    int row = i / bitmapData.Width;
+                    int column = i % bitmapData.Width;
 
-                    if (left > c)
+                    if (left > column)
                     {
-                        left = c;
+                        left = column;
                     }
-                    if (right < c)
+                    if (right < column)
                     {
-                        right = c;
+                        right = column;
                     }
-                    bottom = r;
+                    bottom = row;
                     break;
                 }
             }
 
             if (bottom > top)
             {
-                for (int r = top + 1; r < bottom; r++)
+                for (int row = top + 1; row < bottom; row++)
                 {
                     //determine left
-                    for (int c = 0; c < left; c++)
+                    for (int column = 0; column < left; column++)
                     {
-                        int color = imagePixels[r * bitmapData.Width + c] & 0xffffff;
+                        int color = imagePixels[row * bitmapData.Width + column] & 0xffffff;
                         if (color != 0xffffff)
                         {
-                            if (left > c)
+                            if (left > column)
                             {
-                                left = c;
+                                left = column;
                                 break;
                             }
                         }
                     }
 
                     //determine right
-                    for (int c = bitmapData.Width - 1; c > right; c--)
+                    for (int column = bitmapData.Width - 1; column > right; column--)
                     {
-                        int color = imagePixels[r * bitmapData.Width + c] & 0xffffff;
+                        int color = imagePixels[row * bitmapData.Width + column] & 0xffffff;
                         if (color != 0xffffff)
                         {
-                            if (right < c)
+                            if (right < column)
                             {
-                                right = c;
+                                right = column;
                                 break;
                             }
                         }
@@ -145,7 +145,6 @@ namespace Interapptive.Shared.Imaging
             BitmapData newBitmapData = newImage.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
             Marshal.Copy(imgData, 0, newBitmapData.Scan0, imgData.Length);
             newImage.UnlockBits(newBitmapData);
-
             return newImage;
         }
     }

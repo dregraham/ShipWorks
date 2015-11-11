@@ -140,11 +140,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             try
             {
                 // loop each image, if the pdf had multiple pages
-                for (int i = 0; i < images.Count - 1; i++)
+                for (int i = 0; i < images.Count; i++)
                 {
                     using (MemoryStream memoryStream = new MemoryStream())
                     {
-
                         // Create a cropped image
                         Bitmap labelImage = EdgeDetection.Crop(images[i]);
 
