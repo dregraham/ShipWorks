@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public void SaveToInsuranceChoices()
         {
-            foreach (InsuranceChoice choice in loadedInsurance)
+            foreach (IInsuranceChoice choice in loadedInsurance)
             {
                 useInsurance.ReadMultiCheck(c => choice.Insured = c);
                 insuredValue.ReadMultiAmount(v => choice.InsuranceValue = v);

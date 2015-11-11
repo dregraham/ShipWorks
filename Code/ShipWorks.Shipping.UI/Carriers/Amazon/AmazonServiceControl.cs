@@ -178,6 +178,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             RaiseShipmentServiceChanged();
             UpdateSectionDescription();
+            UpdateInsuranceDisplay();
         }
 
         /// <summary>
