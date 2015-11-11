@@ -28,8 +28,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             okButton.Top = howToFixMessageLabel.Bottom + 5;
 
             infoPictureBox.Top = ((carrierNamesMessageLabel.Bottom + howToFixMessageLabel.Top) / 2) - infoPictureBox.Height / 2;
-
-            Height = howToFixMessageLabel.Bottom + 60;
         }
 
         /// <summary>
