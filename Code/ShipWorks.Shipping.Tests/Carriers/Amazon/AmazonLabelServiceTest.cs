@@ -9,6 +9,7 @@ using ShipWorks.Stores.Platforms.Amazon.Mws;
 using System;
 using System.Collections.Generic;
 using Moq.Language.Flow;
+using ShipWorks.Stores.Platforms.Amazon;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
@@ -71,10 +72,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Create_PopulatesOrder_WhenShipmentIsSet()
         {
+            MockRequestDetailsFactory();
+
             var shipment = new ShipmentEntity
             {
                 Order = new AmazonOrderEntity(),
-                Amazon = new AmazonShipmentEntity() { ShippingServiceID = "something" }
+                Amazon = new AmazonShipmentEntity() { ShippingServiceID = "something", CarrierName = "STAMPS_DOT_COM" }
             };
 
             mock.Mock<IAmazonShippingWebClient>()
@@ -91,6 +94,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Create_CallsIsAllowed_OnEnforcers()
         {
+            MockRequestDetailsFactory();
+
             var enforcer1 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
             var enforcer2 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
 
@@ -169,9 +174,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Create_SendsCreatedCredentialsToWebService_WhenShipmentIsSet()
         {
+            MockRequestDetailsFactory();
+
             var shipment = new ShipmentEntity
             {
-                Amazon = new AmazonShipmentEntity(),
+                Amazon = new AmazonShipmentEntity() { CarrierName = "STAMPS_DOT_COM" },
                 Order = new AmazonOrderEntity()
             };
 
@@ -195,9 +202,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Create_SendsShipmentsToVerifyShipmentOnEnforcer_AfterProcessing()
         {
+            MockRequestDetailsFactory();
+
             var shipment = new ShipmentEntity
             {
-                Amazon = new AmazonShipmentEntity(),
+                Amazon = new AmazonShipmentEntity() { CarrierName = "STAMPS_DOT_COM" },
                 Order = new AmazonOrderEntity()
             };
 
@@ -273,11 +282,29 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 Order = new OrderEntity(),
                 Amazon = new AmazonShipmentEntity()
                 {
-                    AmazonUniqueShipmentID = AmazonUniqueShipmentID
+                    AmazonUniqueShipmentID = AmazonUniqueShipmentID,
+                    CarrierName = "STAMPS_DOT_COM"
                 }
             });
 
             mock.VerifyAll = true;
+        }
+
+        public void MockRequestDetailsFactory()
+        {
+            mock.Mock<IAmazonShipmentRequestDetailsFactory>()
+               .Setup(f => f.Create(It.IsAny<ShipmentEntity>(), It.IsAny<IAmazonOrder>()))
+               .Returns(new ShipmentRequestDetails()
+               {
+                   ShippingServiceOptions = new ShippingServiceOptions()
+                   {
+                       DeclaredValue = new DeclaredValue()
+                       {
+                           Amount = 200,
+                           CurrencyCode = "USD"
+                       }
+                   }
+               });
         }
 
         public void Dispose()
