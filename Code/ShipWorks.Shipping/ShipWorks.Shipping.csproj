@@ -106,6 +106,7 @@
     </Compile>
     <Compile Include="Carriers\Amazon\AmazonAllowedCarriersRateGroupFilter.cs" />
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory.cs" />
+    <Compile Include="Carriers\Amazon\AmazonInsuranceChoice.cs" />
     <Compile Include="Carriers\Amazon\AmazonLabelService.cs" />
     <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Carriers\Amazon\AmazonPackageAdapter.cs" />

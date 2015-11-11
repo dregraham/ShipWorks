@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -99,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment, shipment.Amazon, null),
+                new AmazonInsuranceChoice(shipment),
                 new DimensionsAdapter(shipment.Amazon))
             {
                 TotalWeight = shipment.TotalWeight
