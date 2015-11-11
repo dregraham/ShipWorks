@@ -65,6 +65,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
 
+            // Send a max of $100 in insured value for carriers who aren't Stamps.  Send $0 for Stamps
+            if (!shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase))
+            {
+                requestDetails.ShippingServiceOptions.DeclaredValue.Amount = Math.Min(shipment.Amazon.InsuranceValue, 100m);
+            }
+            else
+            {
+                requestDetails.ShippingServiceOptions.DeclaredValue.Amount = 0;
+            }
+
             CreateShipmentResponse labelResponse = webClient.CreateShipment(requestDetails, settings, shipment.Amazon.ShippingServiceID);
 
             // Save shipment info
