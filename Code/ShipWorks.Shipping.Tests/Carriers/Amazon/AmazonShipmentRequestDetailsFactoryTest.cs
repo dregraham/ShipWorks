@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
 
-            Assert.Equal(testObject.Insurance.Amount, 4);
+            Assert.Null(testObject.Insurance);
         }
 
         [Fact]

@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         ShipmentEntity defaultShipment = new ShipmentEntity
         {
             Order = new AmazonOrderEntity(),
-            Amazon = new AmazonShipmentEntity() { ShippingServiceID = "something" }
+            Amazon = new AmazonShipmentEntity { ShippingServiceID = "something", CarrierName = "Foo" }
         };
 
         CreateShipmentResponse defaultResponse = new CreateShipmentResponse()
@@ -104,9 +104,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
-
-            var shipment = new ShipmentEntity();
-
+            
             var testObject = mock.Create<AmazonLabelService>();
             testObject.Create(defaultShipment);
 
