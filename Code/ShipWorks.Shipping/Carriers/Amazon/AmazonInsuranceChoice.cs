@@ -1,5 +1,7 @@
 ﻿using ShipWorks.Shipping.Insurance;
 using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Utility;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -13,6 +15,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public AmazonInsuranceChoice(ShipmentEntity shipment)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
+            
             Shipment = shipment;
         }
 
