@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
@@ -28,17 +29,22 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         {
             base.LoadProfile(profile);
 
+            LoadOrigins();
+
             dimensionsControl.Initialize();
             EnumHelper.BindComboBox<AmazonDeliveryExperienceType>(deliveryExperience);
 
             AmazonProfileEntity amazonProfile = profile.Amazon;
 
-            //Shipment
+            // Origin
+            AddValueMapping(profile, ShippingProfileFields.OriginID, originState, originCombo, labelSender);
+
+            // Shipment
             AddValueMapping(amazonProfile, AmazonProfileFields.DeliveryExperience, deliveryExperienceState, deliveryExperience, labelDeliveryExperience);
             AddValueMapping(amazonProfile, AmazonProfileFields.Weight, weightState, weight, labelWeight);
             AddValueMapping(amazonProfile, AmazonProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
-            //Insurance
+            // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
         }
 
@@ -53,6 +59,18 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             {
                 dimensionsControl.SaveToEntities();
             }
+        }
+
+        /// <summary>
+        /// Load all the origins
+        /// </summary>
+        private void LoadOrigins()
+        {
+            List<KeyValuePair<string, long>> origins = ShipmentTypeManager.GetType(ShipmentTypeCode.Amazon).GetOrigins();
+
+            originCombo.DisplayMember = "Key";
+            originCombo.ValueMember = "Value";
+            originCombo.DataSource = origins;
         }
     }
 }
