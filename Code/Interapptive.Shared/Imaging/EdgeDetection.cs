@@ -22,7 +22,7 @@ namespace Interapptive.Shared.Imaging
 
             //get image data
             int[] imagePixels;
-            BitmapData bitmapData = Initialize(image, out imagePixels);
+            BitmapData bitmapData = CreateBitmapData(image, out imagePixels);
 
             int left = bitmapData.Width;
             int top = bitmapData.Height;
@@ -121,7 +121,10 @@ namespace Interapptive.Shared.Imaging
             return CreateCroppedImage(width,height, imgData);
         }
 
-        private static BitmapData Initialize(Bitmap image, out int[] imagePixels)
+        /// <summary>
+        /// Creates the BitmapData used for edge detection
+        /// </summary>
+        private static BitmapData CreateBitmapData(Bitmap image, out int[] imagePixels)
         {
             BitmapData bitmapData = image.LockBits(new Rectangle(Point.Empty, image.Size), ImageLockMode.ReadOnly,
                 PixelFormat.Format32bppArgb);
