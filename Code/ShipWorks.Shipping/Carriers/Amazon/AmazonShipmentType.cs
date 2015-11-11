@@ -21,6 +21,7 @@ using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 using System.Diagnostics;
+using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -33,6 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
+        private readonly IEditionManager editionManager;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly Func<IAmazonLabelService> amazonLabelServiceFactory;
         
@@ -41,13 +43,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public AmazonShipmentType(IDateTimeProvider dateTimeProvider, 
             Func<IAmazonRatingService> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, 
-            IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager)
+            IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager,
+            IEditionManager editionManager)
         {
             this.amazonRatesFactory = amazonRatesFactory;
             this.amazonLabelServiceFactory = amazonLabelServiceFactory;
             this.storeManager = storeManager;
             this.orderManager = orderManager;
             this.shippingManager = shippingManager;
+            this.editionManager = editionManager;
             this.dateTimeProvider = dateTimeProvider;
         }
 
@@ -239,6 +243,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override bool IsAllowedFor(ShipmentEntity shipment)
         {
+            if (IsShipmentTypeRestricted)
+            {
+                return false;
+            }
+
             orderManager.PopulateOrderDetails(shipment);
 
             IAmazonOrder order = shipment.Order as IAmazonOrder;
@@ -246,6 +255,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             IAmazonCredentials amazonCredentials = storeManager.GetStore(shipment.Order.StoreID) as IAmazonCredentials;
 
             return order != null && order.IsPrime && amazonCredentials != null;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is shipment type restricted.
+        /// 
+        /// Overridden to use dependency
+        /// </summary>
+        public override bool IsShipmentTypeRestricted
+        {
+            get
+            {
+                EditionRestrictionIssue restriction = editionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode);
+                return restriction.Level == EditionRestrictionLevel.Hidden;
+            }
         }
 
         /// <summary>
