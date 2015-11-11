@@ -93,9 +93,10 @@
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.CancelButton = this.okButton;
-            this.ClientSize = new System.Drawing.Size(531, 108);
+            this.ClientSize = new System.Drawing.Size(527, 104);
             this.ControlBox = false;
             this.Controls.Add(this.howToFixMessageLabel);
             this.Controls.Add(this.infoPictureBox);

@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<AmazonShipmentSetupWizard>()
                 .Keyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Amazon)
                 .InstancePerLifetimeScope();
-            
+
             builder.RegisterType<AmazonSettingsControl>()
                 .Keyed<SettingsControlBase>(ShipmentTypeCode.Amazon)
                 .InstancePerLifetimeScope();
@@ -71,18 +71,21 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             if (!(InterapptiveOnly.IsInterapptiveUser ^ InterapptiveOnly.MagicKeysDown))
             {
                 builder.RegisterType<AmazonUspsRateFilter>()
-                    .AsImplementedInterfaces();
+                    .As<IAmazonRateGroupFilter>();
 
                 builder.RegisterType<AmazonUspsLabelEnforcer>()
                     .AsImplementedInterfaces();
 
                 builder.RegisterType<AmazonUpsRateFilter>()
-                    .AsImplementedInterfaces();
+                    .As<IAmazonRateGroupFilter>();
 
                 builder.RegisterType<AmazonUpsLabelEnforcer>()
                     .AsImplementedInterfaces();
+
+                builder.RegisterType<AmazonAllowedCarriersRateGroupFilter>()
+                    .As<IAmazonRateGroupFilter>();
             }
-			
+
             builder.RegisterType<AmazonAccountValidator>()
                 .AsImplementedInterfaces();
         }

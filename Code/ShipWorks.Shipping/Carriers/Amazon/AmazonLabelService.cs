@@ -2,6 +2,7 @@
 using System.IO;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Pdf;
+using Interapptive.Shared.Imaging;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
@@ -13,7 +14,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using Interapptive.Shared.Imaging;
+using log4net;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -28,6 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IDataResourceManager resourceManager;
         private readonly IEnumerable<IAmazonLabelEnforcer> labelEnforcers;
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonLabelService));
 
         /// <summary>
         /// Constructor
@@ -81,8 +83,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
+            if (shipment.Amazon.AmazonUniqueShipmentID == null)
+            {
+                log.Error($"Attempting to void shipment with shipment id = {shipment.ShipmentID }, but AmazonUniqueShipmentID was null");
+                throw new AmazonShippingException("Amazon shipment is missing the AmazonUniqueShipmentID");
+            }
 
+            IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
+            
             webClient.CancelShipment(settings, shipment.Amazon.AmazonUniqueShipmentID);
         }
 

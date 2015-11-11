@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl" /> class.
         /// </summary>
-        public AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl(List<string> carrierNames)
+        public AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl(IEnumerable<string> carrierNames)
         {
             InitializeComponent();
 
@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// List of carrier names the control received.
         /// Used for unit testing.
         /// </summary>
-        public List<string> CarrierNames { private set; get; }
+        public IEnumerable<string> CarrierNames { private set; get; }
 
         /// <summary>
         /// Creates and opens an <see cref="AmazonCarrierTermsAndConditionsNotAcceptedDialog"/>

@@ -98,7 +98,7 @@ GO
 PRINT N'Altering [dbo].[AmazonStore]'
 GO
 ALTER TABLE [dbo].[AmazonStore] ADD
-[AmazonShippingToken] [nvarchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonStore_AmazonShippingToken] DEFAULT (N'hlkH7XeEA5FYCRxMs0u1N6zpcqsml4KRBK3sMwKQcDgIQiHPhi/G5ai6uq+RI35z')
+[AmazonShippingToken] [nvarchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonStore_AmazonShippingToken] DEFAULT (N'hlkH7XeEA5GehLVXyC7ZpSjpPQVzOciXTvoFKlnobEJblNvBlX/dasYvkTYKkOQfL5Oy6kfyeZI=')
 GO
 PRINT N'Creating [dbo].[AmazonProfile]'
 GO
@@ -176,7 +176,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_ChannelAdvisorStore]
 )
 GO
 INSERT INTO [dbo].[tmp_rg_xx_ChannelAdvisorStore]([StoreID], [AccountKey], [ProfileID], [AttributesToDownload], [ConsolidatorAsUsps], [AmazonMerchantID], [AmazonAuthToken], [AmazonApiRegion], [AmazonShippingToken])
-SELECT [StoreID], [AccountKey], [ProfileID], [AttributesToDownload], [ConsolidatorAsUsps], '', '', '', 'hlkH7XeEA5GJOefdipC2s6DY+ZF7GWI3nazovu5UYESp9FqfeIiKcfyOzL9Mdsy0' FROM [dbo].[ChannelAdvisorStore]
+SELECT [StoreID], [AccountKey], [ProfileID], [AttributesToDownload], [ConsolidatorAsUsps], '', '', '', 'hlkH7XeEA5GehLVXyC7ZpSjpPQVzOciXTvoFKlnobEJblNvBlX/dasYvkTYKkOQfL5Oy6kfyeZI=' FROM [dbo].[ChannelAdvisorStore]
 GO
 DROP TABLE [dbo].[ChannelAdvisorStore]
 GO

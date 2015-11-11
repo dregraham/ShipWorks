@@ -378,6 +378,7 @@
     <Compile Include="Utility\SortOrderAttribute.cs" />
     <Compile Include="Utility\StreamUtility.cs" />
     <Compile Include="Utility\StringUtility.cs" />
+    <Compile Include="Utility\CaseInsensitiveEqualityComparer.cs" />
     <Compile Include="Utility\VersionUtility.cs" />
     <Compile Include="Utility\WeightUtility.cs" />
     <Compile Include="Utility\XmlUtility.cs" />

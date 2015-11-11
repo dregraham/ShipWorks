@@ -144,7 +144,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             RateGroup result = testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes));
 
             AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl footnoteControl = result.FootnoteFactories.OfType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory>().First().CreateFootnote(null) as AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl;
-            Assert.Equal(3, footnoteControl.CarrierNames.Count);
+            Assert.Equal(3, footnoteControl.CarrierNames.Count());
             Assert.True(footnoteControl.CarrierNames.Contains("FEDEX"));
             Assert.True(footnoteControl.CarrierNames.Contains("UPS"));
             Assert.True(footnoteControl.CarrierNames.Contains("USPS"));
