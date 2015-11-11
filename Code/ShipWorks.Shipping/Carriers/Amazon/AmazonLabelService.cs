@@ -108,8 +108,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // If its a pdf we need to convert it
             if (fileContents.FileType == "application/pdf")
             {
-                // Convert the PDF to images and then save to database
-                SavePdfLabel(labelBytes, shipmentID);
+                using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
+                {
+                    using (PdfDocument pdf = new PdfDocument(pdfBytes))
+                    {
+                        // Convert the PDF to images and then save to database
+                        // If cropping fails we save the pdf without cropping
+                        if (!SavePdfLabel(pdf, shipmentID))
+                        {
+                            resourceManager.CreateFromPdf(pdf, shipmentID, "LabelPrimary");
+                        }
+                    }
+                }
             }
             else
             {
@@ -121,20 +131,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Converts Ppf to Cropped label image
         /// </summary>
-        /// <param name="labelBytes"></param>
-        private void SavePdfLabel(byte[] labelBytes, long shipmentID)
+        private bool SavePdfLabel(PdfDocument pdf, long shipmentID)
         {
-            using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
-            using (PdfDocument pdf = new PdfDocument(pdfBytes))
-            {
-                // We need to convert the PDF into images and register each image as a resource in the database
-                List<Stream> images = pdf.ToImages().ToList();
+            // We need to convert the PDF into images and register each image as a resource in the database
+            List<Stream> images = pdf.ToImages().ToList();
 
+            // Try to crop the label 
+            try
+            {
                 // loop each image, if the pdf had multiple pages
-                for (int i = 0; i < images.Count; i++)
+                for (int i = 0; i < images.Count - 1; i++)
                 {
                     using (MemoryStream memoryStream = new MemoryStream())
                     {
+
                         // Create a cropped image
                         Bitmap labelImage = EdgeDetection.Crop(images[i]);
 
@@ -149,6 +159,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     }
                 }
             }
+            catch (Exception)
+            {
+                // Something went wrong with the cropping
+                // return false and use the old method
+                // of saving a pdf
+                return false;
+            }
+            // everything worked
+            return true;
         }
 
         /// <summary>

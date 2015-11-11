@@ -6,23 +6,20 @@ using System.Runtime.InteropServices;
 
 namespace Interapptive.Shared.Imaging
 {
+    /// <summary>
+    /// Used for image edge detection
+    /// pulled from http://stackoverflow.com/questions/16583742/crop-image-white-space-in-c-sharp
+    /// </summary>
     public static class EdgeDetection
     {
         /// <summary>
         /// Crops a bitmap based on edge detection
         /// Only works with Black and White images
         /// </summary>
-        public static Bitmap Crop(Stream image)
+        public static Bitmap Crop(Stream stream)
         {
-            return Crop(new Bitmap(image));
-        }
+            Bitmap image = new Bitmap(stream);
 
-        /// <summary>
-        /// Crops a bitmap based on edge detection
-        /// Only works with Black and White images
-        /// </summary>
-        private static Bitmap Crop(Bitmap image)
-        {
             //get image data
             BitmapData bitmapData = image.LockBits(new Rectangle(Point.Empty, image.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             int[] imagePixels = new int[image.Height * image.Width];
