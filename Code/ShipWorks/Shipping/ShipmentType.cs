@@ -899,7 +899,7 @@ namespace ShipWorks.Shipping
             // Special case for insurance
             for (int i = 0; i < GetParcelCount(shipment); i++)
             {
-                InsuranceChoice insuranceChoice = GetParcelDetail(shipment, i).Insurance;
+                IInsuranceChoice insuranceChoice = GetParcelDetail(shipment, i).Insurance;
 
                 if (profile.Insurance != null)
                 {

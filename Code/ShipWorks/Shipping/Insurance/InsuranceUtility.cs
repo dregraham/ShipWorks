@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Insurance
             // Trying to insure
             if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.ShipWorks)
             {
-                List<InsuranceChoice> insuranceChoices = 
+                List<IInsuranceChoice> insuranceChoices = 
                     Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
                     .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                     .Where(choice => choice.Insured).ToList();

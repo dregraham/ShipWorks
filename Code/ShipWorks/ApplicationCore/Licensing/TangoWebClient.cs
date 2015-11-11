@@ -547,7 +547,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     tracking = "";
                 }
 
-                List<InsuranceChoice> insuredPackages = 
+                List<IInsuranceChoice> insuredPackages = 
                     Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
                     .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                     .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks && choice.InsuranceValue > 0)
@@ -560,7 +560,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 if (insuredPackages.Count > 0)
                 {
-                    InsuranceChoice insuranceChoice = insuredPackages[0];
+                    IInsuranceChoice insuranceChoice = insuredPackages[0];
 
                     shipWorksInsured = true;
                     pennyOne = insuranceChoice.InsurancePennyOne ?? false;

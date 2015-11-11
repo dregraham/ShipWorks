@@ -255,7 +255,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             selectedRows.Clear();
 
             List<DimensionsAdapter> dimensionsToLoad = new List<DimensionsAdapter>();
-            List<InsuranceChoice> insuranceToLoad = new List<InsuranceChoice>();
+            List<IInsuranceChoice> insuranceToLoad = new List<IInsuranceChoice>();
 
             // Stop the dimensions control from listening to weight changes
             dimensionsControl.ShipmentWeightBox = null;
