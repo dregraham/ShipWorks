@@ -14,6 +14,7 @@ using log4net;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
@@ -74,7 +75,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             caStore.AmazonApiRegion = string.Empty;
             caStore.AmazonAuthToken = string.Empty;
             caStore.AmazonMerchantID = string.Empty;
-            caStore.AmazonShippingToken = SecureText.Encrypt(@"{""ErrorDate"":""1/1/2001"", ""ErrorReason"":""""}", "AmazonShippingToken");
+
+            caStore.SetShippingToken(new AmazonShippingToken()
+            {
+                ErrorDate = new DateTime(2001, 1, 1),
+                ErrorReason = string.Empty
+            });
 
             return caStore; 
         }
