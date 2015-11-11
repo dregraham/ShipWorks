@@ -90,23 +90,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Assert.Equal(false, result.IsValid);
             Assert.Equal("Foo Bar", result.FailureReason);
         }
-
-        [Fact]
-        public void CheckRestriction_ReturnsEnforcementFailureWithMessage_WhenNoUpsAccountExists_Test()
-        {
-            store.SetShippingToken(new AmazonShippingToken
-            {
-                ErrorDate = new DateTime(2012, 1, 1),
-                ErrorReason = "Foo Bar"
-            });
-
-            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
-            EnforcementResult result = testObject.CheckRestriction(shipment);
-
-            Assert.Equal(false, result.IsValid);
-            Assert.Equal("Foo Bar", result.FailureReason);
-        }
-
+        
         [Fact]
         public void CheckRestriction_ThrowsShippingException_WhenGivenNonAmazonShipment_Test()
         {
@@ -143,18 +127,48 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void VerifyShipment_DoesNotSetError_WhenUpsAccountsExist()
+        public void VerifyShipment_DoesNotSetError_WhenCasesDoNotMatchUpsAccountsExist()
         {
-            shipment.TrackingNumber = "12399223";
+            shipment.TrackingNumber = "123Tt99223";
 
             mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
                 .Setup(x => x.Accounts)
-                .Returns(new[] { new UpsAccountEntity { AccountNumber = "9922" } });
+                .Returns(new[] { new UpsAccountEntity { AccountNumber = "TT9922" } });
 
             AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
             testObject.VerifyShipment(shipment);
 
             Assert.Null(store.AmazonShippingToken);
+        }
+
+        [Fact]
+        public void VerifyShipment_DoesNotSetError_WhenCasesDMatchUpsAccountsExist()
+        {
+            shipment.TrackingNumber = "123TT99223";
+
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
+                .Setup(x => x.Accounts)
+                .Returns(new[] { new UpsAccountEntity { AccountNumber = "TT9922" } });
+
+            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
+            testObject.VerifyShipment(shipment);
+
+            Assert.Null(store.AmazonShippingToken);
+        }
+
+        [Fact]
+        public void VerifyShipment_DoesSetError_WhenUpsAccountDoesNotExist()
+        {
+            shipment.TrackingNumber = "123TT99223";
+
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
+                .Setup(x => x.Accounts)
+                .Returns(new[] { new UpsAccountEntity { AccountNumber = "5T9922" } });
+
+            AmazonUpsLabelEnforcer testObject = mock.Create<AmazonUpsLabelEnforcer>();
+            testObject.VerifyShipment(shipment);
+
+            Assert.NotNull(store.AmazonShippingToken);
         }
 
         [Fact]

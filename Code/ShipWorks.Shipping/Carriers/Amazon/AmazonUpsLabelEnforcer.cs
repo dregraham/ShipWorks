@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -38,8 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             IAmazonCredentials store = GetStore(shipment);
             AmazonShippingToken shippingToken = store.GetShippingToken();
 
-            if ((IsUpsShipment(shipment) && !accountRepository.Accounts.Any()) ||
-                shippingToken.ErrorDate.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
+            if (shippingToken.ErrorDate.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
             {
                 return new EnforcementResult(shippingToken.ErrorReason);
             }
@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             string upsTracking = shipment.TrackingNumber;
 
-            if (accountRepository.Accounts.Any(account => upsTracking.Contains(account.AccountNumber)))
+            if (accountRepository.Accounts.Any(account => upsTracking.IndexOf(account.AccountNumber, StringComparison.OrdinalIgnoreCase) >= 0))
             {
                 return;
             }

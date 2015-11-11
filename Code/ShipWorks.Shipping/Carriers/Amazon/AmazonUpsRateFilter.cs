@@ -6,6 +6,9 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
+    /// <summary>
+    /// Amazon rate filter to remove UPS if necessary
+    /// </summary>
     public class AmazonUpsRateFilter : IAmazonRateGroupFilter
     {
         private readonly Func<ShipmentTypeCode, IAmazonNotLinkedFootnoteFactory> createFootnoteFactory;
@@ -33,7 +36,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             RateGroup newRateGroup = rateGroup.CopyWithRates(rateGroup.Rates.Where(r => ((AmazonRateTag) r.Tag).CarrierName.IndexOf("ups", StringComparison.OrdinalIgnoreCase) == -1));
             newRateGroup.AddFootnoteFactory(createFootnoteFactory(ShipmentTypeCode.UpsOnLineTools));
-            //newRateGroup.AddFootnoteFactory(new AmazonNotLinkedFootnoteFactory(ShipmentTypeCode.UpsOnLineTools));
 
             return newRateGroup;
         }
