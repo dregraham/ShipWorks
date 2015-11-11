@@ -157,7 +157,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             var testObject = mock.Create<AmazonLabelService>();
 
-            Assert.Throws<ShippingException>(() => testObject.Create(new ShipmentEntity { Order = new OrderEntity() }));
+            Assert.Throws<ShippingException>(() => testObject.Create(new ShipmentEntity
+            {
+                Order = new OrderEntity(),
+                Amazon = new AmazonShipmentEntity()
+                {
+                    ShippingServiceID = "UPS_GROUND"
+                }
+            }));
         }
 
         [Fact]
@@ -220,6 +227,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             enforcer1.VerifyAll();
             enforcer2.VerifyAll();
+        }
+
+        [Fact]
+        public void Create_ThrowsShippingException_WithInvalidShippingServiceID()
+        {
+            var testObject = mock.Create<AmazonLabelService>();
+
+            Assert.Throws<ShippingException>(() => testObject.Create(new ShipmentEntity
+            {
+                Order = new OrderEntity(),
+                Amazon = new AmazonShipmentEntity()
+                {
+                    ShippingServiceID = "-1"
+                }
+            }));
         }
 
         public void Dispose()

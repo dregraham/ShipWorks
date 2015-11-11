@@ -1041,6 +1041,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private static void ValidateInterapptiveCertificate(HttpWebRequest httpWebRequest)
         {
+#if !DEBUG
             if (httpWebRequest.ServicePoint == null)
             {
                 throw new TangoException("The SSL certificate on the server is invalid.");
@@ -1058,6 +1059,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new TangoException("The SSL certificate on the server is invalid.");
             }
+#endif
         }
 
 
