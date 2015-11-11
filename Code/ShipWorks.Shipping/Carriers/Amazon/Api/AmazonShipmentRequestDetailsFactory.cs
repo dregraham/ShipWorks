@@ -21,11 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             return new ShipmentRequestDetails
             {
                 AmazonOrderId = order.AmazonOrderID,
-                Insurance = new CurrencyAmount
-                    {
-                        Amount = 0,
-                        CurrencyCode = "USD"
-                    },
+                Insurance = null,
                 ItemList = GetItemList(order),
                 PackageDimensions = new PackageDimensions
                 {
