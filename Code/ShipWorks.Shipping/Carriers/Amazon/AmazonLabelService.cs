@@ -2,6 +2,7 @@
 using System.IO;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Pdf;
+using Interapptive.Shared.Imaging;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
@@ -13,7 +14,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using Interapptive.Shared.Imaging;
 using log4net;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
