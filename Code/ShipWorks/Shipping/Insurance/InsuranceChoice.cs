@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -10,7 +9,7 @@ namespace ShipWorks.Shipping.Insurance
     /// <summary>
     /// Wraps an entity to provide consist API for accessing insurance information
     /// </summary>
-    public class InsuranceChoice
+    public class InsuranceChoice : IInsuranceChoice
     {
         ShipmentEntity shipment;
 
