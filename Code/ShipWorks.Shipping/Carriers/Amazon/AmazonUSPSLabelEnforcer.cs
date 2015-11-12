@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             IAmazonCredentials store = GetStore(shipment);
             AmazonShippingToken shippingToken = store.GetShippingToken();
 
-            if (shippingToken.ErrorDate.Date == dateTimeProvider.CurrentSqlServerDateTime.Date)
+            if (shippingToken.ErrorDate.Date >= dateTimeProvider.CurrentSqlServerDateTime.Date)
             {
                 return new EnforcementResult(shippingToken.ErrorReason);
             }
