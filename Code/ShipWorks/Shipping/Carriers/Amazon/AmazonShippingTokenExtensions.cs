@@ -1,5 +1,9 @@
 ﻿using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -28,7 +32,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Set the shipping token on the store
         /// </summary>
-        public static void SetShippingToken(this IAmazonCredentials store, AmazonShippingToken shippingToken) =>
-            store.ShippingToken = SecureText.Encrypt(JsonConvert.SerializeObject(shippingToken), amazonShippingTokenEncryptionKey);
+        public static void SetShippingToken(this IAmazonCredentials store, AmazonShippingToken shippingToken, IStoreManager storeManager)
+        {
+            store.ShippingToken = SecureText.Encrypt(JsonConvert.SerializeObject(shippingToken),
+                amazonShippingTokenEncryptionKey);
+
+            storeManager.SaveStore(store as StoreEntity);
+        }
     }
 }

@@ -27,5 +27,12 @@ namespace ShipWorks.Stores
         /// Get the store for the related Shipment
         /// </summary>
         StoreEntity GetRelatedStore(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Saves the store.
+        /// </summary>
+        /// <param name="store">The store.</param>
+        /// <returns></returns>
+        StoreEntity SaveStore(StoreEntity store);
     }
 }
