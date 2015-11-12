@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.Amazon.Enums;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
 {
+    [Serializable]
     [XmlRoot(ElementName = "GetEligibleShippingServicesResponse", Namespace = "https://mws.amazonservices.com/MerchantFulfillment/2015-06-01")]
     public class GetEligibleShippingServicesResponse
     {
@@ -14,6 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public GetEligibleShippingServicesResult GetEligibleShippingServicesResult { get; set; }
     }
 
+    [Serializable]
     [XmlRoot(ElementName = "GetEligibleShippingServicesResult")]
     public class GetEligibleShippingServicesResult
     {
@@ -27,6 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public TermsAndConditionsNotAcceptedCarrierList TermsAndConditionsNotAcceptedCarrierList { get; set; }
     }
 
+    [Serializable]
     [XmlRoot(ElementName = "Rate")]
     public class Rate
     {
@@ -37,6 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public string CurrencyCode { get; set; }
     }
 
+    [Serializable]
     [XmlRoot(ElementName = "ShippingServiceList")]
     public class ShippingServiceList
     {
@@ -44,6 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public List<ShippingService> ShippingService { get; set; }
     }
 
+    [Serializable]
     [XmlRoot(ElementName = "ShippingService")]
     public class ShippingService
     {
@@ -75,6 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public string ShippingServiceName { get; set; }
     }
 
+    [Serializable]
     [XmlRoot(ElementName = "ShippingServiceOptions")]
     public class ShippingServiceOptions
     {
@@ -88,6 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public string DeliveryExperience { get; set; }
     }
 
+    [Serializable]
     [XmlRoot(ElementName = "DeclaredValue")]
     public class DeclaredValue
     {
@@ -98,6 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public decimal Amount { get; set; }
     }
 
+    [Serializable]
     [XmlRoot(ElementName = "TemporarilyUnavailableCarrier")]
     public class TemporarilyUnavailableCarrier
     {
@@ -105,6 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public string CarrierName { get; set; }
     }
 
+    [Serializable]
     [XmlRoot(ElementName = "TemporarilyUnavailableCarrierList")]
     public class TemporarilyUnavailableCarrierList
     {
@@ -112,6 +121,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public List<TemporarilyUnavailableCarrier> TemporarilyUnavailableCarrier { get; set; }
     }
 
+    [Serializable]
     [XmlRoot(ElementName = "TermsAndConditionsNotAcceptedCarrier")]
     public class TermsAndConditionsNotAcceptedCarrier
     {
@@ -119,6 +129,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public List<string> CarrierName { get; set; }
     }
 
+    [Serializable]
     [XmlRoot(ElementName = "TermsAndConditionsNotAcceptedCarrierList")]
     public class TermsAndConditionsNotAcceptedCarrierList
     {
