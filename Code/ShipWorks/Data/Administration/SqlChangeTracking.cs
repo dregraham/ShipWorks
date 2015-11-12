@@ -63,8 +63,7 @@ namespace ShipWorks.Data.Administration
                 "ShipmentCustomsItem",
                 "ShippingOrigin",
                 "ShippingPrintOutput",
-                "ShippingProviderRule",
-                "AmazonAccount"
+                "ShippingProviderRule"
             };
         }
 
