@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 ErrorDate = dateTimeProvider.CurrentSqlServerDateTime.Date,
                 ErrorReason =
-                    "ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your UPS account is linked correctly in Amazon Seller Central."
+                    "ShipWorks experienced an error while trying to create your shipping label using the Amazon Shipping service. Please confirm your UPS account is linked correctly in Amazon Seller Central. If you have confirmed your account is linked properly, please call ShipWorks customer support at 1-800-952-7784."
             };
 
             store.SetShippingToken(shippingToken);
