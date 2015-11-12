@@ -8,132 +8,132 @@ using ShipWorks.Shipping.Carriers.Amazon.Enums;
 namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
 {
     [Serializable]
-    [XmlRoot(ElementName = "GetEligibleShippingServicesResponse", Namespace = "https://mws.amazonservices.com/MerchantFulfillment/2015-06-01")]
+    [XmlRoot("GetEligibleShippingServicesResponse", Namespace = "https://mws.amazonservices.com/MerchantFulfillment/2015-06-01")]
     public class GetEligibleShippingServicesResponse
     {
-        [XmlElement(ElementName = "GetEligibleShippingServicesResult")]
+        [XmlElement("GetEligibleShippingServicesResult")]
         public GetEligibleShippingServicesResult GetEligibleShippingServicesResult { get; set; }
     }
 
     [Serializable]
-    [XmlRoot(ElementName = "GetEligibleShippingServicesResult")]
+    [XmlRoot("GetEligibleShippingServicesResult")]
     public class GetEligibleShippingServicesResult
     {
-        [XmlElement(ElementName = "ShippingServiceList")]
+        [XmlElement("ShippingServiceList")]
         public ShippingServiceList ShippingServiceList { get; set; }
 
-        [XmlElement(ElementName = "TemporarilyUnavailableCarrierList")]
+        [XmlElement("TemporarilyUnavailableCarrierList")]
         public TemporarilyUnavailableCarrierList TemporarilyUnavailableCarrierList { get; set; }
 
-        [XmlElement(ElementName = "TermsAndConditionsNotAcceptedCarrierList")]
+        [XmlElement("TermsAndConditionsNotAcceptedCarrierList")]
         public TermsAndConditionsNotAcceptedCarrierList TermsAndConditionsNotAcceptedCarrierList { get; set; }
     }
 
     [Serializable]
-    [XmlRoot(ElementName = "Rate")]
+    [XmlRoot("Rate")]
     public class Rate
     {
-        [XmlElement(ElementName = "Amount")]
+        [XmlElement("Amount")]
         public decimal Amount { get; set; }
 
-        [XmlElement(ElementName = "CurrencyCode")]
+        [XmlElement("CurrencyCode")]
         public string CurrencyCode { get; set; }
     }
 
     [Serializable]
-    [XmlRoot(ElementName = "ShippingServiceList")]
+    [XmlRoot("ShippingServiceList")]
     public class ShippingServiceList
     {
-        [XmlElement(ElementName = "ShippingService")]
+        [XmlElement("ShippingService")]
         public List<ShippingService> ShippingService { get; set; }
     }
 
     [Serializable]
-    [XmlRoot(ElementName = "ShippingService")]
+    [XmlRoot("ShippingService")]
     public class ShippingService
     {
-        [XmlElement(ElementName = "CarrierName")]
+        [XmlElement("CarrierName")]
         public string CarrierName { get; set; }
 
-        [XmlElement(ElementName = "ShippingServiceOptions")]
+        [XmlElement("ShippingServiceOptions")]
         public ShippingServiceOptions ShippingServiceOptions { get; set; }
 
-        [XmlElement(ElementName = "ShippingServiceId")]
+        [XmlElement("ShippingServiceId")]
         public string ShippingServiceId { get; set; }
 
-        [XmlElement(ElementName = "Rate")]
+        [XmlElement("Rate")]
         public Rate Rate { get; set; }
 
-        [XmlElement(ElementName = "LatestEstimatedDeliveryDate")]
+        [XmlElement("LatestEstimatedDeliveryDate")]
         public string LatestEstimatedDeliveryDate { get; set; }
 
-        [XmlElement(ElementName = "EarliestEstimatedDeliveryDate")]
+        [XmlElement("EarliestEstimatedDeliveryDate")]
         public string EarliestEstimatedDeliveryDate { get; set; }
         
-        [XmlElement(ElementName = "ShippingServiceOfferId")]
+        [XmlElement("ShippingServiceOfferId")]
         public string ShippingServiceOfferId { get; set; }
         
-        [XmlElement(ElementName = "ShipDate")]
+        [XmlElement("ShipDate")]
         public string ShipDate { get; set; }
         
-        [XmlElement(ElementName = "ShippingServiceName")]
+        [XmlElement("ShippingServiceName")]
         public string ShippingServiceName { get; set; }
     }
 
     [Serializable]
-    [XmlRoot(ElementName = "ShippingServiceOptions")]
+    [XmlRoot("ShippingServiceOptions")]
     public class ShippingServiceOptions
     {
-        [XmlElement(ElementName = "CarrierWillPickUp")]
+        [XmlElement("CarrierWillPickUp")]
         public bool CarrierWillPickUp { get; set; }
 
-        [XmlElement(ElementName = "DeclaredValue")]
+        [XmlElement("DeclaredValue")]
         public DeclaredValue DeclaredValue { get; set; }
 
-        [XmlElement(ElementName = "DeliveryExperience")]
+        [XmlElement("DeliveryExperience")]
         public string DeliveryExperience { get; set; }
     }
 
     [Serializable]
-    [XmlRoot(ElementName = "DeclaredValue")]
+    [XmlRoot("DeclaredValue")]
     public class DeclaredValue
     {
-        [XmlElement(ElementName = "CurrencyCode")]
+        [XmlElement("CurrencyCode")]
         public string CurrencyCode { get; set; }
 
-        [XmlElement(ElementName = "Amount")]
+        [XmlElement("Amount")]
         public decimal Amount { get; set; }
     }
 
     [Serializable]
-    [XmlRoot(ElementName = "TemporarilyUnavailableCarrier")]
+    [XmlRoot("TemporarilyUnavailableCarrier")]
     public class TemporarilyUnavailableCarrier
     {
-        [XmlElement(ElementName = "CarrierName")]
+        [XmlElement("CarrierName")]
         public string CarrierName { get; set; }
     }
 
     [Serializable]
-    [XmlRoot(ElementName = "TemporarilyUnavailableCarrierList")]
+    [XmlRoot("TemporarilyUnavailableCarrierList")]
     public class TemporarilyUnavailableCarrierList
     {
-        [XmlElement(ElementName = "TemporarilyUnavailableCarrier")]
+        [XmlElement("TemporarilyUnavailableCarrier")]
         public List<TemporarilyUnavailableCarrier> TemporarilyUnavailableCarrier { get; set; }
     }
 
     [Serializable]
-    [XmlRoot(ElementName = "TermsAndConditionsNotAcceptedCarrier")]
+    [XmlRoot("TermsAndConditionsNotAcceptedCarrier")]
     public class TermsAndConditionsNotAcceptedCarrier
     {
-        [XmlElement(ElementName = "CarrierName")]
+        [XmlElement("CarrierName")]
         public List<string> CarrierName { get; set; }
     }
 
     [Serializable]
-    [XmlRoot(ElementName = "TermsAndConditionsNotAcceptedCarrierList")]
+    [XmlRoot("TermsAndConditionsNotAcceptedCarrierList")]
     public class TermsAndConditionsNotAcceptedCarrierList
     {
-        [XmlElement(ElementName = "TermsAndConditionsNotAcceptedCarrier")]
+        [XmlElement("TermsAndConditionsNotAcceptedCarrier")]
         public TermsAndConditionsNotAcceptedCarrier TermsAndConditionsNotAcceptedCarrier { get; set; }
     }
 }
