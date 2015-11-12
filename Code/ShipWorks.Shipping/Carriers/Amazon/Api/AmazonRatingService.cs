@@ -9,6 +9,7 @@ using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 using System;
+using log4net;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -74,8 +75,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             List<RateResult> rateResults = new List<RateResult>();
             RateGroup rateGroup;
 
+            ILog log = LogManager.GetLogger("AmazonRatingService");
+
+            log.Info($"Response {response}");
+            log.Info($"Response.GetEligibleShippingServicesResult {response.GetEligibleShippingServicesResult}");
+            log.Info($"Response.GetEligibleShippingServicesResult.ShippingServiceList {response.GetEligibleShippingServicesResult.ShippingServiceList}");
             ShippingServiceList serviceList = response.GetEligibleShippingServicesResult.ShippingServiceList;
 
+            log.Info($"serviceList {serviceList}");
+            log.Info($"serviceList.ShippingService {serviceList.ShippingService}");
             if (serviceList.ShippingService.None() || serviceList.ShippingService.All(x => x.Rate == null))
             {
                 // Return an empty list of rates so that the rate control can display the appropriate text.
@@ -93,6 +101,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                         CarrierName = shippingService.CarrierName
                     };
 
+
+                    log.Info($"shippingService.Rate.Amount: {shippingService.Rate.Amount}");
                     RateResult rateResult = new RateResult(shippingService.ShippingServiceName ?? "Unknown", "", shippingService.Rate.Amount, tag);
                     rateResult.ProviderLogo = GetProviderLogo(shippingService.CarrierName ?? string.Empty);
                     rateResults.Add(rateResult);
@@ -101,10 +111,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 rateGroup = new RateGroup(rateResults);
             }
 
+            log.Info($"response.GetEligibleShippingServicesResult?: ${response.GetEligibleShippingServicesResult}");
+            log.Info($"response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?: ${response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList}");
+            log.Info($"response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier: ${response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier}");
+            log.Info($"response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier.CarrierName: ${response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier.CarrierName}");
+
             // Add terms and conditions footnote if needed
-            List<string> carriers = response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier.CarrierName;
+            List <string> carriers = response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier.CarrierName;
             if (carriers != null && carriers.Any())
             {
+                log.Info($"carriers.Distinct(): {carriers.Distinct()}");
                 List<string> carrierNames = carriers.Distinct().ToList();
 
                 rateGroup.AddFootnoteFactory(new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(carrierNames));
