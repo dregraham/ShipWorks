@@ -75,6 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             };
 
             store.SetShippingToken(shippingToken);
+            storeManager.SaveStore(store as StoreEntity);
         }
 
         /// <summary>

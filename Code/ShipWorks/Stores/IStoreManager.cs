@@ -31,8 +31,6 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Saves the store.
         /// </summary>
-        /// <param name="store">The store.</param>
-        /// <returns></returns>
-        StoreEntity SaveStore(StoreEntity store);
+        void SaveStore(StoreEntity store);
     }
 }

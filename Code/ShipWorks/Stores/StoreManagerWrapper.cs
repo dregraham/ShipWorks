@@ -35,6 +35,16 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
+        /// Saves the store.
+        /// </summary>
+        public void SaveStore(StoreEntity store)
+        {
+            StoreManager.SaveStore(store);
+            StatusPresetManager.CheckForChanges();
+            StoreManager.CheckForChanges();
+        }
+
+        /// <summary>
         /// Get the store with the given ID.  If it does not exist, null is returned
         /// </summary>
         public StoreEntity GetStore(long storeID)

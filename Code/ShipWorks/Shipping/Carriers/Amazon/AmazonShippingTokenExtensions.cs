@@ -32,12 +32,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Set the shipping token on the store
         /// </summary>
-        public static void SetShippingToken(this IAmazonCredentials store, AmazonShippingToken shippingToken, IStoreManager storeManager)
+        public static void SetShippingToken(this IAmazonCredentials store, AmazonShippingToken shippingToken)
         {
             store.ShippingToken = SecureText.Encrypt(JsonConvert.SerializeObject(shippingToken),
                 amazonShippingTokenEncryptionKey);
-
-            storeManager.SaveStore(store as StoreEntity);
         }
     }
 }
