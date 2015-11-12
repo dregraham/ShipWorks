@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -60,6 +61,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             get
             {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    message = Code;
+                }
+
+                if (message.Contains("validation error"))
+                {
+                    return TransformValidationErrors(message);
+                }
+
                 // Sometimes Amazon does not give us an error message
                 // If the error message is empty then we will provide
                 // our own message based on the code.
@@ -95,6 +106,46 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                         return message;
                 }
             }
+        }
+
+        /// <summary>
+        /// Transforms a list of validation errors
+        /// </summary>
+        private static string TransformValidationErrors(string message)
+        {
+            string errors = message.Substring(message.IndexOf(':') + 1);
+
+            string[] errorArray = errors.Split(';');
+
+            return errorArray.Aggregate("", (current, error) => current + $"{TransformError(error)} \n");
+        }
+
+        /// <summary>
+        /// Transforms error into more readable error
+        /// </summary>
+        private static string TransformError(string error)
+        {
+            error = error.Replace("shipmentRequestDetails.", "");
+            error = error.Replace("packageDimensions.", "");
+            error = error.Replace(".value", "");
+            error = error.Replace("Value '0' at", "");
+            error = error.Replace("Value null at", "");
+            error = error.Replace("shipFromAddress.", "Ship from address ");
+
+            error = error.Replace("addressLine1", "line1");
+            error = error.Replace("addressLine2", "line2");
+            error = error.Replace("addressLine3", "line3");
+
+            error = error.Replace(
+                "failed to satisfy constraint: Member must have value greater than or equal to 0.001", "must be greater than 0.");
+            error = error.Replace(
+                "failed to satisfy constraint: Member must not be null", "cannnot be blank.");
+
+            error = error.Replace("'", "");
+
+            error = error.Trim();
+
+            return char.ToUpper(error[0]) + error.Substring(1).Trim();
         }
     }
 }
