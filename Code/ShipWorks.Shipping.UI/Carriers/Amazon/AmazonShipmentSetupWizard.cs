@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
@@ -27,6 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         protected AmazonShipmentSetupWizard()
         {
             InitializeComponent();
+            HelpLink.LinkArea = new LinkArea(HelpLink.Text.IndexOf("Click here for instructions", StringComparison.Ordinal), 27);
         }
 
         /// <summary>

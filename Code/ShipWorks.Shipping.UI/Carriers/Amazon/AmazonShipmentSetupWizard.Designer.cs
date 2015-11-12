@@ -84,14 +84,12 @@
             // HelpLink
             // 
             this.HelpLink.AutoSize = true;
-            this.HelpLink.LinkArea = new System.Windows.Forms.LinkArea(299, 27);
+            this.HelpLink.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
             this.HelpLink.Location = new System.Drawing.Point(20, 10);
             this.HelpLink.Name = "HelpLink";
-            this.HelpLink.Size = new System.Drawing.Size(473, 85);
+            this.HelpLink.Size = new System.Drawing.Size(444, 78);
             this.HelpLink.TabIndex = 0;
-            this.HelpLink.TabStop = true;
             this.HelpLink.Text = resources.GetString("HelpLink.Text");
-            this.HelpLink.UseCompatibleTextRendering = true;
             // 
             // wizardPageWelcome
             // 
