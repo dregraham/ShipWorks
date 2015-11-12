@@ -299,6 +299,10 @@
     <ObfuscationExcludedAssemblies Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da" />
     <ObfuscationExcludedAssemblies Include="Autofac.Extras.Attributed, Version=3.3.0.213, Culture=neutral, PublicKeyToken=17863af14b0044da" />
     <ObfuscationExcludedAssemblies Include="Autofac.Integration.Mef, Version=3.0.3.0, Culture=neutral, PublicKeyToken=17863af14b0044da" />
+    <ObfuscationExcludedAssemblies Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <ObfuscationExcludedAssemblies Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <ObfuscationExcludedAssemblies Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <ObfuscationExcludedAssemblies Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
   </ItemGroup>
   <ItemGroup>
     <ObfuscationExcludedRegEx Include="^(Triggers|UserDefinedFunctions|StoredProcedures)::.+" />
