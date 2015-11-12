@@ -263,42 +263,42 @@
 
   <!-- Obfuscate the assemblies -->
   <ItemGroup>
-    <ObfuscationExcludedAssemblies Include="Apitron.PDF.Rasterizer, Version=3.0.25.0, Culture=neutral, PublicKeyToken=6E759DBB0039406E" />
-    <ObfuscationExcludedAssemblies Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
-    <ObfuscationExcludedAssemblies Include="Divelements.SandGrid, Version=2.2.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
-    <ObfuscationExcludedAssemblies Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
-    <ObfuscationExcludedAssemblies Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a" />
-    <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
-    <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
-    <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
-    <ObfuscationExcludedAssemblies Include="ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e" />
-    <ObfuscationExcludedAssemblies Include="ActiproSoftware.WinUICore.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=1eba893a2bc55de5" />
-    <ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
-    <ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
     <ObfuscationExcludedAssemblies Include="ActiproSoftware.Shared.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9" />
-    <ObfuscationExcludedAssemblies Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-    <ObfuscationExcludedAssemblies Include="Rebex.Ftp, Version=4.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-    <ObfuscationExcludedAssemblies Include="Rebex.Networking, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
+    <ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
+    <ObfuscationExcludedAssemblies Include="ActiproSoftware.WinUICore.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=1eba893a2bc55de5" />
+    <ObfuscationExcludedAssemblies Include="Apitron.PDF.Rasterizer, Version=3.0.25.0, Culture=neutral, PublicKeyToken=6E759DBB0039406E" />
+    <ObfuscationExcludedAssemblies Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da" />
+    <ObfuscationExcludedAssemblies Include="Autofac.Extras.Attributed, Version=3.3.0.213, Culture=neutral, PublicKeyToken=17863af14b0044da" />
+    <ObfuscationExcludedAssemblies Include="Autofac.Integration.Mef, Version=3.0.3.0, Culture=neutral, PublicKeyToken=17863af14b0044da" />
+    <ObfuscationExcludedAssemblies Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" />
+    <ObfuscationExcludedAssemblies Include="Common.Logging.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" />
+    <ObfuscationExcludedAssemblies Include="Common.Logging.Log4Net1213, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" />
+    <ObfuscationExcludedAssemblies Include="ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e" />
+    <ObfuscationExcludedAssemblies Include="Divelements.SandGrid, Version=2.2.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
+    <ObfuscationExcludedAssemblies Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
+    <ObfuscationExcludedAssemblies Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a" />
+    <ObfuscationExcludedAssemblies Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <ObfuscationExcludedAssemblies Include="NAudio, Version=1.6.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <ObfuscationExcludedAssemblies Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" />
+    <ObfuscationExcludedAssemblies Include="Quartz, Version=2.3.2.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4" />
     <ObfuscationExcludedAssemblies Include="Rebex.Common, Version=2.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-    <ObfuscationExcludedAssemblies Include="Rebex.Sftp, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Ftp, Version=4.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
     <ObfuscationExcludedAssemblies Include="Rebex.Net.Imap, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
     <ObfuscationExcludedAssemblies Include="Rebex.Net.Pop3, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
     <ObfuscationExcludedAssemblies Include="Rebex.Net.ProxySocket, Version=2.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
     <ObfuscationExcludedAssemblies Include="Rebex.Net.SecureSocket, Version=3.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
     <ObfuscationExcludedAssemblies Include="Rebex.Net.Smtp, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Networking, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
     <ObfuscationExcludedAssemblies Include="Rebex.Security, Version=1.5.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-    <ObfuscationExcludedAssemblies Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-    <ObfuscationExcludedAssemblies Include="SpreadsheetGear, Version=6.0.3.190, Culture=neutral, PublicKeyToken=39c186f5904944ec" />
-    <ObfuscationExcludedAssemblies Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Sftp, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
     <ObfuscationExcludedAssemblies Include="RestSharp, Version=104.1.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
-    <ObfuscationExcludedAssemblies Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" />
-    <ObfuscationExcludedAssemblies Include="Common.Logging.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" />
-    <ObfuscationExcludedAssemblies Include="Common.Logging.Log4Net1213, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e" />
-    <ObfuscationExcludedAssemblies Include="Quartz, Version=2.3.2.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4" />
-    <ObfuscationExcludedAssemblies Include="NAudio, Version=1.6.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
-    <ObfuscationExcludedAssemblies Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da" />
-    <ObfuscationExcludedAssemblies Include="Autofac.Extras.Attributed, Version=3.3.0.213, Culture=neutral, PublicKeyToken=17863af14b0044da" />
-    <ObfuscationExcludedAssemblies Include="Autofac.Integration.Mef, Version=3.0.3.0, Culture=neutral, PublicKeyToken=17863af14b0044da" />
+    <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
+    <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
+    <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
+    <ObfuscationExcludedAssemblies Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
+    <ObfuscationExcludedAssemblies Include="SpreadsheetGear, Version=6.0.3.190, Culture=neutral, PublicKeyToken=39c186f5904944ec" />
     <ObfuscationExcludedAssemblies Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <ObfuscationExcludedAssemblies Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <ObfuscationExcludedAssemblies Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
