@@ -5,7 +5,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
     /// <summary>
     /// Amazon rate info
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class AmazonRateTag
     {
         /// <summary>
