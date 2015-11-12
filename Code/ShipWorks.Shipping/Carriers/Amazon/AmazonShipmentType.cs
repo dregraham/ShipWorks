@@ -385,5 +385,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 new TrackingResult { Summary = "No tracking information available..." } :
                 new TrackingResult { Summary = $"<a style='background-color:#FAFAFA; color:#2266AA;' href ={trackingLink}> Click here for tracking</a>" };
         }
+
+        /// <summary>
+        /// Get the Amazon shipment detail
+        /// </summary>
+        public override ShipmentCommonDetail GetShipmentCommonDetail(ShipmentEntity shipment)
+        {
+            ShipmentCommonDetail commonDetail = new ShipmentCommonDetail();
+
+            AmazonShipmentEntity amazonShipment = shipment.Amazon;
+            
+            commonDetail.PackageLength = amazonShipment.DimsLength;
+            commonDetail.PackageWidth = amazonShipment.DimsWidth;
+            commonDetail.PackageHeight = amazonShipment.DimsHeight;
+
+            return commonDetail;
+        }
     }
 }
