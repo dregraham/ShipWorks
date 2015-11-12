@@ -49,9 +49,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     throw new ArgumentOutOfRangeException(nameof(shipmentTypeCode), shipmentTypeCode, "Only supports Stamps.com and UPS");
             }
 
-            const string linkText = "linked correctly in Amazon Seller Central";
+            const string linkText = "Amazon Seller Central";
 
-            MessageLink.Text = $"Shipworks could not retrieve {EnumHelper.GetDescription(shipmentTypeCode)} rates. Please confirm your {providerType} account is {linkText}{extraMessaging}. ";
+            MessageLink.Text = $"Shipworks could not retrieve {EnumHelper.GetDescription(shipmentTypeCode)} rates. Please confirm your {providerType} account is linked correctly in {linkText}{extraMessaging}. ";
 
             MessageLink.LinkArea = new LinkArea(
                 MessageLink.Text.IndexOf(linkText, StringComparison.OrdinalIgnoreCase),
