@@ -319,6 +319,7 @@
     <ObfuscationExcludedRegEx Include="ShipWorks\.Shipping\.Carriers\.OnTrac\.Schemas\..+\..+(::.+)?" />
     <ObfuscationExcludedRegEx Include="ShipWorks\.Stores\.Platforms\.Newegg\.Net.*Response\..+::.+" />
     <ObfuscationExcludedRegEx Include="ShipWorks\.Stores\.Platforms\.BigCommerce\.DTO\..+::.+" />
+    <ObfuscationExcludedRegEx Include="ShipWorks\.Shipping\.Carriers\.Amazon.\Api\.DTOs\..+::.+" />
   </ItemGroup>
   <Target Name="Obfuscate" Condition=" $(Obfuscate) == 'True' ">
 
