@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
     /// <summary>
     /// Object used to store, encrypt and decrypt an Amazon shipping token
     /// </summary>
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class AmazonShippingToken
     {
         /// <summary>
