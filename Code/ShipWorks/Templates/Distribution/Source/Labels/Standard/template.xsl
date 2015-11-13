@@ -36,10 +36,6 @@
                                 <xsl:when test="$shipment/ShipmentType = 'UPS'">
                                     <img src="{.}" style="width:576; height:384;" />
                                 </xsl:when>
-
-                                <xsl:when test="$shipment/ShipmentType = 'Amazon'">
-                                  <img src="{.}" style="width:576; height:384;" />
-                                </xsl:when>
                                 
                                 <xsl:otherwise>
                                     <img src="{.}" style="width:{@widthInches}in; height:{@heightInches}in;" />
