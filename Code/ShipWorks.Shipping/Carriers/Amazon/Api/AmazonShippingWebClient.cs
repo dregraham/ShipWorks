@@ -6,6 +6,7 @@ using Interapptive.Shared.Net;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
@@ -347,24 +348,34 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Raise AmazonShipperException for errors returned to us in the response XML
         /// </summary>
-        private static void RaiseErrors(AmazonMwsApiCall api, IHttpResponseReader reader, IAmazonMwsWebClientSettings mwsSettings)
+        private static void RaiseErrors([Obfuscation(Exclude = true)] AmazonMwsApiCall api, IHttpResponseReader reader, IAmazonMwsWebClientSettings mwsSettings)
         {
             XNamespace ns = mwsSettings.GetApiNamespace(api);
 
             string responseText = reader.ReadResult();
-            XDocument xdoc = XDocument.Parse(responseText);
 
-            var error = (from e in xdoc.Descendants(ns + "Error")
-                         select new
-                         {
-                             Code = (string)e.Element(ns + "Code"),
-                             Message = (string)e.Element(ns + "Message")
-                         }).FirstOrDefault();
-
-            if (error != null)
+            // Try to parse the response and look for Errors
+            try
             {
-                // No message was provided so we use the error code
-                throw new AmazonShippingException(error.Message, error.Code);
+                XDocument xdoc = XDocument.Parse(responseText);
+
+                var error = (from e in xdoc.Descendants(ns + "Error")
+                             select new
+                             {
+                                 Code = (string)e.Element(ns + "Code"),
+                                 Message = (string)e.Element(ns + "Message")
+                             }).FirstOrDefault();
+
+                if (error != null)
+                {
+                    // No message was provided so we use the error code
+                    throw new AmazonShippingException(error.Message, error.Code);
+                }
+            }
+            catch (XmlException)
+            {
+                // Throw error because the response is not valid
+                throw new AmazonShippingException($"ShipWorks was unable to get a valid response for {api}.");
             }
         }
     }
