@@ -34,7 +34,10 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
 using Interapptive.Shared.Business.Geography;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping
 {
@@ -204,7 +207,35 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Checks whether this shipment type is allowed for the given shipment
         /// </summary>
-        public virtual bool IsAllowedFor(ShipmentEntity shipment) => true;
+        public virtual bool IsAllowedFor(ShipmentEntity shipment)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                // if IOrderManager and IStoreManager are available check and see
+                // if the order is prime and if we have Amazon credentials 
+                // if we have amazon credentials and the order is prime then we will only allow the Amazon carrier
+                if (lifetimeScope.IsRegistered<IOrderManager>() && lifetimeScope.IsRegistered<IStoreManager>())
+                {
+                    IOrderManager orderManager = lifetimeScope.Resolve<IOrderManager>();
+                    orderManager.PopulateOrderDetails(shipment);
+                    IAmazonOrder order = shipment.Order as IAmazonOrder;
+
+                    // Not an IAmazonOrder so we return true or Order is an IAmazonOrder return true if its not prime
+                    if (order == null || !order.IsPrime)
+                    {
+                        return true;
+                    }
+                    
+                    // Order is an IAmazonOrder and is Prime, return false (You can only ship prime orders using the Amazon carrier)
+                    if (order.IsPrime)
+                    {
+                        return false;
+                    }
+                }
+                // Issue with IoC not resolving IOrderManager and IStoreManager
+                return true;
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
