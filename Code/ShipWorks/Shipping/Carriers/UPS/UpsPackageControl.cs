@@ -369,7 +369,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
 
-            IEnumerable<InsuranceChoice> insuranceToLoad = packagesGrid.SelectedElements.OfType<GridRow>()
+            IEnumerable<IInsuranceChoice> insuranceToLoad = packagesGrid.SelectedElements.OfType<GridRow>()
                 .Select(x => x.Tag).OfType<List<UpsPackageEntity>>()
                 .SelectMany(x => x).Select(x => shipmentType.GetParcelDetail(x.UpsShipment.Shipment, x.UpsShipment.Packages.IndexOf(x)).Insurance);
 

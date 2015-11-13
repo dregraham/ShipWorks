@@ -123,6 +123,12 @@
     <Compile Include="Custom\EntityClasses\ActionFilterTriggerEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionQueueEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionTaskEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ChannelAdvisorOrderItemEntity.cs" />
+    <Compile Include="Custom\EntityClasses\AmazonOrderItemEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ChannelAdvisorStoreEntity.cs" />
+    <Compile Include="Custom\EntityClasses\AmazonStoreEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ChannelAdvisorOrderEntity.cs" />
+    <Compile Include="Custom\EntityClasses\AmazonOrderEntity.cs" />
     <Compile Include="Custom\EntityClasses\CommonEntityBase.cs" />
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\EbayOrderItemEntity.cs" />
@@ -145,7 +151,7 @@
     <Compile Include="Custom\EntityClasses\ThreeDCartStoreEntity.cs" />
     <Compile Include="Custom\EntityClasses\UserEntity.cs" />
     <Compile Include="Custom\EntityPersistedAction.cs" />
-    <Compile Include="Custom\EntityPersistedEvent.cs" />    
+    <Compile Include="Custom\EntityPersistedEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Custom\EntityClasses\FilterNodeEntity.cs" />
     <AppDesigner Include="Properties\" />
@@ -1181,7 +1187,7 @@
     </Compile>
     <Compile Include=".\RelationClasses\GrouponOrderItemRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>    
+    </Compile>
     <Compile Include=".\EntityClasses\LemonStandStoreEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
@@ -1210,6 +1216,21 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\ExcludedServiceTypeRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\AmazonAccountRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\AmazonShipmentEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\AmazonShipmentRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\AmazonProfileRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\AmazonProfileEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>

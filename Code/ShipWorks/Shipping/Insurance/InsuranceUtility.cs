@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Insurance
             // Trying to insure
             if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.ShipWorks)
             {
-                List<InsuranceChoice> insuranceChoices = 
+                List<IInsuranceChoice> insuranceChoices = 
                     Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
                     .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                     .Where(choice => choice.Insured).ToList();
@@ -295,6 +295,32 @@ namespace ShipWorks.Shipping.Insurance
 
             switch (shipmentType)
             {
+                case ShipmentTypeCode.Amazon:
+
+                    if (string.IsNullOrEmpty(shipment.Amazon?.CarrierName))
+                    {
+                        return;
+                    }
+
+                    cost.AdvertisePennyOne = false;
+                    if (shipment.Amazon.CarrierName == "STAMPS_DOT_COM")
+                    {
+                        rate = GetUspsRate(shipment);
+                    }
+                    else
+                    {
+                        // FedEx or UPS
+                        if (declaredValue > 0 && declaredValue <= 100)
+                        {
+                            cost.AddInfoMessage($"No ShipWorks Insurance coverage will be provided on this shipment\nsince it will be provided by the carrier.");
+                            return;
+                        }
+
+                        adjustedValue = Math.Max(declaredValue - 100, 0);
+                        rate = 0.55m;
+                    }
+                    break;
+
                 case ShipmentTypeCode.UpsWorldShip:
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.FedEx:
@@ -356,14 +382,7 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Usps:
                     {
-                        if (shipment.ShipPerson.IsDomesticCountry())
-                        {
-                            rate = 0.75m;
-                        }
-                        else
-                        {
-                            rate = 1.55m;
-                        }
+                        rate = GetUspsRate(shipment);
                     }
                     break;
 
@@ -386,6 +405,12 @@ namespace ShipWorks.Shipping.Insurance
             // Set the shipworks cost
             cost.ShipWorks = quantity * rate;
         }
+
+        /// <summary>
+        /// Gets the usps rate based on country
+        /// </summary>
+        private static decimal GetUspsRate(ShipmentEntity shipment)
+                    => shipment.ShipPerson.IsDomesticCountry() ? 0.75m : 1.55m;
 
         /// <summary>
         /// Get the native carrier cost of the give shipment with the specified declared value
@@ -439,6 +464,7 @@ namespace ShipWorks.Shipping.Insurance
                     }
                     break;
 
+                case ShipmentTypeCode.Amazon:
                 default:
 
                     // Unknown for other

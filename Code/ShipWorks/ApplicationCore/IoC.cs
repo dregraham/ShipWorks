@@ -5,6 +5,10 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using System.Reflection;
+using Interapptive.Shared.Messaging;
+using ShipWorks.Common;
+using ShipWorks.Data;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -53,6 +57,10 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<DataResourceManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterType<DateTimeProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -61,7 +69,14 @@ namespace ShipWorks.ApplicationCore
                 .AsSelf()
                 .SingleInstance();
 
+            builder.Register(context => Messenger.Current)
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterAssemblyModules(assemblies);
+
+            builder.RegisterType<EditionManagerWrapper>()
+                .AsImplementedInterfaces();
 
             current = builder.Build();
         }

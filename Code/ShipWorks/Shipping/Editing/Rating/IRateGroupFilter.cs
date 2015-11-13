@@ -1,7 +1,4 @@
-﻿using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
-
-namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
+﻿namespace ShipWorks.Shipping.Editing.Rating
 {
     /// <summary>
     /// Interface to allow carriers to implement a filter to apply to a list of RateResults

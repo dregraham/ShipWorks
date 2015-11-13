@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 using ShipWorks.ApplicationCore;
@@ -10,10 +8,7 @@ using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.IO.Zip;
-using ShipWorks.Templates;
 using System.Drawing;
-using Divelements.SandGrid.Rendering;
-using System.Windows.Forms;
 using System.Drawing.Imaging;
 
 namespace ShipWorks.Data
@@ -29,6 +24,14 @@ namespace ShipWorks.Data
         long resourceID;
         string filename;
         string label;
+
+        /// <summary>
+        /// Constructor to be used for tests, etc.
+        /// </summary>
+        protected DataResourceReference()
+        {
+
+        }
 
         /// <summary>
         /// Constructor
@@ -237,7 +240,7 @@ namespace ShipWorks.Data
                 case "__purged_print_thermal.swr":
                 case "__purged_email_plain.swr":
                 case "__purged_email_html_swr":
-                    
+
                     // All of these are special cased in the Email viewer and print result viewer to show the content, so the file contents don't really matter
                     File.WriteAllText(fullPath, "[Purged]");
 

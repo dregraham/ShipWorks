@@ -26,7 +26,7 @@ namespace ShipWorks.Data.Connection
     /// <summary>
     /// Class for managing the login session and connectivity to SQL Server
     /// </summary>
-    public class SqlSession
+    public class SqlSession : ISqlSession
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SqlSession));
 
