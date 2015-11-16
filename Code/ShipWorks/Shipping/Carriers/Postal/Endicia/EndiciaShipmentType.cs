@@ -148,15 +148,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create the UserControl used to handle Endicia profiles
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new EndiciaProfileControl(EndiciaReseller);
         }
-        
+
         /// <summary>
         /// Create the settings control for Endicia
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             EndiciaSettingsControl settingsControl = new EndiciaSettingsControl(EndiciaReseller);
             settingsControl.Initialize(ShipmentTypeCode);
@@ -269,7 +269,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // If we don't know the packaging or country, it doesn't matter
             if (!string.IsNullOrWhiteSpace(countryCode) && packaging != null)
             {
-                if (PostalUtility.IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
+                if (IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
                 {
                     availablePostalConfirmationTypes.Add(PostalConfirmationType.Delivery);
                     return availablePostalConfirmationTypes;

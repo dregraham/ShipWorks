@@ -25,6 +25,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         private readonly ILemonStandWebClient client;
         private readonly ISqlAdapterRetry sqlAdapter;
 
+        LemonStandStatusCodeProvider statusProvider;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
         /// </summary>
@@ -56,6 +58,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </exception>
         protected override void Download()
         {
+            UpdateOrderStatuses();
+
             Progress.Detail = "Downloading new orders...";
 
             try
@@ -95,21 +99,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 int expectedCount = jsonOrders.Count;
 
-                // Load orders 
-                foreach (JToken jsonOrder in jsonOrders)
-                {
-                    // check for cancellation
-                    if (Progress.IsCancelRequested)
-                    {
-                        return;
-                    }
-
-                    // Set the progress detail
-                    Progress.Detail = "Processing order " + (QuantitySaved + 1) + " of " + expectedCount + "...";
-                    Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
-
-                    LoadOrder(jsonOrder);
-                }
+                if (ProcessOrders(jsonOrders, expectedCount)) return;
 
                 Progress.Detail = "Done";
                 Progress.PercentComplete = 100;
@@ -122,6 +112,26 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new DownloadException(ex.Message, ex);
             }
+        }
+
+        private bool ProcessOrders(List<JToken> jsonOrders, int expectedCount)
+        {
+// Load orders 
+            foreach (JToken jsonOrder in jsonOrders)
+            {
+                // check for cancellation
+                if (Progress.IsCancelRequested)
+                {
+                    return true;
+                }
+
+                // Set the progress detail
+                Progress.Detail = "Processing order " + (QuantitySaved + 1) + " of " + expectedCount + "...";
+                Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
+
+                LoadOrder(jsonOrder);
+            }
+            return false;
         }
 
         /// <summary>
@@ -166,6 +176,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     (LemonStandOrderEntity) InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
                 order.LemonStandOrderID = lsOrder.ID;
                 order.OnlineStatus = lsOrder.Status;
+                order.OnlineStatusCode = lsOrder.ShopOrderStatusID;
 
                 // Only load new orders
                 if (order.IsNew)
@@ -469,6 +480,18 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
 
             return product;
+        }
+
+        /// <summary>
+        /// Update the local order status provider
+        /// </summary>
+        private void UpdateOrderStatuses()
+        {
+            Progress.Detail = "Updating status codes...";
+
+            // refresh the status codes from LemonStand
+            statusProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity)Store);
+            statusProvider.UpdateFromOnlineStore();
         }
     }
 }

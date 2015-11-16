@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -27,24 +24,12 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
         /// <summary>
         /// Gets the type code for this store
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.Brightpearl;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Brightpearl;
 
         /// <summary>
         /// Get the log source
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.Brightpearl;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.Brightpearl;
 
         /// <summary>
         /// Create the user control used in the Store Manager window.
@@ -65,5 +50,10 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
 
             return pages;
         }
+
+        /// <summary>
+        /// Gets the help URL to use in the setup wizard.
+        /// </summary>
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000022247-adding-a-brightpearl-store-in-shipworks";
     }
 }

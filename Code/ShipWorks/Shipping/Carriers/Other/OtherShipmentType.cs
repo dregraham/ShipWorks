@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Other
     /// <summary>
     /// "Other" (custom) ShipmentType implementation
     /// </summary>
-    class OtherShipmentType : ShipmentType
+    public class OtherShipmentType : ShipmentType
     {
         /// <summary>
         /// The ShipmentTypeCode enumeration value
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Create the control needed to edit the profile settings for the type
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new OtherProfileControl();
         }
@@ -172,7 +172,10 @@ namespace ShipWorks.Shipping.Carriers.Other
 
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment, shipment.Other, null),
-                new DimensionsAdapter());
+                new DimensionsAdapter())
+            {
+                TotalWeight = shipment.TotalWeight
+            };
         }
 
         /// <summary>

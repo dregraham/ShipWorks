@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.ApplicationCore.Logging;
+﻿using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 
@@ -25,31 +21,16 @@ namespace ShipWorks.Stores.Platforms.WPeCommerce
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.WPeCommerce;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.WPeCommerce;
 
         /// <summary>
         /// Log request/responses as WP eCommerce
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.WPeCommerce;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.WPeCommerce;
 
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000022267-connecting-wp-ecommerce-with"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000022267";
     }
 }

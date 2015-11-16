@@ -24,24 +24,12 @@ namespace ShipWorks.Stores.Platforms.ChannelSale
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.ChannelSale;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.ChannelSale;
 
         /// <summary>
         /// Log request/responses as CreLoaded
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.ChannelSale;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.ChannelSale;
 
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.
@@ -65,13 +53,7 @@ namespace ShipWorks.Stores.Platforms.ChannelSale
         /// <summary>
         /// Get the account settings help url
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get
-            {
-                return "http://support.shipworks.com/solution/articles/4000023678-connecting-channelsale-with";
-            }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000023678";
 
         /// <summary>
         /// Use the username, since the integration url will be the same for all customers.

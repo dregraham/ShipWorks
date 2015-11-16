@@ -15,6 +15,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.MessageBoxes;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -178,11 +180,14 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfileEntity profile = (ShippingProfileEntity) sandGrid.SelectedElements[0].Tag;
             initialProfileID = profile.ShippingProfileID;
 
-            using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(profile))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
+                    new TypedParameter(typeof(ShippingProfileEntity), profile)
+                );
+                profileEditor.ShowDialog(this);
 
-                LoadProfiles((ShipmentTypeCode) profile.ShipmentType);
+                LoadProfiles((ShipmentTypeCode)profile.ShipmentType);
             }
         }
 
@@ -204,13 +209,17 @@ namespace ShipWorks.Shipping.Profiles
             profile.ShipmentType = (int) SelectedShipmentType;
             profile.ShipmentTypePrimary = false;
 
-            using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(profile))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
+                ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
+                    new TypedParameter(typeof(ShippingProfileEntity), profile)
+                );
+
+                if (profileEditor.ShowDialog(this) == DialogResult.OK)
                 {
                     initialProfileID = profile.ShippingProfileID;
 
-                    LoadProfiles((ShipmentTypeCode) profile.ShipmentType);
+                    LoadProfiles((ShipmentTypeCode)profile.ShipmentType);
                 }
             }
         }

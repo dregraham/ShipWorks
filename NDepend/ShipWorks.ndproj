@@ -3,16 +3,17 @@
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
     <Name>Interapptive.Shared</Name>
-    <Name>ShipWorks</Name>
     <Name>ShipWorks.Shared</Name>
     <Name>ShipWorks.SqlServer</Name>
     <Name>ShipWorks.Core</Name>
     <Name>ShipWorks.Shipping</Name>
     <Name>ShipWorks.Shipping.UI</Name>
     <Name>ShipWorks.ThirdPartyApi</Name>
+    <Name>ShipWorks</Name>
+    <Name>ShipWorks.Stores.UI</Name>
+    <Name>ShipWorks.Stores</Name>
   </Assemblies>
   <FrameworkAssemblies>
-    <Name>mscorlib</Name>
     <Name>System.Data</Name>
     <Name>System</Name>
     <Name>System.Xml</Name>
@@ -64,6 +65,7 @@
     <Name>Quartz</Name>
     <Name>SD.LLBLGen.Pro.DQE.SqlServer.NET20</Name>
     <Name>Common.Logging.Log4Net1213</Name>
+    <Name>mscorlib</Name>
   </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319</Dir>
@@ -84,8 +86,8 @@
   </Dirs>
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <Report Kind="0" SectionsEnabled="45055" XslPath="" Flags="60416" />
-  <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="ParticularAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
-  <BaselineInUISetting ProjectMode="DontCompare" BuildMode="MostRecentAnalysisResultAvailable" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
+  <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\NDependAnalysisResult_ShipWorks_2015Oct28_10h51.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
+  <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\NDependAnalysisResult_ShipWorks_2015Oct28_10h51.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
   <CoverageFiles CoverageDir="" UncoverableAttribute="" />
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="">
     <Chart Name="Lines of Code" ShowInReport="True">
@@ -4220,6 +4222,53 @@ warnif count > 41 from  t in JustMyCode.Types where
  orderby t.NbLinesOfCode
 
 select new { t, t.NbLinesOfCode }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed long methods</Name>
+from m in JustMyCode.Methods where m.CodeWasChanged() &&
+    m.NbLinesOfCode > 30 &&
+    m.NbLinesOfCode > m.OlderVersion().NbLinesOfCode &&
+    m.OlderVersion().NbLinesOfCode <= 30
+select new { 
+   m, 
+   m.NbLinesOfCode, 
+   oldNbLinesOfCode = m.OlderVersion().NbLinesOfCode ,
+   delta = (int?) m.NbLinesOfCode - m.OlderVersion().NbLinesOfCode 
+} ]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed complex methods</Name>
+from m in JustMyCode.Methods where m.CodeWasChanged() &&
+    m.CyclomaticComplexity > 20 &&
+    m.CyclomaticComplexity > m.OlderVersion().CyclomaticComplexity &&
+    m.OlderVersion().CyclomaticComplexity <= 20
+select new { 
+   m, 
+   m.CyclomaticComplexity , 
+   oldValue = m.OlderVersion().CyclomaticComplexity ,
+   delta = (int?) m.CyclomaticComplexity - m.OlderVersion().CyclomaticComplexity 
+}]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed methods w/ too many params</Name>
+from m in JustMyCode.Methods where m.CodeWasChanged() &&
+    m.NbParameters > 5 &&
+    m.NbParameters > m.OlderVersion().NbParameters &&
+    m.OlderVersion().NbParameters <= 5
+select new { 
+   m, 
+   m.NbParameters , 
+   oldValue = m.OlderVersion().NbParameters ,
+   delta = (int?) m.NbParameters - m.OlderVersion().NbParameters 
+}]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed types that are too long</Name>
+from t in JustMyCode.Types 
+where t.CodeWasChanged() &&
+    t.NbLinesOfCode> 500  &&
+    t.NbLinesOfCode> t.OlderVersion().NbLinesOfCode &&
+    t.OlderVersion().NbLinesOfCode <= 500
+orderby t.NbLinesOfCode descending
+select new { 
+   t, 
+   t.NbLinesOfCode, 
+   oldValue = t.OlderVersion().NbLinesOfCode,
+   delta = (int?) t.NbLinesOfCode- t.OlderVersion().NbLinesOfCode
+}
+]]></Query>
     </Group>
   </Queries>
 </NDepend>

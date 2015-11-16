@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -13,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Choxi
     public class ChoxiStoreType : GenericModuleStoreType
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoMoreRackStoreType"/> class.
+        /// Initializes a new instance of the <see cref="ChoxiStoreType"/> (formerly NoMoreRack) class.
         /// </summary>
         public ChoxiStoreType(StoreEntity store)
             : base(store)
@@ -24,25 +21,13 @@ namespace ShipWorks.Stores.Platforms.Choxi
         /// <summary>
         /// Gets the type code for this store
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.Choxi;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Choxi;
 
 
         /// <summary>
         /// Get the log source
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.Choxi;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.Choxi;
 
         /// <summary>
         /// Create the user control used in the Store Manager window.
@@ -79,9 +64,6 @@ namespace ShipWorks.Stores.Platforms.Choxi
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000044856-connecting-nomorerack"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000044856";
     }
 }

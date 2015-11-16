@@ -45,19 +45,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
         [JsonProperty("id")]
         public string ID { get; set; }
 
-        [JsonProperty("number")]
-        public string Number { get; set; }
-
         [JsonProperty("shipping_service")]
         public string ShippingService { get; set; }
-
-        [JsonProperty("notes")]
-        public string Notes { get; set; }
-
-        [JsonProperty("created_at")]
-        public string CreatedAt { get; set; }
-
-        [JsonProperty("updated_at")]
-        public string UpdatedAt { get; set; }
     }
 }

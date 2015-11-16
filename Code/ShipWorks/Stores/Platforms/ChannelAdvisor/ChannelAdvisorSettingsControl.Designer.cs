@@ -30,14 +30,15 @@
         {
             this.consolidator = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorConsolidatorSettingsControl();
             this.attributes = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorAttributesSettingsControl();
+            this.amazon = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorAmazonSettingsControl();
             this.SuspendLayout();
             // 
             // consolidator
             // 
             this.consolidator.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.consolidator.Location = new System.Drawing.Point(0, 98);
+            this.consolidator.Location = new System.Drawing.Point(0, 242);
             this.consolidator.Name = "consolidator";
-            this.consolidator.Size = new System.Drawing.Size(564, 69);
+            this.consolidator.Size = new System.Drawing.Size(582, 69);
             this.consolidator.TabIndex = 1;
             // 
             // attributes
@@ -49,18 +50,27 @@
             this.attributes.Location = new System.Drawing.Point(0, 0);
             this.attributes.Margin = new System.Windows.Forms.Padding(0);
             this.attributes.Name = "attributes";
-            this.attributes.Size = new System.Drawing.Size(564, 99);
+            this.attributes.Size = new System.Drawing.Size(582, 99);
             this.attributes.TabIndex = 0;
             this.attributes.SizeChanged += new System.EventHandler(this.OnAttributesResize);
+            // 
+            // amazon
+            // 
+            this.amazon.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.amazon.Location = new System.Drawing.Point(0, 113);
+            this.amazon.Name = "amazon";
+            this.amazon.Size = new System.Drawing.Size(582, 129);
+            this.amazon.TabIndex = 2;
             // 
             // ChannelAdvisorSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.amazon);
             this.Controls.Add(this.consolidator);
             this.Controls.Add(this.attributes);
             this.Name = "ChannelAdvisorSettingsControl";
-            this.Size = new System.Drawing.Size(564, 167);
+            this.Size = new System.Drawing.Size(582, 311);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -70,5 +80,6 @@
 
         private ChannelAdvisorAttributesSettingsControl attributes;
         private ChannelAdvisorConsolidatorSettingsControl consolidator;
+        private ChannelAdvisorAmazonSettingsControl amazon;
     }
 }

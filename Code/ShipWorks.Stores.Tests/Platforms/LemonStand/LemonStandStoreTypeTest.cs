@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Moq;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores.Platforms.LemonStand;
-using ShipWorks.Stores.Platforms.LemonStand.WizardPages;
 using Xunit;
 
-namespace ShipWorks.Tests.Stores.LemonStand
+namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 {
     public class LemonStandStoreTypeTest
     {
-        Mock<StoreEntity> store = new Mock<StoreEntity>();
-        Mock<LemonStandStoreEntity> lemonStandStore = new Mock<LemonStandStoreEntity>();
+        readonly Mock<StoreEntity> store = new Mock<StoreEntity>();
+        readonly Mock<LemonStandStoreEntity> lemonStandStore = new Mock<LemonStandStoreEntity>();
         string storeUrl = "shipworks.lemonstand.com";
         LemonStandStoreType testObject;
         
@@ -36,16 +34,6 @@ namespace ShipWorks.Tests.Stores.LemonStand
         {
             testObject = new LemonStandStoreType(lemonStandStore.Object);
             Assert.Equal(storeUrl, testObject.LicenseIdentifier);
-        }
-
-        [Fact]
-        public void CreateOnlineUpdateInstanceCommands_OnlyReturnsOneCommand_WhenStoreIsInstantiated_Test()
-        {
-            testObject = new LemonStandStoreType(lemonStandStore.Object);
-
-            List<MenuCommand> commands = testObject.CreateOnlineUpdateInstanceCommands();
-
-            Assert.Equal(1, commands.Count);
         }
 
         [Fact]

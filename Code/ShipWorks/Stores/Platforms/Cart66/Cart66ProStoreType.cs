@@ -21,31 +21,16 @@ namespace ShipWorks.Stores.Platforms.Cart66
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.Cart66Pro;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Cart66Pro;
 
         /// <summary>
         /// Log request/responses as Cart66 Pro
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.Cart66Pro;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.Cart66Pro;
 
         /// <summary>
         /// Gets the help URL to use in the setup wizard.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000022265-connecting-cart66-lite-or-pro-with"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000022265";
     }
 }

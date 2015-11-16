@@ -153,6 +153,8 @@ namespace ShipWorks.Stores
             newOrder.BillAddressValidationSuggestionCount = 0;
             newOrder.ShipAddressType = (int) AddressType.NotChecked;
 
+            newOrder.RequestedShipping = string.Empty;
+
             return newOrder;
         }
 
@@ -223,6 +225,11 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
+            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<OnlineUpdateActionControlBase>(TypeCode))
+            {
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<OnlineUpdateActionControlBase>(TypeCode);
+            }
+
             return null;
         }
 

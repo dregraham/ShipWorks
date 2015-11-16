@@ -34,14 +34,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
         public UspsRateGroupConsolidatorTest()
         {
+            uspsShipmentType = new UspsShipmentType();
+
             exceptionFootnoteFactory1 = new ExceptionsRateFootnoteFactory(uspsShipmentType, new Exception());
             exceptionFootnoteFactory2 = new ExceptionsRateFootnoteFactory(uspsShipmentType, new Exception());
 
             uspsRatePromotionFootnote1 = new UspsRatePromotionFootnoteFactory(uspsShipmentType, new ShipmentEntity(), true);
             uspsRatePromotionFootnote2 = new UspsRatePromotionFootnoteFactory(uspsShipmentType, new ShipmentEntity(), true);
             
-            uspsShipmentType = new UspsShipmentType();
-
             account1 = new UspsAccountEntity()
             {
                 UspsAccountID = 1

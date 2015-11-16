@@ -21,31 +21,16 @@ namespace ShipWorks.Stores.Platforms.InstanteStore
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.InstaStore;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.InstaStore;
 
         /// <summary>
         /// Log request/responses as InstanteStore
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.InstanteStore;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.InstanteStore;
 
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        //public override string AccountSettingsHelpUrl
-        //{
-        //    get { return "http://support.shipworks.com/solution/articles/4000022268-connecting-InstanteStore-with"; }
-        //}
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000055044";
     }
 }

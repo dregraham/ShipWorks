@@ -26,7 +26,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDistinctValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             // Verify that CheckboxMultiValueBinder is a child of GenericMultiValueBinder
             Assert.True(testObject is GenericMultiValueBinder<GenericMultiValueBinderDto<bool, string>, bool>);
@@ -38,7 +39,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDifferentValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             Assert.Equal(testObject.CheckStateValue, CheckState.Indeterminate);
         }
@@ -49,7 +51,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDistinctValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             testObject.PropertyValue = true;
 
@@ -62,7 +65,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDistinctValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             testObject.PropertyValue = false;
 

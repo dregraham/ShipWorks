@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Create the UserControl used to edit the overall fedex settings
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             FedExSettingsControl control = new FedExSettingsControl();
             control.Initialize(ShipmentTypeCode);
@@ -206,7 +206,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Create the UserControl used to edit FedEx profiles.
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new FedExProfileControl();
         }
@@ -952,7 +952,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 return new ShipmentParcel(shipment, package.FedExPackageID, package.TrackingNumber,
                     new InsuranceChoice(shipment, package, package, package),
-                    new DimensionsAdapter(package));
+                    new DimensionsAdapter(package))
+                {
+                    TotalWeight = package.Weight + package.DimsWeight
+                };
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");

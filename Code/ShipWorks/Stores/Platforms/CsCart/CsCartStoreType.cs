@@ -21,31 +21,16 @@ namespace ShipWorks.Stores.Platforms.CsCart
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.CsCart;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.CsCart;
 
         /// <summary>
         /// Log request/responses as CsCart
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.CsCart;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.CsCart;
 
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000042631-connecting-cs-cart"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000042631";
     }
 }

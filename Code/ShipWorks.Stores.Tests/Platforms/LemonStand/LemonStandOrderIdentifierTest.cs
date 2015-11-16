@@ -4,12 +4,11 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.LemonStand;
 using Xunit;
 
-namespace ShipWorks.Tests.Stores.LemonStand
+namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 {
     public class LemonStandOrderIdentifierTest
     {
         Mock<OrderEntity> order = new Mock<OrderEntity>();
-        Mock<LemonStandOrderEntity> lemonStandOrder = new Mock<LemonStandOrderEntity>(); 
         private LemonStandOrderIdentifier testObject;
 
         [Fact]

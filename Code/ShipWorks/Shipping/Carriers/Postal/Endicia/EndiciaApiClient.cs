@@ -434,7 +434,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // request.Services.DeliveryConfirmation = (postal.Confirmation == (int) PostalConfirmationType.Delivery) ? "ON" : "OFF"; -> Documented as set automatically and ignored by ELS
 
             // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
-            if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType) && request.Services.SignatureConfirmation != "ON")
+            if (endiciaShipmentType.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType) && request.Services.SignatureConfirmation != "ON")
             {
                 request.Services.DeliveryConfirmation = "ON";
             }

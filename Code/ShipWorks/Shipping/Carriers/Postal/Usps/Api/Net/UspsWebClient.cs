@@ -1199,7 +1199,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         break;
                 }
             }
-            else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
+            else if (((PostalShipmentType) ShipmentTypeManager.GetType(shipment)).IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
             {
                 // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
                 addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USADC });

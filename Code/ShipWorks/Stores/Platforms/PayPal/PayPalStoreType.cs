@@ -172,5 +172,10 @@ namespace ShipWorks.Stores.Platforms.PayPal
         {
             return AddressValidationStoreSettingType.ValidateAndNotify;
         }
+
+        /// <summary>
+        /// Gets the help URL to use in the account settings.
+        /// </summary>
+        public static string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/129331-ebay-setup-connecting-paypal-to-shipworks";
     }
 }
