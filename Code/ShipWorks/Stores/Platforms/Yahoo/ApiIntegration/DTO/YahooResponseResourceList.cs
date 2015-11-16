@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
         [XmlElement(ElementName = "OrderListQuery")]
         public YahooOrderListQuery OrderListQuery { get; set; }
 
-        [XmlElement(ElementName = "Order")]
-        public YahooOrder Order { get; set; }
+        [XmlElement(ElementName = "OrderList")]
+        public YahooOrderList OrderList { get; set; }
     }
 }

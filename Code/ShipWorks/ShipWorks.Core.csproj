@@ -1180,11 +1180,12 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCartShipmentInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCustomField.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCustomFieldsList.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooError.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooErrorResourceList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooGeneralInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooItem.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooItemList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrder.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderListQuery.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderStatus.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderTotals.cs" />

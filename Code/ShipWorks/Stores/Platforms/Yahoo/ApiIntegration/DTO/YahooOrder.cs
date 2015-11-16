@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
     public class YahooOrder
     {
         [XmlElement(ElementName = "OrderID")]
-        public string OrderID { get; set; }
+        public long OrderID { get; set; }
 
         [XmlElement(ElementName = "CreationTime")]
         public string CreationTime { get; set; }

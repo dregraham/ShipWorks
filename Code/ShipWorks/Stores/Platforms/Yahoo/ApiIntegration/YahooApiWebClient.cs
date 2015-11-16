@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             yahooCatalogEndpoint = $"https://{yahooStoreID}.catalog.store.yahooapis.com/V1";
         }
 
-        public string GetOrder(string orderID)
+        public string GetOrder(long orderID)
         {
             return ProcessRequest(CreateGetOrderRequest(orderID), "GetOrder");
         }
@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         ///     Setup a get request.
         /// </summary>
-        private HttpTextPostRequestSubmitter CreateGetOrderRequest(string orderID)
+        private HttpTextPostRequestSubmitter CreateGetOrderRequest(long orderID)
         {
             string body = GetRequestBodyIntro +
                 "<OrderListQuery>" +
