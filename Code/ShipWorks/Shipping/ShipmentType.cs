@@ -209,31 +209,17 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual bool IsAllowedFor(ShipmentEntity shipment)
         {
+            // Amazon prime orders can only be shipped via the Amazon carrier
+            // this is restriction is per Amazon. 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                // if IOrderManager and IStoreManager are available check and see
-                // if the order is prime and if we have Amazon credentials 
-                // if we have amazon credentials and the order is prime then we will only allow the Amazon carrier
-                if (lifetimeScope.IsRegistered<IOrderManager>() && lifetimeScope.IsRegistered<IStoreManager>())
-                {
-                    IOrderManager orderManager = lifetimeScope.Resolve<IOrderManager>();
-                    orderManager.PopulateOrderDetails(shipment);
-                    IAmazonOrder order = shipment.Order as IAmazonOrder;
+                IOrderManager orderManager = lifetimeScope.Resolve<IOrderManager>();
+                orderManager.PopulateOrderDetails(shipment);
 
-                    // Not an IAmazonOrder so we return true or Order is an IAmazonOrder return true if its not prime
-                    if (order == null || !order.IsPrime)
-                    {
-                        return true;
-                    }
-                    
-                    // Order is an IAmazonOrder and is Prime, return false (You can only ship prime orders using the Amazon carrier)
-                    if (order.IsPrime)
-                    {
-                        return false;
-                    }
-                }
-                // Issue with IoC not resolving IOrderManager and IStoreManager
-                return true;
+                IAmazonOrder order = shipment.Order as IAmazonOrder;
+
+                // If the order is Amazon Prime return false 
+                return !order?.IsPrime ?? true;
             }
         }
 
