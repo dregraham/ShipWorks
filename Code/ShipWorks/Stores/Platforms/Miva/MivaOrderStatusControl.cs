@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
@@ -83,7 +78,6 @@ namespace ShipWorks.Stores.Platforms.Miva
             }
 
             return new KeyValuePair<string, MivaOnlineUpdateStrategy>(name, mivaOnlineUpdateStrategy);
-
         }
 
         /// <summary>
@@ -100,68 +94,57 @@ namespace ShipWorks.Stores.Platforms.Miva
             store.OnlineUpdateStrategy = (int)updateStrategy.SelectedValue;
             store.OnlineUpdateStatusChangeEmail = sebenzaOrderStatusEmail.Checked;
 
-            // We have to update the core fields that represent our online update capabilities
-            switch ((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy)
+            try
             {
-                case MivaOnlineUpdateStrategy.None:
-                    {
-                        store.ModuleOnlineStatusSupport = (int) GenericOnlineStatusSupport.None;
-                        store.ModuleOnlineShipmentDetails = false;
-                        store.ModuleStatusCodes = "<Root />";
+                // We have to update the core fields that represent our online update capabilities
+                switch ((MivaOnlineUpdateStrategy)store.OnlineUpdateStrategy)
+                {
+                    case MivaOnlineUpdateStrategy.None:
+                        SaveNoneToEntity(store);
                         break;
-                    }
-
-                case MivaOnlineUpdateStrategy.Sebenza:
-                    {
-                        store.ModuleOnlineStatusSupport = (int) GenericOnlineStatusSupport.StatusWithComment;
-                        store.ModuleOnlineStatusDataType = (int) GenericVariantDataType.Text;
-                        store.ModuleOnlineShipmentDetails = true;
-
-                        if (store.Fields[(int) MivaStoreFieldIndex.ModuleOnlineStatusSupport].IsChanged)
-                        {
-                            try
-                            {
-                                GenericStoreStatusCodeProvider statusCodeProvider = ((MivaStoreType) StoreTypeManager.GetType(store)).CreateStatusCodeProvider();
-                                statusCodeProvider.UpdateFromOnlineStore();
-                            }
-                            catch (GenericStoreException ex)
-                            {
-                                MessageHelper.ShowError(this, "ShipWorks could not retrieve the list of online status options from Miva Merchant.\n\nDetails: " + ex.Message);
-                                return false;
-                            }
-                        }
-
+                    case MivaOnlineUpdateStrategy.Sebenza:
+                        SaveDetailsToEntity(store, GenericOnlineStatusSupport.StatusWithComment);
                         break;
-                    }
-
-                case MivaOnlineUpdateStrategy.MivaNative:
-                    {
-                        store.ModuleOnlineStatusSupport = (int)GenericOnlineStatusSupport.DownloadOnly;
-                        store.ModuleOnlineStatusDataType = (int)GenericVariantDataType.Text;
-                        store.ModuleOnlineShipmentDetails = true;
-
-                        if (store.Fields[(int) MivaStoreFieldIndex.ModuleOnlineStatusSupport].IsChanged)
-                        {
-                            try
-                            {
-                                GenericStoreStatusCodeProvider statusCodeProvider = ((MivaStoreType) StoreTypeManager.GetType(store)).CreateStatusCodeProvider();
-                                statusCodeProvider.UpdateFromOnlineStore();
-                            }
-                            catch (GenericStoreException ex)
-                            {
-                                MessageHelper.ShowError(this, "ShipWorks could not retrieve the list of online status options from Miva Merchant.\n\nDetails: " + ex.Message);
-                                return false;
-                            }
-                        }
-
+                    case MivaOnlineUpdateStrategy.MivaNative:
+                        SaveDetailsToEntity(store, GenericOnlineStatusSupport.DownloadOnly);
                         break;
-                    }
-
-                default:
-                    throw new InvalidOperationException("Unhandled MivaOnlineUpdateStrategy: " + store.OnlineUpdateStrategy);
+                    default:
+                        throw new InvalidOperationException("Unhandled MivaOnlineUpdateStrategy: " + store.OnlineUpdateStrategy);
+                }
+            }
+            catch (GenericStoreException ex)
+            {
+                MessageHelper.ShowError(this, "ShipWorks could not retrieve the list of online status options from Miva Merchant.\n\nDetails: " + ex.Message);
+                return false;
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Save Miva details to entity
+        /// </summary>
+        private void SaveDetailsToEntity(MivaStoreEntity store, GenericOnlineStatusSupport status)
+        {
+            store.ModuleOnlineStatusSupport = (int) status;
+            store.ModuleOnlineStatusDataType = (int)GenericVariantDataType.Text;
+            store.ModuleOnlineShipmentDetails = true;
+
+            if (store.Fields[(int)MivaStoreFieldIndex.ModuleOnlineStatusSupport].IsChanged)
+            {
+                GenericStoreStatusCodeProvider statusCodeProvider = ((MivaStoreType)StoreTypeManager.GetType(store)).CreateStatusCodeProvider();
+                statusCodeProvider.UpdateFromOnlineStore();
+            }
+        }
+
+        /// <summary>
+        /// Save a none order
+        /// </summary>
+        private void SaveNoneToEntity(MivaStoreEntity store)
+        {
+            store.ModuleOnlineStatusSupport = (int)GenericOnlineStatusSupport.None;
+            store.ModuleOnlineShipmentDetails = false;
+            store.ModuleStatusCodes = "<Root />";
         }
 
         /// <summary>
@@ -169,7 +152,8 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// </summary>
         private void OnUpdateStrategyChanged(object sender, EventArgs e)
         {
-            sebenzaOrderStatusEmail.Enabled = updateStrategy.SelectedValue != null && ((MivaOnlineUpdateStrategy)updateStrategy.SelectedValue == MivaOnlineUpdateStrategy.Sebenza);
+            sebenzaOrderStatusEmail.Enabled = updateStrategy.SelectedValue != null &&
+                ((MivaOnlineUpdateStrategy)updateStrategy.SelectedValue == MivaOnlineUpdateStrategy.Sebenza);
 
             if (!sebenzaOrderStatusEmail.Enabled)
             {

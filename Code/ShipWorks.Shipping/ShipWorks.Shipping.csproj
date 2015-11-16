@@ -50,6 +50,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
@@ -69,6 +73,26 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net40\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Interfaces.2.2.5\lib\net40\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net40\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Forms, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-WinForms.2.2.5\lib\net40\System.Reactive.Windows.Forms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -80,6 +104,43 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Carriers\Amazon\AmazonAllowedCarriersRateGroupFilter.cs" />
+    <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory.cs" />
+    <Compile Include="Carriers\Amazon\AmazonInsuranceChoice.cs" />
+    <Compile Include="Carriers\Amazon\AmazonLabelService.cs" />
+    <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Carriers\Amazon\AmazonPackageAdapter.cs" />
+    <Compile Include="Carriers\Amazon\AmazonRatesRetrievedMessage.cs" />
+    <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonAccountValidator.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
+    <Compile Include="Carriers\Amazon\AmazonUpsLabelEnforcer.cs" />
+    <Compile Include="Carriers\Amazon\AmazonUpsRateFilter.cs" />
+    <Compile Include="Carriers\Amazon\AmazonUspsLabelEnforcer.cs" />
+    <Compile Include="Carriers\Amazon\AmazonUspsRateFilter.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonRatingService.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonShipmentRequestDetailsFactory.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\AmazonRateTag.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\CancelShipmentResponse.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\CreateShipmentResponse.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\ErrorResponse.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
+    <Compile Include="Carriers\Amazon\Api\IAmazonRatingService.cs" />
+    <Compile Include="Carriers\Amazon\Api\IAmazonShipmentRequestDetailsFactory.cs" />
+    <Compile Include="Carriers\Amazon\Api\OperationResponse.cs" />
+    <Compile Include="Carriers\Amazon\EnforcementResult.cs" />
+    <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonLabelEnforcer.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonLabelService.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonNotLinkedFootnoteFactory.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -117,11 +178,8 @@
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Carriers\" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

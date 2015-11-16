@@ -17,5 +17,15 @@ namespace ShipWorks.Shipping
         /// Update the label format of any unprocessed shipment with the given shipment type code
         /// </summary>
         void UpdateLabelFormatOfUnprocessedShipments(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Indicates if the shipment type of the given type code has gone through the full setup wizard \ configuration
+        /// </summary>
+        bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Gets the service used.
+        /// </summary>
+        string GetServiceUsed(ShipmentEntity shipment);
     }
 }

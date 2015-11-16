@@ -13,6 +13,7 @@ using ShipWorks.Common.Threading;
 using Interapptive.Shared;
 using ShipWorks.Common.IO.Hardware.Printers;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace ShipWorks.Templates.Printing
 {
@@ -264,7 +265,7 @@ namespace ShipWorks.Templates.Printing
                 if (needRestorePaper)
                 {
                     log.InfoFormat("Restoring settings of printer '{0}'.", requestedPrinter);
-                    SetPaperSettings(requestedPrinter, paperSource, paperSizeValue, paperSizeLength, paperSizeWidth, paperOrientation);
+                    SetPaperSettings(requestedPrinter, paperSource, paperSizeValue, new Size(paperSizeWidth, paperSizeLength), paperOrientation);
                 }
 
                 // Restore the printer if necessary
@@ -357,8 +358,9 @@ namespace ShipWorks.Templates.Printing
                     printerSettings.PrinterName,
                     paperSource,
                     0,
-                    (int) (desiredHeight * 254),
-                    (int) (desiredWidth * 254),
+                    new Size(
+                        (int)(desiredWidth * 254),
+                        (int) (desiredHeight * 254)),
                     isLandscape ? 2 : 1);
 
                 // Update the context to know its paper settings need restored
@@ -431,21 +433,20 @@ namespace ShipWorks.Templates.Printing
             string printer,
             int paperSource,
             int size,
-            int length,
-            int width,
+            Size lengthAndWidth,
             int orientation)
         {
-            log.InfoFormat("Set paper settings: Source = {0}, Size = {1}, Length = {2}, Width = {3}, Orientation = {4}", paperSource, size, length, width, orientation);
+            log.InfoFormat("Set paper settings: Source = {0}, Size = {1}, Length = {2}, Width = {3}, Orientation = {4}", paperSource, size, lengthAndWidth.Height, lengthAndWidth.Width, orientation);
 
             int oldPaperSize = size;
-            int oldPaperLength = length;
-            int oldPaperWidth = width;
+            int oldPaperLength = lengthAndWidth.Height;
+            int oldPaperWidth = lengthAndWidth.Width;
 
             // Change the system printer settings
             bool success = PrintSetPaperSettings(
                 printer,
                 paperSource,
-                size, length, width, orientation,
+                size, lengthAndWidth.Height, lengthAndWidth.Width, orientation,
                 ref oldPaperSize, ref oldPaperLength, ref oldPaperWidth,
                 false);
 

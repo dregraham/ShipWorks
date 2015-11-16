@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.Business;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -25,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     [NDependIgnoreLongTypes]
     public partial class FedExCustomsControl : CustomsControlBase
     {
-        private MessengerToken fedExServiceChangedToken;
+        private IDisposable fedExServiceChangedToken;
 
         /// <summary>
         /// Constructor
@@ -34,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             InitializeComponent();
 
-            fedExServiceChangedToken = Messenger.Current.Handle<FedExServiceTypeChangedMessage>(this, OnServiceChanged);
+            fedExServiceChangedToken = Messenger.Current.OfType<FedExServiceTypeChangedMessage>().Subscribe(OnServiceChanged);
         }
 
         /// <summary>

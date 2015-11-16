@@ -62,32 +62,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 int count = 0;
                 foreach (DataRow action in actions.Rows)
                 {
-                    int originalStoreID = (int) action["StoreID"];
-                    long storeID;
-
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
-                    {
-                        storeID = MigrationRowKeyTranslator.TranslateKeyToV3(originalStoreID, MigrationRowKeyType.Store, con);
-                    }
-
-                    StoreEntity store = new StoreEntity(storeID);
-                    using (SqlAdapter adapter = new SqlAdapter())
-                    {
-                        adapter.FetchEntity(store);
-
-                        if (store.Fields.State != EntityState.Fetched)
-                        {
-                            throw new InvalidOperationException(string.Format("Could not load store {0}", storeID));
-                        }
-                    }
-
-                    CreateAction(
-                        store,
-                        (string) action["ActionName"],
-                        Convert.ToInt32(action["TriggerType"]),
-                        (string) action["TriggerSettings"],
-                        (string) action["TasksXml"],
-                        (bool) action["Enabled"]);
+                    ConvertAction(progress, actions, action);
 
                     progress.PercentComplete = (100 * ++count) / actions.Rows.Count;
                 }
@@ -111,22 +86,67 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         }
 
         /// <summary>
+        /// Convert a single action
+        /// </summary>
+        private static void ConvertAction(ProgressItem progress, DataTable actions, DataRow action)
+        {
+            int originalStoreID = (int)action["StoreID"];
+            long storeID;
+
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            {
+                storeID = MigrationRowKeyTranslator.TranslateKeyToV3(originalStoreID, MigrationRowKeyType.Store, con);
+            }
+
+            StoreEntity store = new StoreEntity(storeID);
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.FetchEntity(store);
+
+                if (store.Fields.State != EntityState.Fetched)
+                {
+                    throw new InvalidOperationException($"Could not load store {storeID}");
+                }
+            }
+
+            ActionEntity actionEntity = CreateAction(
+                store,
+                (string)action["ActionName"],
+                (bool)action["Enabled"]);
+
+            PersistAction(
+                actionEntity,
+                store,
+                Convert.ToInt32(action["TriggerType"]),
+                (string)action["TriggerSettings"],
+                (string)action["TasksXml"]);
+        }
+
+        /// <summary>
         /// Create a V3 action from the given v2 action properties
         /// </summary>
         [NDependIgnoreTooManyParams]
-        private static void CreateAction(StoreEntity store, string name, int triggerType, string triggerSettings, string tasksXml, bool enabled)
+        private static ActionEntity CreateAction(StoreEntity store, string name, bool enabled)
         {
-            ActionEntity action = new ActionEntity();
-            action.Name = name;
-            action.Enabled = enabled;
-            action.TaskSummary = "";
+            return new ActionEntity
+            {
+                Name = name,
+                Enabled = enabled,
+                TaskSummary = "",
 
-            action.ComputerLimitedType = (int) ComputerLimitedType.TriggeringComputer;
-            action.InternalComputerLimitedList = string.Empty;
+                ComputerLimitedType = (int)ComputerLimitedType.TriggeringComputer,
+                InternalComputerLimitedList = string.Empty,
 
-            action.StoreLimited = true;
-            action.StoreLimitedList = new long[] { store.StoreID };
+                StoreLimited = true,
+                StoreLimitedList = new long[] { store.StoreID },
+            };
+        }
 
+        /// <summary>
+        /// Create a V3 action from the given v2 action properties
+        /// </summary>
+        private static void PersistAction(ActionEntity action, StoreEntity store, int triggerType, string triggerSettings, string tasksXml)
+        {
             LoadTrigger(action, triggerType, triggerSettings);
 
             // Need to save upfront so tasks have a parent ID to save to
@@ -138,28 +158,9 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
             long? restrictFilterNodeID = null;
 
             // The OrderDownloaded trigger had an option filter.  But in v3 its not on the trigger, it's on each task.  We may need to apply it to tasks.
-            if (action.TriggerType == (int) ActionTriggerType.OrderDownloaded)
+            if (action.TriggerType == (int)ActionTriggerType.OrderDownloaded)
             {
-                XElement xSettings = XElement.Parse(triggerSettings);
-                string filterName = (string) xSettings.Element("Filter");
-
-                if (!string.IsNullOrWhiteSpace(filterName))
-                {
-                    using (SqlAdapter adapter = new SqlAdapter())
-                    {
-                        RelationPredicateBucket bucket = new RelationPredicateBucket(FilterFields.Name == filterName);
-                        bucket.Relations.Add(FilterNodeEntity.Relations.FilterSequenceEntityUsingFilterSequenceID);
-                        bucket.Relations.Add(FilterSequenceEntity.Relations.FilterEntityUsingFilterID);
-
-                        FilterNodeCollection nodes = new FilterNodeCollection();
-                        adapter.FetchEntityCollection(nodes, bucket);
-
-                        if (nodes.Count > 0)
-                        {
-                            restrictFilterNodeID = nodes[0].FilterNodeID;
-                        }
-                    }
-                }
+                restrictFilterNodeID = ApplyOrderDownloadedTriggerOptions(triggerSettings, restrictFilterNodeID);
             }
 
             List<ActionTask> tasks = LoadTasks(action, tasksXml, store, restrictFilterNodeID);
@@ -170,6 +171,35 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 action.TaskSummary = ActionManager.GetTaskSummary(tasks);
                 adapter.SaveEntity(action);
             }
+        }
+
+        /// <summary>
+        /// The OrderDownloaded trigger had an option filter.  But in v3 its not on the trigger, it's on each task.  We may need to apply it to tasks.
+        /// </summary>
+        private static long? ApplyOrderDownloadedTriggerOptions(string triggerSettings, long? restrictFilterNodeID)
+        {
+            XElement xSettings = XElement.Parse(triggerSettings);
+            string filterName = (string)xSettings.Element("Filter");
+
+            if (!string.IsNullOrWhiteSpace(filterName))
+            {
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    RelationPredicateBucket bucket = new RelationPredicateBucket(FilterFields.Name == filterName);
+                    bucket.Relations.Add(FilterNodeEntity.Relations.FilterSequenceEntityUsingFilterSequenceID);
+                    bucket.Relations.Add(FilterSequenceEntity.Relations.FilterEntityUsingFilterID);
+
+                    FilterNodeCollection nodes = new FilterNodeCollection();
+                    adapter.FetchEntityCollection(nodes, bucket);
+
+                    if (nodes.Count > 0)
+                    {
+                        restrictFilterNodeID = nodes[0].FilterNodeID;
+                    }
+                }
+            }
+
+            return restrictFilterNodeID;
         }
 
         /// <summary>
@@ -191,69 +221,93 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 default: throw new InvalidOperationException("Unknown V2 action trigger type " + v2TriggerType);
             }
 
-            action.TriggerType = (int) triggerType;
+            action.TriggerType = (int)triggerType;
 
-            switch ((ActionTriggerType) action.TriggerType)
+            switch ((ActionTriggerType)action.TriggerType)
             {
                 case ActionTriggerType.OrderDownloaded:
-                    {
-                        OrderDownloadedTrigger trigger = new OrderDownloadedTrigger();
-                        trigger.Restriction = OrderDownloadedRestriction.OnlyInitial;
-
-                        action.TriggerSettings = trigger.GetXml();
-                    }
+                    LoadOrderDownloadedTrigger(action);
                     break;
 
                 case ActionTriggerType.DownloadFinished:
-                    {
-                        DownloadFinishedTrigger trigger = new DownloadFinishedTrigger();
-                        trigger.OnlyIfNewOrders = (bool) xSettings.Element("NewOrders");
-
-                        int resultType = (int) xSettings.Element("DownloadResult");
-                        trigger.RequiredResult = (resultType != -1) ? (DownloadResult?) resultType : (DownloadResult?) null;
-
-                        action.TriggerSettings = trigger.GetXml();
-                    }
+                    LoadDownloadFinishedTrigger(action, xSettings);
                     break;
 
                 case ActionTriggerType.ShipmentProcessed:
-                    {
-                        ShipmentProcessedTrigger trigger = new ShipmentProcessedTrigger();
-
-                        int shipmentType = (int) xSettings.Element("ShipmentType");
-
-                        trigger.RestrictType = shipmentType >= 0 && shipmentType < 7;
-                        if (trigger.RestrictType)
-                        {
-                            trigger.ShipmentType = (ShipmentTypeCode) shipmentType;
-                        }
-
-                        trigger.RestrictStandardReturn = true;
-                        trigger.ReturnShipmentsOnly = false;
-
-                        action.TriggerSettings = trigger.GetXml();
-                    }
+                    LoadShipmentProcessedTrigger(action, xSettings);
                     break;
 
                 case ActionTriggerType.ShipmentVoided:
-                    {
-                        ShipmentVoidedTrigger trigger = new ShipmentVoidedTrigger();
-
-                        int shipmentType = (int) xSettings.Element("ShipmentType");
-
-                        trigger.RestrictType = shipmentType >= 0 && shipmentType < 7;
-                        if (trigger.RestrictType)
-                        {
-                            trigger.ShipmentType = (ShipmentTypeCode) shipmentType;
-                        }
-
-                        trigger.RestrictStandardReturn = true;
-                        trigger.ReturnShipmentsOnly = false;
-
-                        action.TriggerSettings = trigger.GetXml();
-                    }
+                    LoadShipmentVoidedTrigger(action, xSettings);
                     break;
             }
+        }
+
+        /// <summary>
+        /// Load the v2 trigger data into the given v3 action entity
+        /// </summary>
+        private static void LoadShipmentVoidedTrigger(ActionEntity action, XElement xSettings)
+        {
+            ShipmentVoidedTrigger trigger = new ShipmentVoidedTrigger();
+
+            int shipmentType = (int)xSettings.Element("ShipmentType");
+
+            trigger.RestrictType = shipmentType >= 0 && shipmentType < 7;
+            if (trigger.RestrictType)
+            {
+                trigger.ShipmentType = (ShipmentTypeCode)shipmentType;
+            }
+
+            trigger.RestrictStandardReturn = true;
+            trigger.ReturnShipmentsOnly = false;
+
+            action.TriggerSettings = trigger.GetXml();
+        }
+
+        /// <summary>
+        /// Load the v2 trigger data into the given v3 action entity
+        /// </summary>
+        private static void LoadShipmentProcessedTrigger(ActionEntity action, XElement xSettings)
+        {
+            ShipmentProcessedTrigger trigger = new ShipmentProcessedTrigger();
+
+            int shipmentType = (int)xSettings.Element("ShipmentType");
+
+            trigger.RestrictType = shipmentType >= 0 && shipmentType < 7;
+            if (trigger.RestrictType)
+            {
+                trigger.ShipmentType = (ShipmentTypeCode)shipmentType;
+            }
+
+            trigger.RestrictStandardReturn = true;
+            trigger.ReturnShipmentsOnly = false;
+
+            action.TriggerSettings = trigger.GetXml();
+        }
+
+        /// <summary>
+        /// Load the v2 trigger data into the given v3 action entity
+        /// </summary>
+        private static void LoadDownloadFinishedTrigger(ActionEntity action, XElement xSettings)
+        {
+            DownloadFinishedTrigger trigger = new DownloadFinishedTrigger();
+            trigger.OnlyIfNewOrders = (bool)xSettings.Element("NewOrders");
+
+            int resultType = (int)xSettings.Element("DownloadResult");
+            trigger.RequiredResult = (resultType != -1) ? (DownloadResult?)resultType : (DownloadResult?)null;
+
+            action.TriggerSettings = trigger.GetXml();
+        }
+
+        /// <summary>
+        /// Load the v2 trigger data into the given v3 action entity
+        /// </summary>
+        private static void LoadOrderDownloadedTrigger(ActionEntity action)
+        {
+            OrderDownloadedTrigger trigger = new OrderDownloadedTrigger();
+            trigger.Restriction = OrderDownloadedRestriction.OnlyInitial;
+
+            action.TriggerSettings = trigger.GetXml();
         }
 
         /// <summary>
@@ -261,41 +315,37 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static List<ActionTask> LoadTasks(ActionEntity action, string tasksXml, StoreEntity store, long? restrictFilterNodeID)
         {
-            List<ActionTask> tasks = new List<ActionTask>();
-
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                int stepIndex = 0;
+                return XElement.Parse(tasksXml)
+                    .Elements("Task")
+                    .Select(taskElement => InstantiateTask(taskElement, store))
+                    .Where(x => x != null)
+                    .Select((task, index) => LoadTask(adapter, action, task, restrictFilterNodeID, index))
+                    .ToList();
+            }
+        }
 
-                XElement xTasks = XElement.Parse(tasksXml);
-                foreach (var xTask in xTasks.Elements("Task"))
-                {
-                    ActionTask task = InstantiateTask(xTask, store);
+        /// <summary>
+        /// Load an individual task
+        /// </summary>
+        private static ActionTask LoadTask(SqlAdapter adapter, ActionEntity action, ActionTask task, long? restrictFilterNodeID, int stepIndex)
+        {
+            ActionTaskEntity taskEntity = task.Entity;
 
-                    // Some tasks may not be convertable, ConvertTaskType will return null if that's the case
-                    if (task == null)
-                    {
-                        continue;
-                    }
+            taskEntity.ActionID = action.ActionID;
+            taskEntity.StepIndex = stepIndex;
 
-                    ActionTaskEntity taskEntity = task.Entity;
-
-                    taskEntity.ActionID = action.ActionID;
-                    taskEntity.StepIndex = stepIndex++;
-
-                    if (restrictFilterNodeID != null)
-                    {
-                        taskEntity.FilterCondition = true;
-                        taskEntity.FilterConditionNodeID = (long) restrictFilterNodeID;
-                    }
-
-                    // Save the task
-                    task.Save(action, adapter);
-                    tasks.Add(task);
-                }
+            if (restrictFilterNodeID != null)
+            {
+                taskEntity.FilterCondition = true;
+                taskEntity.FilterConditionNodeID = (long)restrictFilterNodeID;
             }
 
-            return tasks;
+            // Save the task
+            task.Save(action, adapter);
+
+            return task;
         }
 
         /// <summary>
@@ -305,7 +355,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         [NDependIgnoreComplexMethodAttribute]
         private static ActionTask InstantiateTask(XElement xTask, StoreEntity store)
         {
-            string v2TypeName = (string) xTask.Attribute("type");
+            string v2TypeName = (string)xTask.Attribute("type");
 
             switch (v2TypeName)
             {
@@ -341,9 +391,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 case "NetworkSolutionsShipmentUpdateTask": return CreateTaskType<NetworkSolutionsShipmentUploadTask>(store);
             }
 
-            // Throw once we get all of them mapped
             return null;
-            // throw new InvalidOperationException("Unhandled v2 task type name: " + v2TypeName);
         }
 
         /// <summary>
@@ -351,8 +399,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadNetworkSolutionsOrderUpdateTask(NetworkSolutionsOrderUpdateTask task, XElement xTask)
         {
-            task.Comment = (string) xTask.Element("Comments");
-            task.StatusCode = (long) xTask.Element("Code");
+            task.Comment = (string)xTask.Element("Comments");
+            task.StatusCode = (long)xTask.Element("Code");
 
             return task;
         }
@@ -363,7 +411,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         private static ActionTask LoadMivaShipmentUploadTask(GenericStoreOrderUpdateTask task, XElement xTask)
         {
             task.Comment = "";
-            task.StatusCode = (string) xTask.Element("Status");
+            task.StatusCode = (string)xTask.Element("Status");
 
             return task;
         }
@@ -373,7 +421,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadCommerceInterfaceShipmentUploadTask(CommerceInterfaceShipmentUploadTask task, XElement xTask)
         {
-            task.StatusCode = (int) xTask.Element("Code");
+            task.StatusCode = (int)xTask.Element("Code");
             return task;
         }
 
@@ -382,8 +430,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadMarketworksFlagsTask(MarketplaceAdvisorChangeFlagsTaskBase task, XElement xTask)
         {
-            task.FlagsOn = (MarketplaceAdvisorOmsFlagTypes) (int) xTask.Element("OnFlags");
-            task.FlagsOff = (MarketplaceAdvisorOmsFlagTypes) (int) xTask.Element("OffFlags");
+            task.FlagsOn = (MarketplaceAdvisorOmsFlagTypes)(int)xTask.Element("OnFlags");
+            task.FlagsOff = (MarketplaceAdvisorOmsFlagTypes)(int)xTask.Element("OffFlags");
 
             return task;
         }
@@ -393,7 +441,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadVolusionShipmentUploadTask(VolusionShipmentUploadTask task, XElement xTask)
         {
-            task.SendEmail = (bool) xTask.Element("SendEmail");
+            task.SendEmail = (bool)xTask.Element("SendEmail");
             return task;
         }
 
@@ -402,7 +450,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadMagentoShipmentUpdateTask(MagentoShipmentUploadTask task, XElement xTask)
         {
-            task.Comment = (string) xTask.Element("Comments");
+            task.Comment = (string)xTask.Element("Comments");
             return task;
         }
 
@@ -411,7 +459,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadAmeriCommerceUpdateStatusTask(AmeriCommerceOrderUpdateTask task, XElement xTask)
         {
-            task.StatusCode = (int) xTask.Element("Status");
+            task.StatusCode = (int)xTask.Element("Status");
             return task;
         }
 
@@ -420,7 +468,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadInfopiaOrderUpdateTask(InfopiaOrderUpdateTask task, XElement xTask)
         {
-            task.Status = (string) xTask.Element("Status");
+            task.Status = (string)xTask.Element("Status");
             return task;
         }
 
@@ -429,19 +477,19 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static ActionTask LoadGenericOrderUpdateTask(GenericStoreOrderUpdateTask task, XElement xTask)
         {
-            task.Comment = (string) xTask.Element("Comments");
-            task.StatusCode = (string) xTask.Element("Code");
+            task.Comment = (string)xTask.Element("Comments");
+            task.StatusCode = (string)xTask.Element("Code");
 
             return task;
         }
 
         /// <summary>
-        /// Load the ebay action task 
+        /// Load the ebay action task
         /// </summary>
         private static ActionTask LoadEbayOnlineUpdateTask(EbayOnlineUpdateTask task, XElement xTask)
         {
-            task.MarkShipped = (bool) xTask.Element("Shipped");
-            task.MarkPaid = (bool) xTask.Element("Paid");
+            task.MarkShipped = (bool)xTask.Element("Shipped");
+            task.MarkPaid = (bool)xTask.Element("Paid");
 
             return task;
         }
@@ -452,10 +500,10 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         private static PrintTask LoadPrintTaskSettings(PrintTask printTask, XElement xTask)
         {
             // TODO: translate into converted templateID
-            string templateName = (string) xTask.Element("Template");
+            string templateName = (string)xTask.Element("Template");
 
             // In V3 copies are at the template level not the task level
-            int copies = (int) xTask.Element("Copies");
+            int copies = (int)xTask.Element("Copies");
             if (copies > 1)
             {
                 log.Warn("Ignore Copies for PrintTask since in V3 it's stored in the template");
@@ -470,7 +518,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         private static EmailTask LoadEmailTaskSettings(EmailTask emailTask, XElement xTask)
         {
             // TODO: translate into converted templateID
-            string templateName = (string) xTask.Element("Template");
+            string templateName = (string)xTask.Element("Template");
 
             return emailTask;
         }
@@ -480,7 +528,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static PlaySoundTask LoadPlaySoundTaskSettings(PlaySoundTask playSoundTask, XElement xTask)
         {
-            string soundFile = (string) xTask.Element("SoundFile");
+            string soundFile = (string)xTask.Element("SoundFile");
 
             if (File.Exists(soundFile))
             {
@@ -491,7 +539,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 log.WarnFormat("PlaySound task could not find file '{0}'", soundFile);
             }
 
-            playSoundTask.Entity.InputSource = (int) ActionTaskInputSource.Nothing;
+            playSoundTask.Entity.InputSource = (int)ActionTaskInputSource.Nothing;
 
             return playSoundTask;
         }
@@ -501,7 +549,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static SetOrderStatusTask LoadOrderStatusTaskSettings(SetOrderStatusTask setOrderStatusTask, XElement xTask)
         {
-            string status = (string) xTask.Element("Status");
+            string status = (string)xTask.Element("Status");
 
             setOrderStatusTask.Status = status;
 
@@ -515,7 +563,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         {
             ActionTaskDescriptorBinding binding = new ActionTaskDescriptorBinding(typeof(T), store);
 
-            return (T) (object) binding.CreateInstance();
+            return (T)(object)binding.CreateInstance();
         }
 
         /// <summary>

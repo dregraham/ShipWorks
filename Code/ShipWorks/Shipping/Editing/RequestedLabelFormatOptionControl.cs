@@ -5,6 +5,8 @@ using log4net;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -77,9 +79,12 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnProfileLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            using (ShippingProfileEditorDlg profileEditor = new ShippingProfileEditorDlg(shipmentType.GetPrimaryProfile()))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                profileEditor.ShowDialog(this);   
+                ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
+                    new TypedParameter(typeof(ShippingProfileEntity), shipmentType.GetPrimaryProfile())
+                );
+                profileEditor.ShowDialog(this);
             }
         }
 

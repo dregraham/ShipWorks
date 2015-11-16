@@ -340,7 +340,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
 
-            IEnumerable<InsuranceChoice> insuranceToLoad = packagesGrid.SelectedElements.OfType<GridRow>()
+            IEnumerable<IInsuranceChoice> insuranceToLoad = packagesGrid.SelectedElements.OfType<GridRow>()
                 .Select(x => x.Tag).OfType<List<FedExPackageEntity>>()
                 .SelectMany(x => x).Select(x => shipmentType.GetParcelDetail(x.FedExShipment.Shipment, x.FedExShipment.Packages.IndexOf(x)).Insurance);
 

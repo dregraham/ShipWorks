@@ -588,11 +588,11 @@ namespace Interapptive.Shared.IO.Text.Sgml {
             }
         }
 
-        [NDependIgnoreComplexMethodAttribute]
         public override string NamespaceURI
         {
-            [NDependIgnoreComplexMethodAttribute]
-            get {
+            [NDependIgnoreComplexMethod]
+            get
+            {
                 // SGML has no namespaces, unless this turned out to be an xmlns attribute.
                 if (this.state == State.Attr && (string.Compare(this.a.Name, "xmlns", StringComparison.InvariantCulture) == 0)) {
                     return "http://www.w3.org/2000/xmlns/";

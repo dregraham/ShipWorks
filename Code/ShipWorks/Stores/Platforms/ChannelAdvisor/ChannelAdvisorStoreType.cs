@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration;
@@ -9,28 +7,20 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WizardPages;
-using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data;
 using log4net;
-using ShipWorks.Data.Model;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Management;
-using ShipWorks.Actions.Tasks;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Grid;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -45,11 +35,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Store Type 
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.ChannelAdvisor; }
-        }
-
+        public override StoreTypeCode TypeCode => 
+            StoreTypeCode.ChannelAdvisor;
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -81,10 +69,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             InitializeStoreDefaults(caStore);
 
-            caStore.AccountKey = "";
+            caStore.AccountKey = string.Empty;
             caStore.ProfileID = 0;
             caStore.AttributesToDownload = "<Attributes></Attributes>";
             caStore.ConsolidatorAsUsps = false;
+            caStore.AmazonApiRegion = string.Empty;
+            caStore.AmazonAuthToken = string.Empty;
+            caStore.AmazonMerchantID = string.Empty;
+
+            caStore.SetShippingToken(new AmazonShippingToken()
+            {
+                ErrorDate = new DateTime(2001, 1, 1),
+                ErrorReason = string.Empty
+            });
 
             return caStore; 
         }
@@ -105,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             entity.FlagDescription = "";
             entity.FlagType = (int) ChannelAdvisorFlagType.NoFlag;
             entity.MarketplaceNames = "";
-
+            
             return entity;
         }
 
@@ -131,51 +128,41 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Creates the order identifier 
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
-        {
-            return new OrderNumberIdentifier(order.OrderNumber);
-        }
-
+        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) => 
+            new OrderNumberIdentifier(order.OrderNumber);
+        
         /// <summary>
         /// Create the custom downloader
         /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new ChannelAdvisorDownloader(Store);
-        }
-
+        public override StoreDownloader CreateDownloader() =>
+           new ChannelAdvisorDownloader(Store);
+        
         /// <summary>
         /// Create the wizard pages used to set the store up
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
-        {
-            return new List<WizardPage>
+        public override List<WizardPage> CreateAddStoreWizardPages() =>
+            new List<WizardPage>
             {
-                new ChannelAdvisorAccountPage(),
+                new ChannelAdvisorAccountPage()
             };
-        }
 
         /// <summary>
         /// Create the control for generating the online update shipment tasks
         /// </summary>
-        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
-        {
-            return new OnlineUpdateShipmentUpdateActionControl(typeof(ChannelAdvisorShipmentUploadTask));
-        }
-
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
+            new OnlineUpdateShipmentUpdateActionControl(typeof(ChannelAdvisorShipmentUploadTask));
+        
         /// <summary>
         /// Get any filters that should be created as an initial filter set when the store is first created.  If the list is non-empty they will
         /// be automatically put in a folder that is filtered on the store... so their is no need to test for that in the generated filter conditions.
         /// </summary>
-        public override List<FilterEntity> CreateInitialFilters()
-        {
-            return new List<FilterEntity>
-                {
-                    CreateFilterReadyToShip(),
-                    CreateFilterShipped()
-                };
-        }
-
+        public override List<FilterEntity> CreateInitialFilters() =>
+            new List<FilterEntity>
+            {
+                CreateFilterReadyToShip(),
+                CreateFilterShipped()
+            };
+        
         /// <summary>
         /// Creates the filter shipped.
         /// </summary>
@@ -281,19 +268,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Create the account settings control
         /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl()
-        {
-            return new ChannelAdvisorAccountSettingsControl();
-        }
+        public override AccountSettingsControlBase CreateAccountSettingsControl() =>
+            new ChannelAdvisorAccountSettingsControl();
 
         /// <summary>
         /// Create the CA store settings
         /// </summary>
-        public override StoreSettingsControlBase CreateStoreSettingsControl()
-        {
-            return new ChannelAdvisorSettingsControl();
-        }
-
+        public override StoreSettingsControlBase CreateStoreSettingsControl() =>
+            new ChannelAdvisorSettingsControl();
+        
         /// <summary>
         /// Create the condition group for searching on Channel Advisor Order ID
         /// </summary>
@@ -325,14 +308,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Create the CA download policy
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
-            }
-        }
-
+        public override InitialDownloadPolicy InitialDownloadPolicy =>
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
+            
         /// <summary>
         /// Generate CA specific template order elements
         /// </summary>
@@ -345,6 +323,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             outline.AddElement("OrderID", () => order.Value.CustomOrderIdentifier);
             outline.AddElement("FlagStyle", () => order.Value.FlagStyle);
             outline.AddElement("FlagDescription", () => order.Value.FlagDescription);
+            outline.AddElement("IsPrime", () => EnumHelper.GetDescription((ChannelAdvisorIsAmazonPrime) order.Value.IsPrime));
         }
 
         /// <summary>

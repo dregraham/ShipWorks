@@ -59,7 +59,15 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         protected void AddValueMapping(EntityBase2 entity, EntityField2 field, CheckBox checkBox, Control dataControl, params Control[] otherControls)
         {
-            AddMapping(entity, field, checkBox, true, dataControl, otherControls);
+            CheckStateMapping mapping = AddMapping(entity, field, checkBox, dataControl, otherControls);
+
+            mapping.IsValueMapping = true;
+
+            // If its checked, apply the current value
+            if (checkBox.Checked)
+            {
+                ReadFieldValue(entity, field, dataControl);
+            }
         }
 
         /// <summary>
@@ -69,43 +77,36 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         protected void AddEnabledStateMapping(EntityBase2 entity, EntityField2 field, CheckBox checkBox, Control dataControl, params Control[] otherControls)
         {
-            AddMapping(entity, field, checkBox, false, dataControl, otherControls);
+            AddMapping(entity, field, checkBox, dataControl, otherControls);
         }
 
         /// <summary>
         /// Adds a new mapping
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        private void AddMapping(EntityBase2 entity, EntityField2 field, CheckBox checkBox, bool valueMapping, Control dataControl, Control[] otherControls)
+        private CheckStateMapping AddMapping(EntityBase2 entity, EntityField2 field, CheckBox checkBox, Control dataControl, Control[] otherControls)
         {
-            // Add the mapping entry
-            checkStateMap.Add(new CheckStateMapping
+            CheckStateMapping mapping = new CheckStateMapping
             {
                 Entity = entity,
                 Field = field,
                 CheckBox = checkBox,
                 DataControl = dataControl,
-                OtherControls = otherControls,
-                IsValueMapping = valueMapping
-            });
+                OtherControls = otherControls
+            };
+
+            // Add the mapping entry
+            checkStateMap.Add(mapping);
 
             // Update the check state
             checkBox.Checked = entity.GetCurrentFieldValue(field.FieldIndex) != null;
-
-            if (valueMapping)
-            {
-                // If its checked, apply the current value
-                if (checkBox.Checked)
-                {
-                    ReadFieldValue(entity, field, dataControl);
-                }
-            }
 
             // Update the UI and start listening for changes
             checkBox.CheckedChanged += new EventHandler(OnStateCheckChanged);
             OnStateCheckChanged(checkBox, EventArgs.Empty);
 
             checkBox.Enabled = allowChangeCheckState;
+
+            return mapping;
         }
 
         /// <summary>
@@ -412,7 +413,7 @@ namespace ShipWorks.Shipping.Profiles
 
             if (value != null)
             {
-                // if datatype is nullable, llblgen gets confused. This settles the confusion by defining the datatype. 
+                // if datatype is nullable, llblgen gets confused. This settles the confusion by defining the datatype.
                 Type dataType = entity.Fields[field.FieldIndex].DataType;
 
                 if (dataType.Name.Contains("Nullable"))

@@ -9,7 +9,7 @@ namespace Interapptive.Shared.Business
     /// <summary>
     /// Class for parsing and formatting people names
     /// </summary>
-    public class PersonName 
+    public class PersonName
     {
         // Setup regular expression to find prefixes.
         static Regex prefixRegex = new Regex(@"\b(mr\.? |mrs\.? |miss |ms\.? |dr\.? |sgt\.? )", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -59,7 +59,7 @@ namespace Interapptive.Shared.Business
         /// Constructor
         /// </summary>
         public PersonName(string first, string middle, string last)
-            : this (first, middle, last, "", PersonNameParseStatus.Simple)
+            : this(first, middle, last, "", PersonNameParseStatus.Simple)
         {
         }
 
@@ -97,21 +97,18 @@ namespace Interapptive.Shared.Business
             PersonName personName = new PersonName();
             personName.unparsed = input;
 
-            if (input != null)
-            {
-                input = input.Trim();
-            }
-
             // Blank name
-            if (string.IsNullOrEmpty(input))
+            if (string.IsNullOrWhiteSpace(input))
             {
                 return personName;
             }
 
-            // number of commas involved
-            int commaCount = input.Count( c => c == ',');
+            input = input.Trim();
 
-            // Handle commas 
+            // number of commas involved
+            int commaCount = input.Count(c => c == ',');
+
+            // Handle commas
             if (commaCount == 1)
             {
                 string[] parts = input.Split(',');
@@ -127,15 +124,7 @@ namespace Interapptive.Shared.Business
                 personName.parseStatus = PersonNameParseStatus.Unparsed;
             }
 
-            // look for business names (inc, corp, llc) and fallback
-            if (personName.parseStatus == PersonNameParseStatus.Unknown)
-            {
-                Match suffixMatch = businessSuffixRegex.Match(input);
-                if (suffixMatch.Success)
-                {
-                    personName.parseStatus = PersonNameParseStatus.CompanyFound;
-                }
-            }
+            TryParseCompanyName(input, personName);
 
             if (personName.parseStatus == PersonNameParseStatus.Unknown)
             {
@@ -150,7 +139,7 @@ namespace Interapptive.Shared.Business
                     input = input.Remove(suffixMatch.Index, suffixMatch.Length);
 
                     // update the comma count
-                    commaCount = input.Count( c => c == ',');
+                    commaCount = input.Count(c => c == ',');
                 }
 
                 // Flip for comma
@@ -205,22 +194,39 @@ namespace Interapptive.Shared.Business
                     personName.parseStatus = PersonNameParseStatus.Simple;
                 }
             }
-            else 
+            else
             {
                 // pick the middle comma and go
                 string[] segments = input.Split(',');
-                int splitComma = (int)(commaCount + ((commaCount % 2) == 0 ? 0 : 1)) / 2;
+                int splitComma = (commaCount + ((commaCount % 2) == 0 ? 0 : 1)) / 2;
 
-
-                string firstPortion = String.Join(",", segments.Take(splitComma));
-                string lastPortion = String.Join(",", segments.Skip(splitComma));
+                string firstPortion = string.Join(",", segments.Take(splitComma));
+                string lastPortion = string.Join(",", segments.Skip(splitComma));
 
                 // still populae first/last fields for the grid
                 personName.first = firstPortion.Trim();
-                personName.last =  lastPortion.Trim();
+                personName.last = lastPortion.Trim();
             }
 
             return personName;
+        }
+
+        /// <summary>
+        /// Try to parse the company name
+        /// </summary>
+        private static void TryParseCompanyName(string input, PersonName personName)
+        {
+            // look for business names (inc, corp, llc) and fallback
+            if (personName.parseStatus != PersonNameParseStatus.Unknown)
+            {
+                return;
+            }
+
+            Match suffixMatch = businessSuffixRegex.Match(input);
+            if (suffixMatch.Success)
+            {
+                personName.parseStatus = PersonNameParseStatus.CompanyFound;
+            }
         }
 
         /// <summary>
@@ -334,7 +340,7 @@ namespace Interapptive.Shared.Business
                     {
                         name.AppendFormat("{0}{1}", name.Length == 0 ? string.Empty : " ", LastWithSuffix);
                     }
-                        
+
                     return name.ToString();
                 }
                 else

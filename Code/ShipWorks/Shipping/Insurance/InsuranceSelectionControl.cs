@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -20,7 +18,7 @@ namespace ShipWorks.Shipping.Insurance
     /// </summary>
     public partial class InsuranceSelectionControl : UserControl
     {
-        List<InsuranceChoice> loadedInsurance = new List<InsuranceChoice>();
+        List<IInsuranceChoice> loadedInsurance = new List<IInsuranceChoice>();
 
         /// <summary>
         /// The user has edited\changed something about the insurance
@@ -44,7 +42,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Load the data from the list of insurance into the control
         /// </summary>
-        public void LoadInsuranceChoices(IEnumerable<InsuranceChoice> choices)
+        public void LoadInsuranceChoices(IEnumerable<IInsuranceChoice> choices)
         {
             loading = true;
             bool isMultiPackage = false;
@@ -55,7 +53,7 @@ namespace ShipWorks.Shipping.Insurance
             // Update the insurance status and amount used
             using (MultiValueScope scope = new MultiValueScope())
             {
-                foreach (InsuranceChoice choice in loadedInsurance)
+                foreach (IInsuranceChoice choice in loadedInsurance)
                 {
                     if (insuranceProvider == null)
                     {
@@ -96,7 +94,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Sets the label text values for the insurance choice fields.
         /// </summary>
-        private void SetLabelTextValues(InsuranceProvider? insuranceProvider, List<InsuranceChoice> choices)
+        private void SetLabelTextValues(InsuranceProvider? insuranceProvider, List<IInsuranceChoice> choices)
         {
             if (insuranceProvider == InsuranceProvider.ShipWorks)
             {
@@ -141,7 +139,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public void SaveToInsuranceChoices()
         {
-            foreach (InsuranceChoice choice in loadedInsurance)
+            foreach (IInsuranceChoice choice in loadedInsurance)
             {
                 useInsurance.ReadMultiCheck(c => choice.Insured = c);
                 insuredValue.ReadMultiAmount(v => choice.InsuranceValue = v);

@@ -8,13 +8,15 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     /// </summary>
     public class AmazonMwsWebClientSettings : IAmazonMwsWebClientSettings
     {
-        // mwsEntity to get settings from
-        public IAmazonMwsConnection Connection;
-
-        public AmazonMwsWebClientSettings(IAmazonMwsConnection mwsConnection)
+        public AmazonMwsWebClientSettings(IAmazonCredentials mwsCredentials)
         {
-            this.Connection = mwsConnection;
+            Credentials = mwsCredentials;
         }
+
+        /// <summary>
+        /// Amazon Mws Credentials
+        /// </summary>
+        public IAmazonCredentials Credentials { get; set; }
 
         // Default base namespace for Amazon requests and responses
         private static string endpointNamespace = "https://mws.amazonservices.com";
@@ -26,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             get
             {
-                switch (Connection.AmazonApiRegion)
+                switch (Credentials.Region)
                 {
                     case "US":
                         return "https://mws.amazonservices.com";
@@ -43,39 +45,21 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Gets the access key id that should be used for the current store
         /// </summary>
-        public string InterapptiveAccessKeyID
-        {
-            get
-            {
-                return IsNorthAmericanStore ?
-                    "FMrhIncQWseTBwglDs00lVdXyPVgObvu" :
-                    "6bFMt0mymaWE0aWiaWT3SGs9LjvI//db";
-            }
-        }
+        public string InterapptiveAccessKeyID => IsNorthAmericanStore ?
+            "FMrhIncQWseTBwglDs00lVdXyPVgObvu" :
+            "6bFMt0mymaWE0aWiaWT3SGs9LjvI//db";
 
         /// <summary>
         /// Gets the secret key that should be used for the current store
         /// </summary>
-        public string InterapptiveSecretKey
-        {
-            get
-            {
-                return IsNorthAmericanStore ?
-                    "JIX6YaY03qfP5LO31sssIzlVV2kAskmIPw/mj7X+M3EQpsyocKz062su7+INVas5" :
-                    "JjHvzq+MGZuxJu9EkjDv0QGSNQC/FYFg4lSe5PP5HMHRinkOWJhMLPeRH2057Ohd";
-            }
-        }
+        public string InterapptiveSecretKey => IsNorthAmericanStore ?
+            "JIX6YaY03qfP5LO31sssIzlVV2kAskmIPw/mj7X+M3EQpsyocKz062su7+INVas5" :
+            "JjHvzq+MGZuxJu9EkjDv0QGSNQC/FYFg4lSe5PP5HMHRinkOWJhMLPeRH2057Ohd";
 
         /// <summary>
         /// Is the current store in North America?
         /// </summary>
-        private bool IsNorthAmericanStore
-        {
-            get
-            {
-                return Connection.AmazonApiRegion == "US" || Connection.AmazonApiRegion == "CA" || Connection.AmazonApiRegion == "MX";
-            }
-        }
+        private bool IsNorthAmericanStore => Credentials.Region == "US" || Credentials.Region == "CA" || Credentials.Region == "MX";
 
         /// <summary>
         /// Gets the api version for each call
@@ -98,9 +82,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 case AmazonMwsApiCall.GetMatchingProductForId:
                     return "2011-10-01";
                 case AmazonMwsApiCall.GetEligibleShippingServices:
+                case AmazonMwsApiCall.CreateShipment:
+                case AmazonMwsApiCall.CancelShipment:
                     return "2015-06-01";
                 default:
-                    throw new InvalidOperationException(String.Format("Unhandled AmazonMwsApiCall value in GetApiVersion: {0}", amazonMwsApiCall));
+                    throw new InvalidOperationException(
+                        $"Unhandled AmazonMwsApiCall value in GetApiVersion: {amazonMwsApiCall}");
             }
         }
 
@@ -134,14 +121,17 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     version = GetApiVersion(amazonMwsApiCall);
                     break;
                 case AmazonMwsApiCall.GetEligibleShippingServices:
+                case AmazonMwsApiCall.CreateShipment:
+                case AmazonMwsApiCall.CancelShipment:
                     apiName = "MerchantFulfillment";
                     version = GetApiVersion(amazonMwsApiCall);
                     break;
                 default:
-                    throw new InvalidOperationException(String.Format("Unhandled AmazonMwsApiCall value in GetApiEndpointPath: {0}", amazonMwsApiCall));
+                    throw new InvalidOperationException(
+                        $"Unhandled AmazonMwsApiCall value in GetApiEndpointPath: {amazonMwsApiCall}");
             }
 
-            string path = string.Format("/{0}/{1}", apiName, version);
+            string path = $"/{apiName}/{version}";
             path = path.Replace(@"//", @"/");
 
             return path;
@@ -174,8 +164,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     return "GetAuthToken";
                 case AmazonMwsApiCall.GetEligibleShippingServices:
                     return "GetEligibleShippingServices";
+                case AmazonMwsApiCall.CreateShipment:
+                    return "CreateShipment";
+                case AmazonMwsApiCall.CancelShipment:
+                    return "CancelShipment";
                 default:
-                    throw new InvalidOperationException(string.Format("Unhandled AmazonMwsApiCall '{0}'", amazonMwsApiCall));
+                    throw new InvalidOperationException($"Unhandled AmazonMwsApiCall '{amazonMwsApiCall}'");
             }
         }
 
@@ -188,11 +182,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             if (api == AmazonMwsApiCall.SubmitFeed)
             {
                 // thanks Amazon for not sticking to a scheme
-                apiNamespace = String.Format("http://mws.amazonaws.com/doc/{0}/", GetApiVersion(api));
+                apiNamespace = $"http://mws.amazonaws.com/doc/{GetApiVersion(api)}/";
             }
             else if (api == AmazonMwsApiCall.GetMatchingProductForId)
             {
-                apiNamespace = string.Format("http://mws.amazonservices.com/schema/Products/{0}", GetApiVersion(api));
+                apiNamespace = $"http://mws.amazonservices.com/schema/Products/{GetApiVersion(api)}";
             }
             else
             {

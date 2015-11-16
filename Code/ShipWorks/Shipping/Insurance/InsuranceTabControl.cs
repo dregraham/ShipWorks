@@ -204,7 +204,7 @@ namespace ShipWorks.Shipping.Insurance
                 // Get the cost 
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-                InsuranceChoice insuranceChoice = shipmentType.GetParcelDetail(shipment, 0).Insurance;
+                IInsuranceChoice insuranceChoice = shipmentType.GetParcelDetail(shipment, 0).Insurance;
                 InsuranceCost cost = InsuranceUtility.GetInsuranceCost(shipment, insuranceChoice.InsuranceValue);
 
                 if (cost.ShipWorks > 0 && cost.Carrier.HasValue && cost.Carrier > cost.ShipWorks)

@@ -356,18 +356,7 @@ namespace ShipWorks.Stores.Management
                         accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(license.Key, store);
                         licenseStatus.Text = accountDetail.Description;
 
-                        if (accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere)
-                        {
-                            changeLicense.Text = "Change Activation...";
-                        }
-                        else if (accountDetail.ActivationState == LicenseActivationState.ActiveNowhere)
-                        {
-                            changeLicense.Text = "Activate License...";
-                        }
-                        else
-                        {
-                            changeLicense.Text = "Change License...";
-                        }
+                        UpdateChangeLicenseText();
                     }
                 }
 
@@ -396,6 +385,25 @@ namespace ShipWorks.Stores.Management
 
                 licenseStatus.Text = "Error";
                 changeLicense.Visible = false;
+            }
+        }
+
+        /// <summary>
+        /// Update the change license text
+        /// </summary>
+        private void UpdateChangeLicenseText()
+        {
+            if (accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere)
+            {
+                changeLicense.Text = "Change Activation...";
+            }
+            else if (accountDetail.ActivationState == LicenseActivationState.ActiveNowhere)
+            {
+                changeLicense.Text = "Activate License...";
+            }
+            else
+            {
+                changeLicense.Text = "Change License...";
             }
         }
 

@@ -1,20 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="ShipWorks" Platform="DotNet">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
     <Name>Interapptive.Shared</Name>
-    <Name>ShipWorks</Name>
     <Name>ShipWorks.Shared</Name>
     <Name>ShipWorks.SqlServer</Name>
     <Name>ShipWorks.Core</Name>
     <Name>ShipWorks.Shipping</Name>
     <Name>ShipWorks.Shipping.UI</Name>
     <Name>ShipWorks.ThirdPartyApi</Name>
+    <Name>ShipWorks</Name>
     <Name>ShipWorks.Stores.UI</Name>
     <Name>ShipWorks.Stores</Name>
   </Assemblies>
   <FrameworkAssemblies>
-    <Name>mscorlib</Name>
     <Name>System.Data</Name>
     <Name>System</Name>
     <Name>System.Xml</Name>
@@ -66,6 +65,10 @@
     <Name>Quartz</Name>
     <Name>SD.LLBLGen.Pro.DQE.SqlServer.NET20</Name>
     <Name>Common.Logging.Log4Net1213</Name>
+    <Name>mscorlib</Name>
+    <Name>System.Reactive.Linq</Name>
+    <Name>System.Reactive.Interfaces</Name>
+    <Name>System.Reactive.Core</Name>
   </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319</Dir>
@@ -86,8 +89,8 @@
   </Dirs>
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <Report Kind="0" SectionsEnabled="45055" XslPath="" Flags="60416" />
-  <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="ParticularAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
-  <BaselineInUISetting ProjectMode="DontCompare" BuildMode="MostRecentAnalysisResultAvailable" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
+  <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\NDependAnalysisResult_ShipWorks_2015Oct28_10h51.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
+  <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\NDependAnalysisResult_ShipWorks_2015Oct28_10h51.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
   <CoverageFiles CoverageDir="" UncoverableAttribute="" />
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="">
     <Chart Name="Lines of Code" ShowInReport="True">
@@ -138,8 +141,7 @@
   <SourceFileRebasing FromPath="" ToPath="" />
   <PathVariables />
   <RuleFiles />
-  <ProjectRules AreActive="True" />
-  <Queries>
+  <ProjectRules AreActive="True" /><Queries>
     <Group Name="Code Quality" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types too big - critical</Name>
 warnif count > 0 from t in JustMyCode.Types where 
@@ -4230,20 +4232,49 @@ warnif count > 0 from  t in JustMyCode.Types where !t.ParentAssembly.Name.Contai
  orderby t.NbLinesOfCode
 
 select new { t, t.NbLinesOfCode }]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDepend ignore attributes reached</Name>
-warnif count > 98
-from  m in JustMyCode.Methods 
-where (m.ParentType.HasAttribute("Interapptive.Shared.NDependIgnoreLongTypesAttribute") ||
-  m.ParentType.HasAttribute("Interapptive.Shared.NDependIgnoreAttribute")) &&
-( m.HasAttribute("Interapptive.Shared.NDependIgnoreComplexMethodAttribute") ||
-  m.HasAttribute("Interapptive.Shared.NDependIgnoreLongMethodAttribute") ||
-  m.HasAttribute("Interapptive.Shared.NDependIgnoreTooManyParamsAttribute"))
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreAttribute attributes reached</Name>
+warnif count > 19
 
+from m in JustMyCode.Types.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreAttribute*") 
+)
+orderby m.FullName
+select new { m }
 
+]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreComplexMethod attributes reached</Name>
+warnif count > 83
 
-orderby m.Name
+from m in JustMyCode.Methods.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreComplexMethod*") 
+)
+orderby m.FullName
+select new { m }
+]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreTooManyParams attributes reached</Name>
+warnif count > 59
 
+from m in JustMyCode.Methods.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreTooManyParams*") 
+)
+orderby m.FullName
+select new { m }
+]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongTypes attributes reached</Name>
+warnif count > 40
+
+from m in JustMyCode.Types.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreLongTypes*") 
+)
+orderby m.FullName
+select new { m }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongMethod attributes reached</Name>
+warnif count > 381
+
+from m in JustMyCode.Methods.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreLongMethod*") 
+)
+orderby m.FullName
 select new { m }]]></Query>
     </Group>
-  </Queries>
-</NDepend>
+  </Queries></NDepend>

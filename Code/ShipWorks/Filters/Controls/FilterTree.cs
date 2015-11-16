@@ -31,6 +31,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data;
 using ShipWorks.Editions;
 using ShipWorks.Filters.Search;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Filters.Controls
 {
@@ -80,7 +81,7 @@ namespace ShipWorks.Filters.Controls
         // The quick filter node, if any
         FilterNodeEntity quickFilterNode = null;
         bool quickFilterSelected = false;
-        private readonly MessengerToken filterEditedToken;
+        private readonly IDisposable filterEditedToken;
         private readonly FilterControlDisplayManager quickFilterDisplayManager;
 
         // Event raised when a drag-drop operation has taken place
@@ -115,7 +116,7 @@ namespace ShipWorks.Filters.Controls
 
             UpdateQuickFilterDisplay();
 
-            filterEditedToken = Messenger.Current.Handle<FilterNodeEditedMessage>(this, HandleFilterEdited);
+            filterEditedToken = Messenger.Current.OfType<FilterNodeEditedMessage>().Subscribe(HandleFilterEdited);
         }
 
         /// <summary>

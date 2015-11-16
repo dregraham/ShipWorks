@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Templates.Processing.TemplateXml;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Shipping.Carriers.BestRate;
 using Autofac;
 
@@ -115,5 +110,10 @@ namespace ShipWorks.Shipping.Carriers.None
         {
             return new NullShippingBroker();
         }
+
+        /// <summary>
+        /// Checks whether this shipment type is allowed for the given shipment
+        /// </summary>
+        public override bool IsAllowedFor(ShipmentEntity shipment) => true;
     }
 }
