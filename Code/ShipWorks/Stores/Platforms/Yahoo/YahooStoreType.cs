@@ -121,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             =>
                 new InitialDownloadPolicy(InitialDownloadRestrictionType.OrderNumber)
                 {
-                    //DefaultStartingOrderNumber = 1000
+                    DefaultStartingOrderNumber = 0
                 };
         
         /// <summary>
@@ -280,9 +280,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
             if (!((YahooStoreEntity)Store).AccessToken.IsNullOrWhiteSpace())
             {
-                Type type = typeof (YahooOrderStatus);
+                Type type = typeof (YahooApiOrderStatus);
                 
-                foreach (YahooOrderStatus status in Enum.GetValues(type))
+                foreach (YahooApiOrderStatus status in Enum.GetValues(type))
                 {
                     // We want to display the status with spaces, so get the description attribute
                     string description = ((DescriptionAttribute)type.GetMember(status.ToString())[0].GetCustomAttributes(typeof(DescriptionAttribute), false)[0]).Description;

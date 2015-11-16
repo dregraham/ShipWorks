@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using ShipWorks.Stores.Platforms.Yahoo;
-using ShipWorks.Stores.Platforms.Yahoo.DTO;
+using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Yahoo

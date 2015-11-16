@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace ShipWorks.Stores.Platforms.Yahoo.DTO
+namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
 {
     [XmlRoot(ElementName = "Promotions")]
     public class YahooPromotions

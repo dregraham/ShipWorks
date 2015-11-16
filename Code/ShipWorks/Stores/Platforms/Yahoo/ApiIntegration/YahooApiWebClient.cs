@@ -16,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         private string token;
         private string yahooOrderEndpoint;
         private string yahooCatalogEndpoint;
+        private const int OrdersPerPage = 50;
 
         public YahooApiWebClient(YahooStoreEntity store)
         {
@@ -28,6 +29,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         public string GetOrder(string orderID)
         {
             return ProcessRequest(CreateGetOrderRequest(orderID), "GetOrder");
+        }
+
+        public string GetOrderRange(long start)
+        {
+            return ProcessRequest(CreateGetOrderRangeRequest(start), "GetOrderRange");
         }
 
         public string ValidateCredentials()
@@ -52,9 +58,38 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 "</ResourceList>" +
                 "</ystorewsRequest>";
 
-            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml");
-            submitter.Verb = HttpVerb.Post;
-            submitter.Uri = new Uri(yahooOrderEndpoint + "/order");
+            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
+            {
+                Verb = HttpVerb.Post,
+                Uri = new Uri(yahooOrderEndpoint + "/order")
+            };
+            return submitter;
+        }
+
+        private HttpTextPostRequestSubmitter CreateGetOrderRangeRequest(long start)
+        {
+            long end = start + OrdersPerPage;
+            string body = GetRequestBodyIntro +
+                          "<OrderListQuery>" +
+                          "<Filter>" +
+                          "<Include>status</Include>" +
+                          "</Filter>" +
+                          "<QueryParams>" +
+                          "<IntervalRange>" +
+                          $"<Start>{start}</Start>" +
+                          $"<End>{end}</End>" +
+                          "</IntervalRange>" +
+                          "</QueryParams>" +
+                          "</OrderListQuery>" +
+                          "</ResourceList>" +
+                          "</ystorewsRequest>";
+
+            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
+            {
+                Verb = HttpVerb.Post,
+                Uri = new Uri(yahooOrderEndpoint + "/order")
+            };
+
             return submitter;
         }
 
@@ -74,9 +109,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 "</ResourceList>" +
                 "</ystorewsRequest>";
 
-            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml");
-            submitter.Verb = HttpVerb.Post;
-            submitter.Uri = new Uri(yahooCatalogEndpoint + "/CatalogQuery");
+            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
+            {
+                Verb = HttpVerb.Post,
+                Uri = new Uri(yahooCatalogEndpoint + "/CatalogQuery")
+            };
             return submitter;
         }
 

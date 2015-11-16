@@ -1174,6 +1174,24 @@
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAddressInfo.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAppliedPromotion.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooBillToInfo.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCartShipmentInfo.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCustomField.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCustomFieldsList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooError.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooGeneralInfo.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooItem.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooItemList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrder.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderListQuery.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderStatus.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderTotals.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooPromotions.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooResponseResourceList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooShipToInfo.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooStatusList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooAccountPageHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1184,8 +1202,9 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountSettings.xaml.cs">
       <DependentUpon>YahooApiAccountSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiWebClient.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooOrderStatus.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOrderStatus.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\CoreExtensions\Actions\YahooEmailShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.cs">
       <SubType>UserControl</SubType>

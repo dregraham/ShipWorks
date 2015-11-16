@@ -2,7 +2,7 @@
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
-    public enum YahooOrderStatus
+    public enum YahooApiOrderStatus
     {
         [Description("OK")]
         OK = 0,

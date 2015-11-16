@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
-namespace ShipWorks.Stores.Platforms.Yahoo.DTO
+namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
 {
     [XmlRoot(ElementName = "AppliedPromotion")]
     public class YahooAppliedPromotion
