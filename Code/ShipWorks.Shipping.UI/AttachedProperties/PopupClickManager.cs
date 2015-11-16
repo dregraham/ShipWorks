@@ -53,13 +53,12 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         {
             if (e.NewValue != null)
             {
-                (e.NewValue as Popup).CustomPopupPlacementCallback = (popupSize, targetSize, offset) =>
+                Popup popup = e.NewValue as Popup;
+                if (popup != null)
                 {
-                    Visual element = d as Visual ?? GetClosestVisualAncestor(d);
-                    Vector ancestorOffset = VisualTreeHelper.GetOffset(element);
-
-                    return new[] { new CustomPopupPlacement(new Point(ancestorOffset.X, ancestorOffset.Y), PopupPrimaryAxis.None) };
-                };
+                    popup.Placement = PlacementMode.Bottom;
+                    popup.PlacementTarget = GetClosestVisualAncestor<UIElement>(d);
+                }
             }
 
             if (e.NewValue != null && e.OldValue == null)
@@ -135,13 +134,13 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// <summary>
         /// Gets the closest ancestor that is a Visual
         /// </summary>
-        private static Visual GetClosestVisualAncestor(DependencyObject d)
+        private static T GetClosestVisualAncestor<T>(DependencyObject d) where T : Visual
         {
             DependencyObject parent = GetParent(d);
 
             while (parent != null)
             {
-                Visual element = parent as Visual;
+                T element = parent as T;
                 if (element != null)
                 {
                     return element;
