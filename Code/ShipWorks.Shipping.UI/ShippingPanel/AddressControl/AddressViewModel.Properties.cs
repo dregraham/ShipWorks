@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         private string validationMessage;
         private IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> addressSuggestions;
         private int suggestionCount;
+        private bool isAddressValidationEnabled;
 
         /// <summary>
         /// Validate address command
@@ -165,6 +166,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         {
             get { return suggestionCount; }
             set { handler.Set(nameof(SuggestionCount), ref suggestionCount, value); }
+        }
+
+        /// <summary>
+        /// Is address validation enabled or not
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsAddressValidationEnabled
+        {
+            get { return isAddressValidationEnabled; }
+            set { handler.Set(nameof(IsAddressValidationEnabled), ref isAddressValidationEnabled, value); }
         }
     }
 }

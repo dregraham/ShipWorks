@@ -78,6 +78,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
+            Destination.IsAddressValidationEnabled = true;
 
             // Wiring up observables needs objects to not be null, so do this last.
             WireUpObservables();

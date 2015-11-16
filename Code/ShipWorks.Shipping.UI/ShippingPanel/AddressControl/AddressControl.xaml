@@ -59,7 +59,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock Style="{StaticResource Header}">Address</TextBlock>
-            <WrapPanel Grid.Column="1">
+            <WrapPanel Grid.Column="1" Visibility="{Binding IsAddressValidationEnabled, Converter={StaticResource BooleanToVisibility}}">
                 <StackPanel Orientation="Horizontal">
                     <Image VerticalAlignment="Center" 
                        Margin="4,0,8,0"
