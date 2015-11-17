@@ -652,6 +652,7 @@ namespace ShipWorks.Data.Controls
                     if (ValidatedAddressManager.EnsureAddressCanBeValidated(newAddress))
                     {
                         newAddress.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                        newAddress.AddressType = (int) AddressType.NotChecked;
                     }
 
                     newAddress.AddressValidationSuggestionCount = 0;
@@ -998,6 +999,7 @@ namespace ShipWorks.Data.Controls
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
             {
                 lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+                lastValidatedAddress.AddressType = (int) AddressType.NotChecked;
             }
 
             validatedAddresses.Clear();

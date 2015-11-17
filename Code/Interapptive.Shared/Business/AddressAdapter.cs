@@ -133,6 +133,7 @@ namespace Interapptive.Shared.Business
             toAddress.AddressValidationError = fromAddress.AddressValidationError;
             toAddress.AddressValidationStatus = fromAddress.AddressValidationStatus;
             toAddress.AddressValidationSuggestionCount = fromAddress.AddressValidationSuggestionCount;
+            toAddress.AddressType = fromAddress.AddressType;
         }
 
         /// <summary>

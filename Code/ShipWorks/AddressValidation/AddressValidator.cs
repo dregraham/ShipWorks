@@ -72,7 +72,6 @@ namespace ShipWorks.AddressValidation
 
             try
             {
-
                 AddressValidationWebClientValidateAddressResult validationResult = webClient.ValidateAddress(addressAdapter);
 
                 // Store the original address so that the user can revert later if they want
@@ -82,16 +81,17 @@ namespace ShipWorks.AddressValidation
                 originalAddress.AddressPrefix = addressAdapter.FieldPrefix;
 
                 addressAdapter.AddressValidationError = validationResult.AddressValidationError;
+                addressAdapter.AddressType = (int) validationResult.AddressType;
 
                 // Set the validation status based on the settings of the store
                 if (canAdjustAddress)
                 {
-                    SetValidationStatus(validationResult.AddressValidationResults, addressAdapter);
+                    SetValidationStatus(validationResult, addressAdapter);
                     UpdateAddressIfAdjusted(addressAdapter, validationResult.AddressValidationResults);
                 }
                 else
                 {
-                    SetValidationStatusForNotify(validationResult.AddressValidationResults, addressAdapter);
+                    SetValidationStatusForNotify(validationResult, addressAdapter);
 
                     AddressValidationResult validatedAddress = validationResult.AddressValidationResults.FirstOrDefault(x => x.IsValid);
                     if (validatedAddress != null)
@@ -120,6 +120,7 @@ namespace ShipWorks.AddressValidation
                 log.Warn("Error communicating with Address Validation Server.", ex);
                 addressAdapter.AddressValidationError = string.Format("Error communicating with Address Validation Server.\r\n{0}", ex.Message);
                 addressAdapter.AddressValidationStatus = (int)AddressValidationStatusType.Error;
+                addressAdapter.AddressType = (int) AddressType.Error;
                 saveAction(null, new List<ValidatedAddressEntity>());
             }
         }
@@ -137,11 +138,15 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Set the validation status on the entity when we should only notify instead of update
         /// </summary>
-        private static void SetValidationStatusForNotify(List<AddressValidationResult> suggestedAddresses, AddressAdapter adapter)
+        private static void SetValidationStatusForNotify(AddressValidationWebClientValidateAddressResult validationResult, AddressAdapter adapter)
         {
+            var suggestedAddresses = validationResult.AddressValidationResults;
+
+            adapter.AddressType = (int)validationResult.AddressType;
+
             if (!suggestedAddresses.Any())
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;    
             }
             else if (suggestedAddresses.Count == 1 && suggestedAddresses[0].IsValid && suggestedAddresses[0].IsEqualTo(adapter))
             {
@@ -156,8 +161,12 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Set the validation status on the entity
         /// </summary>
-        private static void SetValidationStatus(List<AddressValidationResult> suggestedAddresses, AddressAdapter adapter)
+        private static void SetValidationStatus(AddressValidationWebClientValidateAddressResult validationResult, AddressAdapter adapter)
         {
+            var suggestedAddresses = validationResult.AddressValidationResults;
+
+            adapter.AddressType = (int)validationResult.AddressType;
+            
             if (!suggestedAddresses.Any())
             {
                 adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;

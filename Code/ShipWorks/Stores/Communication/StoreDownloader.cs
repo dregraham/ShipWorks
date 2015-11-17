@@ -706,7 +706,8 @@ namespace ShipWorks.Stores.Communication
             address.ResidentialStatus = (int)ValidationDetailStatusType.Unknown;
             address.AddressValidationSuggestionCount = 0;
             address.AddressValidationError = string.Empty;
-
+            address.AddressType = (int) AddressType.NotChecked;
+            
             ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
 
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))

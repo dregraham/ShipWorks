@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Business;
+﻿using System.Linq;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -36,6 +38,7 @@ namespace ShipWorks.AddressValidation
             try
             {
                 UspsAddressValidationResults uspsResult = session.ValidateAddress(personAdapter);
+                validationResult.AddressType = ConvertAddressType(uspsResult);
 
                 if (uspsResult.IsSuccessfulMatch)
                 {
@@ -64,6 +67,8 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult)
         {
+            //AddressType addressType = ConvertAddressType(uspsResult);
+
             AddressValidationResult addressValidationResult = new AddressValidationResult
             {
                 Street1 = address.Address1 ?? string.Empty,
@@ -76,18 +81,68 @@ namespace ShipWorks.AddressValidation
                 IsValid = isValid,
                 POBox = ConvertPoBox(uspsResult.IsPoBox),
                 ResidentialStatus = ConvertResidentialStatus(uspsResult.ResidentialIndicator),
-                AddressType = ConvertAddressType(uspsResult)
+                //AddressType = addressType
             };
 
             addressValidationResult.ParseStreet1();
             addressValidationResult.ApplyAddressCasing();
-
+            
             return addressValidationResult;
         }
 
+        /// <summary>
+        /// Converts the type of the address.
+        /// </summary>
+        /// <param name="uspsResult">The usps result.</param>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
         private static AddressType ConvertAddressType(UspsAddressValidationResults uspsResult)
         {
-            throw new System.NotImplementedException();
+            bool isMilitary = uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "Y") ?? false;
+            bool isSecondaryAddressProblem = uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "H" || (x.Value ?? string.Empty) == "S") ?? false;
+            bool isUsTerritory = CountryList.IsUSInternationalTerritory(uspsResult.MatchedAddress?.State ?? string.Empty);
+
+            if (!uspsResult.IsCityStateZipOk)
+            {
+                return AddressType.Invalid;
+            }
+
+            if (isSecondaryAddressProblem)
+            {
+                return AddressType.SecondaryNotFound;
+            }
+
+            if (!uspsResult.IsSuccessfulMatch)
+            {
+                return AddressType.PrimaryNotFound;
+            }
+
+            // successful match!
+
+            if (isMilitary)
+            {
+                return AddressType.Military;
+            }
+
+            if (isUsTerritory)
+            {
+                return AddressType.UsTerritory;
+            }
+
+            if (uspsResult.IsPoBox ?? false)
+            {
+                return AddressType.PoBox;
+            }
+
+            switch (uspsResult.ResidentialIndicator)
+            {
+                case ResidentialDeliveryIndicatorType.Yes:
+                    return AddressType.Residential;
+                case ResidentialDeliveryIndicatorType.No:
+                    return AddressType.Commercial;
+                default:
+                    return AddressType.Valid;
+            }
         }
 
         /// <summary>

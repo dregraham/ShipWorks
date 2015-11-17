@@ -253,6 +253,7 @@ namespace ShipWorks.AddressValidation
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a country.";
                 currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
+                currentShippingAddress.AddressType = (int) AddressType.WillNotValidate;
 
                 return false;
             }
@@ -262,6 +263,7 @@ namespace ShipWorks.AddressValidation
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
                 currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.WillNotValidate;
+                currentShippingAddress.AddressType = (int)AddressType.WillNotValidate;
 
                 return false;
             }
@@ -270,7 +272,8 @@ namespace ShipWorks.AddressValidation
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a first line.";
                 currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
-
+                currentShippingAddress.AddressType = (int)AddressType.PrimaryNotFound;
+                
                 return false;
             }
 

@@ -49,22 +49,6 @@ namespace Interapptive.Shared.Business.Geography
         }
 
         /// <summary>
-        /// Indicates if the given foreign country code is a US international territory
-        /// </summary>
-        public static bool IsUSInternationalTerritory(this IAddressAdapter address)
-        {
-            return CountryList.IsUSInternationalTerritory(address);
-        }
-
-        /// <summary>
-        /// Indicates if the given foreign country code is a specific US international territory
-        /// </summary>
-        public static bool IsUSInternationalTerritory(this IAddressAdapter address, string territory)
-        {
-            return CountryList.IsUSInternationalTerritory(address, territory);
-        }
-
-        /// <summary>
         /// Get the icon image of the country flag. Null if one is not present for the country.
         /// </summary>
         public static Image GetCountryFlag(string code)

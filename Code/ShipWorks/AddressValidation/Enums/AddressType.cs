@@ -22,17 +22,17 @@ namespace ShipWorks.AddressValidation.Enums
         WillNotValidate = 1,
 
         [Description("Invalid")]
-        [Details("The address matching system was unable to find an exact match for the city, state, and ZIP Code. We suggest correcting this before creating your label")]
+        [Details("The address matching system was unable to find an exact match for the city, state, and ZIP Code.\r\nWe suggest correcting this before creating your label")]
         [ImageResource("error16")]
         Invalid = 2,
 
         [Description("Ambigous")]
-        [Details("The address matching system was unable to find an exact match for an Apartment or Suite Number. Only the street address, city, state, and ZIP Code fields have been validated.")]
+        [Details("The address matching system was unable to find an exact match for an Apartment or Suite Number.\r\nOnly the street address, city, state, and ZIP Code fields have been validated.")]
         [ImageResource("warning16")]
         SecondaryNotFound = 3,
 
         [Description("Ambigous")]
-        [Details("The address matching system was unable to find an exact match for the street address. Only the city, state, and ZIP Code fields have been validated.")]
+        [Details("The address matching system was unable to find an exact match for the street address. \r\nOnly the city, state, and ZIP Code fields have been validated.")]
         [ImageResource("warning16")]
         PrimaryNotFound = 4,
 
@@ -64,7 +64,10 @@ namespace ShipWorks.AddressValidation.Enums
         [Description("Valid")]
         [Details("Address is correct but Residential/Commercial Status is unknown.")]
         [ImageResource("check16")]
-        Valid = 10
+        Valid = 10, 
 
+        [Description("Error")]
+        [Details("Error communicating with Address Validation Server.")]
+        Error = 11
     }
 }

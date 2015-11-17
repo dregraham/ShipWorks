@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps

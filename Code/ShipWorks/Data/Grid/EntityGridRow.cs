@@ -352,13 +352,11 @@ namespace ShipWorks.Data.Grid
         protected override string GetTooltipText(Point position)
         {
             EntityGridColumn column = HitTestColumn(position);
-            string toolTip = column.GetTooltipText(this);
-            if (!string.IsNullOrEmpty(toolTip))
-            {
-                return toolTip;
-            }
+            string toolTip = column?.GetTooltipText(this);
 
-            return base.GetTooltipText(position);
+            return !string.IsNullOrEmpty(toolTip) ? 
+                toolTip : 
+                base.GetTooltipText(position);
         }
 
         /// <summary>
