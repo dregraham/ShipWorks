@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 switch (code)
                 {
-                    // Errors coming from the Express1 version of the API (prior to hitting USPS) always 
+                    // Errors coming from the Express1 version of the API (prior to hitting USPS) always
                     // return an error code of 0
                     case 0x00000000: return GetExpress1Message();
 
@@ -42,8 +42,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     case 0x005f0302: return "This account is already a reseller account.";
                     case 0x005f0301: return string.Format("This account is a multi-user account. Multi-user accounts are not eligible to be migrated to a reseller account.{0}{0}Please contact Stamps.com if you need assistance.", Environment.NewLine);
                 }
-                
-                SoapException baseEx = base.InnerException as SoapException;
+
+                SoapException baseEx = InnerException as SoapException;
                 string message = baseEx.Detail.InnerText;
 
                 // Strip out the authenticator junk
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 if (string.IsNullOrEmpty(message))
                 {
-                    message = base.InnerException.Message;
+                    message = InnerException.Message;
                 }
 
                 message = message.Replace("Invalid SOAP message due to XML Schema validation failure.", "");
@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         message = message.Substring(0, swsIndex);
                     }
                 }
-                
+
                 if (!string.IsNullOrEmpty(message) && !message.EndsWith("."))
                 {
                     message += ".";
@@ -154,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Extracts a message that is specific to the Express1 version of the USPS API (i.e. when the 
+        /// Extracts a message that is specific to the Express1 version of the USPS API (i.e. when the
         /// error code in the SoapException is 0).
         /// </summary>
         private string GetExpress1Message()

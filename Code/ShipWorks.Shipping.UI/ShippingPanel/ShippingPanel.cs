@@ -12,7 +12,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
-using System.Diagnostics;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             shippingPanelControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
 
-            subscription = messenger.AsObservable<CreateLabelMessage>().Subscribe(HandleCreateLabelMessage);
+            subscription = messenger.OfType<CreateLabelMessage>().Subscribe(HandleCreateLabelMessage);
         }
 
         public EntityType EntityType => EntityType.ShipmentEntity;

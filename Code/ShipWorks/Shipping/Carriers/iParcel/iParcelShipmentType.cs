@@ -372,7 +372,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 {
                     adapter.FetchEntityCollection(iParcelProfileEntityParcel.Packages,
                                                   new RelationPredicateBucket(IParcelProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
-                    
+
                     iParcelProfileEntityParcel.Packages.Sort((int) IParcelProfilePackageFieldIndex.IParcelProfilePackageID, ListSortDirection.Ascending);
                 }
             }
@@ -518,7 +518,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
         /// <returns>An iParcelSettingsControl object.</returns>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             iParcelSettingsControl settingsControl = new iParcelSettingsControl();
             settingsControl.Initialize(ShipmentTypeCode);
@@ -618,7 +618,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 {
                     throw new ArgumentNullException("shipment");
                 }
-                
+
                 if (shipment.RequestedLabelFormat != (int) ThermalLanguage.None)
                 {
                     shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
@@ -821,7 +821,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
                     IEnumerable<iParcelServiceType> disabledServices = GetExcludedServiceTypes(excludedServiceTypeRepository)
                         .Select(s => (iParcelServiceType)s);
-                    
+
 
                     // Filter out the excluded service types before creating rate results
                     foreach (iParcelServiceType serviceType in supportedServiceTypes.Except(disabledServices.Where(s => (iParcelServiceType)s != (iParcelServiceType)shipment.IParcel.Service)))
@@ -836,7 +836,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                         decimal dutyCost = serviceRows.Sum(row => decimal.Parse(row["PackageDuty"].ToString()));
                         decimal totalCost = shippingCost + taxCost + dutyCost;
 
-                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalCost, dutyCost, taxCost, shippingCost, new iParcelRateSelection(serviceType))
+                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty,
+                            totalCost, new RateAmountComponents(taxCost, dutyCost, shippingCost),
+                            new iParcelRateSelection(serviceType))
                         {
                             ServiceLevel = ServiceLevelType.Anytime,
                             ShipmentType = ShipmentTypeCode.iParcel,
@@ -868,7 +870,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 return base.GetTrackingNumbers(shipment);
             }
-            
+
             List<string> trackingList = new List<string>();
 
             for (int i = 0; i < iParcelShipment.Packages.Count; i++)
@@ -935,7 +937,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 throw new iParcelException("ShipWorks could not find the tracking information in the response from i-parcel.");
             }
-            
+
             StringBuilder summary = new StringBuilder();
 
             // Event history is in descending order so grab the first row
@@ -992,13 +994,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     Time = eventDate.ToString("h:mm tt"),
                     Location = GetTrackingDetailLocation(response, rowIndex)
                 };
-                
+
                 trackingResult.Details.Add(detail);
             }
         }
 
         /// <summary>
-        /// Gets the tracking detail location for a specific trackable event in the DataSet 
+        /// Gets the tracking detail location for a specific trackable event in the DataSet
         /// denoted by the given row index.
         /// </summary>
         /// <param name="response">The response.</param>
@@ -1070,9 +1072,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <returns>An instance of an iParcelBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            // There was a conscious decision made with input from Rich that for now we can assume the origin 
+            // There was a conscious decision made with input from Rich that for now we can assume the origin
             // country will always be US when the shipment is configured to ship from the account address
-            string originCountryCode = (ShipmentOriginSource)shipment.OriginOriginID == ShipmentOriginSource.Account ? 
+            string originCountryCode = (ShipmentOriginSource)shipment.OriginOriginID == ShipmentOriginSource.Account ?
                                         "US" : shipment.AdjustedOriginCountryCode();
 
             // We only want to check i-parcel for international shipments originating in the US

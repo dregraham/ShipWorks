@@ -61,9 +61,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
             subscriptions = new CompositeDisposable(
-                shipmentChangedHandler.AsObservable<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
-                shipmentChangedHandler.AsObservable<StoreChangedMessage>().Subscribe(OnStoreChanged),
-                shipmentChangedHandler.AsObservable<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipmentAdapter.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
+                shipmentChangedHandler.OfType<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
+                shipmentChangedHandler.OfType<StoreChangedMessage>().Subscribe(OnStoreChanged),
+                shipmentChangedHandler.OfType<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipmentAdapter.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
                 shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
                 shipmentChangedHandler.ShipmentLoadedStream().Do(_ => AllowEditing = true).Subscribe(LoadOrder),
                 handler.Where(x => x == nameof(ShipmentType))

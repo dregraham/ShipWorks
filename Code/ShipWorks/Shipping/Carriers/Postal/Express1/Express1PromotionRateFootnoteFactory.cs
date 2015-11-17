@@ -17,14 +17,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <param name="express1Settings">Settings that will be used when creating the footnote control</param>
         public Express1PromotionRateFootnoteFactory(ShipmentType shipmentType, IExpress1SettingsFacade express1Settings)
         {
-            ShipmentType = shipmentType;
+            ShipmentTypeCode = shipmentType.ShipmentTypeCode;
             this.express1Settings = express1Settings;
         }
 
         /// <summary>
         /// Gets the carrier to which this footnote is associated
         /// </summary>
-        public ShipmentType ShipmentType { get; private set; }
+        public ShipmentTypeCode ShipmentTypeCode { get; private set; }
 
         /// <summary>
         /// Notes that this factory should not be used in BestRate

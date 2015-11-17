@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Create settings control for WorldShip
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             WorldShipSettingsControl control = new WorldShipSettingsControl();
             control.Initialize(ShipmentTypeCode);

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping
 {
@@ -10,19 +8,37 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShippingException : Exception
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShippingException()
         {
 
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShippingException(string message)
             : base(message)
         {
 
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShippingException(string message, Exception inner)
             : base(message, inner)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected ShippingException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
         {
 
         }

@@ -14,11 +14,11 @@ using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
-using ShipWorks.Shipping.Settings;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using Autofac.Features.OwnedInstances;
 using ShipWorks.Messaging.Messages;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Editing.Rating
 
             rateControl.Initialize(new FootnoteParameters(() => RefreshRates(false), GetStoreForCurrentShipment));
 
-            uspsAccountConvertedToken = Messenger.Current.AsObservable<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
+            uspsAccountConvertedToken = Messenger.Current.OfType<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
         }
 
         /// <summary>

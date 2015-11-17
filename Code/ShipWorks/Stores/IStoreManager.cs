@@ -27,5 +27,15 @@ namespace ShipWorks.Stores
         /// Get all stores, regardless of security, that are currently enabled for downloading and shipping
         /// </summary>
         IEnumerable<StoreEntity> GetEnabledStores();
+
+        /// <summary>
+        /// Get the store for the related Shipment
+        /// </summary>
+        StoreEntity GetRelatedStore(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Saves the store.
+        /// </summary>
+        void SaveStore(StoreEntity store);
     }
 }

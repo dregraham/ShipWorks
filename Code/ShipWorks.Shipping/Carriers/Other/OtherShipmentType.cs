@@ -120,6 +120,11 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer() =>
+			new OtherShipmentProcessingSynchronizer();
+
         /// Process the shipment
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)

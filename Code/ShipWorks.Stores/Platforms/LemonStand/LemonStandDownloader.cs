@@ -100,21 +100,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 int expectedCount = jsonOrders.Count;
 
-                // Load orders 
-                foreach (JToken jsonOrder in jsonOrders)
-                {
-                    // check for cancellation
-                    if (Progress.IsCancelRequested)
-                    {
-                        return;
-                    }
-
-                    // Set the progress detail
-                    Progress.Detail = "Processing order " + (QuantitySaved + 1) + " of " + expectedCount + "...";
-                    Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
-
-                    LoadOrder(jsonOrder);
-                }
+                if (ProcessOrders(jsonOrders, expectedCount)) return;
 
                 Progress.Detail = "Done";
                 Progress.PercentComplete = 100;
@@ -127,6 +113,26 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new DownloadException(ex.Message, ex);
             }
+        }
+
+        private bool ProcessOrders(List<JToken> jsonOrders, int expectedCount)
+        {
+// Load orders 
+            foreach (JToken jsonOrder in jsonOrders)
+            {
+                // check for cancellation
+                if (Progress.IsCancelRequested)
+                {
+                    return true;
+                }
+
+                // Set the progress detail
+                Progress.Detail = "Processing order " + (QuantitySaved + 1) + " of " + expectedCount + "...";
+                Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
+
+                LoadOrder(jsonOrder);
+            }
+            return false;
         }
 
         /// <summary>

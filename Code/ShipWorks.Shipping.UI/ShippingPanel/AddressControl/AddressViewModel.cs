@@ -42,23 +42,21 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         /// </summary>
         public AddressViewModel()
         {
-
+            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AddressViewModel(IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
-            IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
+            IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector) : this()
         {
             this.validator = validator;
             this.shippingOriginManager = shippingOriginManager;
             this.messageHelper = messageHelper;
             this.validatedAddressScope = validatedAddressScope;
             this.addressSelector = addressSelector;
-
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
-
+            
             SetupAddressValidationMessagePropertyHandlers();
 
             AddressSuggestions = Enumerable.Empty<KeyValuePair<string, ValidatedAddressEntity>>();

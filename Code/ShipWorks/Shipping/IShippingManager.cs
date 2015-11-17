@@ -92,5 +92,15 @@ namespace ShipWorks.Shipping
         /// it was voided is logged to tango.
         /// </summary>
         void VoidShipment(long shipmentID);
+		
+        /// <summary>
+        /// Indicates if the shipment type of the given type code has gone through the full setup wizard \ configuration
+        /// </summary>
+        bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Gets the service used.
+        /// </summary>
+        string GetServiceUsed(ShipmentEntity shipment);
     }
 }

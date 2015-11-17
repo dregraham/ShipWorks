@@ -284,6 +284,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.ChannelAdvisor
                         },
 
+                    new GridColumnDefinition("{CDC41FA5-B652-4E1D-B0E6-7908443249D7}", true,
+                        new GridEnumDisplayType<ChannelAdvisorIsAmazonPrime>(EnumSortMethod.Description), "Amazon Prime", ChannelAdvisorIsAmazonPrime.Yes,
+                        ChannelAdvisorOrderFields.IsPrime)
+                        {
+                            StoreTypeCode = StoreTypeCode.ChannelAdvisor
+                        },
+
                     new GridColumnDefinition("{74EF7153-8DFC-4afb-B9A7-0ABD5359B983}", true, 
                         new ProStoresAuthorizationDisplayType(), "Authorized", DateTimeUtility.ParseEnUS("03/04/2001 1:30 PM").ToUniversalTime(),
                         ProStoresOrderFields.AuthorizedDate)

@@ -1,13 +1,17 @@
 ﻿using Autofac;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Services;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.UI.Carriers.Ups
 {
+    /// <summary>
+    /// Service registrations for the Ups shipping carrier
+    /// </summary>
     public class UpsShippingModule : Module
     {
         /// <summary>
@@ -15,6 +19,8 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
+            base.Load(builder);
+
             builder.RegisterType<UpsOltShipmentType>()
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.UpsOnLineTools);

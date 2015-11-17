@@ -20,6 +20,12 @@ namespace ShipWorks.Stores.Services
         public StoreEntity GetRelatedStore(long orderId) => StoreManager.GetRelatedStore(orderId);
 
         /// <summary>
+        /// Get the store for the shipment
+        /// </summary>
+        public StoreEntity GetRelatedStore(ShipmentEntity shipment) => 
+            StoreManager.GetRelatedStore(shipment.ShipmentID);
+
+        /// <summary>
         /// Get the current list of stores.  All stores are returned, regardless of security.
         /// </summary>
         public IEnumerable<StoreEntity> GetAllStores() => StoreManager.GetAllStores();
@@ -28,5 +34,15 @@ namespace ShipWorks.Stores.Services
         /// Get all stores, regardless of security, that are currently enabled for downloading and shipping
         /// </summary>
         public IEnumerable<StoreEntity> GetEnabledStores() => StoreManager.GetEnabledStores();
+
+        /// <summary>
+        /// Saves the store.
+        /// </summary>
+        public void SaveStore(StoreEntity store)
+        {
+            StoreManager.SaveStore(store);
+            StatusPresetManager.CheckForChanges();
+            StoreManager.CheckForChanges();
+        }
     }
 }
