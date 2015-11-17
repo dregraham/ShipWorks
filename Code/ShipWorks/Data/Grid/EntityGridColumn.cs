@@ -293,9 +293,13 @@ namespace ShipWorks.Data.Grid
 
             return textBounds;
         }
+
+        /// <summary>
+        /// Gets the tooltip text.
+        /// </summary>
         public string GetTooltipText(EntityGridRow row)
         {
-            return DisplayType.GetToolTipText(row, this);
+            return DisplayType.GetTooltipText(row, this);
         }
     }
 }

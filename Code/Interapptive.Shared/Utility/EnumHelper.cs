@@ -164,6 +164,9 @@ namespace Interapptive.Shared.Utility
             return GetEnumMetadata(value).DescriptionAttribute?.Description ?? string.Empty;
         }
 
+        /// <summary>
+        /// Gets the details of the given enumerated value
+        /// </summary>
         public static string GetDetails(Enum value)
         {
             return GetEnumMetadata(value).DetailsAttribute?.Details ?? string.Empty;

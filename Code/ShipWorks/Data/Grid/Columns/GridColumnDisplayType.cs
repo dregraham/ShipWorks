@@ -290,7 +290,10 @@ namespace ShipWorks.Data.Grid.Columns
             return Empty;
         }
 
-        internal string GetToolTipText(EntityGridRow row, EntityGridColumn column)
+        /// <summary>
+        /// Gets the tool tip text.
+        /// </summary>
+        internal string GetTooltipText(EntityGridRow row, EntityGridColumn column)
         {
             return row.GetFormattedValue(column).ToolTipText;
         }

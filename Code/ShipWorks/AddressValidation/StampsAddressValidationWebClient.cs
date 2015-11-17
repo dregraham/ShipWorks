@@ -67,8 +67,6 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult)
         {
-            //AddressType addressType = ConvertAddressType(uspsResult);
-
             AddressValidationResult addressValidationResult = new AddressValidationResult
             {
                 Street1 = address.Address1 ?? string.Empty,
@@ -81,7 +79,6 @@ namespace ShipWorks.AddressValidation
                 IsValid = isValid,
                 POBox = ConvertPoBox(uspsResult.IsPoBox),
                 ResidentialStatus = ConvertResidentialStatus(uspsResult.ResidentialIndicator),
-                //AddressType = addressType
             };
 
             addressValidationResult.ParseStreet1();
