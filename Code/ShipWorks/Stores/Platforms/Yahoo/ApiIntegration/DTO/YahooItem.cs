@@ -15,10 +15,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
         public string ItemCode { get; set; }
 
         [XmlElement(ElementName = "Quantity")]
-        public string Quantity { get; set; }
+        public double Quantity { get; set; }
 
         [XmlElement(ElementName = "UnitPrice")]
-        public string UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; }
 
         [XmlElement(ElementName = "Description")]
         public string Description { get; set; }

@@ -167,7 +167,22 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
         private void LoadOrderGiftMessages(YahooOrderEntity orderEntity, YahooOrder order)
         {
-            throw new NotImplementedException();
+            if (order.OrderTotals.GiftWrap !=0 || !order.GiftMessage.IsNullOrWhiteSpace())
+            {
+                YahooOrderItemEntity item = (YahooOrderItemEntity)InstantiateOrderItem(orderEntity);
+
+                item.YahooProductID = "giftwrap";
+                item.Code = "GIFTWRAP";
+                item.Name = "Gift Wrap";
+                item.Quantity = 1;
+                item.UnitPrice = order.OrderTotals.GiftWrap;
+
+                OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+
+                attribute.Name = "Message";
+                attribute.Description = order.GiftMessage;
+                attribute.UnitPrice = 0; 
+            }
         }
 
         /// <summary>
@@ -179,6 +194,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             LoadOrderCharge(orderEntity, "SHIPPING", "Shipping", order.OrderTotals.Shipping);
             LoadOrderCharge(orderEntity, "TAX", "Tax", order.OrderTotals.Tax);
+
+            //if (order.OrderTotals.GiftWrap != 0)
+            //{
+            //    LoadOrderCharge(orderEntity, "GIFT WRAP", "Gift Wrap", order.OrderTotals.GiftWrap);
+            //}
 
             foreach (YahooAppliedPromotion promotion in order.OrderTotals.Promotions.AppliedPromotion)
             {
@@ -219,15 +239,36 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="order">The order DTO.</param>
         private void LoadOrderItems(YahooOrderEntity orderEntity, YahooOrder order)
         {
-            LoadOrderItem();
+            foreach (YahooItem item in order.ItemList.Item)
+            {
+                LoadOrderItem(orderEntity, item);
+            }
         }
 
-        private void LoadOrderItem()
+        private void LoadOrderItem(YahooOrderEntity orderEntity, YahooItem item)
         {
-            LoadOrderItemAttributes();
+            YahooOrderItemEntity itemEntity = (YahooOrderItemEntity)InstantiateOrderItem(orderEntity);
+
+            itemEntity.YahooProductID = item.ItemID;
+            itemEntity.Code = item.ItemCode;
+            itemEntity.Quantity = item.Quantity;
+            itemEntity.UnitPrice = item.UnitPrice;
+            itemEntity.Description = item.Description;
+            itemEntity.Url = item.URL; // Add URL to YahooOrderItem
+            itemEntity.Thumbnail = item.ThumbnailUrl;
+            itemEntity.Weight = GetItemWeight(item.ItemID);
+
+
+
+            LoadOrderItemAttributes(item);
         }
 
-        private void LoadOrderItemAttributes()
+        private double GetItemWeight(string itemID)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void LoadOrderItemAttributes(YahooItem item)
         {
             throw new NotImplementedException();
         }

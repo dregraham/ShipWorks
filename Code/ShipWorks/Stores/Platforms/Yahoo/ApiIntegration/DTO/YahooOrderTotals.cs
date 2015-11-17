@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
     public class YahooOrderTotals
     {
         [XmlElement(ElementName = "Subtotal")]
-        public string Subtotal { get; set; }
+        public decimal Subtotal { get; set; }
 
         [XmlElement(ElementName = "Shipping")]
         public decimal Shipping { get; set; }
@@ -19,5 +19,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
 
         [XmlElement(ElementName = "Total")]
         public decimal Total { get; set; }
+
+        [XmlElement(ElementName = "GiftWrap")]
+        public decimal GiftWrap { get; set; }
     }
 }
