@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Wizard;
@@ -25,6 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Wizard Form for setting up shipping with endicia
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class EndiciaSetupWizard : ShipmentTypeSetupWizardForm
     {
         EndiciaAccountEntity account;
@@ -55,6 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Initialization
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
@@ -217,6 +220,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Stepping next from the address page
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnStepNextAddress(object sender, WizardStepEventArgs e)
         {
             PersonAdapter person = new PersonAdapter();
@@ -418,6 +422,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Stepping next from the payment page
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private void OnStepNextPayment(object sender, WizardStepEventArgs e)
         {
             PersonAdapter creditPerson = new PersonAdapter();
@@ -687,6 +693,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Stepping next from the existing account page
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnStepNextExisting(object sender, WizardStepEventArgs e)
         {
             if (signupCompleted)

@@ -16,6 +16,7 @@ using System.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode;
 using System.Transactions;
+using Interapptive.Shared;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration
 {
@@ -206,6 +207,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// <summary>
         /// Generate the list of all SQL commands required to get the database into a perfect 3x state
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static List<string> GenerateCleanupSqlCommands(SqlConnection con)
         {
             List<string> commands = new List<string>();

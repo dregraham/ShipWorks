@@ -16,6 +16,7 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.IO.Text.HtmlAgilityPack;
 using System.Net;
+using Interapptive.Shared;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Templates.Saving
@@ -242,6 +243,7 @@ namespace ShipWorks.Templates.Saving
         /// <summary>
         /// Do the actual work of the save. Returns false if canceled, true otherwise.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool SaveWorker()
         {
             // Create the html control that will be used
@@ -346,6 +348,7 @@ namespace ShipWorks.Templates.Saving
         /// Acquire the filename based on the given results, and given that there were the given number of total results from the selection.
         /// Returns null if the user is prompted but cancels.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private string AcquireFilename(IEnumerable<TemplateResult> results, int totalResults)
         {
             List<long> entityKeys = new List<long>();
@@ -469,6 +472,7 @@ namespace ShipWorks.Templates.Saving
         /// <summary>
         /// Raise the event that must be handled to ask the user for the filename.  Returns null if the user cancels.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private string RaisePromptForFile(string name, string folder, SaveFileNamePart part)
         {
             SavePromptForFileEventHandler handler = PromptForFile;

@@ -151,6 +151,7 @@ namespace Interapptive.Shared.Business.Geography
         /// <summary>
         /// Load the country list
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void LoadCountries()
         {
             countries.Add("Albania", "AL");

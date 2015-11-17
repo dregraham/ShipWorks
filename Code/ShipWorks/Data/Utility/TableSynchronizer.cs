@@ -10,6 +10,7 @@ using System.Diagnostics;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Adapter.Custom;
 using System.Data.SqlClient;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Caching;
@@ -73,6 +74,7 @@ namespace ShipWorks.Data.Utility
         /// <summary>
         /// Synchronize the contents of the in memory collection with what is in the database
         /// </summary>
+        [NDependIgnoreLongMethod]
         public bool Synchronize(List<TEntity> modified, List<TEntity> added)
         {
             if (changeMonitor == null)

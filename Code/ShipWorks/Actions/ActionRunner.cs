@@ -28,6 +28,7 @@ using ShipWorks.SqlServer.Filters;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Utility;
 using System.ComponentModel;
+using Interapptive.Shared;
 using ShipWorks.Users.Security;
 using ShipWorks.Users.Audit;
 using ShipWorks.Actions.Triggers;
@@ -251,6 +252,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Generate the steps that will be executed for the given queue item
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool GenerateActionQueueSteps(ActionQueueEntity queue, ActionEntity action)
         {
             List<ActionTask> tasks = ActionManager.LoadTasks(action);
@@ -310,6 +312,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Run the steps for the configured queue
         /// </summary>
+        [NDependIgnoreLongMethod]
         public ActionRunnerResult RunQueue()
         {
             // If we couldn't load the queue there was nothing to do
@@ -445,6 +448,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Run the step referred to be the given context.  The input keys will be determined using the task settings and the specified objectid
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void RunStep(ActionStepContext stepContext)
         {
             ActionQueueStepEntity step = stepContext.Step;
@@ -775,6 +779,7 @@ namespace ShipWorks.Actions
         /// Determine the input keys that should be used for the given task and instance of that task.  Returns null if and only if there was
         /// an error determing the input and the instance has been marked and saved as in error.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static List<long> GetStepInputKeys(ActionQueueStepEntity step, ActionTask actionTask, long? objectID)
         {
             ActionTaskInputSource inputSource = (ActionTaskInputSource) step.InputSource;

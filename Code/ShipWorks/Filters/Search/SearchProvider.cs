@@ -14,6 +14,7 @@ using System.Data.SqlClient;
 using ShipWorks.ApplicationCore;
 using ShipWorks.SqlServer.Filters;
 using System.Transactions;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.ApplicationCore.Interaction;
@@ -539,6 +540,7 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Create the container rows that the search results will be materialized to.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void CreateSearchResultsNode()
         {
             // A null reference error was being thrown.  Discoverred by Crash Reports.

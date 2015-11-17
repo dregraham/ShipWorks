@@ -10,6 +10,7 @@ using Divelements.SandGrid.Rendering;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Properties;
 
@@ -52,6 +53,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Draw the foreground of the row.  This is where the detail view processing takes place.
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override void DrawRowForeground(RenderingContext context, Rectangle bounds, GridColumn[] columns, TextFormattingInformation[] textFormats)
         {
             if (Grid == null)
@@ -176,6 +178,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Draw the content of a cell for the specified column.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         protected override void DrawVirtualCell(RenderingContext context, GridColumn baseColumn, object value, Font font, Image image, Rectangle bounds, bool selected, TextFormattingInformation textFormat, Color foreColor)
         {
             Checked = selected;

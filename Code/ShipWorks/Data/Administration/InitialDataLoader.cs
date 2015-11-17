@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -441,6 +442,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Create the never-changing top-level filter for the given target
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static FilterNodeEntity CreateTopLevelFilter(FilterTarget target)
         {
             using (SqlAdapter adapter = new SqlAdapter())

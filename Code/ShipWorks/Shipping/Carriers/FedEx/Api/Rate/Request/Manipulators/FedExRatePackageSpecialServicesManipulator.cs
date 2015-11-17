@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -121,6 +122,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// <param name="serviceType">Type of the service.</param>
         /// <returns></returns>
         /// <exception cref="System.InvalidOperationException">Invalid FedEx ServiceType  + serviceType</exception>
+        [NDependIgnoreComplexMethodAttribute]
         private static ServiceType GetApiServiceType(FedExServiceType serviceType)
         {
             switch (serviceType)

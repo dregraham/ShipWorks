@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Wizard;
@@ -139,6 +140,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Stepping next from the account information page
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnStepNextAccountInfo(object sender, WizardStepEventArgs e)
         {
             account.AccountNumber = accountNumber.Text;

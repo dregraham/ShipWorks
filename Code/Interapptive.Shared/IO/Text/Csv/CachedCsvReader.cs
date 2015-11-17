@@ -131,51 +131,53 @@ namespace Interapptive.Shared.IO.Text.Csv
 		{
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the CsvReader class.
-		/// </summary>
-		/// <param name="reader">A <see cref="T:TextReader"/> pointing to the CSV file.</param>
-		/// <param name="hasHeaders"><see langword="true"/> if field names are located on the first non commented line, otherwise, <see langword="false"/>.</param>
-		/// <param name="delimiter">The delimiter character separating each field (default is ',').</param>
-		/// <param name="quote">The quotation character wrapping every field (default is ''').</param>
-		/// <param name="escape">
-		/// The escape character letting insert quotation characters inside a quoted field (default is '\').
-		/// If no escape character, set to '\0' to gain some performance.
-		/// </param>
-		/// <param name="comment">The comment character indicating that a line is commented out (default is '#').</param>
-		/// <param name="trimSpaces"><see langword="true"/> if spaces at the start and end of a field are trimmed, otherwise, <see langword="false"/>. Default is <see langword="true"/>.</param>
-		/// <exception cref="T:ArgumentNullException">
-		///		<paramref name="reader"/> is a <see langword="null"/>.
-		/// </exception>
-		/// <exception cref="T:ArgumentException">
-		///		Cannot read from <paramref name="reader"/>.
-		/// </exception>
-		public CachedCsvReader(TextReader reader, bool hasHeaders, char delimiter, char quote, char escape, char comment, bool trimSpaces)
+        /// <summary>
+        /// Initializes a new instance of the CsvReader class.
+        /// </summary>
+        /// <param name="reader">A <see cref="T:TextReader"/> pointing to the CSV file.</param>
+        /// <param name="hasHeaders"><see langword="true"/> if field names are located on the first non commented line, otherwise, <see langword="false"/>.</param>
+        /// <param name="delimiter">The delimiter character separating each field (default is ',').</param>
+        /// <param name="quote">The quotation character wrapping every field (default is ''').</param>
+        /// <param name="escape">
+        /// The escape character letting insert quotation characters inside a quoted field (default is '\').
+        /// If no escape character, set to '\0' to gain some performance.
+        /// </param>
+        /// <param name="comment">The comment character indicating that a line is commented out (default is '#').</param>
+        /// <param name="trimSpaces"><see langword="true"/> if spaces at the start and end of a field are trimmed, otherwise, <see langword="false"/>. Default is <see langword="true"/>.</param>
+        /// <exception cref="T:ArgumentNullException">
+        ///		<paramref name="reader"/> is a <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="T:ArgumentException">
+        ///		Cannot read from <paramref name="reader"/>.
+        /// </exception>
+        [NDependIgnoreTooManyParams]
+        public CachedCsvReader(TextReader reader, bool hasHeaders, char delimiter, char quote, char escape, char comment, bool trimSpaces)
 			: this(reader, hasHeaders, delimiter, quote, escape, comment, trimSpaces, DefaultBufferSize)
 		{
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the CsvReader class.
-		/// </summary>
-		/// <param name="reader">A <see cref="T:TextReader"/> pointing to the CSV file.</param>
-		/// <param name="hasHeaders"><see langword="true"/> if field names are located on the first non commented line, otherwise, <see langword="false"/>.</param>
-		/// <param name="delimiter">The delimiter character separating each field (default is ',').</param>
-		/// <param name="quote">The quotation character wrapping every field (default is ''').</param>
-		/// <param name="escape">
-		/// The escape character letting insert quotation characters inside a quoted field (default is '\').
-		/// If no escape character, set to '\0' to gain some performance.
-		/// </param>
-		/// <param name="comment">The comment character indicating that a line is commented out (default is '#').</param>
-		/// <param name="trimSpaces"><see langword="true"/> if spaces at the start and end of a field are trimmed, otherwise, <see langword="false"/>. Default is <see langword="true"/>.</param>
-		/// <param name="bufferSize">The buffer size in bytes.</param>
-		/// <exception cref="T:ArgumentNullException">
-		///		<paramref name="reader"/> is a <see langword="null"/>.
-		/// </exception>
-		/// <exception cref="ArgumentOutOfRangeException">
-		///		<paramref name="bufferSize"/> must be 1 or more.
-		/// </exception>
-		public CachedCsvReader(TextReader reader, bool hasHeaders, char delimiter, char quote, char escape, char comment, bool trimSpaces, int bufferSize)
+        /// <summary>
+        /// Initializes a new instance of the CsvReader class.
+        /// </summary>
+        /// <param name="reader">A <see cref="T:TextReader"/> pointing to the CSV file.</param>
+        /// <param name="hasHeaders"><see langword="true"/> if field names are located on the first non commented line, otherwise, <see langword="false"/>.</param>
+        /// <param name="delimiter">The delimiter character separating each field (default is ',').</param>
+        /// <param name="quote">The quotation character wrapping every field (default is ''').</param>
+        /// <param name="escape">
+        /// The escape character letting insert quotation characters inside a quoted field (default is '\').
+        /// If no escape character, set to '\0' to gain some performance.
+        /// </param>
+        /// <param name="comment">The comment character indicating that a line is commented out (default is '#').</param>
+        /// <param name="trimSpaces"><see langword="true"/> if spaces at the start and end of a field are trimmed, otherwise, <see langword="false"/>. Default is <see langword="true"/>.</param>
+        /// <param name="bufferSize">The buffer size in bytes.</param>
+        /// <exception cref="T:ArgumentNullException">
+        ///		<paramref name="reader"/> is a <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///		<paramref name="bufferSize"/> must be 1 or more.
+        /// </exception>
+        [NDependIgnoreTooManyParams]
+        public CachedCsvReader(TextReader reader, bool hasHeaders, char delimiter, char quote, char escape, char comment, bool trimSpaces, int bufferSize)
 			: base(reader, hasHeaders, delimiter, quote, escape, comment, trimSpaces, bufferSize)
 		{
 			_records = new ArrayList();

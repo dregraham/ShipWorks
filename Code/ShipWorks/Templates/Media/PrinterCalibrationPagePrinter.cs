@@ -8,6 +8,7 @@ using ShipWorks.UI.Controls.Html;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Printing;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.Threading;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -191,6 +192,7 @@ namespace ShipWorks.Templates.Media
         /// <summary>
         /// Generate the html that will output the centered cross
         /// </summary>
+        [NDependIgnoreLongMethod]
         private string GenerateCalibrateHtml(double pageWidth, double pageHeight)
         {
             StringBuilder sb = new StringBuilder();
@@ -274,6 +276,7 @@ namespace ShipWorks.Templates.Media
         /// <summary>
         /// Append an HTML line via an absolte position div
         /// </summary>
+        [NDependIgnoreTooManyParams]
         private void AppendHtmlLine(StringBuilder sb, decimal xStart, decimal yStart, decimal xStop, decimal yStop, string label)
         {
             decimal width = xStop - xStart;

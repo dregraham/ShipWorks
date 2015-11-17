@@ -62,12 +62,14 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using Autofac;
 using ShipWorks.AddressValidation.Enums;
+using Interapptive.Shared;
 
 namespace ShipWorks.Shipping
 {
     /// <summary>
     /// Utility class for working with shipments
     /// </summary>
+    [NDependIgnoreLongTypes]
     public static class ShippingManager
     {
         // Logger
@@ -175,6 +177,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create a shipment for the given order.  The order\shipment reference is created between the two objects.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static ShipmentEntity InternalCreateShipment(OrderEntity order)
         {
             UserSession.Security.DemandPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID);
@@ -418,6 +421,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Save the given shipment.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void SaveShipment(ShipmentEntity shipment)
         {
             // Ensure the latest ShipSense data is recorded for this shipment before saving
@@ -810,6 +814,7 @@ namespace ShipWorks.Shipping
         /// Void the given shipment.  If the shipment is already voided, then no action is taken and no error is reported.  The fact that
         /// it was voided is logged to tango.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void VoidShipment(long shipmentID)
         {
             UserSession.Security.DemandPermission(PermissionType.ShipmentsVoidDelete, shipmentID);
@@ -957,6 +962,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Processes the shipment.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void ProcessShipment(long shipmentID, Dictionary<long, Exception> licenseCheckCache, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
         {
             log.InfoFormat("Shipment {0}  - Process Start", shipmentID);
@@ -1052,6 +1058,7 @@ namespace ShipWorks.Shipping
         /// Process the given shipment.  If the shipment is already processed, then no action is taken or error reported.  Licensing
         /// is validated, and processing results are logged to tango.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void ProcessShipmentHelper(ShipmentEntity shipment, StoreEntity storeEntity, Dictionary<long, Exception> licenseCheckCache)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();

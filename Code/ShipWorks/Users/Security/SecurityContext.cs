@@ -7,6 +7,7 @@ using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.HelperClasses;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Stores;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Utility;
@@ -147,6 +148,7 @@ namespace ShipWorks.Users.Security
         /// related to orders, then the ObjectID will be automatically translated to a StoreID, such as an OrderItemID would
         /// be translated to its order's StoreID.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public bool HasPermission(PermissionType type, long? objectID)
         {
             if (isAdmin)

@@ -153,6 +153,7 @@ THE SOFTWARE.*/
         /// <param name="UrlString">Url string</param>
         /// <param name="ParameterString">Parameter string</param>
         /// <returns>The base information for the signature</returns>
+        [NDependIgnoreLongMethod]
         private string GenerateBase(out string UrlString, out string ParameterString)
         {
             StringBuilder UrlBuilder = new StringBuilder();

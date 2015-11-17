@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI;
 using ShipWorks.Stores;
@@ -74,6 +75,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Ensure the license for the given store is active and allowed to download and process shipments.  It if is
         /// not, a LicenseException is thrown.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void EnsureActive(StoreEntity store)
         {
             if (store == null)

@@ -9,6 +9,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Drawing.Design;
 using System.ComponentModel.Design;
+using Interapptive.Shared;
 using ShipWorks.UI.Wizard.Design;
 
 namespace ShipWorks.UI.Wizard
@@ -634,6 +635,7 @@ namespace ShipWorks.UI.Wizard
         /// <summary>
         /// Show the page at the given index
         /// </summary>
+        [NDependIgnoreLongMethod]
         private WizardPage ShowPage(int index, WizardStepReason reason)
         {
             // Make sure the new index is valid

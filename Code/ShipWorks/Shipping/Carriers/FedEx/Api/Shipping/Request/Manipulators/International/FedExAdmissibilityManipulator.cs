@@ -1,4 +1,5 @@
 using System;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -50,6 +51,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <summary>
         /// Determine the API value corresponding to our internal type
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         private PhysicalPackagingType GetApiAdmissibilityPackagingType(FedExPhysicalPackagingType type)
         {
             switch (type)

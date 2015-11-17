@@ -11,6 +11,7 @@ using log4net;
 using System.ComponentModel;
 using System.Xml.Linq;
 using System.Xml;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -39,6 +40,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// User has clicked OK.  The OpenFileDialog is still open, and we can verify the valid file before closing.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void OnOpenFileDialogOK(object sender, CancelEventArgs e)
         {
             // Assume we'll fail

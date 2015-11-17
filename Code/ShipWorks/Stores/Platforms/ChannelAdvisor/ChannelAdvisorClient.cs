@@ -15,6 +15,7 @@ using log4net;
 using System.Web.Services.Protocols;
 using Interapptive.Shared.Net;
 using System.Xml;
+using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
@@ -190,6 +191,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Downloads the next page of orders from CA
         /// </summary>
+        [NDependIgnoreLongMethod]
         public List<caOrderService.OrderResponseDetailComplete> GetNextOrders()
         {
             if (orderHeaders == null)

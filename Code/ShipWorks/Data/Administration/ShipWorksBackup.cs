@@ -108,6 +108,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Create a backup 
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void CreateBackup(string filename)
         {
             if (filename == null)
@@ -410,6 +411,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Restore a backup from the given filename
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void RestoreBackup(string filename)
         {
             if (filename == null)
@@ -594,6 +596,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Restore's the backup into SQL Server
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void RestoreSqlBackup(BackupDatabase database)
         {
             ProgressItem progress = database.Progress;
@@ -729,6 +732,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Execute the restore operation
         /// </summary>
+        [NDependIgnoreTooManyParams]
         private void ExecuteSqlRestore(SqlConnection con, string databaseName, string backupFilePath, string sourceLogicalDb, string sourceLogicalLog, string targetPhysDb, string targetPhysLog, ProgressItem progress)
         {
             if (RestoreStarting != null)

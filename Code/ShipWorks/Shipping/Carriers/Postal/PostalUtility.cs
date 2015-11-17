@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
@@ -131,6 +132,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Get the domestic services valid for the given shipment type
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         public static List<PostalServiceType> GetDomesticServices(ShipmentTypeCode shipmentType)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();

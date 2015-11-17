@@ -9,6 +9,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Grid.Columns;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Stores.Platforms;
 using ShipWorks.Stores;
 using Interapptive.Shared.Utility;
@@ -84,6 +85,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Override drawing of the cell
         /// </summary>
+        [NDependIgnoreTooManyParams]
         protected override void DrawCell(RenderingContext context, GridRow row, object value, Font cellFont, Image image, Rectangle bounds, bool selected, TextFormattingInformation textFormat, Color cellForeColor)
         {
             // This is because right now SandGrid does not work with the outlook summary thing unless we override the bounds here.  If its ever fixed, we can override the bounds
@@ -134,6 +136,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Can be overridden by derived types for special preview processing
         /// </summary>
+        [NDependIgnoreTooManyParams]
         protected virtual void DrawPreview(RenderingContext context, GridRow row, object exampleValue, Font cellFont, Image image, Rectangle bounds, bool selected, TextFormattingInformation textFormat, Color cellForeColor)
         {
             GridColumnFormattedValue formattedValue = DisplayType.FormatPreview(exampleValue);
@@ -162,6 +165,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Draw a preview of what the column data will look like with the given example value.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public void DrawPreview(RenderingContext context, GridRow row, object exampleValue, Font cellFont, Image image, Rectangle bounds, bool selected, Color cellForeColor)
         {
             // Need text format based on the preview column

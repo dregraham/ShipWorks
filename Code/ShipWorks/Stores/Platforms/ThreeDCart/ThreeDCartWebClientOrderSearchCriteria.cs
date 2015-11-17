@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 
@@ -25,6 +26,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <param name="threeDCartStore">The 3D Cart store</param>
         /// <param name="pageSize">The size of the page of results to return.</param>
         /// <param name="page">The page of results to return.</param>
+        [NDependIgnoreTooManyParams]
         public ThreeDCartWebClientOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType orderDateSearchType, 
             DateTime lastModifiedFromDateTimeUtc, DateTime lastModifiedToDateTimeUtc,
             DateTime lastCreatedFromDateTimeUtc, DateTime lastCreatedToDateTimeUtc, 

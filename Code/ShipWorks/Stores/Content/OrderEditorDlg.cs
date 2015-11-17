@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI;
 using ShipWorks.Data;
@@ -29,6 +30,7 @@ namespace ShipWorks.Stores.Content
     /// <summary>
     /// Window for editing an order
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class OrderEditorDlg : Form
     {
         long orderID;

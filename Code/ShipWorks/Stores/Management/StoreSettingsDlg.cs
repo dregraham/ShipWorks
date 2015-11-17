@@ -26,12 +26,14 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using System.Collections;
 using ShipWorks.AddressValidation.Enums;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Management
 {
     /// <summary>
     /// Window for managing the settings of a single store
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class StoreSettingsDlg : Form
     {
         StoreEntity store;
@@ -320,6 +322,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Load the data to display in the license tab
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadLicenseTab()
         {
             Refresh();
@@ -444,6 +447,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Save changes
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnOK(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
