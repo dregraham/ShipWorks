@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
 {
@@ -6,6 +7,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
     public class YahooPromotions
     {
         [XmlElement(ElementName = "AppliedPromotion")]
-        public YahooAppliedPromotion AppliedPromotion { get; set; }
+        public List<YahooAppliedPromotion> AppliedPromotion { get; set; }
     }
 }

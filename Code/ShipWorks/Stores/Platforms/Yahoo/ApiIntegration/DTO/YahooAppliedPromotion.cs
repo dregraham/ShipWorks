@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
         public string Type { get; set; }
 
         [XmlElement(ElementName = "Discount")]
-        public string Discount { get; set; }
+        public decimal Discount { get; set; }
 
         [XmlElement(ElementName = "Message")]
         public string Message { get; set; }

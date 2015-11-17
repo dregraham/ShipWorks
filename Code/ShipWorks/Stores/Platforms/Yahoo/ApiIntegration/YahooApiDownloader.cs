@@ -132,7 +132,23 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
         private void LoadOrderTotals(YahooOrderEntity orderEntity, YahooOrder order)
         {
-            throw new NotImplementedException();
+            orderEntity.OrderTotal = order.OrderTotals.Total;
+            LoadOrderCharge(orderEntity, "SHIPPING", "Shipping", order.OrderTotals.Shipping);
+            LoadOrderCharge(orderEntity, "TAX", "Tax", order.OrderTotals.Tax);
+
+            foreach (YahooAppliedPromotion promotion in order.OrderTotals.Promotions.AppliedPromotion)
+            {
+                LoadOrderCharge(orderEntity, "PROMOTION", promotion.Name, promotion.Discount);
+            }
+        }
+
+        private void LoadOrderCharge(YahooOrderEntity order, string chargeType, string chargeDescription, decimal amount)
+        {
+            OrderChargeEntity charge = InstantiateOrderCharge(order);
+
+            charge.Type = chargeType;
+            charge.Description = chargeDescription;
+            charge.Amount = amount;
         }
 
         private void LoadOrderItems(YahooOrderEntity orderEntity, YahooOrder order)

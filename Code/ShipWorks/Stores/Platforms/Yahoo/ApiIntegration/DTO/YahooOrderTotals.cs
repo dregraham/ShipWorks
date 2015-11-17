@@ -9,15 +9,15 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
         public string Subtotal { get; set; }
 
         [XmlElement(ElementName = "Shipping")]
-        public string Shipping { get; set; }
+        public decimal Shipping { get; set; }
 
         [XmlElement(ElementName = "Tax")]
-        public string Tax { get; set; }
+        public decimal Tax { get; set; }
 
         [XmlElement(ElementName = "Promotions")]
         public YahooPromotions Promotions { get; set; }
 
         [XmlElement(ElementName = "Total")]
-        public string Total { get; set; }
+        public decimal Total { get; set; }
     }
 }
