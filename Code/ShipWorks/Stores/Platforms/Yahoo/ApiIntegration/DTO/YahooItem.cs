@@ -31,5 +31,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
 
         [XmlElement(ElementName = "ThumbnailURL")]
         public string ThumbnailUrl { get; set; }
+
+        [XmlElement(ElementName = "SelectedOptionList")]
+        public YahooSelectedOptionList SelectedOptionList { get; set; }
     }
 }

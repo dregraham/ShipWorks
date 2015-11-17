@@ -10,5 +10,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
 
         [XmlElement(ElementName = "OrderList")]
         public YahooOrderList OrderList { get; set; }
+
+        [XmlElement(ElementName = "Catalog")]
+        public YahooCatalog Catalog { get; set; }
     }
 }

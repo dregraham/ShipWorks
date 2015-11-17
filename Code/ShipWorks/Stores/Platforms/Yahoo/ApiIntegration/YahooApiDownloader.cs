@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using Quartz.Util;
 using ShipWorks.Data.Model.EntityClasses;
@@ -165,6 +166,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
         }
 
+        /// <summary>
+        /// Loads the order gift messages.
+        /// </summary>
+        /// <param name="orderEntity">The order entity.</param>
+        /// <param name="order">The order DTO.</param>
         private void LoadOrderGiftMessages(YahooOrderEntity orderEntity, YahooOrder order)
         {
             if (order.OrderTotals.GiftWrap !=0 || !order.GiftMessage.IsNullOrWhiteSpace())
@@ -217,7 +223,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
-        /// Loads the order charge.
+        /// Loads an order charge.
         /// </summary>
         /// <param name="order">The order entity.</param>
         /// <param name="chargeType">Type of the charge.</param>
@@ -245,6 +251,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
         }
 
+        /// <summary>
+        /// Loads an order item.
+        /// </summary>
+        /// <param name="orderEntity">The order entity.</param>
+        /// <param name="item">The item DTO.</param>
         private void LoadOrderItem(YahooOrderEntity orderEntity, YahooItem item)
         {
             YahooOrderItemEntity itemEntity = (YahooOrderItemEntity)InstantiateOrderItem(orderEntity);
@@ -254,27 +265,60 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             itemEntity.Quantity = item.Quantity;
             itemEntity.UnitPrice = item.UnitPrice;
             itemEntity.Description = item.Description;
-            itemEntity.Url = item.URL; // Add URL to YahooOrderItem
+            //itemEntity.Url = item.URL; // Add URL to YahooOrderItem
             itemEntity.Thumbnail = item.ThumbnailUrl;
             itemEntity.Weight = GetItemWeight(item.ItemID);
 
-
-
-            LoadOrderItemAttributes(item);
+            LoadOrderItemAttributes(itemEntity, item);
         }
+
 
         private double GetItemWeight(string itemID)
         {
-            throw new NotImplementedException();
-        }
+            YahooStoreEntity store = Store as YahooStoreEntity;
+            if (store == null)
+            {
+                throw new YahooException("Attempted to perform Yahoo actions on a non-Yahoo store");
+            }
 
-        private void LoadOrderItemAttributes(YahooItem item)
-        {
-            throw new NotImplementedException();
+            LruCache<string, YahooCatalogItem> productWeightCache = YahooProductWeightCache.Instance.GetStoreProductWeightCache(store.YahooStoreID);
+
+            YahooCatalogItem item = productWeightCache[itemID];
+            
+            if (item != null)
+            {
+                return item.ShipWeight;
+            }
+
+            // If item is null, that means it is not in the cache
+            // So make the call to get the item weight and cache it
+            YahooApiWebClient client = new YahooApiWebClient(store);
+            YahooCatalogItem newItem = DeserializeResponse<YahooCatalogItem>(client.GetItem(itemID));
+
+            productWeightCache[itemID] = newItem;
+
+            return newItem.ShipWeight;
         }
 
         /// <summary>
-        /// Checks for new orders.
+        /// Loads the item attributes.
+        /// </summary>
+        /// <param name="itemEntity">The item entity.</param>
+        /// <param name="item">The item DTO.</param>
+        private void LoadOrderItemAttributes(YahooOrderItemEntity itemEntity, YahooItem item)
+        {
+            foreach (YahooOption option in item.SelectedOptionList.Option)
+            {
+                OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(itemEntity);
+
+                attribute.Name = option.Name;
+                attribute.Description = option.Value;
+                attribute.UnitPrice = 0;
+            }
+        }
+
+        /// <summary>
+        /// Checks if there are new orders to download.
         /// </summary>
         /// <returns>List of order numbers to be downloaded</returns>
         private List<long> CheckForNewOrders()

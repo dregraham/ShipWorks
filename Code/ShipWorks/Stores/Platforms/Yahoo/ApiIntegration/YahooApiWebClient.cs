@@ -36,6 +36,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             return ProcessRequest(CreateGetOrderRangeRequest(start), "GetOrderRange");
         }
 
+        public string GetItem(string itemID)
+        {
+            return ProcessRequest(CreateGetItemRequest(itemID), "GetItem");
+        }
+
         public string ValidateCredentials()
         {
             return ProcessRequest(CreateGetItemRangeRequest(1, 2, "keyword"), "GetItemRange");
@@ -114,6 +119,30 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 Verb = HttpVerb.Post,
                 Uri = new Uri(yahooCatalogEndpoint + "/CatalogQuery")
             };
+
+            return submitter;
+        }
+
+        private HttpTextPostRequestSubmitter CreateGetItemRequest(string itemID)
+        {
+            string body = GetRequestBodyIntro +
+                          "<CatalogQuery>" +
+                          "<ItemQueryList>" +
+                          "<ItemIDList>" +
+                          $"<ID>{itemID}</ID>" +
+                          "</ItemIDList>" +
+                          "<AttributesType>all</AttributesType>" +
+                          "</ItemQueryList>" +
+                          "</CatalogQuery>" +
+                          "</ResourceList>" +
+                          "</ystorewsRequest>";
+
+            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
+            {
+                Verb = HttpVerb.Post,
+                Uri = new Uri(yahooCatalogEndpoint + "/CatalogQuery")
+            };
+
             return submitter;
         }
 
