@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
+using Quartz.Util;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
@@ -20,6 +22,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
         }
 
+        /// <summary>
+        /// Kicks off download for the store
+        /// </summary>
         protected override void Download()
         {
             Progress.Detail = "Checking for new orders...";
@@ -48,6 +53,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
         }
 
+        /// <summary>
+        /// Downloads the new orders.
+        /// </summary>
+        /// <param name="orderList">The order list.</param>
         private void DownloadNewOrders(List<long> orderList)
         {
             foreach (long orderID in orderList)
@@ -60,6 +69,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
         }
 
+        /// <summary>
+        /// Loads the order.
+        /// </summary>
+        /// <param name="order">The order DTO.</param>
+        /// <exception cref="YahooException">$Failed to instantiate order {order.OrderID}</exception>
         private void LoadOrder(YahooOrder order)
         {
             YahooOrderEntity orderEntity = InstantiateOrder(new YahooOrderIdentifier((order.OrderID.ToString()))) as YahooOrderEntity;
@@ -83,6 +97,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             LoadOrderPayments(orderEntity, order);
         }
 
+        /// <summary>
+        /// Loads the address.
+        /// </summary>
+        /// <param name="orderEntity">The order entity.</param>
+        /// <param name="order">The order DTO.</param>
         private void LoadAddress(YahooOrderEntity orderEntity, YahooOrder order)
         {
             orderEntity.ShipFirstName = order.ShipToInfo.GeneralInfo.FirstName;
@@ -115,9 +134,35 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Loads the order notes.
+        /// </summary>
+        /// <param name="orderEntity">The order entity.</param>
+        /// <param name="order">The order DTO.</param>
         private void LoadOrderNotes(YahooOrderEntity orderEntity, YahooOrder order)
         {
-            throw new NotImplementedException();
+            if (!order.MerchantNotes.IsNullOrWhiteSpace())
+            {
+                // Merchant notes combines all notes into one string, separated by a '>'
+                string[] noteArray = order.MerchantNotes.Split('>');
+
+                foreach (string note in noteArray)
+                {
+                    // Here we are extracting the date that prefixes the note, the date and note are seperated by a ':'
+                    // We want to substring off of the second ":" though, since one appears in the dates time
+                    int dateEndIndex = note.IndexOf(":", note.IndexOf(":", StringComparison.Ordinal) + 1, StringComparison.Ordinal) + 1;
+
+                    DateTime noteDate = DateTime.Parse(note.Substring(0, dateEndIndex));
+                    string noteText = note.Substring(dateEndIndex + 1);
+                    InstantiateNote(orderEntity, noteText, noteDate, NoteVisibility.Internal);
+                }
+            }
+
+            if (!order.BuyerComments.IsNullOrWhiteSpace())
+            {
+                InstantiateNote(orderEntity, order.BuyerComments, DateTime.Parse(order.CreationTime),
+                    NoteVisibility.Public);
+            }
         }
 
         private void LoadOrderGiftMessages(YahooOrderEntity orderEntity, YahooOrder order)
@@ -125,23 +170,39 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Loads the order charges.
+        /// </summary>
+        /// <param name="orderEntity">The order entity.</param>
+        /// <param name="order">The order DTO.</param>
         private void LoadOrderCharges(YahooOrderEntity orderEntity, YahooOrder order)
         {
-            throw new NotImplementedException();
-        }
-
-        private void LoadOrderTotals(YahooOrderEntity orderEntity, YahooOrder order)
-        {
-            orderEntity.OrderTotal = order.OrderTotals.Total;
             LoadOrderCharge(orderEntity, "SHIPPING", "Shipping", order.OrderTotals.Shipping);
             LoadOrderCharge(orderEntity, "TAX", "Tax", order.OrderTotals.Tax);
 
             foreach (YahooAppliedPromotion promotion in order.OrderTotals.Promotions.AppliedPromotion)
             {
-                LoadOrderCharge(orderEntity, "PROMOTION", promotion.Name, promotion.Discount);
+                LoadOrderCharge(orderEntity, "PROMOTION", promotion.Name, -promotion.Discount);
             }
         }
 
+        /// <summary>
+        /// Loads the order totals.
+        /// </summary>
+        /// <param name="orderEntity">The order entity.</param>
+        /// <param name="order">The order DTO.</param>
+        private void LoadOrderTotals(YahooOrderEntity orderEntity, YahooOrder order)
+        {
+            orderEntity.OrderTotal = order.OrderTotals.Total;
+        }
+
+        /// <summary>
+        /// Loads the order charge.
+        /// </summary>
+        /// <param name="order">The order entity.</param>
+        /// <param name="chargeType">Type of the charge.</param>
+        /// <param name="chargeDescription">The charge description.</param>
+        /// <param name="amount">The amount.</param>
         private void LoadOrderCharge(YahooOrderEntity order, string chargeType, string chargeDescription, decimal amount)
         {
             OrderChargeEntity charge = InstantiateOrderCharge(order);
@@ -151,6 +212,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             charge.Amount = amount;
         }
 
+        /// <summary>
+        /// Loads the order items.
+        /// </summary>
+        /// <param name="orderEntity">The order entity.</param>
+        /// <param name="order">The order DTO.</param>
         private void LoadOrderItems(YahooOrderEntity orderEntity, YahooOrder order)
         {
             LoadOrderItem();
@@ -166,6 +232,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Checks for new orders.
+        /// </summary>
+        /// <returns>List of order numbers to be downloaded</returns>
         private List<long> CheckForNewOrders()
         {
             YahooApiWebClient client = new YahooApiWebClient(Store as YahooStoreEntity);
