@@ -26,6 +26,7 @@ using System.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Utility;
 using System.Net.Sockets;
+using Interapptive.Shared;
 using ShipWorks.Users;
 
 namespace ShipWorks.Email
@@ -376,6 +377,8 @@ namespace ShipWorks.Email
         /// <summary>
         /// Send all the messages for the given throttler
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static bool SendMessagesForThrottler(EmailOutboundThrottler throttler, ProgressItem progress)
         {
             bool errors = false;

@@ -5118,10 +5118,11 @@ namespace ShipWorks.UI.Controls.Html.Core
 				[In]
 				IntPtr pRect);
 		}
-		#endregion
+        #endregion
 
-		#region IHTMLPainter
-		[ComVisible(true), Guid("3050f6a6-98b5-11cf-bb82-00aa00bdce0b"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+        #region IHTMLPainter
+        [NDependIgnore]
+        [ComVisible(true), Guid("3050f6a6-98b5-11cf-bb82-00aa00bdce0b"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
 		public interface IHTMLPainter {
 			void Draw(
 				[In, MarshalAs(UnmanagedType.I4)]

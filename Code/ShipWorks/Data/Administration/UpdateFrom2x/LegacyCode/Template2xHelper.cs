@@ -15,6 +15,7 @@ using ShipWorks.Templates.Saving;
 using ShipWorks.Stores;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks;
 using System.Data.SqlClient;
+using Interapptive.Shared;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Utility;
 
@@ -164,6 +165,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Process the settings from the version2 template
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void ReadTemplateSettings(TemplateEntity template)
         {
             if (template == null)

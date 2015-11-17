@@ -15,6 +15,7 @@ using ShipWorks.Shipping;
 using ShipWorks.ApplicationCore.Logging;
 using System.Text.RegularExpressions;
 using System.Net;
+using Interapptive.Shared;
 using log4net;
 using ShipWorks.Data.Connection;
 
@@ -336,6 +337,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Execute the Sebenza online update request
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ExecuteSebenzaOnlineUpdate(string xml)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();

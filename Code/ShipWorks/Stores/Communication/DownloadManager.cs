@@ -20,6 +20,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Data;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.Columns.Definitions;
@@ -298,10 +299,12 @@ namespace ShipWorks.Stores.Communication
                 }
             }
         }
-        
+
         /// <summary>
         /// Entry point function for downloading
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static void DownloadWorkerThread()
         {
             log.InfoFormat("Download starting.");

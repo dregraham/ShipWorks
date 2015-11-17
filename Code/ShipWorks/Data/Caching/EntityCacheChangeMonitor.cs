@@ -14,6 +14,7 @@ using ShipWorks.Users;
 using ShipWorks.Common.Threading;
 using ShipWorks.ApplicationCore.Interaction;
 using System.Timers;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Data.Caching
@@ -178,6 +179,7 @@ namespace ShipWorks.Data.Caching
         /// <summary>
         /// Called on background thread to monitor for changes to data
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void AsyncMonitorChanges(object state)
         {
             ApplicationBusyToken busyToken = (ApplicationBusyToken) state;

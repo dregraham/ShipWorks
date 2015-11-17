@@ -34,10 +34,11 @@ using Interapptive.Shared.IO.Text.Csv.Resources;
 
 namespace Interapptive.Shared.IO.Text.Csv
 {
-	/// <summary>
-	/// Represents a reader that provides fast, non-cached, forward-only access to CSV data.  
-	/// </summary>
-	public class CsvReader
+    /// <summary>
+    /// Represents a reader that provides fast, non-cached, forward-only access to CSV data.  
+    /// </summary>
+    [NDependIgnoreLongTypes]
+    public class CsvReader
 		: IDataReader, IEnumerable, IDisposable
 	{
         string nullIndicator = null;
@@ -303,32 +304,34 @@ namespace Interapptive.Shared.IO.Text.Csv
 		/// <exception cref="T:ArgumentException">
 		///		Cannot read from <paramref name="reader"/>.
 		/// </exception>
+		[NDependIgnoreTooManyParams]
 		public CsvReader(TextReader reader, bool hasHeaders, char delimiter, char quote, char escape, char comment, bool trimSpaces)
 			: this(reader, hasHeaders, delimiter, quote, escape, comment, trimSpaces, DefaultBufferSize)
 		{
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the CsvReader class.
-		/// </summary>
-		/// <param name="reader">A <see cref="T:TextReader"/> pointing to the CSV file.</param>
-		/// <param name="hasHeaders"><see langword="true"/> if field names are located on the first non commented line, otherwise, <see langword="false"/>.</param>
-		/// <param name="delimiter">The delimiter character separating each field (default is ',').</param>
-		/// <param name="quote">The quotation character wrapping every field (default is ''').</param>
-		/// <param name="escape">
-		/// The escape character letting insert quotation characters inside a quoted field (default is '\').
-		/// If no escape character, set to '\0' to gain some performance.
-		/// </param>
-		/// <param name="comment">The comment character indicating that a line is commented out (default is '#').</param>
-		/// <param name="trimSpaces"><see langword="true"/> if spaces at the start and end of a field are trimmed, otherwise, <see langword="false"/>. Default is <see langword="true"/>.</param>
-		/// <param name="bufferSize">The buffer size in bytes.</param>
-		/// <exception cref="T:ArgumentNullException">
-		///		<paramref name="reader"/> is a <see langword="null"/>.
-		/// </exception>
-		/// <exception cref="ArgumentOutOfRangeException">
-		///		<paramref name="bufferSize"/> must be 1 or more.
-		/// </exception>
-		public CsvReader(TextReader reader, bool hasHeaders, char delimiter, char quote, char escape, char comment, bool trimSpaces, int bufferSize)
+        /// <summary>
+        /// Initializes a new instance of the CsvReader class.
+        /// </summary>
+        /// <param name="reader">A <see cref="T:TextReader"/> pointing to the CSV file.</param>
+        /// <param name="hasHeaders"><see langword="true"/> if field names are located on the first non commented line, otherwise, <see langword="false"/>.</param>
+        /// <param name="delimiter">The delimiter character separating each field (default is ',').</param>
+        /// <param name="quote">The quotation character wrapping every field (default is ''').</param>
+        /// <param name="escape">
+        /// The escape character letting insert quotation characters inside a quoted field (default is '\').
+        /// If no escape character, set to '\0' to gain some performance.
+        /// </param>
+        /// <param name="comment">The comment character indicating that a line is commented out (default is '#').</param>
+        /// <param name="trimSpaces"><see langword="true"/> if spaces at the start and end of a field are trimmed, otherwise, <see langword="false"/>. Default is <see langword="true"/>.</param>
+        /// <param name="bufferSize">The buffer size in bytes.</param>
+        /// <exception cref="T:ArgumentNullException">
+        ///		<paramref name="reader"/> is a <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///		<paramref name="bufferSize"/> must be 1 or more.
+        /// </exception>
+        [NDependIgnoreTooManyParams]
+        public CsvReader(TextReader reader, bool hasHeaders, char delimiter, char quote, char escape, char comment, bool trimSpaces, int bufferSize)
 		{
 #if DEBUG
 			_allocStack = new System.Diagnostics.StackTrace();
@@ -1067,37 +1070,39 @@ namespace Interapptive.Shared.IO.Text.Csv
 			}
 		}
 
-		#endregion
+        #endregion
 
-		#region ReadField
+        #region ReadField
 
-		/// <summary>
-		/// Reads the field at the specified index.
-		/// Any unread fields with an inferior index will also be read as part of the required parsing.
-		/// </summary>
-		/// <param name="field">The field index.</param>
-		/// <param name="initializing">Indicates if the reader is currently initializing.</param>
-		/// <param name="discardValue">Indicates if the value(s) are discarded.</param>
-		/// <returns>
-		/// The field at the specified index. 
-		/// A <see langword="null"/> indicates that an error occured or that the last field has been reached during initialization.
-		/// </returns>
-		/// <exception cref="ArgumentOutOfRangeException">
-		///		<paramref name="field"/> is out of range.
-		/// </exception>
-		/// <exception cref="InvalidOperationException">
-		///		There is no current record.
-		/// </exception>
-		/// <exception cref="MissingFieldCsvException">
-		///		The CSV data appears to be missing a field.
-		/// </exception>
-		/// <exception cref="MalformedCsvException">
-		///		The CSV data appears to be malformed.
-		/// </exception>
-		/// <exception cref="T:System.ComponentModel.ObjectDisposedException">
-		///	The instance has been disposed of.
-		/// </exception>
-		private string ReadField(int field, bool initializing, bool discardValue)
+        /// <summary>
+        /// Reads the field at the specified index.
+        /// Any unread fields with an inferior index will also be read as part of the required parsing.
+        /// </summary>
+        /// <param name="field">The field index.</param>
+        /// <param name="initializing">Indicates if the reader is currently initializing.</param>
+        /// <param name="discardValue">Indicates if the value(s) are discarded.</param>
+        /// <returns>
+        /// The field at the specified index. 
+        /// A <see langword="null"/> indicates that an error occured or that the last field has been reached during initialization.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///		<paramref name="field"/> is out of range.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///		There is no current record.
+        /// </exception>
+        /// <exception cref="MissingFieldCsvException">
+        ///		The CSV data appears to be missing a field.
+        /// </exception>
+        /// <exception cref="MalformedCsvException">
+        ///		The CSV data appears to be malformed.
+        /// </exception>
+        /// <exception cref="T:System.ComponentModel.ObjectDisposedException">
+        ///	The instance has been disposed of.
+        /// </exception>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
+        private string ReadField(int field, bool initializing, bool discardValue)
 		{
 			if (!initializing)
 			{
@@ -1423,22 +1428,24 @@ namespace Interapptive.Shared.IO.Text.Csv
 			return ReadNextRecord(false, false);
 		}
 
-		/// <summary>
-		/// Reads the next record.
-		/// </summary>
-		/// <param name="onlyReadHeaders">
-		/// Indicates if the reader will proceed to the next record after having read headers.
-		/// <see langword="true"/> if it stops after having read headers; otherwise, <see langword="false"/>.
-		/// </param>
-		/// <param name="skipToNextLine">
-		/// Indicates if the reader will skip directly to the next line without parsing the current one. 
-		/// To be used when an error occurs.
-		/// </param>
-		/// <returns><see langword="true"/> if a record has been successfully reads; otherwise, <see langword="false"/>.</returns>
-		/// <exception cref="T:System.ComponentModel.ObjectDisposedException">
-		///	The instance has been disposed of.
-		/// </exception>
-		protected virtual bool ReadNextRecord(bool onlyReadHeaders, bool skipToNextLine)
+        /// <summary>
+        /// Reads the next record.
+        /// </summary>
+        /// <param name="onlyReadHeaders">
+        /// Indicates if the reader will proceed to the next record after having read headers.
+        /// <see langword="true"/> if it stops after having read headers; otherwise, <see langword="false"/>.
+        /// </param>
+        /// <param name="skipToNextLine">
+        /// Indicates if the reader will skip directly to the next line without parsing the current one. 
+        /// To be used when an error occurs.
+        /// </param>
+        /// <returns><see langword="true"/> if a record has been successfully reads; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="T:System.ComponentModel.ObjectDisposedException">
+        ///	The instance has been disposed of.
+        /// </exception>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
+        protected virtual bool ReadNextRecord(bool onlyReadHeaders, bool skipToNextLine)
 		{
 			if (_eof)
 			{
@@ -1935,7 +1942,8 @@ namespace Interapptive.Shared.IO.Text.Csv
 			}
 		}
 
-		DataTable IDataReader.GetSchemaTable()
+        [NDependIgnoreLongMethod]
+        DataTable IDataReader.GetSchemaTable()
 		{
 			EnsureInitialize();
 			ValidateDataReader(DataReaderValidations.IsNotClosed);

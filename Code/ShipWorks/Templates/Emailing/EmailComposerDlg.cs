@@ -19,6 +19,7 @@ using System.Net.Mail;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls.Html;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Data.Model;
 using ShipWorks.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -40,6 +41,7 @@ namespace ShipWorks.Templates.Emailing
     /// <summary>
     /// Window for composing a new email message
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class EmailComposerDlg : Form
     {
         TemplateEntity initialTemplate;
@@ -843,6 +845,7 @@ namespace ShipWorks.Templates.Emailing
         /// <summary>
         /// Background thread for adding all the messages to the outbox
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void BackgroundAddToOutbox(object state)
         {
             ProgressDisplayDelayer delayer = (ProgressDisplayDelayer) state;

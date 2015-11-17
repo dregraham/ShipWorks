@@ -92,12 +92,14 @@ using SandComboBox = Divelements.SandRibbon.ComboBox;
 using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using Autofac;
+using Interapptive.Shared;
 
 namespace ShipWorks
 {
     /// <summary>
     /// Main window of the application.
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class MainForm : RibbonForm
     {
         // Logger
@@ -138,6 +140,8 @@ namespace ShipWorks
         /// <summary>
         /// Form is loading, this is before its visible
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private void OnLoad(object sender, EventArgs e)
         {
             log.Info("Loading main application window.");
@@ -396,6 +400,7 @@ namespace ShipWorks
         /// <summary>
         /// Open the window for logging on to SQL Server
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool LogonToSqlServer()
         {
             // If we are here b\c MSDE was uinstalled, but SQL 08 isn't ready yet, we need to force the user back into the Database Upgrade window when they come back.
@@ -529,6 +534,7 @@ namespace ShipWorks
         /// <summary>
         /// Log on to ShipWorks as a ShipWorks user.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LogonToShipWorks()
         {
             UserManager.InitializeForCurrentUser();
@@ -1406,6 +1412,7 @@ namespace ShipWorks
         /// <summary>
         /// Update the UI that's based on user initiated actions
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void UpdateCustomButtonsActionsUI()
         {
             string ribbonChunkName = "Custom Actions";
@@ -2968,6 +2975,7 @@ namespace ShipWorks
         /// <summary>
         /// Update the UI controls for the Detail View settings
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void UpdateDetailViewSettingsUI()
         {
             DetailViewSettings settings = gridControl.ActiveDetailViewSettings;

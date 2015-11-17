@@ -10,6 +10,7 @@ using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using System.Data;
+using Interapptive.Shared;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
 {
@@ -77,6 +78,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// <summary>
         /// Execute the conversion
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override int Run()
         {
             Progress.Detail = "Updating UPS Shipments...";
@@ -157,6 +159,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// <summary>
         /// 
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void ConvertXml(WorkItem item)
         {
             try

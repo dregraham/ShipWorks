@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 {
@@ -24,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public EbayPotentialCombinedOrdersFoundEventArgs(Control owner, Exception error, bool canceled, object userState, EbayCombinedOrderType combinedOrderType, List<EbayCombinedOrderCandidate> candidates) :
             base(error, canceled, userState)
         {

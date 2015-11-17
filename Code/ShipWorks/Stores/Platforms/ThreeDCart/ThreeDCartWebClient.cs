@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -551,6 +552,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <param name="threeDCartOrderItemProductId">The 3D Cart order item product ID</param>
         /// <param name="threeDCartOrderItemName">The 3D Cart order item option value text</param>
         /// <returns>ThreeDCartProductDTO representing the cart product.  Null if an online product can't be found.</returns>
+        [NDependIgnoreLongMethod]
         public ThreeDCartProductDTO GetProduct(long invoiceNumber, string threeDCartOrderItemProductId, string threeDCartOrderItemName)
         {
             // If we got a blank product name, just return

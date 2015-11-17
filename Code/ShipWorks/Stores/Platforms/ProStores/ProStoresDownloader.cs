@@ -15,6 +15,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Stores.Platforms.ProStores
@@ -178,6 +179,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Extract the order from the xml
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
@@ -256,6 +258,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Load the appropriate address info from the XPath
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadAddressInfo(ProStoresOrderEntity order, XPathNavigator xpath)
         {
             PersonName shipFullName = PersonName.Parse(XPathUtility.Evaluate(xpath, "Recipient", ""));

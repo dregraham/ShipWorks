@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -445,6 +446,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Get postal rates for the given shipment
         /// </summary>
         /// <param name="shipment">Shipment for which to retrieve rates</param>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> express1Rates = null;
@@ -611,6 +614,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Process the label server shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ProcessShipment(ShipmentEntity shipment)
         {
             ValidateShipment(shipment);

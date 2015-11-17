@@ -10,6 +10,7 @@ using System.Data;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Stores.Platforms.PayPal;
 using log4net;
 using Interapptive.Shared.Utility;
@@ -111,10 +112,11 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                 }
             }
         }
-        
+
         /// <summary>
         /// Converts all of the certificate fields in the amazon store to V3-compatible
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void UpdateAmazonStores(SqlConnection con)
         {
             Progress.Detail = "Upgrading Amazon certificates...";

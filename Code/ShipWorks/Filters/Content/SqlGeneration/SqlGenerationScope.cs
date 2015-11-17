@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.FactoryClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -120,6 +121,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Constructor.  The child predicate should contain a {0} placeholder for where the child table (of entityType) alias will be inserted.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public SqlGenerationScope(SqlGenerationContext context, SqlGenerationScopeType scopeType, SqlGenerationScope scopeFrom, EntityType entityType, string childPredicate, Func<string, string> childQuantityAdorner)
         {
             if (scopeType == SqlGenerationScopeType.Parent)
@@ -298,6 +300,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Adorns the specified where condition with the appropriate SQL depending on the scope type.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public string Adorn(string where)
         {
             adornCalled = true;

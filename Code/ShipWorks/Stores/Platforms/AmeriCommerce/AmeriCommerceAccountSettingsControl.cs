@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
@@ -164,6 +165,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Save data back to the entity
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override bool SaveToEntity(StoreEntity store)
         {
             AmeriCommerceStoreEntity ameriCommerceStore = store as AmeriCommerceStoreEntity;

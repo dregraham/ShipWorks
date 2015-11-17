@@ -15,6 +15,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
 using ShipWorks.Stores.Content;
 using System.Data.SqlTypes;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Win32;
@@ -174,6 +175,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Downloads the specified transaction from PayPal and creates a ShipWorks order
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadTransaction(PayPalWebClient client, string transactionID)
         {
             log.InfoFormat("Preparing to load PayPal transaction '{0}'.", transactionID);

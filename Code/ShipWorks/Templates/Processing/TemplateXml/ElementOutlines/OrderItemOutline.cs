@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using log4net;
@@ -27,6 +28,8 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public OrderItemOutline(TemplateTranslationContext context)
             : base(context)
         {

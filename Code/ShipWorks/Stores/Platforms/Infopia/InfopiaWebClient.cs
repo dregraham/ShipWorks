@@ -13,6 +13,7 @@ using System.IO;
 using System.Collections;
 using log4net;
 using System.Net;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Platforms.Infopia
 {
@@ -516,6 +517,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Convert the lines from a GetOrders call to a hierarchical XmlDocument
         /// </summary>
+        [NDependIgnoreLongMethod]
         private XPathDocument ConvertOrderResponseToXml(Line[] lines)
         {
             using (StringWriter writer = new StringWriter())
@@ -736,6 +738,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// Contacts infopia to download 
         /// </summary>
         /// <param name="productCodes"></param>
+        [NDependIgnoreLongMethod]
         private void EnsureProductsInternal(List<string> productCodes)
         {
             if (productCodes.Count > 5)

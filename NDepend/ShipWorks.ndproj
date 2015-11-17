@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="ShipWorks" Platform="DotNet">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
@@ -66,6 +66,9 @@
     <Name>SD.LLBLGen.Pro.DQE.SqlServer.NET20</Name>
     <Name>Common.Logging.Log4Net1213</Name>
     <Name>mscorlib</Name>
+    <Name>System.Reactive.Linq</Name>
+    <Name>System.Reactive.Interfaces</Name>
+    <Name>System.Reactive.Core</Name>
   </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319</Dir>
@@ -138,8 +141,7 @@
   <SourceFileRebasing FromPath="" ToPath="" />
   <PathVariables />
   <RuleFiles />
-  <ProjectRules AreActive="True" />
-  <Queries>
+  <ProjectRules AreActive="True" /><Queries>
     <Group Name="Code Quality" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types too big - critical</Name>
 warnif count > 0 from t in JustMyCode.Types where 
@@ -4199,76 +4201,80 @@ select new { n, n.NbLinesOfCode } ]]></Query>
     </Group>
     <Group Name="Jenkins Critical Rules" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of complex methods allowed exceeded</Name>
-warnif count > 85 from m in JustMyCode.Methods where 
-  m.CyclomaticComplexity > 20
+warnif count > 0 from m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+
+  m.CyclomaticComplexity > 20 &&
+  !m.HasAttribute("Interapptive.Shared.NDependIgnoreComplexMethodAttribute")
   orderby m.CyclomaticComplexity descending
 
 select new { m, m.CyclomaticComplexity }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # long methods allowed exceeded</Name>
-warnif  count > 402
-from  m in JustMyCode.Methods where 
-  m.NbLinesOfCode > 30
+warnif  count > 0
+from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+  m.NbLinesOfCode > 30 &&
+  !(m.ParentType.HasAttribute("Interapptive.Shared.NDependIgnoreAttribute") ||
+   m.HasAttribute("Interapptive.Shared.NDependIgnoreLongMethodAttribute"))
 
 select new { m, m.NbLinesOfCode }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of methods w/ too many parameters exceeded</Name>
-warnif count > 85 from  m in JustMyCode.Methods where
- m.NbParameters > 5
+warnif count > 0 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+ m.NbParameters > 5  &&
+  !(m.HasAttribute("Interapptive.Shared.NDependIgnoreTooManyParamsAttribute") ||
+    m.ParentType.HasAttribute("Interapptive.Shared.NDependIgnoreAttribute"))
+
  orderby m.NbParameters
 
 select new { m, m.NbParameters }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # large types allowed exceeded</Name>
-warnif count > 41 from  t in JustMyCode.Types where
- t.NbLinesOfCode > 500
+warnif count > 0 from  t in JustMyCode.Types where !t.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+ t.NbLinesOfCode > 500 &&
+  !t.HasAttribute("Interapptive.Shared.NDependIgnoreLongTypesAttribute")
  orderby t.NbLinesOfCode
 
 select new { t, t.NbLinesOfCode }]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed long methods</Name>
-from m in JustMyCode.Methods where m.CodeWasChanged() &&
-    m.NbLinesOfCode > 30 &&
-    m.NbLinesOfCode > m.OlderVersion().NbLinesOfCode &&
-    m.OlderVersion().NbLinesOfCode <= 30
-select new { 
-   m, 
-   m.NbLinesOfCode, 
-   oldNbLinesOfCode = m.OlderVersion().NbLinesOfCode ,
-   delta = (int?) m.NbLinesOfCode - m.OlderVersion().NbLinesOfCode 
-} ]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed complex methods</Name>
-from m in JustMyCode.Methods where m.CodeWasChanged() &&
-    m.CyclomaticComplexity > 20 &&
-    m.CyclomaticComplexity > m.OlderVersion().CyclomaticComplexity &&
-    m.OlderVersion().CyclomaticComplexity <= 20
-select new { 
-   m, 
-   m.CyclomaticComplexity , 
-   oldValue = m.OlderVersion().CyclomaticComplexity ,
-   delta = (int?) m.CyclomaticComplexity - m.OlderVersion().CyclomaticComplexity 
-}]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed methods w/ too many params</Name>
-from m in JustMyCode.Methods where m.CodeWasChanged() &&
-    m.NbParameters > 5 &&
-    m.NbParameters > m.OlderVersion().NbParameters &&
-    m.OlderVersion().NbParameters <= 5
-select new { 
-   m, 
-   m.NbParameters , 
-   oldValue = m.OlderVersion().NbParameters ,
-   delta = (int?) m.NbParameters - m.OlderVersion().NbParameters 
-}]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed types that are too long</Name>
-from t in JustMyCode.Types 
-where t.CodeWasChanged() &&
-    t.NbLinesOfCode> 500  &&
-    t.NbLinesOfCode> t.OlderVersion().NbLinesOfCode &&
-    t.OlderVersion().NbLinesOfCode <= 500
-orderby t.NbLinesOfCode descending
-select new { 
-   t, 
-   t.NbLinesOfCode, 
-   oldValue = t.OlderVersion().NbLinesOfCode,
-   delta = (int?) t.NbLinesOfCode- t.OlderVersion().NbLinesOfCode
-}
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreAttribute attributes reached</Name>
+warnif count > 19
+
+from m in JustMyCode.Types.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreAttribute*") 
+)
+orderby m.FullName
+select new { m }
+
 ]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreComplexMethod attributes reached</Name>
+warnif count > 83
+
+from m in JustMyCode.Methods.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreComplexMethod*") 
+)
+orderby m.FullName
+select new { m }
+]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreTooManyParams attributes reached</Name>
+warnif count > 59
+
+from m in JustMyCode.Methods.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreTooManyParams*") 
+)
+orderby m.FullName
+select new { m }
+]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongTypes attributes reached</Name>
+warnif count > 40
+
+from m in JustMyCode.Types.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreLongTypes*") 
+)
+orderby m.FullName
+select new { m }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongMethod attributes reached</Name>
+warnif count > 381
+
+from m in JustMyCode.Methods.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreLongMethod*") 
+)
+orderby m.FullName
+select new { m }]]></Query>
     </Group>
-  </Queries>
-</NDepend>
+  </Queries></NDepend>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager
@@ -24,6 +25,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager
         /// <param name="worldShipDescription">The world ship description.</param>
         /// <param name="isMailInnovations">if set to <c>true</c> [is mail innovations].</param>
         /// <param name="isSurePost">if set to <c>true</c> [is sure post].</param>
+        [NDependIgnoreTooManyParams]
         public UpsServiceMapping(UpsServiceType upsServiceType, string destinationCountryCode,
                                                    string rateServiceCode, string shipServiceCode, string transitServiceCode, string worldShipCode,
                                                    string worldShipDescription, bool isMailInnovations, bool isSurePost)

@@ -59,6 +59,7 @@ namespace ShipWorks.UI.Wizard
         /// <summary>
         /// Start the process of downloading
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void Download(Button downloadButton, ProgressBar progress, Label bytes)
         {
             if (downloadButton == null)
