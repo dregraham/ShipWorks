@@ -46,8 +46,10 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Check the restriction level of the given feature. 'data' is relative in context to the specified feature, and must be 
         /// of the type the feature expectes
+        /// 
+        /// virtual for unit tests
         /// </summary>
-        public EditionRestrictionIssue CheckRestriction(EditionFeature feature, object data)
+        public virtual EditionRestrictionIssue CheckRestriction(EditionFeature feature, object data)
         {
             switch (feature)
             {

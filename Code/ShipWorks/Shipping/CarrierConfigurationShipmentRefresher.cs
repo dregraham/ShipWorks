@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Profiles;
 using Interapptive.Shared.Collections;
 using ShipWorks.AddressValidation;
 using ShipWorks.Messaging.Messages;
+using System.Reactive.Linq;
 using System.Reactive.Disposables;
 
 namespace ShipWorks.Shipping
@@ -17,17 +18,17 @@ namespace ShipWorks.Shipping
     /// </summary>
     public sealed class CarrierConfigurationShipmentRefresher : ICarrierConfigurationShipmentRefresher, IDisposable
     {
-        private readonly IMessenger messenger;
+        private readonly IObservable<IShipWorksMessage> messenger;
         private readonly IShippingErrorManager errorManager;
         private readonly IShippingProfileManager shippingProfileManager;
         private readonly IShippingManager shippingManager;
-        private readonly IDisposable messageSubscriptions;
+        private readonly IDisposable subscriptions;
         private readonly List<ShipmentEntity> shipmentsProcessing = new List<ShipmentEntity>();
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CarrierConfigurationShipmentRefresher(IMessenger messenger, IShippingErrorManager errorManager, 
+        public CarrierConfigurationShipmentRefresher(IObservable<IShipWorksMessage> messenger, IShippingErrorManager errorManager, 
             IShippingProfileManager shippingProfileManager, IShippingManager shippingManager)
         {
             this.messenger = MethodConditions.EnsureArgumentIsNotNull(messenger, "messenger");
@@ -35,10 +36,9 @@ namespace ShipWorks.Shipping
             this.shippingProfileManager = MethodConditions.EnsureArgumentIsNotNull(shippingProfileManager, "shippingProfileManager");
             this.shippingManager = MethodConditions.EnsureArgumentIsNotNull(shippingManager, "shippingManager");
 
-            messageSubscriptions = new CompositeDisposable(
-                messenger.AsObservable<ConfiguringCarrierMessage>().Subscribe(OnConfiguringCarrier),
-                messenger.AsObservable<CarrierConfiguredMessage>().Subscribe(OnCarrierConfigured)
-            );
+            subscriptions = new CompositeDisposable(
+                messenger.OfType<ConfiguringCarrierMessage>().Subscribe(OnConfiguringCarrier),
+                messenger.OfType<CarrierConfiguredMessage>().Subscribe(OnCarrierConfigured));
         }
 
         /// <summary>
@@ -123,9 +123,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Dispose any managed resources
         /// </summary>
-        public void Dispose()
-        {
-            messageSubscriptions.Dispose();
-        }
+        public void Dispose() => subscriptions?.Dispose();
     }
 }

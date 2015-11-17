@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
             {
                 // We have two express1 promotional footnote controls; we only want to
                 // keep the one that is for Endicia
-                footnoteFactories.RemoveAll(f => f.ShipmentType.ShipmentTypeCode != ShipmentTypeCode.Endicia && f.GetType() == typeof(Express1PromotionRateFootnoteFactory));
+                footnoteFactories.RemoveAll(f => f.ShipmentTypeCode != ShipmentTypeCode.Endicia && f.GetType() == typeof(Express1PromotionRateFootnoteFactory));
             }
 
             RateGroup filteredRateGroup = new RateGroup(rateGroup.Rates);

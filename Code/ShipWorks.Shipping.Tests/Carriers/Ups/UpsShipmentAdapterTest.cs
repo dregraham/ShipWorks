@@ -1,5 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Ups;
+using ShipWorks.Shipping.Carriers.UPS;
 using System;
 using Xunit;
 

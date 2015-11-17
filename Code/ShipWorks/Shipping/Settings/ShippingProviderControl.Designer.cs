@@ -17,12 +17,8 @@ namespace ShipWorks.Shipping.Settings
         {
             if (disposing)
             {
-                carrierConfiguredToken.Dispose();
-
-                if (components != null)
-                {
-                    components.Dispose();   
-                }
+                carrierConfiguredToken?.Dispose();
+                components?.Dispose();
             }
             base.Dispose(disposing);
         }

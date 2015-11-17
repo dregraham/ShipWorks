@@ -99,9 +99,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             listenForRateCriteriaChanged = false;
 
             subscriptions = new CompositeDisposable(
-                messenger.AsObservable<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
-                messenger.AsObservable<StoreChangedMessage>().Subscribe(OnStoreChanged),
-                messenger.AsObservable<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
+                messenger.OfType<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
+                messenger.OfType<StoreChangedMessage>().Subscribe(OnStoreChanged),
+                messenger.OfType<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
                 shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
                 shipmentChangedHandler.ShipmentLoadedStream().Do(_ => AllowEditing = true).Subscribe(LoadOrder)
             );

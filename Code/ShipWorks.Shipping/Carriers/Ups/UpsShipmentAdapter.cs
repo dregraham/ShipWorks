@@ -2,7 +2,7 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// Adapter for Ups specific shipment information

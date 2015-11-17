@@ -10,6 +10,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services.Builders;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -53,7 +54,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.rateSelectionFactory = rateSelectionFactory;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             
-            subscription = messenger.AsObservable<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage);
+            subscription = messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage);
         }
 
         public ObservableCollection<KeyValuePair<int, string>> Services { get; }

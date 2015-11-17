@@ -152,11 +152,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             return new EndiciaProfileControl(EndiciaReseller);
         }
-        
+
         /// <summary>
         /// Create the settings control for Endicia
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             EndiciaSettingsControl settingsControl = new EndiciaSettingsControl(EndiciaReseller);
             settingsControl.Initialize(ShipmentTypeCode);

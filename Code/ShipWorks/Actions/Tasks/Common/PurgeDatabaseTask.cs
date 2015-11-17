@@ -15,6 +15,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using System.Data.SqlClient;
 using System.Data;
+using ShipWorks.Common;
 
 namespace ShipWorks.Actions.Tasks.Common
 {

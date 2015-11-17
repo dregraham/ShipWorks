@@ -19,7 +19,7 @@ namespace ShipWorks.Filters.Controls
             {
                 components.Dispose();
 
-                filterEditedToken.Dispose();
+                filterEditedToken?.Dispose();
 
                 quickFilterDisplayManager.Dispose();
             }

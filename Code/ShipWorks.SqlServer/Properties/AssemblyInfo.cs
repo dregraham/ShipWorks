@@ -8,9 +8,9 @@ using System.Security;
 [assembly: Guid("428FFA51-AD44-46ec-B2B8-B763219B7622")]
 
 // Versioning
-[assembly: AssemblyVersion("0.0.0.8145")]
-[assembly: AssemblyFileVersion("0.0.0.8145")]
-[assembly: AssemblyInformationalVersion("0.0.0.8145")]
+[assembly: AssemblyVersion("0.0.0.0")]
+[assembly: AssemblyFileVersion("0.0.0.0")]
+[assembly: AssemblyInformationalVersion("0.0.0.0")]
 
 // To be called from within SQL Server
 [assembly: AllowPartiallyTrustedCallers]

@@ -230,6 +230,7 @@
     <Compile Include="Editions\ShipmentTypeFunctionalityTest.cs" />
     <Compile Include="Email\EmailExceptionTest.cs" />
     <Compile Include="ExcelDataAttribute.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\CarrierConditionTests.cs" />
     <Compile Include="Filters\Content\SqlGeneration\FilterSqlResultTest.cs" />
     <Compile Include="Interapptive.Shared\Business\GeographyTest.cs" />
     <Compile Include="Interapptive.Shared\Business\PersonUtilityTests.cs" />
@@ -246,6 +247,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresherTest.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensionsTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettingsTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventsDescriptionTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypesExtensionTest.cs" />
@@ -517,11 +519,18 @@
     <Compile Include="SqlServer\FilterTests.cs" />
     <Compile Include="Stores\Amazon\AmazonMwsResponseHandlerTest.cs" />
     <Compile Include="Stores\Amazon\AmazonMwsWebClientSettingsTest.cs" />
+    <Compile Include="Stores\Amazon\AmazonOrderItemEntityTest.cs" />
+    <Compile Include="Stores\Amazon\AmazonStoreEntityTest.cs" />
+    <Compile Include="Stores\Amazon\AmazonOrderEntityTest.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />
     <Compile Include="Stores\BigCommerce\BigCommerceProductImageCacheTest.cs" />
     <Compile Include="Stores\BrightPearl\BrightPearlUtilityTest.cs" />
     <Compile Include="Stores\BuyDotcom\BuyDotComOnlineUpdaterTest.cs" />
+    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOrderItemEntityTest.cs" />
+    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorStoreEntityTest.cs" />
+    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOrderEntityTest.cs" />
+    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorDownloaderTest.cs" />
     <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOnlineUpdaterTest.cs" />
     <Compile Include="Stores\eBay\EbayOnlineUpdaterTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />

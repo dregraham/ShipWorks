@@ -105,6 +105,9 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                 enabledShipmentTypes.RemoveAll(s => s.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip);
             }
 
+            // Initially this was to remove Amazon Shipment Type from non applicable shipments
+            enabledShipmentTypes.RemoveAll(s => !s.IsAllowedFor(shipment));
+
             bool postalNotSetup = !PostalUtility.IsPostalSetup();
 
             if (postalNotSetup)

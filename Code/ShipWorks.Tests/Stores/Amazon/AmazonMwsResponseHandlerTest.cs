@@ -5,6 +5,7 @@ using ShipWorks.Stores.Platforms.Amazon.Mws;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Amazon;
 using Xunit;
+using Autofac.Extras.Moq;
 
 namespace ShipWorks.Tests.Stores.Amazon
 {
@@ -12,7 +13,6 @@ namespace ShipWorks.Tests.Stores.Amazon
     public class AmazonMwsResponseHandlerTest
     {
         Mock<IHttpResponseReader> mockedHttpResponseReader;
-        AmazonMwsConnection mwsConnection;
         AmazonMwsWebClientSettings mwsSettings;
 
         const string amazonGetServiceStatusResponseFormat =
@@ -23,9 +23,13 @@ namespace ShipWorks.Tests.Stores.Amazon
         
         public AmazonMwsResponseHandlerTest()
         {
-            mwsConnection = new AmazonMwsConnection("", "US", "");
+            //mwsConnection = new AmazonMwsConnection("", "US", "");
+            
+            var mock = AutoMock.GetLoose();
 
-            mwsSettings = new AmazonMwsWebClientSettings(mwsConnection);
+            IAmazonCredentials creds = mock.Create<IAmazonCredentials>();
+
+            mwsSettings = new AmazonMwsWebClientSettings(creds);
 
             //Setup mock object that holds response from request
             mockedHttpResponseReader = new Mock<IHttpResponseReader>();

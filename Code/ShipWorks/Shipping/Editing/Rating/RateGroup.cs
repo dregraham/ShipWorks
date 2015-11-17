@@ -11,6 +11,14 @@ namespace ShipWorks.Shipping.Editing.Rating
         private readonly List<IRateFootnoteFactory> footnoteFactories;
 
         /// <summary>
+        /// Constructor used by mocks, etc.
+        /// </summary>
+        protected RateGroup()
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public RateGroup(IEnumerable<RateResult> rates)
@@ -49,7 +57,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Gets or sets the carrier.
         /// </summary>
-        public virtual ShipmentTypeCode Carrier { get; set; }        
+        public virtual ShipmentTypeCode Carrier { get; set; }
 
         /// <summary>
         /// Creates a new rate group by copying the current group settings and replacing the rates with the passed in rates

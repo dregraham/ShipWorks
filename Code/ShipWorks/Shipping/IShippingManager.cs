@@ -71,5 +71,15 @@ namespace ShipWorks.Shipping
         /// <param name="shipment">Shipment that should be removed from cache</param>
         /// <returns></returns>
         void RemoveShipmentFromRatesCache(ShipmentEntity shipment);
+		
+        /// <summary>
+        /// Indicates if the shipment type of the given type code has gone through the full setup wizard \ configuration
+        /// </summary>
+        bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Gets the service used.
+        /// </summary>
+        string GetServiceUsed(ShipmentEntity shipment);
     }
 }

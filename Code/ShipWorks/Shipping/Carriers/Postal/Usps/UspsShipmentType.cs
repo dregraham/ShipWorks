@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Create the settings control for USPS
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             UspsSettingsControl control = new UspsSettingsControl();
             control.Initialize(ShipmentTypeCode);

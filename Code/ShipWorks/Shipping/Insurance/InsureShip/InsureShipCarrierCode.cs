@@ -27,6 +27,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
             switch (shipmentTypeCode)
             {
+                case ShipmentTypeCode.Amazon:
+                    carrierCode = shipment.Amazon.CarrierName;
+                    if (carrierCode.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase))
+                    {
+                        carrierCode = "USPS";
+                    }
+                    break;
+
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
                     carrierCode = GetUpsCarrierCode(shipment, isDomestic);

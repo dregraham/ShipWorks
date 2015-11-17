@@ -27,15 +27,15 @@ namespace ShipWorks.Shipping.UI.MessageHandlers
         /// </summary>
         /// <returns></returns>
         public IObservable<OrderSelectionChangingMessage> OrderChangingStream() =>
-            messenger.AsObservable<OrderSelectionChangingMessage>();
+            messenger.OfType<OrderSelectionChangingMessage>();
 
         /// <summary>
         /// Gets a stream of the most recent order changed messages
         /// </summary>
         public IObservable<OrderSelectionChangedMessage> ShipmentLoadedStream()
         {
-            return messenger.AsObservable<OrderSelectionChangingMessage>()
-                .CombineLatest(messenger.AsObservable<OrderSelectionChangedMessage>(), (x, y) => new { OrderIdList = x.OrderIdList, Message = y })
+            return messenger.OfType<OrderSelectionChangingMessage>()
+                .CombineLatest(messenger.OfType<OrderSelectionChangedMessage>(), (x, y) => new { OrderIdList = x.OrderIdList, Message = y })
                 .Where(x => x.OrderIdList.Intersect(x.Message.LoadedOrderSelection.Select(y => y.Order?.OrderID ?? -1)).Any())
                 .Select(x => x.Message);
         }

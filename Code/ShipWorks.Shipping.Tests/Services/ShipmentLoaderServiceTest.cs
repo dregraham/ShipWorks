@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -11,25 +10,21 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Users.Security;
 using Xunit;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Autofac.Extras.Moq;
-using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Shipping.Tests.Services
 {
     public class ShipmentLoaderServiceTest
     {
-        private ShipmentLoaderService testObject;
+        private readonly ShipmentLoaderService testObject;
         private OrderSelectionLoaded orderSelectionLoaded;
 
-        private OrderEntity orderEntity;
-        private ShipmentEntity shipmentEntity;
+        private readonly OrderEntity orderEntity;
+        private readonly ShipmentEntity shipmentEntity;
 
-        private Mock<IShipmentLoader> shipmentLoader;
-        private IMessenger messenger;
+        private readonly Mock<IShipmentLoader> shipmentLoader;
+        private readonly IMessenger messenger;
 
         private Mock<IShippingConfiguration> shippingConfigurator;
         private Mock<IShippingManager> shippingManager;
@@ -48,7 +43,7 @@ namespace ShipWorks.Shipping.Tests.Services
             shipmentLoader.Setup(s => s.Load(orderEntity.OrderID)).Returns(orderSelectionLoaded);
 
             messenger = new Messenger();
-            messenger.AsObservable<OrderSelectionChangedMessage>()
+            messenger.OfType<OrderSelectionChangedMessage>()
                 .Subscribe(HandleOrderSelectionChangedMessage);
 
             testObject = new ShipmentLoaderService(shipmentLoader.Object, messenger);

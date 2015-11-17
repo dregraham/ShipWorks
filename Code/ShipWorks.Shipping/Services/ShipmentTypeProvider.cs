@@ -9,13 +9,14 @@ using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
 using System;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Services
 {
     /// <summary>
     /// Provide available shipment types to UI controls
     /// </summary>
-    public class ShipmentTypeProvider : INotifyPropertyChanged
+    public class ShipmentTypeProvider : INotifyPropertyChanged, IDisposable
     {
         private static ShipmentTypeProvider current = DesignModeDetector.IsDesignerHosted() ? 
             null : 
@@ -24,6 +25,7 @@ namespace ShipWorks.Shipping.Services
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly PropertyChangedHandler handler;
         private IEnumerable<ShipmentTypeCode> available;
+        private readonly IDisposable subscription;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -35,12 +37,12 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentTypeProvider(IMessenger messenger, IShipmentTypeManager shipmentTypeManager)
+        public ShipmentTypeProvider(IObservable<IShipWorksMessage> messenger, IShipmentTypeManager shipmentTypeManager)
         {
             this.shipmentTypeManager = shipmentTypeManager;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            messenger.AsObservable<EnabledCarriersChangedMessage>().Subscribe(UpdateAvailableCarriers);
+            subscription = messenger.OfType<EnabledCarriersChangedMessage>().Subscribe(UpdateAvailableCarriers);
             Available = shipmentTypeManager.EnabledShipmentTypeCodes.ToList();
         }
 
@@ -65,5 +67,10 @@ namespace ShipWorks.Shipping.Services
                 .Distinct()
                 .ToList();
         }
+
+        /// <summary>
+        /// Dispose this object
+        /// </summary>
+        public void Dispose() => subscription.Dispose();
     }
 }

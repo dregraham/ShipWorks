@@ -1,18 +1,19 @@
 ﻿using Autofac;
 using ShipWorks.Core.Messaging;
-using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using System.Linq;
 using System.Reflection;
 using System;
 using System.Windows.Forms;
+using ShipWorks.Common;
+using ShipWorks.Data;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -60,6 +61,10 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<DataResourceManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterType<DateTimeProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -102,6 +107,15 @@ namespace ShipWorks.ApplicationCore
                 .ExternallyOwned();
 
             builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
+			
+            builder.Register(context => Messenger.Current)
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterAssemblyModules(assemblies);
+
+            builder.RegisterType<EditionManagerWrapper>()
+                .AsImplementedInterfaces();
 
             current = builder.Build();
         }

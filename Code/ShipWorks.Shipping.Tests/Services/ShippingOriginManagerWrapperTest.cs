@@ -1,5 +1,4 @@
 ﻿using Autofac.Extras.Moq;
-using Autofac.Features.Indexed;
 using Moq;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -8,11 +7,6 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Services

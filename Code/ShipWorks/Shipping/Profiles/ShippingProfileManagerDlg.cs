@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
 using ShipWorks.Data.Connection;
-using Divelements.SandGrid.Specialized;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using Autofac;
@@ -201,7 +195,10 @@ namespace ShipWorks.Shipping.Profiles
             profile.ShipmentType = (int) SelectedShipmentType;
             profile.ShipmentTypePrimary = false;
 
-            EditProfile(profile);
+            if (EditProfile(profile))
+            {
+                initialProfileID = profile.ShippingProfileID;
+            }
         }
 
         /// <summary>
@@ -236,17 +233,22 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Edit the specified profile
         /// </summary>
-        private void EditProfile(ShippingProfileEntity profile)
+        private bool EditProfile(ShippingProfileEntity profile)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(profile, lifetimeScope))
-                {
-                    dlg.ShowDialog(this);
-                }
-            }
+                ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
+                    new TypedParameter(typeof(ShippingProfileEntity), profile)
+                );
 
-            LoadProfiles((ShipmentTypeCode)profile.ShipmentType);
+                if (profileEditor.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadProfiles((ShipmentTypeCode)profile.ShipmentType);
+                    return true;
+                }
+
+                return false;
+            }
         }
     }
 }

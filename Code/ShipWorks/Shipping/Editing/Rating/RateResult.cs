@@ -12,17 +12,11 @@ namespace ShipWorks.Shipping.Editing.Rating
     /// </summary>
     public class RateResult
     {
-        bool selectable;
-        string days;
-        decimal amount;
-        decimal? taxes;
-        decimal? duties;
-        decimal? shipping;
-
-        Image amountFootnote;
-        object tag;
-
-        string carrierDescription;
+        //bool selectable;
+        //string days;
+        //decimal amount;
+        //object tag;
+        private readonly RateAmountComponents rateAmountComponents;
 
         /// <summary>
         /// Constructor for tests
@@ -35,13 +29,13 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Constructor, for when an entry is not a selectable rate, but used more as a heading
         /// </summary>
-        public RateResult(string description, string days) : this()
+        public RateResult(string description, string days)
         {
-            this.Description = description;
-            this.days = days;
+            Description = description;
+            Days = days;
 
-            this.selectable = false;
-            this.IsCounterRate = false;
+            Selectable = false;
+            IsCounterRate = false;
         }
 
         /// <summary>
@@ -49,24 +43,22 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public RateResult(string description, string days, decimal amount, object tag) : this()
         {
-            this.Description = description;
-            this.days = days;
-            this.amount = amount;
-            this.tag = tag;
+            Description = description;
+            Days = days;
+            Amount = amount;
+            Tag = tag;
 
-            this.selectable = true;
-            this.IsCounterRate = false;
+            Selectable = true;
+            IsCounterRate = false;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public RateResult(string description, string days, decimal amount, decimal? duties, decimal? taxes, decimal? shipping, object tag) : 
+        public RateResult(string description, string days, decimal amount, RateAmountComponents rateAmountComponents, object tag) :
             this(description, days, amount, tag)
         {
-            this.duties = duties;
-            this.taxes = taxes;
-            this.shipping = shipping;
+            this.rateAmountComponents = rateAmountComponents;
         }
 
         /// <summary>
@@ -100,89 +92,52 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Transit time description could be "2" or "2 - 3 standard" or whatever
         /// </summary>
-        public string Days
-        {
-            get { return days; }
-            set { days = value; }
-        }
+        public string Days { get; set; }
 
         /// <summary>
         /// The amount the rate will cost the shipper. Only valid if Selectable is true.
         /// </summary>
-        public decimal Amount
-        {
-            get { return amount; }
-        }
+        public decimal Amount { get; }
 
         /// <summary>
         /// Returns the amount formatted as currency. If there is a half cent, 1/2 is added to the end.
         /// </summary>
-        public string FormattedAmount
-        {
-            get
-            {
-                return StringUtility.FormatFriendlyCurrency(Amount);
-            }
-        }
+        public string FormattedAmount => StringUtility.FormatFriendlyCurrency(Amount);
 
         /// <summary>
         /// The amount of taxes included in the rate
         /// </summary>
-        public decimal? Taxes
-        {
-            get { return taxes; }
-        }
+        public decimal? Taxes => rateAmountComponents.Taxes;
 
         /// <summary>
         /// The amount of duties included in the rate
         /// </summary>
-        public decimal? Duties
-        {
-            get { return duties; }
-        }
+        public decimal? Duties => rateAmountComponents.Duties;
 
         /// <summary>
         /// The portion of the amount that goes for shipping
         /// </summary>
-        public decimal? Shipping
-        {
-            get { return shipping; }
-        }
+        public decimal? Shipping => rateAmountComponents.Shipping;
 
         /// <summary>
         /// The image, if any, that will be displayed next to the amount
         /// </summary>
-        public Image AmountFootnote
-        {
-            get { return amountFootnote; }
-            set { amountFootnote = value; }
-        }
+        public Image AmountFootnote { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the shipment.
         /// </summary>
-        /// <value>
-        /// The type of the shipment.
-        /// </value>
         public ShipmentTypeCode ShipmentType { get; set; }
 
         /// <summary>
         /// Tag used by the specific service type to store a strongly-typed object representing the rate.  Only valid if Selectable is true.
         /// </summary>
-        public object Tag
-        {
-            get { return tag; }
-            set { tag = value; }
-        }
+        public object Tag { get; set; }
 
         /// <summary>
         /// Indicates if this rate should be selected by the user.
         /// </summary>
-        public bool Selectable
-        {
-            get { return selectable; }
-            set { selectable = value; }
-        }
+        public bool Selectable { get; set; }
 
         /// <summary>
         /// Gets or sets the expected delivery date.
@@ -196,7 +151,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <remarks>For the base RateResult class, this method should do nothing</remarks>
         public virtual void MaskDescription(IEnumerable<RateResult> rates)
         {
-            
+
         }
 
         /// <summary>
@@ -205,11 +160,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <value>
         /// The carrier description.
         /// </value>
-        public string CarrierDescription
-        {
-            get { return carrierDescription; }
-            set { carrierDescription = value; }
-        }
+        public string CarrierDescription { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this [is a counter rate].
@@ -233,13 +184,13 @@ namespace ShipWorks.Shipping.Editing.Rating
         public RateResult Copy()
         {
             //Description,days,amount, tag
-            RateResult copiedRate = new RateResult(Description, days, amount, duties, taxes, shipping, tag)
+            RateResult copiedRate = new RateResult(Description, Days, Amount, rateAmountComponents, Tag)
             {
-                AmountFootnote = amountFootnote,
-                CarrierDescription = carrierDescription,
+                AmountFootnote = AmountFootnote,
+                CarrierDescription = CarrierDescription,
                 ExpectedDeliveryDate = ExpectedDeliveryDate,
                 IsCounterRate = IsCounterRate,
-                Selectable = selectable,
+                Selectable = Selectable,
                 RateID = RateID,
                 ServiceLevel = ServiceLevel,
                 ShipmentType = ShipmentType,

@@ -232,6 +232,50 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedDlg.Designer.cs">
+      <DependentUpon>AmazonNotLinkedDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.Designer.cs">
+      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteFactory.cs" />
+    <Compile Include="Carriers\Amazon\AmazonOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonOptionsControl.Designer.cs">
+      <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonServiceControl.Designer.cs">
+      <DependentUpon>AmazonServiceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonSettingsControl.Designer.cs">
+      <DependentUpon>AmazonSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonShipmentSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonShipmentSetupWizard.Designer.cs">
+      <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonProfileControl.Designer.cs">
+      <DependentUpon>AmazonProfileControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonShippingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingModule.cs" />
     <Compile Include="ShippingPanel\Weight\ScaleControl.xaml.cs">
@@ -275,6 +319,30 @@
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
       <Name>ShipWorks.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedDlg.resx">
+      <DependentUpon>AmazonNotLinkedDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.resx">
+      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonOptionsControl.resx">
+      <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonServiceControl.resx">
+      <DependentUpon>AmazonServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonSettingsControl.resx">
+      <DependentUpon>AmazonSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonShipmentSetupWizard.resx">
+      <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonProfileControl.resx">
+      <DependentUpon>AmazonProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

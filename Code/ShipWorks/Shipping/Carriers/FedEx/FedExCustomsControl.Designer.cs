@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (disposing)
             {
-                fedExServiceChangedToken.Dispose();
+                fedExServiceChangedToken?.Dispose();
 
                 if (components != null)
                 {
