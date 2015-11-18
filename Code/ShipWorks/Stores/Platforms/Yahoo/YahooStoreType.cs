@@ -60,23 +60,21 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             {
                 string storeID = ((YahooStoreEntity) Store).YahooStoreID;
 
-                if (storeID.IsNullOrWhiteSpace())
-                {
-                    EmailAccountEntity account =
-                        EmailAccountManager.GetAccount(((YahooStoreEntity) Store).YahooEmailAccountID);
-
-                    // If the account was deleted we have to create a made up license that obviously will not be activated to them
-                    if (account == null)
-                    {
-                        return $"{Guid.NewGuid()}@noaccount.com";
-                    }
-
-                    return account.IncomingUsername;
-                }
-                else
+                if (!storeID.IsNullOrWhiteSpace())
                 {
                     return storeID;
                 }
+
+                EmailAccountEntity account =
+                    EmailAccountManager.GetAccount(((YahooStoreEntity) Store).YahooEmailAccountID);
+
+                // If the account was deleted we have to create a made up license that obviously will not be activated to them
+                if (account == null)
+                {
+                    return $"{Guid.NewGuid()}@noaccount.com";
+                }
+
+                return account.IncomingUsername;
             }
         }
 
@@ -153,7 +151,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override StoreDownloader CreateDownloader()
         {
-            return new YahooEmailDownloader((YahooStoreEntity) Store);
+            YahooStoreEntity store = (YahooStoreEntity) Store;
+
+            if (store.YahooStoreID.IsNullOrWhiteSpace())
+            {
+                return new YahooEmailDownloader(store);
+            }
+
+            return new YahooApiDownloader(store);
         }
 
         /// <summary>

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using Quartz.Util;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -75,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="order">The order DTO.</param>
         /// <exception cref="YahooException">$Failed to instantiate order {order.OrderID}</exception>
-        private void LoadOrder(YahooOrder order)
+        public YahooOrderEntity LoadOrder(YahooOrder order)
         {
             YahooOrderEntity orderEntity = InstantiateOrder(new YahooOrderIdentifier((order.OrderID.ToString()))) as YahooOrderEntity;
             if (orderEntity == null)
@@ -96,6 +98,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             LoadOrderGiftMessages(orderEntity, order);
             LoadOrderNotes(orderEntity, order);
             LoadOrderPayments(orderEntity, order);
+
+            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "YahooApiDownloader.LoadOrder");
+            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+
+            return orderEntity;
         }
 
         /// <summary>
@@ -130,9 +137,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             orderEntity.BillPostalCode = order.BillToInfo.AddressInfo.Zip;
         }
 
+        /// <summary>
+        /// Loads the order payments.
+        /// </summary>
+        /// <param name="orderEntity">The order entity.</param>
+        /// <param name="order">The order DTO</param>
         private void LoadOrderPayments(YahooOrderEntity orderEntity, YahooOrder order)
         {
-            throw new NotImplementedException();
+            OrderPaymentDetailEntity payment = InstantiateOrderPaymentDetail(orderEntity);
+
+            payment.Label = "Payment Type";
+            payment.Value = order.PaymentType;
         }
 
         /// <summary>
@@ -267,12 +282,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             itemEntity.Description = item.Description;
             //itemEntity.Url = item.URL; // Add URL to YahooOrderItem
             itemEntity.Thumbnail = item.ThumbnailUrl;
-            itemEntity.Weight = GetItemWeight(item.ItemID);
+            //itemEntity.Weight = GetItemWeight(item.ItemID);
 
             LoadOrderItemAttributes(itemEntity, item);
         }
 
-
+        /// <summary>
+        /// Attempt to get the item weight from the cache, if it is not there get it from Yahoo
+        /// </summary>
+        /// <param name="itemID">The item ID.</param>
+        /// <returns></returns>
+        /// <exception cref="YahooException">Attempted to perform Yahoo actions on a non-Yahoo store</exception>
         private double GetItemWeight(string itemID)
         {
             YahooStoreEntity store = Store as YahooStoreEntity;
@@ -325,9 +345,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             YahooApiWebClient client = new YahooApiWebClient(Store as YahooStoreEntity);
 
-            long lastOrderNumber = GetOrderNumberStartingPoint();
+            long nextOrderNumber = GetOrderNumberStartingPoint();
 
-            string response = client.GetOrderRange(lastOrderNumber + 1);
+            string response = client.GetOrderRange(nextOrderNumber);
 
             YahooResponseResourceList responseResourceList = DeserializeResponse<YahooResponseResourceList>(response);
 
@@ -337,7 +357,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Deserializes the response XML
         /// </summary>
-        private static T DeserializeResponse<T>(string xml)
+        public static T DeserializeResponse<T>(string xml)
         {
             try
             {
