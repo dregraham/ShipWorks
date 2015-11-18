@@ -6,7 +6,6 @@ using System.ComponentModel;
 using ShipWorks.Shipping.Services;
 using ShipWorks.AddressValidation;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Collections.Generic;
