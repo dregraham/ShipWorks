@@ -5,7 +5,7 @@ namespace Interapptive.Shared.Utility
 {
     /// <summary>
     /// Attribute that may be applied to Enum Fields
-    /// Allows setting ApiText, which can be the value that needs to be passed using an api call
+    /// Really this allows for a second description field.
     /// </summary>
     [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field)]
     public sealed class DetailsAttribute : Attribute

@@ -88,11 +88,8 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Converts the type of the address.
+        /// Analyzes the uspsResult and returns the appropriate AddressType
         /// </summary>
-        /// <param name="uspsResult">The usps result.</param>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         private static AddressType ConvertAddressType(UspsAddressValidationResults uspsResult)
         {
             bool isMilitary = uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "Y") ?? false;

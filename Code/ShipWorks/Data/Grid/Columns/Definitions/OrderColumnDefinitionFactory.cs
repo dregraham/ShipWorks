@@ -87,10 +87,12 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         OrderFields.RequestedShipping),
 
                     new GridColumnDefinition("{603A9AF5-94B0-4FCC-8832-CAC54BFCFDFD}", true,
-                    new GridEnumDisplayType<AddressType>(EnumSortMethod.Description),
-                    "Address Type", AddressType.Residential,
-                    OrderFields.ShipAddressType)
-                    {DefaultWidth = 100},
+                        new GridEnumDisplayType<AddressType>(EnumSortMethod.Description),
+                            "S:Type", AddressType.Residential,
+                            OrderFields.ShipAddressType)
+                    {
+                        DefaultWidth = 24
+                    },
 
                     new GridColumnDefinition("{8E9F3D01-98CF-4574-9CF0-9A6A7FE5C86E}", true,
                         new GridCountryDisplayType() { ShowFlag = true, AbbreviationFormat = AbbreviationFormat.Abbreviated }, "S: Country", "US",

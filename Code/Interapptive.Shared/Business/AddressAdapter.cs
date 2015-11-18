@@ -436,7 +436,7 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
-        /// Address type see AddressType enume
+        /// Gets or sets the type of the address.
         /// </summary>
         public int AddressType
         {

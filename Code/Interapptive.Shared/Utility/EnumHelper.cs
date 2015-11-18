@@ -161,7 +161,14 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static string GetDescription(Enum value)
         {
-            return GetEnumMetadata(value).DescriptionAttribute?.Description ?? string.Empty;
+            DescriptionAttribute description = GetEnumMetadata(value).DescriptionAttribute;
+
+            if (description == null)
+            {
+                throw new NullReferenceException($"No description attribute set for {value}");
+            }
+
+            return description.Description;
         }
 
         /// <summary>
@@ -169,6 +176,12 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static string GetDetails(Enum value)
         {
+            // The grid blindly grabs details for all enum fields. If we where to throw here,
+            // we would either have to catch the error or have a second property that checks to see
+            // if the details exists. Seeing that the first requires an error to control program flow
+            // and the second would require using reflection twice (once to check existence and once to
+            // get the value) I felt it best to return an empty string if there is no details attribute.
+
             return GetEnumMetadata(value).DetailsAttribute?.Details ?? string.Empty;
         }
 

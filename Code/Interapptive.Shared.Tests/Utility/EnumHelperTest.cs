@@ -22,8 +22,20 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public void Details_ReturnsEmptyString_WhenDetailsAreNotSet()
         {
-            var details = EnumHelper.GetDetails(TestEnum.NoDetails);
-            Assert.Equal(string.Empty, details);
+            Assert.Equal(string.Empty, EnumHelper.GetDetails(TestEnum.NoDetails));
+        }
+
+        [Fact]
+        public void Description_ReturnsDescription_WhenDescriptionIsAvailable()
+        {
+            var details = EnumHelper.GetDescription(TestEnum.HasDetails);
+            Assert.Equal("some desc", details);
+        }
+
+        [Fact]
+        public void Description_ThrowsException_WhenDescriptionIsNotSet()
+        {
+            Assert.Throws<NullReferenceException>(() => { EnumHelper.GetDescription(TestEnum.NoDetails); });
         }
     }
 

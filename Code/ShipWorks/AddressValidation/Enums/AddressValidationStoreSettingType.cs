@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace ShipWorks.AddressValidation.Enums
 {
+    /// <summary>
+    /// Determines how address validation should be performed for a store
+    /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum AddressValidationStoreSettingType
     {

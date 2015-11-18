@@ -76,7 +76,7 @@ namespace ShipWorks.FileTransfer
                 }
             }
 
-            // Excplicit
+            // Explicit
             if (CheckFtpSecurityExplicit(portOverride, account))
             {
                 return account;

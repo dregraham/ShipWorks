@@ -83,7 +83,6 @@ namespace ShipWorks.AddressValidation
                 originalAddress.AddressPrefix = addressAdapter.FieldPrefix;
 
                 addressAdapter.AddressValidationError = validationResult.AddressValidationError;
-                addressAdapter.AddressType = (int) validationResult.AddressType;
 
                 // Set the validation status based on the settings of the store
                 if (canAdjustAddress)
@@ -142,7 +141,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void SetValidationStatusForNotify(AddressValidationWebClientValidateAddressResult validationResult, AddressAdapter adapter)
         {
-            var suggestedAddresses = validationResult.AddressValidationResults;
+            List<AddressValidationResult> suggestedAddresses = validationResult.AddressValidationResults;
 
             adapter.AddressType = (int)validationResult.AddressType;
 
@@ -165,7 +164,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void SetValidationStatus(AddressValidationWebClientValidateAddressResult validationResult, AddressAdapter adapter)
         {
-            var suggestedAddresses = validationResult.AddressValidationResults;
+            List<AddressValidationResult> suggestedAddresses = validationResult.AddressValidationResults;
 
             adapter.AddressType = (int)validationResult.AddressType;
             
