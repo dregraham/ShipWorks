@@ -61,10 +61,21 @@ namespace Interapptive.Shared.Collections
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
             MethodConditions.EnsureArgumentIsNotNull(selector, nameof(selector));
 
+            // Add a little extra to handle the fact that doubles aren't exactly accurate
+            return SplitIntoChunksImplementation(source, selector, maxValue + 0.01);
+        }
+
+        /// <summary>
+        /// Breaks a collection up into chunks where the sum of the specified value is less than the maxValue
+        /// </summary>
+        /// <typeparam name="TSource">Type of data in the collection</typeparam>
+        /// <param name="source">Collection that will be broken into chunks</param>
+        /// <param name="size">Max value for each chunk</param>
+        /// <returns>Collection of chunks of the specified type</returns>
+        public static IEnumerable<IEnumerable<TSource>> SplitIntoChunksImplementation<TSource>(this IEnumerable<TSource> source, Func<TSource, double> selector, double maxValue)
+        {
             using (IEnumerator<TSource> iter = source.GetEnumerator())
             {
-                // Add a little extra to handle the fact that doubles aren't exactly accurate
-                double maxValueTest = maxValue + 0.01;
                 double currentValue = 0;
                 List<TSource> items = new List<TSource>();
 
@@ -75,7 +86,7 @@ namespace Interapptive.Shared.Collections
 
                     if (items.Any())
                     {
-                        if (currentValue + selectedValue < maxValueTest)
+                        if (currentValue + selectedValue < maxValue)
                         {
                             items.Add(item);
                             currentValue += selectedValue;

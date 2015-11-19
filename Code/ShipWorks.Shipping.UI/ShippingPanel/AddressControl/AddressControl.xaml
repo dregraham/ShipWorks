@@ -62,16 +62,18 @@
             <TextBlock Style="{StaticResource Header}">Address</TextBlock>
             <controls:AlignmentWrapPanel Grid.Column="1" 
                     VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
+                    HorizontalAlignment="Stretch"
                     Visibility="{Binding IsAddressValidationEnabled, Converter={StaticResource BooleanToVisibility}}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Image VerticalAlignment="Center" 
-                       Margin="4,0,8,0"
-                       Source="{Binding ValidationStatus, Converter={StaticResource EnumImage}}" />
+                           Margin="4,0,8,0"
+                           Source="{Binding ValidationStatus, Converter={StaticResource EnumImage}}" />
                     <TextBlock VerticalAlignment="Center"
                            Text="{Binding ValidationStatus, Converter={StaticResource EnumDescription}}" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" 
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
                     <TextBlock Visibility="{Binding CanValidateAddress, Converter={StaticResource BooleanToVisibility}}">
                         <Hyperlink Command="{Binding ValidateCommand}">Validate</Hyperlink>
                     </TextBlock>

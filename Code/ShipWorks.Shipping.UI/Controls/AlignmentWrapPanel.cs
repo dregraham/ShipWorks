@@ -17,25 +17,11 @@ namespace ShipWorks.Shipping.UI.Controls
         /// </summary>
         protected override Size ArrangeOverride(Size finalSize)
         {
-            Size size = new Size();
-            double startY = 0;
+            Size size = InternalChildren.OfType<UIElement>()
+                .SplitIntoChunks(x => x.DesiredSize.Width, finalSize.Width)
+                .Aggregate(new Size(), (currentSize, row) => ArrangeRow(row, currentSize, finalSize.Width));
 
-            foreach (IEnumerable<UIElement> currentElementLine in
-                InternalChildren.OfType<UIElement>().SplitIntoChunks(x => x.DesiredSize.Width, finalSize.Width))
-            {
-                double lineHeight = currentElementLine.Max(x => x.DesiredSize.Height);
-
-                double leftOffset = ArrangeLeftAlignedElements(currentElementLine, startY, finalSize.Width, lineHeight);
-                double rightOffset = ArrangeRightAlignedElements(currentElementLine, startY, finalSize.Width, lineHeight);
-                ArrangeCenterAlignedElements(currentElementLine, startY, leftOffset, rightOffset, lineHeight);
-
-                startY += lineHeight;
-
-                size.Width = Math.Max(size.Width, currentElementLine.Max(x => x.DesiredSize.Width));
-                size.Height += lineHeight;
-            }
-
-            return size;
+            return AdjustSizeForConstraintAndAlignment(size, finalSize);
         }
 
         /// <summary>
@@ -43,57 +29,49 @@ namespace ShipWorks.Shipping.UI.Controls
         /// </summary>
         protected override Size MeasureOverride(Size constraint)
         {
-            return InternalChildren.OfType<UIElement>()
-                .Select(element =>
-                {
-                    element.Measure(constraint);
-                    return element.DesiredSize;
-                })
+            Size size = InternalChildren.OfType<UIElement>()
+                .Select(x => MeasureElement(x, constraint))
                 .SplitIntoChunks(x => x.Width, constraint.Width)
                 .Select(rowSizes => new Size(rowSizes.Sum(x => x.Width), rowSizes.Max(x => x.Height)))
                 .Aggregate(new Size(), (x, y) => new Size(Math.Max(x.Width, y.Width), x.Height + y.Height));
 
+            return AdjustSizeForConstraintAndAlignment(size, constraint);
+        }
 
+        /// <summary>
+        /// Arrange the layout of a single row
+        /// </summary>
+        private Size ArrangeRow(IEnumerable<UIElement> currentElementLine, Size size, double maxWidth)
+        {
+            double lineHeight = currentElementLine.Max(x => x.DesiredSize.Height);
 
+            double leftOffset = ArrangeLeftAlignedElements(currentElementLine, size.Height, maxWidth, lineHeight);
+            double rightOffset = ArrangeRightAlignedElements(currentElementLine, size.Height, maxWidth, lineHeight);
+            ArrangeCenterAlignedElements(currentElementLine, size.Height, leftOffset, rightOffset, lineHeight);
 
+            return new Size(
+                Math.Max(size.Width, currentElementLine.Sum(x => x.DesiredSize.Width)),
+                size.Height + lineHeight);
+        }
 
+        /// <summary>
+        /// Adjust the given size based on the constraint and alignment of the control
+        /// </summary>
+        private Size AdjustSizeForConstraintAndAlignment(Size size, Size constraint)
+        {
+            double width = IsStretchAlignment(this) && !double.IsPositiveInfinity(constraint.Width) ?
+                constraint.Width : size.Width;
 
-            //Size currentLineSize = new Size();
-            //Size panelSize = new Size();
+            return new Size(width, size.Height);
+        }
 
-            //foreach (UIElement element in InternalChildren.OfType<UIElement>())
-            //{
-            //    element.Measure(constraint);
-            //    Size desiredSize = element.DesiredSize;
-
-            //    if (currentLineSize.Width + desiredSize.Width > constraint.Width)
-            //    {
-            //        panelSize.Width = Math.Max(currentLineSize.Width, panelSize.Width);
-            //        panelSize.Height += currentLineSize.Height;
-
-            //        if (desiredSize.Width > constraint.Width)
-            //        {
-            //            panelSize.Width = Math.Max(desiredSize.Width, panelSize.Width);
-            //            panelSize.Height += desiredSize.Height;
-            //            currentLineSize = new Size();
-            //        }
-            //        else
-            //        {
-            //            currentLineSize = new Size(desiredSize.Width, desiredSize.Height);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        currentLineSize.Width += desiredSize.Width;
-            //        currentLineSize.Height = Math.Max(desiredSize.Height, currentLineSize.Height);
-            //    }
-            //}
-
-            //panelSize.Width = double.IsPositiveInfinity(constraint.Width) ?
-            //    Math.Max(currentLineSize.Width, panelSize.Width) :
-            //    constraint.Width;
-            //panelSize.Height += currentLineSize.Height;
-            //return panelSize;
+        /// <summary>
+        /// Measure the size of an element with the given constraint
+        /// </summary>
+        private Size MeasureElement(UIElement element, Size constraint)
+        {
+            element.Measure(constraint);
+            return element.DesiredSize;
         }
 
         /// <summary>
@@ -144,7 +122,7 @@ namespace ShipWorks.Shipping.UI.Controls
         {
             double startX = 0;
 
-            foreach (UIElement element in elements.Where(IsLeftOrStretchAlignment))
+            foreach (UIElement element in elements.Where(x => IsLeftAlignment(x) || IsStretchAlignment(x)))
             {
                 element.Arrange(new Rect(startX, startY, width, height));
                 startX += element.DesiredSize.Width;
@@ -156,28 +134,31 @@ namespace ShipWorks.Shipping.UI.Controls
         /// <summary>
         /// Is the element center aligned
         /// </summary>
-        private bool IsCenterAlignment(UIElement element)
-        {
-            HorizontalAlignment alignment = (HorizontalAlignment)element.GetValue(HorizontalAlignmentProperty);
-            return alignment == HorizontalAlignment.Center;
-        }
+        private bool IsCenterAlignment(UIElement element) =>
+            GetHorizontalAlignment(element) == HorizontalAlignment.Center;
 
         /// <summary>
         /// Is the element right aligned
         /// </summary>
-        private bool IsRightAlignment(UIElement element)
-        {
-            HorizontalAlignment alignment = (HorizontalAlignment)element.GetValue(HorizontalAlignmentProperty);
-            return alignment == HorizontalAlignment.Right;
-        }
+        private bool IsRightAlignment(UIElement element) =>
+            GetHorizontalAlignment(element) == HorizontalAlignment.Right;
 
         /// <summary>
-        /// Is the element left or stretch aligned
+        /// Is the element left aligned
         /// </summary>
-        private bool IsLeftOrStretchAlignment(UIElement element)
-        {
-            HorizontalAlignment alignment = (HorizontalAlignment)element.GetValue(HorizontalAlignmentProperty);
-            return alignment == HorizontalAlignment.Left || alignment == HorizontalAlignment.Stretch;
-        }
+        private bool IsLeftAlignment(UIElement element) =>
+            GetHorizontalAlignment(element) == HorizontalAlignment.Left;
+
+        /// <summary>
+        /// Is the element stretch aligned
+        /// </summary>
+        private bool IsStretchAlignment(UIElement element) =>
+            GetHorizontalAlignment(element) == HorizontalAlignment.Stretch;
+
+        /// <summary>
+        /// Get the horizontal alignment of an element
+        /// </summary>
+        private HorizontalAlignment GetHorizontalAlignment(UIElement element) =>
+            (HorizontalAlignment)element.GetValue(HorizontalAlignmentProperty);
     }
 }
