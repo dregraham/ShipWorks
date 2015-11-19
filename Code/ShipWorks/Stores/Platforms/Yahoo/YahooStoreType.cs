@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
     public class YahooStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(YahooStoreType));
-        private bool ApiUser = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -57,6 +57,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         public override StoreTypeCode TypeCode => StoreTypeCode.Yahoo;
 
         /// <summary>
+        /// Gets a value indicating API user or not.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if API user; otherwise, <c>false</c>.
+        /// </value>
+        public bool ApiUser { get; private set; }
+
+        /// <summary>
         /// License identifier to uniquely identify the store
         /// </summary>
         protected override string InternalLicenseIdentifier
@@ -72,12 +80,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                     EmailAccountManager.GetAccount(((YahooStoreEntity) Store).YahooEmailAccountID);
 
                 // If the account was deleted we have to create a made up license that obviously will not be activated to them
-                if (account == null)
-                {
-                    return $"{Guid.NewGuid()}@noaccount.com";
-                }
-
-                return account.IncomingUsername;
+                return account == null ? $"{Guid.NewGuid()}@noaccount.com" : account.IncomingUsername;
             }
         }
 
@@ -232,6 +235,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             return commands;
         }
 
+
+        
+        
         /// <summary>
         /// Upload shipment details for the selected orders
         /// </summary>
@@ -384,6 +390,73 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 WebHelper.OpenUrl(item.Url, owner);
             }
         }
+        
+
+        /// <summary>
+        ///     Worker thread method for uploading shipment details
+        /// </summary>
+        private void ShipmentUploadCallback(IEnumerable<long> headers, object userState,
+            BackgroundIssueAdder<IEnumerable<long>> issueAdder)
+        {
+            // upload the tracking number for the most recent processed, not voided shipment
+            try
+            {
+                YahooApiOnlineUpdater shipmentUpdater = new YahooApiOnlineUpdater((YahooStoreEntity)Store);
+                shipmentUpdater.UpdateShipmentDetails(headers);
+            }
+            catch (YahooException ex)
+            {
+                // log it
+                log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
+
+                // add the error to issues for the user
+                issueAdder.Add(headers, ex);
+            }
+        }
+
+        /// <summary>
+        /// Command handler for setting online order status
+        /// </summary>
+        private void OnSetOnlineStatus(MenuCommandExecutionContext context)
+        {
+            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
+               "Set Status",
+               "ShipWorks is setting the online status.",
+               "Updating order {0} of {1}...");
+
+            MenuCommand command = context.MenuCommand;
+            int statusCode = (int)command.Tag;
+
+            executor.ExecuteCompleted += (o, e) =>
+            {
+                context.Complete(e.Issues, MenuCommandResult.Error);
+            };
+            executor.ExecuteAsync(SetOnlineStatusCallback, context.SelectedKeys, statusCode);
+        }
+
+        /// <summary>
+        /// Worker thread method for updating online order status
+        /// </summary>
+        private void SetOnlineStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        {
+            log.Debug(Store.StoreName);
+
+            int statusCode = (int)userState;
+            try
+            {
+                YahooApiOnlineUpdater updater = new YahooApiOnlineUpdater((YahooStoreEntity)Store);
+                updater.UpdateOrderStatus(orderID, statusCode);
+            }
+            catch (YahooException ex)
+            {
+                // log it
+                log.ErrorFormat("Error updating online status of orderID {0}: {1}", orderID, ex.Message);
+
+                // add the error to issues so we can react later
+                issueAdder.Add(orderID, ex);
+            }
+        }
+
 
         #endregion
     }

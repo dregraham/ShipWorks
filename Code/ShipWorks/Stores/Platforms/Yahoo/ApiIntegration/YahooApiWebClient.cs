@@ -46,6 +46,16 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             return CleanResponse(ProcessRequest(CreateGetItemRangeRequest(1, 2, "keyword"), "GetItemRange"));
         }
 
+        public void UploadShipmentDetails(string orderID, string trackingNumber, string shipper, string status)
+        {
+            ProcessRequest(CreateUpdateShipmentDetailsRequest(orderID, trackingNumber, shipper, status), "UploadShipmentDetails");
+        }
+
+        public void UploadOrderStatus(string orderID, string status)
+        {
+            ProcessRequest(CreateUploadOrderStatusRequest(orderID, status), "UploadOrderStatus");
+        }
+
         private string CleanResponse(string response)
         {
             response = response.Replace("<ystorews:ystorewsResponse xmlns:ystorews=\"urn:yahoo:sbs:ystorews\" >", "<ystorewsResponse>");
@@ -59,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         private HttpTextPostRequestSubmitter CreateGetOrderRequest(long orderID)
         {
-            string body = GetRequestBodyIntro +
+            string body = RequestBodyIntro + GetRequestBodyIntro +
                 "<OrderListQuery>" +
                 "<Filter>" +
                 $"<Include>all</Include>" +
@@ -82,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         private HttpTextPostRequestSubmitter CreateGetOrderRangeRequest(long start)
         {
             long end = start + OrdersPerPage;
-            string body = GetRequestBodyIntro +
+            string body = RequestBodyIntro + GetRequestBodyIntro +
                           "<OrderListQuery>" +
                           "<Filter>" +
                           "<Include>status</Include>" +
@@ -111,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         private HttpTextPostRequestSubmitter CreateGetItemRangeRequest(int start, int end, string keyword)
         {
-            string body = GetRequestBodyIntro +
+            string body = RequestBodyIntro + GetRequestBodyIntro +
                 "<CatalogQuery>" +
                 "<SimpleSearch>" +
                 $"<StartIndex>{start}</StartIndex>" +
@@ -133,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
         private HttpTextPostRequestSubmitter CreateGetItemRequest(string itemID)
         {
-            string body = GetRequestBodyIntro +
+            string body = RequestBodyIntro + GetRequestBodyIntro +
                           "<CatalogQuery>" +
                           "<ItemQueryList>" +
                           "<ItemIDList>" +
@@ -154,18 +164,64 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             return submitter;
         }
 
-        private string GetRequestBodyIntro => "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-                                              "<ystorewsRequest>" +
-                                              $"<StoreID>{yahooStoreID}</StoreID>" +
-                                              "<SecurityHeader>" +
-                                              $"<PartnerStoreContractToken>{token}</PartnerStoreContractToken>" +
-                                              "</SecurityHeader>" +
-                                              "<Version>1.0</Version>" +
-                                              $"<Verb>get</Verb>" +
+        private HttpTextPostRequestSubmitter CreateUpdateShipmentDetailsRequest(string orderID, string trackingNumber, string shipper, string status)
+        {
+            string body = RequestBodyIntro + UpdateRequestBodyIntro +
+                          "<Order>" +
+                          $"<OrderID>{orderID}</OrderID>" +
+                          "<CartShipmentInfo>" +
+                          $"<TrackingNumber>{trackingNumber}</TrackingNumber>" +
+                          $"<Shipper>{shipper}</Shipper>" +
+                          $"<ShipState>{status}</ShipState>" +
+                          "</CartShipmentInfo>" +
+                          "</Order>" +
+                          "</ResourceList>" +
+                          "</ystorewsRequest>";
+
+            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
+            {
+                Verb = HttpVerb.Post,
+                Uri = new Uri(yahooCatalogEndpoint + "/order")
+            };
+
+            return submitter;
+        }
+
+        private HttpRequestSubmitter CreateUploadOrderStatusRequest(string orderID, string status)
+        {
+            string body = RequestBodyIntro + UpdateRequestBodyIntro +
+                          "<Order>" +
+                          $"<OrderID>{orderID}</OrderID>" +
+                          "<CartShipmentInfo>" +
+                          $"<ShipState>{status}</ShipState>" +
+                          "</CartShipmentInfo>" +
+                          "</Order>" +
+                          "</ResourceList>" +
+                          "</ystorewsRequest>";
+
+            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
+            {
+                Verb = HttpVerb.Post,
+                Uri = new Uri(yahooCatalogEndpoint + "/order")
+            };
+
+            return submitter;
+        }
+
+        private string RequestBodyIntro => "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+                                           "<ystorewsRequest>" +
+                                           $"<StoreID>{yahooStoreID}</StoreID>" +
+                                           "<SecurityHeader>" +
+                                           $"<PartnerStoreContractToken>{token}</PartnerStoreContractToken>" +
+                                           "</SecurityHeader>" +
+                                           "<Version>1.0</Version>";
+
+        private string GetRequestBodyIntro => "<Verb>get</Verb>" +
                                               "<ResourceList>";
 
-
-
+        private string UpdateRequestBodyIntro => "<Verb>update</Verb>" +
+                                              "<ResourceList>";
+        
         /// <summary>
         ///     Executes a request
         /// </summary>
