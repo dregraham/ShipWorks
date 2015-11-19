@@ -10644,6 +10644,8 @@ namespace ShipWorks.Data.Model
 		OrderItemID,
 		///<summary>YahooProductID. </summary>
 		YahooProductID,
+		///<summary>Url. </summary>
+		Url,
 		/// <summary></summary>
 		AmountOfFields
 	}

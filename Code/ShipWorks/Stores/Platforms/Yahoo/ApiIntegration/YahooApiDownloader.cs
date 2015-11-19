@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business.Geography;
@@ -8,6 +9,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using Quartz.Util;
 using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -36,6 +38,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             {
                 List<long> orderList = CheckForNewOrders();
 
+                if (orderList == null)
+                {
+                    throw new YahooException("Error checking for orders");
+                }
+
                 if (orderList.Count == 0)
                 {
                     // There's nothing to download, so update the progress accordingly
@@ -47,12 +54,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     Progress.Detail = "Downloading new orders...";
                     DownloadNewOrders(orderList);
                 }
-
             }
-            catch (Exception)
+            catch (YahooException ex)
             {
-                
-                throw;
+                throw new DownloadException(ex.Message, ex);
+            }
+            catch (SqlForeignKeyException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
             }
         }
 
@@ -66,9 +75,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             {
                 YahooApiWebClient client = new YahooApiWebClient(Store as YahooStoreEntity);
 
-                YahooOrder order = DeserializeResponse<YahooOrder>(client.GetOrder(orderID));
+                YahooResponse response = DeserializeResponse<YahooResponse>(client.GetOrder(orderID));
 
-                LoadOrder(order);
+                LoadOrder(response.ResponseResourceList.OrderList.Order.FirstOrDefault());
             }
         }
 
@@ -88,8 +97,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             orderEntity.OnlineStatusCode = order.StatusList.OrderStatus.Last().StatusID;
             orderEntity.OnlineStatus = EnumHelper.GetDescription((YahooApiOrderStatus) int.Parse(orderEntity.OnlineStatusCode.ToString()));
             orderEntity.RequestedShipping = $"{order.CartShipmentInfo.Shipper} {order.ShipMethod}";
-            orderEntity.OrderDate = DateTime.Parse(order.CreationTime);
-            orderEntity.OnlineLastModified = DateTime.Parse(order.LastUpdatedTime);
+            orderEntity.OrderDate = ParseYahooDateTime(order.CreationTime);
+            orderEntity.OnlineLastModified = ParseYahooDateTime(order.LastUpdatedTime);
+            orderEntity.OrderNumber = order.OrderID;
+            orderEntity.YahooOrderID = order.OrderID.ToString();
 
             LoadAddress(orderEntity, order);
             LoadOrderItems(orderEntity, order);
@@ -164,19 +175,25 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 foreach (string note in noteArray)
                 {
+                    if (note.IsNullOrWhiteSpace())
+                    {
+                        continue;
+                    }
                     // Here we are extracting the date that prefixes the note, the date and note are seperated by a ':'
                     // We want to substring off of the second ":" though, since one appears in the dates time
-                    int dateEndIndex = note.IndexOf(":", note.IndexOf(":", StringComparison.Ordinal) + 1, StringComparison.Ordinal) + 1;
-
+                    int dateEndIndex = note.IndexOf(":", note.IndexOf(":", StringComparison.Ordinal) + 1, StringComparison.Ordinal);
+                    
                     DateTime noteDate = DateTime.Parse(note.Substring(0, dateEndIndex));
+
                     string noteText = note.Substring(dateEndIndex + 1);
+
                     InstantiateNote(orderEntity, noteText, noteDate, NoteVisibility.Internal);
                 }
             }
 
             if (!order.BuyerComments.IsNullOrWhiteSpace())
             {
-                InstantiateNote(orderEntity, order.BuyerComments, DateTime.Parse(order.CreationTime),
+                InstantiateNote(orderEntity, order.BuyerComments, ParseYahooDateTime(order.CreationTime),
                     NoteVisibility.Public);
             }
         }
@@ -221,7 +238,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             //    LoadOrderCharge(orderEntity, "GIFT WRAP", "Gift Wrap", order.OrderTotals.GiftWrap);
             //}
 
-            foreach (YahooAppliedPromotion promotion in order.OrderTotals.Promotions.AppliedPromotion)
+            List<YahooAppliedPromotion> promotions = order.OrderTotals?.Promotions?.AppliedPromotion;
+
+            if (promotions == null)
+            {
+                return;
+            }
+
+            foreach (YahooAppliedPromotion promotion in promotions)
             {
                 LoadOrderCharge(orderEntity, "PROMOTION", promotion.Name, -promotion.Discount);
             }
@@ -277,12 +301,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             itemEntity.YahooProductID = item.ItemID;
             itemEntity.Code = item.ItemCode;
+            itemEntity.Name = item.ItemCode;
             itemEntity.Quantity = item.Quantity;
             itemEntity.UnitPrice = item.UnitPrice;
             itemEntity.Description = item.Description;
-            //itemEntity.Url = item.URL; // Add URL to YahooOrderItem
+            itemEntity.Url = item.URL; 
             itemEntity.Thumbnail = item.ThumbnailUrl;
-            //itemEntity.Weight = GetItemWeight(item.ItemID);
+            itemEntity.Weight = GetItemWeight(item.ItemID);
 
             LoadOrderItemAttributes(itemEntity, item);
         }
@@ -313,7 +338,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             // If item is null, that means it is not in the cache
             // So make the call to get the item weight and cache it
             YahooApiWebClient client = new YahooApiWebClient(store);
-            YahooCatalogItem newItem = DeserializeResponse<YahooCatalogItem>(client.GetItem(itemID));
+            YahooResponse response = DeserializeResponse<YahooResponse>(client.GetItem(itemID));
+
+            YahooCatalogItem newItem = response.ResponseResourceList.Catalog.ItemList.Item.FirstOrDefault();
+
+            if (newItem == null)
+            {
+                throw new YahooException("Error deserializing XML response from Yahoo Catalog API");
+            }
 
             productWeightCache[itemID] = newItem;
 
@@ -327,6 +359,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="item">The item DTO.</param>
         private void LoadOrderItemAttributes(YahooOrderItemEntity itemEntity, YahooItem item)
         {
+            if (item.SelectedOptionList?.Option == null)
+            {
+                return;
+            }
+
             foreach (YahooOption option in item.SelectedOptionList.Option)
             {
                 OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(itemEntity);
@@ -345,13 +382,42 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             YahooApiWebClient client = new YahooApiWebClient(Store as YahooStoreEntity);
 
-            long nextOrderNumber = GetOrderNumberStartingPoint();
 
-            string response = client.GetOrderRange(nextOrderNumber);
+            long nextOrderNumber = GetNextOrderNumber() - 1;
 
-            YahooResponseResourceList responseResourceList = DeserializeResponse<YahooResponseResourceList>(response);
+            if (nextOrderNumber == 0)
+            {
+                //first DL
+                nextOrderNumber = GetOrderNumberStartingPoint() + 1;
+            }
 
-            return responseResourceList.OrderList.Order.Select(order => order.OrderID).ToList();
+            string responseXml = client.GetOrderRange(nextOrderNumber);
+
+            YahooResponse response = DeserializeResponse<YahooResponse>(responseXml);
+
+            return response?.ResponseResourceList?.OrderList?.Order?.Select(order => order.OrderID).ToList();
+        }
+
+        private DateTime ParseYahooDateTime(string yahooDateTime)
+        {
+            // We get DateTime format - Fri Mar 26 12:25:15 2010 GMT
+            // But DateTime.Parse can't parse it, but it can parse a very similar format of Mon, 15 Jun 2009 20:45:30 GMT
+            // So here we just switch things around then parse
+            string[] tokens = yahooDateTime.Split(' ');
+
+            tokens[0] = tokens[0] + ",";
+
+            string temp = tokens[1];
+            tokens[1] = tokens[2];
+            tokens[2] = temp;
+
+            temp = tokens[3];
+            tokens[3] = tokens[4];
+            tokens[4] = temp;
+
+            temp = tokens.Aggregate(string.Empty, (current, token) => $"{current} {token}");
+
+            return DateTime.Parse(temp);
         }
 
         /// <summary>

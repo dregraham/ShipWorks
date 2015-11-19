@@ -22822,6 +22822,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.YahooProductID);}
 		}
+		/// <summary>Creates a new YahooOrderItemEntity.Url field instance</summary>
+		public static EntityField2 Url
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.Url);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity YahooProductEntity</summary>

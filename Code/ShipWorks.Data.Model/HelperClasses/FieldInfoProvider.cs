@@ -2951,6 +2951,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("YahooOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)YahooOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			base.AddElementFieldInfo("YahooOrderItemEntity", "YahooProductID", typeof(System.String), false, false, false, false,  (int)YahooOrderItemFieldIndex.YahooProductID, 255, 0, 0);
+			base.AddElementFieldInfo("YahooOrderItemEntity", "Url", typeof(System.String), false, false, false, false,  (int)YahooOrderItemFieldIndex.Url, 100, 0, 0);
 		}
 		/// <summary>Inits YahooProductEntity's FieldInfo objects</summary>
 		private void InitYahooProductEntityInfos()

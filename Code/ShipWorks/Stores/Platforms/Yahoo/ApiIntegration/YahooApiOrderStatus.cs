@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum YahooApiOrderStatus
     {
         [Description("OK")]

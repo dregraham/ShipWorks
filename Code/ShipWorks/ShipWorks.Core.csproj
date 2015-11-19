@@ -1194,6 +1194,7 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderStatus.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderTotals.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooPromotions.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooResponse.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooResponseResourceList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooSelectedOptionList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooShipToInfo.cs" />
@@ -10431,6 +10432,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.5.sql" />
+    <Content Include="Data\Administration\Scripts\Update\4.7\4.7.0.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

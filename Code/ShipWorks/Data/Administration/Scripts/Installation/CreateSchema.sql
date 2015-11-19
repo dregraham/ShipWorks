@@ -3851,7 +3851,8 @@ GO
 CREATE TABLE [dbo].[YahooOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
-[YahooProductID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[YahooProductID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Url] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL Default ''
 )
 GO
 PRINT N'Creating primary key [PK_YahooOrderItem] on [dbo].[YahooOrderItem]'

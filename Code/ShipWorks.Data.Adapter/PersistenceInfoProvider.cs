@@ -3115,9 +3115,10 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits YahooOrderItemEntity's mappings</summary>
 		private void InitYahooOrderItemEntityMappings()
 		{
-			base.AddElementMapping( "YahooOrderItemEntity", "ShipWorksLocal", @"dbo", "YahooOrderItem", 2 );
+			base.AddElementMapping( "YahooOrderItemEntity", "ShipWorksLocal", @"dbo", "YahooOrderItem", 3 );
 			base.AddElementFieldMapping( "YahooOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "YahooOrderItemEntity", "YahooProductID", "YahooProductID", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "YahooOrderItemEntity", "Url", "Url", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 2 );
 		}
 		/// <summary>Inits YahooProductEntity's mappings</summary>
 		private void InitYahooProductEntityMappings()

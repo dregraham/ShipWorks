@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
+using Interapptive.Shared.Net;
 using log4net;
 using Quartz.Util;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email.Accounts;
 using ShipWorks.UI.Wizard;
@@ -12,7 +15,9 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -33,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
     public class YahooStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(YahooStoreType));
-
+        private bool ApiUser = false;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -58,11 +63,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             get
             {
-                string storeID = ((YahooStoreEntity) Store).YahooStoreID;
-
-                if (!storeID.IsNullOrWhiteSpace())
+                if (ApiUser)
                 {
-                    return storeID;
+                    return ((YahooStoreEntity)Store).YahooStoreID;
                 }
 
                 EmailAccountEntity account =
@@ -84,8 +87,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <value>
         /// The account settings help URL.
         /// </value>
-        public string AccountSettingsHelpUrl => "http://www.shipworks.com/shipworks/help/Yahoo_Email_Account.html";
-
+        public string AccountSettingsHelpUrl => ApiUser ? "" : "http://www.shipworks.com/shipworks/help/Yahoo_Email_Account.html";
+    
         /// <summary>
         /// Create a new default initialized instance of the store type
         /// </summary>
@@ -100,6 +103,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             store.TrackingUpdatePassword = "";
             store.YahooStoreID = "";
             store.AccessToken = "";
+            ApiUser = true;
             
             return store;
         }
@@ -153,12 +157,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             YahooStoreEntity store = (YahooStoreEntity) Store;
 
-            if (store.YahooStoreID.IsNullOrWhiteSpace())
+            if (ApiUser)
             {
-                return new YahooEmailDownloader(store);
+                return new YahooApiDownloader(store);
             }
 
-            return new YahooApiDownloader(store);
+            return new YahooEmailDownloader(store);
         }
 
         /// <summary>
@@ -216,6 +220,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         public override List<MenuCommand> CreateOnlineUpdateCommonCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
+
+            if (ApiUser)
+            {
+                
+            }
 
             MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails));
             commands.Add(uploadCommand);
@@ -342,8 +351,39 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             };
         }
 
+        /// <summary>
+        ///     Indicates if the StoreType supports the display of the given "Online" column.
+        /// </summary>
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
+        {
+            if (column == OnlineGridColumnSupport.OnlineStatus || column == OnlineGridColumnSupport.LastModified)
+            {
+                return true;
+            }
 
+            return base.GridOnlineColumnSupported(column);
+        }
 
+        /// <summary>
+        ///     Indicates what basic grid fields we support hyperlinking for
+        /// </summary>
+        public override bool GridHyperlinkSupported(EntityField2 field)
+        {
+            return EntityUtility.IsSameField(field, OrderItemFields.Name);
+        }
+
+        /// <summary>
+        ///     Handle a link click for the given field
+        /// </summary>
+        public override void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
+        {
+            YahooOrderItemEntity item = entity as YahooOrderItemEntity;
+
+            if (item != null && !item.Url.IsNullOrWhiteSpace())
+            {
+                WebHelper.OpenUrl(item.Url, owner);
+            }
+        }
 
         #endregion
     }

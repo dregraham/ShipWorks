@@ -28,22 +28,30 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
         public string GetOrder(long orderID)
         {
-            return ProcessRequest(CreateGetOrderRequest(orderID), "GetOrder");
+            return CleanResponse(ProcessRequest(CreateGetOrderRequest(orderID), "GetOrder"));
         }
 
         public string GetOrderRange(long start)
         {
-            return ProcessRequest(CreateGetOrderRangeRequest(start), "GetOrderRange");
+            return CleanResponse(ProcessRequest(CreateGetOrderRangeRequest(start), "GetOrderRange"));
         }
 
         public string GetItem(string itemID)
         {
-            return ProcessRequest(CreateGetItemRequest(itemID), "GetItem");
+            return CleanResponse(ProcessRequest(CreateGetItemRequest(itemID), "GetItem"));
         }
 
         public string ValidateCredentials()
         {
-            return ProcessRequest(CreateGetItemRangeRequest(1, 2, "keyword"), "GetItemRange");
+            return CleanResponse(ProcessRequest(CreateGetItemRangeRequest(1, 2, "keyword"), "GetItemRange"));
+        }
+
+        private string CleanResponse(string response)
+        {
+            response = response.Replace("<ystorews:ystorewsResponse xmlns:ystorews=\"urn:yahoo:sbs:ystorews\" >", "<ystorewsResponse>");
+            response = response.Replace("</ystorews:ystorewsResponse>", "</ystorewsResponse>");
+
+            return response;
         }
 
         /// <summary>
