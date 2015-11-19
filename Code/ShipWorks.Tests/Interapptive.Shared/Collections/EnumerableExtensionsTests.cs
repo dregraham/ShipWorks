@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Interapptive.Shared.Collections;
 using Xunit;
 using System.Linq;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using Moq;
 using System.Collections;
 
@@ -83,6 +82,30 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             {
                 Assert.Equal("size", ex.ParamName);
             }
+        }
+
+        [Fact]
+        public void SplitIntoChunks_ReturnsThreeCollections_WhenValuesAreLessThanMax()
+        {
+            var items = Enumerable.Range(0, 9).Select(x => (x % 3) + 1)
+                .SplitIntoChunks(x => x, 6.1);
+            Assert.Equal(3, items.Count());
+        }
+
+        [Fact]
+        public void SplitIntoChunks_ReturnsThreeCollections_WhenValueEqualsMax()
+        {
+            var items = Enumerable.Range(0, 9).Select(x => (x % 3) + 1)
+                .SplitIntoChunks(x => x, 6);
+            Assert.Equal(3, items.Count());
+        }
+
+        [Fact]
+        public void SplitIntoChunks_ReturnsEachItemInItsOwnCollection_WhenEachItemIsMoreThanMaxValue()
+        {
+            var items = Enumerable.Range(0, 9).Select(x => (x % 3) + 2)
+                .SplitIntoChunks(x => x, 1);
+            Assert.Equal(9, items.Count());
         }
 
         [Fact]

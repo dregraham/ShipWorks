@@ -7,8 +7,9 @@
              xmlns:props="clr-namespace:ShipWorks.Shipping.UI.AttachedProperties"
              xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
              xmlns:valueConverters="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
+             xmlns:controls="clr-namespace:ShipWorks.Shipping.UI.Controls"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance local:AddressViewModel, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance local:AddressViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="380" d:DesignWidth="500">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -59,8 +60,11 @@
             </Grid.RowDefinitions>
 
             <TextBlock Style="{StaticResource Header}">Address</TextBlock>
-            <WrapPanel Grid.Column="1" Visibility="{Binding IsAddressValidationEnabled, Converter={StaticResource BooleanToVisibility}}">
-                <StackPanel Orientation="Horizontal">
+            <controls:AlignmentWrapPanel Grid.Column="1" 
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
+                    Visibility="{Binding IsAddressValidationEnabled, Converter={StaticResource BooleanToVisibility}}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Image VerticalAlignment="Center" 
                        Margin="4,0,8,0"
                        Source="{Binding ValidationStatus, Converter={StaticResource EnumImage}}" />
@@ -78,7 +82,7 @@
                         <Hyperlink Command="{Binding ShowValidationMessageCommand}">Details...</Hyperlink>
                     </TextBlock>
                 </StackPanel>
-            </WrapPanel>
+            </controls:AlignmentWrapPanel>
 
             <TextBlock Grid.Row="1" 
                        Grid.Column="0"

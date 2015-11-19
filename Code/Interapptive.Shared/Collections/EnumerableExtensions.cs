@@ -50,6 +50,55 @@ namespace Interapptive.Shared.Collections
         }
 
         /// <summary>
+        /// Breaks a collection up into chunks where the sum of the specified value is less than the maxValue
+        /// </summary>
+        /// <typeparam name="TSource">Type of data in the collection</typeparam>
+        /// <param name="source">Collection that will be broken into chunks</param>
+        /// <param name="size">Max value for each chunk</param>
+        /// <returns>Collection of chunks of the specified type</returns>
+        public static IEnumerable<IEnumerable<TSource>> SplitIntoChunks<TSource>(this IEnumerable<TSource> source, Func<TSource, double> selector, double maxValue)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
+            MethodConditions.EnsureArgumentIsNotNull(selector, nameof(selector));
+
+            using (IEnumerator<TSource> iter = source.GetEnumerator())
+            {
+                // Add a little extra to handle the fact that doubles aren't exactly accurate
+                double maxValueTest = maxValue + 0.01;
+                double currentValue = 0;
+                List<TSource> items = new List<TSource>();
+
+                while (iter.MoveNext())
+                {
+                    TSource item = iter.Current;
+                    double selectedValue = selector(item);
+
+                    if (items.Any())
+                    {
+                        if (currentValue + selectedValue < maxValueTest)
+                        {
+                            items.Add(item);
+                            currentValue += selectedValue;
+                        }
+                        else
+                        {
+                            yield return items;
+                            items = new List<TSource>() { item };
+                            currentValue = selectedValue;
+                        }
+                    }
+                    else
+                    {
+                        items.Add(item);
+                        currentValue += selectedValue;
+                    }
+                }
+
+                yield return items;
+            }
+        }
+
+        /// <summary>
         /// Repeats the items in the collection
         /// </summary>
         /// <typeparam name="T">Type of object in the collection</typeparam>
