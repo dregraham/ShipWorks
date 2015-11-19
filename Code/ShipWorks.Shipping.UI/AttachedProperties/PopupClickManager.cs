@@ -63,11 +63,11 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
 
             if (e.NewValue != null && e.OldValue == null)
             {
-                AlterClickHandler(d, link => link.Click += OnOpenPopupClick, button => button.Click += OnOpenPopupClick);
+                AlterClickHandler(d, link => link.Click += OnOpenPopupClick, button => button.Click += OnOpenPopupClick, element => element.MouseUp += OnOpenPopupClick);
             }
             if (e.NewValue == null && e.OldValue != null)
             {
-                AlterClickHandler(d, link => link.Click -= OnOpenPopupClick, button => button.Click -= OnOpenPopupClick);
+                AlterClickHandler(d, link => link.Click -= OnOpenPopupClick, button => button.Click -= OnOpenPopupClick, element => element.MouseUp -= OnOpenPopupClick);
             }
         }
 
@@ -78,18 +78,18 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         {
             if (e.NewValue != null && e.OldValue == null)
             {
-                AlterClickHandler(d, link => link.Click += OnClosePopupClick, button => button.Click += OnClosePopupClick);
+                AlterClickHandler(d, link => link.Click += OnClosePopupClick, button => button.Click += OnClosePopupClick, element => element.MouseUp += OnClosePopupClick);
             }
             if (e.NewValue == null && e.OldValue != null)
             {
-                AlterClickHandler(d, link => link.Click -= OnClosePopupClick, button => button.Click -= OnClosePopupClick);
+                AlterClickHandler(d, link => link.Click -= OnClosePopupClick, button => button.Click -= OnClosePopupClick, element => element.MouseUp -= OnClosePopupClick);
             }
         }
 
         /// <summary>
         /// Attach or detach the click handler
         /// </summary>
-        private static void AlterClickHandler(DependencyObject d, Action<Hyperlink> updateHyperlinkHandler, Action<ButtonBase> updateButtonBaseHandler)
+        private static void AlterClickHandler(DependencyObject d, Action<Hyperlink> updateHyperlinkHandler, Action<ButtonBase> updateButtonBaseHandler, Action<UIElement> updateElementHandler)
         {
             Hyperlink link = d as Hyperlink;
             if (link != null)
@@ -102,6 +102,12 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
             if (button != null)
             {
                 updateButtonBaseHandler(button);
+                return;
+            }
+
+            UIElement element = d as UIElement;
+            if (element != null) {
+                updateElementHandler(element);
             }
         }
 

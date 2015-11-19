@@ -230,7 +230,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
             PersonAdapter changedPerson = changedAddress.ConvertTo<PersonAdapter>();
 
             PopulateAddress(changedPerson);
-            ValidationStatus = (AddressValidationStatusType) changedPerson.AddressValidationStatus;
+            ValidationStatus = addressSuggestion.IsOriginal ? AddressValidationStatusType.SuggestionIgnored : AddressValidationStatusType.SuggestionSelected;
 
             SetupAddressValidationMessagePropertyHandlers();
         }

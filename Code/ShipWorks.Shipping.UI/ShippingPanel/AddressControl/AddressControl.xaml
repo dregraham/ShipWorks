@@ -8,6 +8,8 @@
              xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
              xmlns:valueConverters="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
              xmlns:controls="clr-namespace:ShipWorks.Shipping.UI.Controls"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:AddressViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="380" d:DesignWidth="500">
@@ -147,26 +149,56 @@
                      props:EntityFieldLength.FieldName="PersonPhone"
                      Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
-        <Popup Name="AddressPopup" Placement="Custom" StaysOpen="False">
-            <Popup.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="3" ShadowDepth="6" />
-            </Popup.Effect>
-            <ItemsControl Padding="25,6,10,6"
-                          Background="LightGray"
-                          ItemsSource="{Binding AddressSuggestions}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button CommandParameter="{Binding Value}"
-                                props:PopupClickManager.ClosePopup="{Binding ElementName=AddressPopup}">
-                            <Button.Command>
-                                <Binding Path="DataContext.SelectAddressSuggestionCommand"
-                                         RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}" />
-                            </Button.Command>
-                            <TextBlock Text="{Binding Key}" />
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+        <Popup Name="AddressPopup" AllowsTransparency="True" 
+               Placement="Custom" StaysOpen="False">
+            <Border Margin="0,0,8,8"
+                    Padding="0,2,0,2"
+                    Background="#FFF0F0F0" 
+                    BorderBrush="DarkGray"
+                    BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5" Opacity="0.4"/>
+                </Border.Effect>
+
+                <ItemsControl ItemsSource="{Binding AddressSuggestions}">
+                    <ItemsControl.Resources>
+                        <Style x:Key="AddressBorderStyle" TargetType="Border">
+                            <Setter Property="Padding" Value="26,4,12,4" />
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#FF91C9F7"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ItemsControl.Resources>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Border Style="{StaticResource AddressBorderStyle}" 
+                                        props:PopupClickManager.ClosePopup="{Binding ElementName=AddressPopup}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseUp" >
+                                            <cmd:EventToCommand 
+                                             PassEventArgsToCommand="False"    
+                                             CommandParameter="{Binding Value}">
+                                                <cmd:EventToCommand.Command>
+                                                    <Binding Path="DataContext.SelectAddressSuggestionCommand"
+                                                    RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}" />
+                                                </cmd:EventToCommand.Command>
+                                            </cmd:EventToCommand>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <TextBlock Text="{Binding Key}" />
+                                </Border>
+
+                                <Separator Margin="26,4,2,4"
+                                           Visibility="{Binding Value.IsOriginal, Converter={StaticResource BooleanToVisibility}}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
         </Popup>
     </StackPanel>
 </UserControl>
