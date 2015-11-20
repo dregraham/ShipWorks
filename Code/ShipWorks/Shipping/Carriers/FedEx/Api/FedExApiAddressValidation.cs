@@ -120,12 +120,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         private static AddressValidationReply MakeRequest(AddressValidationRequest request)
         {
-            AddressValidationReply reply;
             try
             {
                 using (AddressValidationService webService = CreateWebService("ResidentialCheck"))
                 {
-                    reply = webService.addressValidation(request);
+                    return webService.addressValidation(request);
                 }
             }
             catch (SoapException ex)
@@ -136,7 +135,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 throw WebHelper.TranslateWebException(ex, typeof(FedExException));
             }
-            return reply;
         }
 
         /// <summary>
