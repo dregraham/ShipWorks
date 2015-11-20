@@ -89,7 +89,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
         public void Convert_ReturnsListWithTypeCodes_WithTwoListsOfShipmentTypeCodes(ShipmentTypeCode type1, ShipmentTypeCode type2)
         {
             ShipmentTypeListConverter testObject = new ShipmentTypeListConverter(x => "foo");
-            IEnumerable<ShipmentTypeListItem> results = testObject.Convert(new object[] { new List<ShipmentTypeCode> { type1 }, new List<ShipmentTypeCode> { type2 } }, null, null, null) as IEnumerable<ShipmentTypeListItem>;
+            IEnumerable<ShipmentTypeListItem> results = testObject.Convert(new object[] {
+                new List<ShipmentTypeCode> { type1 },
+                new List<ShipmentTypeCode> { type2 } }, null, null, null) as IEnumerable<ShipmentTypeListItem>;
             Assert.Contains(type1, results.Select(x => x.Value));
             Assert.Contains(type2, results.Select(x => x.Value));
         }

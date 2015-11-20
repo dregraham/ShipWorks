@@ -4,9 +4,12 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using Xunit;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Tests.Carriers.iParcel
 {
+    [SuppressMessage("SonarLint", "S101:Class names should comply with a naming convention",
+        Justification = "Class is names to match iParcel's naming convention")]
     public class iParcelShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;

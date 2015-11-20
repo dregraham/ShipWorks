@@ -15,7 +15,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly Func<ShipmentEntity, IUpsServiceManagerFactory> serviceManagerFactory;
         private readonly UpsOltShipmentType shipmentType;
 
-        public UpsShipmentServicesBuilder(UpsOltShipmentType shipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository, Func<ShipmentEntity, IUpsServiceManagerFactory> serviceManagerFactory)
+        public UpsShipmentServicesBuilder(UpsOltShipmentType shipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository,
+            Func<ShipmentEntity, IUpsServiceManagerFactory> serviceManagerFactory)
         {
             this.shipmentType = shipmentType;
             this.excludedServiceTypeRepository = excludedServiceTypeRepository;
@@ -35,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (allSameCountry)
             {
                 ShipmentEntity overriddenShipment = overriddenShipments.First();
-                
+
                 IUpsServiceManager carrierServiceManager = serviceManagerFactory(overriddenShipment).Create(overriddenShipment);
 
                 // Get a list of service types that are valid for the overriddenShipments
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 if (shipments.Any())
                 {
-                    // Always include the service type that the shipment is currently configured in the 
+                    // Always include the service type that the shipment is currently configured in the
                     // event the shipment was configured prior to a service being excluded
                     // Always include the service that the shipments are currently configured with
                     // Only if the ServiceType is valid for the shipment type

@@ -23,10 +23,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
     {
         private readonly OrderEntity orderEntity;
         private readonly StoreEntity storeEntity;
-        private ShipmentEntity shipmentEntity;
+        private readonly ShipmentEntity shipmentEntity;
         private OrderSelectionLoaded orderSelectionLoaded;
 
-        private Mock<ICarrierShipmentAdapterFactory> shipmentAdapterFactory;
+        private readonly Mock<ICarrierShipmentAdapterFactory> shipmentAdapterFactory;
         private Mock<ICarrierShipmentAdapter> shipmentAdapter;
 
         public ShippingPanelViewModelTest()
@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         private ShippingPanelViewModel GetViewModelWithLoadedShipment(AutoMock mock)
         {
             OrderSelectionChangedMessage message = new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded> {orderSelectionLoaded});
-            
+
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
             testObject.LoadOrder(message);
 
@@ -156,7 +156,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                     .Returns(destinationAddress.Object);
 
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                
+
                 testObject.Save();
 
                 destinationAddress.Verify(x => x.SaveToEntity(shipmentEntity.ShipPerson));
@@ -189,7 +189,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 OrderSelectionChangedMessage message = new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded> { orderSelectionLoaded });
-                
+
                 ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
                 testObject.LoadOrder(message);
 
@@ -220,17 +220,12 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 IMessenger messenger = new TestMessenger();
                 mock.Provide<IMessenger>(messenger);
 
-                PersonAdapter newStoreAddress = new PersonAdapter(storeEntity, null)
-                {
-                    Street1 = "It changed!"
-                };
-                
                 Mock<AddressViewModel> addressViewModel = new Mock<AddressViewModel>();
 
                 mock.Mock<IShippingViewModelFactory>().Setup(s => s.GetAddressViewModel()).Returns(addressViewModel.Object);
 
-                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                
+                GetViewModelWithLoadedShipment(mock);
+
                 messenger.Send(new StoreChangedMessage(null, storeEntity));
 
                 addressViewModel.Verify(s => s.SetAddressFromOrigin(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()), Times.AtLeastOnce);
@@ -264,7 +259,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 Mock<AddressViewModel> originAddress = mock.WithOriginAddressViewModel();
 
                 IMessenger messenger = mock.Provide<IMessenger>(new TestMessenger());
-                
+
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.OriginAddressType = (long)ShipmentOriginSource.Account;
 
@@ -352,7 +347,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                mock.WithCarrierShipmentAdapterFromChangeShipment(x => 
+                mock.WithCarrierShipmentAdapterFromChangeShipment(x =>
                     x.SetupGet(a => a.SupportsMultiplePackages).Returns(supportsMultiplePackages));
 
                 shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
@@ -420,7 +415,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             {
                 ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
                 testObject.LoadOrder(new OrderSelectionChangedMessage(this, new[] { new OrderSelectionLoaded(new Exception()) }));
-                
+
                 Assert.Equal(ShippingPanelLoadedShipmentResult.Error, testObject.LoadedShipmentResult);
             }
         }
@@ -494,7 +489,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
-                
+
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
                 testObject.ShipmentType = ShipmentTypeCode.OnTrac;
 
@@ -509,7 +504,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                
+
                 testObject.SaveToDatabase();
 
                 mock.Mock<IShippingManager>()
@@ -572,13 +567,15 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                TestMessenger messenger = new TestMessenger();
-                mock.Provide<IMessenger>(messenger);
+                using (TestMessenger messenger = new TestMessenger())
+                {
+                    mock.Provide<IMessenger>(messenger);
 
-                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                messenger.Send(new ShipmentDeletedMessage(this, shipmentEntity.ShipmentID));
+                    ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+                    messenger.Send(new ShipmentDeletedMessage(this, shipmentEntity.ShipmentID));
 
-                Assert.Equal(ShippingPanelLoadedShipmentResult.Deleted, testObject.LoadedShipmentResult);
+                    Assert.Equal(ShippingPanelLoadedShipmentResult.Deleted, testObject.LoadedShipmentResult);
+                }
             }
         }
 
@@ -587,13 +584,15 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                TestMessenger messenger = new TestMessenger();
-                mock.Provide<IMessenger>(messenger);
+                using (TestMessenger messenger = new TestMessenger())
+                {
+                    mock.Provide<IMessenger>(messenger);
 
-                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                messenger.Send(new ShipmentDeletedMessage(this, shipmentEntity.ShipmentID + 1));
+                    ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+                    messenger.Send(new ShipmentDeletedMessage(this, shipmentEntity.ShipmentID + 1));
 
-                Assert.NotEqual(ShippingPanelLoadedShipmentResult.Error, testObject.LoadedShipmentResult);
+                    Assert.NotEqual(ShippingPanelLoadedShipmentResult.Error, testObject.LoadedShipmentResult);
+                }
             }
         }
 
@@ -608,7 +607,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                
+
                 Assert.Equal(ShippingAddressEditStateType.Processed, testObject.DestinationAddressEditableState);
             }
         }

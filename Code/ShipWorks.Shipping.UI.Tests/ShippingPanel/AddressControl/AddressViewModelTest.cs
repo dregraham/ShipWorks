@@ -8,7 +8,6 @@ using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using ShipWorks.Shipping.UI.ShippingPanel;
 
@@ -16,8 +15,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
 {
     public class AddressViewModelTest : IDisposable
     {
-        AutoMock mock;
-        PersonAdapter entityBasedAdapter = new PersonAdapter(new ShipmentEntity { ShipmentID = 3 }, "Ship");
+        readonly AutoMock mock;
+        readonly PersonAdapter entityBasedAdapter = new PersonAdapter(new ShipmentEntity { ShipmentID = 3 }, "Ship");
 
         public AddressViewModelTest()
         {

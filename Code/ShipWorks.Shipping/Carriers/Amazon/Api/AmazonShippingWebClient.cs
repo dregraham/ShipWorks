@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     ErrorResponse errorResponse = SerializationUtility.DeserializeFromXml<ErrorResponse>(xml);
                     throw new AmazonShippingException(errorResponse.Error.Message, ex);
                 }
-                
+
                 throw new AmazonShippingException($"Error Deserializing {typeof(T).Name}", ex);
             }
         }
@@ -173,11 +173,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private static void AddShippingServiceOptions(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
             // ShippingServiceOptions
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp", requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLower());
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience", requestDetails.ShippingServiceOptions.DeliveryExperience);
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp",
+                requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLower());
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience",
+                requestDetails.ShippingServiceOptions.DeliveryExperience);
 
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.Amount", requestDetails.ShippingServiceOptions.DeclaredValue.Amount.ToString(CultureInfo.InvariantCulture));
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode", requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.Amount",
+                requestDetails.ShippingServiceOptions.DeclaredValue.Amount.ToString(CultureInfo.InvariantCulture));
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode",
+                requestDetails.ShippingServiceOptions.DeclaredValue.CurrencyCode);
         }
 
         /// <summary>

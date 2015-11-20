@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml;
-using System.Diagnostics;
 
 namespace ShipWorks.Data.Import.Spreadsheet
 {
@@ -14,7 +12,6 @@ namespace ShipWorks.Data.Import.Spreadsheet
     /// </summary>
     public abstract class GenericSpreadsheetMap
     {
-        string name;
         GenericSpreadsheetMapDateSettings dateSettings;
 
         GenericSpreadsheetTargetSchema targetSchema;
@@ -24,7 +21,7 @@ namespace ShipWorks.Data.Import.Spreadsheet
         GenericSpreadsheetFieldMappingCollection mappings = new GenericSpreadsheetFieldMappingCollection();
 
         /// <summary>
-        /// Deserialization constructor
+        /// De-serialization constructor
         /// </summary>
         protected GenericSpreadsheetMap(GenericSpreadsheetTargetSchema targetSchema, string mapXml)
         {
@@ -40,7 +37,6 @@ namespace ShipWorks.Data.Import.Spreadsheet
         {
             this.targetSchema = targetSchema;
             this.targetSettings = targetSchema.CreateSettings();
-            this.sourceSchema = CreateSourceSchema();
             this.dateSettings = new GenericSpreadsheetMapDateSettings();
 
             ValidateTargetSchema(targetSchema);
@@ -63,11 +59,7 @@ namespace ShipWorks.Data.Import.Spreadsheet
         /// <summary>
         /// The name of the map\definition
         /// </summary>
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// The target schema that the map must conform to
@@ -86,11 +78,11 @@ namespace ShipWorks.Data.Import.Spreadsheet
         }
 
         /// <summary>
-        /// Thes source schema of the input document
+        /// The source schema of the input document
         /// </summary>
         public GenericSpreadsheetSourceSchema SourceSchema
         {
-            get { return sourceSchema; }
+            get { return sourceSchema ?? (sourceSchema = CreateSourceSchema()); }
             set { sourceSchema = value; }
         }
 
@@ -111,7 +103,7 @@ namespace ShipWorks.Data.Import.Spreadsheet
         }
 
         /// <summary>
-        /// Must be implmeneted by derived classes to create new SourceSchema instances
+        /// Must be implemented by derived classes to create new SourceSchema instances
         /// </summary>
         protected abstract GenericSpreadsheetSourceSchema CreateSourceSchema();
 
@@ -150,9 +142,9 @@ namespace ShipWorks.Data.Import.Spreadsheet
 
             XElement root = new XElement("ShipWorksMap",
                 new XAttribute("version", "1.1"),
-                new XElement("Name", name),
+                new XElement("Name", Name),
 
-                new XElement("Dates", 
+                new XElement("Dates",
                     new XElement("DateTimeFormat", dateSettings.DateTimeFormat),
                     new XElement("DateFormat", dateSettings.DateFormat),
                     new XElement("TimeFormat", dateSettings.TimeFormat),
@@ -178,7 +170,7 @@ namespace ShipWorks.Data.Import.Spreadsheet
         }
 
         /// <summary>
-        /// Load the map from the given persisted xml data
+        /// Load the map from the given persisted XML data
         /// </summary>
         public void LoadFromXml(string mapXml)
         {
@@ -198,7 +190,7 @@ namespace ShipWorks.Data.Import.Spreadsheet
                 }
 
                 // Name
-                name = (string) root.Element("Name");
+                Name = (string) root.Element("Name");
 
                 // Dates
                 dateSettings = new GenericSpreadsheetMapDateSettings();
@@ -219,7 +211,7 @@ namespace ShipWorks.Data.Import.Spreadsheet
                 targetSettings = targetSchema.CreateSettings();
                 targetSettings.LoadFrom(root.Element("Settings"));
 
-                // Create a new collection of mappings to be loaded 
+                // Create a new collection of mappings to be loaded
                 mappings = new GenericSpreadsheetFieldMappingCollection();
 
                 // Mappings

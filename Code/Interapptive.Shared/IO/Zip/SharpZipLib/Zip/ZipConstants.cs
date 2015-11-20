@@ -24,7 +24,7 @@
 // making a combined work based on this library.  Thus, the terms and
 // conditions of the GNU General Public License cover the whole
 // combination.
-// 
+//
 // As a special exception, the copyright holders of this library give you
 // permission to link this library with independent modules to produce an
 // executable, regardless of the license terms of these independent
@@ -45,11 +45,11 @@ using System.Threading;
 using System.Globalization;
 #endif
 
-namespace ICSharpCode.SharpZipLib.Zip 
+namespace ICSharpCode.SharpZipLib.Zip
 {
 
 	#region Enumerations
-	
+
 	/// <summary>
 	/// Determines how entries are tested to see if they should use Zip64 extensions or not.
 	/// </summary>
@@ -69,7 +69,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// </summary>
 		Dynamic,
 	}
-	
+
 	/// <summary>
 	/// The kind of compression used for an entry in an archive
 	/// </summary>
@@ -79,30 +79,30 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// A direct copy of the file contents is held in the archive
 		/// </summary>
 		Stored     = 0,
-		
+
 		/// <summary>
-		/// Common Zip compression method using a sliding dictionary 
+		/// Common Zip compression method using a sliding dictionary
 		/// of up to 32KB and secondary compression from Huffman/Shannon-Fano trees
 		/// </summary>
 		Deflated   = 8,
-		
+
 		/// <summary>
 		/// An extension to deflate with a 64KB window. Not supported by #Zip currently
 		/// </summary>
 		Deflate64  = 9,
-		
+
 		/// <summary>
 		/// BZip2 compression. Not supported by #Zip.
 		/// </summary>
 		BZip2      = 11,
-		
+
 		/// <summary>
 		/// WinZip special for AES encryption, Not supported by #Zip.
 		/// </summary>
 		WinZipAES  = 99,
-		
+
 	}
-	
+
 	/// <summary>
 	/// Identifies the encryption algorithm used for an entry
 	/// </summary>
@@ -181,7 +181,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// </summary>
 		Method = 0x0006,
 		/// <summary>
-		/// Bit 3 if set indicates a trailing data desciptor is appended to the entry data
+		/// Bit 3 if set indicates a trailing data descriptor is appended to the entry data
 		/// </summary>
 		Descriptor = 0x0008,
 		/// <summary>
@@ -214,7 +214,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// </summary>
 		Unused10 = 0x0400,
 		/// <summary>
-		/// Bit 11 if set indicates the filename and 
+		/// Bit 11 if set indicates the filename and
 		/// comment fields for this file must be encoded using UTF-8.
 		/// </summary>
 		UnicodeText = 0x0800,
@@ -239,7 +239,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// </summary>
 		ReservedPkware15 = 0x8000
 	}
-	
+
 	#endregion
 
 	/// <summary>
@@ -256,7 +256,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// for an entry.  See <see cref="ZipEntry.CanDecompress"/>.
 		/// </remarks>
 		public const int VersionMadeBy = 45;
-		
+
 		/// <summary>
 		/// The version made by field for entries in the central header when created by this library
 		/// </summary>
@@ -266,7 +266,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// </remarks>
 		[Obsolete("Use VersionMadeBy instead")]
 		public const int VERSION_MADE_BY = 45;
-		
+
 		/// <summary>
 		/// The minimum version required to support strong encryption
 		/// </summary>
@@ -277,77 +277,77 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// </summary>
 		[Obsolete("Use VersionStrongEncryption instead")]
 		public const int VERSION_STRONG_ENCRYPTION = 50;
-		
+
 		/// <summary>
 		/// The version required for Zip64 extensions
 		/// </summary>
 		public const int VersionZip64 = 45;
 		#endregion
-		
+
 		#region Header Sizes
 		/// <summary>
 		/// Size of local entry header (excluding variable length fields at end)
 		/// </summary>
 		public const int LocalHeaderBaseSize = 30;
-		
+
 		/// <summary>
 		/// Size of local entry header (excluding variable length fields at end)
 		/// </summary>
 		[Obsolete("Use LocalHeaderBaseSize instead")]
 		public const int LOCHDR = 30;
-		
+
 		/// <summary>
 		/// Size of Zip64 data descriptor
 		/// </summary>
 		public const int Zip64DataDescriptorSize = 24;
-		
+
 		/// <summary>
 		/// Size of data descriptor
 		/// </summary>
 		public const int DataDescriptorSize = 16;
-		
+
 		/// <summary>
 		/// Size of data descriptor
 		/// </summary>
 		[Obsolete("Use DataDescriptorSize instead")]
 		public const int EXTHDR = 16;
-		
+
 		/// <summary>
 		/// Size of central header entry (excluding variable fields)
 		/// </summary>
 		public const int CentralHeaderBaseSize = 46;
-		
+
 		/// <summary>
 		/// Size of central header entry
 		/// </summary>
 		[Obsolete("Use CentralHeaderBaseSize instead")]
 		public const int CENHDR = 46;
-		
+
 		/// <summary>
 		/// Size of end of central record (excluding variable fields)
 		/// </summary>
 		public const int EndOfCentralRecordBaseSize = 22;
-		
+
 		/// <summary>
 		/// Size of end of central record (excluding variable fields)
 		/// </summary>
 		[Obsolete("Use EndOfCentralRecordBaseSize instead")]
 		public const int ENDHDR = 22;
-		
+
 		/// <summary>
 		/// Size of 'classic' cryptographic header stored before any entry data
 		/// </summary>
 		public const int CryptoHeaderSize = 12;
-		
+
 		/// <summary>
 		/// Size of cryptographic header stored before entry data
 		/// </summary>
 		[Obsolete("Use CryptoHeaderSize instead")]
 		public const int CRYPTO_HEADER_SIZE = 12;
 		#endregion
-		
+
 		#region Header Signatures
-		
+
 		/// <summary>
 		/// Signature for local entry header
 		/// </summary>
@@ -363,24 +363,24 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// Signature for spanning entry
 		/// </summary>
 		public const int SpanningSignature = 'P' | ('K' << 8) | (7 << 16) | (8 << 24);
-		
+
 		/// <summary>
 		/// Signature for spanning entry
 		/// </summary>
 		[Obsolete("Use SpanningSignature instead")]
 		public const int SPANNINGSIG = 'P' | ('K' << 8) | (7 << 16) | (8 << 24);
-		
+
 		/// <summary>
 		/// Signature for temporary spanning entry
 		/// </summary>
 		public const int SpanningTempSignature = 'P' | ('K' << 8) | ('0' << 16) | ('0' << 24);
-		
+
 		/// <summary>
 		/// Signature for temporary spanning entry
 		/// </summary>
 		[Obsolete("Use SpanningTempSignature instead")]
 		public const int SPANTEMPSIG = 'P' | ('K' << 8) | ('0' << 16) | ('0' << 24);
-		
+
 		/// <summary>
 		/// Signature for data descriptor
 		/// </summary>
@@ -391,7 +391,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// so the values are recorded after the data prefixed by this header, as well as in the central directory.
 		/// </remarks>
 		public const int DataDescriptorSignature = 'P' | ('K' << 8) | (7 << 16) | (8 << 24);
-		
+
 		/// <summary>
 		/// Signature for data descriptor
 		/// </summary>
@@ -403,7 +403,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// </remarks>
 		[Obsolete("Use DataDescriptorSignature instead")]
 		public const int EXTSIG = 'P' | ('K' << 8) | (7 << 16) | (8 << 24);
-		
+
 		/// <summary>
 		/// Signature for central header
 		/// </summary>
@@ -419,28 +419,28 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// Signature for Zip64 central file header
 		/// </summary>
 		public const int Zip64CentralFileHeaderSignature = 'P' | ('K' << 8) | (6 << 16) | (6 << 24);
-		
+
 		/// <summary>
 		/// Signature for Zip64 central file header
 		/// </summary>
 		[Obsolete("Use Zip64CentralFileHeaderSignature instead")]
 		public const int CENSIG64 = 'P' | ('K' << 8) | (6 << 16) | (6 << 24);
-		
+
 		/// <summary>
 		/// Signature for Zip64 central directory locator
 		/// </summary>
 		public const int Zip64CentralDirLocatorSignature = 'P' | ('K' << 8) | (6 << 16) | (7 << 24);
-		
+
 		/// <summary>
 		/// Signature for archive extra data signature (were headers are encrypted).
 		/// </summary>
 		public const int ArchiveExtraDataSignature = 'P' | ('K' << 8) | (6 << 16) | (7 << 24);
-		
+
 		/// <summary>
 		/// Central header digitial signature
 		/// </summary>
 		public const int CentralHeaderDigitalSignature = 'P' | ('K' << 8) | (5 << 16) | (5 << 24);
-		
+
 		/// <summary>
 		/// Central header digitial signature
 		/// </summary>
@@ -451,14 +451,14 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// End of central directory record signature
 		/// </summary>
 		public const int EndOfCentralDirectorySignature = 'P' | ('K' << 8) | (5 << 16) | (6 << 24);
-		
+
 		/// <summary>
 		/// End of central directory record signature
 		/// </summary>
 		[Obsolete("Use EndOfCentralDirectorySignature instead")]
 		public const int ENDSIG = 'P' | ('K' << 8) | (5 << 16) | (6 << 24);
 		#endregion
-		
+
 #if NETCF_1_0 || NETCF_2_0
 		// This isnt so great but is better than nothing.
         // Trying to work out an appropriate OEM code page would be good.
@@ -467,7 +467,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 #else
 		static int defaultCodePage = Thread.CurrentThread.CurrentCulture.TextInfo.OEMCodePage;
 #endif
-		
+
 		/// <summary>
 		/// Default encoding used for string conversion.  0 gives the default system OEM code page.
 		/// Dont use unicode encodings if you want to be Zip compatible!
@@ -477,16 +477,16 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// </summary>
 		public static int DefaultCodePage {
 			get {
-				return defaultCodePage; 
+				return defaultCodePage;
 			}
 			set {
-				defaultCodePage = value; 
+				defaultCodePage = value;
 			}
 		}
 
 		/// <summary>
 		/// Convert a portion of a byte array to a string.
-		/// </summary>		
+		/// </summary>
 		/// <param name="data">
 		/// Data to convert to string
 		/// </param>
@@ -499,12 +499,12 @@ namespace ICSharpCode.SharpZipLib.Zip
 		public static string ConvertToString(byte[] data, int count)
 		{
 			if ( data == null ) {
-				return string.Empty;	
+				return string.Empty;
 			}
-			
+
 			return Encoding.GetEncoding(DefaultCodePage).GetString(data, 0, count);
 		}
-	
+
 		/// <summary>
 		/// Convert a byte array to string
 		/// </summary>
@@ -517,7 +517,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 		public static string ConvertToString(byte[] data)
 		{
 			if ( data == null ) {
-				return string.Empty;	
+				return string.Empty;
 			}
 			return ConvertToString(data, data.Length);
 		}
@@ -536,9 +536,9 @@ namespace ICSharpCode.SharpZipLib.Zip
 		public static string ConvertToStringExt(int flags, byte[] data, int count)
 		{
 			if ( data == null ) {
-				return string.Empty;	
+				return string.Empty;
 			}
-			
+
 			if ( (flags & (int)GeneralBitFlags.UnicodeText) != 0 ) {
 				return Encoding.UTF8.GetString(data, 0, count);
 			}
@@ -546,7 +546,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 				return ConvertToString(data, count);
 			}
 		}
-		
+
 		/// <summary>
 		/// Convert a byte array to string
 		/// </summary>
@@ -560,9 +560,9 @@ namespace ICSharpCode.SharpZipLib.Zip
 		public static string ConvertToStringExt(int flags, byte[] data)
 		{
 			if ( data == null ) {
-				return string.Empty;	
+				return string.Empty;
 			}
-			
+
 			if ( (flags & (int)GeneralBitFlags.UnicodeText) != 0 ) {
 				return Encoding.UTF8.GetString(data, 0, data.Length);
 			}
@@ -583,7 +583,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 			if ( str == null ) {
 				return new byte[0];
 			}
-			
+
 			return Encoding.GetEncoding(DefaultCodePage).GetBytes(str);
 		}
 
@@ -609,7 +609,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 			}
 		}
 
-		
+
 		/// <summary>
 		/// Initialise default instance of <see cref="ZipConstants">ZipConstants</see>
 		/// </summary>

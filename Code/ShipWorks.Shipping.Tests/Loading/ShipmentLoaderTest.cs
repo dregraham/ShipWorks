@@ -204,15 +204,15 @@ namespace ShipWorks.Shipping.Tests.Loading
         {
             AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shippingConfigurator = mock.WithShippingConfiguration();
-            filterHelper = mock.WithFilterHelper();
-            addressValidator = mock.WithAddressValidator();
-            shippingManager = mock.WithShippingManager(orderEntity.OrderID, 
-                new List<ICarrierShipmentAdapter> { mock.Create<ICarrierShipmentAdapter>() }, 
+            filterHelper = mock.WithFilterHelper(true);
+            addressValidator = mock.WithAddressValidator(true);
+            shippingManager = mock.WithShippingManager(orderEntity.OrderID,
+                new List<ICarrierShipmentAdapter> { mock.Create<ICarrierShipmentAdapter>() },
                 Enumerable.Empty<ICarrierShipmentAdapter>());
 
             storeType = mock.WithTestStoreType();
 
-            mock.WithStoreTypeManager(storeType.Object); 
+            mock.WithStoreTypeManager(storeType.Object);
 
             Mock<ICarrierShipmentAdapter> shipmentAdapter = mock.WithCarrierShipmentAdapter(shipmentEntity, true);
             mock.WithCarrierShipmentAdapterFactory(shipmentAdapter.Object);

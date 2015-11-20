@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
     /// <summary>
     /// Thrown when a UPS API response has an error
     /// </summary>
+    [Serializable]
     public class UpsApiException : UpsException
     {
-        readonly UpsApiResponseStatus status;
-        readonly string errorCode;
-        readonly string description;
-        readonly string errorLocation;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -29,43 +23,39 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         public UpsApiException(UpsApiResponseStatus status, string errorCode, string description, string errorLocation)
             : base(string.IsNullOrEmpty(description) ? "UPS Error: " + errorCode : description)
         {
-            this.status = status;
-            this.errorCode = errorCode;
-            this.description = description;
-            this.errorLocation = errorLocation;
+            Status = status;
+            ErrorCode = errorCode;
+            Description = description;
+            ErrorLocation = errorLocation;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected UpsApiException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
+            base(serializationInfo, streamingContext)
+        {
+
         }
 
         /// <summary>
         /// Status returned by UPS
         /// </summary>
-        public UpsApiResponseStatus Status
-        {
-            get { return status; }
-        }
+        public UpsApiResponseStatus Status { get; }
 
         /// <summary>
-        /// Error code, specific to the online tool
+        /// Error code, specific to the on line tool
         /// </summary>
-        public override string ErrorCode
-        {
-            get { return errorCode; }
-        }
+        public override string ErrorCode { get; }
 
         /// <summary>
         /// Optional description
         /// </summary>
-        public string Description
-        {
-            get { return description; }
-        }
+        public string Description { get; }
 
         /// <summary>
-        /// Node location of the bad request elmeent.
+        /// Node location of the bad request element.
         /// </summary>
-        public string ErrorLocation
-        {
-            get { return errorLocation; }
-
-        }
+        public string ErrorLocation { get; }
     }
 }
