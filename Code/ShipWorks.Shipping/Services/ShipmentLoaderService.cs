@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
@@ -30,7 +28,7 @@ namespace ShipWorks.Shipping.Services
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
             
-            messenger.AsObservable<OrderSelectionChangingMessage>()
+            messenger.OfType<OrderSelectionChangingMessage>()
                 //.ObserveOn(DispatcherScheduler.Current)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .Throttle(TimeSpan.FromMilliseconds(100))

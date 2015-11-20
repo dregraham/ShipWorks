@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
-        /// version of the constructor will use the "live" implementation of the 
+        /// version of the constructor will use the "live" implementation of the
         /// IBestRateShippingBrokerFactory interface.
         /// </summary>
         public BestRateShipmentType()
@@ -218,7 +218,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Called to get the latest rates for the shipment. This implementation will accumulate the 
+        /// Called to get the latest rates for the shipment. This implementation will accumulate the
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
@@ -249,22 +249,22 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
             catch (BestRateException ex)
             {
-                // A problem occurred that is germane to the BestRateShipmentType (and not within any 
-                // brokers or shipment types); this is most likely there aren't any providers/accounts 
-                // setup to use with best rate, so we'll just return a rate group communicating the 
+                // A problem occurred that is germane to the BestRateShipmentType (and not within any
+                // brokers or shipment types); this is most likely there aren't any providers/accounts
+                // setup to use with best rate, so we'll just return a rate group communicating the
                 // problem to the user
                 return new InvalidRateGroup(this, ex);
             }
         }
 
         /// <summary>
-        /// Called to get the latest rates for the shipment. This implementation will accumulate the 
+        /// Called to get the latest rates for the shipment. This implementation will accumulate the
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
         private IEnumerable<RateGroup> GetRates(ShipmentEntity shipment, List<BrokerException> exceptionHandler)
         {
             List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment, true).ToList();
-            
+
             if (!bestRateShippingBrokers.Any())
             {
                 string message = string.Format("No accounts are configured to use with best rate.{0}Check the shipping settings to ensure " +
@@ -277,9 +277,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             List<Task<RateGroup>> tasks = bestRateShippingBrokers
                 .Select(broker => StartGetRatesTask(broker, shipment, exceptionHandler))
                 .ToList();
-            
+
             tasks.ForEach(t => t.Wait());
-            
+
             return tasks.Select(x => x.Result);
         }
 
@@ -301,8 +301,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 compiledRateGroup = rateGroupFilter.Filter(compiledRateGroup);
             }
-            
-            // Allow each rate result the chance to mask its description if needed based on the 
+
+            // Allow each rate result the chance to mask its description if needed based on the
             // other rate results in the list. This is for UPS that does not want its named-rates
             // intermingled with rates from other carriers
             compiledRateGroup.Rates.ForEach(x => x.MaskDescription(compiledRateGroup.Rates));
@@ -310,7 +310,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             return compiledRateGroup;
         }
-        
+
         /// <summary>
         /// Starts getting rates for a broker
         /// </summary>
@@ -339,7 +339,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            // This is by design. The best rate shipment type should never actually 
+            // This is by design. The best rate shipment type should never actually
             // process a shipment due to the pre-process functionality
             throw new InvalidOperationException();
         }
@@ -365,7 +365,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             return new BestRateSettingsControl();
         }
@@ -388,31 +388,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             AddBestRateEvent(shipment, BestRateEventTypes.RateAutoSelectedAndProcessed);
 
             ShippingManager.EnsureShipmentLoaded(shipment);
-            IEnumerable<RateGroup> rateGroups;
-
-            try
-            {
-                // Important to get rates here again because this will ensure that the rates 
-                // are current with the configuration of the shipment; this will come into
-                // play when comparing the selected rate with the rates in the rate groups
-                rateGroups = GetRates(shipment, new List<BrokerException>());
-            }
-            catch (AggregateException ex)
-            {
-                // Inspect the aggregate exception for the details of the first underlying exception
-                if (ex.InnerException is AggregateException)
-                {
-                    // The inner exception is also an aggregate exception (in the case that a multi-threaded 
-                    // broker also threw an aggregate exception), so dive into the details of it to grab the 
-                    // first meaningful exception
-                    AggregateException innerAggregate = ex.InnerException as AggregateException;
-                    throw innerAggregate.InnerExceptions.First();
-                }
-
-                // The inner exception is not an aggregate exception, so we can just throw the
-                // first inner exception
-                throw ex.InnerExceptions.First();
-            }
+            IEnumerable<RateGroup> rateGroups = GetRatesForPreProcessing(shipment);
 
             // We want all the rates here, so we can pass them back to the coutner rate processing if needed
             RateGroup filteredRates = CompileBestRates(shipment, rateGroups);
@@ -468,11 +444,41 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 // Apply the selected rate to the shipment, so it's configured
                 // for processing
-                ApplySelectedShipmentRate(shipment, rateToApply);   
+                ApplySelectedShipmentRate(shipment, rateToApply);
                 shipmentsToReturn.Add(shipment);
             }
-            
+
             return shipmentsToReturn;
+        }
+
+        /// <summary>
+        /// Get a list of rates for preprocessing
+        /// </summary>
+        private IEnumerable<RateGroup> GetRatesForPreProcessing(ShipmentEntity shipment)
+        {
+            try
+            {
+                // Important to get rates here again because this will ensure that the rates
+                // are current with the configuration of the shipment; this will come into
+                // play when comparing the selected rate with the rates in the rate groups
+                return GetRates(shipment, new List<BrokerException>());
+            }
+            catch (AggregateException ex)
+            {
+                // Inspect the aggregate exception for the details of the first underlying exception
+                if (ex.InnerException is AggregateException)
+                {
+                    // The inner exception is also an aggregate exception (in the case that a multi-threaded
+                    // broker also threw an aggregate exception), so dive into the details of it to grab the
+                    // first meaningful exception
+                    AggregateException innerAggregate = ex.InnerException as AggregateException;
+                    throw innerAggregate.InnerExceptions.First();
+                }
+
+                // The inner exception is not an aggregate exception, so we can just throw the
+                // first inner exception
+                throw ex.InnerExceptions.First();
+            }
         }
 
         /// <summary>
@@ -502,7 +508,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
             else
             {
-                // The rate was not a counter rate, but it was not found 
+                // The rate was not a counter rate, but it was not found
                 if (!ratesToApplyToReturnedShipments.Any())
                 {
                     throw new ShippingException("The rate that was selected is out of date or could not be found. Please select another rate.");
@@ -533,7 +539,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             if (counterRatesProcessing != null)
             {
-                // Invoke the callback for handling the case where a counter rate is the 
+                // Invoke the callback for handling the case where a counter rate is the
                 // best rate available (e.g. sign up for an account with the best rate provider,
                 // choose to use an existing account instead, etc.)
                 counterRatesProcessing(eventArgs);
@@ -590,7 +596,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override bool IsCustomsRequired(ShipmentEntity shipment)
         {
-            // Make sure the best rate shipment data is loaded (in the event that we're 
+            // Make sure the best rate shipment data is loaded (in the event that we're
             // coming from somewhere other than the shipping screen)
             LoadShipmentData(shipment, false);
 
@@ -606,9 +612,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             if (exception.SeverityLevel == BrokerExceptionSeverityLevel.Error)
             {
-                // Throw the inner exception since the actual shipping exception we're interested 
+                // Throw the inner exception since the actual shipping exception we're interested
                 // in (and the application is expecting to handle) is here
-                throw exception.InnerException;    
+                throw exception.InnerException;
             }
         }
 
@@ -621,12 +627,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateSelected);
             BestRateEventTypes originalEventTypes = (BestRateEventTypes)shipment.BestRateEvents;
-            
+
             BestRateResultTag bestRateResultTag = ((BestRateResultTag)bestRate.Tag);
 
             bestRateResultTag.RateSelectionDelegate(shipment);
 
-            // Reset the event types after the the selected shipment has been applied to 
+            // Reset the event types after the the selected shipment has been applied to
             // avoid losing them during the transition to the targeted shipment type
             shipment.BestRateEvents = (byte)originalEventTypes;
         }
@@ -713,7 +719,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             return shipmentInsuranceProvider;
         }
-        
+
         /// <summary>
         /// Adds the best rate event.
         /// </summary>

@@ -9,11 +9,10 @@ using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.UI.MessageHandlers;
-using System.Reactive.Concurrency;
-using Autofac.Extras.Attributed;
 using ShipWorks.Shipping.UI.Services;
 using ShipWorks.AddressValidation;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -130,6 +129,11 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<MessageHelperWrapper>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<ShippingProfileEditorDlg>();
+
+            builder.RegisterType<ShippingManagerWrapper>()
+                .AsImplementedInterfaces();
+				
             builder.RegisterType<AddressValidator>()
                 .AsImplementedInterfaces();
 

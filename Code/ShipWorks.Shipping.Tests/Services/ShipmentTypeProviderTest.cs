@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using System.Reactive.Subjects;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Tests.Services
 {
@@ -21,6 +22,7 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             subject = new Subject<EnabledCarriersChangedMessage>();
+            mock.Provide<IObservable<IShipWorksMessage>>(subject);
         }
 
         [Fact]
@@ -42,9 +44,6 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Mock<IShipmentTypeManager>().SetupSequence(x => x.EnabledShipmentTypeCodes)
                 .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps })
                 .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.FedEx, ShipmentTypeCode.Usps });
-            mock.Mock<IMessenger>()
-                .Setup(x => x.AsObservable<EnabledCarriersChangedMessage>())
-                .Returns(subject);
 
             ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
@@ -60,9 +59,6 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
                 .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps });
-            mock.Mock<IMessenger>()
-                .Setup(x => x.AsObservable<EnabledCarriersChangedMessage>())
-                .Returns(subject);
 
             ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
@@ -76,9 +72,6 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
                 .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps });
-            mock.Mock<IMessenger>()
-                .Setup(x => x.AsObservable<EnabledCarriersChangedMessage>())
-                .Returns(subject);
 
             ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
@@ -92,9 +85,6 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
                 .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps });
-            mock.Mock<IMessenger>()
-                .Setup(x => x.AsObservable<EnabledCarriersChangedMessage>())
-                .Returns(subject);
 
             ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 
@@ -105,8 +95,8 @@ namespace ShipWorks.Shipping.Tests.Services
 
         public void Dispose()
         {
-            subject.Dispose();
             mock.Dispose();
+            subject.Dispose();
         }
     }
 }

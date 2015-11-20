@@ -12,7 +12,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
-using System.Diagnostics;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             shippingPanelControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
 
-            subscription = messenger.AsObservable<CreateLabelMessage>().Subscribe(HandleCreateLabelMessage);
+            subscription = messenger.OfType<CreateLabelMessage>().Subscribe(HandleCreateLabelMessage);
         }
 
         public EntityType EntityType => EntityType.ShipmentEntity;
@@ -97,10 +97,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             // There is no store dependent ui
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning disable S125 // Sections of code should not be "commented out"
         private async void HandleCreateLabelMessage(CreateLabelMessage message)
         {
-//            await viewModel.ProcessShipment();
+            //            await viewModel.ProcessShipment();
         }
+#pragma warning restore S125 // Sections of code should not be "commented out"
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         /// <summary>
         /// Saves the shipment to the database when the shipping panel loses focus.

@@ -87,7 +87,7 @@ namespace ShipWorks.Users.Audit
             enumMapping[126] = typeof(FedExLinearUnitOfMeasure);
             enumMapping[127] = typeof(iParcelServiceType);
             enumMapping[128] = typeof(EbayShippingMethod);
-            enumMapping[Formats.AmazonDeliveryExperienceType] = null; // AmazonDeliveryExperienceType -- ShipWorks.Core does not know about this type so we need to register it later
+            enumMapping[Formats.AmazonDeliveryExperienceType] = null; // AmazonDeliveryExperienceType -- ShipWorks.Core does not know about this type so we register it later
         }
 
         /// <summary>

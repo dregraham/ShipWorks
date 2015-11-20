@@ -1,4 +1,7 @@
 using ShipWorks.Data.Model.EntityClasses;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -10,6 +13,15 @@ namespace ShipWorks.Shipping.Settings
     /// </remarks>
     public class ShippingSettingsWrapper : IShippingSettings
     {
+        /// <summary>
+        /// The list of shipment types that have been fully configured for use within ShipWorks
+        /// </summary>
+        public IEnumerable<ShipmentTypeCode> GetConfiguredTypes()
+        {
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            return settings.ConfiguredTypes.Cast<ShipmentTypeCode>();
+        }
+
         /// <summary>
         /// Marks the given ShipmentTypeCode as completely configured
         /// </summary>

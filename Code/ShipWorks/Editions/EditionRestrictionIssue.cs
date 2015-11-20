@@ -18,9 +18,9 @@ namespace ShipWorks.Editions
         static EditionRestrictionIssue noneIssue = new EditionRestrictionIssue();
 
         /// <summary>
-        /// Special constructor for creating singleton "None" issue
+        /// Special constructor for creating singleton "None" issue and unit tests
         /// </summary>
-        private EditionRestrictionIssue()
+        public EditionRestrictionIssue()
             : base(null, EditionFeature.None, EditionRestrictionLevel.None)
         {
             conflictingData = null;

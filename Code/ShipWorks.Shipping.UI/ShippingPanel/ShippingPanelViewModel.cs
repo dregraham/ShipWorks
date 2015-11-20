@@ -61,9 +61,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
             subscriptions = new CompositeDisposable(
-                shipmentChangedHandler.AsObservable<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
-                shipmentChangedHandler.AsObservable<StoreChangedMessage>().Subscribe(OnStoreChanged),
-                shipmentChangedHandler.AsObservable<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipmentAdapter.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
+                shipmentChangedHandler.OfType<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
+                shipmentChangedHandler.OfType<StoreChangedMessage>().Subscribe(OnStoreChanged),
+                shipmentChangedHandler.OfType<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipmentAdapter.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
                 shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
                 shipmentChangedHandler.ShipmentLoadedStream().Do(_ => AllowEditing = true).Subscribe(LoadOrder),
                 handler.Where(x => x == nameof(ShipmentType))
@@ -78,6 +78,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
+            Destination.IsAddressValidationEnabled = true;
 
             // Wiring up observables needs objects to not be null, so do this last.
             WireUpObservables();
@@ -127,15 +128,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                     DomesticInternationalText = shipmentAdapter.IsDomestic ? "Domestic" : "International";
                 });
 
-            //// Wire up the rate criteria obseravable throttling for the PropertyChanged event.
-            //Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
-            //    // We only listen if listenForRateCriteriaChanged is true.
-            //    .Where(evt => listenForRateCriteriaChanged)
-            //    // Only fire the event if we have a shipment and it is a rating field.
-            //    .Where(evt =>
-            //    {
-            //        bool hasShipment = orderSelectionLoaded?.Shipment != null;
-            //        bool isRatingField = IsRatingField(evt.EventArgs.PropertyName);
+#pragma warning disable S125 // Sections of code should not be "commented out"
+                            //// Wire up the rate criteria obseravable throttling for the PropertyChanged event.
+                            //Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
+                            //    // We only listen if listenForRateCriteriaChanged is true.
+                            //    .Where(evt => listenForRateCriteriaChanged)
+                            //    // Only fire the event if we have a shipment and it is a rating field.
+                            //    .Where(evt =>
+                            //    {
+                            //        bool hasShipment = orderSelectionLoaded?.Shipment != null;
+                            //        bool isRatingField = IsRatingField(evt.EventArgs.PropertyName);
 
             //        // forceRateCriteriaChanged is used for race conditions:
             //        // For example, ShipmentType property changes, and then before the throttle time, SupportsMultipleShipments changes.
@@ -154,7 +156,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             //        OnRateCriteriaPropertyChanged(null, evt.EventArgs);
             //    });
         }
-        
+#pragma warning restore S125 // Sections of code should not be "commented out"
+
         /// <summary>
         /// Save the current shipment to the database
         /// </summary>
@@ -261,6 +264,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             SupportsMultiplePackages = shipmentAdapter.SupportsMultiplePackages;
         }
 
+#pragma warning disable S125 // Sections of code should not be "commented out"
         ///// <summary>
         ///// Process the current shipment using the specified processor
         ///// </summary>
@@ -275,6 +279,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         //        AllowEditing = (shipments?.FirstOrDefault()?.Processed ?? false) == false;
         //    }
         //}
+#pragma warning restore S125 // Sections of code should not be "commented out"
 
         /// <summary>
         /// Save the UI values to the shipment
@@ -412,9 +417,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.SetAddressFromOrigin(OriginAddressType, shipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
         }
 
+
         /// <summary>
         /// Determines if a view model field is used for the shipment's rating criteria.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S125:Sections of code should not be \"commented out\"", Justification = "<Pending>")]
         private bool IsRatingField(string propertyname)
         {
             return false;

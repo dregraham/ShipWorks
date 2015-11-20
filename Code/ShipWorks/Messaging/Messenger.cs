@@ -37,15 +37,16 @@ namespace ShipWorks.Core.Messaging
         /// Get the current messenger instance
         /// </summary>
         public static IMessenger Current { get; private set; }
-
-        /// <summary>
-        /// Get a reference to the messenger as an observable stream of messages
-        /// </summary>
-        public IObservable<T> AsObservable<T>() where T : IShipWorksMessage => messageStream.OfType<T>();
-
+        
         /// <summary>
         /// Send a message to any listeners
         /// </summary>
         public void Send<T>(T message) where T : IShipWorksMessage => observer?.OnNext(message);
+
+        /// <summary>
+        /// Subscribe to the message stream
+        /// </summary>
+        public IDisposable Subscribe(IObserver<IShipWorksMessage> observer) => 
+            messageStream.Subscribe(observer);
     }
 }

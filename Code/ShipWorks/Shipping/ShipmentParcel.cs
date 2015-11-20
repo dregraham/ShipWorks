@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.Shipping
 {
@@ -16,33 +11,21 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShipmentParcel
     {
-        // The shipment the parcel represents
-        ShipmentEntity shipment;
-
-        // Package ID in the database, if the shipment type supports it
-        long? packageID;
-
-        // What the user has opted into for insurance for this parcel
-        InsuranceChoice insurance;
-
-        // Dimensions for the parcel
-        DimensionsAdapter dimensions;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentParcel(ShipmentEntity shipment, long? packageID, InsuranceChoice insurance, DimensionsAdapter dimensions)
+        public ShipmentParcel(ShipmentEntity shipment, long? packageID, IInsuranceChoice insurance, DimensionsAdapter dimensions)
         {
-            this.shipment = shipment;
-            this.packageID = packageID;
-            this.insurance = insurance;
-            this.dimensions = dimensions;
+            Shipment = shipment;
+            PackageID = packageID;
+            Insurance = insurance;
+            Dimensions = dimensions;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentParcel(ShipmentEntity shipment, long? packageID, string trackingNumber, InsuranceChoice insurance, DimensionsAdapter dimensions) :
+        public ShipmentParcel(ShipmentEntity shipment, long? packageID, string trackingNumber, IInsuranceChoice insurance, DimensionsAdapter dimensions) :
             this(shipment, packageID, insurance, dimensions)
         {
             TrackingNumber = trackingNumber;
@@ -51,34 +34,22 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The shipment that holds the parcel
         /// </summary>
-        public ShipmentEntity Shipment
-        {
-            get { return shipment; }
-        }
+        public ShipmentEntity Shipment { get; }
 
         /// <summary>
         /// The PackageID for the package in the database, if the shipment type supports it
         /// </summary>
-        public long? PackageID
-        {
-            get { return packageID; }
-        }
+        public long? PackageID { get; }
         
         /// <summary>
         /// User-selected insurance option for the parcel
         /// </summary>
-        public InsuranceChoice Insurance
-        {
-            get { return insurance; }
-        }
+        public IInsuranceChoice Insurance { get; }
 
         /// <summary>
         /// Dimensions for the parcel
         /// </summary>
-        public DimensionsAdapter Dimensions
-        {
-            get { return dimensions; }
-        }
+        public DimensionsAdapter Dimensions { get; }
 
         /// <summary>
         /// Gets or sets the weight (including add weight) of the package contents

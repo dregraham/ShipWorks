@@ -81,10 +81,10 @@ namespace ShipWorks.Shipping.Editing
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (ShippingProfileEditorDlg profileEditor = new ShippingProfileEditorDlg(shipmentType.GetPrimaryProfile(), lifetimeScope))
-                {
-                    profileEditor.ShowDialog(this);
-                }
+                ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
+                    new TypedParameter(typeof(ShippingProfileEntity), shipmentType.GetPrimaryProfile())
+                );
+                profileEditor.ShowDialog(this);
             }
         }
 

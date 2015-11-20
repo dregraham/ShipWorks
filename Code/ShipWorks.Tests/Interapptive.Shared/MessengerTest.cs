@@ -1,8 +1,8 @@
 ﻿using System;
-using ShipWorks.Core.Messaging;
 using Xunit;
 using Moq;
-using ShipWorks.Messaging.Messages;
+using System.Reactive.Linq;
+using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.Tests.Interapptive.Shared
 {
@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Send_DoesNotCallHandler_WhenHandlerIsForDifferentMessage()
         {
             bool wasCalled = false;
-            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled = true);
+            messenger.OfType<TestMessage>().Subscribe(x => wasCalled = true);
             messenger.Send(Mock.Of<IShipWorksMessage>());
             Assert.False(wasCalled);
         }
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Handle_GetsCalled_OnMessageSend()
         {
             bool wasCalled = false;
-            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled = true);
+            messenger.OfType<TestMessage>().Subscribe(x => wasCalled = true);
             messenger.Send(new TestMessage());
             Assert.True(wasCalled);
         }
@@ -44,8 +44,8 @@ namespace ShipWorks.Tests.Interapptive.Shared
         {
             bool wasCalled1 = false;
             bool wasCalled2 = false;
-            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled1 = true);
-            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled2 = true);
+            messenger.OfType<TestMessage>().Subscribe(x => wasCalled1 = true);
+            messenger.OfType<TestMessage>().Subscribe(x => wasCalled2 = true);
             messenger.Send(new TestMessage());
             Assert.True(wasCalled1);
             Assert.True(wasCalled2);
@@ -56,8 +56,8 @@ namespace ShipWorks.Tests.Interapptive.Shared
         {
             bool wasCalled1 = false;
             bool wasCalled2 = false;
-            IDisposable token = messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled1 = true);
-            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled2 = true);
+            IDisposable token = messenger.OfType<TestMessage>().Subscribe(x => wasCalled1 = true);
+            messenger.OfType<TestMessage>().Subscribe(x => wasCalled2 = true);
             token.Dispose();
             messenger.Send(new TestMessage());
             Assert.False(wasCalled1);
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Send_DoesNotThrow_WhenHandlerHasBeenDisposed()
         {
             DisposableHandler handler = new DisposableHandler();
-            messenger.AsObservable<TestMessage>().Subscribe(handler.Handler);
+            messenger.OfType<TestMessage>().Subscribe(handler.Handler);
             handler.Dispose();
             GC.Collect();
             messenger.Send(new TestMessage());
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Send_RoutesMessagesThroughObservable_WhenMessageIsOfSpecifiedType()
         {
             bool wasCalled = false;
-            messenger.AsObservable<TestMessage>().Subscribe(x => wasCalled = true);
+            messenger.OfType<TestMessage>().Subscribe(x => wasCalled = true);
             messenger.Send(new TestMessage());
             Assert.True(wasCalled);
         }
@@ -87,12 +87,17 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Send_DoesNotRouteMessagesThroughObservable_WhenMessageIsNotOfSpecifiedType()
         {
             bool wasCalled = false;
-            messenger.AsObservable<CreateLabelMessage>().Subscribe(x => wasCalled = true);
+            messenger.OfType<OtherMessage>().Subscribe(x => wasCalled = true);
             messenger.Send(new TestMessage());
             Assert.False(wasCalled);
         }
 
         private class TestMessage : IShipWorksMessage
+        {
+            public object Sender { get; private set; }
+        }
+
+        private class OtherMessage : IShipWorksMessage
         {
             public object Sender { get; private set; }
         }

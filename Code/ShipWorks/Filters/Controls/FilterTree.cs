@@ -31,6 +31,7 @@ using ShipWorks.Data;
 using ShipWorks.Editions;
 using ShipWorks.Filters.Search;
 using ShipWorks.Messaging.Messages;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Filters.Controls
 {
@@ -114,7 +115,7 @@ namespace ShipWorks.Filters.Controls
 
             UpdateQuickFilterDisplay();
 
-            filterEditedToken = Messenger.Current.AsObservable<FilterNodeEditedMessage>().Subscribe(HandleFilterEdited);
+            filterEditedToken = Messenger.Current.OfType<FilterNodeEditedMessage>().Subscribe(HandleFilterEdited);
         }
 
         /// <summary>

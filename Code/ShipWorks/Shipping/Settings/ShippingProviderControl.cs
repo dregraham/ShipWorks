@@ -7,6 +7,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.UI.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping.Settings
             toolStripFakeDelete.Renderer = new NoBorderToolStripRenderer();
             toolStripAddRule.Renderer = new NoBorderToolStripRenderer();
 
-            carrierConfiguredToken = Messenger.Current.AsObservable<CarrierConfiguredMessage>().Subscribe(HandleCarrierConfigured);
+            carrierConfiguredToken = Messenger.Current.OfType<CarrierConfiguredMessage>().Subscribe(HandleCarrierConfigured);
         }
 
         private void HandleCarrierConfigured(CarrierConfiguredMessage message)

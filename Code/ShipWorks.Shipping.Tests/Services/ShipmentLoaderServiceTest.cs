@@ -9,7 +9,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using Xunit;
-
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Tests.Services
 {
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             OrderSelectionLoaded handlededOrderSelectionLoaded = new OrderSelectionLoaded();
 
-            messenger.AsObservable<OrderSelectionChangedMessage>()
+            messenger.OfType<OrderSelectionChangedMessage>()
                 .Subscribe((OrderSelectionChangedMessage orderSelectionChangedMessage) => handlededOrderSelectionLoaded = orderSelectionChangedMessage.LoadedOrderSelection.FirstOrDefault());
 
             await testObject.LoadAndNotify(new List<long> { orderEntity.OrderID } );

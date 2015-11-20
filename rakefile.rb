@@ -221,8 +221,10 @@ namespace :db do
 		dropSqlText = "
 			USE master;
 			go
+			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '{DBNAME}')
 			ALTER DATABASE [{DBNAME}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
 			go
+			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '{DBNAME}')
 			ALTER DATABASE [{DBNAME}] SET MULTI_USER;
 			go
 			

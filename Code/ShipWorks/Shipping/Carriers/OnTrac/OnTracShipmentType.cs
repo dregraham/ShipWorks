@@ -461,7 +461,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Create the settings control for OnTrac
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             return new OnTracSettingsControl();
         }

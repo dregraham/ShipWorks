@@ -23,7 +23,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validation results that have not been explicitly set
         /// </summary>
-        public static ValidatedAddressData NotSet => NotSet;
+        public static ValidatedAddressData NotSet => notSet;
 
         /// <summary>
         /// Constructor

@@ -1,15 +1,10 @@
 ﻿using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
 using ShipWorks.Properties;
 using ShipWorks.UI.Controls.Design;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Interop;
@@ -37,6 +32,15 @@ namespace ShipWorks.Shipping.UI.ValueConverters
             }
 
             Image image = EnumHelper.GetImage((Enum)value);
+            if (image == null)
+            {
+                return BitmapSource.Create(2, 2, 96, 96,
+                    PixelFormats.Indexed1,
+                    new BitmapPalette(new List<System.Windows.Media.Color> { Colors.Transparent }),
+                    new byte[] { 0, 0, 0, 0 },
+                    1);
+            }
+
             using (Bitmap bitmap = new Bitmap(image))
             {
                 return Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());

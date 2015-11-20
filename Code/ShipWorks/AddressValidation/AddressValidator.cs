@@ -143,7 +143,6 @@ namespace ShipWorks.AddressValidation
                 {
                     saveAction(null, new List<ValidatedAddressEntity>());
                 }
-
             }
             catch (AddressValidationException ex)
             {
@@ -160,14 +159,12 @@ namespace ShipWorks.AddressValidation
         public async Task<ValidatedAddressData> ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress)
         {
             ValidatedAddressData data = ValidatedAddressData.NotSet;
-            ValidatedAddressEntity original = null;
-            IEnumerable<ValidatedAddressEntity> suggestions = null;
 
-            await ValidateAsync(addressAdapter, canAdjustAddress, (x, y) =>
+            await ValidateAsync(addressAdapter, canAdjustAddress, (original, suggestions) =>
             {
                 data = original == null ?
-                ValidatedAddressData.Empty :
-                new ValidatedAddressData(original, suggestions);
+                    ValidatedAddressData.Empty :
+                    new ValidatedAddressData(original, suggestions);
             });
 
             return data;

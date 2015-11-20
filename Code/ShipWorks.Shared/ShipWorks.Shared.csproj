@@ -103,6 +103,22 @@
       <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net40\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Interfaces.2.2.5\lib\net40\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net40\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -118,6 +134,11 @@
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Shipping\ShipmentTypeCode.cs" />
     <Compile Include="Shipping\ShipmentTypeIconAttribute.cs" />
+    <Compile Include="Stores\Platforms\Amazon\IAmazonCredentials.cs" />
+    <Compile Include="Stores\Platforms\Amazon\IAmazonOrder.cs" />
+    <Compile Include="Stores\Platforms\Amazon\IAmazonOrderItem.cs" />
+    <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsIsPrime.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\Enums\ChannelAdvisorIsAmazonPrime.cs" />
     <Compile Include="Stores\StoreTypeCode.cs" />
     <Compile Include="Stores\StoreTypeIconAttribute.cs" />
     <Compile Include="Stores\StoreTypeIdentity.cs" />

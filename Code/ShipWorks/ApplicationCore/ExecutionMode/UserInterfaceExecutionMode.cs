@@ -25,6 +25,7 @@ using ShipWorks.Shipping;
 using System.Linq;
 using ShipWorks.Messaging.Messages;
 using TD.SandDock;
+using System.Reactive.Linq;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -172,7 +173,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 lifetimeScope.Resolve<IMessenger>()
-                    .AsObservable<OpenShippingDialogMessage>()
+                    .OfType<OpenShippingDialogMessage>()
                     .Subscribe(HandleOpenShippingDialogMessage);
             }
         }

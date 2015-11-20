@@ -115,10 +115,10 @@ namespace ShipWorks.Shipping.Settings.Defaults
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(shipmentType.GetPrimaryProfile(), lifetimeScope))
-                {
-                    dlg.ShowDialog(this);
-                }
+                ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
+                    new TypedParameter(typeof(ShippingProfileEntity), shipmentType.GetPrimaryProfile())
+                );
+                profileEditor.ShowDialog(this);
             }
 
             if (ProfileEdited != null)

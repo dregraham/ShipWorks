@@ -71,14 +71,7 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand
         /// </summary>
         void OnStatusChanged(object sender, EventArgs e)
         {
-            if (comboBoxStatus.SelectedIndex < 0)
-            {
-                task.StatusCode = -1;
-            }
-            else
-            {
-                task.StatusCode = (int)comboBoxStatus.SelectedValue;
-            }
+            task.StatusCode = comboBoxStatus.SelectedIndex < 0 ? -1 : (int)comboBoxStatus.SelectedValue;
         }
     }
 }

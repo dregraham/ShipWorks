@@ -44,7 +44,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             Assert.Equal(false, testObject.IsMultiValued);
         }
@@ -55,7 +56,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDifferentValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             Assert.Equal(true, testObject.IsMultiValued);
         }
@@ -66,7 +68,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             Assert.Equal(true, testObject.IsMultiValued);
         }
@@ -77,7 +80,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(Enumerable.Empty<GenericMultiValueBinderDto<int, string>>(),
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             Assert.Equal(false, testObject.IsMultiValued);
         }
@@ -88,7 +92,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource.GetRange(1, 1),
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             Assert.Equal(false, testObject.IsMultiValued);
         }
@@ -99,7 +104,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<string, string>, string> testObject2 = new GenericMultiValueBinder<GenericMultiValueBinderDto<string, string>, string>(Enumerable.Empty<GenericMultiValueBinderDto<string, string>>(),
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             Assert.Null(testObject2.PropertyValue);
         }
@@ -110,7 +116,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             testObject.PropertyValue = allDistinctValuesDataSource.First().Property1;
 
@@ -123,7 +130,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDifferentValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             testObject.PropertyValue = 99999992;
 
@@ -136,7 +144,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             testObject.PropertyValue = 99999992;
 
@@ -149,7 +158,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource.GetRange(1, 1),
                 "Property1",
                 s => s.Property1,
-                (s, v) => { s.Property1 = v; });
+                (s, v) => { s.Property1 = v; },
+                s => false);
 
             testObject.PropertyValue = 99999992;
 
@@ -162,7 +172,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => s.Property1 = v);
+                (s, v) => s.Property1 = v,
+                s => false);
 
             testObject.Save();
 
@@ -175,7 +186,8 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDifferentValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => s.Property1 = v);
+                (s, v) => s.Property1 = v,
+                s => false);
 
             testObject.Save();
 
@@ -188,12 +200,29 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
                 "Property1",
                 s => s.Property1,
-                (s, v) => s.Property1 = v);
+                (s, v) => s.Property1 = v,
+                s => false);
 
             testObject.PropertyValue = 3;
             testObject.Save();
 
             Assert.Equal(3, testObject.PropertyValue);
+        }
+
+        [Fact]
+        public void SaveWithNewPropertyValue_AndAllDistinctDataSource_AndReadOnlyIsTrue_PropertyValueIsOldValue()
+        {
+            GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
+                "Property1",
+                s => s.Property1,
+                (s, v) => s.Property1 = v,
+                s => true);
+
+            int oldValue = testObject.PropertyValue;
+            testObject.PropertyValue = 3;
+            testObject.Save();
+
+            Assert.True(allDistinctValuesDataSource.All(s => s.Property1 == oldValue));
         }
     }
 }

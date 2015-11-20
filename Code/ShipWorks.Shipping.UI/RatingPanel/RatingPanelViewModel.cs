@@ -66,10 +66,10 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             ShowAllRates = true;
 
             subscriptions = new CompositeDisposable(
-                messenger.AsObservable<UspsAutomaticExpeditedChangedMessage>().Subscribe(x => HandleUspsAutomaticExpeditedChangedMessage(x)),
-                messenger.AsObservable<ShipmentChangedMessage>().Subscribe(HandleShipmentChangedMessage),
-                messenger.AsObservable<OrderSelectionChangingMessage>()
-                    .CombineLatest(messenger.AsObservable<OrderSelectionChangedMessage>(), (x, y) => new { OrderIdList = x.OrderIdList, Message = y })
+                messenger.OfType<UspsAutomaticExpeditedChangedMessage>().Subscribe(x => HandleUspsAutomaticExpeditedChangedMessage(x)),
+                messenger.OfType<ShipmentChangedMessage>().Subscribe(HandleShipmentChangedMessage),
+                messenger.OfType<OrderSelectionChangingMessage>()
+                    .CombineLatest(messenger.OfType<OrderSelectionChangedMessage>(), (x, y) => new { OrderIdList = x.OrderIdList, Message = y })
                     .Where(x => x.OrderIdList.Intersect(x.Message.LoadedOrderSelection.Select(y => y.Order?.OrderID ?? -1)).Any())
                     .Select(x => x.Message)
                     .Subscribe(RefreshSelectedShipments)
@@ -165,6 +165,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Forces rates to be refreshed by re-fetching the rates from the shipping provider.
         /// </summary>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "CS4014:Consider applying the 'await' operator.", Justification = "We purposely want the execution of this method to continue when calling FetchRates.")]
         public void RefreshRates(bool ignoreCache)
         {
             CancellationToken token = ResetCancellationTokenSource();
@@ -254,6 +255,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Called when the shipment values have changed. We need to refresh the
         /// shipment data/rates being displayed to accurately.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "CS4014:Consider applying the 'await' operator.", Justification = "We purposely want the execution of this method to continue when calling FetchRates.")]
         private void HandleShipmentChangedMessage(ShipmentChangedMessage message)
         {
             CancellationToken cancellationToken = ResetCancellationTokenSource();

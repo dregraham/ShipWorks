@@ -202,7 +202,7 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it 
+        /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
         /// will be used to calculate the initial number of days back to to.
         /// </summary>
         protected DateTime? GetOrderDateStartingPoint()
@@ -256,7 +256,7 @@ namespace ShipWorks.Stores.Communication
                 {
                     if (store.InitialDownloadOrder != null)
                     {
-                        // We have to subtract one b\c the downloader expects the starting point to be the max order number in the db.  So what 
+                        // We have to subtract one b\c the downloader expects the starting point to be the max order number in the db.  So what
                         // it does is download all orders AFTER it.  But for the initial download policy, we want to START with it.  So we have
                         // to backoff by one to include it.
                         orderNumber = Math.Max(0, store.InitialDownloadOrder.Value - 1);
@@ -338,7 +338,7 @@ namespace ShipWorks.Stores.Communication
                 order.RollupNoteCount = 0;
                 order.RollupItemCount = 0;
                 order.RollupItemTotalWeight = 0;
-                
+
                 order.ShipSenseHashKey = string.Empty;
                 order.ShipSenseRecognitionStatus = (int)ShipSenseOrderRecognitionStatus.NotRecognized;
             }
@@ -625,7 +625,7 @@ namespace ShipWorks.Stores.Communication
                     OrderUtility.PopulateOrderDetails(order, adapter);
                     OrderUtility.UpdateShipSenseHashKey(order);
                     adapter.SaveAndRefetch(order);
-					
+
 					// Update unprocessed shipment addresses if the order address has changed
                     if (!order.IsNew)
                     {
@@ -669,7 +669,7 @@ namespace ShipWorks.Stores.Communication
                         SetAddressValidationStatus(order, "Bill", adapter);
                         adapter.SaveAndRefetch(order);
                     }
-                    
+
                     log.InfoFormat("{0} is {1} new", orderIdentifier, alreadyDownloaded ? "not " : "");
 
                     // Log this download
@@ -742,7 +742,7 @@ namespace ShipWorks.Stores.Communication
                     if (IsAddressEmpty(existingCustomer,prefix))
                     {
                         shouldCopy = true;
-                    } 
+                    }
                     else if (originalAddress==null || originalAddress.Equals(new PersonAdapter(existingCustomer, prefix)))
                     {
                         shouldCopy = true;
@@ -758,7 +758,7 @@ namespace ShipWorks.Stores.Communication
                 default:
                     throw new ArgumentOutOfRangeException("behavior");
             }
-            
+
             if (shouldCopy)
             {
                 PersonAdapter.Copy(order, existingCustomer, prefix);

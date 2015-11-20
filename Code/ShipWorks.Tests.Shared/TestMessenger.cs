@@ -17,5 +17,8 @@ namespace ShipWorks.Tests.Shared
         public IObservable<T> AsObservable<T>() where T : IShipWorksMessage => subject.OfType<T>();
 
         public void Dispose() => subject.Dispose();
+
+        public IDisposable Subscribe(IObserver<IShipWorksMessage> observer) =>
+            subject.Subscribe(observer);
     }
 }

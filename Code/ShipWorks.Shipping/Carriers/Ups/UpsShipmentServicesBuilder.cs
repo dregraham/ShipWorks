@@ -4,11 +4,10 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Carriers.UPS;
 using Interapptive.Shared.Utility;
 using System;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     public class UpsShipmentServicesBuilder : IShipmentServicesBuilder
     {

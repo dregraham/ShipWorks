@@ -53,22 +53,21 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         {
             if (e.NewValue != null)
             {
-                (e.NewValue as Popup).CustomPopupPlacementCallback = (popupSize, targetSize, offset) =>
+                Popup popup = e.NewValue as Popup;
+                if (popup != null)
                 {
-                    Visual element = d as Visual ?? GetClosestVisualAncestor(d);
-                    Vector ancestorOffset = VisualTreeHelper.GetOffset(element);
-
-                    return new[] { new CustomPopupPlacement(new Point(ancestorOffset.X, ancestorOffset.Y), PopupPrimaryAxis.None) };
-                };
+                    popup.Placement = PlacementMode.Bottom;
+                    popup.PlacementTarget = GetClosestVisualAncestor<UIElement>(d);
+                }
             }
 
             if (e.NewValue != null && e.OldValue == null)
             {
-                AlterClickHandler(d, link => link.Click += OnOpenPopupClick, button => button.Click += OnOpenPopupClick);
+                AlterClickHandler(d, link => link.Click += OnOpenPopupClick, button => button.Click += OnOpenPopupClick, element => element.MouseUp += OnOpenPopupClick);
             }
             if (e.NewValue == null && e.OldValue != null)
             {
-                AlterClickHandler(d, link => link.Click -= OnOpenPopupClick, button => button.Click -= OnOpenPopupClick);
+                AlterClickHandler(d, link => link.Click -= OnOpenPopupClick, button => button.Click -= OnOpenPopupClick, element => element.MouseUp -= OnOpenPopupClick);
             }
         }
 
@@ -79,18 +78,18 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         {
             if (e.NewValue != null && e.OldValue == null)
             {
-                AlterClickHandler(d, link => link.Click += OnClosePopupClick, button => button.Click += OnClosePopupClick);
+                AlterClickHandler(d, link => link.Click += OnClosePopupClick, button => button.Click += OnClosePopupClick, element => element.MouseUp += OnClosePopupClick);
             }
             if (e.NewValue == null && e.OldValue != null)
             {
-                AlterClickHandler(d, link => link.Click -= OnClosePopupClick, button => button.Click -= OnClosePopupClick);
+                AlterClickHandler(d, link => link.Click -= OnClosePopupClick, button => button.Click -= OnClosePopupClick, element => element.MouseUp -= OnClosePopupClick);
             }
         }
 
         /// <summary>
         /// Attach or detach the click handler
         /// </summary>
-        private static void AlterClickHandler(DependencyObject d, Action<Hyperlink> updateHyperlinkHandler, Action<ButtonBase> updateButtonBaseHandler)
+        private static void AlterClickHandler(DependencyObject d, Action<Hyperlink> updateHyperlinkHandler, Action<ButtonBase> updateButtonBaseHandler, Action<UIElement> updateElementHandler)
         {
             Hyperlink link = d as Hyperlink;
             if (link != null)
@@ -103,6 +102,12 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
             if (button != null)
             {
                 updateButtonBaseHandler(button);
+                return;
+            }
+
+            UIElement element = d as UIElement;
+            if (element != null) {
+                updateElementHandler(element);
             }
         }
 
@@ -135,13 +140,13 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// <summary>
         /// Gets the closest ancestor that is a Visual
         /// </summary>
-        private static Visual GetClosestVisualAncestor(DependencyObject d)
+        private static T GetClosestVisualAncestor<T>(DependencyObject d) where T : Visual
         {
             DependencyObject parent = GetParent(d);
 
             while (parent != null)
             {
-                Visual element = parent as Visual;
+                T element = parent as T;
                 if (element != null)
                 {
                     return element;

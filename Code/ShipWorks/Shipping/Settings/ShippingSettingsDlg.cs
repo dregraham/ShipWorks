@@ -17,6 +17,7 @@ using ShipWorks.Templates.Printing;
 using log4net;
 using Autofac;
 using ShipWorks.Messaging.Messages;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Settings
             this.lifetimeScope = lifetimeScope;
             WindowStateSaver.Manage(this);
 
-            uspsAccountCreatedToken = Messenger.Current.AsObservable<UspsAccountCreatedMessage>().Subscribe(OnUspsAccountCreated);
+            uspsAccountCreatedToken = Messenger.Current.OfType<UspsAccountCreatedMessage>().Subscribe(OnUspsAccountCreated);
         }
 
         /// <summary>

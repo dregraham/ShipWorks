@@ -22,7 +22,7 @@ namespace Interapptive.Shared.Business
         /// Creates a new instance of the adapter for the entity.  All fields must
         /// be named to standard, with the optional given prefix in front of them.
         /// </summary>
-        public PersonAdapter(IEntity2 entity, string fieldPrefix) 
+        public PersonAdapter(IEntity2 entity, string fieldPrefix)
             : base(entity, fieldPrefix)
         {
 
@@ -212,7 +212,6 @@ namespace Interapptive.Shared.Business
                 return false;
             }
 
-
             return left.Equals(right);
         }
 
@@ -247,7 +246,7 @@ namespace Interapptive.Shared.Business
         /// </summary>
         public PersonNameParseStatus NameParseStatus
         {
-            get 
+            get
             {
                 if (HasField("NameParseStatus"))
                 {
@@ -268,6 +267,22 @@ namespace Interapptive.Shared.Business
         {
             get { return GetField<string>("UnparsedName"); }
             set { SetField("UnparsedName", value); }
+        }
+
+        /// <summary>
+        /// Parsed version of the name
+        /// </summary>
+        public PersonName ParsedName
+        {
+            get { return new PersonName(this); }
+            set {
+                PersonName name = value ?? new PersonName();
+                FirstName = name.First;
+                MiddleName = name.Middle;
+                LastName = name.LastWithSuffix;
+                UnparsedName = name.UnparsedName;
+                NameParseStatus = name.ParseStatus;
+            }
         }
 
         /// <summary>

@@ -13,13 +13,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// </summary>
         public CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentType shipmentType)
         {
-            ShipmentType = shipmentType;
+            ShipmentTypeCode = shipmentType.ShipmentTypeCode;
         }
 
         /// <summary>
         /// Gets and sets the shipment type
         /// </summary>
-        public ShipmentType ShipmentType { get; private set; }
+        public ShipmentTypeCode ShipmentTypeCode { get; private set; }
 
         /// <summary>
         /// Notes that this factory should be used in BestRate
