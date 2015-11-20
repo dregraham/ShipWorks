@@ -77,13 +77,13 @@ namespace ShipWorks.FileTransfer
                 }
             }
 
-            // Excplicit with ReuseControlConnectionSession true
+            // Explicit with ReuseControlConnectionSession true
             if (CheckFtpSecurityExplicit(portOverride, account, true))
             {
                 return account;
             }
 
-            // Excplicit with ReuseControlConnectionSession false
+            // Explicit with ReuseControlConnectionSession false
             if (CheckFtpSecurityExplicit(portOverride, account, false))
             {
                 return account;
@@ -310,7 +310,7 @@ namespace ShipWorks.FileTransfer
         /// <summary>
         /// Attempt to open the given FTP connection, throws FileTransferException if not succesful
         /// </summary>
-        private static Ftp OpenFtpConnection(FtpAccountEntity account)
+        private static IFtp OpenFtpConnection(FtpAccountEntity account)
         {
             TlsParameters tls = new TlsParameters();
             tls.CertificateVerifier = CertificateVerifier.AcceptAll;
