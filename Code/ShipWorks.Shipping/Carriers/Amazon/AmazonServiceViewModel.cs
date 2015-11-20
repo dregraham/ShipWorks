@@ -53,7 +53,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (!services.Any())
             {
-                AmazonRateTag selectedRateTag = new AmazonRateTag { Description = "No rates are available for the shipment.", ShippingServiceId = "-1", ShippingServiceOfferId = null, CarrierName = null };
+                AmazonRateTag selectedRateTag = new AmazonRateTag
+                {
+                    Description = "No rates are available for the shipment.",
+                    ShippingServiceId = "-1",
+                    ShippingServiceOfferId = null,
+                    CarrierName = null
+                };
                 services.Insert(0, selectedRateTag);
                 ShippingService = selectedRateTag;
             }
@@ -193,7 +199,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ShippingServiceOfferId = shipment.Amazon.ShippingServiceOfferID,
                 CarrierName = shipment.Amazon.CarrierName
             };
-        
+
         /// <summary>
         /// Event for property changed handling
         /// </summary>

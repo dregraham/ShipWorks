@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
             this.messageHelper = messageHelper;
             this.validatedAddressScope = validatedAddressScope;
             this.addressSelector = addressSelector;
-            
+
             SetupAddressValidationMessagePropertyHandlers();
 
             AddressSuggestions = Enumerable.Empty<KeyValuePair<string, ValidatedAddressEntity>>();
@@ -198,20 +198,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
 
             SaveToEntity(personAdapter);
             personAdapter.CopyTo(addressAdapter);
-            
+
             ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, true);
 
-            // See if the loaded address has chagned since we started validating
+            // See if the loaded address has changed since we started validating
             if (currentEntityId != entityId)
             {
                 return;
             }
-            
+
             addressAdapter.CopyTo(personAdapter);
 
             validatedAddressScope.StoreAddresses(entityId.Value, validationData.AllAddresses, prefix);
             AddressSuggestions = BuildDictionary(validationData.AllAddresses);
-            
+
             PopulateAddress(personAdapter);
             PopulateValidationDetails(personAdapter);
         }
@@ -223,14 +223,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         {
             addressValidationSubscriptions?.Dispose();
 
-            PersonAdapter person = new PersonAdapter(new ValidatedAddressEntity(), string.Empty);
+            PersonAdapter person = new PersonAdapter();
             SaveToEntity(person);
-            
+
             AddressAdapter changedAddress = await addressSelector.SelectAddress(person.ConvertTo<AddressAdapter>(), addressSuggestion);
             PersonAdapter changedPerson = changedAddress.ConvertTo<PersonAdapter>();
 
             PopulateAddress(changedPerson);
-            ValidationStatus = addressSuggestion.IsOriginal ? AddressValidationStatusType.SuggestionIgnored : AddressValidationStatusType.SuggestionSelected;
+            ValidationStatus = (AddressValidationStatusType)changedPerson.AddressValidationStatus;
 
             SetupAddressValidationMessagePropertyHandlers();
         }
@@ -258,21 +258,29 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
             addressValidationSubscriptions?.Dispose();
 
             addressValidationSubscriptions = new CompositeDisposable(
-                handler.Where(x => x == nameof(ValidationStatus)).Subscribe(x => InvalidateValidationProperties()),
-                handler.Where(x => validationProperties.Contains(x)).Subscribe(x => ValidationStatus = AddressValidationStatusType.NotChecked)
+                handler.Where(x => x == nameof(ValidationStatus)).Subscribe(_ => ResetValidationProperties()),
+                handler.Where(x => validationProperties.Contains(x)).Subscribe(_ => InvalidateValidation())
             );
+        }
+
+        /// <summary>
+        /// Invalidate validation of the address
+        /// </summary>
+        private void InvalidateValidation()
+        {
+            if (entityId.HasValue)
+            {
+                validatedAddressScope.ClearAddresses(entityId.Value, prefix);
+            }
+
+            ValidationStatus = AddressValidationStatusType.NotChecked;
         }
 
         /// <summary>
         /// Invalidate the validation properties
         /// </summary>
-        private void InvalidateValidationProperties()
+        private void ResetValidationProperties()
         {
-            if (entityId.HasValue)
-            {
-                validatedAddressScope.StoreAddresses(entityId.Value, Enumerable.Empty<ValidatedAddressEntity>(), prefix);
-            }
-
             handler.RaisePropertyChanged(nameof(CanValidateAddress));
             handler.RaisePropertyChanged(nameof(CanShowSuggestions));
             handler.RaisePropertyChanged(nameof(CanShowValidationMessage));

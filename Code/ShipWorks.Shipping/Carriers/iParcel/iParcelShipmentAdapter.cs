@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
@@ -9,6 +10,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// <summary>
     /// Adapter for specific shipment information
     /// </summary>
+    [SuppressMessage("SonarLint", "S101:Class names should comply with a naming convention",
+        Justification = "Class is names to match iParcel's naming convention")]
     public class iParcelShipmentAdapter : ICarrierShipmentAdapter
     {
         private readonly ShipmentEntity shipment;
@@ -16,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private readonly ICustomsManager customsManager;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
         public iParcelShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager)
         {

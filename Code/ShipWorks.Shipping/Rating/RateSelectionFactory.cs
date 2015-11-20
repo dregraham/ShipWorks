@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -13,7 +14,7 @@ using ShipWorks.Shipping.Editing.Rating;
 namespace ShipWorks.Shipping.Rating
 {
     /// <summary>
-    /// Factory that creates an IRateSelection basesd on a RateResult.
+    /// Factory that creates an IRateSelection based on a RateResult.
     /// </summary>
     public class RateSelectionFactory : IRateSelectionFactory
     {
@@ -21,6 +22,8 @@ namespace ShipWorks.Shipping.Rating
         /// Creates an IRateSelection based on given RateResult
         /// </summary>
         /// <returns></returns>
+        [SuppressMessage("SonarLint", "S1541:Methods should not be too complex",
+            Justification = "This is the est way to handle this without breaking into multiple classes")]
         public IRateSelection CreateRateSelection(RateResult rateResult)
         {
             RateSelection rateSelection = new RateSelection();
@@ -54,7 +57,7 @@ namespace ShipWorks.Shipping.Rating
                 case ShipmentTypeCode.BestRate:
                 case ShipmentTypeCode.Other:
                 case ShipmentTypeCode.None:
-                    // The RateResult should already be converted to the actual carrier rate result 
+                    // The RateResult should already be converted to the actual carrier rate result
                     // by the time it gets here, so just continue for BestRate
                     // None and Other don't have rates, so just continue.
                     break;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -30,6 +31,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// <param name="shipment">The shipment.</param>
         /// <param name="imageData">The base 64 binary data of each label image.</param>
         /// <returns>A collection of Label instances.</returns>
+        [SuppressMessage("SonarLint", "S2368:Public methods should not have multidimensional array parameters",
+            Justification = "Image data is two dimensions, which requires the array")]
         public IEnumerable<Label> CreateLabels(ShipmentEntity shipment, byte[][] imageData)
         {
             List<Label> labels = new List<Label>();
@@ -42,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 
             return labels;
         }
-        
+
         /// <summary>
         /// Creates a single label.
         /// </summary>

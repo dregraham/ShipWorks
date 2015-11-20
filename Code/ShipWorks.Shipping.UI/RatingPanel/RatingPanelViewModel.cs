@@ -22,6 +22,7 @@ using ShipWorks.Core.Common.Threading;
 using System.Threading;
 using System.Reactive.Linq;
 using System.Reactive.Disposables;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -103,7 +104,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         }
 
         /// <summary>
-        /// Gets/Sets the rate group 
+        /// Gets/Sets the rate group
         /// </summary>
         [Obfuscation(Exclude = true)]
         public RateGroup RateGroup
@@ -165,7 +166,8 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Forces rates to be refreshed by re-fetching the rates from the shipping provider.
         /// </summary>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "CS4014:Consider applying the 'await' operator.", Justification = "We purposely want the execution of this method to continue when calling FetchRates.")]
+        [SuppressMessage("SonarQube", "CS4014:Consider applying the 'await' operator.",
+            Justification = "We purposely want the execution of this method to continue when calling FetchRates.")]
         public void RefreshRates(bool ignoreCache)
         {
             CancellationToken token = ResetCancellationTokenSource();
@@ -255,7 +257,8 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Called when the shipment values have changed. We need to refresh the
         /// shipment data/rates being displayed to accurately.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "CS4014:Consider applying the 'await' operator.", Justification = "We purposely want the execution of this method to continue when calling FetchRates.")]
+        [SuppressMessage("SonarQube", "CS4014:Consider applying the 'await' operator.",
+            Justification = "We purposely want the execution of this method to continue when calling FetchRates.")]
         private void HandleShipmentChangedMessage(ShipmentChangedMessage message)
         {
             CancellationToken cancellationToken = ResetCancellationTokenSource();
@@ -288,7 +291,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         }
 
         /// <summary>
-        /// Fetches the rates from the shipment type and 
+        /// Fetches the rates from the shipment type and
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
@@ -367,9 +370,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             if (consolidatePostalRates &&
                 PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
                 !PostalUtility.IsPostalSetup() &&
-                shipmentTypeCode != ShipmentTypeCode.Usps &&
-                shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
-                shipmentTypeCode != ShipmentTypeCode.Express1Usps)
+                IsNotUspsOrExpress1(shipmentTypeCode))
             {
                 shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter> { new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter() }));
 
@@ -394,6 +395,16 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         }
 
         /// <summary>
+        /// Tests whether the shipment type is not USPS or Express 1
+        /// </summary>
+        private bool IsNotUspsOrExpress1(ShipmentTypeCode shipmentTypeCode)
+        {
+            return shipmentTypeCode != ShipmentTypeCode.Usps &&
+                   shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
+                   shipmentTypeCode != ShipmentTypeCode.Express1Usps;
+        }
+
+        /// <summary>
         /// Cancel any existing actions and get a new token
         /// </summary>
         private CancellationToken ResetCancellationTokenSource()
@@ -404,7 +415,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             return cancelRatesToken.Token;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -416,7 +427,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         public void Dispose()

@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         {
             GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService
             {
-                Rate = new Rate { Amount = 2.34m },
+                Rate = new Rate { Amount = 2.34M },
                 ShippingServiceName = "UPS",
                 ShippingServiceId = "Foo",
                 ShippingServiceOfferId = "Bar"
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             RateResult rateResult = result.Rates.FirstOrDefault();
 
             Assert.Equal("UPS", rateResult.Description);
-            Assert.Equal(2.34m, rateResult.Amount);
+            Assert.Equal(2.34M, rateResult.Amount);
             Assert.Equal("Foo", ((AmazonRateTag)rateResult.Tag).ShippingServiceId);
             Assert.Equal("Bar", ((AmazonRateTag)rateResult.Tag).ShippingServiceOfferId);
         }
@@ -143,7 +143,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
             RateGroup result = testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes));
 
-            AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl footnoteControl = result.FootnoteFactories.OfType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory>().First().CreateFootnote(null) as AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl;
+            AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl footnoteControl = result.FootnoteFactories
+                .OfType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory>()
+                .First()
+                .CreateFootnote(null) as AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl;
             Assert.Equal(3, footnoteControl.CarrierNames.Count());
             Assert.True(footnoteControl.CarrierNames.Contains("FEDEX"));
             Assert.True(footnoteControl.CarrierNames.Contains("UPS"));
@@ -175,7 +178,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
             GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService
             {
-                Rate = new Rate { Amount = 2.34m },
+                Rate = new Rate { Amount = 2.34M },
                 ShippingServiceName = "UPS",
                 ShippingServiceId = "Foo",
                 ShippingServiceOfferId = "Bar"
@@ -194,7 +197,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes));
 
             Assert.Equal(1, filteredRate.Rates.Count);
-            Assert.Equal(2.34m, filteredRate.Rates.First().Amount);
+            Assert.Equal(2.34M, filteredRate.Rates.First().Amount);
         }
 
         private static GetEligibleShippingServicesResponse GetEligibleShippingServicesResponse(List<string> tAndC, List<string> tAndC2)
@@ -261,7 +264,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         {
             get
             {
-                return SerializationUtility.DeserializeFromXml<GetEligibleShippingServicesResponse>(GetEmbeddedResourceXml("ShipWorks.Tests.Shipping.Carriers.Amazon.Api.Artifacts.GetEligibleShippingServicesResponse.xml"));
+                string resource = GetEmbeddedResourceXml("ShipWorks.Tests.Shipping.Carriers.Amazon.Api.Artifacts.GetEligibleShippingServicesResponse.xml");
+                return SerializationUtility.DeserializeFromXml<GetEligibleShippingServicesResponse>(resource);
             }
         }
 

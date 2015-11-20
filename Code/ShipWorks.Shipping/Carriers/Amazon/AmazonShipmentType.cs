@@ -21,6 +21,7 @@ using ShipWorks.Stores.Platforms.Amazon;
 using System.Diagnostics;
 using ShipWorks.Editions;
 using ShipWorks.Core.Messaging;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -36,12 +37,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IEditionManager editionManager;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly Func<IAmazonLabelService> amazonLabelServiceFactory;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IDateTimeProvider dateTimeProvider, 
-            Func<IAmazonRatingService> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, 
+        public AmazonShipmentType(IDateTimeProvider dateTimeProvider,
+            Func<IAmazonRatingService> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory,
             IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager,
             IEditionManager editionManager)
         {
@@ -87,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment) => 
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
             shipment.Amazon.ShippingServiceName;
 
         /// <summary>
@@ -183,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             IAmazonOrder amazonCredentials = shipment.Order as IAmazonOrder;
 
             Debug.Assert(amazonCredentials != null);
-            
+
             amazonShipment.DimsWeight = shipment.ContentWeight;
 
             base.ConfigureNewShipment(shipment);
@@ -225,7 +226,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 }
 
                 ratingField = base.RatingFields;
-                
+
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DeclaredValue);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DeliveryExperience);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsAddWeight);
@@ -258,7 +259,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
         /// <summary>
         /// Gets a value indicating whether this instance is shipment type restricted.
-        /// 
+        ///
         /// Overridden to use dependency
         /// </summary>
         public override bool IsShipmentTypeRestricted
@@ -287,7 +288,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             base.ConfigurePrimaryProfile(profile);
 
             AmazonProfileEntity amazon = profile.Amazon;
-            
+
             amazon.DeliveryExperience = (int) AmazonDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
             amazon.Weight = 0;
 
@@ -305,7 +306,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
         {
             base.ApplyProfile(shipment, profile);
-            
+
             if (shipment.Amazon == null)
             {
                 return;
@@ -313,10 +314,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
             AmazonProfileEntity amazonProfile = profile.Amazon;
-            
+
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
 
-            if (amazonProfile.Weight != null && amazonProfile.Weight.Value != 0)
+            if (amazonProfile.Weight.HasValue && amazonProfile.Weight.Value > 0)
             {
                 ShippingProfileUtility.ApplyProfileValue(amazonProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
@@ -349,7 +350,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Tracks the shipment.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S1871:Two branches in the same conditional structure should not have exactly the same implementation", Justification = "Easier to understand broken out this way.")]
+        [SuppressMessage("SonarQube", "S1871:Two branches in the same conditional structure should not have exactly the same implementation",
+            Justification = "Easier to understand broken out this way.")]
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             if (string.IsNullOrWhiteSpace(shipment?.TrackingNumber))
@@ -362,7 +364,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             string serviceUsed = shippingManager.GetServiceUsed(shipment);
             if (serviceUsed.IndexOf("ups", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                trackingLink = $"http://wwwapps.ups.com/WebTracking/processInputRequest?HTMLVersion=5.0&amp;loc=en_US&amp;Requester=UPSHome&amp;tracknum={shipment.TrackingNumber}&amp;AgreeToTermsAndConditions=yes&amp;track.x=46&amp;track.y=9";
+                trackingLink = $"http://wwwapps.ups.com/WebTracking/processInputRequest?HTMLVersion=5.0&amp;loc=en_US&" +
+                    $"amp;Requester=UPSHome&amp;tracknum={shipment.TrackingNumber}&amp;AgreeToTermsAndConditions=yes&amp;track.x=46&amp;track.y=9";
             }
             else if (serviceUsed.IndexOf("DHL SM", StringComparison.OrdinalIgnoreCase) >= 0)
             {
@@ -394,7 +397,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             ShipmentCommonDetail commonDetail = new ShipmentCommonDetail();
 
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
-            
+
             commonDetail.PackageLength = amazonShipment.DimsLength;
             commonDetail.PackageWidth = amazonShipment.DimsWidth;
             commonDetail.PackageHeight = amazonShipment.DimsHeight;

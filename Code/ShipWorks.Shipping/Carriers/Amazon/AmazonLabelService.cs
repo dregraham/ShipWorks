@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // Send a max of $100 in insured value for carriers who aren't Stamps.  Send $0 for Stamps
             if (!shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase))
             {
-                requestDetails.ShippingServiceOptions.DeclaredValue.Amount = Math.Min(shipment.Amazon.InsuranceValue, 100m);
+                requestDetails.ShippingServiceOptions.DeclaredValue.Amount = Math.Min(shipment.Amazon.InsuranceValue, 100M);
             }
             else
             {

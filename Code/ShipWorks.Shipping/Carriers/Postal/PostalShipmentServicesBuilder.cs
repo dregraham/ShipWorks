@@ -40,7 +40,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 {
                     // Always include the service type that the shipment is currently configured in the 
                     // event the shipment was configured prior to a service being excluded
-                    internationalServicesToLoad = internationalServicesToLoad.Union(allInternationalServices.Intersect(new List<PostalServiceType> { (PostalServiceType)shipments.First().Postal.Service })).ToList();
+                    internationalServicesToLoad = internationalServicesToLoad.Union(
+                        allInternationalServices.Intersect(new List<PostalServiceType> { (PostalServiceType)shipments.First().Postal.Service }))
+                        .ToList();
                 }
 
                 // Bind the drop down to the international services

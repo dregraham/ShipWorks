@@ -8,14 +8,15 @@ using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
+using ShipWorks.Shipping.UI.ShippingPanel;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
 {
     public class AddressViewModelTest : IDisposable
     {
-        AutoMock mock;
+        readonly AutoMock mock;
+        readonly PersonAdapter entityBasedAdapter = new PersonAdapter(new ShipmentEntity { ShipmentID = 3 }, "Ship");
 
         public AddressViewModelTest()
         {
@@ -447,6 +448,94 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             Assert.NotEqual("Bar2", testObject.StateProvCode);
             Assert.NotEqual("Baz2", testObject.CountryCode);
             Assert.NotEqual("22345", testObject.PostalCode);
+        }
+
+        [Fact]
+        public void SetStreet_ResetsValidationStatus_WhenItIsAValidationProperty() =>
+            VerifyPropertySetterResetsValidationStatus(x => x.Street = "Foo");
+
+        [Fact]
+        public void SetCountryCode_ResetsValidationStatus_WhenItIsAValidationProperty() =>
+            VerifyPropertySetterResetsValidationStatus(x => x.CountryCode = "Foo");
+
+        [Fact]
+        public void SetPostalCode_ResetsValidationStatus_WhenItIsAValidationProperty() =>
+            VerifyPropertySetterResetsValidationStatus(x => x.PostalCode = "Foo");
+
+        [Fact]
+        public void SetStateProvCode_ResetsValidationStatus_WhenItIsAValidationProperty() =>
+            VerifyPropertySetterResetsValidationStatus(x => x.StateProvCode = "Foo");
+
+        [Fact]
+        public void SetCity_ResetsValidationStatus_WhenItIsAValidationProperty() =>
+            VerifyPropertySetterResetsValidationStatus(x => x.City = "Foo");
+
+        [Fact]
+        public void SetName_DoesNotResetValidationStatus_WhenItIsNotAValidationProperty()
+        {
+            entityBasedAdapter.AddressValidationStatus = (int)AddressValidationStatusType.Fixed;
+
+            AddressViewModel testObject = mock.Create<AddressViewModel>();
+            testObject.IsAddressValidationEnabled = true;
+            testObject.Load(entityBasedAdapter);
+
+            testObject.FullName = "Foo Bar";
+
+            Assert.Equal(AddressValidationStatusType.Fixed, testObject.ValidationStatus);
+        }
+
+        [Fact]
+        public void Set_ClearsAddressSuggestions_WhenPropertyIsValidationProperty()
+        {
+            AddressViewModel testObject = mock.Create<AddressViewModel>();
+            testObject.IsAddressValidationEnabled = true;
+            testObject.Load(entityBasedAdapter);
+
+            testObject.Street = "Foo";
+
+            mock.Mock<IValidatedAddressScope>()
+                .Verify(x => x.ClearAddresses(3, "Ship"));
+        }
+
+        [Fact]
+        public void Set_DoesNotClearAddressSuggestions_WhenPropertyIsValidationPropertyButAddressIsNotEntityBacked()
+        {
+            AddressViewModel testObject = mock.Create<AddressViewModel>();
+            testObject.IsAddressValidationEnabled = true;
+            testObject.Load(new PersonAdapter());
+
+            testObject.Street = "Foo";
+
+            mock.Mock<IValidatedAddressScope>()
+                .Verify(x => x.ClearAddresses(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public void ShowValidationMessage_CallsShowInformation_WithValidationMessage()
+        {
+            entityBasedAdapter.AddressValidationError = "Foo Bar";
+
+            AddressViewModel testObject = mock.Create<AddressViewModel>();
+            testObject.IsAddressValidationEnabled = true;
+            testObject.Load(entityBasedAdapter);
+
+            testObject.ShowValidationMessageCommand.Execute(null);
+
+            mock.Mock<IMessageHelper>()
+                .Verify(x => x.ShowInformation("Foo Bar"));
+        }
+
+        public void VerifyPropertySetterResetsValidationStatus(Action<AddressViewModel> setAction)
+        {
+            entityBasedAdapter.AddressValidationStatus = (int)AddressValidationStatusType.Fixed;
+
+            AddressViewModel testObject = mock.Create<AddressViewModel>();
+            testObject.IsAddressValidationEnabled = true;
+            testObject.Load(entityBasedAdapter);
+
+            setAction(testObject);
+
+            Assert.Equal(AddressValidationStatusType.NotChecked, testObject.ValidationStatus);
         }
 
         public void Dispose()

@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
         private readonly IShipmentPackageBuilderFactory shipmentPackageBuilderFactory;
 
-        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", 
+        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual",
             Justification = "Event is virtual to allow tests to fire it")]
         public virtual event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -48,19 +48,21 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory, IShipmentPackageBuilderFactory shipmentPackageBuilderFactory, IMessenger messenger, IRateSelectionFactory rateSelectionFactory) : this()
+        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
+            IShipmentPackageBuilderFactory shipmentPackageBuilderFactory, IMessenger messenger,
+            IRateSelectionFactory rateSelectionFactory) : this()
         {
             this.shipmentPackageBuilderFactory = shipmentPackageBuilderFactory;
             this.rateSelectionFactory = rateSelectionFactory;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
-            
+
             subscription = messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage);
         }
 
         public ObservableCollection<KeyValuePair<int, string>> Services { get; }
 
         public ObservableCollection<KeyValuePair<int,string>> Packages { get; }
-            
+
         [Obfuscation(Exclude = true)]
         public DateTime ShipDate
         {
@@ -110,7 +112,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 .BuildServiceTypeDictionary(new [] { shipment });
 
             Services.Clear();
-            
+
             foreach (KeyValuePair<int, string> entry in services)
             {
                 Services.Add(entry);

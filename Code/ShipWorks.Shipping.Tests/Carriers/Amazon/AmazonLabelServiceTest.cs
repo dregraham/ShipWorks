@@ -8,9 +8,9 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using System;
 using System.Collections.Generic;
-using Moq.Language.Flow;
 using ShipWorks.Stores.Platforms.Amazon;
 using Xunit;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
@@ -22,6 +22,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Amazon = new AmazonShipmentEntity { ShippingServiceID = "something", CarrierName = "Foo" }
         };
 
+        [SuppressMessage("SonarLint", "S103:Lines should not be too long",
+            Justification = "The long line is binary data for tests")]
         readonly CreateShipmentResponse defaultResponse = new CreateShipmentResponse()
         {
             CreateShipmentResult = new CreateShipmentResult()
@@ -109,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
-            
+
             var testObject = mock.Create<AmazonLabelService>();
             testObject.Create(defaultShipment);
 
@@ -247,7 +249,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 }
             }));
         }
-		
+
         [Fact]
         public void Void_ThrowsError_WhenAmazonUniqueShipmentIDIsNull()
         {
@@ -268,7 +270,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var testObject = mock.Create<AmazonLabelService>();
 
             var AmazonUniqueShipmentID = "42";
-            
+
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(webClient => webClient.CancelShipment(It.IsAny<IAmazonMwsWebClientSettings>(), "42"))
                 .Verifiable();

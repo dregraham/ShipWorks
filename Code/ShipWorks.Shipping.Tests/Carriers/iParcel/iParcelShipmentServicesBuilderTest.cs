@@ -4,12 +4,14 @@ using Xunit;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Settings;
-using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Tests.Shared;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Tests.Carriers.iParcel
 {
+    [SuppressMessage("SonarLint", "S101:Class names should comply with a naming convention",
+        Justification = "Class is names to match iParcel's naming convention")]
     public class iParcelShipmentServicesBuilderTest
     {
         [Fact]
@@ -65,7 +67,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
                 Assert.Contains((int)iParcelServiceType.Preferred, results.Keys);
             }
         }
-        
+
         [Fact]
         public void BuildServiceTypeDictionary_DoesNotContainDuplicates_ShipmentIncludesPreferedAndItIsAvailable()
         {

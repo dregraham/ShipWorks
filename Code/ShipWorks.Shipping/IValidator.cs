@@ -6,10 +6,10 @@ namespace ShipWorks.Shipping
     /// Interface for classes that need to validate something
     /// </summary>
     /// <typeparam name="TEntity">The object to be validated.</typeparam>
-    public interface IValidator<TEntity>
+    public interface IValidator<in TEntity>
     {
         /// <summary>
-        /// Validate an object asychronously.
+        /// Validate an object asynchronously.
         /// </summary>
         Task ValidateAsync(TEntity entity);
     }

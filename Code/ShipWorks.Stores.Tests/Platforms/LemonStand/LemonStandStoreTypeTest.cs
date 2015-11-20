@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using Moq;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores.Platforms.LemonStand;
@@ -13,16 +11,16 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
     {
         readonly Mock<StoreEntity> store = new Mock<StoreEntity>();
         readonly Mock<LemonStandStoreEntity> lemonStandStore = new Mock<LemonStandStoreEntity>();
-        string storeUrl = "shipworks.lemonstand.com";
+        readonly string storeUrl = "shipworks.lemonstand.com";
         LemonStandStoreType testObject;
-        
+
         public LemonStandStoreTypeTest()
         {
             // LemonStand StoreTypeCode value is 68
             lemonStandStore.Setup(s => s.TypeCode).Returns(68);
             lemonStandStore.Setup(s => s.StoreURL).Returns(storeUrl);
         }
-        
+
         [Fact]
         public void Constructor_ThrowsInvalidOperationException_WhenGivenNonLemonStandStoreEntity_Test()
         {

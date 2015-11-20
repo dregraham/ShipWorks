@@ -12,9 +12,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
     [ActionTask("Update store status", "LemonStandOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class LemonStandOrderUpdateTask : StoreInstanceTaskBase
     {
-        // Default the status code to an invalid code (so the drop down works correctly)
-        int statusCode = -1;
-
         /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
@@ -26,12 +23,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         /// <summary>
         /// The status code the task will be run with
         /// </summary>
-        public int StatusCode
-        {
-            get { return statusCode; }
-            set { statusCode = value; }
-        }
+        /// <remarks>
+        /// Default the status code to an invalid code (so the drop down works correctly)
+        /// </remarks>
+        public int StatusCode { get; set; } = -1;
 
+        /// <summary>
+        /// Create the editor
+        /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
             return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<ActionTaskEditor>(StoreTypeCode.LemonStand, new TypedParameter(typeof(LemonStandOrderUpdateTask), this));
@@ -68,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
                 LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater(store);
                 foreach (long orderID in inputKeys)
                 {
-                    updater.UpdateOrderStatus(orderID, statusCode, context.CommitWork);
+                    updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
                 }
             }
             catch (LemonStandException ex)

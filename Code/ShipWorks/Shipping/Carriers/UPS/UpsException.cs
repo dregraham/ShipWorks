@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
-    /// Base for all handlable ups exceptions
+    /// Base for all handleable ups exceptions
     /// </summary>
+    [Serializable]
     public class UpsException : CarrierException
     {
         public UpsException()
@@ -31,6 +30,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public virtual string ErrorCode
         {
             get { return "0"; }
+        }
+
+        protected UpsException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
+            base(serializationInfo, streamingContext)
+        {
+
         }
     }
 }

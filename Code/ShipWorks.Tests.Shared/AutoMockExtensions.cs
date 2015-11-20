@@ -64,7 +64,14 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Configure an IShippingConfiguration
         /// </summary>
-        public static Mock<IShippingConfiguration> WithShippingConfiguration(this AutoMock mock, bool autoCreateShipments = true, bool userHasPermission = true, bool getAddressValidation = true)
+        public static Mock<IShippingConfiguration> WithShippingConfiguration(this AutoMock mock) =>
+            mock.WithShippingConfiguration(true, true, true);
+
+        /// <summary>
+        /// Configure an IShippingConfiguration
+        /// </summary>
+        public static Mock<IShippingConfiguration> WithShippingConfiguration(this AutoMock mock, bool autoCreateShipments,
+            bool userHasPermission, bool getAddressValidation)
         {
             Mock<IShippingConfiguration> mockObject = mock.Mock<IShippingConfiguration>();
             mockObject.Setup(s => s.AutoCreateShipments).Returns(autoCreateShipments);
@@ -77,7 +84,7 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Configure an IFilterHelper
         /// </summary>
-        public static Mock<IFilterHelper> WithFilterHelper(this AutoMock mock, bool result = true)
+        public static Mock<IFilterHelper> WithFilterHelper(this AutoMock mock, bool result)
         {
             Mock<IFilterHelper> mockObject = mock.Mock<IFilterHelper>();
             mockObject.Setup(s => s.EnsureFiltersUpToDate(It.IsAny<TimeSpan>())).Returns(result);
@@ -88,7 +95,7 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Configure an IValidator<ShipmentEntity>
         /// </summary>
-        public static Mock<IValidator<ShipmentEntity>> WithAddressValidator(this AutoMock mock, bool result = true)
+        public static Mock<IValidator<ShipmentEntity>> WithAddressValidator(this AutoMock mock, bool result)
         {
             Mock<IValidator<ShipmentEntity>> mockObject = mock.Mock<IValidator<ShipmentEntity>>();
             mockObject.Setup(av => av.ValidateAsync(It.IsAny<ShipmentEntity>())).Returns(Task.FromResult(result));

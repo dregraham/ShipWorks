@@ -4,12 +4,15 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using System.Linq;
 using Interapptive.Shared.Utility;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
     /// <summary>
     /// Service type builder for iParcel shipments
     /// </summary>
+    [SuppressMessage("SonarLint", "S101:Class names should comply with a naming convention",
+        Justification = "Class is names to match iParcel's naming convention")]
     public class iParcelShipmentServicesBuilder : IShipmentServicesBuilder
     {
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
