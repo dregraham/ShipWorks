@@ -223,7 +223,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         {
             addressValidationSubscriptions?.Dispose();
 
-            PersonAdapter person = new PersonAdapter(new ValidatedAddressEntity(), string.Empty);
+            PersonAdapter person = new PersonAdapter();
             SaveToEntity(person);
 
             AddressAdapter changedAddress = await addressSelector.SelectAddress(person.ConvertTo<AddressAdapter>(), addressSuggestion);
