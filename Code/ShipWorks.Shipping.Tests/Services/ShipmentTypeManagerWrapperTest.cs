@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Tests.Services
 {
     public class ShipmentTypeManagerWrapperTest
     {
-        IShipmentTypeManager testObject;
+        readonly IShipmentTypeManager testObject;
 
         public ShipmentTypeManagerWrapperTest()
         {

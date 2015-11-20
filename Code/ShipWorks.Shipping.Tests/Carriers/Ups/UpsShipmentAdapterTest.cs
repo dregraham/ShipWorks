@@ -3,7 +3,6 @@ using ShipWorks.Shipping.Carriers.UPS;
 using System;
 using System.Collections.Generic;
 using Moq;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using Xunit;
 

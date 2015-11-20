@@ -344,10 +344,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 shipment.TotalWeight += shipment.Amazon.DimsWeight;
             }
         }
-        
+
+
         /// <summary>
         /// Tracks the shipment.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S1871:Two branches in the same conditional structure should not have exactly the same implementation", Justification = "Easier to understand broken out this way.")]
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             if (string.IsNullOrWhiteSpace(shipment?.TrackingNumber))

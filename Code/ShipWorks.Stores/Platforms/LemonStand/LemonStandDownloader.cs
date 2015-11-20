@@ -100,7 +100,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 int expectedCount = jsonOrders.Count;
 
-                if (ProcessOrders(jsonOrders, expectedCount)) return;
+                if (ProcessOrders(jsonOrders, expectedCount))
+                {
+                    return;
+                }
 
                 Progress.Detail = "Done";
                 Progress.PercentComplete = 100;

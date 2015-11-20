@@ -31,9 +31,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             return filteredRateGroup;
         }
 
+
         /// <summary>
         /// Filter carriers from any T&C footnote factories
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3215:\"interface\" instances should not be cast to concrete types", Justification = "CarrierNames is specific only to Amazon.")]
         private IRateFootnoteFactory FilterCarrierNames(IRateFootnoteFactory factory)
         {
             AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory termsFactory = factory as AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory;

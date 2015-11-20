@@ -16,21 +16,5 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             InitializeComponent();
         }
-
-        /// <summary>
-        /// Loads the settings.
-        /// </summary>
-        public void LoadSettings()
-        {
-            
-        }
-
-        /// <summary>
-        /// Saves the settings.
-        /// </summary>
-        public void SaveSettings()
-        {
-            
-        }
     }
 }

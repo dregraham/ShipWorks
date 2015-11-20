@@ -51,8 +51,6 @@ namespace ShipWorks.Shipping.Tests.Services
             shipmentLoader.Setup(s => s.Load(orderEntity.OrderID)).Returns(orderSelectionLoaded);
 
             messenger = new Messenger();
-            //messenger.OfType<OrderSelectionChangedMessage>()
-            //    .Subscribe(HandleOrderSelectionChangedMessage);
 
             testObject = new ShipmentLoaderService(shipmentLoader.Object, messenger);
         }

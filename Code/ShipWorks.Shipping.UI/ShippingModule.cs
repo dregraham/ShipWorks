@@ -9,20 +9,10 @@ using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.UI.MessageHandlers;
-using System.Reactive.Concurrency;
-using Autofac.Extras.Attributed;
 using ShipWorks.Shipping.UI.Services;
 using ShipWorks.AddressValidation;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.Amazon;
-using ShipWorks.Shipping.Carriers.Amazon.Api;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.UI.Carriers.Amazon;
 
 namespace ShipWorks.Shipping.UI
 {

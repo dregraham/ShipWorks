@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             if (store == null)
             {
-                throw new ArgumentNullException(nameof(store));
+                throw new ArgumentNullException("store");
             }
             lemonStandEndpoint = store.StoreURL + "/api/v2";
             accessToken = store.Token;
@@ -113,13 +113,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         public void UploadShipmentDetails(string trackingNumber, string shipmentID)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
+            string trackingNumberToSend = trackingNumber;
 
             // LemonStand returns a bad request error if a blank tracking number is uploaded
-            if (trackingNumber.IsNullOrWhiteSpace())
+            if (trackingNumberToSend.IsNullOrWhiteSpace())
             {
-                trackingNumber = "No tracking number was entered";
+                trackingNumberToSend = "No tracking number was entered";
             }
-            parameters.Add("tracking_code", trackingNumber);
+
+            parameters.Add("tracking_code", trackingNumberToSend);
+
             try
             {
                 ProcessRequest(CreatePostRequest("shipment/" + shipmentID + "/trackingcode", parameters),

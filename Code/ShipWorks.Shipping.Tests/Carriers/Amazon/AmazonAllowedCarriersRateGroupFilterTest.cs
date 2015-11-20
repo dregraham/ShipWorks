@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
     public class AmazonAllowedCarriersRateGroupFilterTest : IDisposable
     {
-        AutoMock mock;
+        readonly AutoMock mock;
 
         public AmazonAllowedCarriersRateGroupFilterTest()
         {
@@ -69,7 +69,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Filter_RemovesCarriersFromTandCFootnoteFactory_WhenFactoryIsInList()
         {
-            AmazonShipmentType shipmentType = mock.Create<AmazonShipmentType>();
             var factory = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new[] { "FOO", "UPS", "fedeX" });
 
             RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
@@ -87,7 +86,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Filter_RemovesTandCFootnoteFactory_WhenFilteredCarrierListIsEmpty()
         {
-            AmazonShipmentType shipmentType = mock.Create<AmazonShipmentType>();
             var factory = new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new[] { "FOO" });
 
             RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
