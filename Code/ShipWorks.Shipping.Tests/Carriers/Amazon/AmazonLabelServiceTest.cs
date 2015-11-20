@@ -16,13 +16,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
     public class AmazonLabelServiceTest : IDisposable
     {
-        ShipmentEntity defaultShipment = new ShipmentEntity
+        readonly ShipmentEntity defaultShipment = new ShipmentEntity
         {
             Order = new AmazonOrderEntity(),
             Amazon = new AmazonShipmentEntity { ShippingServiceID = "something", CarrierName = "Foo" }
         };
 
-        CreateShipmentResponse defaultResponse = new CreateShipmentResponse()
+        readonly CreateShipmentResponse defaultResponse = new CreateShipmentResponse()
         {
             CreateShipmentResult = new CreateShipmentResult()
             {
@@ -50,8 +50,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             }
         };
 
-        AutoMock mock = null;
-        List<IAmazonLabelEnforcer> labelEnforcers;
+        readonly AutoMock mock = null;
+        readonly List<IAmazonLabelEnforcer> labelEnforcers;
 
         public AmazonLabelServiceTest()
         {
@@ -148,8 +148,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
 
-            var shipment = new ShipmentEntity();
-
             var testObject = mock.Create<AmazonLabelService>();
             Assert.Throws<AmazonShippingException>(() => testObject.Create(defaultShipment));
 
@@ -223,8 +221,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 .Verifiable();
 
             labelEnforcers.AddRange(new[] { enforcer1.Object, enforcer2.Object });
-
-            var settings = mock.Create<IAmazonMwsWebClientSettings>();
 
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))

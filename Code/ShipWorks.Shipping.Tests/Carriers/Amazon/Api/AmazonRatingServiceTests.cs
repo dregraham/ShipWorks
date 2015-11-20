@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 {
     public class AmazonRatingServiceTests : IDisposable
     {
-        AutoMock mock;
+        readonly AutoMock mock;
 
         public AmazonRatingServiceTests()
         {

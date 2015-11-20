@@ -46,9 +46,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.settingsFactory = settingsFactory;
         }
 
+
         /// <summary>
         /// Create the label
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3240:The simplest possible condition syntax should be used", Justification = "More readable this way.")]
         public void Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
