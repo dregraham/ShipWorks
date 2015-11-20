@@ -88,8 +88,7 @@ namespace ShipWorks.FileTransfer
             {
                 return account;
             }
-
-
+            
             // Implicit
             if (CheckFtpSecurityImplicit(portOverride, account))
             {
