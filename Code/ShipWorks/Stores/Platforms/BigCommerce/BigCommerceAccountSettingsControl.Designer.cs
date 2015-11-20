@@ -109,7 +109,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(266, 18);
             this.label5.TabIndex = 23;
-            this.label5.Text = "For help finding your API Path, Username or Token,";
+            this.label5.Text = "For help finding your API Path, Username or Token, ";
             // 
             // helpLink
             // 
