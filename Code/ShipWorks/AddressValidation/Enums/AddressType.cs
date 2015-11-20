@@ -15,8 +15,8 @@ namespace ShipWorks.AddressValidation.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum AddressType
     {
-        [Description("")]
-        [Details("")]
+        [Description("Not Validated")]
+        [ImageResource("help2_16")]
         NotChecked = 0,
 
         [Description("International")]
