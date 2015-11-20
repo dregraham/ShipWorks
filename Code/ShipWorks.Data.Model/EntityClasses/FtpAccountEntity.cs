@@ -455,6 +455,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("InternalOwnerID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ReuseControlConnectionSession", fieldHashtable);
 		}
 		#endregion
 
@@ -606,6 +609,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)FtpAccountFieldIndex.InternalOwnerID, false); }
 			set	{ SetValue((int)FtpAccountFieldIndex.InternalOwnerID, value); }
+		}
+
+		/// <summary> The ReuseControlConnectionSession property of the Entity FtpAccount<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FtpAccount"."ReuseControlConnectionSession"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> ReuseControlConnectionSession
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)FtpAccountFieldIndex.ReuseControlConnectionSession, false); }
+			set	{ SetValue((int)FtpAccountFieldIndex.ReuseControlConnectionSession, value); }
 		}
 
 
