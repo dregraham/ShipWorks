@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         [Fact]
         public void Deserialize_ShippingService()
         {
-            using (var mock = AutoMock.GetLoose())
+            using (AutoMock.GetLoose())
             {
                 string successfulResponseXml = GetEmbeddedResourceXml("ShipWorks.Shipping.Tests.Carriers.Amazon.Api.Artifacts.GetEligibleShippingServicesResponse.xml");
 
