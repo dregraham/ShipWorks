@@ -11,9 +11,15 @@ namespace ShipWorks.AddressValidation
     public class ValidatedAddressScope : IValidatedAddressScope
     {
         // Maps the controls to their current value set in scope
-        readonly Dictionary<long, Dictionary<string, List<ValidatedAddressEntity>>> valueMap = 
+        readonly Dictionary<long, Dictionary<string, List<ValidatedAddressEntity>>> valueMap =
             new Dictionary<long, Dictionary<string, List<ValidatedAddressEntity>>>();
-    
+
+        /// <summary>
+        /// Clear validated addresses for the given entity and prefix
+        /// </summary>
+        public void ClearAddresses(long value, string prefix) =>
+            StoreAddresses(value, Enumerable.Empty<ValidatedAddressEntity>(), prefix);
+
         /// <summary>
         /// Store a collection of addresses that should be saved
         /// </summary>
@@ -22,7 +28,7 @@ namespace ShipWorks.AddressValidation
             // Set the prefix on the addresses
             List<ValidatedAddressEntity> addressList = addresses.ToList();
             addressList.ForEach(x => x.AddressPrefix = fieldPrefix);
-            
+
             if (valueMap.ContainsKey(entityId))
             {
                 if (valueMap[entityId].ContainsKey(fieldPrefix))
@@ -39,7 +45,7 @@ namespace ShipWorks.AddressValidation
                 valueMap.Add(entityId, new Dictionary<string, List<ValidatedAddressEntity>>{ { fieldPrefix, addressList } });
             }
         }
-        
+
         /// <summary>
         /// Create a function that will get a list of validated addresses
         /// </summary>

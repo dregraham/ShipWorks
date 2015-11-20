@@ -10,6 +10,11 @@ namespace ShipWorks.AddressValidation
     public interface IValidatedAddressScope
     {
         /// <summary>
+        /// Clear validated addresses for the given entity and prefix
+        /// </summary>
+        void ClearAddresses(long value, string prefix);
+
+        /// <summary>
         /// Store a collection of addresses that should be saved
         /// </summary>
         void StoreAddresses(long entityId, IEnumerable<ValidatedAddressEntity> addresses, string fieldPrefix);
