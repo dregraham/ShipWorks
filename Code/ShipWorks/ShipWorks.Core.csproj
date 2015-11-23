@@ -818,8 +818,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingToken.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensions.cs" />
-    <Compile Include="Shipping\Carriers\iParcel\iParcelLabelService.cs" />
-    <Compile Include="Shipping\Carriers\OnTrac\OnTracLabelService.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />

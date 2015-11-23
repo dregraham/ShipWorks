@@ -140,7 +140,9 @@
     <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\IAmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
+    <Compile Include="Carriers\iParcel\iParcelLabelService.cs" />
     <Compile Include="Carriers\None\NoneLabelService.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracLabelService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
