@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -134,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private static string TransformError(string error)
         {
-            string replacedError = error.Replace("shipmentRequestDetails.", "")
+            string replacedError = error.Trim().Replace("shipmentRequestDetails.", "")
                 .Replace("packageDimensions.", "")
                 .Replace(".value", "")
                 .Replace("Value '0' at", "")
@@ -150,7 +151,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 .Replace("'", "")
                 .Trim();
 
-            return char.ToUpper(error[0]) + replacedError.Substring(1);
+            return char.ToUpper(replacedError[0]) + replacedError.Substring(1);
         }
     }
 }
