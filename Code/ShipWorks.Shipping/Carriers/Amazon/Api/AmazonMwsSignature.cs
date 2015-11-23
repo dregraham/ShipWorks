@@ -63,6 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             return value;
         }
 
+
         /// <summary>
         /// Replace a pattern in a string 
         /// </summary>
@@ -70,6 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="p"></param>
         /// <param name="r"></param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S1121:Assignments should not be made from within sub-expressions", Justification = "This was code provided to us.")]
         private static string ReplaceAll(string s, Regex p, string r)
         {
             int n = s?.Length ?? 0;

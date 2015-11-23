@@ -222,7 +222,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             if (container == null)
             {
-                throw new ArgumentNullException(nameof(container));
+                throw new ArgumentNullException("container");
             }
             ElementOutline outline = container.AddElement("LemonStand");
             outline.AddElement("LemonStandOrderID", () => order.Value.LemonStandOrderID);
@@ -444,18 +444,24 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
         }
 
+        /// <summary>
+        /// Gets the current order statuses.
+        /// </summary>
+        /// <returns></returns>
         private List<string> GetCurrentOrderStatuses()
         {
             XmlSerializer deserializer = new XmlSerializer(typeof(LemonStandStatusCodes));
+            List<string> statusList = new List<string>();
 
             LemonStandStoreEntity store = (LemonStandStoreEntity) Store;
-            TextReader reader = new StringReader(store.StatusCodes);
+            using (TextReader reader = new StringReader(store.StatusCodes))
+            {
+                LemonStandStatusCodes codes = (LemonStandStatusCodes)deserializer.Deserialize(reader);
 
-            LemonStandStatusCodes codes = (LemonStandStatusCodes) deserializer.Deserialize(reader);
+                statusList = codes.StatusCode.Select(code => code.Name).ToList();
 
-            List<string> statusList = codes.StatusCode.Select(code => code.Name).ToList();
-            
-            statusList.Sort();
+                statusList.Sort();
+            }
 
             return statusList;
         }
