@@ -16,6 +16,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             builder.RegisterType<iParcelShipmentType>()
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.iParcel);
+            
+            builder.RegisterType<iParcelDatabaseRepository>()
+                .AsImplementedInterfaces();
+        
+            builder.RegisterType<iParcelServiceGateway>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<iParcelLabelService>()
+                .Keyed<ILabelService>(ShipmentTypeCode.iParcel);
         }
     }
 }

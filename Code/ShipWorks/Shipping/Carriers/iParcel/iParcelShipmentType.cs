@@ -5,8 +5,6 @@ using System.Data;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -16,8 +14,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters.Content.Conditions.Shipments;
-using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.iParcel.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
@@ -31,8 +27,6 @@ using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.UI.Wizard;
 
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -69,21 +63,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// The ShipmentTypeCode represented by this ShipmentType
         /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode
-        {
-            get { return ShipmentTypeCode.iParcel; }
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.iParcel;
 
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
-        public override bool HasAccounts
-        {
-            get
-            {
-                return iParcelAccountManager.Accounts.Any();
-            }
-        }
+        public override bool HasAccounts => iParcelAccountManager.Accounts.Any();
 
         /// <summary>
         /// Create and Initialize a new shipment
@@ -604,49 +589,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            ProcessShipmentAndReturnResponse(shipment);
+            throw new NotImplementedException("You should use the iParcelLabelService");
         }
-
-        /// <summary>
-        /// Process the shipment. (This is being used for Fitnesse tests.)
-        /// </summary>
-        public DataSet ProcessShipmentAndReturnResponse(ShipmentEntity shipment)
-        {
-            try
-            {
-                if (shipment == null)
-                {
-                    throw new ArgumentNullException("shipment");
-                }
-
-                if (shipment.RequestedLabelFormat != (int) ThermalLanguage.None)
-                {
-                    shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
-                }
-                else
-                {
-                    shipment.ActualLabelFormat = null;
-                }
-
-                IParcelAccountEntity iParcelAccount = repository.GetiParcelAccount(shipment);
-                iParcelCredentials credentials = new iParcelCredentials(iParcelAccount.Username, iParcelAccount.Password, true, serviceGateway);
-
-                // i-parcel requires that we upload item information, so fetch the order and order items
-                repository.PopulateOrderDetails(shipment);
-
-                DataSet response = serviceGateway.SubmitShipment(credentials, shipment);
-
-                repository.SaveLabel(shipment, response);
-                repository.SaveTrackingInfoToEntity(shipment, response);
-
-                return response;
-            }
-            catch (iParcelException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
-        }
-
+        
         /// <summary>
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
@@ -758,10 +703,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// FedEx supports rates
         /// </summary>
-        public override bool SupportsGetRates
-        {
-            get { return true; }
-        }
+        public override bool SupportsGetRates => true;
 
         /// <summary>
         /// Get a list of rates for the FedEx shipment
@@ -1157,13 +1099,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <value>
         /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
         /// </value>
-        public override bool SupportsMultiplePackages
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SupportsMultiplePackages => true;
 
         /// <summary>
         /// Saves the requested label format to the child shipment

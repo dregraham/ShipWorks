@@ -36,19 +36,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
         private readonly IEditionManager editionManager;
-        private readonly IDateTimeProvider dateTimeProvider;
         
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IDateTimeProvider dateTimeProvider,Func<IAmazonRatingService> amazonRatesFactory, IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, IEditionManager editionManager)
+        public AmazonShipmentType(Func<IAmazonRatingService> amazonRatesFactory, IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, IEditionManager editionManager)
         {
             this.amazonRatesFactory = amazonRatesFactory;
             this.storeManager = storeManager;
             this.orderManager = orderManager;
             this.shippingManager = shippingManager;
             this.editionManager = editionManager;
-            this.dateTimeProvider = dateTimeProvider;
         }
 
         /// <summary>
@@ -110,14 +108,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             throw new NotImplementedException("You should be using the ILabelService");
         }
           
-        /// <summary>
-        /// Void the shipment
-        /// </summary>
-        public override void VoidShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException("You should be using the ILabelService");
-        }
-
         /// <summary>
         /// Create the XML input to the XSL engine
         /// </summary>
