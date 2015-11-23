@@ -2,6 +2,9 @@
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -63,7 +66,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.iParcel
         protected override void ShipShipment(ShipmentEntity shipment)
         {
             iParcelShipmentType iParcelShipmentType = new iParcelShipmentType();
-
+            
             // remove the default package that gets created in the ConfigureNewShipment method
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -81,20 +84,26 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.iParcel
 
             shipment.IParcel.Service = (int)GetServiceType();
 
-            DataSet response = iParcelShipmentType.ProcessShipmentAndReturnResponse(shipment);
-
-            decimal responseInsuranceValue = 0m;
-
-            responseInsuranceValue = decimal.Parse(response.Tables["CostInfo"].Rows[0]["PackageInsurance"].ToString());
-
-            if (!string.IsNullOrWhiteSpace(ExpectedInsuranceValue))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                decimal expectedInsuranceValue = decimal.Parse(ExpectedInsuranceValue);
-                if (expectedInsuranceValue != responseInsuranceValue)
+                ILabelService labelService = lifetimeScope.ResolveKeyed<ILabelService>(ShipmentTypeCode.iParcel);
+
+                iParcelLabelService iParcelLabelService = labelService as iParcelLabelService;
+
+                DataSet response = iParcelLabelService.ProcessShipmentAndReturnResponse(shipment);
+
+                decimal responseInsuranceValue = 0m;
+
+                responseInsuranceValue = decimal.Parse(response.Tables["CostInfo"].Rows[0]["PackageInsurance"].ToString());
+
+                if (!string.IsNullOrWhiteSpace(ExpectedInsuranceValue))
                 {
-                    throw new Exception(string.Format("Expected insurance value {0} doesn't equal response insurancevalue {1}",
-                        expectedInsuranceValue,
-                        responseInsuranceValue));
+                    decimal expectedInsuranceValue = decimal.Parse(ExpectedInsuranceValue);
+                    if (expectedInsuranceValue != responseInsuranceValue)
+                    {
+                        throw new Exception(
+                            $"Expected insurance value {expectedInsuranceValue} doesn't equal response insurancevalue {responseInsuranceValue}");
+                    }
                 }
             }
 

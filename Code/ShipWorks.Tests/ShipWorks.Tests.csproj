@@ -379,6 +379,7 @@
     <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelCredentialsTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelDatabaseRepositoryTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelLabelServiceTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelSkuQuantityParserTest.cs" />

@@ -25,6 +25,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <param name="shipment"></param>
         public void Create(ShipmentEntity shipment)
         {
+            ProcessShipmentAndReturnResponse(shipment);
+        }
+        
+        /// <summary>
+        /// Process the shipment this is used for integration tests
+        /// </summary>
+        public DataSet ProcessShipmentAndReturnResponse(ShipmentEntity shipment)
+        {
             try
             {
                 if (shipment == null)
@@ -51,6 +59,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
                 repository.SaveLabel(shipment, response);
                 repository.SaveTrackingInfoToEntity(shipment, response);
+
+                return response;
             }
             catch (iParcelException ex)
             {
