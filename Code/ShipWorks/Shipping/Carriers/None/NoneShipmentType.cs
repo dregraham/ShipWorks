@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            throw new ShippingException("No carrier is selected for the shipment.");
+            throw new NotImplementedException("You should be using the NoneLabelService");
         }
 
         /// <summary>
