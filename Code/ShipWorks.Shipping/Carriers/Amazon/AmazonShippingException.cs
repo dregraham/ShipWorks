@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         { }
 
         /// <summary>
-        /// Gets the erro code
+        /// Gets the error code
         /// </summary>
         public string Code { get; }
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 }
 
                 string lowerCaseCode = Code?.ToLower();
-                return errorTranslation.ContainsKey(lowerCaseCode) ?
+                return lowerCaseCode != null && errorTranslation.ContainsKey(lowerCaseCode) ?
                     errorTranslation[lowerCaseCode] :
                     message;
             }
@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 .Replace(
                     "failed to satisfy constraint: Member must have value greater than or equal to 0.001", "must be greater than 0.")
                 .Replace(
-                    "failed to satisfy constraint: Member must not be null", "cannnot be blank.")
+                    "failed to satisfy constraint: Member must not be null", "cannot be blank.")
                 .Replace("'", "")
                 .Trim();
 
