@@ -1,10 +1,13 @@
 ﻿using Autofac;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon
@@ -88,6 +91,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
 
             builder.RegisterType<AmazonAccountValidator>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<NullAccountRepository>()
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Amazon)
+                .SingleInstance();
+
+            builder.RegisterType<AmazonShipmentAdapter>()
+                .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Amazon)
+                .ExternallyOwned();
         }
     }
 }

@@ -39,6 +39,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly Func<IAmazonLabelService> amazonLabelServiceFactory;
 
         /// <summary>
+        /// Constructor for tests
+        /// </summary>
+        public AmazonShipmentType()
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public AmazonShipmentType(IDateTimeProvider dateTimeProvider,
