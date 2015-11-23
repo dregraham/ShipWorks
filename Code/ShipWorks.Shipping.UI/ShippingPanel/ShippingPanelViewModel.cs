@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             subscriptions = new CompositeDisposable(
                 shipmentChangedHandler.OfType<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
                 shipmentChangedHandler.OfType<StoreChangedMessage>().Subscribe(OnStoreChanged),
-                shipmentChangedHandler.OfType<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipmentAdapter.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
+                shipmentChangedHandler.OfType<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipmentAdapter?.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
                 shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
                 shipmentChangedHandler.ShipmentLoadedStream().Do(_ => AllowEditing = true).Subscribe(LoadOrder),
                 handler.Where(x => x == nameof(ShipmentType))
@@ -392,7 +392,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return;
             }
 
-            if (shipmentChangedMessage?.ShipmentAdapter?.Shipment == null || shipmentAdapter.Shipment == null)
+            if (shipmentChangedMessage?.ShipmentAdapter?.Shipment == null || shipmentAdapter?.Shipment == null)
             {
                 return;
             }
