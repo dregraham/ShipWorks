@@ -71,13 +71,25 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="orderList">The order list.</param>
         private void DownloadNewOrders(List<long> orderList)
         {
+            int expectedCount = orderList.Count;
+
             foreach (long orderID in orderList)
             {
                 YahooApiWebClient client = new YahooApiWebClient(Store as YahooStoreEntity);
 
                 YahooResponse response = DeserializeResponse<YahooResponse>(client.GetOrder(orderID));
 
+                // Set the progress detail
+                Progress.Detail = $"Processing order {QuantitySaved + 1} of {expectedCount} ...";
+                Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
+
                 LoadOrder(response.ResponseResourceList.OrderList.Order.FirstOrDefault());
+
+                // Check for cancellation
+                if (Progress.IsCancelRequested)
+                {
+                    return;
+                } 
             }
         }
 
@@ -94,21 +106,24 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 throw new YahooException($"Failed to instantiate order {order.OrderID}");
             }
 
-            orderEntity.OnlineStatusCode = order.StatusList.OrderStatus.Last().StatusID;
-            orderEntity.OnlineStatus = EnumHelper.GetDescription((YahooApiOrderStatus) int.Parse(orderEntity.OnlineStatusCode.ToString()));
-            orderEntity.RequestedShipping = $"{order.CartShipmentInfo.Shipper} {order.ShipMethod}";
-            orderEntity.OrderDate = ParseYahooDateTime(order.CreationTime);
-            orderEntity.OnlineLastModified = ParseYahooDateTime(order.LastUpdatedTime);
-            orderEntity.OrderNumber = order.OrderID;
-            orderEntity.YahooOrderID = order.OrderID.ToString();
+            if (orderEntity.IsNew)
+            {
+                orderEntity.OnlineStatusCode = order.StatusList.OrderStatus.Last().StatusID;
+                orderEntity.OnlineStatus = EnumHelper.GetDescription((YahooApiOrderStatus)int.Parse(orderEntity.OnlineStatusCode.ToString()));
+                orderEntity.RequestedShipping = $"{order.CartShipmentInfo.Shipper} {order.ShipMethod}";
+                orderEntity.OrderDate = ParseYahooDateTime(order.CreationTime);
+                orderEntity.OnlineLastModified = ParseYahooDateTime(order.LastUpdatedTime);
+                orderEntity.OrderNumber = order.OrderID;
+                orderEntity.YahooOrderID = order.OrderID.ToString();
 
-            LoadAddress(orderEntity, order);
-            LoadOrderItems(orderEntity, order);
-            LoadOrderTotals(orderEntity, order);
-            LoadOrderCharges(orderEntity, order);
-            LoadOrderGiftMessages(orderEntity, order);
-            LoadOrderNotes(orderEntity, order);
-            LoadOrderPayments(orderEntity, order);
+                LoadAddress(orderEntity, order);
+                LoadOrderItems(orderEntity, order);
+                LoadOrderTotals(orderEntity, order);
+                LoadOrderCharges(orderEntity, order);
+                LoadOrderGiftMessages(orderEntity, order);
+                LoadOrderNotes(orderEntity, order);
+                LoadOrderPayments(orderEntity, order); 
+            }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "YahooApiDownloader.LoadOrder");
             retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
@@ -131,7 +146,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             orderEntity.ShipStreet1 = order.ShipToInfo.AddressInfo.Address1;
             orderEntity.ShipStreet2 = order.ShipToInfo.AddressInfo.Address2;
             orderEntity.ShipCity = order.ShipToInfo.AddressInfo.City;
-            orderEntity.ShipCountryCode = Geography.GetCountryCode(order.ShipToInfo.AddressInfo.Country);
+            // Yahoo gives the country code followed by the country name, so split it and grab just the code
+            orderEntity.ShipCountryCode = Geography.GetCountryCode(order.ShipToInfo.AddressInfo.Country.Split(' ')[0]);
             orderEntity.ShipStateProvCode = Geography.GetStateProvCode(order.ShipToInfo.AddressInfo.State);
             orderEntity.ShipPostalCode = order.ShipToInfo.AddressInfo.Zip;
 
@@ -143,7 +159,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             orderEntity.BillStreet1 = order.BillToInfo.AddressInfo.Address1;
             orderEntity.BillStreet2 = order.BillToInfo.AddressInfo.Address2;
             orderEntity.BillCity = order.BillToInfo.AddressInfo.City;
-            orderEntity.BillCountryCode = Geography.GetCountryCode(order.BillToInfo.AddressInfo.Country);
+            orderEntity.BillCountryCode = Geography.GetCountryCode(order.ShipToInfo.AddressInfo.Country.Split(' ')[0]);
             orderEntity.BillStateProvCode = Geography.GetStateProvCode(order.BillToInfo.AddressInfo.State);
             orderEntity.BillPostalCode = order.BillToInfo.AddressInfo.Zip;
         }
@@ -233,10 +249,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             LoadOrderCharge(orderEntity, "SHIPPING", "Shipping", order.OrderTotals.Shipping);
             LoadOrderCharge(orderEntity, "TAX", "Tax", order.OrderTotals.Tax);
 
-            //if (order.OrderTotals.GiftWrap != 0)
-            //{
-            //    LoadOrderCharge(orderEntity, "GIFT WRAP", "Gift Wrap", order.OrderTotals.GiftWrap);
-            //}
+            if (order.OrderTotals.Coupon != 0)
+            {
+                LoadOrderCharge(orderEntity, "COUPON", "Coupon", order.OrderTotals.Coupon);
+            }
 
             List<YahooAppliedPromotion> promotions = order.OrderTotals?.Promotions?.AppliedPromotion;
 
@@ -382,6 +398,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             YahooApiWebClient client = new YahooApiWebClient(Store as YahooStoreEntity);
 
+            List<long> orders = new List<long>();
+
+            bool done = false;
 
             long nextOrderNumber = GetNextOrderNumber() - 1;
 
@@ -391,11 +410,28 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 nextOrderNumber = GetOrderNumberStartingPoint() + 1;
             }
 
-            string responseXml = client.GetOrderRange(nextOrderNumber);
+            while (!done)
+            {
+                string responseXml = client.GetOrderRange(nextOrderNumber);
 
-            YahooResponse response = DeserializeResponse<YahooResponse>(responseXml);
+                YahooResponse response = DeserializeResponse<YahooResponse>(responseXml);
 
-            return response?.ResponseResourceList?.OrderList?.Order?.Select(order => order.OrderID).ToList();
+                if (orders.Count != 0 && orders.Last() == nextOrderNumber)
+                {
+                    done = true;
+                    continue;
+                }
+
+                if (response != null)
+                {
+                    orders.AddRange(
+                        response.ResponseResourceList.OrderList.Order.Select(order => order.OrderID).ToList());
+                }
+
+                nextOrderNumber = orders.Last();
+            }
+
+            return orders;
         }
 
         private DateTime ParseYahooDateTime(string yahooDateTime)

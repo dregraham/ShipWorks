@@ -91,17 +91,16 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
         private HttpTextPostRequestSubmitter CreateGetOrderRangeRequest(long start)
         {
-            long end = start + OrdersPerPage;
             string body = RequestBodyIntro + GetRequestBodyIntro +
                           "<OrderListQuery>" +
                           "<Filter>" +
                           "<Include>status</Include>" +
                           "</Filter>" +
                           "<QueryParams>" +
-                          "<IntervalRange>" +
+                          "<CountedRange>" +
                           $"<Start>{start}</Start>" +
-                          $"<End>{end}</End>" +
-                          "</IntervalRange>" +
+                          $"<Count>{OrdersPerPage}</Count>" +
+                          "</CountedRange>" +
                           "</QueryParams>" +
                           "</OrderListQuery>" +
                           "</ResourceList>" +
@@ -181,7 +180,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
             {
                 Verb = HttpVerb.Post,
-                Uri = new Uri(yahooCatalogEndpoint + "/order")
+                Uri = new Uri(yahooOrderEndpoint + "/order")
             };
 
             return submitter;
@@ -202,7 +201,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
             {
                 Verb = HttpVerb.Post,
-                Uri = new Uri(yahooCatalogEndpoint + "/order")
+                Uri = new Uri(yahooOrderEndpoint + "/order")
             };
 
             return submitter;

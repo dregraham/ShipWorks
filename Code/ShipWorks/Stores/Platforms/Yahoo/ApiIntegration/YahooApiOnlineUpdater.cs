@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     return;
                 }
 
-                client.UploadOrderStatus(orderID.ToString(), status);
+                client.UploadOrderStatus(order.YahooOrderID, status);
 
                 // Update the local database with the new status
                 OrderEntity basePrototype = new OrderEntity(orderID)
@@ -98,7 +98,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 YahooOrderEntity order = (YahooOrderEntity)shipment.Order;
                 if (!order.IsManual)
                 {
-
                     client.UploadShipmentDetails(order.OrderNumber.ToString(), shipment.TrackingNumber, GetCarrierCode(shipment),
                         order.OnlineStatus);
                 }
@@ -115,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 throw new ArgumentNullException("shipment");
             }
 
-            LemonStandOrderEntity order = (LemonStandOrderEntity)shipment.Order;
+            YahooOrderEntity order = (YahooOrderEntity)shipment.Order;
 
             if (!order.IsManual)
             {
