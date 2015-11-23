@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// <summary>
     /// Manage label through Amazon
     /// </summary>
-    public class AmazonLabelService : IAmazonLabelService
+    public class AmazonLabelService : ILabelService
     {
         private readonly IOrderManager orderManager;
         private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;

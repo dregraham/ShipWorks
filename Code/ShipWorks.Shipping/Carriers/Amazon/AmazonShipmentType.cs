@@ -37,18 +37,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IShippingManager shippingManager;
         private readonly IEditionManager editionManager;
         private readonly IDateTimeProvider dateTimeProvider;
-        private readonly Func<IAmazonLabelService> amazonLabelServiceFactory;
         
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IDateTimeProvider dateTimeProvider, 
-            Func<IAmazonRatingService> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, 
-            IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager,
-            IEditionManager editionManager)
+        public AmazonShipmentType(IDateTimeProvider dateTimeProvider,Func<IAmazonRatingService> amazonRatesFactory, IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, IEditionManager editionManager)
         {
             this.amazonRatesFactory = amazonRatesFactory;
-            this.amazonLabelServiceFactory = amazonLabelServiceFactory;
             this.storeManager = storeManager;
             this.orderManager = orderManager;
             this.shippingManager = shippingManager;
@@ -110,14 +105,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Process the shipment
         /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment) =>
-            amazonLabelServiceFactory().Create(shipment);
-
+        public override void ProcessShipment(ShipmentEntity shipment)
+        {
+            throw new NotImplementedException("You should be using the ILabelService");
+        }
+          
         /// <summary>
         /// Void the shipment
         /// </summary>
-        public override void VoidShipment(ShipmentEntity shipment) =>
-            amazonLabelServiceFactory().Void(shipment);
+        public override void VoidShipment(ShipmentEntity shipment)
+        {
+            throw new NotImplementedException("You should be using the ILabelService");
+        }
 
         /// <summary>
         /// Create the XML input to the XSL engine

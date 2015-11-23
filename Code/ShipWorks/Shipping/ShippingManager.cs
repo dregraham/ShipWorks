@@ -1152,7 +1152,23 @@ namespace ShipWorks.Shipping
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
-                    shipmentType.ProcessShipment(shipment);
+                    
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        if(lifetimeScope.IsRegisteredWithKey<ILabelService>((ShipmentTypeCode)shipment.ShipmentType))
+                        {
+                            ILabelService labelService =
+                                lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
+
+                            labelService.Create(shipment);
+                        }
+                        else
+                        {
+                            // TODO: remove this once shipmenttype dot ProcessShipment is gone
+                            shipmentType.ProcessShipment(shipment);
+                        }
+                    }
+
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
 
                     if (IsInsuredByInsureShip(shipmentType, shipment))

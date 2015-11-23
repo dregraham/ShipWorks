@@ -1,11 +1,11 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.Amazon
+namespace ShipWorks.Shipping
 {
     /// <summary>
     /// Create Amazon labels
     /// </summary>
-    public interface IAmazonLabelService
+    public interface ILabelService
     {
         /// <summary>
         /// Create a label

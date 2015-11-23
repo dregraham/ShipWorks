@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .Keyed<ShippingProfileControlBase>(ShipmentTypeCode.Amazon);
 
             builder.RegisterType<AmazonLabelService>()
-                .AsImplementedInterfaces();
+                .Keyed<ILabelService>(ShipmentTypeCode.Amazon);
 
             builder.RegisterType<AmazonShipmentRequestDetailsFactory>()
                 .As<IAmazonShipmentRequestDetailsFactory>();
