@@ -58,8 +58,6 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<RatingPanel.RatingPanel>();
 
-            builder.RegisterType<RatingPanelViewModel>();
-
             builder.RegisterType<AddressViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 

@@ -116,8 +116,6 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterAssemblyModules(assemblies);
-
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
 
