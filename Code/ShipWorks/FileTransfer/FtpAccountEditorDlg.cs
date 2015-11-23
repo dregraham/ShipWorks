@@ -47,11 +47,8 @@ namespace ShipWorks.FileTransfer
             securityMethod.SelectedIndex = ftpAccount.SecurityType;
             previousSecurityType = security;
 
-            if (ftpAccount.ReuseControlConnectionSession != null)
-            {
-                reuseControlConnectionSession.Checked = (bool)ftpAccount.ReuseControlConnectionSession;
-            }
-
+            reuseControlConnectionSession.Checked = ftpAccount.ReuseControlConnectionSession.GetValueOrDefault();
+            
             transferMethod.SelectedIndex = ftpAccount.Passive ? 1 : 0;
             transferMethod.Enabled = security != FtpSecurityType.Sftp;
         }
