@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
 {
-    partial class YahooAccountPageHost
+    partial class YahooApiAccountPageHost
     {
         /// <summary> 
         /// Required designer variable.

@@ -17,5 +17,10 @@ namespace ShipWorks.Stores
         /// Get all stores, regardless of security, that are currently enabled for downloading and shipping
         /// </summary>
         IEnumerable<StoreEntity> GetEnabledStores();
+
+        /// <summary>
+        /// Get the store with the given ID.  If it does not exist, null is returned
+        /// </summary>
+        StoreEntity GetStore(long storeID);
     }
 }

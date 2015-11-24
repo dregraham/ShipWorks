@@ -10,11 +10,11 @@ using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
 {
-    public partial class YahooAccountPageHost : AddStoreWizardPage
+    public partial class YahooApiAccountPageHost : AddStoreWizardPage
     {
-        private YahooAccountSettingsViewModel viewModel;
+        private YahooApiAccountPageViewModel viewModel;
 
-        public YahooAccountPageHost()
+        public YahooApiAccountPageHost()
         {
             InitializeComponent();
             Load += OnPageLoad;
@@ -29,8 +29,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
         
         private void OnPageLoad(object sender, EventArgs e)
         {
-            viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<YahooAccountSettingsViewModel>>().Value;
-            YahooApiAccountSettings page = new YahooApiAccountSettings
+            viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<YahooApiAccountPageViewModel>>().Value;
+
+            YahooApiAccountPage page = new YahooApiAccountPage
             {
                 DataContext = viewModel
             };

@@ -115,7 +115,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             return new List<WizardPage>
                 {
-                    new YahooAccountPageHost()
+                    new YahooApiAccountPageHost()
                 };
         }
 

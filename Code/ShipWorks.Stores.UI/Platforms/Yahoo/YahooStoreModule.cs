@@ -7,7 +7,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<YahooAccountSettingsViewModel>();
+            builder.RegisterType<YahooApiAccountPageViewModel>();
         }
     }
 }

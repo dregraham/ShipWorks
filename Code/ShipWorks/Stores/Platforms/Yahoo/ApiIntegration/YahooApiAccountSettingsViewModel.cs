@@ -1,28 +1,26 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Net;
 using System.Reflection;
-using Interapptive.Shared.UI;
+using System.Text;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
+namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
-    public class YahooAccountSettingsViewModel : INotifyPropertyChanged
+    public class YahooApiAccountSettingsViewModel : INotifyPropertyChanged
     {
-        private readonly IStoreTypeManager storeTypeManager;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string yahooStoreID;
         private string accessToken;
-        private string helpUrl;
         private long backupOrderNumber;
 
-        public YahooAccountSettingsViewModel(IStoreTypeManager storeTypeManager)
+        public YahooApiAccountSettingsViewModel()
         {
-            this.storeTypeManager = storeTypeManager;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            YahooStoreType storeType = storeTypeManager.GetType(StoreTypeCode.Yahoo) as YahooStoreType;
-            HelpUrl = storeType?.AccountSettingsHelpUrl;
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);   
         }
 
         [Obfuscation(Exclude = true)]
@@ -38,14 +36,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
             get { return accessToken; }
             set { handler.Set(nameof(AccessToken), ref accessToken, value); }
         }
-
-        [Obfuscation(Exclude = true)]
-        public string HelpUrl
-        {
-            get { return helpUrl; }
-            set { handler.Set(nameof(HelpUrl), ref helpUrl, value); }
-        }
-
+        
         [Obfuscation(Exclude = true)]
         public long BackupOrderNumber
         {
@@ -53,9 +44,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
             set { handler.Set(nameof(BackupOrderNumber), ref backupOrderNumber, value); }
         }
 
-        public void Load(YahooStoreType store)
+        public void Load(YahooStoreEntity store)
         {
-            HelpUrl = store.AccountSettingsHelpUrl;
+            YahooStoreID = store.YahooStoreID;
+            AccessToken = store.AccessToken;
         }
 
         public string Save(YahooStoreEntity store)
@@ -63,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
             store.YahooStoreID = YahooStoreID;
             store.AccessToken = AccessToken;
             store.BackupOrderNumber = BackupOrderNumber;
-
+            
             if (string.IsNullOrEmpty(YahooStoreID))
             {
                 return "Please enter your Store URL";
@@ -75,12 +67,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
             }
 
             //todo: Check given order number
-            
+
             YahooApiWebClient client = new YahooApiWebClient(store);
+            YahooApiDownloader downloader = new YahooApiDownloader(store);
 
             try
             {
                 client.ValidateCredentials();
+                downloader.ForceDownload();
             }
             catch (WebException ex)
             {

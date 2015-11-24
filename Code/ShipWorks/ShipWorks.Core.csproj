@@ -1200,16 +1200,26 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooSelectedOptionList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooShipToInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooStatusList.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooAccountPageHost.cs">
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooAccountPageHost.Designer.cs">
-      <DependentUpon>YahooAccountPageHost.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.Designer.cs">
+      <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooAccountSettingsViewModel.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountSettings.xaml.cs">
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageViewModel.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml.cs">
+      <DependentUpon>YahooApiAccountPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettings.xaml.cs">
       <DependentUpon>YahooApiAccountSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.Designer.cs">
+      <DependentUpon>YahooApiAccountSettingsHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsViewModel.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiWebClient.cs" />
@@ -7804,8 +7814,11 @@
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooAccountPageHost.resx">
-      <DependentUpon>YahooAccountPageHost.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.resx">
+      <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.resx">
+      <DependentUpon>YahooApiAccountSettingsHost.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.resx">
       <DependentUpon>YahooEmailAccountPage.cs</DependentUpon>
@@ -11074,9 +11087,13 @@
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountSettings.xaml">
+    <Page Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

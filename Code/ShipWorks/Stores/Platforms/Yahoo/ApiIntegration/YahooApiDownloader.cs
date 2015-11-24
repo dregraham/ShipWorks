@@ -27,6 +27,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
         }
 
+        public void ForceDownload()
+        {
+            Download();
+        }
+
         /// <summary>
         /// Kicks off download for the store
         /// </summary>
@@ -37,6 +42,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             try
             {
                 List<long> orderList = CheckForNewOrders();
+
+                ((YahooStoreEntity) Store).BackupOrderNumber = null;
 
                 if (orderList == null)
                 {
@@ -396,7 +403,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <returns>List of order numbers to be downloaded</returns>
         private List<long> CheckForNewOrders()
         {
-            YahooApiWebClient client = new YahooApiWebClient(Store as YahooStoreEntity);
+            YahooStoreEntity store = Store as YahooStoreEntity;
+
+            YahooApiWebClient client = new YahooApiWebClient(store);
 
             List<long> orders = new List<long>();
 
@@ -404,31 +413,68 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             long nextOrderNumber = GetNextOrderNumber() - 1;
 
-            if (nextOrderNumber == 0)
+            long? backupNumber = store.BackupOrderNumber;
+
+            // This should only happen on the stores initial download
+            if (nextOrderNumber == 0 && backupNumber != null)
             {
-                //first DL
-                nextOrderNumber = GetOrderNumberStartingPoint() + 1;
+               nextOrderNumber = backupNumber.Value;
             }
 
+            int backupTries = 2;
             while (!done)
             {
                 string responseXml = client.GetOrderRange(nextOrderNumber);
 
                 YahooResponse response = DeserializeResponse<YahooResponse>(responseXml);
 
+                // If invalid start range error occurs try to use the backup order number.
+                // If it is not set, attempt to use the last 5 highest order numbers in ShipWorks.
+                // If none of those work, throw a download error telling the user to go to the 
+                // store settings and change the starting order number
+                if (response?.ErrorResourceList?.Error != null)
+                {
+                    if (backupNumber != null)
+                    {
+                        nextOrderNumber = backupNumber.Value;
+                        backupNumber = null;
+                        continue;
+                    }
+
+                    if (backupTries >= 7)
+                    {
+                        throw new DownloadException(
+                            "You either have no orders to download or need to set a new starting order number in store settings");
+                    }
+
+                    nextOrderNumber = GetNextOrderNumber() - backupTries;
+                    backupTries++;
+                    continue;
+                }
+
+
+                // check if the last order in the last after getting more orders is the same
+                // as the starting order number last used to retrieve orders. If so we know we
+                // have retrieved all of the orders.
                 if (orders.Count != 0 && orders.Last() == nextOrderNumber)
                 {
                     done = true;
                     continue;
                 }
 
+                // We know we haven't reached to end of the list, so add the list of orders just retrieved
+                // to the running list of orders to download.
                 if (response != null)
                 {
                     orders.AddRange(
                         response.ResponseResourceList.OrderList.Order.Select(order => order.OrderID).ToList());
                 }
 
+                // When the loop starts over, we want to use the last order number we retrieved
+                // as the starting order number for the next retrieval
                 nextOrderNumber = orders.Last();
+
+                backupNumber = null;
             }
 
             return orders;
@@ -467,10 +513,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
             catch (InvalidOperationException ex)
             {
-                if (xml.Contains("ErrorResponse"))
+                if (!xml.Contains("ErrorResourceList"))
                 {
-                    YahooErrorResourceList errorResponse = SerializationUtility.DeserializeFromXml<YahooErrorResourceList>(xml);
-                    throw new YahooException(errorResponse.Error.Message, ex);
+                    YahooResponse errorResponse = SerializationUtility.DeserializeFromXml<YahooResponse>(xml);
+
+                    foreach (YahooError error in errorResponse.ErrorResourceList.Error)
+                    {
+                        throw new YahooException(error.Message, ex);
+                    }
                 }
 
                 throw new YahooException($"Error Deserializing {typeof(T).Name}", ex);

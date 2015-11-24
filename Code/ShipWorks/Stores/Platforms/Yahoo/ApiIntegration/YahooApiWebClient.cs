@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -7,6 +8,7 @@ using Interapptive.Shared.Net;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
@@ -220,10 +222,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
         private string UpdateRequestBodyIntro => "<Verb>update</Verb>" +
                                               "<ResourceList>";
-        
+
         /// <summary>
-        ///     Executes a request
+        /// Executes a request
         /// </summary>
+        /// <param name="submitter">The submitter.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
         private static string ProcessRequest(HttpRequestSubmitter submitter, string action)
         {
             try
@@ -235,12 +240,27 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 {
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");
-                    
+
                     return responseData;
                 }
             }
             catch (Exception ex)
             {
+                WebException webEx = ex as WebException;
+
+                if (webEx?.Response?.GetResponseStream() != null)
+                {
+                    using (StreamReader reader = new StreamReader(webEx.Response.GetResponseStream()))
+                    {
+                        string response = reader.ReadToEnd();
+
+                        if (response.Contains("<Code>20021</Code>") || response.Contains("<Code>10402</Code>"))
+                        {
+                            return response;
+                        }
+                    }
+                }
+
                 throw WebHelper.TranslateWebException(ex, typeof(YahooException));
             }
         }
