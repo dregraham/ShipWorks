@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapter.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExUtilityWrapper.cs" />

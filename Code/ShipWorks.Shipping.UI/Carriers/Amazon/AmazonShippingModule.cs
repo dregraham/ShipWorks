@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Amazon;
@@ -99,6 +100,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<AmazonShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Amazon)
                 .ExternallyOwned();
+
+            builder.RegisterType<AmazonShipmentServicesBuilder>()
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Amazon)
+                .FindConstructorsWith(new NonDefaultConstructorFinder())
+                .SingleInstance();
         }
     }
 }

@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 shipmentChangedHandler.OfType<StoreChangedMessage>().Subscribe(OnStoreChanged),
                 shipmentChangedHandler.OfType<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipmentAdapter?.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
                 shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
-                shipmentChangedHandler.ShipmentLoadedStream().Do(_ => AllowEditing = true).Subscribe(LoadOrder),
+                shipmentChangedHandler.ShipmentLoadedStream().ObserveOnDispatcher().Do(_ => AllowEditing = true).Subscribe(LoadOrder),
                 handler.Where(x => x == nameof(ShipmentType))
                     .Where(x => !(shipmentAdapter.Shipment?.Processed ?? true))
                     .Subscribe(_ => {
@@ -79,6 +79,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
             Destination.IsAddressValidationEnabled = true;
+            ShipmentViewModel = shippingViewModelFactory.GetShipmentViewModel();
 
             // Wiring up observables needs objects to not be null, so do this last.
             WireUpObservables();
@@ -262,6 +263,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             DomesticInternationalText = "Domestic";
 
             SupportsMultiplePackages = shipmentAdapter.SupportsMultiplePackages;
+
+            ShipmentViewModel.Load(shipmentAdapter.Shipment);
         }
 
 #pragma warning disable S125 // Sections of code should not be "commented out"
