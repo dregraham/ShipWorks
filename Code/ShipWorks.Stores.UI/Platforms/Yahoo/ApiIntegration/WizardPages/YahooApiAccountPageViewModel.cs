@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Net;
+using System.Reactive.Linq;
 using System.Reflection;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -68,8 +69,12 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 
         public void Load(YahooStoreEntity storeEntity)
         {
-            store = storeEntity;
+            //store = storeEntity;
             HelpUrl = ((YahooStoreType) storeTypeManager.GetType(StoreTypeCode.Yahoo)).AccountSettingsHelpUrl;
+            handler.Where(x => x == nameof(BackupOrderNumber))
+                .Select(_ => storeWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID ,AccessToken =  AccessToken}).GetOrderRange(BackupOrderNumber))
+                .Select(x => x.Contains("<Code>20021</Code>") || x.Contains("<Code>10402</Code>") ? YahooOrderNumberValidation.Valid : YahooOrderNumberValidation.Invalid)
+                .Subscribe(x => IsValid = x);
         }
 
         public string Save(YahooStoreEntity store)
