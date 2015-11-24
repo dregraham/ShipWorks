@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Interapptive.Shared.Usb;
 using log4net;
 
@@ -10,17 +12,25 @@ namespace Interapptive.Shared.IO.Hardware.Scales
     /// </summary>
     public static class ScaleReader
     {
+        const int MaxScaleConnectionAttempts = 20;
+
         static readonly ILog log = LogManager.GetLogger(typeof(ScaleReader));
-        static readonly ScaleReadResult notFoundResult = new ScaleReadResult(ScaleReadStatus.NotFound, "Could not find a compatible scale, the scale is in motion, or the scale is being used by another application.");
+
+        static readonly ScaleReadResult unknownNotFoundResult = ScaleReadResult.NotFound(string.Empty);
+        static readonly ScaleReadResult serialScalesNotPolledResult =
+            ScaleReadResult.NotFound("Serial scales are not read during polling.");
+        static readonly ScaleReadResult notFoundResult = ScaleReadResult.NotFound(
+            "Could not find a compatible scale, the scale is in motion, or the scale is being used by another application.");
 
         static ScaleUsbReader usbReader;
         static ScaleSerialPortReader serialReader;
 
-        static volatile ScaleReadResult lastResult = notFoundResult;
+        static ScaleReadResult lastResult = notFoundResult;
 
         static object threadLock = new object();
-        private static readonly DeviceListener DeviceListener = new DeviceListener();
-        private const int MaxScaleConnectionAttempts = 20;
+        static readonly DeviceListener DeviceListener = new DeviceListener();
+
+        public static IObservable<ScaleReadResult> ReadEvents { get; }
 
         /// <summary>
         /// Static constructor
@@ -28,16 +38,19 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         static ScaleReader()
         {
             DeviceListener.DeviceChanged += OnDeviceListenerDeviceChanged;
-            SetUsbScale();
+
+            TaskEx.Run(() => SetUsbScale());
+
+            ReadEvents = Observable.Interval(TimeSpan.FromMilliseconds(250))
+                .Select(_ => ReadScale(true))
+                .DistinctUntilChanged()
+                .Publish().RefCount();
         }
 
         /// <summary>
         /// Attempt to set up a usb scale after a device was attached or configuration was changed
         /// </summary>
-        private static void OnDeviceListenerDeviceChanged(object sender, EventArgs e)
-        {
-            SetUsbScale();
-        }
+        private static void OnDeviceListenerDeviceChanged(object sender, EventArgs e) => SetUsbScale();
 
         /// <summary>
         /// Attempt to get a reference to a usb scale
@@ -82,8 +95,8 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                     }
                 }
 
-                log.DebugFormat("Scale {0} after {1} attempts", 
-                    usbReader == null ? "could not be attached" : "attached successfully", 
+                log.DebugFormat("Scale {0} after {1} attempts",
+                    usbReader == null ? "could not be attached" : "attached successfully",
                     currentAttempt);
             }
         }
@@ -91,18 +104,16 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// <summary>
         /// Read from any attached scale that can be found
         /// </summary>
-        public static ScaleReadResult ReadScale()
-        {
-            return ReadScale(false);
-        }
+        public static ScaleReadResult ReadScale() => ReadScale(false);
 
         /// <summary>
         /// Read from any attached scale that can be found
         /// </summary>
-        public static ScaleReadResult ReadScale(bool isPolling)
+        private static ScaleReadResult ReadScale(bool isPolling)
         {
-            // If we can't take the lock don't worry about it - we'll just immediately return whatever the most recent result was.   This prevents oodles of threads and UI from trying to 
-            // read all at the same time, and also prevents blocking (which was happening, and causing hangs
+            // If we can't take the lock don't worry about it - we'll just immediately return whatever the most recent result was.
+            // This prevents oodles of threads and UI from trying to read all at the same time,
+            // and also prevents blocking (which was happening, and causing hangs
             if (Monitor.TryEnter(threadLock))
             {
                 try
@@ -125,7 +136,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         {
             if (isPolling && serialReader != null)
             {
-                return new ScaleReadResult(ScaleReadStatus.NotFound, "Serial scales are not read during polling.");
+                return serialScalesNotPolledResult;
             }
 
             ScaleReadResult existingResult = ReadExisting();
@@ -157,7 +168,9 @@ namespace Interapptive.Shared.IO.Hardware.Scales
 
             // Read serial - but not as a background polling
             serialReader = new ScaleSerialPortReader();
-            ScaleReadResult serialResult = (!isPolling) ? serialReader.ReadScale() : new ScaleReadResult(ScaleReadStatus.NotFound, "Serial scales are not read during polling.");
+            ScaleReadResult serialResult = (!isPolling) ?
+                serialReader.ReadScale() :
+                serialScalesNotPolledResult;
 
             // Success, return result now
             if (serialResult.Status != ScaleReadStatus.NotFound)
@@ -175,23 +188,13 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         }
 
         /// <summary>
-        /// Read from an existing previously succesfull scale
+        /// Read from an existing previously successful scale
         /// </summary>
         private static ScaleReadResult ReadExisting()
         {
-            // Previously successful USB
-            if (usbReader != null)
-            {
-                return usbReader.ReadScale();
-            }
-
-            // Previously successful serial
-            if (serialReader != null)
-            {
-                return serialReader.ReadScale();
-            }
-
-            return new ScaleReadResult(ScaleReadStatus.NotFound, "");
+            return usbReader?.ReadScale() ??
+                serialReader?.ReadScale() ??
+                unknownNotFoundResult;
         }
     }
 }

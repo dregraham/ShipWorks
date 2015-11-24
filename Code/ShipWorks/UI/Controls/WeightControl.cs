@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.UI.Utility;
 using System.Text.RegularExpressions;
-using Interapptive.Shared;
-using Interapptive.Shared.Utility;
 using ShipWorks.Users;
 using System.Threading;
 using ShipWorks.ApplicationCore.Crashes;
-using System.Diagnostics;
 using ShipWorks.UI.Controls.Design;
 using Interapptive.Shared.IO.Hardware.Scales;
-using ShipWorks.Common.Threading;
 using Interapptive.Shared.Business;
 using System.Reflection;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace ShipWorks.UI.Controls
 {
@@ -56,7 +50,7 @@ namespace ShipWorks.UI.Controls
         // The last valid weight that was entered
         double currentWeight = 0.0;
 
-        // The last display we showed to the user.  Sometimes the display is a rounded (innacurate)
+        // The last display we showed to the user.  Sometimes the display is a rounded (inaccurate)
         // version of the actual.  This allows us to see if the display has not changed, and instead
         // of parsing it (the rounded version) we just keep the accurate version.
         string lastDisplay = "";
@@ -68,6 +62,7 @@ namespace ShipWorks.UI.Controls
         bool showWeighButton = true;
         private bool ignoreWeightChanges;
         const int weightButtonArea = 123;
+        private IDisposable scaleSubscription;
 
         // Raised whenever the value changes
         public event EventHandler WeightChanged;
@@ -99,11 +94,13 @@ namespace ShipWorks.UI.Controls
 
             liveWeight.Visible = false;
 
+            scaleSubscription?.Dispose();
+
             // Start the background thread that will monitor the current weight
-            Thread thread = new Thread(ExceptionMonitor.WrapThread(ThreadWeightMonitor));
-            thread.IsBackground = true;
-            thread.Name = "WeightMonitor";
-            thread.Start();
+            scaleSubscription = ScaleReader.ReadEvents
+                .TakeWhile(_ => !(Program.MainForm.Disposing || Program.MainForm.IsDisposed || CrashWindow.IsApplicationCrashed))
+                .ObserveOn(SynchronizationContext.Current)
+                .Subscribe(x => UpdateLiveWeight(x.Status == ScaleReadStatus.Success ? x.Weight : (double?)null));
         }
 
         /// <summary>
@@ -116,8 +113,8 @@ namespace ShipWorks.UI.Controls
         {
             get
             {
-                // Always return the currrent weight rather than the parsed weight since 
-                // the current weight will be the most precise (i.e. it is not impacted 
+                // Always return the current weight rather than the parsed weight since
+                // the current weight will be the most precise (i.e. it is not impacted
                 // by rounding for display purposes).
                 return currentWeight;
             }
@@ -134,7 +131,7 @@ namespace ShipWorks.UI.Controls
                         ClearError();
                     }
 
-                    FormatWeightText();   
+                    FormatWeightText();
                 }
             }
         }
@@ -169,7 +166,7 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Maxiumum allowed range
+        /// Maximum allowed range
         /// </summary>
         [Category("Appearance")]
         [DefaultValue(150)]
@@ -216,7 +213,7 @@ namespace ShipWorks.UI.Controls
                 }
             }
         }
-        
+
         /// <summary>
         /// Controls if the weigh button and live weight display is visible
         /// </summary>
@@ -224,9 +221,9 @@ namespace ShipWorks.UI.Controls
         [DefaultValue(true)]
         public bool ShowWeighButton
         {
-            get 
-            { 
-                return showWeighButton; 
+            get
+            {
+                return showWeighButton;
             }
             set
             {
@@ -252,14 +249,14 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Controls if the weight box is readonly or not
+        /// Controls if the weight box is read only or not
         /// </summary>
         [DefaultValue(false)]
         public bool ReadOnly
         {
-            get 
-            { 
-                return textBox.ReadOnly; 
+            get
+            {
+                return textBox.ReadOnly;
             }
             set
             {
@@ -270,8 +267,8 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Clear the contents of the weight control.  The content will remained clear until 
-        /// the user types something or the Weight propery is assigned.
+        /// Clear the contents of the weight control.  The content will remained clear until
+        /// the user types something or the Weight proper is assigned.
         /// </summary>
         [DefaultValue(false)]
         public bool Cleared
@@ -474,7 +471,7 @@ namespace ShipWorks.UI.Controls
         public static string FormatWeight(double weight, WeightDisplayFormat displayFormat)
         {
             string result;
-            
+
             if (displayFormat == WeightDisplayFormat.FractionalPounds)
             {
                 result = string.Format("{0:0.0#} lbs", weight);
@@ -492,11 +489,12 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Grab the weight from the scale
         /// </summary>
-        private void OnWeigh(object sender, EventArgs e)
+        private async void OnWeigh(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
+            weighButton.Enabled = false;
 
-            ScaleReadResult result = ScaleReader.ReadScale();
+            ScaleReadResult result = await TaskEx.Run(() => ScaleReader.ReadScale());
 
             if (result.Status == ScaleReadStatus.Success)
             {
@@ -513,13 +511,15 @@ namespace ShipWorks.UI.Controls
                 }
                 else
                 {
-                    FormatWeightText();   
+                    FormatWeightText();
                 }
             }
             else
             {
                 SetError(result.Message);
             }
+
+            weighButton.Enabled = true;
         }
 
         /// <summary>
@@ -541,7 +541,7 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Set the value of the curret weight to the given value.
+        /// Set the value of the current weight to the given value.
         /// </summary>
         private void SetCurrentWeight(double newWeight)
         {
@@ -587,41 +587,6 @@ namespace ShipWorks.UI.Controls
             }
 
  	        base.OnLeave(e);
-        }
-
-        /// <summary>
-        /// Background thread to monitor and poll for the current weight
-        /// </summary>
-        private void ThreadWeightMonitor()
-        {
-            ScaleReadResult lastResult = null;
-
-            while (true)
-            {
-                ScaleReadResult thisResult = ScaleReader.ReadScale(true);
-
-                // Quit when disposed or crashed
-                if (this.IsDisposed || this.Disposing || Program.MainForm.Disposing || Program.MainForm.IsDisposed || CrashWindow.IsApplicationCrashed)
-                {
-                    break;
-                }
-                
-                // Don't bother if nothing has changed or we arent visible
-                if (Visible && Program.MainForm.Visible && !object.Equals(lastResult, thisResult))
-                {
-                    bool keepGoing = (bool) Program.MainForm.Invoke(new Func<double?, bool>(UpdateLiveWeight), (thisResult.Status == ScaleReadStatus.Success) ? thisResult.Weight : (double?) null);
-
-                    if (!keepGoing)
-                    {
-                        break;
-                    }
-
-                    lastResult = thisResult;
-                }
-
-                // Poll frequency controlled by this
-                Thread.Sleep(250);
-            }
         }
 
         /// <summary>

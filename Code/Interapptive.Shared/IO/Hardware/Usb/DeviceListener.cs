@@ -33,9 +33,9 @@ namespace Interapptive.Shared.Usb
         /// </summary>
         void OnDeviceWatcherEventArrived(object sender, EventArrivedEventArgs e)
         {
-            if (sender == deviceWatcher && DeviceChanged != null)
+            if (sender == deviceWatcher)
             {
-                DeviceChanged(this, EventArgs.Empty);
+                DeviceChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -54,16 +54,18 @@ namespace Interapptive.Shared.Usb
         /// <param name="disposing">Is the object already being disposed?</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!disposing)
             {
-                if (deviceWatcher != null)
-                {
-                    // Disposing does not stop watching for events, so we need to manually do that
-                    deviceWatcher.Stop();
-                    deviceWatcher.EventArrived -= OnDeviceWatcherEventArrived;
-                    deviceWatcher.Dispose();
-                    deviceWatcher = null;
-                }
+                return;
+            }
+
+            if (deviceWatcher != null)
+            {
+                // Disposing does not stop watching for events, so we need to manually do that
+                deviceWatcher.Stop();
+                deviceWatcher.EventArrived -= OnDeviceWatcherEventArrived;
+                deviceWatcher.Dispose();
+                deviceWatcher = null;
             }
         }
     }
