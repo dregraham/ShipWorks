@@ -108,26 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
-                    PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
-
-                    if (PostalUtility.IsEntryFacilityRequired(serviceType))
-                    {
-                        anyRequireEntryFacility = true;
-                    }
-
-                    endiciaAccount.ApplyMultiValue(shipment.Postal.Endicia.EndiciaAccountID);
-
-                    hidePostage.ApplyMultiCheck(shipment.Postal.Endicia.StealthPostage);
-                    noPostage.ApplyMultiCheck(shipment.Postal.NoPostage);
-
-                    rubberStamp1.ApplyMultiText(shipment.Postal.Memo1);
-                    rubberStamp2.ApplyMultiText(shipment.Postal.Memo2);
-                    rubberStamp3.ApplyMultiText(shipment.Postal.Memo3);
-
-                    referenceID.ApplyMultiText(shipment.Postal.Endicia.ReferenceID);
-
-                    sortType.ApplyMultiValue((PostalSortType) shipment.Postal.SortType);
-                    entryFacility.ApplyMultiValue((PostalEntryFacility) shipment.Postal.EntryFacility);
+                    anyRequireEntryFacility = anyRequireEntryFacility || LoadShipment(shipment);
                 }
             }
 
@@ -138,6 +119,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
+        }
+
+        /// <summary>
+        /// Load a single shipment into the ui
+        /// </summary>
+        private bool LoadShipment(ShipmentEntity shipment)
+        {
+            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
+
+            endiciaAccount.ApplyMultiValue(shipment.Postal.Endicia.EndiciaAccountID);
+
+            hidePostage.ApplyMultiCheck(shipment.Postal.Endicia.StealthPostage);
+            noPostage.ApplyMultiCheck(shipment.Postal.NoPostage);
+
+            rubberStamp1.ApplyMultiText(shipment.Postal.Memo1);
+            rubberStamp2.ApplyMultiText(shipment.Postal.Memo2);
+            rubberStamp3.ApplyMultiText(shipment.Postal.Memo3);
+
+            referenceID.ApplyMultiText(shipment.Postal.Endicia.ReferenceID);
+
+            sortType.ApplyMultiValue((PostalSortType)shipment.Postal.SortType);
+            entryFacility.ApplyMultiValue((PostalEntryFacility)shipment.Postal.EntryFacility);
+
+            return PostalUtility.IsEntryFacilityRequired(serviceType);
         }
 
         /// <summary>
@@ -153,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Save the origin
             originControl.SaveToEntities();
 
-            // Save the 
+            // Save the
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 endiciaAccount.ReadMultiValue(v => shipment.Postal.Endicia.EndiciaAccountID = (long) v);

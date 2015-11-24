@@ -35,23 +35,19 @@ namespace ShipWorks.Stores.Platforms.osCommerce
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.osCommerce;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.osCommerce;
 
         /// <summary>
         /// Log request/responses as osCommerce
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.OSCommerce;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.OSCommerce;
+
+        /// <summary>
+        /// Gets or sets the account settings help URL.
+        /// </summary>
+        /// <value>
+        /// The account settings help URL.
+        /// </value>
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/129340";
     }
 }

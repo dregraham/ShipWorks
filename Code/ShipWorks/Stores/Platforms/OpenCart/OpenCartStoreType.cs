@@ -21,31 +21,16 @@ namespace ShipWorks.Stores.Platforms.OpenCart
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.OpenCart;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.OpenCart;
 
         /// <summary>
         /// Log request/responses as OpenCart
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.OpenCart;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.OpenCart;
 
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000022741-connecting-opencart-with"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000022741";
     }
 }

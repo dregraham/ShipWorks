@@ -153,7 +153,7 @@
             // 
             this.signatureTextBox.Location = new System.Drawing.Point(97, 54);
             this.signatureTextBox.Name = "signatureTextBox";
-            this.signatureTextBox.Size = new System.Drawing.Size(363, 21);
+            this.signatureTextBox.Size = new System.Drawing.Size(296, 21);
             this.signatureTextBox.TabIndex = 5;
             // 
             // signaturePasswordTextBox
@@ -208,6 +208,7 @@
             this.linkHelp.Size = new System.Drawing.Size(53, 13);
             this.linkHelp.TabIndex = 5;
             this.linkHelp.Text = "Click here";
+            this.linkHelp.Url = "http://www.interapptive.com/shipworks/help";
             // 
             // PayPalCredentialsControl
             // 
@@ -219,7 +220,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panelSignature);
             this.Controls.Add(this.panelCertificate);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(427, 142);
             this.Name = "PayPalCredentialsControl";
             this.Size = new System.Drawing.Size(479, 142);

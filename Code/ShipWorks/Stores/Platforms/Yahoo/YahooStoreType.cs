@@ -83,6 +83,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             }
         }
 
+       
         /// <summary>
         /// Gets or sets the account settings help URL.
         /// </summary>
@@ -243,6 +244,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
             executor.ExecuteAsync(UploadShipmentDetailsCallback, context.SelectedKeys, generatedEmail);
         }
+
+        
 
         /// <summary>
         /// The worker thread function that does the actual details uploading

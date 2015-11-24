@@ -17,6 +17,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages
         public YahooEmailAccountPage()
         {
             InitializeComponent();
+
+            linkHelp.Url = YahooStoreType.AccountSettingsHelpUrl;
         }
 
         /// <summary>

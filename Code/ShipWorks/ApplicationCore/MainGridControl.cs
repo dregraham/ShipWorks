@@ -88,11 +88,7 @@ namespace ShipWorks.ApplicationCore
         // Cached list of selected store keys.  So if it's asked for more than once and the selection hasn't changed,
         // we don't have to refigure it out
         List<long> selectedStoreKeys = null;
-        
-        // Keep track of the rows that are checked. this is only because the SandGrid has no way of removing 
-        // all of the checks at once, so that we dont have to loop through each row. 
-        private readonly List<GridRow> checkedRows = new List<GridRow>();
-
+ 
         /// <summary>
         /// Constructor
         /// </summary>
@@ -255,9 +251,6 @@ namespace ShipWorks.ApplicationCore
                         throw new InvalidOperationException("Cannot update ActiveFilterNode when there is no active grid.");
                     }
                 }
-
-                // Clear all of the checked rows
-                ClearCheckedRows();
             }
         }
 
@@ -433,7 +426,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Createa grid for the given filter target
+        /// Create a grid for the given filter target
         /// </summary>
         private FilterEntityGrid CreateGrid(FilterTarget target)
         {
@@ -447,7 +440,6 @@ namespace ShipWorks.ApplicationCore
             grid.StretchPrimaryGrid = false;
 
             grid.ColumnsReordered += OnColumnsReordered;
-            grid.AfterCheck += OnCheckChanged;
             grid.SelectionChanged += new SelectionChangedEventHandler(OnGridSelectionChanged);
             grid.SortChanged += new GridEventHandler(OnGridSortChanged);
             grid.KeyDown += new KeyEventHandler(OnGridKeyDown);
@@ -462,8 +454,12 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void OnColumnsReordered(object sender, EventArgs e)
         {
-            SaveGridColumnState();
-            ReloadGridColumns();
+            FilterEntityGrid grid = sender as FilterEntityGrid;
+            if (grid != null)
+            {
+                grid.SaveColumns();
+                grid.ReloadColumns();
+            }
         }
 
         /// <summary>
@@ -590,63 +586,18 @@ namespace ShipWorks.ApplicationCore
                 log.InfoFormat("Grid selection changed while not visible. ({0}, {1})", grid.Rows.Count, grid.Selection.Count);
                 return;
             }
-
-            ClearCheckedRows();
-            
-            // Check the rows that are selected 
-            if (e?.Grid != null)
-            {
-                foreach (GridRow row in e.Grid.SelectedElements)
-                {
-                    row.Checked = row.Selected;
-                    checkedRows.Add(row);
-                }
-            }
-            
+          
             RaiseSelectionChanged();
         }
 
         /// <summary>
-        /// Checkbox changed in grid
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnCheckChanged(object sender, GridRowCheckEventArgs e)
-        {
-            PagedEntityGrid grid = (PagedEntityGrid)sender;
-            if (!grid.Visible)
-            {
-                log.InfoFormat("Grid selection changed while not visible. ({0}, {1})", grid.Rows.Count, grid.Selection.Count);
-                return;
-            }
-
-            // Set the rows Selected status to the Rows checked status
-            e.Row.Selected = e.Row.Checked;
-            
-            // Keep track of all of the checked rows
-            if (e.Row.Checked)
-            {
-                checkedRows.Add(e.Row);
-            }
-            else
-            {
-                checkedRows.Remove(e.Row);
-            }
-            
-            RaiseSelectionChanged();
-        }
-
-        /// <summary>
-        /// Raise the even to notify that the selection and content of the grid has changed
+        /// Raise the event to notify that the selection and content of the grid has changed
         /// </summary>
         private void RaiseSelectionChanged()
         {
             selectedStoreKeys = null;
 
-            if (SelectionChanged != null)
-            {
-                SelectionChanged(this, EventArgs.Empty);
-            }
+            SelectionChanged?.Invoke(this, EventArgs.Empty);
         }
         
         /// <summary>
@@ -661,7 +612,6 @@ namespace ShipWorks.ApplicationCore
                 return;
             }
             
-            ClearCheckedRows();
             RaiseSortChanged();
         }
 
@@ -879,7 +829,6 @@ namespace ShipWorks.ApplicationCore
 
             ActiveGrid.ActiveFilterNode = searchProvider.SearchResultsNode;
             UpdateHeaderContent();
-            ClearCheckedRows();
             RaiseSelectionChanged();
         }
 
@@ -1025,19 +974,6 @@ namespace ShipWorks.ApplicationCore
         {
             AdvancedSearchVisible = true;
             filterEditor.LoadDefinition(definition);
-        }
-
-        /// <summary>
-        /// Uncheks the checked rows
-        /// </summary>
-        public void ClearCheckedRows()
-        {
-            // Clear all checked rows 
-            foreach (GridRow row in checkedRows)
-            {
-                row.Checked = false;
-            }
-            checkedRows.Clear();
         }
     }
 }

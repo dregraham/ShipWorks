@@ -219,8 +219,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
             else
             {
-                OnTracAccountEntity account = onTracAccount.SelectedIndex >= 0 ? 
-                    OnTracAccountManager.GetAccount((long) onTracAccount.SelectedValue) : 
+                OnTracAccountEntity account = onTracAccount.SelectedIndex >= 0 ?
+                    OnTracAccountManager.GetAccount((long) onTracAccount.SelectedValue) :
                     null;
 
                 if (account != null)

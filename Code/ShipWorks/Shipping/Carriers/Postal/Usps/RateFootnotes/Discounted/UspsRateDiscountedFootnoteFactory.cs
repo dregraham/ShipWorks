@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted
             this.originalRates = originalRates;
             this.discountedRates = discountedRates;
 
-            ShipmentType = shipmentType;
+            ShipmentTypeCode = shipmentType.ShipmentTypeCode;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted
         /// <summary>
         /// Gets the corresponding shipment type for the factory.
         /// </summary>
-        public ShipmentType ShipmentType { get; private set; }
+        public ShipmentTypeCode ShipmentTypeCode { get; private set; }
 
         /// <summary>
         /// Create an Express1 rate discounted control

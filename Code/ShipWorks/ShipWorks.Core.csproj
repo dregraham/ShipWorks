@@ -265,6 +265,22 @@
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Management" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net40\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Interfaces.2.2.5\lib\net40\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net40\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -686,10 +702,16 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
+    <Compile Include="Data\Connection\ISqlSession.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
+    <Compile Include="Data\DataResourceManagerWrapper.cs" />
+    <Compile Include="Data\IDataResourceManager.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
+    <Compile Include="Editions\EditionManagerWrapper.cs" />
+    <Compile Include="Editions\IEditionManager.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
     <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
@@ -786,6 +808,22 @@
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
     <Compile Include="Shipping\CarrierConfiguredMessage.cs" />
     <Compile Include="Shipping\Carriers\AccountManagerBase.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.Designer.cs">
+      <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedDialog.Designer.cs">
+      <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Amazon\AmazonShippingToken.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensions.cs" />
+    <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
+    <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />
@@ -823,7 +861,7 @@
     <Compile Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevelComparer.cs" />
-    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\IRateGroupFilter.cs" />
+    <Compile Include="Shipping\Editing\Rating\IRateGroupFilter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilter.cs" />
     <Compile Include="Shipping\Carriers\CarrierAccountRepositoryBase.cs" />
     <Compile Include="Shipping\Carriers\CarrierDescription.cs" />
@@ -1064,6 +1102,7 @@
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroup.cs" />
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroupShippingException.cs" />
     <Compile Include="Shipping\Editing\Rating\IRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Editing\Rating\RateAmountComponents.cs" />
     <Compile Include="Shipping\Editing\Rating\RateCache.cs" />
     <Compile Include="Shipping\Editing\Rating\InformationFootnoteControl.cs">
       <SubType>UserControl</SubType>
@@ -1114,6 +1153,7 @@
     <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shipping\IShipmentTypeManager.cs" />
     <Compile Include="Shipping\IShippingDialogInteraction.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />
@@ -1140,6 +1180,7 @@
     <Compile Include="Shipping\Settings\ShippingSettingsWrapper.cs" />
     <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
+    <Compile Include="Shipping\ShipmentTypeManagerWrapper.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
     <Compile Include="Stores\Content\IOrderUtility.cs" />
     <Compile Include="Stores\Content\OrderUtilityWrapper.cs" />
@@ -1148,13 +1189,17 @@
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonEarliestExpectedDeliveryDateCondition.cs" />
     <Compile Include="Stores\IStoreManager.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonIsPrimeCondition.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsConnection.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsIsPrime.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsResponseHandler.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
     <Compile Include="Stores\Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.Designer.cs">
+      <DependentUpon>ChannelAdvisorAmazonSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1167,6 +1212,8 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorClassificationCondition.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
@@ -1182,6 +1229,9 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCatalog.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCatalogItem.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCatalogItemList.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartWebClientApiCall.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartWebClientRequestThrottle.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartWebClientRequestThrottledException.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCustomField.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCustomFieldsList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooErrorResourceList.cs" />
@@ -1213,6 +1263,7 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsViewModel.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartWebClientThrottleWaitCancelException.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiWebClient.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOrderStatus.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooProductWeightCache.cs" />
@@ -7528,6 +7579,12 @@
       <SubType>Designer</SubType>
       <LastGenOutput>ShippingIcons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.resx">
+      <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedDialog.resx">
+      <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.resx">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -7798,6 +7855,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\EnumCheckboxControl.resx">
       <DependentUpon>EnumCheckboxControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.resx">
+      <DependentUpon>ChannelAdvisorAmazonSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorConsolidatorSettingsControl.cs</DependentUpon>
@@ -10429,13 +10489,15 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.4\4.4.1.5.sql" />
-    <Content Include="Data\Administration\Scripts\Update\4.7\4.7.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10888,9 +10950,9 @@
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\TrackingLink\settings.xml" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Notes\settings.xml" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Notes\template.xsl" />
-    <Content Include="Templates\Distribution\Source\System\Snippets\TrackingLink\template.xsl">
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\TrackingLink\template.xsl">
       <SubType>Designer</SubType>
-    </Content>
+    </EmbeddedResource>
     <Content Include="Templates\Distribution\Source\System\Utility\XML Source\settings.xml" />
     <Content Include="Templates\Distribution\Source\System\Utility\XML Source\template.xsl" />
     <EmbeddedResource Include="Templates\Management\Skeletons\snippet.xsl" />

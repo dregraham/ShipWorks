@@ -61,7 +61,7 @@ namespace ShipWorks.Editions
         /// <summary>
         /// The level, if any, that this is restrcited
         /// </summary>
-        public EditionRestrictionLevel Level
+        public virtual EditionRestrictionLevel Level
         {
             get { return level; }
         }

@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Create the settings control for USPS
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             UspsSettingsControl control = new UspsSettingsControl();
             control.Initialize(ShipmentTypeCode);
@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Create the UserControl used to handle USPS profiles
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new UspsProfileControl();
         }
@@ -714,7 +714,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // If we don't know the packaging or country, it doesn't matter
             if (!string.IsNullOrWhiteSpace(countryCode) && packaging != null)
             {
-                if (PostalUtility.IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
+                if (IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
                 {
                     return new List<PostalConfirmationType> { PostalConfirmationType.Delivery };
                 }
@@ -895,6 +895,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             bucket.Relations.Add(PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID);
 
             adapter.UpdateEntitiesDirectly(new UspsShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
+
+        /// <summary>
+        /// Returns a list of countries eligible for free international delivery confirmation.
+        /// </summary>
+        /// <returns></returns>
+        protected override List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
+        {
+            return base.CountriesEligibleForFreeInternationalDeliveryConfirmation().Union(new[] { "MX", "PL" }).ToList();
         }
     }
 }

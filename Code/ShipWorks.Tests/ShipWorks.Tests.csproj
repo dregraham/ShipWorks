@@ -111,6 +111,22 @@
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
@@ -195,6 +211,7 @@
     <Compile Include="Editions\ShipmentTypeFunctionalityTest.cs" />
     <Compile Include="Email\EmailExceptionTest.cs" />
     <Compile Include="ExcelDataAttribute.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\CarrierConditionTests.cs" />
     <Compile Include="Filters\Content\SqlGeneration\FilterSqlResultTest.cs" />
     <Compile Include="Interapptive.Shared\Business\GeographyTest.cs" />
     <Compile Include="Interapptive.Shared\Business\PersonUtilityTests.cs" />
@@ -211,6 +228,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresherTest.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensionsTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettingsTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventsDescriptionTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypesExtensionTest.cs" />
@@ -481,11 +499,18 @@
     <Compile Include="SqlServer\FilterTests.cs" />
     <Compile Include="Stores\Amazon\AmazonMwsResponseHandlerTest.cs" />
     <Compile Include="Stores\Amazon\AmazonMwsWebClientSettingsTest.cs" />
+    <Compile Include="Stores\Amazon\AmazonOrderItemEntityTest.cs" />
+    <Compile Include="Stores\Amazon\AmazonStoreEntityTest.cs" />
+    <Compile Include="Stores\Amazon\AmazonOrderEntityTest.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />
     <Compile Include="Stores\BigCommerce\BigCommerceProductImageCacheTest.cs" />
     <Compile Include="Stores\BrightPearl\BrightPearlUtilityTest.cs" />
     <Compile Include="Stores\BuyDotcom\BuyDotComOnlineUpdaterTest.cs" />
+    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOrderItemEntityTest.cs" />
+    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorStoreEntityTest.cs" />
+    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOrderEntityTest.cs" />
+    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorDownloaderTest.cs" />
     <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOnlineUpdaterTest.cs" />
     <Compile Include="Stores\eBay\EbayOnlineUpdaterTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />
@@ -578,6 +603,10 @@
     <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
       <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
       <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
+      <Project>{A5EB7A6B-1600-4BE2-AED6-3284C4E7987C}</Project>
+      <Name>ShipWorks.Shipping</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
       <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>

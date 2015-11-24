@@ -21,31 +21,16 @@ namespace ShipWorks.Stores.Platforms.LoadedCommerce
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.LoadedCommerce;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.LoadedCommerce;
 
         /// <summary>
         /// Log request/responses as LoadedCommerce
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.LoadedCommerce;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.LoadedCommerce;
 
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000044620-connecting-loadedcommerce"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000044620";
     }
 }

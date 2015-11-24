@@ -22,5 +22,15 @@ namespace ShipWorks.Stores
         /// Get the store with the given ID.  If it does not exist, null is returned
         /// </summary>
         StoreEntity GetStore(long storeID);
+
+        /// <summary>
+        /// Get the store for the related Shipment
+        /// </summary>
+        StoreEntity GetRelatedStore(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Saves the store.
+        /// </summary>
+        void SaveStore(StoreEntity store);
     }
 }
