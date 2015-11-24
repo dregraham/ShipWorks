@@ -119,13 +119,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 };
         }
 
-        public override InitialDownloadPolicy InitialDownloadPolicy
-            =>
-                new InitialDownloadPolicy(InitialDownloadRestrictionType.OrderNumber)
-                {
-                    DefaultStartingOrderNumber = 0
-                };
-        
         /// <summary>
         /// Create the identifier to uniquely identify the order
         /// </summary>

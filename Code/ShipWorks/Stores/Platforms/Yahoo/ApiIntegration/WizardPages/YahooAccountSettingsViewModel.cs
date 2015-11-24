@@ -15,6 +15,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
         private string yahooStoreID;
         private string accessToken;
         private string helpUrl;
+        private long backupOrderNumber;
 
         public YahooAccountSettingsViewModel(IStoreTypeManager storeTypeManager)
         {
@@ -45,6 +46,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
             set { handler.Set(nameof(HelpUrl), ref helpUrl, value); }
         }
 
+        [Obfuscation(Exclude = true)]
+        public long BackupOrderNumber
+        {
+            get { return backupOrderNumber; }
+            set { handler.Set(nameof(BackupOrderNumber), ref backupOrderNumber, value); }
+        }
+
         public void Load(YahooStoreType store)
         {
             HelpUrl = store.AccountSettingsHelpUrl;
@@ -54,6 +62,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
         {
             store.YahooStoreID = YahooStoreID;
             store.AccessToken = AccessToken;
+            store.BackupOrderNumber = BackupOrderNumber;
 
             if (string.IsNullOrEmpty(YahooStoreID))
             {
@@ -64,6 +73,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
             {
                 return "Please enter your Access Token";
             }
+
+            //todo: Check given order number
             
             YahooApiWebClient client = new YahooApiWebClient(store);
 

@@ -3867,7 +3867,8 @@ CREATE TABLE [dbo].[YahooStore]
 [YahooEmailAccountID] [bigint] NOT NULL,
 [TrackingUpdatePassword] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [YahooStoreID] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT '',
-[AccessToken] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT ''
+[AccessToken] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT '',
+[BackupOrderNumber] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_YahooStore] on [dbo].[YahooStore]'

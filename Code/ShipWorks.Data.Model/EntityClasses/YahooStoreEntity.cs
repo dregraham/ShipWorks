@@ -518,6 +518,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("AccessToken", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BackupOrderNumber", fieldHashtable);
 		}
 		#endregion
 
@@ -676,6 +679,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)YahooStoreFieldIndex.AccessToken, true); }
 			set	{ SetValue((int)YahooStoreFieldIndex.AccessToken, value); }
+		}
+
+		/// <summary> The BackupOrderNumber property of the Entity YahooStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "YahooStore"."BackupOrderNumber"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> BackupOrderNumber
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)YahooStoreFieldIndex.BackupOrderNumber, false); }
+			set	{ SetValue((int)YahooStoreFieldIndex.BackupOrderNumber, value); }
 		}
 
 

@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
 {
@@ -6,13 +7,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
     public class YahooErrorResourceList
     {
         [XmlElement(ElementName = "Error")]
-        public Error Error { get; set; }
+        public List<YahooError> Error { get; set; }
     }
 
-    public class Error
+    public class YahooError
     {
         [XmlElement(ElementName = "Code")]
-        public string Code { get; set; }
+        public long Code { get; set; }
         [XmlElement(ElementName = "Message")]
         public string Message { get; set; }
     }

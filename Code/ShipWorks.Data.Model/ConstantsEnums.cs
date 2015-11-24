@@ -10744,6 +10744,8 @@ namespace ShipWorks.Data.Model
 		YahooStoreID,
 		///<summary>AccessToken. </summary>
 		AccessToken,
+		///<summary>BackupOrderNumber. </summary>
+		BackupOrderNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
