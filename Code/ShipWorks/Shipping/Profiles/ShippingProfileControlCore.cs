@@ -66,6 +66,7 @@ namespace ShipWorks.Shipping.Profiles
             if (checkBox.Checked)
             {
                 ReadFieldValue(entity, field, dataControl);
+                OnStateCheckChanged(checkBox, EventArgs.Empty);
             }
         }
 
