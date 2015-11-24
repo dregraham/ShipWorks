@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using ShipWorks.AddressValidation;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -23,6 +24,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
             shipment = new ShipmentEntity()
             {
                 ShipmentTypeCode = ShipmentTypeCode.None,
+                ShipDate = new DateTime(2015, 11, 24, 10, 10, 10),
+                ContentWeight = 1,
+                TotalWeight = 1,
+                Insurance = true,
             };
 
             customsManager = new Mock<ICustomsManager>();
@@ -138,6 +143,48 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(0, testObject.UpdateDynamicData().Count);
+        }
+
+        [Fact]
+        public void SupportsPackageTypes_IsFalse()
+        {
+            ICarrierShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            Assert.False(testObject.SupportsPackageTypes);
+        }
+
+        [Fact]
+        public void ShipDate_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void ShipDate_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.ShipDate = testObject.ShipDate.AddDays(1);
+
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void UsingInsurance_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void UsingInsurance_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new NoneShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.UsingInsurance = !testObject.UsingInsurance;
+
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
         }
     }
 }

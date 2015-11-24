@@ -611,5 +611,25 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 Assert.Equal(ShippingAddressEditStateType.Processed, testObject.DestinationAddressEditableState);
             }
         }
+
+        [Fact]
+        public void Save_DelegatesToShipmentViewModelFactory_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                Mock<ShipmentViewModel> shipmentViewModel = new Mock<ShipmentViewModel>();
+
+                mock.Mock<IShippingViewModelFactory>()
+                    .SetupSequence(s => s.GetShipmentViewModel())
+                    .Returns(shipmentViewModel.Object)
+                    .Returns(new Mock<ShipmentViewModel>().Object);
+
+                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+                testObject.Save();
+
+                shipmentViewModel.Verify(x => x.Save(It.IsAny<ICarrierShipmentAdapter>()));
+            }
+        }
     }
 }

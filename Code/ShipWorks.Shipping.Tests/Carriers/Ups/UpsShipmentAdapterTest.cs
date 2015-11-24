@@ -3,7 +3,9 @@ using ShipWorks.Shipping.Carriers.UPS;
 using System;
 using System.Collections.Generic;
 using Moq;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Services;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Ups
@@ -22,7 +24,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
             shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = ShipmentTypeCode.UpsOnLineTools,
+                ShipDate = new DateTime(2015, 11, 24, 10, 10, 10),
+                ContentWeight = 1,
+                TotalWeight = 1,
+                Insurance = true,
                 Ups = new UpsShipmentEntity()
+                {
+                    Service = (int)UpsServiceType.Ups2DayAirAM
+                }
             };
 
             customsManager = new Mock<ICustomsManager>();
@@ -153,6 +162,66 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
+        }
+
+        [Fact]
+        public void SupportsPackageTypes_IsTrue()
+        {
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            Assert.True(testObject.SupportsPackageTypes);
+        }
+
+        [Fact]
+        public void ShipDate_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void ShipDate_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.ShipDate = testObject.ShipDate.AddDays(1);
+
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void UsingInsurance_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void UsingInsurance_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.UsingInsurance = !testObject.UsingInsurance;
+
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void ServiceType_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.Ups.Service, testObject.ServiceType);
+        }
+
+        [Fact]
+        public void ServiceType_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            shipment.Ups.Service = (int)UpsServiceType.UpsGround;
+            testObject.ServiceType = (int)UpsServiceType.Ups2DayAir;
+
+            Assert.Equal(shipment.Ups.Service, testObject.ServiceType);
         }
     }
 }

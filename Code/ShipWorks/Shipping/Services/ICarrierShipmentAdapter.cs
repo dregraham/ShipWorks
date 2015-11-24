@@ -45,5 +45,30 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         /// <returns>Dictionary of shipments and exceptions.</returns>
         IDictionary<ShipmentEntity, Exception> UpdateDynamicData();
+
+        /// <summary>
+        /// Does this shipment type support package Types?
+        /// </summary>
+        bool SupportsPackageTypes { get; }
+
+        /// <summary>
+        /// DateTime of the shipment
+        /// </summary>
+        DateTime ShipDate { get; set; }
+
+        /// <summary>
+        /// Total weight of the shipment
+        /// </summary>
+        double TotalWeight { get; }
+
+        /// <summary>
+        /// Is Insurance requested?
+        /// </summary>
+        bool UsingInsurance { get; set; }
+
+        /// <summary>
+        /// Service type selected
+        /// </summary>
+        int ServiceType { get; set; }
     }
 }

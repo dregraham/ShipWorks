@@ -12,14 +12,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentServicesBuilder : IShipmentServicesBuilder
     {
-        private readonly IAmazonRatingService amazonRatingService;
+        private readonly AmazonShipmentType amazonShipmentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonShipmentServicesBuilder"/> class.
         /// </summary>
-        public AmazonShipmentServicesBuilder(IAmazonRatingService amazonRatingService)
+        public AmazonShipmentServicesBuilder(AmazonShipmentType amazonShipmentType)
         {
-            this.amazonRatingService = amazonRatingService;
+            this.amazonShipmentType = amazonShipmentType;
         }
 
         /// <summary>
@@ -34,8 +34,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 return new Dictionary<int, string>();
             }
-            
-            RateGroup rateGroup = amazonRatingService.GetRates(shipment);
+
+            RateGroup rateGroup = amazonShipmentType.GetRates(shipment);
             
             int index = 0;
             return rateGroup.Rates.ToDictionary(s => index++, s => s.Description);

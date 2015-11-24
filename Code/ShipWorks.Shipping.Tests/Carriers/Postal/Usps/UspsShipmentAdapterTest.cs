@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using ShipWorks.AddressValidation;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -23,8 +25,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = ShipmentTypeCode.Usps,
+                ShipDate = new DateTime(2015, 11, 24, 10, 10, 10),
+                ContentWeight = 1,
+                TotalWeight = 1,
+                Insurance = true,
                 Postal = new PostalShipmentEntity
                 {
+                    Service = (int)PostalServiceType.FirstClass,
                     Usps = new UspsShipmentEntity()
                 }
             };
@@ -163,6 +170,66 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
+        }
+
+        [Fact]
+        public void SupportsPackageTypes_IsTrue()
+        {
+            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            Assert.True(testObject.SupportsPackageTypes);
+        }
+
+        [Fact]
+        public void ShipDate_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void ShipDate_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.ShipDate = testObject.ShipDate.AddDays(1);
+
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void UsingInsurance_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void UsingInsurance_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.UsingInsurance = !testObject.UsingInsurance;
+
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void ServiceType_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.Postal.Service, testObject.ServiceType);
+        }
+
+        [Fact]
+        public void ServiceType_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            shipment.Postal.Service = (int)PostalServiceType.FirstClass;
+            testObject.ServiceType = (int)PostalServiceType.ParcelSelect;
+
+            Assert.Equal(shipment.Postal.Service, testObject.ServiceType);
         }
     }
 }

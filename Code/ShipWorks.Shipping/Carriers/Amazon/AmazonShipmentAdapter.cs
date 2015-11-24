@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     {
         private readonly ShipmentEntity shipment;
         private readonly AmazonShipmentType shipmentType;
+        private int serviceType = 0;
 
         /// <summary>
         /// Constuctor
@@ -110,6 +111,46 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             IDictionary<ShipmentEntity, Exception> results = new Dictionary<ShipmentEntity, Exception>();
 
             return results;
+        }
+
+        /// <summary>
+        /// Does this shipment type support package Types?
+        /// </summary>
+        public bool SupportsPackageTypes => false;
+
+        /// <summary>
+        /// DateTime of the shipment
+        /// </summary>
+        public DateTime ShipDate 
+        {
+            get { return shipment.ShipDate; }
+            set { shipment.ShipDate = value; }
+        }
+
+        /// <summary>
+        /// Total weight of the shipment
+        /// </summary>
+        public double TotalWeight
+        {
+            get { return shipment.TotalWeight; }
+        }
+
+        /// <summary>
+        /// Is Insurance requested?
+        /// </summary>
+        public bool UsingInsurance
+        {
+            get { return shipment.Insurance; }
+            set { shipment.Insurance = value; }
+        }
+
+        /// <summary>
+        /// Service type selected
+        /// </summary>
+        public int ServiceType
+        {
+            get { return serviceType; }
+            set { serviceType = value; }
         }
     }
 }

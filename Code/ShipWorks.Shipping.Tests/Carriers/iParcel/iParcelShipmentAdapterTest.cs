@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using Moq;
 using Xunit;
 using System.Diagnostics.CodeAnalysis;
+using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Tests.Carriers.iParcel
 {
@@ -24,7 +26,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = ShipmentTypeCode.iParcel,
+                ShipDate = new DateTime(2015, 11, 24, 10, 10, 10),
+                ContentWeight = 1,
+                TotalWeight = 1,
+                Insurance = true,
                 IParcel = new IParcelShipmentEntity()
+                {
+                    Service = (int)iParcelServiceType.Immediate
+                }
             };
 
             customsManager = new Mock<ICustomsManager>();
@@ -149,6 +158,66 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
+        }
+
+        [Fact]
+        public void SupportsPackageTypes_IsFalse()
+        {
+            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            Assert.False(testObject.SupportsPackageTypes);
+        }
+
+        [Fact]
+        public void ShipDate_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void ShipDate_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.ShipDate = testObject.ShipDate.AddDays(1);
+
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void UsingInsurance_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void UsingInsurance_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.UsingInsurance = !testObject.UsingInsurance;
+
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void ServiceType_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.IParcel.Service, testObject.ServiceType);
+        }
+
+        [Fact]
+        public void ServiceType_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            shipment.IParcel.Service = (int)iParcelServiceType.Immediate;
+            testObject.ServiceType = (int)iParcelServiceType.Preferred;
+
+            Assert.Equal(shipment.IParcel.Service, testObject.ServiceType);
         }
     }
 }

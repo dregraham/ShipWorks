@@ -11,6 +11,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services.Builders;
 using System.Reactive.Linq;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -21,7 +22,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     {
         private DateTime shipDate;
         private double totalWeight;
-        private bool insurance;
+        private bool usingInsurance;
         private int serviceType;
         private readonly IRateSelectionFactory rateSelectionFactory;
         private readonly IDisposable subscription;
@@ -78,38 +79,38 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         [Obfuscation(Exclude = true)]
-        public bool Insurance
+        public bool UsingInsurance
         {
-            get { return insurance; }
-            set { handler.Set(nameof(Insurance), ref insurance, value); }
+            get { return usingInsurance; }
+            set { handler.Set(nameof(UsingInsurance), ref usingInsurance, value); }
         }
 
         [Obfuscation(Exclude = true)]
         public int ServiceType
         {
             get { return serviceType; }
-            set { handler.Set(nameof(ServiceType), ref serviceType, value); }
+            set { handler.Set(nameof(ServiceType), ref serviceType, value, true); }
         }
 
         /// <summary>
         /// Load the shipment
         /// </summary>
-        public virtual void Load(ShipmentEntity shipment)
+        public virtual void Load(ICarrierShipmentAdapter shipmentAdapter)
         {
-            ShipDate = shipment.ShipDate;
-            TotalWeight = shipment.TotalWeight;
-            Insurance = shipment.Insurance;
-            RefreshServiceTypes(shipment);
-            RefreshPackageTypes(shipment);
+            ShipDate = shipmentAdapter.ShipDate;
+            TotalWeight = shipmentAdapter.TotalWeight;
+            UsingInsurance = shipmentAdapter.UsingInsurance;
+            RefreshServiceTypes(shipmentAdapter);
+            RefreshPackageTypes(shipmentAdapter);
         }
 
         /// <summary>
         /// Refreshes the shipment types.
         /// </summary>
-        public virtual void RefreshServiceTypes(ShipmentEntity shipment)
+        public virtual void RefreshServiceTypes(ICarrierShipmentAdapter shipmentAdapter)
         {
-            Dictionary<int, string> services = shipmentServicesBuilderFactory.Get(shipment.ShipmentTypeCode)
-                .BuildServiceTypeDictionary(new [] { shipment });
+            Dictionary<int, string> services = shipmentServicesBuilderFactory.Get(shipmentAdapter.ShipmentTypeCode)
+                .BuildServiceTypeDictionary(new [] { shipmentAdapter.Shipment });
 
             Services.Clear();
 
@@ -117,31 +118,34 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 Services.Add(entry);
             }
+
+            ServiceType = shipmentAdapter.ServiceType;
         }
 
         /// <summary>
         /// Refreshes the package types.
         /// </summary>
-        public virtual void RefreshPackageTypes(ShipmentEntity shipment)
+        public virtual void RefreshPackageTypes(ICarrierShipmentAdapter shipmentAdapter)
         {
-            Dictionary<int, string> packageTypes = shipmentPackageBuilderFactory.Get(shipment.ShipmentTypeCode)
-                   .BuildPackageTypeDictionary(new[] { shipment });
+            //Dictionary<int, string> packageTypes = shipmentPackageBuilderFactory.Get(shipmentAdapter.ShipmentTypeCode)
+            //       .BuildPackageTypeDictionary(new[] { shipmentAdapter.Shipment });
 
-            Packages.Clear();
-            foreach (KeyValuePair<int, string> entry in packageTypes)
-            {
-                Packages.Add(entry);
-            }
+            //Packages.Clear();
+            //foreach (KeyValuePair<int, string> entry in packageTypes)
+            //{
+            //    Packages.Add(entry);
+            //}
         }
 
         /// <summary>
         /// Save UI values to the shipment
         /// </summary>
-        public virtual void Save(ShipmentEntity shipment)
+        public virtual void Save(ICarrierShipmentAdapter shipmentAdapter)
         {
-            shipment.ShipDate = ShipDate;
-            shipment.TotalWeight = TotalWeight;
-            shipment.Insurance = Insurance;
+            shipmentAdapter.ShipDate = ShipDate;
+            //shipmentAdapter.TotalWeight = TotalWeight;
+            shipmentAdapter.UsingInsurance = UsingInsurance;
+            shipmentAdapter.ServiceType = ServiceType;
         }
 
         /// <summary>

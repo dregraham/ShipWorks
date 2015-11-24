@@ -8,6 +8,8 @@ using ShipWorks.Tests.Shared;
 using Xunit;
 using Autofac;
 using Autofac.Extras.Moq;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
 {
@@ -25,8 +27,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
             shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = ShipmentTypeCode.Endicia,
+                ShipDate = new DateTime(2015, 11, 24, 10, 10, 10),
+                ContentWeight = 1,
+                TotalWeight = 1,
+                Insurance = true,
                 Postal = new PostalShipmentEntity
                 {
+                    Service = (int)PostalServiceType.FirstClass,
                     Endicia = new EndiciaShipmentEntity()
                 }
             };
@@ -171,6 +178,66 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
+        }
+
+        [Fact]
+        public void SupportsPackageTypes_IsTrue()
+        {
+            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            Assert.True(testObject.SupportsPackageTypes);
+        }
+
+        [Fact]
+        public void ShipDate_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void ShipDate_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.ShipDate = testObject.ShipDate.AddDays(1);
+
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void UsingInsurance_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void UsingInsurance_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.UsingInsurance = !testObject.UsingInsurance;
+
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void ServiceType_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.Postal.Service, testObject.ServiceType);
+        }
+
+        [Fact]
+        public void ServiceType_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            shipment.Postal.Service = (int)PostalServiceType.FirstClass;
+            testObject.ServiceType = (int)PostalServiceType.ParcelSelect;
+
+            Assert.Equal(shipment.Postal.Service, testObject.ServiceType);
         }
     }
 }

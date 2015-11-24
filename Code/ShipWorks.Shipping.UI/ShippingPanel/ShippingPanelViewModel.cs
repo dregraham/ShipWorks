@@ -264,7 +264,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             SupportsMultiplePackages = shipmentAdapter.SupportsMultiplePackages;
 
-            ShipmentViewModel.Load(shipmentAdapter.Shipment);
+            ShipmentViewModel.Load(shipmentAdapter);
         }
 
 #pragma warning disable S125 // Sections of code should not be "commented out"
@@ -300,6 +300,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.SaveToEntity(shipmentAdapter.Shipment.OriginPerson);
             Destination.SaveToEntity(shipmentAdapter.Shipment.ShipPerson);
 
+            ShipmentViewModel.Save(shipmentAdapter);
+
             IDictionary<ShipmentEntity, Exception> errors = shipmentAdapter.UpdateDynamicData();
             DisplayError(errors);
         }
@@ -325,12 +327,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Updates the services.
         /// </summary>
-        private void UpdateServices() => ShipmentViewModel.RefreshServiceTypes(shipmentAdapter.Shipment);
+        private void UpdateServices() => ShipmentViewModel.RefreshServiceTypes(shipmentAdapter);
 
         /// <summary>
         /// Updates the packages.
         /// </summary>
-        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(shipmentAdapter.Shipment);
+        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(shipmentAdapter);
 
         /// <summary>
         /// Enables the need to update packages.

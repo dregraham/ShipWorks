@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Moq;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Services;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
@@ -20,7 +21,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = ShipmentTypeCode.Amazon,
+                ShipDate = new DateTime(2015, 11, 24, 10, 10, 10),
+                ContentWeight = 1,
+                TotalWeight = 1,
+                Insurance = true,
                 Amazon = new AmazonShipmentEntity()
+                {
+                    ShippingServiceID = "FEDEX_PTP_PRIORITY_OVERNIGHT"
+                }
             };
 
             shipmentTypeMock = new Mock<AmazonShipmentType>(MockBehavior.Strict);
@@ -128,6 +136,48 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(0, testObject.UpdateDynamicData().Count);
+        }
+
+        [Fact]
+        public void SupportsPackageTypes_IsFalse()
+        {
+            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+
+            Assert.False(testObject.SupportsPackageTypes);
+        }
+
+        [Fact]
+        public void ShipDate_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void ShipDate_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+
+            testObject.ShipDate = testObject.ShipDate.AddDays(1);
+
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void UsingInsurance_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void UsingInsurance_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+
+            testObject.UsingInsurance = !testObject.UsingInsurance;
+
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
         }
     }
 }

@@ -107,5 +107,45 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             return customsManager.EnsureCustomsLoaded(new[] { shipment });
         }
+
+        /// <summary>
+        /// Does this shipment type support package Types?
+        /// </summary>
+        public bool SupportsPackageTypes => true;
+
+        /// <summary>
+        /// DateTime of the shipment
+        /// </summary>
+        public DateTime ShipDate
+        {
+            get { return shipment.ShipDate; }
+            set { shipment.ShipDate = value; }
+        }
+
+        /// <summary>
+        /// Total weight of the shipment
+        /// </summary>
+        public double TotalWeight
+        {
+            get { return shipment.TotalWeight; }
+        }
+
+        /// <summary>
+        /// Is Insurance requested?
+        /// </summary>
+        public bool UsingInsurance
+        {
+            get { return shipment.Insurance; }
+            set { shipment.Insurance = value; }
+        }
+
+        /// <summary>
+        /// Service type selected
+        /// </summary>
+        public int ServiceType
+        {
+            get { return shipment.Postal.Service; }
+            set { shipment.Postal.Service = value; }
+        }
     }
 }

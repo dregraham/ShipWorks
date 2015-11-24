@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using ShipWorks.AddressValidation;
+using ShipWorks.Shipping.Carriers.OnTrac.Enums;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -23,7 +25,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
             shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = ShipmentTypeCode.OnTrac,
+                ShipDate = new DateTime(2015, 11, 24, 10, 10, 10),
+                ContentWeight = 1,
+                TotalWeight = 1,
+                Insurance = true,
                 OnTrac = new OnTracShipmentEntity()
+                {
+                    Service = (int)OnTracServiceType.Ground
+                }
             };
 
             customsManager = new Mock<ICustomsManager>();
@@ -154,6 +163,66 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
+        }
+
+        [Fact]
+        public void SupportsPackageTypes_IsTrue()
+        {
+            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            Assert.True(testObject.SupportsPackageTypes);
+        }
+
+        [Fact]
+        public void ShipDate_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void ShipDate_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.ShipDate = testObject.ShipDate.AddDays(1);
+
+            Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void UsingInsurance_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void UsingInsurance_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            testObject.UsingInsurance = !testObject.UsingInsurance;
+
+            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
+        }
+
+        [Fact]
+        public void ServiceType_ReturnsShipmentValue()
+        {
+            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            Assert.Equal(shipment.OnTrac.Service, testObject.ServiceType);
+        }
+
+        [Fact]
+        public void ServiceType_IsUpdated()
+        {
+            ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+
+            shipment.OnTrac.Service = (int)OnTracServiceType.Sunrise;
+            testObject.ServiceType = (int)OnTracServiceType.SunriseGold;
+
+            Assert.Equal(shipment.OnTrac.Service, testObject.ServiceType);
         }
     }
 }

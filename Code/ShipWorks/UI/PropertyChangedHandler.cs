@@ -47,9 +47,17 @@ namespace ShipWorks.Core.UI
         /// </summary>
         public bool Set<T>(string name, ref T field, T value)
         {
+            return Set(name, ref field, value, false);
+        }
+
+        /// <summary>
+        /// Set the value of a field for a property
+        /// </summary>
+        public bool Set<T>(string name, ref T field, T value, bool forceRaisePropertyChanged)
+        {
             lock (lockObject)
             {
-                if (Equals(field, value))
+                if (!forceRaisePropertyChanged && Equals(field, value))
                 {
                     return false;
                 }
