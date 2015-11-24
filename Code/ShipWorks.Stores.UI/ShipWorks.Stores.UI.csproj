@@ -47,6 +47,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
@@ -63,11 +65,14 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
@@ -98,7 +103,18 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml.cs">
+      <DependentUpon>YahooApiAccountPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.Designer.cs">
+      <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageViewModel.cs" />
     <Compile Include="Platforms\Yahoo\YahooStoreModule.cs" />
+    <Compile Include="Platforms\Yahoo\YahooOrderNumberValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreModule.cs" />
   </ItemGroup>
@@ -114,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.resx">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.resx">
+      <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +156,10 @@
       <Project>{c53624d5-5b3b-48a6-9729-52a573726de9}</Project>
       <Name>ShipWorks.Stores</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
+      <Project>{1f6a1dc6-dd72-4279-8747-6789f83711ff}</Project>
+      <Name>ShipWorks.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
       <Name>ShipWorks.Core</Name>
@@ -146,6 +169,13 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

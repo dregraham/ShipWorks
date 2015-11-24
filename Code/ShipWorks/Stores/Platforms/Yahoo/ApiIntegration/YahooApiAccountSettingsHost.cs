@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Features.OwnedInstances;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
-    public partial class YahooApiAccountSettingsHost : UserControl
+    public partial class YahooApiAccountSettingsHost : AccountSettingsControlBase
     {
         private YahooApiAccountSettingsViewModel viewModel;
 
+        public YahooStoreEntity Store { get; set; }
 
         public YahooApiAccountSettingsHost()
         {
@@ -31,6 +28,20 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 DataContext = viewModel
             };
             ControlHost.Child = page;
+
+            viewModel.Load(Store);
+        }
+        
+        public override void LoadStore(StoreEntity store)
+        {
+            Store = store as YahooStoreEntity;
+        }
+
+        public override bool SaveToEntity(StoreEntity store)
+        {
+            string message = viewModel.Save(store as YahooStoreEntity);
+
+            return message.Equals(string.Empty);
         }
     }
 }

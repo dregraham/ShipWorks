@@ -1,25 +1,31 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Net;
 using System.Reflection;
-using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Yahoo;
+using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
 
-namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
+namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 {
     public class YahooApiAccountPageViewModel : INotifyPropertyChanged
     {
         private readonly IStoreTypeManager storeTypeManager;
+        private readonly Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string yahooStoreID;
         private string accessToken;
         private string helpUrl;
         private long backupOrderNumber;
+        private YahooStoreEntity store;
+        private YahooOrderNumberValidation isValid;
 
-        public YahooApiAccountPageViewModel(IStoreTypeManager storeTypeManager)
+        public YahooApiAccountPageViewModel(IStoreTypeManager storeTypeManager, Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient)
         {
             this.storeTypeManager = storeTypeManager;
+            this.storeWebClient = storeWebClient;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             YahooStoreType storeType = storeTypeManager.GetType(StoreTypeCode.Yahoo) as YahooStoreType;
             HelpUrl = storeType?.AccountSettingsHelpUrl;
@@ -53,9 +59,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
             set { handler.Set(nameof(BackupOrderNumber), ref backupOrderNumber, value); }
         }
 
-        public void Load(YahooStoreType store)
+        [Obfuscation(Exclude = true)]
+        public YahooOrderNumberValidation IsValid
         {
-            HelpUrl = store.AccountSettingsHelpUrl;
+            get { return isValid; }
+            set { handler.Set(nameof(IsValid), ref isValid, value); }
+        }
+
+        public void Load(YahooStoreEntity storeEntity)
+        {
+            store = storeEntity;
+            HelpUrl = ((YahooStoreType) storeTypeManager.GetType(StoreTypeCode.Yahoo)).AccountSettingsHelpUrl;
         }
 
         public string Save(YahooStoreEntity store)
@@ -64,20 +78,25 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
             store.AccessToken = AccessToken;
             store.BackupOrderNumber = BackupOrderNumber;
 
-            if (string.IsNullOrEmpty(YahooStoreID))
+            if (string.IsNullOrWhiteSpace(YahooStoreID))
             {
                 return "Please enter your Store URL";
             }
 
-            if (string.IsNullOrEmpty(AccessToken))
+            if (string.IsNullOrWhiteSpace(AccessToken))
             {
                 return "Please enter your Access Token";
             }
 
-            //todo: Check given order number
-            
-            YahooApiWebClient client = new YahooApiWebClient(store);
+            IYahooApiWebClient client = storeWebClient(store);
 
+            string response = client.GetOrderRange(BackupOrderNumber);
+
+            if (response.Contains("<Code>20021</Code>") || response.Contains("<Code>10402</Code>"))
+            {
+                //show invalid order number warning
+            }
+            
             try
             {
                 client.ValidateCredentials();
@@ -89,5 +108,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
 
             return string.Empty;
         }
+
+        
     }
 }

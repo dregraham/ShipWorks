@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             try
             {
                 client.ValidateCredentials();
-                downloader.ForceDownload();
+                //downloader.ForceDownload();
             }
             catch (WebException ex)
             {

@@ -1,17 +1,16 @@
 ﻿using System.Diagnostics;
 using System.Windows.Navigation;
 
-namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
+namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 {
     /// <summary>
     /// Interaction logic for YahooApiAccountSettings.xaml
     /// </summary>
-    public partial class YahooApiAccountSettings 
+    public partial class YahooApiAccountPage
     {
-        public YahooApiAccountSettings()
+        public YahooApiAccountPage()
         {
             InitializeComponent();
-            
         }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)

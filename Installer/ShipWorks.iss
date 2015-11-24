@@ -96,6 +96,7 @@ Source: {#AppArtifacts}\ShipWorks.Shipping.UI.dll; DestDir: {app}; Flags: overwr
 Source: {#AppArtifacts}\ShipWorks.Stores.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Stores.UI.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.ThirdPartyApi.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\ShipWorks.UI.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Interapptive.Shared.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Divelements.SandRibbon.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Divelements.SandGrid.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion

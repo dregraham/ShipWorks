@@ -8,7 +8,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
+namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 {
     public partial class YahooApiAccountPageHost : AddStoreWizardPage
     {
@@ -18,15 +18,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
         {
             InitializeComponent();
             Load += OnPageLoad;
-            SteppingInto += OnSteppingInto;
             StepNext += OnStepNext;
         }
 
-        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
-        {
-            //viewModel.Load();
-        }
-        
         private void OnPageLoad(object sender, EventArgs e)
         {
             viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<YahooApiAccountPageViewModel>>().Value;

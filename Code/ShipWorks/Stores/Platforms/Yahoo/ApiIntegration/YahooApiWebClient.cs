@@ -12,7 +12,7 @@ using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
-    public class YahooApiWebClient
+    public class YahooApiWebClient : IYahooApiWebClient
     {
         private string yahooStoreID;
         private string token;

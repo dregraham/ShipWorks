@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using Quartz.Util;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email.Accounts;
 using ShipWorks.UI.Wizard;
@@ -25,7 +27,6 @@ using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
 
@@ -115,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             return new List<WizardPage>
                 {
-                    new YahooApiAccountPageHost()
+                    IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<WizardPage>(StoreTypeCode.Yahoo)
                 };
         }
 
@@ -163,6 +164,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
+            YahooStoreEntity store = (YahooStoreEntity)Store;
+
+            if (store.YahooStoreID != "")
+            {
+                return new YahooApiAccountSettingsHost();
+            }
+
             return new YahooEmailAccountSettingsControl();
         }
 
@@ -171,6 +179,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override StoreSettingsControlBase CreateStoreSettingsControl()
         {
+            YahooStoreEntity store = (YahooStoreEntity)Store;
+
+            if (store.YahooStoreID != "")
+            {
+                return new StoreSettingsControlBase();
+            }
             return new YahooEmailStoreSettingsControl();
         }
 

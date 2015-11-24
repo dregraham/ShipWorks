@@ -60,6 +60,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 {
                     Progress.Detail = "Downloading new orders...";
                     DownloadNewOrders(orderList);
+
+                    StoreManager.SaveStore(Store);
                 }
             }
             catch (YahooException ex)
@@ -413,7 +415,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             long nextOrderNumber = GetNextOrderNumber() - 1;
 
-            long? backupNumber = store.BackupOrderNumber;
+            long? backupNumber = store?.BackupOrderNumber;
 
             // This should only happen on the stores initial download
             if (nextOrderNumber == 0 && backupNumber != null)
@@ -427,31 +429,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 string responseXml = client.GetOrderRange(nextOrderNumber);
 
                 YahooResponse response = DeserializeResponse<YahooResponse>(responseXml);
-
-                // If invalid start range error occurs try to use the backup order number.
-                // If it is not set, attempt to use the last 5 highest order numbers in ShipWorks.
-                // If none of those work, throw a download error telling the user to go to the 
-                // store settings and change the starting order number
-                if (response?.ErrorResourceList?.Error != null)
+                
+                if (CheckForErrors(response, ref backupNumber, ref nextOrderNumber, ref backupTries))
                 {
-                    if (backupNumber != null)
-                    {
-                        nextOrderNumber = backupNumber.Value;
-                        backupNumber = null;
-                        continue;
-                    }
-
-                    if (backupTries >= 7)
-                    {
-                        throw new DownloadException(
-                            "You either have no orders to download or need to set a new starting order number in store settings");
-                    }
-
-                    nextOrderNumber = GetNextOrderNumber() - backupTries;
-                    backupTries++;
                     continue;
                 }
-
 
                 // check if the last order in the last after getting more orders is the same
                 // as the starting order number last used to retrieve orders. If so we know we
@@ -478,6 +460,35 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
 
             return orders;
+        }
+
+        private bool CheckForErrors(YahooResponse response, ref long? backupNumber, ref long nextOrderNumber,
+            ref int backupTries)
+        {
+            // If invalid start range error occurs try to use the backup order number.
+            // If it is not set, attempt to use the last 5 highest order numbers in ShipWorks.
+            // If none of those work, throw a download error telling the user to go to the 
+            // store settings and change the starting order number
+            if (response?.ErrorResourceList?.Error != null)
+            {
+                if (backupNumber != null)
+                {
+                    nextOrderNumber = backupNumber.Value;
+                    backupNumber = null;
+                    return true;
+                }
+
+                if (backupTries >= 7)
+                {
+                    throw new DownloadException(
+                        "You either have no orders to download or need to set a new starting order number in store settings");
+                }
+
+                nextOrderNumber = GetNextOrderNumber() - backupTries;
+                backupTries++;
+                return true;
+            }
+            return false;
         }
 
         private DateTime ParseYahooDateTime(string yahooDateTime)

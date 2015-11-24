@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.WizardPages
+﻿namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 {
     partial class YahooApiAccountPageHost
     {
