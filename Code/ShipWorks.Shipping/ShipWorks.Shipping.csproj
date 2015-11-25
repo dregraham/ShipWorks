@@ -153,7 +153,6 @@
     <Compile Include="Carriers\Postal\Endicia\EndiciaLabelService.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaLabelService.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1UspsLabelService.cs" />
-    <Compile Include="Carriers\Postal\PostalLabelService.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsLabelService.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsLabelService.cs" />
