@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Interapptive.Shared.IO.Hardware.Scales;
 using ShipWorks.UI.Controls;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
 {
@@ -27,17 +28,26 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
 
         private IDisposable weightSubscription;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ScaleControl()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Weight from the scale
+        /// </summary>
         public string Weight
         {
             get { return (string)GetValue(WeightProperty); }
             set { SetValue(WeightProperty, value); }
         }
 
+        /// <summary>
+        /// Handle dependency property changes
+        /// </summary>
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
@@ -57,6 +67,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
             }
         }
 
+        /// <summary>
+        /// Display the weight read from the scale
+        /// </summary>
         private void DisplayWeight(ScaleReadResult readResult)
         {
             if (readResult.Status == ScaleReadStatus.Success && readResult.Weight >= 0)
@@ -70,7 +83,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
             }
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Read scale into the weight property
+        /// </summary>
+        [Obfuscation]
+        private async void OnWeighButtonClick(object sender, RoutedEventArgs e)
         {
             ScaleReadResult result = await ScaleReader.ReadScale();
 
@@ -85,6 +102,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
             binding?.UpdateSource();
         }
 
+        /// <summary>
+        /// Format the weight
+        /// </summary>
         private string FormatWeight(double weight) =>
             WeightControl.FormatWeight(weight, (WeightDisplayFormat) GetValue(DisplayFormatProperty));
     }

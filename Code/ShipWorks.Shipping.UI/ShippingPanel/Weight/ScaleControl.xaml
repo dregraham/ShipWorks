@@ -17,7 +17,7 @@
 
     <StackPanel Orientation="Horizontal">
         <Button Style="{StaticResource EmptyButtonStyle}"
-                Click="Button_Click">
+                Click="OnWeighButtonClick">
             <Image Width="15" Source="/ShipWorks.Core;component/Resources/weigh.png"/>
         </Button>
         <TextBlock x:Name="Display"
