@@ -150,5 +150,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             get { return shipment.Postal.Service; }
             set { shipment.Postal.Service = value; }
         }
+
+        /// <summary>
+        /// Package type selected
+        /// </summary>
+        public int PackageType
+        {
+            get { return shipment.Postal.PackagingType; }
+            set { shipment.Postal.PackagingType = value; }
+        }
     }
 }

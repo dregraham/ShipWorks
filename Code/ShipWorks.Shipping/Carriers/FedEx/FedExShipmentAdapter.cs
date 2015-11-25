@@ -146,5 +146,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             get { return shipment.FedEx.Service; }
             set { shipment.FedEx.Service = value; }
         }
+
+        /// <summary>
+        /// Package type selected
+        /// </summary>
+        public int PackageType
+        {
+            get { return shipment.FedEx.PackagingType; }
+            set { shipment.FedEx.PackagingType = value; }
+        }
     }
 }

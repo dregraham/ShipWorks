@@ -146,5 +146,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             get { return shipment.OnTrac.Service; }
             set { shipment.OnTrac.Service = value; }
         }
+
+        /// <summary>
+        /// Package type selected
+        /// </summary>
+        public int PackageType
+        {
+            get { return shipment.OnTrac.PackagingType; }
+            set { shipment.OnTrac.PackagingType = value; }
+        }
     }
 }

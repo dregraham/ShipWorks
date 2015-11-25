@@ -53,7 +53,12 @@
             <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Services}"/>
 
             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource GridLabel}" Width="56">Packaging:</TextBlock>
-            <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Packages}"  SelectedValuePath="Key" DisplayMemberPath="Value" />
+            <ComboBox Grid.Row="3" Grid.Column="1" 
+                      ItemsSource="{Binding PackageTypes, UpdateSourceTrigger=PropertyChanged}" 
+                      SelectedValue="{Binding PackageType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedValuePath="Key" 
+                      DisplayMemberPath="Value" 
+                      />
 
             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource GridLabel}" Width="40">Weight:</TextBlock>
 

@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
                     .Setup(x => x.GetValidPackagingTypes(It.IsAny<FedExServiceType>()))
                     .Returns(validPackageTypes);
 
-                var testObject = mock.Create<FedExShipmentPackageBuilder>();
+                var testObject = mock.Create<FedExShipmentPackageTypesBuilder>();
                 results = testObject.BuildPackageTypeDictionary(shipments);
             }
             return results;

@@ -151,5 +151,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Other
             get { return -1; }
             set { ; }
         }
+
+        /// <summary>
+        /// Package type selected
+        /// </summary>
+        public int PackageType
+        {
+            get { return 0; }
+            set {; }
+        }
     }
 }

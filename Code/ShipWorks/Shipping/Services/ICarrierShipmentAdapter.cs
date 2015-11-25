@@ -70,5 +70,10 @@ namespace ShipWorks.Shipping.Services
         /// Service type selected
         /// </summary>
         int ServiceType { get; set; }
+
+        /// <summary>
+        /// Package type selected
+        /// </summary>
+        int PackageType { get; set; }
     }
 }

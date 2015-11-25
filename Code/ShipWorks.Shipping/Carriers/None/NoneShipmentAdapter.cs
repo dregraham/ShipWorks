@@ -141,5 +141,14 @@ namespace ShipWorks.Shipping.Carriers.None
             get { return 0; }
             set { ; }
         }
+
+        /// <summary>
+        /// Package type selected
+        /// </summary>
+        public int PackageType
+        {
+            get { return 0; }
+            set {; }
+        }
     }
 }

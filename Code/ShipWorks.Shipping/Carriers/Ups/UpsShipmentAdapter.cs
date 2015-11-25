@@ -147,5 +147,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             get { return shipment.Ups.Service; }
             set { shipment.Ups.Service = value; }
         }
+
+        /// <summary>
+        /// Package type selected
+        /// </summary>
+        public int PackageType
+        {
+            get { return -1; }
+            set { ; }
+        }
     }
 }

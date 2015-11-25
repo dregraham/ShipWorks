@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private double totalWeight;
         private bool usingInsurance;
         private int serviceType;
+        private int packageType;
         private readonly IRateSelectionFactory rateSelectionFactory;
         private readonly IDisposable subscription;
 
@@ -43,7 +44,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             Services = new ObservableCollection<KeyValuePair<int, string>>();
-            Packages = new ObservableCollection<KeyValuePair<int, string>>();
+            PackageTypes = new ObservableCollection<KeyValuePair<int, string>>();
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
         public ObservableCollection<KeyValuePair<int, string>> Services { get; }
 
-        public ObservableCollection<KeyValuePair<int,string>> Packages { get; }
+        public ObservableCollection<KeyValuePair<int,string>> PackageTypes { get; }
 
         [Obfuscation(Exclude = true)]
         public DateTime ShipDate
@@ -90,6 +91,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get { return serviceType; }
             set { handler.Set(nameof(ServiceType), ref serviceType, value, true); }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public int PackageType
+        {
+            get { return packageType; }
+            set { handler.Set(nameof(PackageType), ref packageType, value, true); }
         }
 
         /// <summary>
@@ -127,14 +135,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public virtual void RefreshPackageTypes(ICarrierShipmentAdapter shipmentAdapter)
         {
-            //Dictionary<int, string> packageTypes = shipmentPackageBuilderFactory.Get(shipmentAdapter.ShipmentTypeCode)
-            //       .BuildPackageTypeDictionary(new[] { shipmentAdapter.Shipment });
+            Dictionary<int, string> packageTypes = shipmentPackageBuilderFactory.Get(shipmentAdapter.ShipmentTypeCode)
+                   .BuildPackageTypeDictionary(new[] { shipmentAdapter.Shipment });
 
-            //Packages.Clear();
-            //foreach (KeyValuePair<int, string> entry in packageTypes)
-            //{
-            //    Packages.Add(entry);
-            //}
+            PackageTypes.Clear();
+            foreach (KeyValuePair<int, string> entry in packageTypes)
+            {
+                PackageTypes.Add(entry);
+            }
+
+            PackageType = shipmentAdapter.PackageType;
         }
 
         /// <summary>
@@ -146,6 +156,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             //shipmentAdapter.TotalWeight = TotalWeight;
             shipmentAdapter.UsingInsurance = UsingInsurance;
             shipmentAdapter.ServiceType = ServiceType;
+            shipmentAdapter.PackageType = PackageType;
         }
 
         /// <summary>

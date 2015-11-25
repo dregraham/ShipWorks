@@ -148,5 +148,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             get { return shipment.IParcel.Service; }
             set { shipment.IParcel.Service = value; }
         }
+
+        /// <summary>
+        /// Package type selected
+        /// </summary>
+        public int PackageType
+        {
+            get { return 0; }
+            set {; }
+        }
     }
 }

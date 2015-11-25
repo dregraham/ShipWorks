@@ -152,5 +152,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             get { return serviceType; }
             set { serviceType = value; }
         }
+
+        /// <summary>
+        /// Package type selected
+        /// </summary>
+        public int PackageType
+        {
+            get { return 0; }
+            set { ; }
+        }
     }
 }
