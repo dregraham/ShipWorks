@@ -339,9 +339,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            // This is by design. The best rate shipment type should never actually
-            // process a shipment due to the pre-process functionality
-            throw new InvalidOperationException();
+            throw new NotImplementedException("You should be using the BestRateLabelService");
         }
 
         /// <summary>

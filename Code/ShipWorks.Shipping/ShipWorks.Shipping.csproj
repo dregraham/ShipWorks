@@ -145,11 +145,11 @@
     <Compile Include="Carriers\Amazon\IAmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
     <Compile Include="Carriers\FedEx\FedExLabelService.cs" />
-    <Compile Include="Carriers\FedEx\FedExShippingClerkFactoryWrapper.cs" />
     <Compile Include="Carriers\iParcel\iParcelLabelService.cs" />
     <Compile Include="Carriers\None\NoneLabelService.cs" />
     <Compile Include="Carriers\OnTrac\OnTracLabelService.cs" />
     <Compile Include="Carriers\Other\OtherLabelService.cs" />
+    <Compile Include="Carriers\Postal\PostalLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsOltLabelService.cs" />
     <Compile Include="Carriers\Ups\WorldShipLabelService.cs" />
