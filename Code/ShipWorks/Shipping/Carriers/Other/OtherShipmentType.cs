@@ -191,15 +191,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            if (shipment.Other.Carrier.Trim().Length == 0)
-            {
-                throw new ShippingException("No carrier is specified.");
-            }
-
-            if (shipment.Other.Service.Trim().Length == 0)
-            {
-                throw new ShippingException("No service is specified.");
-            }
+            throw new NotImplementedException("You should be using the OtherLabelService");
         }
 
         /// <summary>
