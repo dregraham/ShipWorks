@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
                 .FindConstructorsWith(new NonDefaultConstructorFinder())
                 .SingleInstance();
 
-            builder.RegisterType<FedExShipmentPackageBuilder>()
+            builder.RegisterType<FedExShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.FedEx)
                 .SingleInstance();
 

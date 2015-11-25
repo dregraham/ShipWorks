@@ -2,6 +2,7 @@
 using Autofac;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -29,6 +30,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             builder.RegisterType<iParcelShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.iParcel)
                 .ExternallyOwned();
+
+            builder.RegisterType<NullShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Amazon)
+                .SingleInstance();
         }
     }
 }

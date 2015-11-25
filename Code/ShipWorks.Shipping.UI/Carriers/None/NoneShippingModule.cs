@@ -4,6 +4,7 @@ using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.UI.Carriers.None
 {
@@ -40,6 +41,10 @@ namespace ShipWorks.Shipping.UI.Carriers.None
             builder.RegisterType<NoneShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.None)
                 .ExternallyOwned();
+
+            builder.RegisterType<NullShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Amazon)
+                .SingleInstance();
         }
     }
 }

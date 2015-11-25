@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 {
-    public class FedExShipmentPackageBuilderTest
+    public class FedExShipmentPackageTypesBuilderTest
     {
         [Fact]
         public void BuildPackageTypeDictionary_ReturnsCustomPackagingOnly_ShipmentsAreNull()

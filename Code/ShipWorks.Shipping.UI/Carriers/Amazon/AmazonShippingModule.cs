@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon
@@ -104,6 +105,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<AmazonShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Amazon)
                 .FindConstructorsWith(new NonDefaultConstructorFinder())
+                .SingleInstance();
+
+            builder.RegisterType<NullShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Amazon)
                 .SingleInstance();
         }
     }

@@ -9,12 +9,15 @@ using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
-    public class FedExShipmentPackageBuilder : IShipmentPackageTypesBuilder
+    /// <summary>
+    /// Tool to build collection with package type number and string based on shipments
+    /// </summary>
+    public class FedExShipmentPackageTypesBuilder : IShipmentPackageTypesBuilder
     {
         private readonly FedExShipmentType fedExShipmentType;
         private readonly IFedExUtility fedExUtility;
 
-        public FedExShipmentPackageBuilder(FedExShipmentType fedExShipmentType, IFedExUtility fedExUtility)
+        public FedExShipmentPackageTypesBuilder(FedExShipmentType fedExShipmentType, IFedExUtility fedExUtility)
         {
             this.fedExShipmentType = fedExShipmentType;
             this.fedExUtility = fedExUtility;

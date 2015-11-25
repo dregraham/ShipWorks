@@ -6,6 +6,7 @@ using ShipWorks.Shipping.Carriers.Postal.Other;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Carriers.Other
@@ -44,6 +45,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
             builder.RegisterType<OtherShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Other)
                 .ExternallyOwned();
+
+            builder.RegisterType<NullShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Amazon)
+                .SingleInstance();
         }
     }
 }
