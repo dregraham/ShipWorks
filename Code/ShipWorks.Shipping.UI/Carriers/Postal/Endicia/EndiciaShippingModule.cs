@@ -2,6 +2,7 @@
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.Endicia
 {
@@ -27,6 +28,10 @@ namespace ShipWorks.Shipping.Carriers.Endicia
             builder.RegisterType<EndiciaShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Endicia)
                 .ExternallyOwned();
+
+            builder.RegisterType<EndiciaShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Endicia)
+                .SingleInstance();
         }
     }
 }

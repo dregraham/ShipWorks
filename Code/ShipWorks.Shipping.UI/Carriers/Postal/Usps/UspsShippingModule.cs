@@ -2,6 +2,7 @@
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.Usps
 {
@@ -27,6 +28,10 @@ namespace ShipWorks.Shipping.Carriers.Usps
             builder.RegisterType<UspsShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Usps)
                 .ExternallyOwned();
+
+            builder.RegisterType<UspsShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Usps)
+                .SingleInstance();
         }
     }
 }

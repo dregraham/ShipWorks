@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 .ExternallyOwned();
 
             builder.RegisterType<NullShipmentPackageTypesBuilder>()
-                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Amazon)
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.iParcel)
                 .SingleInstance();
         }
     }

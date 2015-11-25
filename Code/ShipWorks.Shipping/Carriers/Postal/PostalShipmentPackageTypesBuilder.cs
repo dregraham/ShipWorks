@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.OnTrac.Enums;
+using Interapptive.Shared.Collections;
 using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.Settings;
 
-namespace ShipWorks.Shipping.Carriers.OnTrac
+namespace ShipWorks.Shipping.Carriers.Postal
 {
     /// <summary>
-    /// Tool to build collection with package type number and string based on shipments
+    /// Service type builder for Postal shipments
     /// </summary>
-    public class OnTracShipmentPackageTypesBuilder : IShipmentPackageTypesBuilder
+    public class PostalShipmentPackageTypesBuilder : IShipmentPackageTypesBuilder
     {
         private readonly IExcludedPackageTypeRepository excludedPackageTypeRepository;
-        private readonly OnTracShipmentType shipmentType;
+        private readonly PostalShipmentType shipmentType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnTracShipmentPackageTypesBuilder(OnTracShipmentType shipmentType, IExcludedPackageTypeRepository excludedPackageTypeRepository)
+        protected PostalShipmentPackageTypesBuilder(PostalShipmentType shipmentType, IExcludedPackageTypeRepository excludedPackageTypeRepository)
         {
             this.shipmentType = shipmentType;
             this.excludedPackageTypeRepository = excludedPackageTypeRepository;

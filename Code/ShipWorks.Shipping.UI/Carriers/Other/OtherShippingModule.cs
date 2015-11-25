@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
                 .ExternallyOwned();
 
             builder.RegisterType<NullShipmentPackageTypesBuilder>()
-                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Amazon)
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Other)
                 .SingleInstance();
         }
     }

@@ -2,6 +2,7 @@
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.WebTools
 {
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.WebTools
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.PostalWebTools);
 
-            builder.RegisterType<PostalWebShipmentServicesBuilder>()
+            builder.RegisterType<PostalWebToolsShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.PostalWebTools)
                 .SingleInstance();
 
@@ -27,6 +28,10 @@ namespace ShipWorks.Shipping.Carriers.WebTools
             builder.RegisterType<PostalWebToolsShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.PostalWebTools)
                 .ExternallyOwned();
+
+            builder.RegisterType<PostalWebToolsShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.PostalWebTools)
+                .SingleInstance();
         }
     }
 }

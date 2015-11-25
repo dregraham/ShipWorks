@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.UI.Carriers.None
                 .ExternallyOwned();
 
             builder.RegisterType<NullShipmentPackageTypesBuilder>()
-                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Amazon)
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.None)
                 .SingleInstance();
         }
     }

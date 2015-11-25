@@ -6,6 +6,7 @@ using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.Express1
 {
@@ -47,6 +48,14 @@ namespace ShipWorks.Shipping.Carriers.Express1
             builder.RegisterType<EndiciaShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Express1Endicia)
                 .ExternallyOwned();
+
+            builder.RegisterType<Express1EndiciaShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Express1Endicia)
+                .SingleInstance();
+
+            builder.RegisterType<Express1UspsShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Express1Usps)
+                .SingleInstance();
         }
     }
 }

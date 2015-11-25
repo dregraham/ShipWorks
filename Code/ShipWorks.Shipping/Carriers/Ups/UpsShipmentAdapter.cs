@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             get
             {
-                return ShipmentTypeCode.UpsOnLineTools;
+                return shipment.ShipmentTypeCode;
             }
         }
 

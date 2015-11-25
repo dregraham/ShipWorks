@@ -17,6 +17,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private readonly FedExShipmentType fedExShipmentType;
         private readonly IFedExUtility fedExUtility;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public FedExShipmentPackageTypesBuilder(FedExShipmentType fedExShipmentType, IFedExUtility fedExUtility)
         {
             this.fedExShipmentType = fedExShipmentType;
