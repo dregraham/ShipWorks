@@ -13,6 +13,7 @@ using ShipWorks.Shipping.UI.Services;
 using ShipWorks.AddressValidation;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -26,6 +27,10 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<ChangeShipmentTypePipeline>()
+                .As<IShippingPanelObservableRegistration>()
+                .PreserveExistingDefaults();
+
             builder.RegisterType<ShippingPanelRegistration>()
                 .AsImplementedInterfaces()
                 .PreserveExistingDefaults();
@@ -131,7 +136,7 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<ShippingManagerWrapper>()
                 .AsImplementedInterfaces();
-				
+
             builder.RegisterType<AddressValidator>()
                 .AsImplementedInterfaces();
 

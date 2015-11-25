@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
+using Interapptive.Shared.Threading;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -43,7 +44,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Begin a lifetime scope from which dependencies can be resolved
         /// </summary>
-        public static ILifetimeScope BeginLifetimeScope(Action<ContainerBuilder> configurationAction) => 
+        public static ILifetimeScope BeginLifetimeScope(Action<ContainerBuilder> configurationAction) =>
             current.BeginLifetimeScope(configurationAction);
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
                 .SingleInstance();
-            
+
             builder.RegisterType<FilterHelperWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -110,8 +111,11 @@ namespace ShipWorks.ApplicationCore
                 .As<IWin32Window>()
                 .ExternallyOwned();
 
+            builder.RegisterType<SchedulerProvider>()
+                .AsImplementedInterfaces();
+
             builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
-			
+
             builder.Register(context => Messenger.Current)
                 .AsImplementedInterfaces()
                 .SingleInstance();

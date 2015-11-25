@@ -2,6 +2,8 @@
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using System.Reflection;
 using System.Windows.Input;
+using ShipWorks.Shipping.Services;
+using System;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -19,8 +21,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private ShippingAddressEditStateType destinationAddressEditableState;
         private bool supportsAccounts;
         private string domesticInternationalText;
-
-
+        
         /// <summary>
         /// Command to create a label
         /// </summary>

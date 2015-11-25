@@ -15,6 +15,7 @@ using Interapptive.Shared.Collections;
 using System.Reactive.Disposables;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
+using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -24,9 +25,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     public partial class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
     {
         private readonly PropertyChangedHandler handler;
-        private ICarrierShipmentAdapter shipmentAdapter;
         private OrderSelectionLoaded orderSelectionLoaded;
-        
+
         private bool forceDomesticInternationalChanged = false;
 
         private readonly IShippingManager shippingManager;
@@ -49,6 +49,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Constructor
         /// </summary>
         public ShippingPanelViewModel(
+            IEnumerable<IShippingPanelObservableRegistration> registrations,
             OrderSelectionChangedHandler shipmentChangedHandler,
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
@@ -57,25 +58,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.shippingManager = shippingManager;
             this.shipmentChangedHandler = shipmentChangedHandler;
             this.messageHelper = messageHelper;
-            
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
             subscriptions = new CompositeDisposable(
                 shipmentChangedHandler.OfType<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
                 shipmentChangedHandler.OfType<StoreChangedMessage>().Subscribe(OnStoreChanged),
-                shipmentChangedHandler.OfType<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == shipmentAdapter?.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
+                shipmentChangedHandler.OfType<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == ShipmentAdapter?.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
                 shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
-                shipmentChangedHandler.ShipmentLoadedStream().ObserveOnDispatcher().Do(_ => AllowEditing = true).Subscribe(LoadOrder),
-                handler.Where(x => x == nameof(ShipmentType))
-                    .Where(x => !(shipmentAdapter.Shipment?.Processed ?? true))
-                    .Subscribe(_ => {
-                        shipmentAdapter = shippingManager.ChangeShipmentType(ShipmentType, shipmentAdapter.Shipment);
-                        Populate();
-                    }),
-                handler.Where(x => x == nameof(OriginAddressType))
-                    .Subscribe(_ => Origin.SetAddressFromOrigin(OriginAddressType, shipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType))
+                new CompositeDisposable(registrations.Select(x => x.Register(this)))
             );
-            
+
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
             Destination.IsAddressValidationEnabled = true;
@@ -88,7 +81,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
-        /// Wire up any Obseravable patterns
+        /// Current shipment adapter
+        /// </summary>
+        public ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
+
+        /// <summary>
+        /// Expose a stream of property changes
+        /// </summary>
+        public IObservable<string> PropertyChangeStream => handler;
+
+        /// <summary>
+        /// Wire up any Observable patterns
         /// </summary>
         private void WireUpObservables()
         {
@@ -106,11 +109,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
                         bool handleField = propertyName.Equals(nameof(AddressViewModel.CountryCode), StringComparison.InvariantCultureIgnoreCase) ||
                                            propertyName.Equals(nameof(AddressViewModel.PostalCode), StringComparison.InvariantCultureIgnoreCase) ||
-                                           propertyName.Equals(nameof(AddressViewModel.StateProvCode), StringComparison.InvariantCultureIgnoreCase); 
+                                           propertyName.Equals(nameof(AddressViewModel.StateProvCode), StringComparison.InvariantCultureIgnoreCase);
 
                         // forceDomesticInternationalChanged is used for race conditions:
                         // For example (from rate criteria changing), ShipmentType property changes, and then before the throttle time, SupportsMultipleShipments changes.
-                        // Since SupportsMultipleShipments isn't a rating field, the event would not be fired, even though 
+                        // Since SupportsMultipleShipments isn't a rating field, the event would not be fired, even though
                         // ShipmentType changed and the event needs to be raised.
                         // So keep track that during the throttling a rate criteria was changed.
                         forceDomesticInternationalChanged = forceDomesticInternationalChanged || handleField;
@@ -123,10 +126,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                     // Reset forceDomesticInternationalChanged so that we don't force it on the next round.
                     forceDomesticInternationalChanged = false;
 
-                    Destination.SaveToEntity(shipmentAdapter.Shipment.ShipPerson);
-                    Origin.SaveToEntity(shipmentAdapter.Shipment.OriginPerson);
+                    Destination.SaveToEntity(ShipmentAdapter.Shipment.ShipPerson);
+                    Origin.SaveToEntity(ShipmentAdapter.Shipment.OriginPerson);
 
-                    DomesticInternationalText = shipmentAdapter.IsDomestic ? "Domestic" : "International";
+                    DomesticInternationalText = ShipmentAdapter.IsDomestic ? "Domestic" : "International";
                 });
 
 #pragma warning disable S125 // Sections of code should not be "commented out"
@@ -142,7 +145,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             //        // forceRateCriteriaChanged is used for race conditions:
             //        // For example, ShipmentType property changes, and then before the throttle time, SupportsMultipleShipments changes.
-            //        // Since SupportsMultipleShipments isn't a rating field, the event would not be fired, even though 
+            //        // Since SupportsMultipleShipments isn't a rating field, the event would not be fired, even though
             //        // ShipmentType changed and the event needs to be raised.
             //        // So keep track that during the throttling a rate criteria was changed.
             //        forceRateCriteriaChanged = forceRateCriteriaChanged || (hasShipment && isRatingField);
@@ -164,13 +167,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void SaveToDatabase()
         {
-            if (shipmentAdapter?.Shipment?.Processed ?? true)
+            if (ShipmentAdapter?.Shipment?.Processed ?? true)
             {
                 return;
             }
 
             Save();
-            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(shipmentAdapter.Shipment, false);
+            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter.Shipment, false);
             DisplayError(errors);
         }
 
@@ -190,12 +193,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
             {
-                shipmentAdapter = orderSelectionLoaded.ShipmentAdapters.Single();
-                Populate();
+                Populate(orderSelectionLoaded.ShipmentAdapters.Single());
             }
             else
             {
-                shipmentAdapter = null;
+                ShipmentAdapter = null;
             }
         }
 
@@ -232,39 +234,40 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Populate the view model with the current state of the shipment
         /// </summary>
-        private void Populate()
+        public void Populate(ICarrierShipmentAdapter fromShipmentAdapter)
         {
-            InitialShipmentTypeCode = shipmentAdapter.ShipmentTypeCode;
+            ShipmentAdapter = fromShipmentAdapter;
+            InitialShipmentTypeCode = ShipmentAdapter.ShipmentTypeCode;
 
             // Set the shipment type without going back through the shipment changed machinery
-            selectedShipmentType = shipmentAdapter.ShipmentTypeCode;
+            selectedShipmentType = ShipmentAdapter.ShipmentTypeCode;
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
 
             RequestedShippingMethod = orderSelectionLoaded.Order.RequestedShipping;
 
-            SupportsAccounts = shipmentAdapter.SupportsAccounts;
+            SupportsAccounts = ShipmentAdapter.SupportsAccounts;
 
             // If the shipment type does not support accounts, and the current origin id is account, default to store origin.
-            OriginAddressType = !shipmentAdapter.SupportsAccounts && shipmentAdapter.Shipment.OriginOriginID == 2 ? 0 : shipmentAdapter.Shipment.OriginOriginID;
+            OriginAddressType = !ShipmentAdapter.SupportsAccounts && ShipmentAdapter.Shipment.OriginOriginID == 2 ? 0 : ShipmentAdapter.Shipment.OriginOriginID;
             InitialOriginAddressType = OriginAddressType;
 
-            AccountId = shipmentAdapter.AccountId.GetValueOrDefault();
+            AccountId = ShipmentAdapter.AccountId.GetValueOrDefault();
 
-            Origin.Load(shipmentAdapter.Shipment.OriginPerson);
-            Destination.Load(shipmentAdapter.Shipment.ShipPerson);
+            Origin.Load(ShipmentAdapter.Shipment.OriginPerson);
+            Destination.Load(ShipmentAdapter.Shipment.ShipPerson);
 
-            AllowEditing = !shipmentAdapter.Shipment.Processed;
+            AllowEditing = !ShipmentAdapter.Shipment.Processed;
 
             DestinationAddressEditableState = orderSelectionLoaded.DestinationAddressEditable;
-            
-            Origin.SetAddressFromOrigin(OriginAddressType, shipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
+
+            Origin.SetAddressFromOrigin(OriginAddressType, ShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
 
             DomesticInternationalText = "Domestic";
 
-            SupportsMultiplePackages = shipmentAdapter.SupportsMultiplePackages;
+            SupportsMultiplePackages = ShipmentAdapter.SupportsMultiplePackages;
 
-            ShipmentViewModel.Load(shipmentAdapter);
+            ShipmentViewModel.Load(ShipmentAdapter);
         }
 
 #pragma warning disable S125 // Sections of code should not be "commented out"
@@ -289,20 +292,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void Save()
         {
-            if (shipmentAdapter.Shipment?.Processed == true)
+            if (ShipmentAdapter.Shipment?.Processed == true)
             {
                 return;
             }
 
-            shipmentAdapter.AccountId = AccountId;
-            shipmentAdapter.Shipment.OriginOriginID = OriginAddressType;
+            ShipmentAdapter.AccountId = AccountId;
+            ShipmentAdapter.Shipment.OriginOriginID = OriginAddressType;
 
-            Origin.SaveToEntity(shipmentAdapter.Shipment.OriginPerson);
-            Destination.SaveToEntity(shipmentAdapter.Shipment.ShipPerson);
+            Origin.SaveToEntity(ShipmentAdapter.Shipment.OriginPerson);
+            Destination.SaveToEntity(ShipmentAdapter.Shipment.ShipPerson);
 
-            ShipmentViewModel.Save(shipmentAdapter);
+            ShipmentViewModel.Save(ShipmentAdapter);
 
-            IDictionary<ShipmentEntity, Exception> errors = shipmentAdapter.UpdateDynamicData();
+            IDictionary<ShipmentEntity, Exception> errors = ShipmentAdapter.UpdateDynamicData();
             DisplayError(errors);
         }
 
@@ -327,12 +330,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Updates the services.
         /// </summary>
-        private void UpdateServices() => ShipmentViewModel.RefreshServiceTypes(shipmentAdapter);
+        private void UpdateServices() => ShipmentViewModel.RefreshServiceTypes(ShipmentAdapter);
 
         /// <summary>
         /// Updates the packages.
         /// </summary>
-        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(shipmentAdapter);
+        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(ShipmentAdapter);
 
         /// <summary>
         /// Enables the need to update packages.
@@ -375,7 +378,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void OnRateCriteriaPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (shipmentAdapter.Shipment == null)
+            if (ShipmentAdapter.Shipment == null)
             {
                 return;
             }
@@ -383,7 +386,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             // Save UI values to the shipment so we can send the new values to the rates panel
             Save();
 
-            shipmentChangedHandler.Send(new ShipmentChangedMessage(this, shipmentAdapter));
+            shipmentChangedHandler.Send(new ShipmentChangedMessage(this, ShipmentAdapter));
         }
 
         /// <summary>
@@ -397,15 +400,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return;
             }
 
-            if (shipmentChangedMessage?.ShipmentAdapter?.Shipment == null || shipmentAdapter?.Shipment == null)
+            if (shipmentChangedMessage?.ShipmentAdapter?.Shipment == null || ShipmentAdapter?.Shipment == null)
             {
                 return;
             }
 
-            if (shipmentChangedMessage.ShipmentAdapter.Shipment.ShipmentID == shipmentAdapter.Shipment.ShipmentID)
+            if (shipmentChangedMessage.ShipmentAdapter.Shipment.ShipmentID == ShipmentAdapter.Shipment.ShipmentID)
             {
-                shipmentAdapter = shipmentChangedMessage.ShipmentAdapter;
-                Populate();
+                Populate(shipmentChangedMessage.ShipmentAdapter);
             }
         }
 
@@ -419,7 +421,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return;
             }
 
-            Origin.SetAddressFromOrigin(OriginAddressType, shipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
+            Origin.SetAddressFromOrigin(OriginAddressType, ShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
         }
 
 
@@ -467,7 +469,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             // Show as deleted.
             LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Deleted;
-            shipmentAdapter = null;
+            ShipmentAdapter = null;
         }
 
         /// <summary>
@@ -475,12 +477,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void DisplayError(IDictionary<ShipmentEntity, Exception> errors)
         {
-            if (errors.ContainsKey(shipmentAdapter.Shipment))
+            if (errors.ContainsKey(ShipmentAdapter.Shipment))
             {
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-                shipmentChangedHandler.Send(new OrderSelectionChangingMessage(this, new[] { shipmentAdapter.Shipment.OrderID }));
+                shipmentChangedHandler.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
             }
         }
 
