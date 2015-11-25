@@ -161,6 +161,7 @@
     <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="Imaging\EdgeDetection.cs" />
     <Compile Include="InterapptiveOnly.cs" />
+    <Compile Include="Threading\ISchedulerProvider.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
     <Compile Include="Collections\LruCache.cs" />
     <Compile Include="Collections\LruCacheItemRemovedEvent.cs" />
