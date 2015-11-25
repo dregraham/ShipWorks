@@ -7,8 +7,21 @@ using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
+    /// <summary>
+    /// OnTrac Label Service
+    /// </summary>
     public class OnTracLabelService : ILabelService
     {
+        private readonly ICarrierAccountRepository<OnTracAccountEntity> onTracAccountRepository;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OnTracLabelService(ICarrierAccountRepository<OnTracAccountEntity> onTracAccountRepository)
+        {
+            this.onTracAccountRepository = onTracAccountRepository;
+        }
+
         /// <summary>
         /// Processes the OnTrac shipment
         /// </summary>
@@ -66,9 +79,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Get the OnTrac account to be used for the given shipment
         /// </summary>
-        private static OnTracAccountEntity GetAccountForShipment(ShipmentEntity shipment)
+        private OnTracAccountEntity GetAccountForShipment(ShipmentEntity shipment)
         {
-            OnTracAccountEntity account = OnTracAccountManager.GetAccount(shipment.OnTrac.OnTracAccountID);
+            OnTracAccountEntity account = onTracAccountRepository.GetAccount(shipment.OnTrac.OnTracAccountID);
+
             if (account == null)
             {
                 throw new OnTracException("No OnTrac account is selected for the shipment.");

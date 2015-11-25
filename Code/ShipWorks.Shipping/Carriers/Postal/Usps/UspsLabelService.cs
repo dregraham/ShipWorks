@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,15 +14,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public class UspsLabelService : ILabelService
     {
-        private readonly UspsShipmentType uspsShipmentType;
-        private readonly Express1UspsShipmentType express1UspsShipmentType;
-        private readonly Express1UspsLabelService express1UspsLabelService;
+        private readonly Func<UspsShipmentType> uspsShipmentType;
+        private readonly Func<Express1UspsShipmentType> express1UspsShipmentType;
+        private readonly Func<Express1UspsLabelService> express1UspsLabelService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsLabelService(UspsShipmentType uspsShipmentType, Express1UspsShipmentType express1UspsShipmentType, Express1UspsLabelService express1UspsLabelService)
-        {
+        public UspsLabelService(Func<UspsShipmentType> uspsShipmentType, Func<Express1UspsShipmentType> express1UspsShipmentType, Func<Express1UspsLabelService> express1UspsLabelService)
+        { 
             this.uspsShipmentType = uspsShipmentType;
             this.express1UspsShipmentType = express1UspsShipmentType;
             this.express1UspsLabelService = express1UspsLabelService;
@@ -32,17 +33,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public void Create(ShipmentEntity shipment)
         {
-            uspsShipmentType.ValidateShipment(shipment);
+            uspsShipmentType().ValidateShipment(shipment);
 
             try
             {
-                if (uspsShipmentType.ShouldRateShop(shipment) || uspsShipmentType.ShouldTestExpress1Rates(shipment))
+                if (uspsShipmentType().ShouldRateShop(shipment) || uspsShipmentType().ShouldTestExpress1Rates(shipment))
                 {
                     ProcessShipmentWithRates(shipment);
                 }
                 else
                 {
-                    uspsShipmentType.CreateWebClient().ProcessShipment(shipment);
+                    uspsShipmentType().CreateWebClient().ProcessShipment(shipment);
                 }
             }
             catch (UspsException ex)
@@ -62,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             try
             {
-                uspsShipmentType.CreateWebClient().VoidShipment(shipment);
+                uspsShipmentType().CreateWebClient().VoidShipment(shipment);
             }
             catch (UspsException ex)
             {
@@ -75,8 +76,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void ProcessShipmentWithRates(ShipmentEntity shipment)
         {
-            IUspsWebClient client = uspsShipmentType.CreateWebClient();
-            IEnumerable<UspsAccountEntity> accounts = uspsShipmentType.GetRates(shipment).Rates
+            IUspsWebClient client = uspsShipmentType().CreateWebClient();
+            IEnumerable<UspsAccountEntity> accounts = uspsShipmentType().GetRates(shipment).Rates
                     .OrderBy(x => x.Amount)
                     .Select(x => x.OriginalTag as UspsPostalRateSelection)
                     .Where(x => x.IsRateFor(shipment))
@@ -97,14 +98,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         shipment.ShipmentType = (int)ShipmentTypeCode.Express1Usps;
                         
                         shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
-                        uspsShipmentType.UseAccountForShipment(account, shipment);
+                        uspsShipmentType().UseAccountForShipment(account, shipment);
 
-                        express1UspsShipmentType.UpdateDynamicShipmentData(shipment);
-                        express1UspsLabelService.Create(shipment);
+                        express1UspsShipmentType().UpdateDynamicShipmentData(shipment);
+                        express1UspsLabelService().Create(shipment);
                     }
                     else
                     {
-                        uspsShipmentType.UseAccountForShipment(account, shipment);
+                        uspsShipmentType().UseAccountForShipment(account, shipment);
                         client.ProcessShipment(shipment);
                     }
 

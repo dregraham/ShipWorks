@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -15,6 +16,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             builder.RegisterType<OnTracLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.OnTrac);
+            
+            builder.RegisterType<OnTracAccountRepository>()
+                .As<ICarrierAccountRepository<OnTracAccountEntity>>();
         }
     }
 }

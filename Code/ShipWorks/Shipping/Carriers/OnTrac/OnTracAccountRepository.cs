@@ -8,13 +8,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public override IEnumerable<OnTracAccountEntity> Accounts
-        {
-            get
-            {
-                return OnTracAccountManager.Accounts;
-            }
-        }
+        public override IEnumerable<OnTracAccountEntity> Accounts => OnTracAccountManager.Accounts;
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.

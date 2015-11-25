@@ -1,7 +1,6 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {

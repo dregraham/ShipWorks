@@ -2,8 +2,15 @@
 
 namespace ShipWorks.Shipping.Carriers.Other
 {
+    /// <summary>
+    /// Label Service for the Other carrier
+    /// </summary>
     public class OtherLabelService : ILabelService
     { 
+        /// <summary>
+        /// Creates an Other label
+        /// </summary>
+        /// <param name="shipment"></param>
         public void Create(ShipmentEntity shipment)
         {
             if (shipment.Other.Carrier.Trim().Length == 0)
@@ -17,9 +24,12 @@ namespace ShipWorks.Shipping.Carriers.Other
             }
         }
 
+        /// <summary>
+        /// Voids the Other label
+        /// </summary>
+        /// <param name="shipment"></param>
         public void Void(ShipmentEntity shipment)
         {
-            throw new System.NotImplementedException();
         }
     }
 }
