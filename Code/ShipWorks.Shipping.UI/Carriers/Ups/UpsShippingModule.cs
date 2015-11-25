@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups
@@ -17,6 +18,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             builder.RegisterType<UpsAccountRepository>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsOltLabelService>()
+                .Keyed<ILabelService>(ShipmentTypeCode.UpsOnLineTools);
+
+            builder.RegisterType<WorldShipLabelService>()
+                .Keyed<ILabelService>(ShipmentTypeCode.UpsWorldShip);
         }
     }
 }
