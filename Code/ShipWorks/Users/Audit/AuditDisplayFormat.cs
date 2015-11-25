@@ -124,7 +124,7 @@ namespace ShipWorks.Users.Audit
                     return string.Format("{0:c}", data);
 
                 case Weight:
-                    return WeightControl.FormatWeight(Convert.ToDouble(data), (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat);
+                    return WeightControl.FormatWeight(Convert.ToDouble(data));
 
                 case Entity:
                     return GetEntityLabel(Convert.ToInt64(data));

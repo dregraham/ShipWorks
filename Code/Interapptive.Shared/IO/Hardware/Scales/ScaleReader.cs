@@ -43,7 +43,6 @@ namespace Interapptive.Shared.IO.Hardware.Scales
 
             ReadEvents = Observable.Interval(TimeSpan.FromMilliseconds(250))
                 .Select(_ => ReadScale(true))
-                .DistinctUntilChanged()
                 .Publish().RefCount();
         }
 
@@ -104,7 +103,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// <summary>
         /// Read from any attached scale that can be found
         /// </summary>
-        public static ScaleReadResult ReadScale() => ReadScale(false);
+        public static Task<ScaleReadResult> ReadScale() => TaskEx.Run(() => ReadScale(false));
 
         /// <summary>
         /// Read from any attached scale that can be found

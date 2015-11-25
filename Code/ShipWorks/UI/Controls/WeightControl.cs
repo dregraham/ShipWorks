@@ -468,8 +468,17 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Format the given weight based on the specified display format.
         /// </summary>
-        public static string FormatWeight(double weight, WeightDisplayFormat displayFormat)
+        public static string FormatWeight(double weight) =>
+            FormatWeight(weight, WeightDisplayFormat.FractionalPounds);
+
+        /// <summary>
+        /// Format the given weight based on the specified display format.
+        /// </summary>
+        public static string FormatWeight(double weight, WeightDisplayFormat defaultDisplayFormat)
         {
+            WeightDisplayFormat displayFormat = (WeightDisplayFormat?)UserSession.User?.Settings.ShippingWeightFormat ??
+                defaultDisplayFormat;
+
             string result;
 
             if (displayFormat == WeightDisplayFormat.FractionalPounds)
@@ -494,7 +503,7 @@ namespace ShipWorks.UI.Controls
             Cursor.Current = Cursors.WaitCursor;
             weighButton.Enabled = false;
 
-            ScaleReadResult result = await TaskEx.Run(() => ScaleReader.ReadScale());
+            ScaleReadResult result = await ScaleReader.ReadScale();
 
             if (result.Status == ScaleReadStatus.Success)
             {

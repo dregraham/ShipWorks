@@ -23,14 +23,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                 return string.Empty;
             }
 
-            WeightDisplayFormat format = WeightDisplayFormat.FractionalPounds;
-
-            if (UserSession.IsLoggedOn)
-            {
-                format = (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat;
-            }
-
-            return WeightControl.FormatWeight((double) value, format);
+            return WeightControl.FormatWeight((double) value);
         }
     }
 }

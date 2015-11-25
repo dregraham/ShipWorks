@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Editing
                     { 
                         profile.Name,
                         string.Format("{0} x {1} x {2} in", profile.Length, profile.Width, profile.Height),
-                        WeightControl.FormatWeight(profile.Weight, (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat)
+                        WeightControl.FormatWeight(profile.Weight)
                     });
 
                 sandGrid.Rows.Add(row);
