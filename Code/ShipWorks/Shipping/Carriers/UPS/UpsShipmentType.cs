@@ -1061,14 +1061,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException("You should be using the UpsLabelService");
-        }
-
-        /// <summary>
         /// Determines whether [is mail innovations enabled] for OLT.
         /// </summary>
         /// <returns></returns>

@@ -15,14 +15,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public class EndiciaLabelService : ILabelService
     {
         private readonly EndiciaShipmentType endiciaShipmentType;
+        private readonly Express1EndiciaShipmentType express1EndiciaShipmentType;
+        private readonly Express1EndiciaLabelService express1EndiciaLabelService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaLabelService(EndiciaShipmentType endiciaShipmentType)
+        public EndiciaLabelService(EndiciaShipmentType endiciaShipmentType, Express1EndiciaShipmentType express1EndiciaShipmentType, Express1EndiciaLabelService express1EndiciaLabelService)
         {
             //TODO: stop using the ShipmentType when we pull rating into its own service
             this.endiciaShipmentType = endiciaShipmentType;
+            this.express1EndiciaShipmentType = express1EndiciaShipmentType;
+            this.express1EndiciaLabelService = express1EndiciaLabelService;
         }
 
         /// <summary>
@@ -103,11 +107,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
                 shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
-                Express1EndiciaShipmentType shipmentType = (Express1EndiciaShipmentType)ShipmentTypeManager.GetType(shipment);
-
                 // Process via Express1
-                shipmentType.UpdateDynamicShipmentData(shipment);
-                shipmentType.ProcessShipment(shipment);
+                express1EndiciaShipmentType.UpdateDynamicShipmentData(shipment);
+                express1EndiciaLabelService.Create(shipment);
             }
             else
             {

@@ -187,14 +187,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException("You should be using the OtherLabelService");
-        }
-
-        /// <summary>
         /// Create the XML input to the XSL engine
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)

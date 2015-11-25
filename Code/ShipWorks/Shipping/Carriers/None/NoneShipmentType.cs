@@ -94,14 +94,6 @@ namespace ShipWorks.Shipping.Carriers.None
         }
 
         /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException("You should be using the NoneLabelService");
-        }
-
-        /// <summary>
         /// Gets an instance to the best rate shipping broker for the None shipment type based on the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>

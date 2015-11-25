@@ -99,14 +99,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 TotalWeight = shipment.TotalWeight
             };
         }
-
-        /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException("You should be using the ILabelService");
-        }
           
         /// <summary>
         /// Create the XML input to the XSL engine

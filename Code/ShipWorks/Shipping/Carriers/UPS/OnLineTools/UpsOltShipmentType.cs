@@ -66,14 +66,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         }
 
         /// <summary>
-        /// Process the UPS shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException("You should be using the UpsOltLabelService");
-        }
-
-        /// <summary>
         /// Generate the carrier specific template xml
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)

@@ -854,8 +854,6 @@ namespace ShipWorks.Shipping
                     // Transacted
                     using (SqlAdapter adapter = new SqlAdapter(true))
                     {
-                        shipmentType.VoidShipment(shipment);
-
                         using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                         {
                             if (lifetimeScope.IsRegisteredWithKey<ILabelService>((ShipmentTypeCode)shipment.ShipmentType))
@@ -864,11 +862,6 @@ namespace ShipWorks.Shipping
                                     lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode)shipment.ShipmentType);
 
                                 labelService.Void(shipment);
-                            }
-                            else
-                            {
-                                // TODO: remove this once shipmenttype dot VoidShipment is gone
-                                shipmentType.VoidShipment(shipment);
                             }
                         }
 
@@ -1171,18 +1164,10 @@ namespace ShipWorks.Shipping
                     
                     using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
-                        if(lifetimeScope.IsRegisteredWithKey<ILabelService>((ShipmentTypeCode)shipment.ShipmentType))
-                        {
-                            ILabelService labelService =
-                                lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
+                        ILabelService labelService =
+                            lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
 
-                            labelService.Create(shipment);
-                        }
-                        else
-                        {
-                            // TODO: remove this once shipmenttype dot ProcessShipment is gone
-                            shipmentType.ProcessShipment(shipment);
-                        }
+                        labelService.Create(shipment);
                     }
 
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -181,26 +182,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new Express1UspsShipmentProcessingSynchronizer();
-        }
-
-        /// <summary>
-        /// Processes a shipment.
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            ValidateShipment(shipment);
-
-            try
-            {
-                // Express1 for USPS requires that postage be hidden per their negotiated
-                // service agreement
-                shipment.Postal.Usps.HidePostage = true;
-                new Express1UspsWebClient().ProcessShipment(shipment);
-            }
-            catch(UspsException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
         }
 
         /// <summary>

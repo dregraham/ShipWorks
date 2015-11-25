@@ -226,14 +226,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException("You should be using the OnTracLabelService");
-        }
-
-        /// <summary>
         /// Get new OnTracSetupWizard
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()

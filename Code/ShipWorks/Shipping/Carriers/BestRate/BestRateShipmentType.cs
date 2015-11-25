@@ -335,14 +335,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException("You should be using the BestRateLabelService");
-        }
-
-        /// <summary>
         /// Gets whether the specified settings tab should be hidden in the UI
         /// </summary>
         public override bool IsSettingsTabHidden(ShipmentTypeSettingsControl.Page tab)

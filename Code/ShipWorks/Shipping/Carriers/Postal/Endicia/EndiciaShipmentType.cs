@@ -609,14 +609,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Process the label server shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException("You should be using the EndiciaLabelService");
-        }
-
-        /// <summary>
         /// Validate the shipment before processing or rating
         /// </summary>
         public void ValidateShipment(ShipmentEntity shipment)

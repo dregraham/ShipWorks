@@ -936,24 +936,11 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public abstract void ProcessShipment(ShipmentEntity shipment);
-
-        /// <summary>
         /// Must be overridden by derived types to provide tracking details for the given shipment.
         /// </summary>
         public virtual TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             throw new ShippingException(string.Format("Tracking is not supported for {0}.", ShipmentTypeName));
-        }
-
-        /// <summary>
-        /// Called to do carrier specific shipment voiding.  Not all carriers required voiding.
-        /// </summary>
-        public virtual void VoidShipment(ShipmentEntity shipment)
-        {
-
         }
 
         /// <summary>

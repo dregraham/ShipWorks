@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using System.Windows.Forms;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
@@ -35,39 +32,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Postal Shipment Type
         /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode
-        {
-            get
-            {
-                return ShipmentTypeCode.Express1Endicia;
-            }
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.Express1Endicia;
 
         /// <summary>
         /// The user-displayable name of the shipment type
         /// </summary>
         [Obfuscation(Exclude = true)]        
-        public override string ShipmentTypeName
-        {
-            get
-            {
-                return 
-                    (ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) || 
-                    ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps)) ?
-                    "USPS (Express1 for Endicia)" : "USPS (Express1)";
-            }
-        }
+        public override string ShipmentTypeName => (ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) || 
+                                                    ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps)) ?
+            "USPS (Express1 for Endicia)" : "USPS (Express1)";
 
         /// <summary>
         /// Reseller type
         /// </summary>
-        public override EndiciaReseller EndiciaReseller
-        {
-            get
-            {
-                return EndiciaReseller.Express1;
-            }
-        }
+        public override EndiciaReseller EndiciaReseller => EndiciaReseller.Express1;
 
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
@@ -108,37 +86,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             return GetCachedRates<EndiciaException>(shipment, entity => { throw new EndiciaException("An account is required to view Express1 rates."); });
         }
 
-        /// <summary>
-        /// Process the label server shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            ValidateShipment(shipment);
-
-            try
-            {
-                (new EndiciaApiClient(AccountRepository, LogEntryFactory, CertificateInspector)).ProcessShipment(shipment, this);
-            }
-            catch (EndiciaException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
-        }
-
-        /// <summary>
-        /// Void the given endicia shipment
-        /// </summary>
-        public override void VoidShipment(ShipmentEntity shipment)
-        {
-            try
-            {
-                Express1EndiciaCustomerServiceClient.RequestRefund(shipment);
-            }
-            catch (EndiciaException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
-        }
         /// <summary>
         /// Create the setup wizard for configuring an Express 1 account.
         /// </summary>
@@ -203,10 +150,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Supports getting counter rates.
         /// </summary>
-        public override bool SupportsCounterRates
-        {
-            get { return false; }
-        }
+        public override bool SupportsCounterRates => false;
 
         /// <summary>
         /// Update the label format of carrier specific unprocessed shipments

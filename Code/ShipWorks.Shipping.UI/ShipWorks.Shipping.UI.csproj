@@ -156,6 +156,8 @@
     <Compile Include="Carriers\OnTrac\OnTracShippingModule.cs" />
     <Compile Include="Carriers\Other\OtherShippingModule.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShippingModule.cs" />
+    <Compile Include="Carriers\Postal\Express1\Express1ShippingModule.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsShippingModule.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsShippingModule.cs" />
     <Compile Include="Carriers\Ups\UpsShippingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

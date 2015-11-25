@@ -583,14 +583,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             return new iParcelShipmentProcessingSynchronizer();
         }
-
-        /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException("You should use the iParcelLabelService");
-        }
         
         /// <summary>
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
