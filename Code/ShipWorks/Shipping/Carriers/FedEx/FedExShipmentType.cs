@@ -1076,34 +1076,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            try
-            {
-                // Okay to "new up" the shipping clerk here, as this class is the root consumer 
-                // that drives the underlying FedEx API and outside of the current scope of unit testing,
-                // so there isn't a need to be able to specify the dependencies of the shipping clerk
-                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
-                shippingClerk.Ship(shipment);
-            }
-            catch (FedExException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
-        }
-
-        /// <summary>
-        /// Void the given fedex shipment
-        /// </summary>
-        public override void VoidShipment(ShipmentEntity shipment)
-        {
-            try
-            {
-                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
-                shippingClerk.Void(shipment);
-            }
-            catch (FedExException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
+            throw new NotImplementedException("You should be using the FedExLabelService");
         }
 
         /// <summary>

@@ -46,6 +46,10 @@
     <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\log4net.dll</HintPath>
@@ -140,6 +144,8 @@
     <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\IAmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
+    <Compile Include="Carriers\FedEx\FedExLabelService.cs" />
+    <Compile Include="Carriers\FedEx\FedExShippingClerkFactoryWrapper.cs" />
     <Compile Include="Carriers\iParcel\iParcelLabelService.cs" />
     <Compile Include="Carriers\None\NoneLabelService.cs" />
     <Compile Include="Carriers\OnTrac\OnTracLabelService.cs" />

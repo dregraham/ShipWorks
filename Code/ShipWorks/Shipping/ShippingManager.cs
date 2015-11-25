@@ -856,6 +856,22 @@ namespace ShipWorks.Shipping
                     {
                         shipmentType.VoidShipment(shipment);
 
+                        using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                        {
+                            if (lifetimeScope.IsRegisteredWithKey<ILabelService>((ShipmentTypeCode)shipment.ShipmentType))
+                            {
+                                ILabelService labelService =
+                                    lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode)shipment.ShipmentType);
+
+                                labelService.Void(shipment);
+                            }
+                            else
+                            {
+                                // TODO: remove this once shipmenttype dot VoidShipment is gone
+                                shipmentType.VoidShipment(shipment);
+                            }
+                        }
+
                         shipment.Voided = true;
                         shipment.VoidedDate = DateTime.UtcNow;
                         shipment.VoidedUserID = UserSession.User.UserID;

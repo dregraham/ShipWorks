@@ -149,6 +149,7 @@
       <DependentUpon>AmazonProfileControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Amazon\AmazonShippingModule.cs" />
+    <Compile Include="Carriers\FedEx\FedExShippingModule.cs" />
     <Compile Include="Carriers\iParcel\iParcelShippingModule.cs" />
     <Compile Include="Carriers\None\NoneShippingModule.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShippingModule.cs" />
