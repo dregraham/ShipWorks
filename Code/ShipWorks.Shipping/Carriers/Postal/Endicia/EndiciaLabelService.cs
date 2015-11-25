@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public EndiciaLabelService(EndiciaShipmentType endiciaShipmentType)
         {
+            //TODO: stop using the ShipmentType when we pull rating into its own service
             this.endiciaShipmentType = endiciaShipmentType;
         }
 

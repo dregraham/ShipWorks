@@ -110,29 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            if (shipment.ShipPerson.IsDomesticCountry() && shipment.Postal.Confirmation == (int) PostalConfirmationType.None)
-            {
-                PostalPackagingType packaging = (PostalPackagingType) shipment.Postal.PackagingType;
-
-                if ((shipment.Postal.Service != (int) PostalServiceType.ExpressMail) &&
-                    !(shipment.Postal.Service == (int) PostalServiceType.FirstClass && (packaging== PostalPackagingType.Envelope || packaging == PostalPackagingType.LargeEnvelope)) )
-                {
-                    throw new ShippingException(string.Format(
-                        "A confirmation option must be selected when shipping {0}.", 
-                        EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service)));
-                }
-            }
-
-            if (shipment.Postal.Service == (int) PostalServiceType.ExpressMail &&
-                shipment.Postal.Confirmation != (int)PostalConfirmationType.None &&
-                shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRestricted &&
-                shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRequired)
-            {
-                throw new ShippingException("A confirmation option cannot be used with Express mail.");
-            }
-
-            // Process the shipment
-            PostalWebClientShipping.ProcessShipment(shipment.Postal);
+            throw new NotImplementedException("You should be using the WebToolsLabelService");
         }
 
         /// <summary>
