@@ -19,6 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
     public class BestRateShipmentTypeTest
     {
         private BestRateShipmentType testObject;
+        private BestRateLabelService labelService;
 
         private Mock<IBestRateShippingBrokerFactory> brokerFactory;
         private Mock<IBestRateShippingBroker> broker;
@@ -61,6 +62,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             log = new Mock<ILog>();
 
             testObject = new BestRateShipmentType(brokerFactory.Object, filterFactory.Object, log.Object);
+
+            labelService = new BestRateLabelService();
 
             InitializeFootnoteTests();
         }
@@ -331,7 +334,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [Fact]
         public void ProcessShipment_ThrowsInvalidOperationException_Test()
         {
-            Assert.Throws<InvalidOperationException>(() => testObject.ProcessShipment(new ShipmentEntity()));
+            Assert.Throws<InvalidOperationException>(() => labelService.Create(new ShipmentEntity()));
         }
 
         [Fact]
