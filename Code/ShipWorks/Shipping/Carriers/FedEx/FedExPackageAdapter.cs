@@ -93,6 +93,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Gets or sets the packaging type.
+        /// </summary>
+        public int PackagingType
+        {
+            get { return shipmentEntity.FedEx.PackagingType; }
+            set { shipmentEntity.FedEx.PackagingType = value; }
+        }
+
+        /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         public string HashCode()

@@ -74,6 +74,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Gets or sets the packaging type.
+        /// </summary>
+        public int PackagingType
+        {
+            get { return shipment.Postal.PackagingType; }
+            set { shipment.Postal.PackagingType = value; }
+        }
+
+        /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         public string HashCode()

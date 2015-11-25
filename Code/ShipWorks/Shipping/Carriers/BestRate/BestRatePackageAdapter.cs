@@ -74,6 +74,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Gets or sets the packaging type.
+        /// </summary>
+        public int PackagingType
+        {
+            get { return 0; }
+            set { }
+        }
+
+        /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         public string HashCode()

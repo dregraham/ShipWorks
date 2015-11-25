@@ -151,6 +151,7 @@
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentAdapterTest.cs" />
+    <Compile Include="Carriers\Other\OtherPackageAdapterTest.cs" />
     <Compile Include="Carriers\Other\OtherShipmentAdapterTest.cs" />
     <Compile Include="Carriers\None\NoneShipmentAdapterTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />

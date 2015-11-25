@@ -37,6 +37,11 @@ namespace ShipWorks.Shipping.Services
         bool ApplyAdditionalWeight { get; set; }
 
         /// <summary>
+        /// Gets or sets the packaging type.
+        /// </summary>
+        int PackagingType { get; set; }
+
+        /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         string HashCode();

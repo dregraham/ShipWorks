@@ -74,6 +74,15 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Gets or sets the packaging type.
+        /// </summary>
+        public int PackagingType
+        {
+            get { return shipment.OnTrac.PackagingType; }
+            set { shipment.OnTrac.PackagingType = value; }
+        }
+
+        /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         public string HashCode()
