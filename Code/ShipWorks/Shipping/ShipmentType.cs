@@ -36,6 +36,7 @@ using System.Xml.Linq;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 

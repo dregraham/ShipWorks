@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ShipWorks.Shipping.ShipSense.Hashing
+namespace Interapptive.Shared.Utility
 {
     /// <summary>
     /// Class that implements a hash for strings.

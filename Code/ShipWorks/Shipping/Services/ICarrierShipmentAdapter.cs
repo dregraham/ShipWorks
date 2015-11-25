@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -75,5 +76,6 @@ namespace ShipWorks.Shipping.Services
         /// Package type selected
         /// </summary>
         int PackageType { get; set; }
+
     }
 }

@@ -1,9 +1,8 @@
 ﻿
-namespace ShipWorks.Shipping.ShipSense.Packaging
+namespace ShipWorks.Shipping.Services
 {
     /// <summary>
-    /// An interface intended to be used for shuffling package data between 
-    /// a ShipSense knowledge base entry and carriers.
+    /// An interface intended to be used for shuffling package data between classes.
     /// </summary>
     public interface IPackageAdapter
     {

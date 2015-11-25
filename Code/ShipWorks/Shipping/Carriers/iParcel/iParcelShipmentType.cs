@@ -32,6 +32,7 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Services;
 using ShipWorks.UI.Wizard;
 
 

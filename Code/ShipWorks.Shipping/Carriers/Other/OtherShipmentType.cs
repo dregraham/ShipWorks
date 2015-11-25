@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {

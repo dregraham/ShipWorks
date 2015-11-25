@@ -44,6 +44,7 @@ using ShipWorks.Stores.Content;
 using Autofac;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping
 {

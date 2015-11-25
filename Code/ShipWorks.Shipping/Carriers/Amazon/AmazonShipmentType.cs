@@ -22,6 +22,7 @@ using System.Diagnostics;
 using ShipWorks.Editions;
 using ShipWorks.Core.Messaging;
 using System.Diagnostics.CodeAnalysis;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {

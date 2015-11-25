@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.None
 {

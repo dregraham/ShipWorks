@@ -33,6 +33,7 @@ using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Api;
 using Interapptive.Shared.Net;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {

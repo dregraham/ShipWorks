@@ -2,6 +2,8 @@
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Diagnostics.CodeAnalysis;
+using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {

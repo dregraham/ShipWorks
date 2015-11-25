@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.ShipSense.Packaging
 {

@@ -44,6 +44,7 @@ using log4net;
 using log4net.Repository.Hierarchy;
 using System.Globalization;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Services;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.UPS

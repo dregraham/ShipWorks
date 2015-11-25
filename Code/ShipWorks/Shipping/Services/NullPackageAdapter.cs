@@ -1,12 +1,10 @@
-﻿
-using ShipWorks.Shipping.ShipSense.Hashing;
+﻿using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Shipping.ShipSense.Packaging
+namespace ShipWorks.Shipping.Services
 {
     /// <summary>
     /// A package adapter that amounts to an implementation of the null object
-    /// pattern. This is intended for shipment types where ShipSense is not
-    /// applicable.
+    /// pattern. 
     /// </summary>
     public class NullPackageAdapter : IPackageAdapter
     {
