@@ -133,6 +133,9 @@
     <Compile Include="Carriers\Amazon\AmazonUspsRateFilterTest.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRatingServiceTests.cs" />
     <Compile Include="Carriers\Amazon\Api\GetEligibleShippingServicesResponseTest.cs" />
+    <Compile Include="Carriers\None\NoneLabelServiceTest.cs" />
+    <Compile Include="Carriers\Other\OtherLabelServiceTest.cs" />
+    <Compile Include="Carriers\Ups\UpsLabelServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
