@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Interapptive.Shared.Utility;
 using System.Collections.ObjectModel;
 using System.Collections;
@@ -23,16 +22,24 @@ namespace Interapptive.Shared.Collections
         /// <returns>Collection of chunks of the specified type</returns>
         public static IEnumerable<IEnumerable<T>> SplitIntoChunksOf<T>(this IEnumerable<T> source, int size)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException("source");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
 
             if (size < 1)
             {
                 throw new ArgumentOutOfRangeException("size");
             }
 
+            return SplitIntoChunksOfImplementation(source, size);
+        }
+        /// <summary>
+        /// Breaks a collection up into chunks of the selected size
+        /// </summary>
+        /// <typeparam name="T">Type of data in the collection</typeparam>
+        /// <param name="source">Collection that will be broken into chunks</param>
+        /// <param name="size">Size of each chunk</param>
+        /// <returns>Collection of chunks of the specified type</returns>
+        private static IEnumerable<IEnumerable<T>> SplitIntoChunksOfImplementation<T>(IEnumerable<T> source, int size)
+        {
             using (IEnumerator<T> iter = source.GetEnumerator())
             {
                 while (iter.MoveNext())
@@ -118,10 +125,7 @@ namespace Interapptive.Shared.Collections
         /// <returns></returns>
         public static IEnumerable<T> Repeat<T>(this IEnumerable<T> source, int count)
         {
-            if (null == source)
-            {
-                throw new ArgumentNullException("source");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
 
             if (count < 0)
             {
@@ -218,10 +222,8 @@ namespace Interapptive.Shared.Collections
         /// <summary>
         /// Create a ReadOnlyCollection from the given enumerable
         /// </summary>
-        public static ReadOnlyCollection<T> ToReadOnly<T>(this IEnumerable<T> source) => 
+        public static ReadOnlyCollection<T> ToReadOnly<T>(this IEnumerable<T> source) =>
             new ReadOnlyCollection<T>(source?.ToList() ?? new List<T>());
-
-
 
         /// <summary>
         /// Returns whether the collection has more, less, or equal to the specified count
@@ -245,7 +247,7 @@ namespace Interapptive.Shared.Collections
         public static int HasMoreOrLessThanCount(this IEnumerable source, int count)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
-            
+
             ICollection collection = source as ICollection;
             if (collection != null)
             {

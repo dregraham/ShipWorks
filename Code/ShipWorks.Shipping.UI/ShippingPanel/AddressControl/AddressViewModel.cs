@@ -65,6 +65,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
         }
 
         /// <summary>
+        /// Expose a stream of property changes
+        /// </summary>
+        public IObservable<string> PropertyChangeStream => handler;
+
+        /// <summary>
         /// Can the current address be validated
         /// </summary>
         [Obfuscation(Exclude = true)]

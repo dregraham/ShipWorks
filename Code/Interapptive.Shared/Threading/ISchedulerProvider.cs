@@ -10,6 +10,8 @@ namespace Interapptive.Shared.Threading
         /// <summary>
         /// Current thread scheduler
         /// </summary>
+        /// <remarks>This is the default for Generate, Range, Repeat, TakeLast,
+        /// ToObservable, and the ReplaySubject</remarks>
         IScheduler CurrentThread { get; }
 
         /// <summary>
@@ -20,6 +22,8 @@ namespace Interapptive.Shared.Threading
         /// <summary>
         /// Immediate scheduler
         /// </summary>
+        /// <remarks>This is the default for Empty, GetSchedulerForCurrentContext, Return,
+        /// StartWith, Throw, Run</remarks>
         IScheduler Immediate { get; }
 
         /// <summary>
@@ -36,5 +40,13 @@ namespace Interapptive.Shared.Threading
         /// Task pool scheduler
         /// </summary>
         IScheduler TaskPool { get; }
+
+        /// <summary>
+        /// Default scheduler used by Reactive
+        /// </summary>
+        /// <remarks>This is the default for Start, ToAsync, FromAsyncPattern, Buffer, Delay, DelaySubscription,
+        /// Generate, Interval, Sample, Skip, SkipLast, SkipUntil, Take, TakeLast, TakeLastBuffer, TakeUntil,
+        /// Throttle, TimeInterval, Timeout, Timer, Timestamp, Window</remarks>
+        IScheduler Default { get; }
     }
 }

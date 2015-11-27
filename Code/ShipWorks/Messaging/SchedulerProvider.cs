@@ -36,5 +36,10 @@ namespace Interapptive.Shared.Threading
         /// Task pool scheduler
         /// </summary>
         public IScheduler TaskPool => TaskPoolScheduler.Default;
+
+        /// <summary>
+        /// Default scheduler used by time based methods
+        /// </summary>
+        public IScheduler Default => DefaultScheduler.Instance;
     }
 }

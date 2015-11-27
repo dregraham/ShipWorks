@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Threading;
 using ShipWorks.Shipping.UI.MessageHandlers;
 using System;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
@@ -29,10 +30,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
-            return changeHandler.ShipmentLoadedStream()
-                .ObserveOn(schedulerProvider.Dispatcher)
-                .Do(_ => viewModel.AllowEditing = true)
-                .Subscribe(viewModel.LoadOrder);
+            return new CompositeDisposable(
+                changeHandler.OrderChangingStream()
+                    .Subscribe(_ => viewModel.AllowEditing = false),
+                changeHandler.ShipmentLoadedStream()
+                    .ObserveOn(schedulerProvider.Dispatcher)
+                    .Do(_ => viewModel.AllowEditing = true)
+                    .Subscribe(viewModel.LoadOrder)
+            );
         }
     }
 }

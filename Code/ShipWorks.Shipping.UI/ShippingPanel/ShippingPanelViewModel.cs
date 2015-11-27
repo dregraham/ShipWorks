@@ -5,17 +5,15 @@ using System.Linq;
 using System.Reactive.Linq;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Core.Messaging.Messages.Shipping;
-using ShipWorks.Shipping.UI.MessageHandlers;
 using Interapptive.Shared.Collections;
 using System.Reactive.Disposables;
-using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
+using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -27,10 +25,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly PropertyChangedHandler handler;
         private OrderSelectionLoaded orderSelectionLoaded;
 
-        private bool forceDomesticInternationalChanged = false;
-
         private readonly IShippingManager shippingManager;
-        private readonly OrderSelectionChangedHandler shipmentChangedHandler;
+        private readonly IMessenger messenger;
         private readonly IDisposable subscriptions;
         private readonly IMessageHelper messageHelper;
 
@@ -50,24 +46,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public ShippingPanelViewModel(
             IEnumerable<IShippingPanelObservableRegistration> registrations,
-            OrderSelectionChangedHandler shipmentChangedHandler,
+            IMessenger messenger,
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             IShippingViewModelFactory shippingViewModelFactory) : this()
         {
             this.shippingManager = shippingManager;
-            this.shipmentChangedHandler = shipmentChangedHandler;
+            this.messenger = messenger;
             this.messageHelper = messageHelper;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
-
-            subscriptions = new CompositeDisposable(
-                shipmentChangedHandler.OfType<ShipmentChangedMessage>().Subscribe(OnShipmentChanged),
-                shipmentChangedHandler.OfType<StoreChangedMessage>().Subscribe(OnStoreChanged),
-                shipmentChangedHandler.OfType<ShipmentDeletedMessage>().Where(x => x.DeletedShipmentId == ShipmentAdapter?.Shipment?.ShipmentID).Subscribe(OnShipmentDeleted),
-                shipmentChangedHandler.OrderChangingStream().Subscribe(_ => AllowEditing = false),
-                new CompositeDisposable(registrations.Select(x => x.Register(this)))
-            );
 
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
@@ -75,6 +63,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ShipmentViewModel = shippingViewModelFactory.GetShipmentViewModel();
 
             // Wiring up observables needs objects to not be null, so do this last.
+            subscriptions = new CompositeDisposable(registrations.Select(x => x.Register(this)));
             WireUpObservables();
 
             PropertyChanging += OnPropertyChanging;
@@ -95,42 +84,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void WireUpObservables()
         {
-            // Merge the two address view models together so that we can respond to their property changed events
-            Observable.Merge(
-                (new List<AddressViewModel> { Origin, Destination }).Select(
-                    o => Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
-                        h => o.PropertyChanged += h,
-                        h => o.PropertyChanged -= h
-                        )
-                    ))
-                    .Where(evt =>
-                    {
-                        string propertyName = evt.EventArgs.PropertyName;
 
-                        bool handleField = propertyName.Equals(nameof(AddressViewModel.CountryCode), StringComparison.InvariantCultureIgnoreCase) ||
-                                           propertyName.Equals(nameof(AddressViewModel.PostalCode), StringComparison.InvariantCultureIgnoreCase) ||
-                                           propertyName.Equals(nameof(AddressViewModel.StateProvCode), StringComparison.InvariantCultureIgnoreCase);
-
-                        // forceDomesticInternationalChanged is used for race conditions:
-                        // For example (from rate criteria changing), ShipmentType property changes, and then before the throttle time, SupportsMultipleShipments changes.
-                        // Since SupportsMultipleShipments isn't a rating field, the event would not be fired, even though
-                        // ShipmentType changed and the event needs to be raised.
-                        // So keep track that during the throttling a rate criteria was changed.
-                        forceDomesticInternationalChanged = forceDomesticInternationalChanged || handleField;
-
-                        return forceDomesticInternationalChanged;
-                    })
-                .Throttle(TimeSpan.FromMilliseconds(250))
-                .Subscribe(evt =>
-                {
-                    // Reset forceDomesticInternationalChanged so that we don't force it on the next round.
-                    forceDomesticInternationalChanged = false;
-
-                    Destination.SaveToEntity(ShipmentAdapter.Shipment.ShipPerson);
-                    Origin.SaveToEntity(ShipmentAdapter.Shipment.OriginPerson);
-
-                    DomesticInternationalText = ShipmentAdapter.IsDomestic ? "Domestic" : "International";
-                });
 
 #pragma warning disable S125 // Sections of code should not be "commented out"
                             //// Wire up the rate criteria obseravable throttling for the PropertyChanged event.
@@ -386,42 +340,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             // Save UI values to the shipment so we can send the new values to the rates panel
             Save();
 
-            shipmentChangedHandler.Send(new ShipmentChangedMessage(this, ShipmentAdapter));
-        }
-
-        /// <summary>
-        /// Event for updating the view model when a shipment has changed.
-        /// </summary>
-        private void OnShipmentChanged(ShipmentChangedMessage shipmentChangedMessage)
-        {
-            // Don't handle shipment changed messages from ourselves
-            if (Equals(shipmentChangedMessage.Sender))
-            {
-                return;
-            }
-
-            if (shipmentChangedMessage?.ShipmentAdapter?.Shipment == null || ShipmentAdapter?.Shipment == null)
-            {
-                return;
-            }
-
-            if (shipmentChangedMessage.ShipmentAdapter.Shipment.ShipmentID == ShipmentAdapter.Shipment.ShipmentID)
-            {
-                Populate(shipmentChangedMessage.ShipmentAdapter);
-            }
-        }
-
-        /// <summary>
-        /// Handles StoreChangedMessages.
-        /// </summary>
-        private void OnStoreChanged(StoreChangedMessage storeChangedMessage)
-        {
-            if (OriginAddressType != (int)ShipmentOriginSource.Store)
-            {
-                return;
-            }
-
-            Origin.SetAddressFromOrigin(OriginAddressType, ShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
+            messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter));
         }
 
 
@@ -465,7 +384,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// A shipment has been deleted
         /// </summary>
-        private void OnShipmentDeleted(ShipmentDeletedMessage message)
+        public void UnloadShipment()
         {
             // Show as deleted.
             LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Deleted;
@@ -482,7 +401,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-                shipmentChangedHandler.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
+                messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
             }
         }
 

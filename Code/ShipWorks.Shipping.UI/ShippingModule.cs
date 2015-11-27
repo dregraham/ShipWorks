@@ -27,10 +27,6 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ChangeShipmentTypePipeline>()
-                .As<IShippingPanelObservableRegistration>()
-                .PreserveExistingDefaults();
-
             builder.RegisterType<ShippingPanelRegistration>()
                 .AsImplementedInterfaces()
                 .PreserveExistingDefaults();

@@ -195,9 +195,13 @@
     <Compile Include="ShippingPanel\AddressControl\AddressViewModel.Properties.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\DomesticInternationalDisplayPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\IShippingPanelObservableRegistration.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\LoadOrderPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ObservableRegistrationsModule.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentDeletedPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml.cs">
       <DependentUpon>ShipmentControl.xaml</DependentUpon>
     </Compile>
