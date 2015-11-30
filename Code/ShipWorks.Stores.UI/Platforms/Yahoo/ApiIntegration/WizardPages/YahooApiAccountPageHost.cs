@@ -30,6 +30,10 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
                 DataContext = viewModel
             };
             ControlHost.Child = page;
+
+            YahooStoreEntity store = GetStore<YahooStoreEntity>();
+
+            viewModel.Load(store);
         }
 
         /// <summary>

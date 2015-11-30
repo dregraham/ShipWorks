@@ -7,13 +7,31 @@
              xmlns:converters ="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance wizardPages:YahooApiAccountPageViewModel}"
-             d:DesignHeight="200" d:DesignWidth="200">
+             d:DesignHeight="200" d:DesignWidth="400"
+             FontFamily="Tahoma" FontSize="11">
     <UserControl.Resources>
         <converters:EnumImageConverter x:Key="EnumImage"/>
     </UserControl.Resources>            
-    <StackPanel Margin="0,0,-90,0">
-        <TextBlock>Please enter your Yahoo store ID and access token</TextBlock>
-        <Grid>
+    <StackPanel Margin="24,8,24,8">
+        <StackPanel.Resources>
+            <Style x:Key="Section" TargetType="FrameworkElement">
+                <Setter Property="Margin" Value="0,0,0,8"></Setter>
+            </Style>
+        </StackPanel.Resources>
+        <TextBlock Style="{StaticResource Section}">Please enter your Yahoo store ID and access token:</TextBlock>
+        <Grid Style="{StaticResource Section}" Margin="24,0,24,8">
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Margin" Value="0,0,8,0"></Setter>
+                    <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Margin" Value="0,2,0,2"></Setter>
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                    <Setter Property="Padding" Value="2,2,2,2"></Setter>
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -23,26 +41,34 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0">Store ID:</TextBlock>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding YahooStoreID}"></TextBox>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding YahooStoreID, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <TextBlock Grid.Row="1" Grid.Column="0">Access Token:</TextBlock>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AccessToken}"></TextBox>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AccessToken, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </Grid>
-        <TextBlock>
+        <TextBlock Style="{StaticResource Section}">
             <Run>For help adding your Yahoo store,</Run> 
             <Hyperlink NavigateUri="{Binding HelpUrl}" RequestNavigate="Hyperlink_OnRequestNavigate">click here</Hyperlink>
         </TextBlock>
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"> </RowDefinition>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="80"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0">Download orders starting from order number:</TextBlock>
-            <TextBox Grid.Column="1" Text="{Binding BackupOrderNumber}"></TextBox>
-            <Image Grid.Column="2" Source="{Binding IsValid, Converter={StaticResource EnumImage}}"> </Image>
+            <TextBlock Grid.Column="0"
+                       VerticalAlignment="Center">Download orders starting from order number:</TextBlock>
+            <TextBox Grid.Column="1" 
+                     Text="{Binding BackupOrderNumber, UpdateSourceTrigger=PropertyChanged}" 
+                     Margin="8,0,4,0" 
+                     VerticalAlignment="Center" 
+                     Padding="2,2,2,2"></TextBox>
+            <Image Grid.Column="2" 
+                   Source="{Binding IsValid, Converter={StaticResource EnumImage}}"
+                   VerticalAlignment="Center"
+                   Stretch="None"></Image>
         </Grid>
-        
-        
     </StackPanel>
-    
 </UserControl>

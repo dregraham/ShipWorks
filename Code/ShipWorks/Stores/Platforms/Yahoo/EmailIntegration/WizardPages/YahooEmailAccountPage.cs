@@ -17,8 +17,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages
         public YahooEmailAccountPage()
         {
             InitializeComponent();
-
-            linkHelp.Url = YahooStoreType.AccountSettingsHelpUrl;
         }
 
         /// <summary>
@@ -28,6 +26,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages
         {
             YahooStoreEntity store = GetStore<YahooStoreEntity>();
             EmailAccountEntity account = store.YahooEmailAccount;
+
+            YahooStoreType storeType = StoreTypeManager.GetType(store) as YahooStoreType;
+
+            linkHelp.Url = storeType?.AccountSettingsHelpUrl;
 
             if (account == null)
             {

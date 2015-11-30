@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Net;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reflection;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Yahoo;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
+using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
 namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 {
@@ -19,9 +21,8 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
         private string yahooStoreID;
         private string accessToken;
         private string helpUrl;
-        private long backupOrderNumber;
-        private YahooStoreEntity store;
-        private YahooOrderNumberValidation isValid;
+        private long? backupOrderNumber;
+        private YahooOrderNumberValidation isValid;  
 
         public YahooApiAccountPageViewModel(IStoreTypeManager storeTypeManager, Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient)
         {
@@ -54,7 +55,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
         }
 
         [Obfuscation(Exclude = true)]
-        public long BackupOrderNumber
+        public long? BackupOrderNumber
         {
             get { return backupOrderNumber; }
             set { handler.Set(nameof(BackupOrderNumber), ref backupOrderNumber, value); }
@@ -69,12 +70,45 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 
         public void Load(YahooStoreEntity storeEntity)
         {
-            //store = storeEntity;
             HelpUrl = ((YahooStoreType) storeTypeManager.GetType(StoreTypeCode.Yahoo)).AccountSettingsHelpUrl;
-            handler.Where(x => x == nameof(BackupOrderNumber))
-                .Select(_ => storeWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID ,AccessToken =  AccessToken}).GetOrderRange(BackupOrderNumber))
-                .Select(x => x.Contains("<Code>20021</Code>") || x.Contains("<Code>10402</Code>") ? YahooOrderNumberValidation.Valid : YahooOrderNumberValidation.Invalid)
+            handler.Where(IsValidationProperty)
+                .Where(IsValidationPropertyEntered)
+                .Do(_ => IsValid = YahooOrderNumberValidation.Validating)
+                .Throttle(TimeSpan.FromMilliseconds(350))
+                .ObserveOn(TaskPoolScheduler.Default)
+                .Select(Validate)
+                .Select(x => x ? YahooOrderNumberValidation.Valid : YahooOrderNumberValidation.Invalid)
+                .ObserveOn(DispatcherScheduler.Current)
                 .Subscribe(x => IsValid = x);
+        }
+
+        private bool Validate(string arg)
+        {
+            try
+            {
+                YahooResponse response = storeWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
+                            .GetOrderRange(BackupOrderNumber.GetValueOrDefault());
+
+                return response.ErrorResourceList == null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private bool IsValidationPropertyEntered(string propertyName)
+        {
+            return !string.IsNullOrWhiteSpace(YahooStoreID) && 
+                !string.IsNullOrWhiteSpace(AccessToken) &&
+                BackupOrderNumber.HasValue;
+        }
+
+        private bool IsValidationProperty(string propertyName)
+        {
+            return propertyName == nameof(BackupOrderNumber) ||
+                propertyName == nameof(YahooStoreID) ||
+                propertyName == nameof(AccessToken);
         }
 
         public string Save(YahooStoreEntity store)
@@ -95,12 +129,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 
             IYahooApiWebClient client = storeWebClient(store);
 
-            string response = client.GetOrderRange(BackupOrderNumber);
-
-            if (response.Contains("<Code>20021</Code>") || response.Contains("<Code>10402</Code>"))
-            {
-                //show invalid order number warning
-            }
+            YahooResponse response = client.GetOrderRange(BackupOrderNumber.GetValueOrDefault());
             
             try
             {
@@ -113,7 +142,5 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 
             return string.Empty;
         }
-
-        
     }
 }

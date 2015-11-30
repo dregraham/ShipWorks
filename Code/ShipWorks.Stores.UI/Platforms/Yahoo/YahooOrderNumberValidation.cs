@@ -1,17 +1,22 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.ComponentModel;
+using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.UI.Platforms.Yahoo
 {
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum YahooOrderNumberValidation
     {
-
-        [ImageResource("check2")]
+        [Description("Valid")]
+        [ImageResource("check16")]
         Valid,
 
-        [ImageResource("error2")]
+        [Description("Invalid")]
+        [ImageResource("error16")]
         Invalid,
 
-        [ImageResource("check2")]
+        [Description("Validating")]
+        [ImageResource("circle_ball_blue")]
         Validating
     }
 }

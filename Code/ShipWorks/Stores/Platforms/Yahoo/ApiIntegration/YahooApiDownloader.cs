@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             {
                 YahooApiWebClient client = new YahooApiWebClient(Store as YahooStoreEntity);
 
-                YahooResponse response = DeserializeResponse<YahooResponse>(client.GetOrder(orderID));
+                YahooResponse response = client.GetOrder(orderID);
 
                 // Set the progress detail
                 Progress.Detail = $"Processing order {QuantitySaved + 1} of {expectedCount} ...";
@@ -363,7 +363,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             // If item is null, that means it is not in the cache
             // So make the call to get the item weight and cache it
             YahooApiWebClient client = new YahooApiWebClient(store);
-            YahooResponse response = DeserializeResponse<YahooResponse>(client.GetItem(itemID));
+            YahooResponse response = client.GetItem(itemID);
 
             YahooCatalogItem newItem = response.ResponseResourceList.Catalog.ItemList.Item.FirstOrDefault();
 
@@ -426,10 +426,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             int backupTries = 2;
             while (!done)
             {
-                string responseXml = client.GetOrderRange(nextOrderNumber);
+                YahooResponse response = client.GetOrderRange(nextOrderNumber);
 
-                YahooResponse response = DeserializeResponse<YahooResponse>(responseXml);
-                
                 if (CheckForErrors(response, ref backupNumber, ref nextOrderNumber, ref backupTries))
                 {
                     continue;
@@ -511,31 +509,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             temp = tokens.Aggregate(string.Empty, (current, token) => $"{current} {token}");
 
             return DateTime.Parse(temp);
-        }
-
-        /// <summary>
-        /// Deserializes the response XML
-        /// </summary>
-        public static T DeserializeResponse<T>(string xml)
-        {
-            try
-            {
-                return SerializationUtility.DeserializeFromXml<T>(xml);
-            }
-            catch (InvalidOperationException ex)
-            {
-                if (!xml.Contains("ErrorResourceList"))
-                {
-                    YahooResponse errorResponse = SerializationUtility.DeserializeFromXml<YahooResponse>(xml);
-
-                    foreach (YahooError error in errorResponse.ErrorResourceList.Error)
-                    {
-                        throw new YahooException(error.Message, ex);
-                    }
-                }
-
-                throw new YahooException($"Error Deserializing {typeof(T).Name}", ex);
-            }
         }
     }
 }

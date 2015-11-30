@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -28,24 +29,24 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             yahooCatalogEndpoint = $"https://{yahooStoreID}.catalog.store.yahooapis.com/V1";
         }
 
-        public string GetOrder(long orderID)
+        public YahooResponse GetOrder(long orderID)
         {
-            return CleanResponse(ProcessRequest(CreateGetOrderRequest(orderID), "GetOrder"));
+            return ProcessRequest(CreateGetOrderRequest(orderID), "GetOrder");
         }
 
-        public string GetOrderRange(long start)
+        public YahooResponse GetOrderRange(long start)
         {
-            return CleanResponse(ProcessRequest(CreateGetOrderRangeRequest(start), "GetOrderRange"));
+            return ProcessRequest(CreateGetOrderRangeRequest(start), "GetOrderRange");
         }
 
-        public string GetItem(string itemID)
+        public YahooResponse GetItem(string itemID)
         {
-            return CleanResponse(ProcessRequest(CreateGetItemRequest(itemID), "GetItem"));
+            return ProcessRequest(CreateGetItemRequest(itemID), "GetItem");
         }
 
-        public string ValidateCredentials()
+        public YahooResponse ValidateCredentials()
         {
-            return CleanResponse(ProcessRequest(CreateGetItemRangeRequest(1, 2, "keyword"), "GetItemRange"));
+            return ProcessRequest(CreateGetItemRangeRequest(1, 2, "keyword"), "GetItemRange");
         }
 
         public void UploadShipmentDetails(string orderID, string trackingNumber, string shipper, string status)
@@ -58,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             ProcessRequest(CreateUploadOrderStatusRequest(orderID, status), "UploadOrderStatus");
         }
 
-        private string CleanResponse(string response)
+        private static string CleanResponse(string response)
         {
             response = response.Replace("<ystorews:ystorewsResponse xmlns:ystorews=\"urn:yahoo:sbs:ystorews\" >", "<ystorewsResponse>");
             response = response.Replace("</ystorews:ystorewsResponse>", "</ystorewsResponse>");
@@ -74,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             string body = RequestBodyIntro + GetRequestBodyIntro +
                 "<OrderListQuery>" +
                 "<Filter>" +
-                $"<Include>all</Include>" +
+                "<Include>all</Include>" +
                 "</Filter>" +
                 "<QueryParams>" +
                 $"<OrderID>{orderID}</OrderID>" +
@@ -229,7 +230,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="submitter">The submitter.</param>
         /// <param name="action">The action.</param>
         /// <returns></returns>
-        private static string ProcessRequest(HttpRequestSubmitter submitter, string action)
+        private static YahooResponse ProcessRequest(HttpRequestSubmitter submitter, string action)
         {
             try
             {
@@ -241,27 +242,47 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");
 
-                    return responseData;
+                    return DeserializeResponse<YahooResponse>(CleanResponse(responseData));
                 }
             }
             catch (Exception ex)
             {
                 WebException webEx = ex as WebException;
 
-                if (webEx?.Response?.GetResponseStream() != null)
+                if (webEx?.Response?.GetResponseStream() == null)
                 {
-                    using (StreamReader reader = new StreamReader(webEx.Response.GetResponseStream()))
-                    {
-                        string response = reader.ReadToEnd();
+                    throw WebHelper.TranslateWebException(ex, typeof (YahooException));
+                }
 
-                        if (response.Contains("<Code>20021</Code>") || response.Contains("<Code>10402</Code>"))
-                        {
-                            return response;
-                        }
+                using (StreamReader reader = new StreamReader(webEx.Response.GetResponseStream()))
+                {
+                    return DeserializeResponse<YahooResponse>(CleanResponse(reader.ReadToEnd()));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deserializes the response XML
+        /// </summary>
+        public static T DeserializeResponse<T>(string xml)
+        {
+            try
+            {
+                return SerializationUtility.DeserializeFromXml<T>(xml);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!xml.Contains("ErrorResourceList"))
+                {
+                    YahooResponse errorResponse = SerializationUtility.DeserializeFromXml<YahooResponse>(xml);
+
+                    foreach (YahooError error in errorResponse.ErrorResourceList.Error)
+                    {
+                        throw new YahooException(error.Message, ex);
                     }
                 }
 
-                throw WebHelper.TranslateWebException(ex, typeof(YahooException));
+                throw new YahooException($"Error Deserializing {typeof(T).Name}", ex);
             }
         }
     }
