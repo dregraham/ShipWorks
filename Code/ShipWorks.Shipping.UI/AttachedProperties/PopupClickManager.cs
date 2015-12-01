@@ -106,7 +106,8 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
             }
 
             UIElement element = d as UIElement;
-            if (element != null) {
+            if (element != null)
+            {
                 updateElementHandler(element);
             }
         }

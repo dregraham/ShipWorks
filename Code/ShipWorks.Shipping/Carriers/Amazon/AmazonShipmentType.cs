@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             shipment.Amazon.ShippingServiceName;
 
         /// <summary>
-        /// Get detailed information about the parcel in a generic way that can be used accross shipment types
+        /// Get detailed information about the parcel in a generic way that can be used across shipment types
         /// </summary>
         public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
@@ -353,7 +353,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 shipment.TotalWeight += shipment.Amazon.DimsWeight;
             }
         }
-
 
         /// <summary>
         /// Tracks the shipment.

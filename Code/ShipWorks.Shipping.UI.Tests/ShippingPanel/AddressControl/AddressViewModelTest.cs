@@ -527,7 +527,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
 
         public void VerifyPropertySetterResetsValidationStatus(Action<AddressViewModel> setAction)
         {
-            entityBasedAdapter.AddressValidationStatus = (int)AddressValidationStatusType.Fixed;
+            entityBasedAdapter.AddressValidationStatus = (int) AddressValidationStatusType.Fixed;
 
             AddressViewModel testObject = mock.Create<AddressViewModel>();
             testObject.IsAddressValidationEnabled = true;

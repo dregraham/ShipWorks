@@ -15,6 +15,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using log4net;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -46,11 +47,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.labelEnforcers = labelEnforcers;
         }
 
-
         /// <summary>
         /// Create the label
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3240:The simplest possible condition syntax should be used", Justification = "More readable this way.")]
+        [SuppressMessage("SonarQube", "S3240:The simplest possible condition syntax should be used",
+            Justification = "More readable this way.")]
         public void Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
@@ -102,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
-            
+
             webClient.CancelShipment(settings, shipment.Amazon.AmazonUniqueShipmentID);
         }
 
@@ -156,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // We need to convert the PDF into images and register each image as a resource in the database
             List<Stream> images = pdf.ToImages().ToList();
 
-            // Try to crop the label 
+            // Try to crop the label
             try
             {
                 // loop each image, if the pdf had multiple pages

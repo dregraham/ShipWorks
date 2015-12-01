@@ -1,7 +1,7 @@
 ﻿using ShipWorks.Shipping.Insurance;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
-using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -17,15 +17,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
-            
+
             Shipment = shipment;
         }
-
 
         /// <summary>
         /// If the package is being insured PennyOne - only applies to FedEx\UPS shipments
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used", Justification = "This is specific only to Amazon.")]
+        [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used",
+            Justification = "This is specific only to Amazon.")]
         public bool? InsurancePennyOne
         {
             get { return Shipment.Amazon.CarrierName == "STAMPS_DOT_COM"; }

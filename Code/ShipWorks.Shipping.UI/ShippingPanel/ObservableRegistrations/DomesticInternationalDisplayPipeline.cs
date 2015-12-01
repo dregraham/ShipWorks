@@ -18,7 +18,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="schedulerProvider"></param>
         public DomesticInternationalDisplayPipeline(ISchedulerProvider schedulerProvider)
         {
             this.schedulerProvider = schedulerProvider;
