@@ -11117,7 +11117,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Stores\Platforms\Yahoo\ApiIntegration\WizardPages\" />
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>

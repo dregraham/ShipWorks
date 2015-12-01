@@ -11,6 +11,9 @@ using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.CoreExtensions.Actions
 {
+    /// <summary>
+    /// Action task for uploading shipment detials to Yahoo
+    /// </summary>
     [ActionTask("Upload shipment details", "YahooApiShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class YahooApiShipmentUploadTask : StoreInstanceTaskBase
     {

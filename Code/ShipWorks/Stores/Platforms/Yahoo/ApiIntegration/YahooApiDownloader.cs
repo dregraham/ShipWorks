@@ -17,19 +17,33 @@ using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
+    /// <summary>
+    /// Downloader for Yahoo stores using the Yahoo Api
+    /// </summary>
     public class YahooApiDownloader : StoreDownloader
     {
-        public YahooApiDownloader(StoreEntity store) : base(store)
+        private readonly IYahooApiWebClient webClient;
+        private readonly ISqlAdapterRetry sqlAdapter;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YahooApiDownloader"/> class.
+        /// </summary>
+        /// <param name="store"></param>
+        public YahooApiDownloader(StoreEntity store) : this(store, new YahooApiWebClient((YahooStoreEntity)store), new SqlAdapterRetry<SqlException>(5, -5, "YahooApiDownloader.LoadOrder"))
         {
         }
 
-        public YahooApiDownloader(StoreEntity store, StoreType storeType) : base(store, storeType)
-        {
-        }
 
-        public void ForceDownload()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YahooApiDownloader"/> class.
+        /// </summary>
+        /// <param name="store">The store.</param>
+        /// <param name="webClient">The web client.</param>
+        /// <param name="sqlAdapter">The SQL adapter.</param>
+        public YahooApiDownloader(StoreEntity store, IYahooApiWebClient webClient, ISqlAdapterRetry sqlAdapter) : base(store, new YahooStoreType(store))
         {
-            Download();
+            this.webClient = webClient;
+            this.sqlAdapter = sqlAdapter;
         }
 
         /// <summary>
@@ -43,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             {
                 List<long> orderList = CheckForNewOrders();
 
-                ((YahooStoreEntity) Store).BackupOrderNumber = null;
+                ((YahooStoreEntity)Store).BackupOrderNumber = null;
 
                 if (orderList == null)
                 {
@@ -61,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     Progress.Detail = "Downloading new orders...";
                     DownloadNewOrders(orderList);
 
-                    StoreManager.SaveStore(Store);
+                    //StoreManager.SaveStore(Store);
                 }
             }
             catch (YahooException ex)
@@ -82,12 +96,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             int expectedCount = orderList.Count;
 
-            foreach (long orderID in orderList)
+            foreach (YahooResponse response in orderList.Select(orderID => webClient.GetOrder(orderID)))
             {
-                YahooApiWebClient client = new YahooApiWebClient(Store as YahooStoreEntity);
-
-                YahooResponse response = client.GetOrder(orderID);
-
                 // Set the progress detail
                 Progress.Detail = $"Processing order {QuantitySaved + 1} of {expectedCount} ...";
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
@@ -98,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 if (Progress.IsCancelRequested)
                 {
                     return;
-                } 
+                }
             }
         }
 
@@ -131,11 +141,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 LoadOrderCharges(orderEntity, order);
                 LoadOrderGiftMessages(orderEntity, order);
                 LoadOrderNotes(orderEntity, order);
-                LoadOrderPayments(orderEntity, order); 
+                LoadOrderPayments(orderEntity, order);
             }
 
-            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "YahooApiDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
 
             return orderEntity;
         }
@@ -207,7 +216,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     // Here we are extracting the date that prefixes the note, the date and note are seperated by a ':'
                     // We want to substring off of the second ":" though, since one appears in the dates time
                     int dateEndIndex = note.IndexOf(":", note.IndexOf(":", StringComparison.Ordinal) + 1, StringComparison.Ordinal);
-                    
+
                     DateTime noteDate = DateTime.Parse(note.Substring(0, dateEndIndex));
 
                     string noteText = note.Substring(dateEndIndex + 1);
@@ -230,7 +239,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="order">The order DTO.</param>
         private void LoadOrderGiftMessages(YahooOrderEntity orderEntity, YahooOrder order)
         {
-            if (order.OrderTotals.GiftWrap !=0 || !order.GiftMessage.IsNullOrWhiteSpace())
+            if (order.OrderTotals.GiftWrap != 0 || !order.GiftMessage.IsNullOrWhiteSpace())
             {
                 YahooOrderItemEntity item = (YahooOrderItemEntity)InstantiateOrderItem(orderEntity);
 
@@ -244,7 +253,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 attribute.Name = "Message";
                 attribute.Description = order.GiftMessage;
-                attribute.UnitPrice = 0; 
+                attribute.UnitPrice = 0;
             }
         }
 
@@ -330,7 +339,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             itemEntity.Quantity = item.Quantity;
             itemEntity.UnitPrice = item.UnitPrice;
             itemEntity.Description = item.Description;
-            itemEntity.Url = item.URL; 
+            itemEntity.Url = item.URL;
             itemEntity.Thumbnail = item.ThumbnailUrl;
             itemEntity.Weight = GetItemWeight(item.ItemID);
 
@@ -354,7 +363,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             LruCache<string, YahooCatalogItem> productWeightCache = YahooProductWeightCache.Instance.GetStoreProductWeightCache(store.YahooStoreID);
 
             YahooCatalogItem item = productWeightCache[itemID];
-            
+
             if (item != null)
             {
                 return item.ShipWeight;
@@ -362,8 +371,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             // If item is null, that means it is not in the cache
             // So make the call to get the item weight and cache it
-            YahooApiWebClient client = new YahooApiWebClient(store);
-            YahooResponse response = client.GetItem(itemID);
+            YahooResponse response = webClient.GetItem(itemID);
 
             YahooCatalogItem newItem = response.ResponseResourceList.Catalog.ItemList.Item.FirstOrDefault();
 
@@ -407,8 +415,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             YahooStoreEntity store = Store as YahooStoreEntity;
 
-            YahooApiWebClient client = new YahooApiWebClient(store);
-
             List<long> orders = new List<long>();
 
             bool done = false;
@@ -420,13 +426,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             // This should only happen on the stores initial download
             if (nextOrderNumber == 0 && backupNumber != null)
             {
-               nextOrderNumber = backupNumber.Value;
+                nextOrderNumber = backupNumber.Value;
             }
 
             int backupTries = 2;
             while (!done)
             {
-                YahooResponse response = client.GetOrderRange(nextOrderNumber);
+                YahooResponse response = webClient.GetOrderRange(nextOrderNumber);
 
                 if (CheckForErrors(response, ref backupNumber, ref nextOrderNumber, ref backupTries))
                 {
@@ -460,35 +466,48 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             return orders;
         }
 
+        /// <summary>
+        /// Checks for errors in the response to see if we need to try and use the backup order number
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <param name="backupNumber">The backup order number to try on next invalid starting order number.</param>
+        /// <param name="nextOrderNumber">The next order number.</param>
+        /// <param name="backupTries">The number of times the next backup order number is used.</param>
+        /// <returns>True if errors occured, false if no errors</returns>
         private bool CheckForErrors(YahooResponse response, ref long? backupNumber, ref long nextOrderNumber,
-            ref int backupTries)
+                    ref int backupTries)
         {
             // If invalid start range error occurs try to use the backup order number.
             // If it is not set, attempt to use the last 5 highest order numbers in ShipWorks.
-            // If none of those work, throw a download error telling the user to go to the 
+            // If none of those work, throw a download error telling the user to go to the
             // store settings and change the starting order number
-            if (response?.ErrorResourceList?.Error != null)
+            if (response?.ErrorResourceList?.Error == null)
             {
-                if (backupNumber != null)
-                {
-                    nextOrderNumber = backupNumber.Value;
-                    backupNumber = null;
-                    return true;
-                }
+                return false;
+            }
 
-                if (backupTries >= 7)
-                {
-                    throw new DownloadException(
-                        "You either have no orders to download or need to set a new starting order number in store settings");
-                }
-
-                nextOrderNumber = GetNextOrderNumber() - backupTries;
-                backupTries++;
+            if (backupNumber != null)
+            {
+                nextOrderNumber = backupNumber.Value;
+                backupNumber = null;
                 return true;
             }
-            return false;
+
+            if (backupTries >= 7)
+            {
+                throw new DownloadException(
+                    "You either have no orders to download or need to set a new starting order number in store settings");
+            }
+
+            nextOrderNumber = GetNextOrderNumber() - backupTries;
+            backupTries++;
+            return true;
         }
 
+        /// <summary>
+        /// Parses the yahoo date string into a DateTime
+        /// </summary>
+        /// <param name="yahooDateTime">The yahoo date time.</param>
         private DateTime ParseYahooDateTime(string yahooDateTime)
         {
             // We get DateTime format - Fri Mar 26 12:25:15 2010 GMT

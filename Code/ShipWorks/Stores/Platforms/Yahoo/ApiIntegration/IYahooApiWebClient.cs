@@ -2,6 +2,9 @@ using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
+    /// <summary>
+    /// Interface for the Yahoo Api Web Client
+    /// </summary>
     public interface IYahooApiWebClient
     {
         YahooResponse GetOrder(long orderID);

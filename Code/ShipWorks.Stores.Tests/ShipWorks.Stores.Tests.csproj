@@ -179,6 +179,9 @@
     <EmbeddedResource Include="Platforms\LemonStand\Artifacts\OrderMissingItems.js" />
     <EmbeddedResource Include="Platforms\LemonStand\Artifacts\ShipmentMissingShippingAddress.js" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Platforms\Yahoo\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

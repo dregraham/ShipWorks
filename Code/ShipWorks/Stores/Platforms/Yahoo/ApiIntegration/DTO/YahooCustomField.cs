@@ -1,7 +1,9 @@
-﻿using System.Xml.Serialization;
+﻿using System.Reflection;
+using System.Xml.Serialization;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
 {
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     [XmlRoot(ElementName = "CustomField")]
     public class YahooCustomField
     {

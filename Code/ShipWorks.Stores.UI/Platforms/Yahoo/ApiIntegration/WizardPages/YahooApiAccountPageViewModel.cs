@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
         private string accessToken;
         private string helpUrl;
         private long? backupOrderNumber;
-        private YahooOrderNumberValidation isValid;  
+        private YahooOrderNumberValidation isValid;
 
         public YahooApiAccountPageViewModel(IStoreTypeManager storeTypeManager, Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient)
         {
@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 
         private bool IsValidationPropertyEntered(string propertyName)
         {
-            return !string.IsNullOrWhiteSpace(YahooStoreID) && 
+            return !string.IsNullOrWhiteSpace(YahooStoreID) &&
                 !string.IsNullOrWhiteSpace(AccessToken) &&
                 BackupOrderNumber.HasValue;
         }
@@ -130,7 +130,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
             IYahooApiWebClient client = storeWebClient(store);
 
             YahooResponse response = client.GetOrderRange(BackupOrderNumber.GetValueOrDefault());
-            
+
             try
             {
                 client.ValidateCredentials();
