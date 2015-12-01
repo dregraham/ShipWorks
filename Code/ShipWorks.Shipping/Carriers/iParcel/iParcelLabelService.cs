@@ -40,8 +40,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-                shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None
-                    ? shipment.RequestedLabelFormat
+                shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None ? 
+                    shipment.RequestedLabelFormat
                     : (int?) null;
 
                 IParcelAccountEntity iParcelAccount = repository.GetiParcelAccount(shipment);

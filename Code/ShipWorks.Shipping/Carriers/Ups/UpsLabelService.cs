@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -138,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
 
             // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
             // This is no longer valid due to new dimensional weight requirements.
-            return Math.Abs(package.DimsLength - 1.0) > .001 || Math.Abs(package.DimsWidth - 1.0) > .001 || Math.Abs(package.DimsHeight - 1.0) > .001;
+            return package.DimsLength.IsEquivalentTo(1.0) || package.DimsWidth.IsEquivalentTo(1.0) || package.DimsHeight.IsEquivalentTo(1.0);
         }
     }
 }

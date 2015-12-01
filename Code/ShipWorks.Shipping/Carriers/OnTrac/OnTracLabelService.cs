@@ -39,13 +39,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 DatabaseOnTracShipmentRepository onTracShipmentRepository = new DatabaseOnTracShipmentRepository();
 
                 // None is only an option if an invalid country is selected.
-                if ((shipment.OnTrac.Service) == (int)OnTracServiceType.None)
+                if (shipment.OnTrac.Service == (int)OnTracServiceType.None)
                 {
                     throw new OnTracException("OnTrac does not provide service outside of the United States.", true);
                 }
 
-                shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None
-                    ? shipment.RequestedLabelFormat
+                shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None ? 
+                    shipment.RequestedLabelFormat
                     : (int?) null;
 
                 // Transform shipment to OnTrac DTO
