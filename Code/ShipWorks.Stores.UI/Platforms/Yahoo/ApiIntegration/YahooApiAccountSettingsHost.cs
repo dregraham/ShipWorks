@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Windows.Forms;
 using Autofac;
 using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 
-namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
+namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 {
     public partial class YahooApiAccountSettingsHost : AccountSettingsControlBase
     {
@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             viewModel.Load(Store);
         }
-        
+
         public override void LoadStore(StoreEntity store)
         {
             Store = store as YahooStoreEntity;
@@ -41,7 +41,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             string message = viewModel.Save(store as YahooStoreEntity);
 
-            return message.Equals(string.Empty);
+            if (message.Equals(string.Empty))
+            {
+                return true;
+            }
+
+            MessageHelper.ShowError(this, message);
+
+            return false;
         }
     }
 }

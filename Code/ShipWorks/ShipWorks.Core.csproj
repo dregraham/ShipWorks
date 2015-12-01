@@ -1251,16 +1251,6 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooShipToInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooStatusList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiWebClient.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettings.xaml.cs">
-      <DependentUpon>YahooApiAccountSettings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.Designer.cs">
-      <DependentUpon>YahooApiAccountSettingsHost.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsViewModel.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartWebClientThrottleWaitCancelException.cs" />
@@ -7865,9 +7855,6 @@
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.resx">
-      <DependentUpon>YahooApiAccountSettingsHost.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.resx">
       <DependentUpon>YahooEmailAccountPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -11136,12 +11123,6 @@
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiAccountSettings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

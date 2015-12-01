@@ -163,17 +163,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Create the control for editing the account settings
         /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl()
-        {
-            YahooStoreEntity store = (YahooStoreEntity)Store;
+        //public override AccountSettingsControlBase CreateAccountSettingsControl()
+        //{
+        //    YahooStoreEntity store = (YahooStoreEntity)Store;
 
-            if (store.YahooStoreID != "")
-            {
-                return new YahooApiAccountSettingsHost();
-            }
+        //    if (store.YahooStoreID != "")
+        //    {
+        //        return new YahooApiAccountSettingsHost();
+        //    }
 
-            return new YahooEmailAccountSettingsControl();
-        }
+        //    return new YahooEmailAccountSettingsControl();
+        //}
 
         /// <summary>
         /// Create the store settings control

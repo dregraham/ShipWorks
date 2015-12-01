@@ -137,6 +137,16 @@
       <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageViewModel.cs" />
+    <Compile Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettings.xaml.cs">
+      <DependentUpon>YahooApiAccountSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.Designer.cs">
+      <DependentUpon>YahooApiAccountSettingsHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\Yahoo\YahooStoreModule.cs" />
     <Compile Include="Platforms\Yahoo\YahooOrderNumberValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -157,6 +167,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.resx">
       <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettingsHost.resx">
+      <DependentUpon>YahooApiAccountSettingsHost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +210,10 @@
   <ItemGroup />
   <ItemGroup>
     <Page Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

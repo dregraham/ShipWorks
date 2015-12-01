@@ -305,12 +305,14 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<AccountSettingsControlBase>(TypeCode))
+            if (!IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<Func<StoreEntity, AccountSettingsControlBase>>(TypeCode))
             {
-                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<AccountSettingsControlBase>(TypeCode);
+                throw new InvalidOperationException("Invalid store type. " + TypeCode);
             }
 
-            throw new InvalidOperationException("Invalid store type. " + TypeCode);
+            Func<StoreEntity, AccountSettingsControlBase> controlFactory = IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<Func<StoreEntity, AccountSettingsControlBase>>(TypeCode);
+
+            return controlFactory(Store);
         }
 
         /// <summary>

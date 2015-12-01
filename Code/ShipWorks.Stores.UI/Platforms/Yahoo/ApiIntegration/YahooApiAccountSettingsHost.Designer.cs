@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
+﻿namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 {
     partial class YahooApiAccountSettingsHost
     {
