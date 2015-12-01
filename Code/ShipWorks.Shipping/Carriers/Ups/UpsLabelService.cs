@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -99,16 +100,16 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions, 
         /// a ShippingException is thrown informing the user.
         /// </summary>
-        private void ValidatePackageDimensions(ShipmentEntity shipment)
+        private static void ValidatePackageDimensions(ShipmentEntity shipment)
         {
-            string exceptionMessage = string.Empty;
+            StringBuilder exceptionMessage = new StringBuilder();
             int packageIndex = 1;
 
             foreach (UpsPackageEntity upsPackage in shipment.Ups.Packages)
             {
-                if (upsPackage.PackagingType == (int)UpsPackagingType.Custom && !DimensionsAreValid(upsPackage.DimsLength, upsPackage.DimsWidth, upsPackage.DimsHeight))
+                if (!DimensionsAreValid(upsPackage))
                 {
-                    exceptionMessage += $"Package {packageIndex} has invalid dimensions.{Environment.NewLine}";
+                    exceptionMessage.Append($"Package {packageIndex} has invalid dimensions.{Environment.NewLine}");
                 }
 
                 packageIndex++;
@@ -116,25 +117,28 @@ namespace ShipWorks.Shipping.Carriers.Ups
 
             if (exceptionMessage.Length > 0)
             {
-                exceptionMessage += "Package dimensions must be greater than 0 and not 1x1x1.  ";
-                throw new InvalidPackageDimensionsException(exceptionMessage);
+                exceptionMessage.Append("Package dimensions must be greater than 0 and not 1x1x1.  ");
+                throw new InvalidPackageDimensionsException(exceptionMessage.ToString());
             }
         }
-
+        
         /// <summary>
         /// Check to see if a package dimensions are valid for carriers that require dimensions.
         /// </summary>
         /// <returns>True if the dimensions are valid.  False otherwise.</returns>
-        private bool DimensionsAreValid(double length, double width, double height)
+        private static bool DimensionsAreValid(UpsPackageEntity package)
         {
-            if (length <= 0 || width <= 0 || height <= 0)
+            // Only check the dimensions if the package type is custom 
+            if (package.PackagingType != (int) UpsPackagingType.Custom) return true;
+
+            if (package.DimsLength <= 0 || package.DimsWidth <= 0 || package.DimsHeight <= 0)
             {
                 return false;
             }
 
             // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
             // This is no longer valid due to new dimensional weight requirements.
-            return Math.Abs(length - 1.0) > .001 || Math.Abs(width - 1.0) > .001 || Math.Abs(height - 1.0) > .001;
+            return Math.Abs(package.DimsLength - 1.0) > .001 || Math.Abs(package.DimsWidth - 1.0) > .001 || Math.Abs(package.DimsHeight - 1.0) > .001;
         }
     }
 }
