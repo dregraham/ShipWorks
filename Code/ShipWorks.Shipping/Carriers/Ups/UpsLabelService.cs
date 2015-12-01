@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
             {
                 if (!DimensionsAreValid(upsPackage))
                 {
-                    exceptionMessage.Append($"Package {packageIndex} has invalid dimensions.{Environment.NewLine}");
+                    exceptionMessage.AppendLine($"Package {packageIndex} has invalid dimensions.");
                 }
 
                 packageIndex++;
@@ -139,7 +139,9 @@ namespace ShipWorks.Shipping.Carriers.Ups
 
             // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
             // This is no longer valid due to new dimensional weight requirements.
-            return package.DimsLength.IsEquivalentTo(1.0) || package.DimsWidth.IsEquivalentTo(1.0) || package.DimsHeight.IsEquivalentTo(1.0);
+            return !(package.DimsLength.IsEquivalentTo(1) &&
+                     package.DimsWidth.IsEquivalentTo(1) &&
+                     package.DimsHeight.IsEquivalentTo(1));
         }
     }
 }
