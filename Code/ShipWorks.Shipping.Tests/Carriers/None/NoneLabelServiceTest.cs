@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
         public void NoneLabelService_Throws_ShippingException_OnProcess()
         {
             var testObject = mock.Create<NoneLabelService>();
-            ShippingException ex = Assert.Throws<ShippingException>(()=>testObject.Create(null));
+            ShippingException ex = Assert.Throws<ShippingException>(() => testObject.Create(null));
 
             Assert.Equal("No carrier is selected for the shipment.", ex.Message);
         }

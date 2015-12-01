@@ -7,7 +7,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
     /// <summary>
     /// Validates OLT shipment.
     /// </summary>
-    public class UpsOltShipmentValidator
+    public class UpsOltShipmentValidator : IUpsOltShipmentValidator
     {
         /// <summary>
         /// Validates the shipment.

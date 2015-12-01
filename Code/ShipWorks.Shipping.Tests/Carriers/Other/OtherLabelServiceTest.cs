@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
         [Fact]
         public void OtherLabelService_Throws_ShippingException_WithEmptyCarrier()
         {
-            var shipment = new ShipmentEntity() {Other = new OtherShipmentEntity() {Carrier = string.Empty}};
+            var shipment = new ShipmentEntity() { Other = new OtherShipmentEntity() { Carrier = string.Empty } };
             var testObject = mock.Create<OtherLabelService>();
             ShippingException ex = Assert.Throws<ShippingException>(() => testObject.Create(shipment));
 

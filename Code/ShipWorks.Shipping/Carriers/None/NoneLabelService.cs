@@ -5,7 +5,7 @@ namespace ShipWorks.Shipping.Carriers.None
     /// <summary>
     /// None label service
     /// </summary>
-    public class NoneLabelService:ILabelService
+    public class NoneLabelService : ILabelService
     {
         /// <summary>
         /// Creates a none label 

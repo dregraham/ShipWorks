@@ -109,7 +109,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void SaveShipmentInfoToEntity(Shipment amazonShipment, ShipmentEntity shipment)
         {
-            // Save shipment info to shipment entity
             shipment.TrackingNumber = amazonShipment.TrackingId;
             shipment.ShipmentCost = amazonShipment.ShippingService.Rate.Amount;
             shipment.Amazon.AmazonUniqueShipmentID = amazonShipment.ShipmentId;

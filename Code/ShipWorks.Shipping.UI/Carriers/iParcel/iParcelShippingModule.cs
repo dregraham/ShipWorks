@@ -4,6 +4,9 @@ using ShipWorks.Data.Model.Custom;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
+    /// <summary>
+    /// Shipping module the iParcel carrier
+    /// </summary>
     [SuppressMessage("SonarLint", "S101:Class names should comply with a naming convention",
         Justification = "Class is names to match iParcel's naming convention")]
     public class iParcelShippingModule : Module

@@ -7,6 +7,9 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
+    /// <summary>
+    /// Shipping module for the FedEx carrier
+    /// </summary>
     public class FedExShippingModule : Module
     {
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -30,10 +31,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             try
             {
-                if (shipment == null)
-                {
-                    throw new ArgumentNullException("shipment");
-                }
+                MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
                 OnTracAccountEntity account = GetAccountForShipment(shipment);
 
@@ -41,19 +39,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 DatabaseOnTracShipmentRepository onTracShipmentRepository = new DatabaseOnTracShipmentRepository();
 
                 // None is only an option if an invalid country is selected.
-                if (((OnTracServiceType)shipment.OnTrac.Service) == OnTracServiceType.None)
+                if ((shipment.OnTrac.Service) == (int)OnTracServiceType.None)
                 {
                     throw new OnTracException("OnTrac does not provide service outside of the United States.", true);
                 }
 
-                if (shipment.RequestedLabelFormat != (int)ThermalLanguage.None)
-                {
-                    shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
-                }
-                else
-                {
-                    shipment.ActualLabelFormat = null;
-                }
+                shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None
+                    ? shipment.RequestedLabelFormat
+                    : (int?) null;
 
                 // Transform shipment to OnTrac DTO
                 ShipmentRequestList shipmentRequestList = OnTracDtoAdapter.CreateShipmentRequestList(
@@ -71,6 +64,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
         }
 
+        /// <summary>
+        /// Voids the OnTrac shipment
+        /// </summary>
+        /// <param name="shipment"></param>
         public void Void(ShipmentEntity shipment)
         {
 

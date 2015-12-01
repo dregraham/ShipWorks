@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Data;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
+    /// <summary>
+    /// Label service for the iParcel carrier
+    /// </summary>
     public class iParcelLabelService : ILabelService
     {
         private readonly IiParcelRepository repository;
@@ -22,7 +26,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Process the shipment for iParcel
         /// </summary>
-        /// <param name="shipment"></param>
         public void Create(ShipmentEntity shipment)
         {
             ProcessShipmentAndReturnResponse(shipment);
@@ -35,19 +38,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             try
             {
-                if (shipment == null)
-                {
-                    throw new ArgumentNullException("shipment");
-                }
+                MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-                if (shipment.RequestedLabelFormat != (int)ThermalLanguage.None)
-                {
-                    shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
-                }
-                else
-                {
-                    shipment.ActualLabelFormat = null;
-                }
+                shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None
+                    ? shipment.RequestedLabelFormat
+                    : (int?) null;
 
                 IParcelAccountEntity iParcelAccount = repository.GetiParcelAccount(shipment);
                 iParcelCredentials credentials = new iParcelCredentials(iParcelAccount.Username, iParcelAccount.Password, true, serviceGateway);

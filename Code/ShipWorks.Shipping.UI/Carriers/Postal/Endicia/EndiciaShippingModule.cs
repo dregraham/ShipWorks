@@ -3,6 +3,9 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 
 namespace ShipWorks.Shipping.Carriers.Endicia
 {
+    /// <summary>
+    /// Shipping module for endicia
+    /// </summary>
     public class EndiciaShippingModule : Module
     {
         /// <summary>

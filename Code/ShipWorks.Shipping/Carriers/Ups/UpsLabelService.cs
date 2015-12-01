@@ -106,12 +106,9 @@ namespace ShipWorks.Shipping.Carriers.Ups
 
             foreach (UpsPackageEntity upsPackage in shipment.Ups.Packages)
             {
-                if (upsPackage.PackagingType == (int)UpsPackagingType.Custom)
+                if (upsPackage.PackagingType == (int)UpsPackagingType.Custom && !DimensionsAreValid(upsPackage.DimsLength, upsPackage.DimsWidth, upsPackage.DimsHeight))
                 {
-                    if (!DimensionsAreValid(upsPackage.DimsLength, upsPackage.DimsWidth, upsPackage.DimsHeight))
-                    {
-                        exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, Environment.NewLine);
-                    }
+                    exceptionMessage += $"Package {packageIndex} has invalid dimensions.{Environment.NewLine}";
                 }
 
                 packageIndex++;
@@ -128,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// Check to see if a package dimensions are valid for carriers that require dimensions.
         /// </summary>
         /// <returns>True if the dimensions are valid.  False otherwise.</returns>
-        public virtual bool DimensionsAreValid(double length, double width, double height)
+        private bool DimensionsAreValid(double length, double width, double height)
         {
             if (length <= 0 || width <= 0 || height <= 0)
             {
@@ -137,12 +134,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
 
             // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
             // This is no longer valid due to new dimensional weight requirements.
-            if (length == 1.0 && width == 1.0 && height == 1.0)
-            {
-                return false;
-            }
-
-            return true;
+            return Math.Abs(length - 1.0) > .001 || Math.Abs(width - 1.0) > .001 || Math.Abs(height - 1.0) > .001;
         }
     }
 }

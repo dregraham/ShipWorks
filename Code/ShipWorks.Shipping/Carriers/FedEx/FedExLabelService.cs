@@ -24,9 +24,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void Create(ShipmentEntity shipment)
         {
+            IShippingClerk shippingClerk = shippingClerkFactory(shipment);
+
             try
             {
-                IShippingClerk shippingClerk = shippingClerkFactory(shipment);
                 shippingClerk.Ship(shipment);
             }
             catch (FedExException ex)
@@ -40,9 +41,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {
+            IShippingClerk shippingClerk = shippingClerkFactory(shipment);
             try
             {
-                IShippingClerk shippingClerk = shippingClerkFactory(shipment);
                 shippingClerk.Void(shipment);
             }
             catch (FedExException ex)

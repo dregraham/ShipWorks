@@ -79,7 +79,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             IUspsWebClient client = uspsShipmentType.CreateWebClient();
             IEnumerable<UspsAccountEntity> accounts = uspsShipmentType.GetRates(shipment).Rates
                     .OrderBy(x => x.Amount)
-                    .Select(x => x.OriginalTag as UspsPostalRateSelection)
+                    .Select(x => x.OriginalTag)
+                    .OfType<UspsPostalRateSelection>()
                     .Where(x => x.IsRateFor(shipment))
                     .Select(x => x.Accounts)
                     .FirstOrDefault();

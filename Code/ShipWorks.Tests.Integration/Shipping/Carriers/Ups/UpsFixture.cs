@@ -99,16 +99,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
             {
                 shipment.Ups.Subclassification = (int)UpsPostalSubclassificationType.Irregular;
             }
-
-            UpsOltShipmentType upsOltShipmentType = new UpsOltShipmentType();
-
+            
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ILabelService labelService = lifetimeScope.ResolveKeyed<ILabelService>(ShipmentTypeCode.UpsOnLineTools);
-
-                UpsOltLabelService upsOltLabelService = labelService as UpsOltLabelService;
-
-                upsOltLabelService.Create(shipment);
+                
+                labelService.Create(shipment);
             }
             
             shipment.ContentWeight = shipment.Ups.Packages.Sum(p => p.DimsWeight);

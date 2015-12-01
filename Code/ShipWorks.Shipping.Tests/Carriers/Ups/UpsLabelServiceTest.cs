@@ -67,7 +67,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
             testObject.Create(shipment);
 
             Assert.Equal(string.Empty, shipment.Ups.ReturnContents);
-
         }
     }
 }

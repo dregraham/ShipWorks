@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ShippingManager.EnsureShipmentLoaded(shipment);
             }
 
-            return new[] {new AmazonPackageAdapter(shipment)};
+            return new[] { new AmazonPackageAdapter(shipment) };
         }
 
         /// <summary>
@@ -127,10 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             List<TemplateLabelData> labelData = new List<TemplateLabelData>();
 
@@ -138,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             List<DataResourceReference> resources =
                 DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID);
 
-            if (resources.Count > 0)
+            if (resources.Any())
             {
                 // Add our standard label output
                 DataResourceReference labelResource = resources.Single(i => i.Label == "LabelPrimary");
@@ -241,9 +238,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
         /// <summary>
         /// Gets a value indicating whether this instance is shipment type restricted.
-        /// 
-        /// Overridden to use dependency
         /// </summary>
+        /// <remarks>
+        /// Overridden to use dependency
+        /// </remarks>
         public override bool IsShipmentTypeRestricted
         {
             get

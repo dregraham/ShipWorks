@@ -5,7 +5,10 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Express1
 {
-    public class ExpressShippingModule : Module
+    /// <summary>
+    /// Module for the Express1 carrier
+    /// </summary>
+    public class Express1ShippingModule : Module
     {
         /// <summary>
         /// Load the module configuration

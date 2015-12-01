@@ -37,10 +37,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// The user-displayable name of the shipment type
         /// </summary>
-        [Obfuscation(Exclude = true)]        
-        public override string ShipmentTypeName => (ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) || 
-                                                    ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps)) ?
-            "USPS (Express1 for Endicia)" : "USPS (Express1)";
+        [Obfuscation(Exclude = true)]
+        public override string ShipmentTypeName
+        {
+            get
+            {
+                return
+                    (ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) ||
+                    ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps)) ?
+                    "USPS (Express1 for Endicia)" : "USPS (Express1)";
+            }
+        }
 
         /// <summary>
         /// Reseller type

@@ -3,6 +3,9 @@ using ShipWorks.Shipping.Carriers.Other;
 
 namespace ShipWorks.Shipping.UI.Carriers.Other
 {
+    /// <summary>
+    /// Shipping module for the other carrier
+    /// </summary>
     public class OtherShippingModule : Module
     {
         /// <summary>

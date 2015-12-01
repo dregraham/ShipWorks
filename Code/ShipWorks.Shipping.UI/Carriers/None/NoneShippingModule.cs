@@ -3,6 +3,9 @@ using ShipWorks.Shipping.Carriers.None;
 
 namespace ShipWorks.Shipping.Carriers.None
 {
+    /// <summary>
+    /// Shipping module for the None carrier
+    /// </summary>
     public class NoneShippingModule : Module
     {
         /// <summary>

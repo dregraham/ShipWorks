@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             // This is by design. The best rate shipment type should never actually
             // process a shipment due to the pre-process functionality
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("A label cannot be created directly through Best Rate");
         }
 
         /// <summary>

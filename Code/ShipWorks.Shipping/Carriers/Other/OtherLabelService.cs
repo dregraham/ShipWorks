@@ -13,12 +13,12 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <param name="shipment"></param>
         public void Create(ShipmentEntity shipment)
         {
-            if (shipment.Other.Carrier.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(shipment.Other.Carrier))
             {
                 throw new ShippingException("No carrier is specified.");
             }
 
-            if (shipment.Other.Service.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(shipment.Other.Service))
             {
                 throw new ShippingException("No service is specified.");
             }

@@ -3,6 +3,9 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
+    /// <summary>
+    /// Shipping module for the OnTrac carrier
+    /// </summary>
     public class OnTracShippingModule : Module
     {
         /// <summary>

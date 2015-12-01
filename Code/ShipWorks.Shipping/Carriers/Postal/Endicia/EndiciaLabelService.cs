@@ -29,16 +29,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.express1EndiciaLabelService = express1EndiciaLabelService;
         }
 
+
+
         /// <summary>
         /// Creates an Endicia label
         /// </summary>
         public void Create(ShipmentEntity shipment)
         {
             endiciaShipmentType.ValidateShipment(shipment);
-
-            bool useExpress1 = Express1Utilities.IsPostageSavingService(shipment) && !endiciaShipmentType.IsRateDiscountMessagingRestricted &&
-                Express1Utilities.IsValidPackagingType((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType) &&
-                ShippingSettings.Fetch().EndiciaAutomaticExpress1;
+            bool useExpress1 = ShouldUsedExpress1(shipment);
 
             EndiciaAccountEntity express1Account = EndiciaAccountManager.GetAccount(ShippingSettings.Fetch().EndiciaAutomaticExpress1Account);
 
@@ -125,6 +124,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     throw new ShippingException(ex.Message, ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Check to see if we should use Express1
+        /// </summary>
+        private bool ShouldUsedExpress1(ShipmentEntity shipment)
+        {
+            return Express1Utilities.IsPostageSavingService(shipment) && !endiciaShipmentType.IsRateDiscountMessagingRestricted &&
+                Express1Utilities.IsValidPackagingType((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType) &&
+                ShippingSettings.Fetch().EndiciaAutomaticExpress1;
         }
 
         /// <summary>

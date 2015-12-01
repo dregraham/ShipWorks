@@ -2,6 +2,9 @@
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
+    /// <summary>
+    /// Shipping module for the BestRate carrier
+    /// </summary>
     public class BestRateShippingModule : Module
     {
         /// <summary>
