@@ -198,7 +198,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
 
-            RequestedShippingMethod = orderSelectionLoaded.Order.RequestedShipping;
+            RequestedShippingMethod = orderSelectionLoaded.Order?.RequestedShipping;
 
             SupportsAccounts = ShipmentAdapter.SupportsAccounts;
 

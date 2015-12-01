@@ -484,21 +484,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public void Save_UpdatesShipment_WhenShipmentIsNotProcessed()
-        {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
-
-                ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-                testObject.ShipmentType = ShipmentTypeCode.OnTrac;
-
-                mock.Mock<IShippingManager>()
-                    .Verify(x => x.ChangeShipmentType(ShipmentTypeCode.OnTrac, shipmentEntity));
-            }
-        }
-
-        [Fact]
         public void Save_CallsSaveToDatabase_WhenShipmentIsNotProcessed()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())

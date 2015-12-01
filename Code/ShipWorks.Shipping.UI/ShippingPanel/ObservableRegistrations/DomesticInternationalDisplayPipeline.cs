@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Text;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {

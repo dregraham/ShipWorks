@@ -15,6 +15,7 @@ using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
 using Interapptive.Shared.Threading;
+using log4net;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -122,6 +123,8 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
+
+            builder.Register((x, p) => LogManager.GetLogger(p.TypedAs<Type>()));
 
             current = builder.Build();
         }
