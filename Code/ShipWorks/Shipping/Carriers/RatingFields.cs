@@ -16,62 +16,33 @@ namespace ShipWorks.Shipping.Carriers
     /// </summary>
     public class RatingFields
     {
-        private readonly List<EntityField2> shipmentFields;
-        private readonly List<EntityField2> packageFields;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public RatingFields()
         {
-            shipmentFields = new List<EntityField2>();
-            packageFields = new List<EntityField2>();
+            ShipmentFields = new List<EntityField2>();
+            PackageFields = new List<EntityField2>();
         }
 
         /// <summary>
         /// List of fields based on Shipment entities.  You can include ShipmentFields and any derived shipment fields like FedExFields.
         /// </summary>
-        public List<EntityField2> ShipmentFields
-        {
-            get { return shipmentFields; }
-        }
+        public List<EntityField2> ShipmentFields { get; }
 
         /// <summary>
         /// List of fields based on package entities like FedExPackageFields.
         /// </summary>
-        public List<EntityField2> PackageFields
-        {
-            get { return packageFields; }
-        }
-
-        /// <summary>
-        /// The union of shipment and package fields.
-        /// </summary>
-        private List<EntityField2> AllFields
-        {
-            get
-            {
-                return shipmentFields.Union(packageFields).ToList();
-            }
-        }
-
-        /// <summary>
-        /// The names of AllFields
-        /// </summary>
-        private List<string> AllFieldNames
-        {
-            get
-            {
-                return AllFields.Select(f => f.Name).ToList();
-            }
-        }
+        public List<EntityField2> PackageFields { get; }
 
         /// <summary>
         /// Returns true if specified field name is in the shipment fields or package fields.
         /// </summary>
         public bool FieldsContainName(string fieldName)
         {
-            return AllFieldNames.Any(f => f.Equals(fieldName, StringComparison.InvariantCultureIgnoreCase));
+            List<string> allFieldNames = ShipmentFields.Union(PackageFields).Select(f=>f.Name).ToList();
+
+            return allFieldNames.Any(f => f.Equals(fieldName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         /// <summary>
