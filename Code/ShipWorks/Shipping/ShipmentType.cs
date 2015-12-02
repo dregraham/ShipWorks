@@ -1074,11 +1074,7 @@ namespace ShipWorks.Shipping
         /// <param name="exception">The exception</param>
         protected RateGroup CacheInvalidRateGroup(ShipmentEntity shipment, Exception exception)
         {
-            RateGroup rateGroup = new InvalidRateGroup(this, exception);
-
-            RateCache.Instance.Save(GetRatingHash(shipment), rateGroup);
-
-            return rateGroup;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -1090,29 +1086,7 @@ namespace ShipWorks.Shipping
         /// <returns></returns>
         protected RateGroup GetCachedRates<T>(ShipmentEntity shipment, Func<ShipmentEntity, RateGroup> getRatesFunction) where T : Exception
         {
-            string rateHash = GetRatingHash(shipment);
-
-            if (RateCache.Instance.Contains(rateHash))
-            {
-                return RateCache.Instance.GetRateGroup(rateHash);
-            }
-
-            try
-            {
-                RateGroup rateGroup = getRatesFunction(shipment);
-                RateCache.Instance.Save(rateHash, rateGroup);
-
-                return rateGroup;
-            }
-            catch (T ex)
-            {
-                // This is a bad configuration on some level, so cache an empty rate group
-                // before throwing throwing the exceptions
-                RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, ex);
-                InvalidRateGroupShippingException shippingException = new InvalidRateGroupShippingException(invalidRateGroup, ex.Message, ex);
-
-                throw shippingException;
-            }
+            throw new NotImplementedException();
         }
 
         /// <summary>
