@@ -466,33 +466,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(PostalShipmentFields.PackagingType);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsHeight);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsLength);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsWidth);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsAddWeight);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsWeight);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.NonMachinable);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.NonRectangular);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.InsuranceValue);
-
-                return ratingField;
-            }
-        }
-
-        /// <summary>
         /// Builds a RateGroup from a list of express 1 rates
         /// </summary>
         /// <param name="rates">List of rates that should be filtered and added to the group</param>
@@ -517,51 +490,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             });
 
             return new RateGroup(validExpress1Rates);
-        }
-
-        /// <summary>
-        /// Gets the filtered rates based on any excluded services configured for this postal shipment type.
-        /// </summary>
-        protected virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
-        {
-            List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).Union(new List<PostalServiceType> { (PostalServiceType)shipment.Postal.Service }).ToList();
-            return rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
-        }
-
-        /// <summary>
-        /// Gets counter rates for a postal shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        protected virtual RateGroup GetCounterRates(ShipmentEntity shipment)
-        {
-            try
-            {
-                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
-            }
-            catch (CounterRatesOriginAddressException)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());    
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
-                return errorRates;
-            }
-            
-            RateGroup rates = new RateGroup(new List<RateResult>());
-
-            if (!IsShipmentTypeRestricted)
-            {
-                // Only get counter rates if the shipment type has not been restricted
-                rates = new PostalWebShipmentType().GetRates(shipment);
-                rates.Rates.ForEach(x =>
-                {
-                    if (x.ProviderLogo != null)
-                    {
-                        // Only change existing logos; don't set logos for rates that don't have them
-                        x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType);
-                    }
-                });
-            }
-
-            return rates;
         }
 
         /// <summary>
@@ -647,6 +575,22 @@ namespace ShipWorks.Shipping.Carriers.Postal
             };
 
             return eligibleCountryCodes;
+        }
+
+
+        protected virtual RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual RateGroup GetRatesInternal(ShipmentEntity shipment)
+        {
+            throw new NotImplementedException();
         }
     }
 }
