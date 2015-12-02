@@ -43,6 +43,5 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             return $"YahooOrderID:{yahooOrderID}";
         }
-
     }
 }

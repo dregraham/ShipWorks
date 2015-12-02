@@ -23,10 +23,12 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         private void OnPageLoad(object sender, EventArgs e)
         {
             viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<YahooApiAccountSettingsViewModel>>().Value;
+
             YahooApiAccountSettings page = new YahooApiAccountSettings
             {
                 DataContext = viewModel
             };
+
             ControlHost.Child = page;
 
             viewModel.Load(Store);

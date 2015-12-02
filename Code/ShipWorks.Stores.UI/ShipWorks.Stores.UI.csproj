@@ -137,6 +137,7 @@
       <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageViewModel.cs" />
+    <Compile Include="Platforms\Yahoo\ApiIntegration\YahooAccountViewModel.cs" />
     <Compile Include="Platforms\Yahoo\ApiIntegration\YahooApiAccountSettings.xaml.cs">
       <DependentUpon>YahooApiAccountSettings.xaml</DependentUpon>
     </Compile>

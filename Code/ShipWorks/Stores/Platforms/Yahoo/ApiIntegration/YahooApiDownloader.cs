@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;

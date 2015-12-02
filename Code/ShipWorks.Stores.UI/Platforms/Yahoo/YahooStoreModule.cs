@@ -13,7 +13,7 @@ using ShipWorks.UI.Wizard;
 namespace ShipWorks.Stores.UI.Platforms.Yahoo
 {
     /// <summary>
-    /// Register YahooStore
+    /// Make necessary registations for Yahoo
     /// </summary>
     public class YahooStoreModule : Module
     {
@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo
         }
 
         /// <summary>
-        /// Gets the account settings control base.
+        /// Gets the account settings control base based on whether or not the Api version is being used
         /// </summary>
         /// <exception cref="System.InvalidOperationException">Store is not a Yahoo Store</exception>
         private static AccountSettingsControlBase GetAccountSettingsControlBase(IComponentContext context, IEnumerable<Parameter> parameters)
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo
             }
 
             return string.IsNullOrWhiteSpace(store.YahooStoreID) ?
-                new YahooEmailAccountSettingsControl() : 
+                new YahooEmailAccountSettingsControl() :
                 (AccountSettingsControlBase) new YahooApiAccountSettingsHost();
         }
     }

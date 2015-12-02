@@ -5,10 +5,13 @@ using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
+    /// <summary>
+    /// Cache for storing Yahoo item weights, since we have to submit a whole new request
+    /// solely for getting an items weight. So lets try an limit the number of calls we have to make.
+    /// </summary>
     public class YahooProductWeightCache
     {
-
-        private Dictionary<string, LruCache<string, YahooCatalogItem>> storeProductWeightCaches;
+        private readonly Dictionary<string, LruCache<string, YahooCatalogItem>> storeProductWeightCaches;
 
         private static readonly Lazy<YahooProductWeightCache> instance =
             new Lazy<YahooProductWeightCache>(() => new YahooProductWeightCache());
@@ -24,7 +27,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Gets the cache for specific store.
         /// </summary>
-        /// <returns></returns>
         public LruCache<string, YahooCatalogItem> GetStoreProductWeightCache(string storeID)
         {
             // Create the key for the store
@@ -42,6 +44,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             return productWeightCache;
         }
 
+        /// <summary>
+        /// The instance value of the cache
+        /// </summary>
         public static YahooProductWeightCache Instance => instance.Value;
     }
 }

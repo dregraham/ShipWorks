@@ -14,7 +14,6 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 {
     public class YahooApiAccountSettingsViewModel : INotifyPropertyChanged
     {
-        private readonly IStoreTypeManager storeTypeManager;
         private readonly Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -23,12 +22,10 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         private long? backupOrderNumber;
         private YahooOrderNumberValidation isValid;
 
-        public YahooApiAccountSettingsViewModel(IStoreTypeManager storeTypeManager, Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient)
+        public YahooApiAccountSettingsViewModel(Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient)
         {
-            this.storeTypeManager = storeTypeManager;
             this.storeWebClient = storeWebClient;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            YahooStoreType storeType = storeTypeManager.GetType(StoreTypeCode.Yahoo) as YahooStoreType;
         }
 
         [Obfuscation(Exclude = true)]

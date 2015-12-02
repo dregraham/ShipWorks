@@ -127,17 +127,30 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
                 return "Please enter your Access Token";
             }
 
-            IYahooApiWebClient client = storeWebClient(store);
-
-            YahooResponse response = client.GetOrderRange(BackupOrderNumber.GetValueOrDefault());
-
             try
             {
-                client.ValidateCredentials();
+                YahooResponse response = storeWebClient(new YahooStoreEntity() {YahooStoreID = YahooStoreID, AccessToken = AccessToken})
+                    .ValidateCredentials();
+
+                return response.ErrorMessages == null ? string.Empty : CheckCredentials(response);
             }
-            catch (WebException ex)
+            catch (Exception ex)
             {
-                return ex.Message;
+                return $"Error connecting to Yahoo Api: {ex.Message}";
+            }
+        }
+
+        private string CheckCredentials(YahooResponse response)
+        {
+            foreach (YahooError error in response.ErrorMessages.Error)
+            {
+                switch (error.Code)
+                {
+                    case 10010:
+                        return "Invalid Yahoo Store ID";
+                    case 10009:
+                        return "Invalid Access Token";
+                }
             }
 
             return string.Empty;

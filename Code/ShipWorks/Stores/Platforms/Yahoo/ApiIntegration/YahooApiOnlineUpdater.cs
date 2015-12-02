@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -10,23 +8,32 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
+
+    /// <summary>
+    /// Uploads shipment details and order status to Yahoo
+    /// </summary>
     public class YahooApiOnlineUpdater
     {
         private readonly ILog log;
         private readonly YahooApiWebClient client;
-        private readonly YahooStoreEntity store;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YahooApiOnlineUpdater"/> class.
+        /// </summary>
+        /// <param name="store">The store.</param>
         public YahooApiOnlineUpdater(YahooStoreEntity store) : this(LogManager.GetLogger(typeof (YahooApiOnlineUpdater)), new YahooApiWebClient(store))
         {
-            this.store = store;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YahooApiOnlineUpdater"/> class.
+        /// </summary>
+        /// <param name="log">The logger</param>
+        /// <param name="client">The api web client.</param>
         public YahooApiOnlineUpdater(ILog log, YahooApiWebClient client)
         {
             this.log = log;
@@ -34,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
-        /// Changes the status of an BigCommerce order to that specified
+        /// Changes the status of a Yahoo order to that specified
         /// </summary>
         public void UpdateOrderStatus(long orderID, string status)
         {
@@ -49,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
-        /// Changes the status of an BigCommerce order to that specified
+        /// Changes the status of a Yahoo order to that specified
         /// </summary>
         public void UpdateOrderStatus(long orderID, string status, UnitOfWork2 unitOfWork)
         {
@@ -79,9 +86,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
         }
 
-
-
-
+        /// <summary>
+        /// Updates the shipment details.
+        /// </summary>
+        /// <param name="orderKeys">The order keys.</param>
         public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
         {
             foreach (long orderKey in orderKeys)
@@ -123,6 +131,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
         }
 
+        /// <summary>
+        /// Gets the carrier code.
+        /// </summary>
+        /// <param name="shipmentEntity">The shipment entity.</param>
+        /// <returns></returns>
         private string GetCarrierCode(ShipmentEntity shipmentEntity)
         {
             string carrierCode;
@@ -164,9 +177,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     //The shipment is a UPS shipment, check to see if it is UPS-MI
                     carrierCode = "ups";
                     break;
-                    
+
                 default:
-                    Debug.Fail("Unhandled ShipmentTypeCode in Groupon.GetCarrierCode");
+                    Debug.Fail("Unhandled ShipmentTypeCode in YahooApiOnlineUpdater.GetCarrierCode");
                     carrierCode = "Other";
                     break;
             }

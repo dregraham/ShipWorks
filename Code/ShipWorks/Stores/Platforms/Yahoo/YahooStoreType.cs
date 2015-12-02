@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Net;
@@ -70,26 +71,22 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                     throw new YahooException("Attempted to get Yahoo Internal License Identifier for a non Yahoo store");
                 }
 
-                if (store.YahooStoreID != string.Empty)
+                if (!store.YahooStoreID.IsNullOrWhiteSpace())
                 {
-                    return ((YahooStoreEntity)Store).YahooStoreID;
+                    return ((YahooStoreEntity) Store).YahooStoreID;
                 }
 
                 EmailAccountEntity account =
-                    EmailAccountManager.GetAccount(((YahooStoreEntity) Store).YahooEmailAccountID);
+                    EmailAccountManager.GetAccount(((YahooStoreEntity)Store).YahooEmailAccountID);
 
                 // If the account was deleted we have to create a made up license that obviously will not be activated to them
                 return account == null ? $"{Guid.NewGuid()}@noaccount.com" : account.IncomingUsername;
             }
         }
 
-       
         /// <summary>
         /// Gets or sets the account settings help URL.
         /// </summary>
-        /// <value>
-        /// The account settings help URL.
-        /// </value>
         public string AccountSettingsHelpUrl => "http://www.shipworks.com/shipworks/help/Yahoo_Email_Account.html";
 
         /// <summary>
@@ -106,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             store.TrackingUpdatePassword = "";
             store.YahooStoreID = "";
             store.AccessToken = "";
-            
+
             return store;
         }
 
@@ -152,28 +149,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             YahooStoreEntity store = (YahooStoreEntity) Store;
 
-            if (store.YahooStoreID != "")
+            if (store.YahooStoreID.IsNullOrWhiteSpace())
             {
-                return new YahooApiDownloader(store);
+                return new YahooEmailDownloader(store);
             }
 
-            return new YahooEmailDownloader(store);
+            return new YahooApiDownloader(store);
         }
-
-        /// <summary>
-        /// Create the control for editing the account settings
-        /// </summary>
-        //public override AccountSettingsControlBase CreateAccountSettingsControl()
-        //{
-        //    YahooStoreEntity store = (YahooStoreEntity)Store;
-
-        //    if (store.YahooStoreID != "")
-        //    {
-        //        return new YahooApiAccountSettingsHost();
-        //    }
-
-        //    return new YahooEmailAccountSettingsControl();
-        //}
 
         /// <summary>
         /// Create the store settings control
@@ -182,11 +164,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             YahooStoreEntity store = (YahooStoreEntity)Store;
 
-            if (store.YahooStoreID != "")
-            {
-                return new StoreSettingsControlBase();
-            }
-            return new YahooEmailStoreSettingsControl();
+            return store.YahooStoreID.IsNullOrWhiteSpace() ? new YahooEmailStoreSettingsControl() : new StoreSettingsControlBase();
         }
 
         /// <summary>
@@ -221,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             ElementOutline outline = container.AddElement("Yahoo");
             outline.AddElement("ProductID", () => item.Value.YahooProductID);
         }
-        
+
         /// <summary>
         /// Upload shipment details for the selected orders
         /// </summary>
@@ -244,8 +222,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
             executor.ExecuteAsync(UploadShipmentDetailsCallback, context.SelectedKeys, generatedEmail);
         }
-
-        
 
         /// <summary>
         /// The worker thread function that does the actual details uploading
@@ -284,18 +260,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             List<FilterEntity> filters = new List<FilterEntity>();
 
-            if (!((YahooStoreEntity)Store).YahooStoreID.IsNullOrWhiteSpace())
+            if (((YahooStoreEntity) Store).YahooStoreID.IsNullOrWhiteSpace())
             {
-                Type type = typeof (YahooApiOrderStatus);
-                
-                foreach (YahooApiOrderStatus status in Enum.GetValues(type))
-                {
-                    // We want to display the status with spaces, so get the description attribute
-                    string description = ((DescriptionAttribute)type.GetMember(status.ToString())[0].GetCustomAttributes(typeof(DescriptionAttribute), false)[0]).Description;
-                    
-                    filters.Add(CreateOrderStatusFilter(description));
-                }
+                return filters;
             }
+
+            filters.AddRange(from YahooApiOrderStatus status in EnumHelper.GetEnumList<YahooApiOrderStatus>()
+                             select CreateOrderStatusFilter(EnumHelper.GetDescription(status)));
 
             return filters;
         }
@@ -414,7 +385,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 WebHelper.OpenUrl(item.Url, owner);
             }
         }
-  
+
         /// <summary>
         /// Command handler for setting online order status
         /// </summary>
@@ -443,6 +414,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             log.Debug(Store.StoreName);
 
             string statusCode = userState.ToString();
+
             try
             {
                 YahooApiOnlineUpdater updater = new YahooApiOnlineUpdater((YahooStoreEntity)Store);
@@ -470,12 +442,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 throw new YahooException("Attempted to create Yahoo online update action control for a non Yahoo store");
             }
 
-            if (store.YahooStoreID != string.Empty)
-            {
-                return new OnlineUpdateShipmentUpdateActionControl(typeof (YahooApiShipmentUploadTask));
-            }
-
-            return null;
+            return store.YahooStoreID.IsNullOrWhiteSpace() ? null : new OnlineUpdateShipmentUpdateActionControl(typeof(YahooApiShipmentUploadTask));
         }
 
         /// <summary>
@@ -491,20 +458,22 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 throw new YahooException("Attempted to upload Yahoo shipment details for a non Yahoo store");
             }
 
-            if (store.YahooStoreID != string.Empty)
+            if (store.YahooStoreID.IsNullOrWhiteSpace())
             {
-                BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                    "Upload Shipment Details",
-                    "ShipWorks is uploading shipment information.",
-                    "Updating order {0} of {1}...");
-
-                executor.ExecuteCompleted += (o, e) =>
-                {
-                    context.Complete(e.Issues, MenuCommandResult.Error);
-                };
-
-                executor.ExecuteAsync(ApiUploadShipmentDetailsCallback, context.SelectedKeys, context.SelectedKeys);
+                return;
             }
+
+            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
+                "Upload Shipment Details",
+                "ShipWorks is uploading shipment information.",
+                "Updating order {0} of {1}...");
+
+            executor.ExecuteCompleted += (o, e) =>
+            {
+                context.Complete(e.Issues, MenuCommandResult.Error);
+            };
+
+            executor.ExecuteAsync(ApiUploadShipmentDetailsCallback, context.SelectedKeys, context.SelectedKeys);
         }
 
         /// <summary>
@@ -537,7 +506,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 }
             }
         }
-
         #endregion
     }
 }

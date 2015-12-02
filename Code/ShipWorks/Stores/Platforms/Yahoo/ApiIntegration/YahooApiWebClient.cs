@@ -1,26 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
+    /// <summary>
+    /// Class for interacting with the yahoo merchant API
+    /// </summary>
     public class YahooApiWebClient : IYahooApiWebClient
     {
-        private string yahooStoreID;
-        private string token;
-        private string yahooOrderEndpoint;
-        private string yahooCatalogEndpoint;
+        private readonly string yahooStoreID;
+        private readonly string token;
+        private readonly string yahooOrderEndpoint;
+        private readonly string yahooCatalogEndpoint;
         private const int OrdersPerPage = 50;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YahooApiWebClient"/> class.
+        /// </summary>
+        /// <param name="store">The Yahoo Store Entity</param>
         public YahooApiWebClient(YahooStoreEntity store)
         {
             yahooStoreID = store.YahooStoreID;
@@ -29,48 +32,19 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             yahooCatalogEndpoint = $"https://{yahooStoreID}.catalog.store.yahooapis.com/V1";
         }
 
-        public YahooResponse GetOrder(long orderID)
-        {
-            return ProcessRequest(CreateGetOrderRequest(orderID), "GetOrder");
-        }
-
-        public YahooResponse GetOrderRange(long start)
-        {
-            return ProcessRequest(CreateGetOrderRangeRequest(start), "GetOrderRange");
-        }
-
-        public YahooResponse GetItem(string itemID)
-        {
-            return ProcessRequest(CreateGetItemRequest(itemID), "GetItem");
-        }
-
+        /// <summary>
+        /// Validates the credentials.
+        /// </summary>
         public YahooResponse ValidateCredentials()
         {
-            return ProcessRequest(CreateGetItemRangeRequest(1, 2, "keyword"), "GetItemRange");
-        }
-
-        public void UploadShipmentDetails(string orderID, string trackingNumber, string shipper, string status)
-        {
-            ProcessRequest(CreateUpdateShipmentDetailsRequest(orderID, trackingNumber, shipper, status), "UploadShipmentDetails");
-        }
-
-        public void UploadOrderStatus(string orderID, string status)
-        {
-            ProcessRequest(CreateUploadOrderStatusRequest(orderID, status), "UploadOrderStatus");
-        }
-
-        private static string CleanResponse(string response)
-        {
-            response = response.Replace("<ystorews:ystorewsResponse xmlns:ystorews=\"urn:yahoo:sbs:ystorews\" >", "<ystorewsResponse>");
-            response = response.Replace("</ystorews:ystorewsResponse>", "</ystorewsResponse>");
-
-            return response;
+            return ProcessRequest(CreateSearchItemRangeRequest(1, 2, "keyword"), "GetItemRange");
         }
 
         /// <summary>
-        ///     Setup a get request.
+        /// Gets the order.
         /// </summary>
-        private HttpTextPostRequestSubmitter CreateGetOrderRequest(long orderID)
+        /// <param name="orderID">The order identifier.</param>
+        public YahooResponse GetOrder(long orderID)
         {
             string body = RequestBodyIntro + GetRequestBodyIntro +
                 "<OrderListQuery>" +
@@ -84,15 +58,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 "</ResourceList>" +
                 "</ystorewsRequest>";
 
-            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
-            {
-                Verb = HttpVerb.Post,
-                Uri = new Uri(yahooOrderEndpoint + "/order")
-            };
-            return submitter;
+            return ProcessRequest(CreateOrderRequestSubmitter(body), "GetOrder");
         }
 
-        private HttpTextPostRequestSubmitter CreateGetOrderRangeRequest(long start)
+        /// <summary>
+        /// Gets a "page" of orders from a starting order number
+        /// </summary>
+        /// <param name="start">The Yahoo Order ID to start from</param>
+        public YahooResponse GetOrderRange(long start)
         {
             string body = RequestBodyIntro + GetRequestBodyIntro +
                           "<OrderListQuery>" +
@@ -109,41 +82,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                           "</ResourceList>" +
                           "</ystorewsRequest>";
 
-            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
-            {
-                Verb = HttpVerb.Post,
-                Uri = new Uri(yahooOrderEndpoint + "/order")
-            };
-
-            return submitter;
+            return ProcessRequest(CreateOrderRequestSubmitter(body), "GetOrderRange");
         }
 
         /// <summary>
-        ///     Setup a get request.
+        /// Gets the item.
         /// </summary>
-        private HttpTextPostRequestSubmitter CreateGetItemRangeRequest(int start, int end, string keyword)
-        {
-            string body = RequestBodyIntro + GetRequestBodyIntro +
-                "<CatalogQuery>" +
-                "<SimpleSearch>" +
-                $"<StartIndex>{start}</StartIndex>" +
-                $"<EndIndex>{end}</EndIndex>" +
-                $"<Keyword>{keyword}</Keyword>" +
-                "</SimpleSearch>" +
-                "</CatalogQuery>" +
-                "</ResourceList>" +
-                "</ystorewsRequest>";
-
-            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
-            {
-                Verb = HttpVerb.Post,
-                Uri = new Uri(yahooCatalogEndpoint + "/CatalogQuery")
-            };
-
-            return submitter;
-        }
-
-        private HttpTextPostRequestSubmitter CreateGetItemRequest(string itemID)
+        /// <param name="itemID">The Yahoo Item ID</param>
+        public YahooResponse GetItem(string itemID)
         {
             string body = RequestBodyIntro + GetRequestBodyIntro +
                           "<CatalogQuery>" +
@@ -157,16 +103,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                           "</ResourceList>" +
                           "</ystorewsRequest>";
 
-            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
-            {
-                Verb = HttpVerb.Post,
-                Uri = new Uri(yahooCatalogEndpoint + "/CatalogQuery")
-            };
-
-            return submitter;
+            return ProcessRequest(CreateCatalogRequestSubmitter(body), "GetItem");
         }
 
-        private HttpTextPostRequestSubmitter CreateUpdateShipmentDetailsRequest(string orderID, string trackingNumber, string shipper, string status)
+        /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
+        /// <param name="orderID">The order's Yahoo Order ID</param>
+        /// <param name="trackingNumber">The tracking number to upload</param>
+        /// <param name="shipper">The shipping carrier used</param>
+        /// <param name="status">The order status to upload</param>
+        public void UploadShipmentDetails(string orderID, string trackingNumber, string shipper, string status)
         {
             string body = RequestBodyIntro + UpdateRequestBodyIntro +
                           "<Order>" +
@@ -180,16 +127,15 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                           "</ResourceList>" +
                           "</ystorewsRequest>";
 
-            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
-            {
-                Verb = HttpVerb.Post,
-                Uri = new Uri(yahooOrderEndpoint + "/order")
-            };
-
-            return submitter;
+            ProcessRequest(CreateOrderRequestSubmitter(body), "UploadShipmentDetails");
         }
 
-        private HttpRequestSubmitter CreateUploadOrderStatusRequest(string orderID, string status)
+        /// <summary>
+        /// Uploads the order status.
+        /// </summary>
+        /// <param name="orderID">The Yahoo Order ID</param>
+        /// <param name="status">The order status to upload</param>
+        public void UploadOrderStatus(string orderID, string status)
         {
             string body = RequestBodyIntro + UpdateRequestBodyIntro +
                           "<Order>" +
@@ -201,7 +147,41 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                           "</ResourceList>" +
                           "</ystorewsRequest>";
 
-            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
+            ProcessRequest(CreateOrderRequestSubmitter(body), "UploadOrderStatus");
+        }
+
+        /// <summary>
+        /// Creates a search item range request. Currently only used to validate credentials
+        /// because it doesn't throw an error for an invalid start and end range like getting a
+        /// range of orders does.
+        /// </summary>
+        /// <param name="start">The starting Yahoo Item ID.</param>
+        /// <param name="end">The ending Yahoo Item ID</param>
+        /// <param name="keyword">The keyword to search for</param>
+        /// <returns></returns>
+        private HttpTextPostRequestSubmitter CreateSearchItemRangeRequest(int start, int end, string keyword)
+        {
+            string body = RequestBodyIntro + GetRequestBodyIntro +
+                "<CatalogQuery>" +
+                "<SimpleSearch>" +
+                $"<StartIndex>{start}</StartIndex>" +
+                $"<EndIndex>{end}</EndIndex>" +
+                $"<Keyword>{keyword}</Keyword>" +
+                "</SimpleSearch>" +
+                "</CatalogQuery>" +
+                "</ResourceList>" +
+                "</ystorewsRequest>";
+
+            return CreateCatalogRequestSubmitter(body);
+        }
+
+        /// <summary>
+        /// Creates the order request submitter.
+        /// </summary>
+        /// <param name="xmlBody">The XML body</param>
+        private HttpTextPostRequestSubmitter CreateOrderRequestSubmitter(string xmlBody)
+        {
+            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(xmlBody, "xml")
             {
                 Verb = HttpVerb.Post,
                 Uri = new Uri(yahooOrderEndpoint + "/order")
@@ -210,6 +190,36 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             return submitter;
         }
 
+        /// <summary>
+        /// Creates the catalog request submitter.
+        /// </summary>
+        /// <param name="xmlBody">The XML body.</param>
+        private HttpTextPostRequestSubmitter CreateCatalogRequestSubmitter(string xmlBody)
+        {
+            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(xmlBody, "xml")
+            {
+                Verb = HttpVerb.Post,
+                Uri = new Uri(yahooCatalogEndpoint + "/CatalogQuery")
+            };
+
+            return submitter;
+        }
+
+        /// <summary>
+        /// Cleans the response.
+        /// </summary>
+        /// <param name="response">The response to clean</param>
+        private static string CleanResponse(string response)
+        {
+            response = response.Replace("<ystorews:ystorewsResponse xmlns:ystorews=\"urn:yahoo:sbs:ystorews\" >", "<ystorewsResponse>");
+            response = response.Replace("</ystorews:ystorewsResponse>", "</ystorewsResponse>");
+
+            return response;
+        }
+
+        /// <summary>
+        /// The request xml intro
+        /// </summary>
         private string RequestBodyIntro => "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                                            "<ystorewsRequest>" +
                                            $"<StoreID>{yahooStoreID}</StoreID>" +
@@ -218,17 +228,23 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                                            "</SecurityHeader>" +
                                            "<Version>1.0</Version>";
 
+        /// <summary>
+        /// Additional xml intro for get requests
+        /// </summary>
         private string GetRequestBodyIntro => "<Verb>get</Verb>" +
-                                              "<ResourceList>";
+                                                      "<ResourceList>";
 
+        /// <summary>
+        /// Additional xml intro for update requests
+        /// </summary>
         private string UpdateRequestBodyIntro => "<Verb>update</Verb>" +
-                                              "<ResourceList>";
+                                                      "<ResourceList>";
 
         /// <summary>
         /// Executes a request
         /// </summary>
-        /// <param name="submitter">The submitter.</param>
-        /// <param name="action">The action.</param>
+        /// <param name="submitter">The request submitter.</param>
+        /// <param name="action">The method calling process request for logging purposes</param>
         /// <returns></returns>
         private static YahooResponse ProcessRequest(HttpRequestSubmitter submitter, string action)
         {
