@@ -101,6 +101,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public virtual long? OrderID => ShipmentAdapter?.Shipment?.OrderID;
 
         /// <summary>
+        /// Is the current shipment processed
+        /// </summary>
+        public virtual bool? IsProcessed => ShipmentAdapter?.Shipment?.Processed;
+
+        /// <summary>
         /// Wire up any Observable patterns
         /// </summary>
         private void WireUpObservables()
@@ -209,7 +214,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Populate the view model with the current state of the shipment
         /// </summary>
-        public void Populate(ICarrierShipmentAdapter fromShipmentAdapter)
+        public virtual void Populate(ICarrierShipmentAdapter fromShipmentAdapter)
         {
             ShipmentAdapter = fromShipmentAdapter;
             InitialShipmentTypeCode = ShipmentAdapter.ShipmentTypeCode;
@@ -405,9 +410,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// A shipment has been deleted
         /// </summary>
-        public void UnloadShipment()
+        public virtual void UnloadShipment()
         {
-            // Show as deleted.
             LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Deleted;
             ShipmentAdapter = null;
         }

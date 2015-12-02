@@ -1,8 +1,8 @@
-﻿using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages.Shipping;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
             return messages.OfType<ShipmentDeletedMessage>()
-                .Where(x => x.DeletedShipmentId == viewModel.ShipmentAdapter?.Shipment?.ShipmentID)
+                .Where(x => x.DeletedShipmentId == viewModel.Shipment?.ShipmentID)
                 .Subscribe(x => viewModel.UnloadShipment());
         }
     }

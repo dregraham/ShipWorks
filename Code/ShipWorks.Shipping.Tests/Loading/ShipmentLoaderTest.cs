@@ -58,8 +58,8 @@ namespace ShipWorks.Shipping.Tests.Loading
             {
                 testObject = mock.Create<ShipmentLoader>();
                 shippingManager.Setup(s => s.GetShipments(It.IsAny<long>(), It.IsAny<bool>()))
-                    .Returns(new List<ICarrierShipmentAdapter> {
-                        mock.Create<ICarrierShipmentAdapter>(),
+                    .Returns(new [] {
+                        mock.CreateCarrierShipmentAdapter(a => a.Setup(x => x.Shipment).Returns(shipmentEntity)).Object,
                         mock.Create<ICarrierShipmentAdapter>()
                     });
 
@@ -207,7 +207,7 @@ namespace ShipWorks.Shipping.Tests.Loading
             filterHelper = mock.WithFilterHelper(true);
             addressValidator = mock.WithAddressValidator(true);
             shippingManager = mock.WithShippingManager(orderEntity.OrderID,
-                new List<ICarrierShipmentAdapter> { mock.Create<ICarrierShipmentAdapter>() },
+                new [] { mock.CreateCarrierShipmentAdapter(a => a.Setup(x => x.Shipment).Returns(shipmentEntity)).Object },
                 Enumerable.Empty<ICarrierShipmentAdapter>());
 
             storeType = mock.WithTestStoreType();

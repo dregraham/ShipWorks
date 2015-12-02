@@ -1,9 +1,9 @@
-﻿using log4net;
-using ShipWorks.Shipping.Services;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using log4net;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             subscription = viewModel.PropertyChangeStream
                 .Where(x => x == nameof(viewModel.ShipmentType))
-                .Where(x => !(viewModel.ShipmentAdapter.Shipment?.Processed ?? true))
+                .Where(x => viewModel.IsProcessed.HasValue && !viewModel.IsProcessed.Value)
                 .Select(_ => ChangeShipmentType())
                 .Subscribe(x => viewModel.Populate(x), HandleException);
         }
@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// Get a shipping adapter from the changed shipment type
         /// </summary>
         private ICarrierShipmentAdapter ChangeShipmentType() =>
-            shippingManager.ChangeShipmentType(viewModel.ShipmentType, viewModel.ShipmentAdapter.Shipment);
+            shippingManager.ChangeShipmentType(viewModel.ShipmentType, viewModel.Shipment);
 
         /// <summary>
         /// Handle an exception raised while changing the shipment type

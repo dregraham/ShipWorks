@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -6,7 +7,6 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 using ShipWorks.Tests.Shared;
-using System;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
@@ -14,10 +14,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
     public class ChangeShipmentTypePipelineTest : IDisposable
     {
         readonly AutoMock mock;
+        readonly Mock<ShippingPanelViewModel> viewModelMock;
+        readonly ShippingPanelViewModel viewModel;
 
         public ChangeShipmentTypePipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            viewModelMock = mock.CreateShippingPanelViewModel(v =>
+            {
+                v.Setup(x => x.IsProcessed).Returns(false);
+                v.Setup(x => x.Populate(It.IsAny<ICarrierShipmentAdapter>()));
+                v.CallBase = true;
+            });
+            viewModel = viewModelMock.Object;
         }
 
         [Fact]
@@ -40,7 +49,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         public void Register_ChangesShipmentType_WhenShipmentTypeChangesAndShipmentIsNotProcessed()
         {
             var shipmentEntity = new ShipmentEntity();
-            var viewModel = CreateViewModel(shipmentEntity);
+            viewModelMock.Setup(x => x.Shipment).Returns(shipmentEntity);
 
             var testObject = mock.Create<ChangeShipmentTypePipeline>();
             testObject.Register(viewModel);
@@ -59,20 +68,18 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
                 .Setup(x => x.ChangeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentEntity>()))
                 .Returns(newAdapter);
 
-            var viewModel = CreateViewModel();
-
             var testObject = mock.Create<ChangeShipmentTypePipeline>();
             testObject.Register(viewModel);
 
             viewModel.ShipmentType = ShipmentTypeCode.Usps;
 
-            Assert.Equal(newAdapter, viewModel.ShipmentAdapter);
+            viewModelMock.Verify(x => x.Populate(newAdapter));
         }
 
         [Fact]
         public void Register_DoesNotChangeShipmentType_WhenShipmentTypeChangesButShipmentIsProcessed()
         {
-            var viewModel = CreateViewModel(new ShipmentEntity { Processed = true });
+            viewModelMock.Setup(x => x.IsProcessed).Returns(true);
 
             var testObject = mock.Create<ChangeShipmentTypePipeline>();
             testObject.Register(viewModel);
@@ -88,8 +95,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_DoesNotChangeShipmentType_WhenPropertyIsNotShipmentType()
         {
-            ShippingPanelViewModel viewModel = CreateViewModel();
-
             var testObject = mock.Create<ChangeShipmentTypePipeline>();
             testObject.Register(viewModel);
 
@@ -107,8 +112,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             mock.Mock<IShippingManager>()
                 .SetupSequence(x => x.ChangeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentEntity>()))
                 .Throws<InvalidOperationException>();
-
-            var viewModel = CreateViewModel();
 
             var testObject = mock.Create<ChangeShipmentTypePipeline>();
             testObject.Register(viewModel);
@@ -131,8 +134,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
                 .SetupSequence(x => x.ChangeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentEntity>()))
                 .Throws(exception);
 
-            var viewModel = CreateViewModel();
-
             var testObject = mock.Create<ChangeShipmentTypePipeline>();
             testObject.Register(viewModel);
 
@@ -140,19 +141,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             mock.Mock<ILog>()
                 .Verify(x => x.Error(exception));
-        }
-
-        private ShippingPanelViewModel CreateViewModel() => CreateViewModel(new ShipmentEntity());
-
-        private ShippingPanelViewModel CreateViewModel(ShipmentEntity shipment)
-        {
-            var adapter = mock.Mock<ICarrierShipmentAdapter>();
-            adapter.Setup(x => x.Shipment).Returns(shipment);
-
-            var viewModel = mock.Create<ShippingPanelViewModel>();
-            viewModel.Populate(adapter.Object);
-
-            return viewModel;
         }
 
         public void Dispose()
