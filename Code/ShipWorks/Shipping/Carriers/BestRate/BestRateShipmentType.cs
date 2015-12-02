@@ -253,7 +253,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // brokers or shipment types); this is most likely there aren't any providers/accounts
                 // setup to use with best rate, so we'll just return a rate group communicating the
                 // problem to the user
-                return new InvalidRateGroup(this, ex);
+                return new InvalidRateGroup(ShipmentTypeCode, ex);
             }
         }
 

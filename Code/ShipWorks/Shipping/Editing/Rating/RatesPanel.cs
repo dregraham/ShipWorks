@@ -241,7 +241,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                     }
                     catch (FedExAddressValidationException ex)
                     {
-                        panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(new FedExShipmentType(), ex),
+                        panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(ShipmentTypeCode.FedEx, ex),
                             shipment);
 
                         // Add the shipment ID to the exception data, so we can determine whether
@@ -257,7 +257,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                         if (rates == null)
                         {
                             rates = new RateGroup(new List<RateResult>());
-                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType ?? new NoneShipmentType(), ex));
+                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType?.ShipmentTypeCode ?? ShipmentTypeCode.None, ex));
                         }
 
                         panelRateGroup = new ShipmentRateGroup(rates, shipment);
