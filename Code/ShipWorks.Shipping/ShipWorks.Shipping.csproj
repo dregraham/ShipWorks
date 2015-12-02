@@ -147,6 +147,8 @@
     <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
     <Compile Include="Carriers\BestRate\BestRateLabelService.cs" />
     <Compile Include="Carriers\FedEx\FedExLabelService.cs" />
+    <Compile Include="Carriers\FedEx\FedExRateHashingService.cs" />
+    <Compile Include="Carriers\FedEx\FedExRatingService.cs" />
     <Compile Include="Carriers\iParcel\iParcelLabelService.cs" />
     <Compile Include="Carriers\None\NoneLabelService.cs" />
     <Compile Include="Carriers\OnTrac\OnTracLabelService.cs" />

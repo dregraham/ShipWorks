@@ -991,54 +991,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Get a list of rates for the FedEx shipment
-        /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-            ICarrierSettingsRepository originalSettings = SettingsRepository;
-            ICertificateInspector originalInspector = CertificateInspector;
-            string originalHubID = shipment.FedEx.SmartPostHubID;
-
-            try
-            {
-                // Check with the SettingsRepository here rather than FedExAccountManager, so getting 
-                // counter rates from the broker is not impacted
-                if (!SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted)
-                {
-                    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
-
-                    // We need to swap out the SettingsRepository and certificate inspector 
-                    // to get FedEx counter rates
-                    SettingsRepository = new FedExCounterRateAccountRepository(TangoCredentialStore.Instance);
-                    CertificateInspector = new CertificateInspector(TangoCredentialStore.Instance.FedExCertificateVerificationData);
-                }
-
-                return GetCachedRates<FedExException>(shipment, GetRatesFromApi);
-            }
-            catch (CounterRatesOriginAddressException)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
-                return errorRates;
-            }
-            finally
-            {
-                // Switch the settings repository back to the original now that we have counter rates
-                SettingsRepository = originalSettings;
-                CertificateInspector = originalInspector;
-                shipment.FedEx.SmartPostHubID = originalHubID;
-            }
-        }
-
-        /// <summary>
-        /// Get a list of rates for the FedEx shipment from the FedEx API
-        /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
-        {
-            return FedExShippingClerkFactory.CreateShippingClerk(shipment, SettingsRepository).GetRates(shipment);
-        }
-
-        /// <summary>
         /// Provide FedEx tracking results for the given shipment
         /// </summary>
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
@@ -1123,50 +1075,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 shipment.FedEx.SmartPostUspsApplicationId = string.Empty;
             }
-        }
-
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(FedExShipmentFields.FedExAccountID);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.WeightUnitType);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.Signature);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.Service);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.PackagingType);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.DropoffType);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SaturdayDelivery);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.OriginResidentialDetermination);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostHubID);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostIndicia);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostEndorsement);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.CodEnabled);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.NonStandardContainer);
-
-                ratingField.PackageFields.Add(FedExPackageFields.DimsWeight);
-                ratingField.PackageFields.Add(FedExPackageFields.DeclaredValue);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsLength);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsHeight);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsWidth);
-                ratingField.PackageFields.Add(FedExPackageFields.ContainsAlcohol);
-                ratingField.PackageFields.Add(FedExPackageFields.DryIceWeight);
-
-                return ratingField;
-            }
-        }
-
-        /// <summary>
-        /// Gets the rating hash based on the shipment's configuration.
-        /// </summary>
-        public override string GetRatingHash(ShipmentEntity shipment)
-        {
-            return RatingFields.GetRatingHash(shipment, shipment.FedEx.Packages);
         }
 
         /// <summary>

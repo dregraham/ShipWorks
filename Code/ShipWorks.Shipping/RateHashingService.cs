@@ -5,7 +5,7 @@ using ShipWorks.Shipping.Carriers;
 namespace ShipWorks.Shipping
 {
     /// <summary>
-    /// Base class for RateHashingService - A rate hash is a unique 
+    /// Base class for RateHashingService - A rate hash is a unique string for a shipments characteristics
     /// </summary>
     public abstract class RateHashingService : IRateHashingService
     {
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets the rating hash based on the shipment's configuration.
         /// </summary>
-        public string GetRatingHash(ShipmentEntity shipment)
+        public virtual string GetRatingHash(ShipmentEntity shipment)
         {
             return RatingFields.GetRatingHash(shipment);
         }

@@ -892,14 +892,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual RateGroup GetRates(ShipmentEntity shipment)
         {
-            if (SupportsGetRates)
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                throw new InvalidOperationException("Should not be called.");
-            }
+            throw new NotImplementedException();
         }
 
         /// <summary>
