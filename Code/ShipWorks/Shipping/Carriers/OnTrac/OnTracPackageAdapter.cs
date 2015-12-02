@@ -1,14 +1,19 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
+    /// <summary>
+    /// Implementation of the IPackageAdapter interface intended to be used for shuffling package data between classes.
+    /// </summary>
     public class OnTracPackageAdapter : IPackageAdapter
     {
         private readonly ShipmentEntity shipment;
+        private PackageTypeBinding packagingType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OnTracPackageAdapter"/> class.
@@ -17,6 +22,21 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public OnTracPackageAdapter(ShipmentEntity shipment)
         {
             this.shipment = shipment;
+
+            packagingType = new PackageTypeBinding()
+            {
+                PackageTypeID = shipment.OnTrac.PackagingType,
+                Name = EnumHelper.GetDescription((OnTracPackagingType)shipment.OnTrac.PackagingType)
+            };
+        }
+
+        /// <summary>
+        /// Gets or sets the index of this package adapter in a list of package adapters.
+        /// </summary>
+        public int Index
+        {
+            get { return 1; }
+            set { }
         }
 
         /// <summary>
@@ -76,10 +96,23 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        public int PackagingType
+        public PackageTypeBinding PackagingType
         {
-            get { return shipment.OnTrac.PackagingType; }
-            set { shipment.OnTrac.PackagingType = value; }
+            get
+            {
+                return packagingType;
+            }
+            set
+            {
+                packagingType = value;
+
+                // value can be null when switching between shipments, so only update the underlying value
+                // if we have a valid packagingType.
+                if (packagingType != null)
+                {
+                    shipment.OnTrac.PackagingType = packagingType.PackageTypeID;
+                }
+            }
         }
 
         /// <summary>

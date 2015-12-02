@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
@@ -11,6 +12,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services.Builders;
 using System.Reactive.Linq;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
@@ -25,8 +27,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private bool usingInsurance;
         private int serviceType;
         private int packageType;
+        private int numberOfPackages;
+        private IEnumerable<IPackageAdapter> packageAdapters;
         private readonly IRateSelectionFactory rateSelectionFactory;
         private readonly IDisposable subscription;
+        private IPackageAdapter selectedPackageAdapter;
+        private bool supportsMultiplePackages;
+        private bool supportsPackageTypes;
 
         private readonly PropertyChangedHandler handler;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
@@ -44,7 +51,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             Services = new ObservableCollection<KeyValuePair<int, string>>();
-            PackageTypes = new ObservableCollection<KeyValuePair<int, string>>();
+            PackageTypes = new ObservableCollection<PackageTypeBinding>();
         }
 
         /// <summary>
@@ -61,9 +68,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             subscription = messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage);
         }
 
+        [Obfuscation(Exclude = true)]
         public ObservableCollection<KeyValuePair<int, string>> Services { get; }
 
-        public ObservableCollection<KeyValuePair<int,string>> PackageTypes { get; }
+        [Obfuscation(Exclude = true)]
+        public ObservableCollection<PackageTypeBinding> PackageTypes { get; }
 
         [Obfuscation(Exclude = true)]
         public DateTime ShipDate
@@ -94,10 +103,44 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         [Obfuscation(Exclude = true)]
-        public int PackageType
+        public IEnumerable<int> PackageCountList
         {
-            get { return packageType; }
-            set { handler.Set(nameof(PackageType), ref packageType, value, true); }
+            get { return Enumerable.Range(1, 25); }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public int NumberOfPackages
+        {
+            get { return numberOfPackages; }
+            set { handler.Set(nameof(NumberOfPackages), ref numberOfPackages, value, true); }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public IEnumerable<IPackageAdapter> PackageAdapters
+        {
+            get { return packageAdapters; }
+            set { handler.Set(nameof(PackageAdapters), ref packageAdapters, value, true); }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public IPackageAdapter SelectedPackageAdapter
+        {
+            get { return selectedPackageAdapter; }
+            set { handler.Set(nameof(SelectedPackageAdapter), ref selectedPackageAdapter, value, true); }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public bool SupportsMultiplePackages
+        {
+            get { return supportsMultiplePackages; }
+            set { handler.Set(nameof(SupportsMultiplePackages), ref supportsMultiplePackages, value); }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public bool SupportsPackageTypes
+        {
+            get { return supportsPackageTypes; }
+            set { handler.Set(nameof(SupportsPackageTypes), ref supportsPackageTypes, value); }
         }
 
         /// <summary>
@@ -108,8 +151,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ShipDate = shipmentAdapter.ShipDate;
             TotalWeight = shipmentAdapter.TotalWeight;
             UsingInsurance = shipmentAdapter.UsingInsurance;
+            SupportsPackageTypes = shipmentAdapter.SupportsPackageTypes;
+            SupportsMultiplePackages = shipmentAdapter.SupportsMultiplePackages;
+
             RefreshServiceTypes(shipmentAdapter);
             RefreshPackageTypes(shipmentAdapter);
+
+            PackageAdapters = shipmentAdapter.GetPackageAdapters();
+            NumberOfPackages = PackageAdapters.Count();
+            
+            SelectedPackageAdapter = PackageAdapters.FirstOrDefault();
+
         }
 
         /// <summary>
@@ -117,8 +169,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public virtual void RefreshServiceTypes(ICarrierShipmentAdapter shipmentAdapter)
         {
-            Dictionary<int, string> services = shipmentServicesBuilderFactory.Get(shipmentAdapter.ShipmentTypeCode)
-                .BuildServiceTypeDictionary(new [] { shipmentAdapter.Shipment });
+            Dictionary<int, string> services;
+            try
+            {
+                services = shipmentServicesBuilderFactory.Get(shipmentAdapter.ShipmentTypeCode)
+                    .BuildServiceTypeDictionary(new[] { shipmentAdapter.Shipment });
+            }
+            catch (InvalidRateGroupShippingException ex)
+            {
+                Services.Add(new KeyValuePair<int, string>(shipmentAdapter.ServiceType, "Error getting service types."));
+                return;
+            }
 
             Services.Clear();
 
@@ -129,6 +190,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             ServiceType = shipmentAdapter.ServiceType;
         }
+
 
         /// <summary>
         /// Refreshes the package types.
@@ -141,10 +203,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             PackageTypes.Clear();
             foreach (KeyValuePair<int, string> entry in packageTypes)
             {
-                PackageTypes.Add(entry);
+                PackageTypes.Add(new PackageTypeBinding()
+                {
+                    PackageTypeID = entry.Key,
+                    Name = entry.Value
+                });
             }
-
-            PackageType = shipmentAdapter.PackageType;
         }
 
         /// <summary>
@@ -156,7 +220,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             //shipmentAdapter.TotalWeight = TotalWeight;
             shipmentAdapter.UsingInsurance = UsingInsurance;
             shipmentAdapter.ServiceType = ServiceType;
-            shipmentAdapter.PackageType = PackageType;
         }
 
         /// <summary>

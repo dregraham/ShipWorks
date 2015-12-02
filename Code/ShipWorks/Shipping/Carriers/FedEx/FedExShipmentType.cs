@@ -265,9 +265,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Return an adapter per package
             List<IPackageAdapter> adapters = new List<IPackageAdapter>();
-            foreach (FedExPackageEntity packageEntity in shipment.FedEx.Packages)
+            for (int index = 0; index < shipment.FedEx.Packages.Count; index++)
             {
-                adapters.Add(new FedExPackageAdapter(shipment, packageEntity));
+                FedExPackageEntity packageEntity = shipment.FedEx.Packages[index];
+                adapters.Add(new FedExPackageAdapter(shipment, packageEntity, index + 1));
             }
 
             return adapters;

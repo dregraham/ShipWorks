@@ -6,6 +6,9 @@ using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
+    /// <summary>
+    /// Implementation of the IPackageAdapter interface intended to be used for shuffling package data between classes.
+    /// </summary>
     public class iParcelPackageAdapter : IPackageAdapter
     {
         private readonly ShipmentEntity shipmentEntity;
@@ -16,11 +19,18 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <param name="packageEntity">The package entity.</param>
-        public iParcelPackageAdapter(ShipmentEntity shipmentEntity, IParcelPackageEntity packageEntity)
+        /// <param name="packageIndex">The index of this package adapter in a list of package adapters.</param>
+        public iParcelPackageAdapter(ShipmentEntity shipmentEntity, IParcelPackageEntity packageEntity, int packageIndex)
         {
             this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;
+            this.Index = packageIndex;
         }
+
+        /// <summary>
+        /// Gets or sets the index of this package adapter in a list of package adapters.
+        /// </summary>
+        public int Index { get; set; }
 
         /// <summary>
         /// Gets or sets the length.
@@ -95,9 +105,16 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        public int PackagingType
+        public PackageTypeBinding PackagingType
         {
-            get { return 0; }
+            get
+            {
+                return new PackageTypeBinding()
+                {
+                    PackageTypeID = 0,
+                    Name = "None"
+                };
+            }
             set { }
         }
 

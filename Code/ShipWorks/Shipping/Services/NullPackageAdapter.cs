@@ -9,6 +9,15 @@ namespace ShipWorks.Shipping.Services
     public class NullPackageAdapter : IPackageAdapter
     {
         /// <summary>
+        /// Gets or sets the index of this package adapter in a list of package adapters.
+        /// </summary>
+        public int Index
+        {
+            get { return 1; }
+            set { }
+        }
+
+        /// <summary>
         /// Gets or sets the length.
         /// </summary>
         public double Length
@@ -65,9 +74,16 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        public int PackagingType
+        public PackageTypeBinding PackagingType
         {
-            get { return 0; }
+            get
+            {
+                return new PackageTypeBinding()
+                {
+                    PackageTypeID = 0,
+                    Name = "None"
+                };
+            }
             set { }
         }
 

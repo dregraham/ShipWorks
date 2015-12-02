@@ -192,9 +192,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             // Return an adapter per package
             List<IPackageAdapter> adapters = new List<IPackageAdapter>();
-            foreach (IParcelPackageEntity packageEntity in shipment.IParcel.Packages)
+            for (int index = 0; index < shipment.IParcel.Packages.Count; index++)
             {
-                adapters.Add(new iParcelPackageAdapter(shipment, packageEntity));
+                IParcelPackageEntity packageEntity = shipment.IParcel.Packages[index];
+                adapters.Add(new iParcelPackageAdapter(shipment, packageEntity, index + 1));
             }
 
             return adapters;

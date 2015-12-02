@@ -148,12 +148,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Package type selected
+        /// List of package adapters for the shipment
         /// </summary>
-        public int PackageType
+        public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
-            get { return shipment.OnTrac.PackagingType; }
-            set { shipment.OnTrac.PackagingType = value; }
+            return shipmentType.GetPackageAdapters(shipment);
         }
     }
 }

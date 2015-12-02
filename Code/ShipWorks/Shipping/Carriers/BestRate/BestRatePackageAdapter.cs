@@ -6,6 +6,9 @@ using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
+    /// <summary>
+    /// Implementation of the IPackageAdapter interface intended to be used for shuffling package data between classes.
+    /// </summary>
     public class BestRatePackageAdapter : IPackageAdapter
     {
         private readonly ShipmentEntity shipment;
@@ -17,6 +20,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public BestRatePackageAdapter(ShipmentEntity shipment)
         {
             this.shipment = shipment;
+        }
+
+        /// <summary>
+        /// Gets or sets the index of this package adapter in a list of package adapters.
+        /// </summary>
+        public int Index
+        {
+            get { return 1; }
+            set {}
         }
 
         /// <summary>
@@ -76,9 +88,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        public int PackagingType
+        public PackageTypeBinding PackagingType
         {
-            get { return 0; }
+            get { return null; }
             set { }
         }
 

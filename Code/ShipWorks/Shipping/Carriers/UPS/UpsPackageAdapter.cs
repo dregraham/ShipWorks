@@ -1,26 +1,44 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
+    /// <summary>
+    /// Implementation of the IPackageAdapter interface intended to be used for shuffling package data between classes.
+    /// </summary>
     public class UpsPackageAdapter : IPackageAdapter
     {
         private readonly ShipmentEntity shipmentEntity;
         private readonly UpsPackageEntity packageEntity;
+        private PackageTypeBinding packagingType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsPackageAdapter" /> class.
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <param name="packageEntity">The package entity.</param>
-        public UpsPackageAdapter(ShipmentEntity shipmentEntity, UpsPackageEntity packageEntity)
+        /// <param name="packageIndex">The index of this package adapter in a list of package adapters.</param>
+        public UpsPackageAdapter(ShipmentEntity shipmentEntity, UpsPackageEntity packageEntity, int packageIndex)
         {
             this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;
+            this.Index = packageIndex;
+
+            packagingType = new PackageTypeBinding()
+            {
+                PackageTypeID = packageEntity.PackagingType,
+                Name = EnumHelper.GetDescription((UpsPackagingType)packageEntity.PackagingType)
+            };
         }
+
+        /// <summary>
+        /// Gets or sets the index of this package adapter in a list of package adapters.
+        /// </summary>
+        public int Index { get; set; }
 
         /// <summary>
         /// Gets or sets the length.
@@ -95,10 +113,23 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        public int PackagingType
+        public PackageTypeBinding PackagingType
         {
-            get { return packageEntity.PackagingType; }
-            set { packageEntity.PackagingType = value; }
+            get
+            {
+                return packagingType;
+            }
+            set
+            {
+                packagingType = value;
+
+                // value can be null when switching between shipments, so only update the underlying value
+                // if we have a valid packagingType.
+                if (packagingType != null)
+                {
+                    packageEntity.PackagingType = packagingType.PackageTypeID;
+                }
+            }
         }
 
         /// <summary>

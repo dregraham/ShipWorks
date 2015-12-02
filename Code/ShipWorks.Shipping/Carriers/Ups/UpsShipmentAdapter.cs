@@ -149,12 +149,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Package type selected
+        /// List of package adapters for the shipment
         /// </summary>
-        public int PackageType
+        public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
-            get { return -1; }
-            set { ; }
+            return shipmentType.GetPackageAdapters(shipment);
         }
     }
 }

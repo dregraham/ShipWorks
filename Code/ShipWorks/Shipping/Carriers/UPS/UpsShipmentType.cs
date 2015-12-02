@@ -1316,9 +1316,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Return an adapter per package
             List<IPackageAdapter> adapters = new List<IPackageAdapter>();
-            foreach (UpsPackageEntity packageEntity in shipment.Ups.Packages)
+            for (int index = 0; index < shipment.Ups.Packages.Count; index++)
             {
-                adapters.Add(new UpsPackageAdapter(shipment, packageEntity));
+                UpsPackageEntity packageEntity = shipment.Ups.Packages[index];
+                adapters.Add(new UpsPackageAdapter(shipment, packageEntity, index + 1));
             }
 
             return adapters;

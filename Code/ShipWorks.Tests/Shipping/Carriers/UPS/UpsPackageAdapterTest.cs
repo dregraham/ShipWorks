@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Services;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Ups
@@ -24,9 +25,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Ups
 
             UpsPackageEntity package = new UpsPackageEntity();
 
-            UpsPackageAdapter testObject = new UpsPackageAdapter(shipment, package)
+            UpsPackageAdapter testObject = new UpsPackageAdapter(shipment, package, 1)
             {
-                PackagingType = 999999,
+                PackagingType = new PackageTypeBinding() { PackageTypeID = 999999 },
                 AdditionalWeight = 3.1,
                 ApplyAdditionalWeight = true,
                 Height = 2.2,
@@ -37,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Ups
 
             string firstTry = testObject.HashCode();
 
-            testObject.PackagingType = 0;
+            testObject.PackagingType = new PackageTypeBinding() { PackageTypeID = 0 };
             string secondTry = testObject.HashCode();
 
             // Make sure PackagingType WAS NOT PART OF THE HASH!

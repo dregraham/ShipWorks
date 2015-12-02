@@ -154,12 +154,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Package type selected
+        /// List of package adapters for the shipment
         /// </summary>
-        public int PackageType
+        public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
-            get { return 0; }
-            set { ; }
+            return shipmentType.GetPackageAdapters(shipment);
         }
     }
 }

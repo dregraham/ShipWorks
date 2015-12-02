@@ -73,9 +73,8 @@ namespace ShipWorks.Shipping.Services
         int ServiceType { get; set; }
 
         /// <summary>
-        /// Package type selected
+        /// List of package adapters for the shipment
         /// </summary>
-        int PackageType { get; set; }
-
+        IEnumerable<IPackageAdapter> GetPackageAdapters();
     }
 }

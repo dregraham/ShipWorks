@@ -7,6 +7,11 @@ namespace ShipWorks.Shipping.Services
     public interface IPackageAdapter
     {
         /// <summary>
+        /// Gets or sets the index of this package adapter in a list of package adapters.
+        /// </summary>
+        int Index { get; set; }
+
+        /// <summary>
         /// Gets or sets the length.
         /// </summary>
         double Length { get; set; }
@@ -39,7 +44,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        int PackagingType { get; set; }
+        PackageTypeBinding PackagingType { get; set; }
 
         /// <summary>
         /// Gets the hash code based on this package adapter's properties.

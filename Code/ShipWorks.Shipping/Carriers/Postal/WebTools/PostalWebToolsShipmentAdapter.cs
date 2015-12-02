@@ -152,12 +152,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         }
 
         /// <summary>
-        /// Package type selected
+        /// List of package adapters for the shipment
         /// </summary>
-        public int PackageType
+        public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
-            get { return shipment.Postal.PackagingType; }
-            set { shipment.Postal.PackagingType = value; }
+            return shipmentType.GetPackageAdapters(shipment);
         }
     }
 }

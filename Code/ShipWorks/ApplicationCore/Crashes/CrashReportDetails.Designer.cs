@@ -88,7 +88,7 @@ namespace ShipWorks.ApplicationCore.Crashes
             this.Controls.Add(this.save);
             this.Controls.Add(this.reportDetails);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.MaximizeBox = false;
+            this.MaximizeBox = true;
             this.MinimizeBox = false;
             this.Name = "CrashReportDetails";
             this.ShowIcon = false;

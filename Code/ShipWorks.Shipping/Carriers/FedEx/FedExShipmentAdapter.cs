@@ -148,12 +148,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Package type selected
+        /// List of package adapters for the shipment
         /// </summary>
-        public int PackageType
+        public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
-            get { return shipment.FedEx.PackagingType; }
-            set { shipment.FedEx.PackagingType = value; }
+            return shipmentType.GetPackageAdapters(shipment);
         }
     }
 }

@@ -1,26 +1,44 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
+    /// <summary>
+    /// Implementation of the IPackageAdapter interface intended to be used for shuffling package data between classes.
+    /// </summary>
     public class FedExPackageAdapter : IPackageAdapter
     {
         private readonly ShipmentEntity shipmentEntity;
         private readonly FedExPackageEntity packageEntity;
+        private PackageTypeBinding packagingType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExPackageAdapter" /> class.
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <param name="packageEntity">The package entity.</param>
-        public FedExPackageAdapter(ShipmentEntity shipmentEntity, FedExPackageEntity packageEntity)
+        /// <param name="packageIndex">The index of this package adapter in a list of package adapters.</param>
+        public FedExPackageAdapter(ShipmentEntity shipmentEntity, FedExPackageEntity packageEntity, int packageIndex)
         {
             this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;
+            this.Index = packageIndex;
+
+            packagingType = new PackageTypeBinding()
+            {
+                PackageTypeID = shipmentEntity.FedEx.PackagingType,
+                Name = EnumHelper.GetDescription((FedExPackagingType)shipmentEntity.FedEx.PackagingType)
+            };
         }
+
+        /// <summary>
+        /// Gets or sets the index of this package adapter in a list of package adapters.
+        /// </summary>
+        public int Index { get; set; }
 
         /// <summary>
         /// Gets or sets the length.
@@ -95,10 +113,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        public int PackagingType
+        public PackageTypeBinding PackagingType
         {
-            get { return shipmentEntity.FedEx.PackagingType; }
-            set { shipmentEntity.FedEx.PackagingType = value; }
+            get
+            {
+                return packagingType;
+            }
+            set
+            {
+                packagingType = value;
+
+                // value can be null when switching between shipments, so only update the underlying value
+                // if we have a valid packagingType.
+                if (packagingType != null)
+                {
+                    shipmentEntity.FedEx.PackagingType = packagingType.PackageTypeID;
+                }
+            }
         }
 
         /// <summary>
@@ -107,7 +138,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public string HashCode()
         {
             StringHash stringHash = new StringHash();
-            
+
             string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", Length, Width, Height, Weight, AdditionalWeight, ApplyAdditionalWeight);
 
             return stringHash.Hash(rawValue, string.Empty);

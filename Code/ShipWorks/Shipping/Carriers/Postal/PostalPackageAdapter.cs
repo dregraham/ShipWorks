@@ -6,9 +6,13 @@ using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
+    /// <summary>
+    /// Implementation of the IPackageAdapter interface intended to be used for shuffling package data between classes.
+    /// </summary>
     public class PostalPackageAdapter : IPackageAdapter
     {
         private readonly ShipmentEntity shipment;
+        private PackageTypeBinding packagingType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PostalPackageAdapter"/> class.
@@ -17,6 +21,21 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public PostalPackageAdapter(ShipmentEntity shipment)
         {
             this.shipment = shipment;
+
+            packagingType = new PackageTypeBinding()
+            {
+                PackageTypeID = shipment.Postal.PackagingType,
+                Name = EnumHelper.GetDescription((PostalPackagingType)shipment.Postal.PackagingType)
+            };
+        }
+
+        /// <summary>
+        /// Gets or sets the index of this package adapter in a list of package adapters.
+        /// </summary>
+        public int Index
+        {
+            get { return 1; }
+            set { }
         }
 
         /// <summary>
@@ -76,10 +95,23 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        public int PackagingType
+        public PackageTypeBinding PackagingType
         {
-            get { return shipment.Postal.PackagingType; }
-            set { shipment.Postal.PackagingType = value; }
+            get
+            {
+                return packagingType;
+            }
+            set
+            {
+                packagingType = value;
+
+                // value can be null when switching between shipments, so only update the underlying value
+                // if we have a valid packagingType.
+                if (packagingType != null)
+                {
+                    shipment.Postal.PackagingType = packagingType.PackageTypeID;
+                }
+            }
         }
 
         /// <summary>
