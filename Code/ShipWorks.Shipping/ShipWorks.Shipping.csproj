@@ -158,6 +158,7 @@
     <Compile Include="Carriers\Ups\UpsLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsOltLabelService.cs" />
     <Compile Include="Carriers\Ups\WorldShipLabelService.cs" />
+    <Compile Include="IRateHashingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
