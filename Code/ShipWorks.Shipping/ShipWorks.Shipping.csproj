@@ -162,6 +162,7 @@
     <Compile Include="ICachedRatesService.cs" />
     <Compile Include="IRateHashingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RateHashingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
