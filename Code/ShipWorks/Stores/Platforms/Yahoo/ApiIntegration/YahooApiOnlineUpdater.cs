@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
     public class YahooApiOnlineUpdater
     {
         private readonly ILog log;
-        private readonly YahooApiWebClient client;
+        private readonly IYahooApiWebClient client;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiOnlineUpdater"/> class.
@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="log">The logger</param>
         /// <param name="client">The api web client.</param>
-        public YahooApiOnlineUpdater(ILog log, YahooApiWebClient client)
+        public YahooApiOnlineUpdater(ILog log, IYahooApiWebClient client)
         {
             this.log = log;
             this.client = client;
@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Changes the status of a Yahoo order to that specified
         /// </summary>
-        public void UpdateOrderStatus(long orderID, string status, UnitOfWork2 unitOfWork)
+        private void UpdateOrderStatus(long orderID, string status, UnitOfWork2 unitOfWork)
         {
             YahooOrderEntity order = (YahooOrderEntity)DataProvider.GetEntity(orderID);
             if (order != null)
@@ -136,9 +136,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns></returns>
-        private string GetCarrierCode(ShipmentEntity shipmentEntity)
+        public string GetCarrierCode(ShipmentEntity shipmentEntity)
         {
-            string carrierCode;
+            // Yahoo only supports usps, ups, fedex, dhl and airborne.
+            // so if the carrier is something else (OnTrac, iparcel...)
+            // just give an empty string and we just won't upload the carrier
+            string carrierCode = string.Empty;
 
             switch (((ShipmentTypeCode)shipmentEntity.ShipmentType))
             {
@@ -176,11 +179,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     ShippingManager.EnsureShipmentLoaded(shipmentEntity);
                     //The shipment is a UPS shipment, check to see if it is UPS-MI
                     carrierCode = "ups";
-                    break;
-
-                default:
-                    Debug.Fail("Unhandled ShipmentTypeCode in YahooApiOnlineUpdater.GetCarrierCode");
-                    carrierCode = "Other";
                     break;
             }
 

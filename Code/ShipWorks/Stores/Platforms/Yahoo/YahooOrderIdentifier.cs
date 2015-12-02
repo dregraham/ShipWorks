@@ -1,4 +1,5 @@
-﻿using ShipWorks.Stores.Content;
+﻿using System;
+using ShipWorks.Stores.Content;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Yahoo
@@ -9,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
     public class YahooOrderIdentifier : OrderIdentifier
     {
         // Yahoo's Order ID
-        readonly string yahooOrderID = "";
+        readonly string yahooOrderID;
 
         /// <summary>
         /// Constructor
@@ -24,8 +25,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override void ApplyTo(OrderEntity order)
         {
-            YahooOrderEntity yahoo = (YahooOrderEntity) order;
-            yahoo.YahooOrderID = yahooOrderID;
+            YahooOrderEntity yahooOrder = order as YahooOrderEntity;
+
+            if (yahooOrder == null)
+            {
+                throw new YahooException("Attempted to apply a Yahoo Order ID to a null or non-Yahoo Order");
+            }
+
+            yahooOrder.YahooOrderID = yahooOrderID;
         }
 
         /// <summary>
@@ -33,6 +40,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override void ApplyTo(DownloadDetailEntity downloadDetail)
         {
+            if (downloadDetail == null)
+            {
+                throw new ArgumentNullException("downloadDetail");
+            }
+
             downloadDetail.ExtraStringData1 = yahooOrderID;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
@@ -45,7 +46,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         public YahooStoreType(StoreEntity store)
             : base(store)
         {
-            if (store != null && !(store is YahooStoreEntity))
+            if (store == null)
+            {
+                throw new ArgumentNullException("store");
+            }
+
+            if (!(store is YahooStoreEntity))
             {
                 throw new ArgumentException("StoreEntity is not instance of YahooStoreEntity.");
             }
@@ -122,7 +128,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new YahooOrderIdentifier(((YahooOrderEntity) order).YahooOrderID);
+            YahooOrderEntity yahooOrder = order as YahooOrderEntity;
+
+            if (yahooOrder == null)
+            {
+                throw new YahooException("Attempted to create a Yahoo order identifier for a non-Yahoo order");
+            }
+
+            return new YahooOrderIdentifier(yahooOrder.YahooOrderID);
         }
 
         /// <summary>
@@ -148,12 +161,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             YahooStoreEntity store = (YahooStoreEntity) Store;
 
-            if (store.YahooStoreID.IsNullOrWhiteSpace())
-            {
-                return new YahooEmailDownloader(store);
-            }
-
-            return new YahooApiDownloader(store);
+            return store.YahooStoreID.IsNullOrWhiteSpace() ?
+                new YahooEmailDownloader(store) :
+                (StoreDownloader) new YahooApiDownloader(store);
         }
 
         /// <summary>
@@ -163,7 +173,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             YahooStoreEntity store = (YahooStoreEntity)Store;
 
-            return store.YahooStoreID.IsNullOrWhiteSpace() ? new YahooEmailStoreSettingsControl() : new StoreSettingsControlBase();
+            return store.YahooStoreID.IsNullOrWhiteSpace() ?
+                new YahooEmailStoreSettingsControl() :
+                null;
         }
 
         /// <summary>
@@ -264,8 +276,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 return filters;
             }
 
-            filters.AddRange(from YahooApiOrderStatus status in EnumHelper.GetEnumList<YahooApiOrderStatus>()
-                             select CreateOrderStatusFilter(EnumHelper.GetDescription(status)));
+            foreach (EnumEntry<YahooApiOrderStatus> status in EnumHelper.GetEnumList<YahooApiOrderStatus>())
+            {
+                filters.Add(CreateOrderStatusFilter(status.Description));
+            }
 
             return filters;
         }
@@ -328,7 +342,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 throw new YahooException("Attempted to create Yahoo instance commands for a non Yahoo store");
             }
 
-            if (store.YahooStoreID == string.Empty)
+            if (store.YahooStoreID.IsNullOrWhiteSpace())
             {
                 commands.Add(new MenuCommand("Upload Shipment Details", OnUploadShipmentDetails));
                 return commands;

@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using Quartz.Util;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
@@ -119,13 +120,18 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                           "<Order>" +
                           $"<OrderID>{orderID}</OrderID>" +
                           "<CartShipmentInfo>" +
-                          $"<TrackingNumber>{trackingNumber}</TrackingNumber>" +
-                          $"<Shipper>{shipper}</Shipper>" +
-                          $"<ShipState>{status}</ShipState>" +
-                          "</CartShipmentInfo>" +
-                          "</Order>" +
-                          "</ResourceList>" +
-                          "</ystorewsRequest>";
+                          $"<TrackingNumber>{trackingNumber}</TrackingNumber>";
+
+            if (!shipper.IsNullOrWhiteSpace())
+            {
+                body += $"<Shipper>{shipper}</Shipper>";
+            }
+
+            body += $"<ShipState>{status}</ShipState>" +
+                "</CartShipmentInfo>" +
+                "</Order>" +
+                "</ResourceList>" +
+                "</ystorewsRequest>";
 
             ProcessRequest(CreateOrderRequestSubmitter(body), "UploadShipmentDetails");
         }
@@ -209,7 +215,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Cleans the response.
         /// </summary>
         /// <param name="response">The response to clean</param>
-        private static string CleanResponse(string response)
+        private string CleanResponse(string response)
         {
             response = response.Replace("<ystorews:ystorewsResponse xmlns:ystorews=\"urn:yahoo:sbs:ystorews\" >", "<ystorewsResponse>");
             response = response.Replace("</ystorews:ystorewsResponse>", "</ystorewsResponse>");
@@ -246,7 +252,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="submitter">The request submitter.</param>
         /// <param name="action">The method calling process request for logging purposes</param>
         /// <returns></returns>
-        private static YahooResponse ProcessRequest(HttpRequestSubmitter submitter, string action)
+        private YahooResponse ProcessRequest(HttpRequestSubmitter submitter, string action)
         {
             try
             {
@@ -261,6 +267,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     return DeserializeResponse<YahooResponse>(CleanResponse(responseData));
                 }
             }
+            // Unfortunately if any error occurs on Yahoo's side, they throw 400 errors causing
+            // a web exception on our side. Because of that, the error codes and messages they respond with
+            // are lost. We want to capture them so we can handle the errors accordingly. So here we check if
+            // the exception was a web exception. If so, dig through the exception to get Yahoo's actual response,
+            // deserialize it and return a YahooResponse object containing the error code so we can deal with it later.
             catch (Exception ex)
             {
                 WebException webEx = ex as WebException;
@@ -288,16 +299,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
             catch (InvalidOperationException ex)
             {
-                if (!xml.Contains("ErrorResourceList"))
-                {
-                    YahooResponse errorResponse = SerializationUtility.DeserializeFromXml<YahooResponse>(xml);
-
-                    foreach (YahooError error in errorResponse.ErrorResourceList.Error)
-                    {
-                        throw new YahooException(error.Message, ex);
-                    }
-                }
-
                 throw new YahooException($"Error Deserializing {typeof(T).Name}", ex);
             }
         }
