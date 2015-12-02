@@ -10,6 +10,9 @@ using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
 namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 {
+    /// <summary>
+    /// Base class for the account settings and account page view model
+    /// </summary>
     public class YahooApiAccountViewModel
     {
         private readonly Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient;
@@ -20,12 +23,19 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         private long? backupOrderNumber;
         private YahooOrderNumberValidation isValid;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YahooApiAccountViewModel"/> class.
+        /// </summary>
+        /// <param name="storeWebClient">The store web client.</param>
         public YahooApiAccountViewModel(Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient)
         {
             this.storeWebClient = storeWebClient;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
+        /// <summary>
+        /// The store's Yahoo Store ID
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string YahooStoreID
         {
@@ -33,6 +43,9 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
             set { handler.Set(nameof(YahooStoreID), ref yahooStoreID, value); }
         }
 
+        /// <summary>
+        /// The store's Access Token
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string AccessToken
         {
@@ -40,6 +53,10 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
             set { handler.Set(nameof(AccessToken), ref accessToken, value); }
         }
 
+        /// <summary>
+        /// The order number to start from when an invalid start range error is caught
+        /// when getting a list of orders.
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public long? BackupOrderNumber
         {
@@ -47,6 +64,10 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
             set { handler.Set(nameof(BackupOrderNumber), ref backupOrderNumber, value); }
         }
 
+        /// <summary>
+        /// Enum for determining the validation status of the backup order number. Wired up
+        /// to a converter to display an appropriate image on the page.
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public YahooOrderNumberValidation IsValid
         {
@@ -54,6 +75,9 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
             set { handler.Set(nameof(IsValid), ref isValid, value); }
         }
 
+        /// <summary>
+        /// Determines whether the properties we are tracking are all filled in
+        /// </summary>
         private bool IsValidationPropertyEntered(string propertyName)
         {
             return !string.IsNullOrWhiteSpace(YahooStoreID) &&
@@ -61,6 +85,10 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
                 BackupOrderNumber.HasValue;
         }
 
+        /// <summary>
+        /// Determines whether the property changed is one of the ones we
+        /// care about for order number validation
+        /// </summary>
         private bool IsValidationProperty(string propertyName)
         {
             return propertyName == nameof(BackupOrderNumber) ||
@@ -68,7 +96,10 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
                 propertyName == nameof(AccessToken);
         }
 
-        private bool Validate(string arg)
+        /// <summary>
+        /// Validates the backup order number
+        /// </summary>
+        private bool ValidateBackupOrderNumber(string arg)
         {
             try
             {
@@ -83,7 +114,12 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
             }
         }
 
-        protected string CheckCredentials(YahooResponse response)
+        /// <summary>
+        /// If we are here there is an error in the response, see if it is
+        /// because of an invalid store id or access token
+        /// </summary>
+        /// <param name="response">The response to check for errors</param>
+        protected string CheckCredentialsError(YahooResponse response)
         {
             foreach (YahooError error in response.ErrorMessages.Error)
             {
@@ -99,19 +135,28 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
             return string.Empty;
         }
 
-        protected void ValidateBackupOrderNumber()
+        /// <summary>
+        /// Handles any changes to the form
+        /// </summary>
+        protected void HandleChanges()
         {
             handler.Where(IsValidationProperty)
                 .Where(IsValidationPropertyEntered)
                 .Do(_ => IsValid = YahooOrderNumberValidation.Validating)
                 .Throttle(TimeSpan.FromMilliseconds(350))
                 .ObserveOn(TaskPoolScheduler.Default)
-                .Select(Validate)
+                .Select(ValidateBackupOrderNumber)
                 .Select(x => x ? YahooOrderNumberValidation.Valid : YahooOrderNumberValidation.Invalid)
                 .ObserveOn(DispatcherScheduler.Current)
                 .Subscribe(x => IsValid = x);
         }
 
+        /// <summary>
+        /// If all of the account information entered and valid, an empty string is returned.
+        /// If errors occur while validating the information, return the error message.
+        /// </summary>
+        /// <param name="store">The store.</param>
+        /// <returns></returns>
         public string Save(YahooStoreEntity store)
         {
             store.YahooStoreID = YahooStoreID;
@@ -138,7 +183,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
                 YahooResponse response = storeWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
                     .ValidateCredentials();
 
-                return response.ErrorMessages == null ? string.Empty : CheckCredentials(response);
+                return response.ErrorMessages == null ? string.Empty : CheckCredentialsError(response);
             }
             catch (Exception ex)
             {

@@ -7,11 +7,19 @@ using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
 
 namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 {
+    /// <summary>
+    /// View model for the YahooAccountPage
+    /// </summary>
     public class YahooApiAccountPageViewModel : YahooApiAccountViewModel, INotifyPropertyChanged
     {
         private readonly IStoreTypeManager storeTypeManager;
         private string helpUrl;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YahooApiAccountPageViewModel"/> class.
+        /// </summary>
+        /// <param name="storeTypeManager">The store type manager.</param>
+        /// <param name="storeWebClient">The store web client.</param>
         public YahooApiAccountPageViewModel(IStoreTypeManager storeTypeManager, Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient) : base(storeWebClient)
         {
             this.storeTypeManager = storeTypeManager;
@@ -19,6 +27,9 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
             HelpUrl = storeType?.AccountSettingsHelpUrl;
         }
 
+        /// <summary>
+        /// Help link URL
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string HelpUrl
         {
@@ -26,10 +37,14 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
             set { handler.Set(nameof(HelpUrl), ref helpUrl, value); }
         }
 
+        /// <summary>
+        /// Loads the page
+        /// </summary>
+        /// <param name="storeEntity">The store entity.</param>
         public void Load(YahooStoreEntity storeEntity)
         {
-            HelpUrl = ((YahooStoreType) storeTypeManager.GetType(StoreTypeCode.Yahoo)).AccountSettingsHelpUrl;
-            ValidateBackupOrderNumber();
+            HelpUrl = ((YahooStoreType)storeTypeManager.GetType(StoreTypeCode.Yahoo)).AccountSettingsHelpUrl;
+            HandleChanges();
         }
     }
 }

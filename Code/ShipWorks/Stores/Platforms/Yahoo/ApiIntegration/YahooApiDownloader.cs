@@ -525,7 +525,19 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             temp = tokens.Aggregate(string.Empty, (current, token) => $"{current} {token}");
 
-            return DateTime.Parse(temp);
+            DateTime result;
+
+            DateTime.TryParse(temp, out result);
+
+            // When try parse fails, it returns DateTime.MinValue. We don't want to actually set that
+            // as the date, so throw an error. If Yahoo ever changes their date format, this method will
+            // more than likely have to change.
+            if (result == DateTime.MinValue)
+            {
+                throw new DownloadException("Error parsing date in Yahoo's response");
+            }
+
+            return result;
         }
     }
 }

@@ -10,10 +10,16 @@ using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 {
+    /// <summary>
+    /// Winforms element for hosting the WPF Yahoo Account Page
+    /// </summary>
     public partial class YahooApiAccountPageHost : AddStoreWizardPage
     {
         private YahooApiAccountPageViewModel viewModel;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YahooApiAccountPageHost"/> class.
+        /// </summary>
         public YahooApiAccountPageHost()
         {
             InitializeComponent();
@@ -21,6 +27,11 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
             StepNext += OnStepNext;
         }
 
+        /// <summary>
+        /// Called when [page load].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnPageLoad(object sender, EventArgs e)
         {
             viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<YahooApiAccountPageViewModel>>().Value;
@@ -29,6 +40,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
             {
                 DataContext = viewModel
             };
+
             ControlHost.Child = page;
 
             YahooStoreEntity store = GetStore<YahooStoreEntity>();
@@ -47,12 +59,13 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
 
             string message = viewModel.Save(store);
 
-            if (!string.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(message))
             {
-                MessageHelper.ShowError(this, message);
-                e.NextPage = this;
                 return;
             }
+
+            MessageHelper.ShowError(this, message);
+            e.NextPage = this;
         }
     }
 }
