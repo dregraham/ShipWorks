@@ -13,7 +13,6 @@ namespace ShipWorks.Shipping
     public class CachedRatesService : ICachedRatesService
     {
         private readonly IRateHashingService rateHashingService;
-        private readonly ShipmentType shipmentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedRatesService"/> class.

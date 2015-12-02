@@ -160,6 +160,8 @@
     <Compile Include="Carriers\Postal\WebTools\WebToolsLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsOltLabelService.cs" />
+    <Compile Include="Carriers\Ups\UpsRateHashingService.cs" />
+    <Compile Include="Carriers\Ups\UpsRatingService.cs" />
     <Compile Include="Carriers\Ups\WorldShipLabelService.cs" />
     <Compile Include="ICachedRatesService.cs" />
     <Compile Include="IRateHashingService.cs" />
