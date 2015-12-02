@@ -1,12 +1,11 @@
-﻿using Autofac.Extras.Moq;
-using Moq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Autofac;
+using Autofac.Extras.Moq;
+using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores;
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.Shared
         /// Get an AutoMock that is loose and will try and return meaningful defaults instead of null
         /// </summary>
         /// <returns></returns>
-        public static AutoMock GetLooseThatReturnsMocks() => AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) {DefaultValue = DefaultValue.Mock});
+        public static AutoMock GetLooseThatReturnsMocks() => AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
 
         /// <summary>
         /// Configure a shipment type that will be returned by an instance of IShipmentTypeFactory
@@ -159,10 +158,27 @@ namespace ShipWorks.Tests.Shared
         /// </summary>
         public static Mock<ICarrierShipmentAdapter> WithCarrierShipmentAdapter(this AutoMock mock, ShipmentEntity shipment, bool isDomestic)
         {
-            Mock<ICarrierShipmentAdapter> mockObject = mock.Mock<ICarrierShipmentAdapter>();
+            return mock.CreateCarrierShipmentAdapter(x =>
+            {
+                x.Setup(s => s.Shipment).Returns(shipment);
+                x.Setup(s => s.IsDomestic).Returns(isDomestic);
+            });
+        }
 
-            mockObject.Setup(s => s.Shipment).Returns(shipment);
-            mockObject.Setup(s => s.IsDomestic).Returns(isDomestic);
+        /// <summary>
+        /// Configure an ICarrierShipmentAdapter
+        /// </summary>
+        public static Mock<ICarrierShipmentAdapter> CreateCarrierShipmentAdapter(this AutoMock mock) =>
+            CreateCarrierShipmentAdapter(mock, null);
+
+        /// <summary>
+        /// Configure an ICarrierShipmentAdapter
+        /// </summary>
+        public static Mock<ICarrierShipmentAdapter> CreateCarrierShipmentAdapter(this AutoMock mock, Action<Mock<ICarrierShipmentAdapter>> configuration)
+        {
+            Mock<ICarrierShipmentAdapter> mockObject = mock.MockRepository.Create<ICarrierShipmentAdapter>();
+
+            configuration?.Invoke(mockObject);
 
             return mockObject;
         }

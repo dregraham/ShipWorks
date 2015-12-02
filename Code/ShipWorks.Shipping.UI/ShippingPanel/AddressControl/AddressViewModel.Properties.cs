@@ -6,6 +6,9 @@ using System.Windows.Input;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.AddressControl
 {
+    /// <summary>
+    /// View model for use by AddressControl
+    /// </summary>
     public partial class AddressViewModel
     {
         private string fullName;

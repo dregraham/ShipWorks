@@ -325,7 +325,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
 
-            if (amazonProfile.Weight.HasValue && amazonProfile.Weight.Value > 0)
+            if (amazonProfile.Weight.GetValueOrDefault() > 0)
             {
                 ShippingProfileUtility.ApplyProfileValue(amazonProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }

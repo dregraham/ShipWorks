@@ -124,7 +124,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
 
-            builder.Register((x, p) => LogManager.GetLogger(p.TypedAs<Type>()));
+            builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
 
             current = builder.Build();
         }

@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Interapptive.Shared.Collections;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Messaging.Messages;
-using ShipWorks.Core.Messaging.Messages.Shipping;
-using Interapptive.Shared.Collections;
-using System.Reactive.Disposables;
-using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
-using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -38,7 +37,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public ShippingPanelViewModel()
         {
-
+            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
         }
 
         /// <summary>
@@ -55,12 +54,19 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.messenger = messenger;
             this.messageHelper = messageHelper;
 
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
-
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
             Destination.IsAddressValidationEnabled = true;
             ShipmentViewModel = shippingViewModelFactory.GetShipmentViewModel();
+
+            Origin.PropertyChangeStream
+                .Select(_ => ShipmentAdapter?.Shipment?.OriginPerson)
+                .Where(x => x != null)
+                .Subscribe(x => Origin.SaveToEntity(x));
+            Destination.PropertyChangeStream
+                .Select(_ => ShipmentAdapter?.Shipment?.ShipPerson)
+                .Where(x => x != null)
+                .Subscribe(x => Destination.SaveToEntity(x));
 
             // Wiring up observables needs objects to not be null, so do this last.
             subscriptions = new CompositeDisposable(registrations.Select(x => x.Register(this)));
@@ -70,14 +76,29 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
+        /// Is the current shipment domestic
+        /// </summary>
+        public virtual bool IsDomestic => ShipmentAdapter?.IsDomestic ?? true;
+
+        /// <summary>
         /// Current shipment adapter
         /// </summary>
-        public ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
+        public virtual ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
 
         /// <summary>
         /// Expose a stream of property changes
         /// </summary>
         public IObservable<string> PropertyChangeStream => handler;
+
+        /// <summary>
+        /// Gets the shipment from the current adapter
+        /// </summary>
+        public virtual ShipmentEntity Shipment => ShipmentAdapter?.Shipment;
+
+        /// <summary>
+        /// Gets the id of the order associated with the current shipment
+        /// </summary>
+        public virtual long? OrderID => ShipmentAdapter?.Shipment?.OrderID;
 
         /// <summary>
         /// Wire up any Observable patterns
@@ -87,15 +108,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
 
 #pragma warning disable S125 // Sections of code should not be "commented out"
-                            //// Wire up the rate criteria obseravable throttling for the PropertyChanged event.
-                            //Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
-                            //    // We only listen if listenForRateCriteriaChanged is true.
-                            //    .Where(evt => listenForRateCriteriaChanged)
-                            //    // Only fire the event if we have a shipment and it is a rating field.
-                            //    .Where(evt =>
-                            //    {
-                            //        bool hasShipment = orderSelectionLoaded?.Shipment != null;
-                            //        bool isRatingField = IsRatingField(evt.EventArgs.PropertyName);
+            //// Wire up the rate criteria obseravable throttling for the PropertyChanged event.
+            //Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
+            //    // We only listen if listenForRateCriteriaChanged is true.
+            //    .Where(evt => listenForRateCriteriaChanged)
+            //    // Only fire the event if we have a shipment and it is a rating field.
+            //    .Where(evt =>
+            //    {
+            //        bool hasShipment = orderSelectionLoaded?.Shipment != null;
+            //        bool isRatingField = IsRatingField(evt.EventArgs.PropertyName);
 
             //        // forceRateCriteriaChanged is used for race conditions:
             //        // For example, ShipmentType property changes, and then before the throttle time, SupportsMultipleShipments changes.

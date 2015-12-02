@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private void UpdateOriginAddress(ShippingPanelViewModel viewModel)
         {
             viewModel.Origin.SetAddressFromOrigin(viewModel.OriginAddressType,
-                viewModel.ShipmentAdapter.Shipment?.OrderID ?? 0,
+                viewModel.OrderID ?? 0,
                 viewModel.AccountId,
                 viewModel.ShipmentType);
         }

@@ -31,30 +31,31 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     /// </summary>
     public class LemonStandStoreType : StoreType
     {
-        // Logger 
         private readonly ILog log;
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
-        public LemonStandStoreType(StoreEntity store)
-            : this(store, LogManager.GetLogger(typeof (LemonStandStoreType)))
+        public LemonStandStoreType(StoreEntity store) : base(store)
         {
-        }
-
-        public LemonStandStoreType(StoreEntity store, ILog log)
-            : base(store)
-        {
-            this.log = log;
+            log = LogManager.GetLogger(typeof(LemonStandStoreType));
         }
 
         /// <summary>
-        ///     Indentifying type code
+        /// Constructor
+        /// </summary>
+        public LemonStandStoreType(StoreEntity store, Func<Type, ILog> logFactory) : base(store)
+        {
+            log = logFactory(typeof(LemonStandStoreType));
+        }
+
+        /// <summary>
+        /// Identifying type code
         /// </summary>
         public override StoreTypeCode TypeCode => StoreTypeCode.LemonStand;
 
         /// <summary>
-        ///     Gets the license identifier for this store
+        /// Gets the license identifier for this store
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
@@ -69,12 +70,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Gets the help URL to use in the account settings.
+        /// Gets the help URL to use in the account settings.
         /// </summary>
         public static Uri AccountSettingsHelpUrl => new Uri("http://support.shipworks.com/support/solutions/articles/4000062623");
 
         /// <summary>
-        ///     The initial download policy
+        /// The initial download policy
         /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy =>
             new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) {DefaultDaysBack = 7, MaxDaysBack = 30};
@@ -84,14 +85,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
-            List<MenuCommand> commands = new List<MenuCommand>(); 
+            List<MenuCommand> commands = new List<MenuCommand>();
 
             // get possible status codes from the provider
             LemonStandStatusCodeProvider codeProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity)Store);
 
-            // create a menu item for each status 
+            // create a menu item for each status
             List<string> statusCodeNames = GetCurrentOrderStatuses().ToList();
-            
+
             bool isOne = false;
             foreach (string codeName in statusCodeNames)
             {
@@ -275,7 +276,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
         /// <summary>
         ///     Get any filters that should be created as an initial filter set when the store is first created.  If the list is
-        ///     non-empty they will be automatically put in a folder that is filtered on the store... so there is no need to test 
+        ///     non-empty they will be automatically put in a folder that is filtered on the store... so there is no need to test
         ///     for that in the generated filter conditions.
         /// </summary>
         public override List<FilterEntity> CreateInitialFilters()
@@ -393,9 +394,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             LemonStandWebClient client = new LemonStandWebClient((LemonStandStoreEntity)Store);
 
             List<JToken> statuses = client.GetOrderStatuses().SelectToken("data").Children().ToList();
-            
+
             List<string> list = statuses.Select(status => status.SelectToken("name").ToString()).ToList();
-            
+
             list.Sort();
 
             return list;

@@ -1,9 +1,7 @@
-﻿using ShipWorks.Shipping.Loading;
-using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows.Input;
-using ShipWorks.Shipping.Services;
-using System;
+using ShipWorks.Shipping.Loading;
+using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -21,7 +19,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private ShippingAddressEditStateType destinationAddressEditableState;
         private bool supportsAccounts;
         private string domesticInternationalText;
-        
+
         /// <summary>
         /// Command to create a label
         /// </summary>
@@ -31,7 +29,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Selected shipment type code for the current shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShipmentTypeCode ShipmentType
+        public virtual ShipmentTypeCode ShipmentType
         {
             get { return selectedShipmentType; }
             set { handler.Set(nameof(ShipmentType), ref selectedShipmentType, value); }
@@ -131,7 +129,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Id of the account for the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public long AccountId
+        public virtual long AccountId
         {
             get { return accountId; }
             set { handler.Set(nameof(AccountId), ref accountId, value); }
@@ -140,12 +138,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// The origin address view model.
         /// </summary>
-        public AddressViewModel Origin { get; }
+        public virtual AddressViewModel Origin { get; }
 
         /// <summary>
         /// The destination address view model.
         /// </summary>
-        public AddressViewModel Destination { get; }
+        public virtual AddressViewModel Destination { get; }
 
         /// <summary>
         /// The Shipment view model.

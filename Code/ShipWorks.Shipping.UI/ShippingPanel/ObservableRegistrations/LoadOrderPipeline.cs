@@ -19,7 +19,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         /// <param name="changeHandler"></param>
         /// <param name="schedulerProvider"></param>
-        public LoadOrderOnSelectionChangedPipeline(OrderSelectionChangedHandler changeHandler, ISchedulerProvider schedulerProvider)
+        public LoadOrderOnSelectionChangedPipeline(
+            OrderSelectionChangedHandler changeHandler,
+            ISchedulerProvider schedulerProvider)
         {
             this.changeHandler = changeHandler;
             this.schedulerProvider = schedulerProvider;

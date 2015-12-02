@@ -1,10 +1,10 @@
-﻿using Interapptive.Shared.Threading;
-using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
-using System;
-using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
+using Interapptive.Shared.Threading;
+using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -13,7 +13,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// </summary>
     public class DomesticInternationalDisplayPipeline : IShippingPanelObservableRegistration
     {
-        bool forceDomesticInternationalChanged;
+        readonly HashSet<string> domesticAffectingProperties = new HashSet<string>
+        {
+            nameof(AddressViewModel.CountryCode),
+            nameof(AddressViewModel.PostalCode),
+            nameof(AddressViewModel.StateProvCode)
+        };
+
         readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
@@ -29,47 +35,27 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
-            // Merge the two address view models together so that we can respond to their property changed events
             return Observable.Merge(
-                (new[] { viewModel.Origin, viewModel.Destination }).Select(
-                    o => Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
-                        h => o.PropertyChanged += h,
-                        h => o.PropertyChanged -= h
-                        )
-                    ))
-                    .Where(evt =>
-                    {
-                        string propertyName = evt.EventArgs.PropertyName;
-
-                        bool handleField = propertyName.Equals(nameof(AddressViewModel.CountryCode), StringComparison.InvariantCultureIgnoreCase) ||
-                                           propertyName.Equals(nameof(AddressViewModel.PostalCode), StringComparison.InvariantCultureIgnoreCase) ||
-                                           propertyName.Equals(nameof(AddressViewModel.StateProvCode), StringComparison.InvariantCultureIgnoreCase);
-
-                        // forceDomesticInternationalChanged is used for race conditions:
-                        // For example (from rate criteria changing), ShipmentType property changes, and then before the throttle time, SupportsMultipleShipments changes.
-                        // Since SupportsMultipleShipments isn't a rating field, the event would not be fired, even though
-                        // ShipmentType changed and the event needs to be raised.
-                        // So keep track that during the throttling a rate criteria was changed.
-                        forceDomesticInternationalChanged = forceDomesticInternationalChanged || handleField;
-
-                        return forceDomesticInternationalChanged;
-                    })
+                    viewModel.Origin.PropertyChangeStream,
+                    viewModel.Destination.PropertyChangeStream)
+                .Where(domesticAffectingProperties.Contains)
+                .Select(_ => viewModel.ShipmentAdapter)
                 .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
-                .Subscribe(_ => SetDomesticInternationalText(viewModel));
+                .Subscribe(shipmentAdapter => SetDomesticInternationalText(viewModel, shipmentAdapter));
         }
 
         /// <summary>
         /// Set the domestic international text
         /// </summary>
-        public void SetDomesticInternationalText(ShippingPanelViewModel viewModel)
+        public void SetDomesticInternationalText(ShippingPanelViewModel viewModel, ICarrierShipmentAdapter shipmentAdapter)
         {
-            // Reset forceDomesticInternationalChanged so that we don't force it on the next round.
-            forceDomesticInternationalChanged = false;
+            if (!ReferenceEquals(viewModel.ShipmentAdapter, shipmentAdapter))
+            {
+                // If the shipment adapter has changed since we got notified of the property change, just bail
+                return;
+            }
 
-            viewModel.Destination.SaveToEntity(viewModel.ShipmentAdapter.Shipment.ShipPerson);
-            viewModel.Origin.SaveToEntity(viewModel.ShipmentAdapter.Shipment.OriginPerson);
-
-            viewModel.DomesticInternationalText = viewModel.ShipmentAdapter.IsDomestic ? "Domestic" : "International";
+            viewModel.DomesticInternationalText = viewModel.IsDomestic ? "Domestic" : "International";
         }
     }
 }
