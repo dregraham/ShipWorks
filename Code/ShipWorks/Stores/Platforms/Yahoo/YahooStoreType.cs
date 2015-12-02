@@ -46,12 +46,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         public YahooStoreType(StoreEntity store)
             : base(store)
         {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
-
-            if (!(store is YahooStoreEntity))
+            if (store!= null && !(store is YahooStoreEntity))
             {
                 throw new ArgumentException("StoreEntity is not instance of YahooStoreEntity.");
             }
