@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Is the loaded shipment processed?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool AllowEditing
+        public virtual bool AllowEditing
         {
             get { return allowEditing; }
             set { handler.Set(nameof(AllowEditing), ref allowEditing, value); }
@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Origin address type that should be used
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public long OriginAddressType
+        public virtual long OriginAddressType
         {
             get { return originAddressType; }
             set { handler.Set(nameof(OriginAddressType), ref originAddressType, value); }

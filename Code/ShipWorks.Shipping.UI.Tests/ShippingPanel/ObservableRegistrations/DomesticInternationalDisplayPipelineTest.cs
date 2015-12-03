@@ -2,6 +2,7 @@
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Moq;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 using ShipWorks.Tests.Shared;
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_GetsDomesticStatusFromAdapter_Waits250Milliseconds()
         {
-            var viewModel = mock.CreateShippingPanelViewModel();
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>();
             var testObject = mock.Create<DomesticInternationalDisplayPipeline>();
             testObject.Register(viewModel.Object);
 
@@ -64,7 +65,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [InlineData(true, "Domestic")]
         public void Register_SetsTextCorrectly_DependingOnIsDomestic(bool isDomestic, string text)
         {
-            var viewModel = mock.CreateShippingPanelViewModel(s => s.Setup(x => x.IsDomestic).Returns(isDomestic)).Object;
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>(s => s.Setup(x => x.IsDomestic).Returns(isDomestic)).Object;
             var testObject = mock.Create<DomesticInternationalDisplayPipeline>();
             testObject.Register(viewModel);
 
@@ -78,11 +79,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_DoesNotChangeDomesticProperty_WhenShipmentAdapterChanges()
         {
-            var viewModel = mock.CreateShippingPanelViewModel(s =>
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>(s =>
             {
                 s.SetupSequence(x => x.ShipmentAdapter)
-                    .Returns(mock.CreateCarrierShipmentAdapter(null).Object)
-                    .Returns(mock.CreateCarrierShipmentAdapter(null).Object);
+                    .Returns(mock.CreateMock<ICarrierShipmentAdapter>(null).Object)
+                    .Returns(mock.CreateMock<ICarrierShipmentAdapter>(null).Object);
             });
 
             var testObject = mock.Create<DomesticInternationalDisplayPipeline>();
@@ -97,7 +98,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
         private void VerifyGetsDomesticStatusFromAdapterForPropertyChange(Action<ShippingPanelViewModel> changeProperty)
         {
-            var viewModel = mock.CreateShippingPanelViewModel(s => s.Setup(x => x.IsDomestic).Verifiable()).Object;
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>(s => s.Setup(x => x.IsDomestic).Verifiable()).Object;
             var testObject = mock.Create<DomesticInternationalDisplayPipeline>();
             testObject.Register(viewModel);
 

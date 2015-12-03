@@ -181,6 +181,7 @@
     <Compile Include="AttachedProperties\PopupClickManager.cs" />
     <Compile Include="AttachedProperties\SelectDefaultWhenValueIsNull.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
+    <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
     <Compile Include="RatingPanel\RatingPanel.cs">
       <SubType>UserControl</SubType>
@@ -201,7 +202,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\DomesticInternationalDisplayPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\IShippingPanelObservableRegistration.cs" />
-    <Compile Include="ShippingPanel\ObservableRegistrations\LoadOrderPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\LoadOrderOnSelectionChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ObservableRegistrationsModule.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentDeletedPipeline.cs" />

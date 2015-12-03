@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Load the shipment from the given order
         /// </summary>
-        public void LoadOrder(OrderSelectionChangedMessage orderMessage)
+        public virtual void LoadOrder(OrderSelectionChangedMessage orderMessage)
         {
             int orders = orderMessage.LoadedOrderSelection.HasMoreOrLessThanCount(1);
             if (orders != 0)

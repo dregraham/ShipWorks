@@ -158,29 +158,11 @@ namespace ShipWorks.Tests.Shared
         /// </summary>
         public static Mock<ICarrierShipmentAdapter> WithCarrierShipmentAdapter(this AutoMock mock, ShipmentEntity shipment, bool isDomestic)
         {
-            return mock.CreateCarrierShipmentAdapter(x =>
+            return mock.CreateMock<ICarrierShipmentAdapter>(x =>
             {
                 x.Setup(s => s.Shipment).Returns(shipment);
                 x.Setup(s => s.IsDomestic).Returns(isDomestic);
             });
-        }
-
-        /// <summary>
-        /// Configure an ICarrierShipmentAdapter
-        /// </summary>
-        public static Mock<ICarrierShipmentAdapter> CreateCarrierShipmentAdapter(this AutoMock mock) =>
-            CreateCarrierShipmentAdapter(mock, null);
-
-        /// <summary>
-        /// Configure an ICarrierShipmentAdapter
-        /// </summary>
-        public static Mock<ICarrierShipmentAdapter> CreateCarrierShipmentAdapter(this AutoMock mock, Action<Mock<ICarrierShipmentAdapter>> configuration)
-        {
-            Mock<ICarrierShipmentAdapter> mockObject = mock.MockRepository.Create<ICarrierShipmentAdapter>();
-
-            configuration?.Invoke(mockObject);
-
-            return mockObject;
         }
 
         /// <summary>
@@ -208,6 +190,22 @@ namespace ShipWorks.Tests.Shared
             mockObject.Setup(s => s.GetStore(It.IsAny<long>())).Returns(store);
 
             return mockObject;
+        }
+
+        /// <summary>
+        /// Create a mock from the repository
+        /// </summary>
+        public static Mock<T> CreateMock<T>(this AutoMock mock) where T : class =>
+            CreateMock<T>(mock, null);
+
+        /// <summary>
+        /// Create a mock from the repository
+        /// </summary>
+        public static Mock<T> CreateMock<T>(this AutoMock mock, Action<Mock<T>> configure) where T : class
+        {
+            var mockedObject = mock.MockRepository.Create<T>();
+            configure?.Invoke(mockedObject);
+            return mockedObject;
         }
     }
 }

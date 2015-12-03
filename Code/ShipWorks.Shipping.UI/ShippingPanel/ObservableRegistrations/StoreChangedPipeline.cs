@@ -1,9 +1,9 @@
-﻿using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping.Settings.Origin;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -37,14 +37,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private void OnStoreChanged(ShippingPanelViewModel viewModel)
         {
-            if (viewModel.OriginAddressType != (int)ShipmentOriginSource.Store)
+            if (viewModel.OriginAddressType != (int) ShipmentOriginSource.Store)
             {
                 return;
             }
 
             viewModel.Origin.SetAddressFromOrigin(
                 viewModel.OriginAddressType,
-                viewModel.ShipmentAdapter.Shipment?.OrderID ?? 0,
+                viewModel.OrderID ?? 0,
                 viewModel.AccountId,
                 viewModel.ShipmentType);
         }

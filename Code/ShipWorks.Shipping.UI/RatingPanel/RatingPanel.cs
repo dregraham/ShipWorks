@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,21 +11,19 @@ using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls.Design;
-using ShipWorks.Shipping.UI.MessageHandlers;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
     /// <summary>
-    /// User control that will fetch and 
-    /// show rates for an order that has been selected. If an order doesn't have 
-    /// any shipments, a message will be displayed. For orders that have multiple 
-    /// shipments, the first unprocessed shipment is used for rating. Rates are 
+    /// User control that will fetch and
+    /// show rates for an order that has been selected. If an order doesn't have
+    /// any shipments, a message will be displayed. For orders that have multiple
+    /// shipments, the first unprocessed shipment is used for rating. Rates are
     /// not retrieved for orders that only have processed shipments.
     /// </summary>
     public partial class RatingPanel : UserControl, IDockingPanelContent
     {
         private readonly RatingPanelViewModel viewModel;
-        readonly OrderSelectionChangedHandler orderSelectionChangedHandler;
         private RateGroup rateGroup;
         private bool showAllRates;
         private bool showSpinner;
@@ -46,7 +43,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             }
 
             viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<RatingPanelViewModel>();
-            orderSelectionChangedHandler = IoC.UnsafeGlobalLifetimeScope.Resolve<OrderSelectionChangedHandler>();
 
             DataBindings.Add(nameof(RateGroup), viewModel, nameof(viewModel.RateGroup));
             DataBindings.Add(nameof(ErrorMessage), viewModel, nameof(viewModel.ErrorMessage));
@@ -56,7 +52,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         }
 
         /// <summary>
-        /// Gets/Sets the rate group 
+        /// Gets/Sets the rate group
         /// </summary>
         [Obfuscation(Exclude = true)]
         public RateGroup RateGroup
@@ -218,7 +214,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         }
 
         /// <summary>
-        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
+        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
         /// list with up-to-date displayed entity content.
         /// </summary>
         public Task ReloadContent()

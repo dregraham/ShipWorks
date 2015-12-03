@@ -1,8 +1,8 @@
-﻿using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
             return messages.OfType<ShipmentChangedMessage>()
-                .Subscribe(x => OnShipmentChanged(x, viewModel));
+                .Subscribe(msg => OnShipmentChanged(msg, viewModel));
         }
 
         /// <summary>
@@ -42,12 +42,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             }
 
             if (shipmentChangedMessage?.ShipmentAdapter?.Shipment == null ||
-                viewModel.ShipmentAdapter?.Shipment == null)
+                viewModel.Shipment == null)
             {
                 return;
             }
 
-            if (shipmentChangedMessage.ShipmentAdapter.Shipment.ShipmentID == viewModel.ShipmentAdapter.Shipment.ShipmentID)
+            if (shipmentChangedMessage.ShipmentAdapter.Shipment.ShipmentID == viewModel.Shipment.ShipmentID)
             {
                 viewModel.Populate(shipmentChangedMessage.ShipmentAdapter);
             }

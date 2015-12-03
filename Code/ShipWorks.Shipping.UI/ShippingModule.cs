@@ -1,19 +1,18 @@
 ﻿using Autofac;
-using ShipWorks.Shipping.Settings;
+using ShipWorks.AddressValidation;
 using ShipWorks.Core.ApplicationCode;
+using ShipWorks.Shipping.Loading;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Accounts;
 using ShipWorks.Shipping.Services.Builders;
-using ShipWorks.Shipping.UI.RatingPanel;
-using ShipWorks.Shipping.UI.ShippingPanel;
-using ShipWorks.Shipping.Loading;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.UI.MessageHandlers;
+using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Shipping.UI.Services;
-using ShipWorks.AddressValidation;
+using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -123,7 +122,8 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<OrderSelectionChangedHandler>();
+            builder.RegisterType<OrderSelectionChangedHandler>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<MessageHelperWrapper>()
                 .AsImplementedInterfaces();

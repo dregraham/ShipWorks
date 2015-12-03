@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         public ChangeShipmentTypePipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            viewModelMock = mock.CreateShippingPanelViewModel(v =>
+            viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v =>
             {
                 v.Setup(x => x.IsProcessed).Returns(false);
                 v.Setup(x => x.Populate(It.IsAny<ICarrierShipmentAdapter>()));

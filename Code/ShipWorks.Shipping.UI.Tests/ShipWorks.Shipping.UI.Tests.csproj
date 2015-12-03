@@ -151,7 +151,10 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\DomesticInternationalDisplayPipelineTest.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\LoadOrderOnSelectionChangedPipelineTest.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentChangedPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentDeletedPipelineTest.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipelineTest.cs" />
     <Compile Include="ShippingPanel\ShipmentViewModelTest.cs" />
     <Compile Include="ShippingPanel\ShippingPanelAutoMockExtensions.cs" />
     <Compile Include="ShippingPanel\ShippingPanelViewModelTest.cs" />

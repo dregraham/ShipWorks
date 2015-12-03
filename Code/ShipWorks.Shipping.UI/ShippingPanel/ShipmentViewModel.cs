@@ -4,16 +4,15 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reflection;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping.Rating;
-using ShipWorks.Shipping.Services.Builders;
-using System.Reactive.Linq;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -158,7 +157,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             PackageAdapters = shipmentAdapter.GetPackageAdapters();
             NumberOfPackages = PackageAdapters.Count();
-            
+
             SelectedPackageAdapter = PackageAdapters.FirstOrDefault();
 
         }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Services;
-using System.Diagnostics.CodeAnalysis;
-using ShipWorks.AddressValidation;
 using ShipWorks.Shipping.Carriers.Other;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Other
 {
@@ -31,11 +30,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Other
             this.customsManager = customsManager;
             shipmentType = shipmentTypeFactory.Get(shipment) as OtherShipmentType;
         }
-        
+
         /// <summary>
         /// Id of the other account associated with this shipment
         /// </summary>
-        [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used", 
+        [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used",
             Justification = "Other shipment types don't have accounts")]
         [SuppressMessage("SonarQube", "S108:Nested blocks of code should not be left empty",
             Justification = "Other shipment types don't have accounts")]

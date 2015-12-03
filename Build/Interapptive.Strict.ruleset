@@ -98,4 +98,8 @@
   <Rules AnalyzerId="System.Runtime.Analyzers" RuleNamespace="System.Runtime.Analyzers">
     <Rule Id="CA1001" Action="None" />
   </Rules>
+  <Rules AnalyzerId="SonarLint.CSharp" RuleNamespace="SonarLint.CSharp">
+    <Rule Id="S1905" Action="Warning" />
+    <Rule Id="S1939" Action="Warning" />
+  </Rules>
 </RuleSet>

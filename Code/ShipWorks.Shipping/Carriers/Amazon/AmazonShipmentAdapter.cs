@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
-using System.Diagnostics.CodeAnalysis;
-using ShipWorks.AddressValidation;
-using ShipWorks.Shipping.Carriers.Amazon;
-using ShipWorks.Shipping.Carriers.Other;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -19,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly AmazonShipmentType shipmentType;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
         public AmazonShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory)
         {
@@ -30,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.shipment = shipment;
             shipmentType = shipmentTypeFactory.Get(shipment) as AmazonShipmentType;
         }
-        
+
         /// <summary>
         /// Id of the other account associated with this shipment
         /// </summary>
@@ -120,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// DateTime of the shipment
         /// </summary>
-        public DateTime ShipDate 
+        public DateTime ShipDate
         {
             get { return shipment.ShipDate; }
             set { shipment.ShipDate = value; }

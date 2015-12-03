@@ -1,8 +1,8 @@
-﻿using Interapptive.Shared.Threading;
-using ShipWorks.Shipping.UI.MessageHandlers;
-using System;
+﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Interapptive.Shared.Threading;
+using ShipWorks.Shipping.UI.MessageHandlers;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -11,16 +11,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// </summary>
     public class LoadOrderOnSelectionChangedPipeline : IShippingPanelObservableRegistration
     {
-        readonly OrderSelectionChangedHandler changeHandler;
+        readonly IOrderSelectionChangedHandler changeHandler;
         readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="changeHandler"></param>
-        /// <param name="schedulerProvider"></param>
         public LoadOrderOnSelectionChangedPipeline(
-            OrderSelectionChangedHandler changeHandler,
+            IOrderSelectionChangedHandler changeHandler,
             ISchedulerProvider schedulerProvider)
         {
             this.changeHandler = changeHandler;

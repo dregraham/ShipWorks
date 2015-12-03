@@ -5,6 +5,7 @@ using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -26,7 +27,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_CallsUnloadShipment_WhenCurrentShipmentHasDeletedId()
         {
-            var viewModel = mock.CreateShippingPanelViewModel(v => v.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 123 }));
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>()
+                .WithShipment(new ShipmentEntity { ShipmentID = 123 });
 
             var testObject = mock.Create<ShipmentDeletedPipeline>();
             testObject.Register(viewModel.Object);
@@ -39,7 +41,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_DoesNotCallUnloadShipment_WhenCurrentShipmentDoesNotHaveDeletedId()
         {
-            var viewModel = mock.CreateShippingPanelViewModel();
+            var viewModel = mock.CreateMock<ShippingPanelViewModel>();
 
             var testObject = mock.Create<ShipmentDeletedPipeline>();
             testObject.Register(viewModel.Object);
