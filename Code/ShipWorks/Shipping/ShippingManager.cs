@@ -768,9 +768,28 @@ namespace ShipWorks.Shipping
             StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
             storeType.OverrideShipmentDetails(clonedShipment);
 
-            // Use the cloned shipment with the potentially adjusted shipping address to get the rates
-            RateGroup rateResults = shipmentType.GetRates(clonedShipment);
+            RateGroup rateResults = null;
 
+            // Get rates from rating service if it is registered, otherwise get rate from the shipmenttype
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                if (lifetimeScope.IsRegisteredWithKey<IRatingService>((ShipmentTypeCode)shipment.ShipmentType))
+                {
+                    IRatingService ratingService =
+                        lifetimeScope.ResolveKeyed<IRatingService>((ShipmentTypeCode) shipment.ShipmentType);
+
+                    rateResults = ratingService.GetRates(clonedShipment);
+                }
+                else
+                {
+                    // Use the cloned shipment with the potentially adjusted shipping address to get the rates
+                    IRatingService ratingService =
+                        lifetimeScope.ResolveKeyed<IRatingService>(ShipmentTypeCode.Other);
+
+                    rateResults = ratingService.GetRates(clonedShipment);
+                }
+            }
+            
             // Copy back any best rate events that were set on the clone
             shipment.BestRateEvents |= clonedShipment.BestRateEvents;
 

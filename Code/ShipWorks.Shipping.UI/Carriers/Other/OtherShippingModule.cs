@@ -15,6 +15,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
         {
             builder.RegisterType<OtherLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.Other);
+
+            builder.RegisterType<EmptyRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.Other);
         }
     }
 }

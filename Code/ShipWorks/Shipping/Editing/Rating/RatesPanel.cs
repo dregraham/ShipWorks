@@ -147,23 +147,8 @@ namespace ShipWorks.Shipping.Editing.Rating
             {
                 if (!shipment.Processed)
                 {
-                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-
-                    if (!shipmentType.SupportsGetRates)
-                    {
-                        RateGroup rateGroupWithNoRatesFooter = new RateGroup(new List<RateResult>());
-
-                        rateGroupWithNoRatesFooter.AddFootnoteFactory(new InformationFootnoteFactory("Select another provider to get rates."));
-
-                        rateControl.ClearRates(string.Format("The provider \"{0}\" does not support retrieving rates.",
-                                                                EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)),
-                                                                rateGroupWithNoRatesFooter);
-                    }
-                    else
-                    {
-                        // We need to fetch the rates from the provider
-                        FetchRates(shipment, ignoreCache);
-                    }
+                    // We need to fetch the rates from the provider
+                    FetchRates(shipment, ignoreCache);
                 }
                 else
                 {
@@ -287,10 +272,18 @@ namespace ShipWorks.Shipping.Editing.Rating
                         ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
                         if (ratedShipment != null && ratedShipment.ShipmentID == selectedShipmentID)
                         {
-                            // Only update the rate control if the shipment is for the currently selected 
-                            // order to avoid the appearance of lag when a user is quickly clicking around
-                            // the rate grid
-                            LoadRates(panelRateGroup);
+                            if (ShipmentTypeManager.GetType(shipment).SupportsGetRates)
+                            {
+                                // Only update the rate control if the shipment is for the currently selected 
+                                // order to avoid the appearance of lag when a user is quickly clicking around
+                                // the rate grid
+                                LoadRates(panelRateGroup);
+                            }
+                            else
+                            {
+                                // The carrier does not support get rates so we display a message to the user
+                                rateControl.ClearRates($"The provider \"{panelRateGroup.Carrier}\" does not support retrieving rates.", panelRateGroup);
+                            }
                         }
                     }
                 };
