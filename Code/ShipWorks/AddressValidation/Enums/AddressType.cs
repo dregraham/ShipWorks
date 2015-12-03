@@ -71,6 +71,7 @@ namespace ShipWorks.AddressValidation.Enums
 
         [Description("Error")]
         [Details("Error communicating with Address Validation Server.")]
+        [ImageResource("error16")]
         Error = 11
     }
 }
