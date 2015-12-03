@@ -44,7 +44,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private readonly ILabelRepository labelRepository;
         private readonly IFedExRequestFactory requestFactory;
         private readonly ICarrierSettingsRepository settingsRepository;
-        private readonly ICertificateInspector certificateInspector;
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
         private readonly ILog log;
 
@@ -54,7 +53,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         public FedExShippingClerk(FedExShippingClerkParameters parameters)
         {
             settingsRepository = parameters.SettingsRepository;
-            certificateInspector = parameters.Inspector;
             forceVersionCapture = parameters.ForceVersionCapture;
             requestFactory = parameters.RequestFactory;
             log = parameters.Log;
@@ -447,6 +445,48 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             }
         }
 
+        public RateGroup GetRates(ShipmentEntity shipment, ICertificateInspector certificateInspector)
+        {
+            try
+            {
+                // Make sure package dimensions are valid.
+                ValidatePackageDimensions(shipment);
+
+                //Make sure the addresses only have two lines
+                ValidateTwoLineAddress(shipment);
+
+                // Make sure we have a trusted connection with FedEx before making any requests that would
+                // send credentials over the network
+                ICertificateRequest certificateRequest = requestFactory.CreateCertificateRequest(certificateInspector);
+                if (certificateRequest.Submit() != CertificateSecurityLevel.Trusted)
+                {
+                    log.Warn("The FedEx certificate did not pass inspection and could not be trusted.");
+                    throw new FedExException("ShipWorks is unable to make a secure connection to FedEx.");
+                }
+
+                // Ensure that the version capture has been performed
+                PerformVersionCapture(shipment);
+
+                List<RateResult> overallResults = new List<RateResult>();
+
+                // Retrieve the rates from FedEx
+                overallResults.AddRange(GetBasicRates(shipment));
+                overallResults.AddRange(GetSmartPostRates(shipment));
+                overallResults.AddRange(GetOneRateRates(shipment));
+
+                // Filter out any excluded services, but always include the service that the shipment is configured with
+                List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, overallResults);
+
+                RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
+
+                return finalGroup;
+            }
+            catch (Exception ex)
+            {
+                throw (HandleException(ex));
+            }
+        }
+
         /// <summary>
         /// Performs the FedEx version capture calls for FedEx that are required for end of day close functionality. This should
         /// only run once per run of ShipWorks.
@@ -548,44 +588,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <returns>A RateGroup containing the rates received from FedEx.</returns>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
-            try
-            {
-                // Make sure package dimensions are valid.
-                ValidatePackageDimensions(shipment);
-
-                //Make sure the addresses only have two lines
-                ValidateTwoLineAddress(shipment);
-
-                // Make sure we have a trusted connection with FedEx before making any requests that would
-                // send credentials over the network
-                ICertificateRequest certificateRequest = requestFactory.CreateCertificateRequest(certificateInspector);
-                if (certificateRequest.Submit() != CertificateSecurityLevel.Trusted)
-                {
-                    log.Warn("The FedEx certificate did not pass inspection and could not be trusted.");
-                    throw new FedExException("ShipWorks is unable to make a secure connection to FedEx.");
-                }
-
-                // Ensure that the version capture has been performed
-                PerformVersionCapture(shipment);
-                
-                List<RateResult> overallResults = new List<RateResult>();
-                
-                // Retrieve the rates from FedEx
-                overallResults.AddRange(GetBasicRates(shipment));
-                overallResults.AddRange(GetSmartPostRates(shipment));
-                overallResults.AddRange(GetOneRateRates(shipment));
-
-                // Filter out any excluded services, but always include the service that the shipment is configured with
-                List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, overallResults);
-
-                RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
-
-                return finalGroup;
-            }
-            catch (Exception ex)
-            {
-                throw (HandleException(ex));
-            }
+            return GetRates(shipment, new TrustingCertificateInspector());
         }
 
         /// <summary>

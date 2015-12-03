@@ -12,12 +12,12 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class CachedRatesService : ICachedRatesService
     {
-        private readonly IRateHashingService rateHashingService;
+        private readonly Func<ShipmentTypeCode, IRateHashingService> rateHashingService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedRatesService"/> class.
         /// </summary>
-        public CachedRatesService(IRateHashingService rateHashingService)
+        public CachedRatesService(Func<ShipmentTypeCode, IRateHashingService> rateHashingService)
         {
             this.rateHashingService = rateHashingService;
         }
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping
         /// <returns></returns>
         public RateGroup GetCachedRates<T>(ShipmentEntity shipment, Func<ShipmentEntity, RateGroup> getRatesFunction) where T : Exception
         {
-            string rateHash = rateHashingService.GetRatingHash(shipment);
+            string rateHash = rateHashingService((ShipmentTypeCode)shipment.ShipmentType).GetRatingHash(shipment);
 
             if (RateCache.Instance.Contains(rateHash))
             {
@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping
         {
             RateGroup rateGroup = new InvalidRateGroup((ShipmentTypeCode) shipment.ShipmentType, exception);
 
-            RateCache.Instance.Save(rateHashingService.GetRatingHash(shipment), rateGroup);
+            RateCache.Instance.Save(rateHashingService((ShipmentTypeCode)shipment.ShipmentType).GetRatingHash(shipment), rateGroup);
 
             return rateGroup;
         }
