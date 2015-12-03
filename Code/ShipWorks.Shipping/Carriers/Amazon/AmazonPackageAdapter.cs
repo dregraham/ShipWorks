@@ -25,11 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.
         /// </summary>
-        public int Index
-        {
-            get { return 1; }
-            set { }
-        }
+        public int Index { get; set; } = 1;
 
         /// <summary>
         /// Gets or sets the length.
@@ -88,11 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        public PackageTypeBinding PackagingType
-        {
-            get { return null; }
-            set { }
-        }
+        public PackageTypeBinding PackagingType { get; set; } = null;
 
         /// <summary>
         /// Gets the hash code based on this package adapter's properties.

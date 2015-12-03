@@ -146,11 +146,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Other
         /// <summary>
         /// Service type selected
         /// </summary>
-        public int ServiceType
-        {
-            get { return -1; }
-            set { ; }
-        }
+        public int ServiceType { get; set; } = 0;
 
         /// <summary>
         /// List of package adapters for the shipment

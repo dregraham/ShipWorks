@@ -8,7 +8,7 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Services;
 using Xunit;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Ups
+namespace ShipWorks.Tests.Shipping.Carriers.UPS
 {
     public class UpsPackageAdapterTest
     {

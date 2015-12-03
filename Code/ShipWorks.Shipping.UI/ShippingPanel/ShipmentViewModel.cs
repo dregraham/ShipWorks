@@ -26,7 +26,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private double totalWeight;
         private bool usingInsurance;
         private int serviceType;
-        private int packageType;
         private int numberOfPackages;
         private IEnumerable<IPackageAdapter> packageAdapters;
         private readonly IRateSelectionFactory rateSelectionFactory;
@@ -175,7 +174,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 services = shipmentServicesBuilderFactory.Get(shipmentAdapter.ShipmentTypeCode)
                     .BuildServiceTypeDictionary(new[] { shipmentAdapter.Shipment });
             }
-            catch (InvalidRateGroupShippingException ex)
+            catch (InvalidRateGroupShippingException)
             {
                 Services.Add(new KeyValuePair<int, string>(shipmentAdapter.ServiceType, "Error getting service types."));
                 return;
@@ -217,7 +216,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public virtual void Save(ICarrierShipmentAdapter shipmentAdapter)
         {
             shipmentAdapter.ShipDate = ShipDate;
-            //shipmentAdapter.TotalWeight = TotalWeight;
+            // shipmentAdapter.TotalWeight = TotalWeight
             shipmentAdapter.UsingInsurance = UsingInsurance;
             shipmentAdapter.ServiceType = ServiceType;
         }

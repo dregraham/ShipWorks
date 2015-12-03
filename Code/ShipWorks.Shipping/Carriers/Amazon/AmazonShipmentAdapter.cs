@@ -17,7 +17,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     {
         private readonly ShipmentEntity shipment;
         private readonly AmazonShipmentType shipmentType;
-        private int serviceType = 0;
 
         /// <summary>
         /// Constuctor
@@ -147,11 +146,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Service type selected
         /// </summary>
-        public int ServiceType
-        {
-            get { return serviceType; }
-            set { serviceType = value; }
-        }
+        public int ServiceType { get; set; } = 0;
 
         /// <summary>
         /// List of package adapters for the shipment

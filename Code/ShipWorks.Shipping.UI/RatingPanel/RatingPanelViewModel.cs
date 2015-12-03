@@ -198,7 +198,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             else
             {
                 // We need to fetch the rates from the provider
+#pragma warning disable 4014
                 FetchRates(shipment, ignoreCache, token);
+#pragma warning restore 4014
             }
         }
 
@@ -266,7 +268,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             // Refresh the shipment data and then the rates
             ShipmentEntity shipment = message.ShipmentAdapter.Shipment;
 
+#pragma warning disable 4014
             FetchRates(shipment, false, cancellationToken);
+#pragma warning restore 4014
         }
 
         /// <summary>

@@ -7,7 +7,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 {
     public class ShipmentViewModelTest
     {
-        //readonly ShipmentEntity shipment = new ShipmentEntity();
+        
+#pragma warning disable S125 // Sections of code should not be "commented out"
+//readonly ShipmentEntity shipment = new ShipmentEntity();
 
         [Fact]
         public void Save_UpdatesShipmentEntity_WhenTotalWeightChanged_Test()
@@ -23,5 +25,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             //    Assert.Equal(2.93, shipment.TotalWeight);
             //}
         }
+#pragma warning restore S125 // Sections of code should not be "commented out"
     }
 }

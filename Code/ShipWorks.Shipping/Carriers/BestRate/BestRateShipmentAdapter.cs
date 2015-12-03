@@ -53,8 +53,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             get
             {
-                return shipment; 
-            } 
+                return shipment;
+            }
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             get
             {
-                return ShipmentTypeCode.BestRate; 
-            } 
+                return ShipmentTypeCode.BestRate;
+            }
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             get
             {
-                return false; 
+                return false;
             }
         }
 
@@ -149,11 +149,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Service type selected
         /// </summary>
-        public int ServiceType
-        {
-            get { return 0; }
-            set { ; }
-        }
+        public int ServiceType { get; set;} = 0;
 
         /// <summary>
         /// List of package adapters for the shipment

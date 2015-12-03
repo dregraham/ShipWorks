@@ -136,11 +136,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <summary>
         /// Service type selected
         /// </summary>
-        public int ServiceType
-        {
-            get { return 0; }
-            set { ; }
-        }
+        public int ServiceType { get; set; } = 0;
 
         /// <summary>
         /// List of package adapters for the shipment
