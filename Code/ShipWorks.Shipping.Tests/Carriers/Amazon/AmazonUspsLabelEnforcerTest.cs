@@ -94,6 +94,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void VerifyShipment_DelegatesToStoreManager()
         {
+            shipment.TrackingNumber = "00000x1000";
             AmazonUspsLabelEnforcer testObject = mock.Create<AmazonUspsLabelEnforcer>();
             testObject.VerifyShipment(shipment);
 
