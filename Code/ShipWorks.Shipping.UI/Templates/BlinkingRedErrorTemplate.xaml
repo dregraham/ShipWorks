@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ControlTemplate x:Key="BlinkingRedErrorTemplate">
         <Grid>
-            <Image ToolTip="{Binding ElementName=adorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" 
-                           Width="15" 
-                           Height="15" 
+            <Image ToolTip="{Binding ElementName=adorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                           Width="15"
+                           Height="15"
                            HorizontalAlignment="Right"
                            Source="pack://application:,,,/ShipWorks.Core;component/Resources/delete.png">
                 <Image.Style>
@@ -13,7 +13,12 @@
                             <EventTrigger RoutedEvent="Image.Loaded">
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)" BeginTime="0:0:0" Duration="0:0:.5" From="1.0" To="0.0" RepeatBehavior="Forever" AutoReverse="True"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)"
+                                                         BeginTime="0:0:0"
+                                                         Duration="0:0:.5"
+                                                         From="1.0" To="0.0"
+                                                         RepeatBehavior="Forever"
+                                                         AutoReverse="True"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>

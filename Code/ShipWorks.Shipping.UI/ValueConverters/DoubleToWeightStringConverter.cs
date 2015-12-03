@@ -1,37 +1,16 @@
-﻿using Interapptive.Shared.Business;
-using ShipWorks.UI.Controls;
-using ShipWorks.Users;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
+using Interapptive.Shared.Business;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users;
 
 namespace ShipWorks.Shipping.UI.ValueConverters
 {
     public class DoubleToWeightStringConverter : IValueConverter
     {
-        /// <summary>
-        /// Class to convert from double to weight string and back
-        /// based on users preferences
-        /// </summary>
-        public DoubleToWeightStringConverter() : this(new UserSessionWrapper())
-        {
-                
-        }
-
-        /// <summary>
-        /// Class to convert from double to weight string and back
-        /// based on users preferences
-        /// </summary>
-        public DoubleToWeightStringConverter(IUserSession userSession)
-        {
-            // if the user is null use fractional pounds as the default
-            this.weightFormat = userSession.User == null
-                ? WeightDisplayFormat.FractionalPounds
-                : (WeightDisplayFormat) userSession.User.Settings.ShippingWeightFormat;
-        }
-
         private readonly WeightDisplayFormat weightFormat;
 
         // Match any integer or floating point number
@@ -54,6 +33,27 @@ namespace ShipWorks.Shipping.UI.ValueConverters
             RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
         /// <summary>
+        /// Class to convert from double to weight string and back
+        /// based on users preferences
+        /// </summary>
+        public DoubleToWeightStringConverter() : this(new UserSessionWrapper())
+        {
+
+        }
+
+        /// <summary>
+        /// Class to convert from double to weight string and back
+        /// based on users preferences
+        /// </summary>
+        public DoubleToWeightStringConverter(IUserSession userSession)
+        {
+            // if the user is null use fractional pounds as the default
+            weightFormat = userSession.User == null ?
+                WeightDisplayFormat.FractionalPounds :
+                (WeightDisplayFormat) userSession.User.Settings.ShippingWeightFormat;
+        }
+
+        /// <summary>
         /// Convert from Double to weight String (lbs and oz)
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -62,10 +62,10 @@ namespace ShipWorks.Shipping.UI.ValueConverters
             {
                 throw new InvalidOperationException("Value is not a double");
             }
-            
-            return FormatWeight((double)value, weightFormat);
+
+            return FormatWeight((double) value, weightFormat);
         }
-        
+
         /// <summary>
         /// Convert from weight String (lbs and oz) to Double
         /// </summary>
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.UI.ValueConverters
                         Match poundsMatch = poundsRegex.Match(value.ToString());
 
                         // Did it match
-                        newWeight = poundsMatch.Success ? (double?)double.Parse(poundsMatch.Groups["Pounds"].Value) : null;
+                        newWeight = poundsMatch.Success ? (double?) double.Parse(poundsMatch.Groups["Pounds"].Value) : null;
                     }
                 }
 

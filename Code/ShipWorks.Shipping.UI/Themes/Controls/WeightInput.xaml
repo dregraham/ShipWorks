@@ -1,0 +1,51 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Themes.Controls"
+                    xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight"
+                    xmlns:converters="clr-namespace:ShipWorks.Shipping.UI.ValueConverters">
+    <Style TargetType="{x:Type weight:WeightInput}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type weight:WeightInput}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Name="PART_Entry"
+                                 Grid.Column="0">
+                        </TextBox>
+                        <weight:ScaleControl Grid.Column="1"
+                               Weight="{Binding Text,ElementName=PART_Entry,Mode=OneWayToSource,UpdateSourceTrigger=Explicit}"/>
+                        <Image Grid.Column="2"
+                               ToolTip="{Binding ElementName=adorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                               Width="15"
+                               Height="15"
+                               Source="pack://application:,,,/ShipWorks.Core;component/Resources/delete.png">
+                            <Image.Style>
+                                <Style>
+                                    <Style.Triggers>
+                                        <EventTrigger RoutedEvent="Image.Loaded">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(Image.Opacity)"
+                                                         BeginTime="0:0:0"
+                                                         Duration="0:0:.3"
+                                                         From="1.0" To="0.0"
+                                                         RepeatBehavior="3x"
+                                                         AutoReverse="True" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <!--<AdornedElementPlaceholder x:Name="adorner"/>-->
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
