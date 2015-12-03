@@ -46,7 +46,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         public YahooStoreType(StoreEntity store)
             : base(store)
         {
-            if (store!= null && !(store is YahooStoreEntity))
+            if (store == null)
+            {
+                throw new ArgumentNullException("store");
+            }
+
+            if (store != null && !(store is YahooStoreEntity))
             {
                 throw new ArgumentException("StoreEntity is not instance of YahooStoreEntity.");
             }
@@ -348,6 +353,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 BreakAfter = true
             });
 
+            commands.Add(new MenuCommand(EnumHelper.GetDescription(YahooApiOrderStatus.OK), OnSetOnlineStatus));
             commands.Add(new MenuCommand(EnumHelper.GetDescription(YahooApiOrderStatus.Fraudulent), OnSetOnlineStatus));
             commands.Add(new MenuCommand(EnumHelper.GetDescription(YahooApiOrderStatus.Cancelled), OnSetOnlineStatus));
             commands.Add(new MenuCommand(EnumHelper.GetDescription(YahooApiOrderStatus.Returned), OnSetOnlineStatus));
@@ -365,6 +371,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
+            YahooStoreEntity store = (YahooStoreEntity)Store;
+
+            if (store.YahooStoreID.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
             if (column == OnlineGridColumnSupport.OnlineStatus || column == OnlineGridColumnSupport.LastModified)
             {
                 return true;
@@ -378,7 +391,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override bool GridHyperlinkSupported(EntityField2 field)
         {
-            return EntityUtility.IsSameField(field, OrderItemFields.Name);
+            YahooStoreEntity store = (YahooStoreEntity)Store;
+
+            return !store.YahooStoreID.IsNullOrWhiteSpace() && EntityUtility.IsSameField(field, OrderItemFields.Name);
         }
 
         /// <summary>
