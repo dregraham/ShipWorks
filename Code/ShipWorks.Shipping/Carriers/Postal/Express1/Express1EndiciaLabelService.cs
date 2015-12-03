@@ -9,14 +9,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// </summary>
     public class Express1EndiciaLabelService : ILabelService
     {
-        private readonly EndiciaShipmentType endiciaShipmentType;
+        private readonly Express1EndiciaShipmentType express1EndiciaShipmentType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1EndiciaLabelService(EndiciaShipmentType endiciaShipmentType)
+        public Express1EndiciaLabelService(Express1EndiciaShipmentType express1EndiciaShipmentType)
         {
-            this.endiciaShipmentType = endiciaShipmentType;
+            this.express1EndiciaShipmentType = express1EndiciaShipmentType;
         }
 
         /// <summary>
@@ -25,12 +25,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <param name="shipment"></param>
         public void Create(ShipmentEntity shipment)
         {
-            endiciaShipmentType.ValidateShipment(shipment);
+            express1EndiciaShipmentType.ValidateShipment(shipment);
 
             try
             {
-                (new EndiciaApiClient(endiciaShipmentType.AccountRepository, endiciaShipmentType.LogEntryFactory,
-                    endiciaShipmentType.CertificateInspector)).ProcessShipment(shipment, endiciaShipmentType);
+                (new EndiciaApiClient(express1EndiciaShipmentType.AccountRepository, express1EndiciaShipmentType.LogEntryFactory,
+                    express1EndiciaShipmentType.CertificateInspector)).ProcessShipment(shipment, express1EndiciaShipmentType);
             }
             catch (EndiciaException ex)
             {

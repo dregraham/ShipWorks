@@ -11,15 +11,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     public class Express1UspsLabelService : ILabelService
     {
         private readonly Express1UspsShipmentType express1UspsShipmentType;
-        private readonly UspsShipmentType uspsShipmentType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1UspsLabelService(Express1UspsShipmentType express1UspsShipmentType, UspsShipmentType uspsShipmentType)
+        public Express1UspsLabelService(Express1UspsShipmentType express1UspsShipmentType)
         {
             this.express1UspsShipmentType = express1UspsShipmentType;
-            this.uspsShipmentType = uspsShipmentType;
         }
 
         /// <summary>
@@ -51,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         {
             try
             {
-                uspsShipmentType.CreateWebClient().VoidShipment(shipment);
+                express1UspsShipmentType.CreateWebClient().VoidShipment(shipment);
             }
             catch (UspsException ex)
             {
