@@ -32,8 +32,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 LemonStandStoreEntity store = (LemonStandStoreEntity)Store;
                 LemonStandWebClient client = new LemonStandWebClient(store);
 
-                List<JToken> statuses = client.GetOrderStatuses().SelectToken("data").Children().ToList();
-
                 LemonStandOrderStatuses stats =
                     JsonConvert.DeserializeObject<LemonStandOrderStatuses>(client.GetOrderStatuses().ToString());
 
