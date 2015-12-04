@@ -130,6 +130,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
+    <Compile Include="Platforms\Yahoo\EmbeddedResourceHelper.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiDownloaderTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiOnlineUpdaterTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiWebClientTest.cs" />
@@ -190,7 +191,10 @@
     <EmbeddedResource Include="Platforms\LemonStand\Artifacts\ShipmentMissingShippingAddress.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Platforms\Yahoo\Artifacts\" />
+    <EmbeddedResource Include="Platforms\Yahoo\Artifacts\YahooGetItemResponse.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Platforms\Yahoo\Artifacts\YahooGetOrderResponse.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

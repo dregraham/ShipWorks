@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 Progress.Detail = $"Processing order {QuantitySaved + 1} of {expectedCount} ...";
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
-                LoadOrder(response.ResponseResourceList.OrderList.Order.FirstOrDefault());
+                CreateOrder(response.ResponseResourceList.OrderList.Order.FirstOrDefault());
 
                 // Check for cancellation
                 if (Progress.IsCancelRequested)
@@ -111,13 +111,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
-        /// Loads the order.
+        /// Creates the order entity and calls load order to populate it
         /// </summary>
         /// <param name="order">The order DTO.</param>
         /// <exception cref="YahooException">$Failed to instantiate order {order.OrderID}</exception>
-        public YahooOrderEntity LoadOrder(YahooOrder order)
+        public YahooOrderEntity CreateOrder(YahooOrder order)
         {
             YahooOrderEntity orderEntity = InstantiateOrder(new YahooOrderIdentifier((order.OrderID.ToString()))) as YahooOrderEntity;
+
             if (orderEntity == null)
             {
                 throw new YahooException($"Failed to instantiate order {order.OrderID}");
@@ -125,24 +126,37 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             if (orderEntity.IsNew)
             {
-                orderEntity.OnlineStatusCode = order.StatusList.OrderStatus.Last().StatusID;
-                orderEntity.OnlineStatus = EnumHelper.GetDescription((YahooApiOrderStatus)int.Parse(orderEntity.OnlineStatusCode.ToString()));
-                orderEntity.RequestedShipping = $"{order.CartShipmentInfo.Shipper} {order.ShipMethod}";
-                orderEntity.OrderDate = ParseYahooDateTime(order.CreationTime);
-                orderEntity.OnlineLastModified = ParseYahooDateTime(order.LastUpdatedTime);
-                orderEntity.OrderNumber = order.OrderID;
-                orderEntity.YahooOrderID = order.OrderID.ToString();
-
-                LoadAddress(orderEntity, order);
-                LoadOrderItems(orderEntity, order);
-                LoadOrderTotals(orderEntity, order);
-                LoadOrderCharges(orderEntity, order);
-                LoadOrderGiftMessages(orderEntity, order);
-                LoadOrderNotes(orderEntity, order);
-                LoadOrderPayments(orderEntity, order);
+                orderEntity = LoadOrder(order, orderEntity);
             }
 
             sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+
+            return orderEntity;
+        }
+
+        /// <summary>
+        /// Populates order entity with fields from YahooOrder DTO
+        /// </summary>
+        /// <param name="order">The order DTO.</param>
+        /// <param name="orderEntity">The order entity.</param>
+        public YahooOrderEntity LoadOrder(YahooOrder order, YahooOrderEntity orderEntity)
+        {
+            orderEntity.OnlineStatusCode = order.StatusList.OrderStatus.Last().StatusID;
+            orderEntity.OnlineStatus =
+                EnumHelper.GetDescription((YahooApiOrderStatus) int.Parse(orderEntity.OnlineStatusCode.ToString()));
+            orderEntity.RequestedShipping = $"{order.CartShipmentInfo.Shipper} {order.ShipMethod}";
+            orderEntity.OrderDate = ParseYahooDateTime(order.CreationTime);
+            orderEntity.OnlineLastModified = ParseYahooDateTime(order.LastUpdatedTime);
+            orderEntity.OrderNumber = order.OrderID;
+            orderEntity.YahooOrderID = order.OrderID.ToString();
+
+            LoadAddress(orderEntity, order);
+            LoadOrderItems(orderEntity, order);
+            LoadOrderTotals(orderEntity, order);
+            LoadOrderCharges(orderEntity, order);
+            LoadOrderGiftMessages(orderEntity, order);
+            LoadOrderNotes(orderEntity, order);
+            LoadOrderPayments(orderEntity, order);
 
             return orderEntity;
         }
@@ -506,7 +520,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Parses the yahoo date string into a DateTime
         /// </summary>
         /// <param name="yahooDateTime">The yahoo date time.</param>
-        private DateTime ParseYahooDateTime(string yahooDateTime)
+        public DateTime ParseYahooDateTime(string yahooDateTime)
         {
             // We get DateTime format - Fri Mar 26 12:25:15 2010 GMT
             // But DateTime.Parse can't parse it, but it can parse a very similar format of Mon, 15 Jun 2009 20:45:30 GMT
@@ -534,10 +548,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             // more than likely have to change.
             if (result == DateTime.MinValue)
             {
-                throw new DownloadException("Error parsing date in Yahoo's response");
+                throw new YahooException("Error parsing date in Yahoo's response");
             }
 
-            return result;
+            return result.ToUniversalTime();
         }
     }
 }

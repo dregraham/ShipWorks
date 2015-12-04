@@ -48,12 +48,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void Constructor_ThrowsArgumentNullException_WhenStoreIsNull_Test()
-        {
-            Assert.Throws<ArgumentNullException>(() => new YahooStoreType(null));
-        }
-
-        [Fact]
         public void AccountSettingsHelpUrl_ReturnsCorrectUrlString_Test()
         {
             Assert.Equal("http://www.shipworks.com/shipworks/help/Yahoo_Email_Account.html", apiTestObject.AccountSettingsHelpUrl);
