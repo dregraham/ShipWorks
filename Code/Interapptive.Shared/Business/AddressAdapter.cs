@@ -23,7 +23,7 @@ namespace Interapptive.Shared.Business
         /// Creates a new instance of the adapter for the entity.  All fields must
         /// be named to standard, with the optional given prefix in front of them.
         /// </summary>
-        public AddressAdapter(IEntity2 entity, string fieldPrefix) 
+        public AddressAdapter(IEntity2 entity, string fieldPrefix)
             : base(entity, fieldPrefix)
         {
 
@@ -91,7 +91,10 @@ namespace Interapptive.Shared.Business
         public static void Copy(AddressAdapter fromAdapter, AddressAdapter toAdapter)
         {
             // Only copy the origin of there is one to copy from
-            if (fromAdapter.HasField("OriginID")) toAdapter.OriginID = fromAdapter.OriginID;
+            if (fromAdapter.HasField("OriginID"))
+            {
+                toAdapter.OriginID = fromAdapter.OriginID;
+            }
 
             toAdapter.Street1 = fromAdapter.Street1.Trim();
             toAdapter.Street2 = fromAdapter.Street2.Trim();
@@ -257,7 +260,7 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
-        /// All 3 streets combined, seperated by new lines, but only non-blank ones
+        /// All 3 streets combined, separated by new lines, but only non-blank ones
         /// </summary>
         public string StreetAll
         {
