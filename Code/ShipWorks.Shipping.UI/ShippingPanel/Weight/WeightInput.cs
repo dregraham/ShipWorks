@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using ShipWorks.UI.Controls;
 
@@ -13,6 +14,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
     [TemplatePart(Name = "PART_Entry", Type = typeof(TextBox))]
     public class WeightInput : Control
     {
+        TextBox entry;
+
         public static readonly DependencyProperty WeightProperty =
             DependencyProperty.Register("Weight", typeof(double), typeof(WeightInput),
                 new FrameworkPropertyMetadata(0.0,
@@ -26,8 +29,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(WeightInput), new FrameworkPropertyMetadata(typeof(WeightInput)));
         }
-
-        TextBox entry;
 
         /// <summary>
         /// Weight in fractional lbs
@@ -49,6 +50,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
             if (entry != null)
             {
                 entry.LostKeyboardFocus -= OnEntryLostKeyboardFocus;
+                entry.TextChanged -= OnEntryTextChanged;
             }
 
             entry = GetTemplateChild("PART_Entry") as TextBox;
@@ -59,6 +61,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
             }
 
             entry.LostKeyboardFocus += OnEntryLostKeyboardFocus;
+            entry.TextChanged += OnEntryTextChanged;
+        }
+
+        private void OnEntryTextChanged(object sender, TextChangedEventArgs e)
+        {
+            BindingExpressionBase bindingExpressionBase =
+                BindingOperations.GetBindingExpressionBase(this, WeightProperty);
+            Validation.ClearInvalid(bindingExpressionBase);
         }
 
         /// <summary>
@@ -75,6 +85,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
             else
             {
                 SetEntryWeightValue(this, Weight);
+
+                BindingExpression bindingExpression = BindingOperations.GetBindingExpression(this, WeightProperty);
+
+                BindingExpressionBase bindingExpressionBase =
+                    BindingOperations.GetBindingExpressionBase(this, WeightProperty);
+
+                ValidationError validationError =
+                    new ValidationError(new ExceptionValidationRule(), bindingExpression);
+
+                Validation.MarkInvalid(bindingExpressionBase, validationError);
             }
         }
 
