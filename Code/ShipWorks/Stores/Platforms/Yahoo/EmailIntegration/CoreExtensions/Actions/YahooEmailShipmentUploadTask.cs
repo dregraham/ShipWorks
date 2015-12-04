@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.CoreExtensions.Actio
         }
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using Quartz.Util;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
@@ -37,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages
 
             if (enableTrackingPassword.Checked)
             {
-                if (trackingPassword.Text.Trim().Length == 0)
+                if (trackingPassword.Text.IsNullOrWhiteSpace())
                 {
                     MessageHelper.ShowInformation(this, "Enter your Yahoo! email tracking password.");
                     e.NextPage = this;

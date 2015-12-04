@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
             switch (IsValid)
             {
                 case YahooOrderNumberValidation.Validating:
-                    return "Please wait while ShipWorks validates the order number you entered";
+                    return "Please wait while ShipWorks validates the order number you entered.";
                 case YahooOrderNumberValidation.Invalid:
                     return "The order number you entered does not exist for this Yahoo store. Please enter an existing order number to start downloading from.";
                 default:

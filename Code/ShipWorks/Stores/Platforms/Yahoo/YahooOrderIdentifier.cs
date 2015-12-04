@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -40,10 +41,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override void ApplyTo(DownloadDetailEntity downloadDetail)
         {
-            if (downloadDetail == null)
-            {
-                throw new ArgumentNullException("downloadDetail");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(downloadDetail, "downloadDetail");
 
             downloadDetail.ExtraStringData1 = yahooOrderID;
         }

@@ -42,9 +42,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
-        /// Gets the order.
+        /// Gets an order.
         /// </summary>
-        /// <param name="orderID">The order identifier.</param>
+        /// <param name="orderID">The Yahoo Order ID</param>
         public YahooResponse GetOrder(long orderID)
         {
             string body = RequestBodyIntro + GetRequestBodyIntro +
@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Gets a "page" of orders from a starting order number
         /// </summary>
         /// <param name="start">The Yahoo Order ID to start from</param>
-        public YahooResponse GetOrderRange(long start)
+        public YahooResponse GetOrderRange(long startingOrderNumber)
         {
             string body = RequestBodyIntro + GetRequestBodyIntro +
                           "<OrderListQuery>" +
@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                           "</Filter>" +
                           "<QueryParams>" +
                           "<CountedRange>" +
-                          $"<Start>{start}</Start>" +
+                          $"<Start>{startingOrderNumber}</Start>" +
                           $"<Count>{OrdersPerPage}</Count>" +
                           "</CountedRange>" +
                           "</QueryParams>" +
@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
-        /// Gets the item.
+        /// Gets an item.
         /// </summary>
         /// <param name="itemID">The Yahoo Item ID</param>
         public YahooResponse GetItem(string itemID)
@@ -299,7 +299,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
             catch (InvalidOperationException ex)
             {
-                throw new YahooException($"Error Deserializing {typeof(T).Name}", ex);
+                throw new YahooException($"Error deserializing {typeof(T).Name}", ex);
             }
         }
     }

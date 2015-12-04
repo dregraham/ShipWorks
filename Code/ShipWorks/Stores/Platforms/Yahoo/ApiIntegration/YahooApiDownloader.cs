@@ -27,10 +27,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Initializes a new instance of the <see cref="YahooApiDownloader"/> class.
         /// </summary>
         /// <param name="store"></param>
-        public YahooApiDownloader(StoreEntity store) : this(store, new YahooApiWebClient((YahooStoreEntity)store), new SqlAdapterRetry<SqlException>(5, -5, "YahooApiDownloader.LoadOrder"))
+        public YahooApiDownloader(StoreEntity store) :
+            this(store,
+                new YahooApiWebClient((YahooStoreEntity)store),
+                new SqlAdapterRetry<SqlException>(5, -5, "YahooApiDownloader.LoadOrder"))
         {
         }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiDownloader"/> class.
@@ -55,8 +57,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             {
                 List<long> orderList = CheckForNewOrders();
 
-                ((YahooStoreEntity)Store).BackupOrderNumber = null;
-
                 if (orderList == null)
                 {
                     throw new YahooException("Error checking for orders");
@@ -73,7 +73,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     Progress.Detail = "Downloading new orders...";
                     DownloadNewOrders(orderList);
 
-                    //StoreManager.SaveStore(Store);
+                    ((YahooStoreEntity)Store).BackupOrderNumber = null;
+                    StoreManager.SaveStore(Store);
                 }
             }
             catch (YahooException ex)
@@ -94,11 +95,26 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             int expectedCount = orderList.Count;
 
-            foreach (YahooResponse response in orderList.Select(orderID => webClient.GetOrder(orderID)))
+            foreach (long orderID in orderList)
             {
+                YahooResponse response = webClient.GetOrder(orderID);
+
+                if (response.ResponseResourceList?.OrderList?.Order?.FirstOrDefault() == null)
+                {
+                    if (response.ErrorResourceList != null)
+                    {
+                        foreach (YahooError error in response.ErrorResourceList.Error)
+                        {
+                            throw new DownloadException(error.Message);
+                        }
+                    }
+
+                    throw new DownloadException($"Error downloading order {orderID}");
+                }
+
                 // Set the progress detail
                 Progress.Detail = $"Processing order {QuantitySaved + 1} of {expectedCount} ...";
-                Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
+                Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
 
                 CreateOrder(response.ResponseResourceList.OrderList.Order.FirstOrDefault());
 
@@ -117,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <exception cref="YahooException">$Failed to instantiate order {order.OrderID}</exception>
         public YahooOrderEntity CreateOrder(YahooOrder order)
         {
-            YahooOrderEntity orderEntity = InstantiateOrder(new YahooOrderIdentifier((order.OrderID.ToString()))) as YahooOrderEntity;
+            YahooOrderEntity orderEntity = InstantiateOrder(new YahooOrderIdentifier(order.OrderID.ToString())) as YahooOrderEntity;
 
             if (orderEntity == null)
             {
@@ -127,9 +143,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             if (orderEntity.IsNew)
             {
                 orderEntity = LoadOrder(order, orderEntity);
-            }
 
-            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+                sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+            }
 
             return orderEntity;
         }
@@ -219,19 +235,16 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 // Merchant notes combines all notes into one string, separated by a '>'
                 string[] noteArray = order.MerchantNotes.Split('>');
 
-                foreach (string note in noteArray)
+                foreach (string note in noteArray.Where(note => !note.IsNullOrWhiteSpace()))
                 {
-                    if (note.IsNullOrWhiteSpace())
-                    {
-                        continue;
-                    }
-                    // Here we are extracting the date that prefixes the note, the date and note are seperated by a ':'
-                    // We want to substring off of the second ":" though, since one appears in the dates time
-                    int dateEndIndex = note.IndexOf(":", note.IndexOf(":", StringComparison.Ordinal) + 1, StringComparison.Ordinal);
+                    // Here we are extracting the date that prefixes the note. The date and note are separated by a ':'.
+                    // But because the time contains a ':', we'll combine the first 2 pieces for the time, and the last
+                    // part will be the notes text
+                    string[] splitNote = note.Split(':');
 
-                    DateTime noteDate = DateTime.Parse(note.Substring(0, dateEndIndex));
+                    DateTime noteDate = DateTime.Parse($"{splitNote[0]}:{splitNote[1]}");
 
-                    string noteText = note.Substring(dateEndIndex + 1);
+                    string noteText = splitNote[2].TrimStart(' ');
 
                     InstantiateNote(orderEntity, noteText, noteDate, NoteVisibility.Internal);
                 }
@@ -427,21 +440,27 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             YahooStoreEntity store = Store as YahooStoreEntity;
 
+            if (store == null)
+            {
+                throw new DownloadException("Attempted to check for orders on a null store");
+            }
+
             List<long> orders = new List<long>();
 
             bool done = false;
 
             long nextOrderNumber = GetNextOrderNumber() - 1;
 
-            long? backupNumber = store?.BackupOrderNumber;
+            long? backupNumber = store.BackupOrderNumber;
 
-            // This should only happen on the stores initial download
+            // This should only happen on the store's initial download
             if (nextOrderNumber == 0 && backupNumber != null)
             {
                 nextOrderNumber = backupNumber.Value;
             }
 
             int backupTries = 2;
+
             while (!done)
             {
                 YahooResponse response = webClient.GetOrderRange(nextOrderNumber);
@@ -451,7 +470,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     continue;
                 }
 
-                // check if the last order in the last after getting more orders is the same
+                // After getting more orders, Check if the last order number in the list is the same
                 // as the starting order number last used to retrieve orders. If so we know we
                 // have retrieved all of the orders.
                 if (orders.Count != 0 && orders.Last() == nextOrderNumber)
@@ -485,7 +504,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="backupNumber">The backup order number to try on next invalid starting order number.</param>
         /// <param name="nextOrderNumber">The next order number.</param>
         /// <param name="backupTries">The number of times the next backup order number is used.</param>
-        /// <returns>True if errors occured, false if no errors</returns>
+        /// <returns>True if errors occurred, false if no errors</returns>
         private bool CheckForErrors(YahooResponse response, ref long? backupNumber, ref long nextOrderNumber,
                     ref int backupTries)
         {
@@ -541,12 +560,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             DateTime result;
 
-            DateTime.TryParse(temp, out result);
-
             // When try parse fails, it returns DateTime.MinValue. We don't want to actually set that
             // as the date, so throw an error. If Yahoo ever changes their date format, this method will
             // more than likely have to change.
-            if (result == DateTime.MinValue)
+            if (DateTime.TryParse(temp, out result) == false)
             {
                 throw new YahooException("Error parsing date in Yahoo's response");
             }

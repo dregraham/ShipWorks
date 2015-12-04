@@ -12,7 +12,7 @@ using ShipWorks.Shipping;
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.CoreExtensions.Actions
 {
     /// <summary>
-    /// Action task for uploading shipment detials to Yahoo
+    /// Action task for uploading shipment details to Yahoo
     /// </summary>
     [ActionTask("Upload shipment details", "YahooApiShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class YahooApiShipmentUploadTask : StoreInstanceTaskBase
@@ -63,11 +63,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.CoreExtensions.Actions
             }
 
             YahooStoreEntity store = StoreManager.GetStore(StoreID) as YahooStoreEntity;
+
             if (store == null)
             {
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
             }
-
 
             // Get any postponed data we've previously stored away
             List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>)d).ToList();

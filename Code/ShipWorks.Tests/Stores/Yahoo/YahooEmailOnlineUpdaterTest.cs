@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
     /// <summary>
     /// Summary description for YahooOnlineUpdaterTest
     /// </summary>
-    public class YahooOnlineUpdaterTest
+    public class YahooEmailOnlineUpdaterTest
     {
         private ShipmentEntity shipmentEntity;
         private OrderEntity orderEntity;
@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
         private PostalShipmentEntity postalShipmentEntity;
         private UpsShipmentEntity upsEntity;
 
-        public YahooOnlineUpdaterTest()
+        public YahooEmailOnlineUpdaterTest()
         {
             orderEntity = new NeweggOrderEntity { OrderNumber = 123456 };
             shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow };

@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
-        /// Save the new account information if no errors occured,
+        /// Save the new account information if no errors occurred,
         /// displays error if one occurs.
         /// </summary>
         /// <param name="store">The store entity</param>
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         {
             string message = viewModel.Save(store as YahooStoreEntity);
 
-            if (message.Equals(string.Empty))
+            if (string.IsNullOrEmpty(message))
             {
                 return true;
             }

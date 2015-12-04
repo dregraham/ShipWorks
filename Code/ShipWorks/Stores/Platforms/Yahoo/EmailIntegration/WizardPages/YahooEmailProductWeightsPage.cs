@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages
         }
 
         /// <summary>
-        /// Stepping next from the prodcut import page
+        /// Stepping next from the product import page
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
@@ -41,12 +41,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages
             {
                 MessageHelper.ShowInformation(this, "Import your Yahoo! product catalog before continuing.");
                 e.NextPage = this;
-                return;
             }
         }
 
         /// <summary>
-        /// Changing wether to import weights or not
+        /// Changing whether to import weights or not
         /// </summary>
         private void OnRadioSelectionChanged(object sender, EventArgs e)
         {

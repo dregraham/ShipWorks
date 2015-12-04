@@ -73,11 +73,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
                 if (!store.YahooStoreID.IsNullOrWhiteSpace())
                 {
-                    return ((YahooStoreEntity) Store).YahooStoreID;
+                    return store.YahooStoreID;
                 }
 
                 EmailAccountEntity account =
-                    EmailAccountManager.GetAccount(((YahooStoreEntity)Store).YahooEmailAccountID);
+                    EmailAccountManager.GetAccount(store.YahooEmailAccountID);
 
                 // If the account was deleted we have to create a made up license that obviously will not be activated to them
                 return account == null ? $"{Guid.NewGuid()}@noaccount.com" : account.IncomingUsername;
@@ -290,7 +290,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
             definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
 
-            //      [Store] == this store
+            // [Store] == this store
             StoreCondition storeCondition = new StoreCondition
             {
                 Operator = EqualityOperator.Equals,
@@ -303,7 +303,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             ConditionGroupContainer shippedDefinition = new ConditionGroupContainer();
             definition.RootContainer.SecondGroup = shippedDefinition;
 
-            //      [Any]
+            // [Any]
             shippedDefinition.FirstGroup = new ConditionGroup { JoinType = ConditionJoinType.Any };
 
             OnlineStatusCondition onlineStatus = new OnlineStatusCondition

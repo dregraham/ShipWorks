@@ -6,6 +6,7 @@ using System.Net;
 using System.Xml.XPath;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using Quartz.Util;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Adapter.Custom;
@@ -70,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         {
             catalogUrl = catalogUrl.Trim();
 
-            if (catalogUrl.Length == 0)
+            if (catalogUrl.IsNullOrWhiteSpace())
             {
                 throw new YahooException("Enter your product catalog URL.");
             }
@@ -111,13 +112,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                     {
                         throw new YahooException(response.StatusDescription);
                     }
-                    else
+
+                    if (!response.ContentType.ToUpper().EndsWith("XML"))
                     {
-                        if (!response.ContentType.ToUpper().EndsWith("XML"))
-                        {
-                            throw new YahooException("The specified URL does not appear to be a Yahoo! Product Catalog.");
-                        }
+                        throw new YahooException("The specified URL does not appear to be a Yahoo! Product Catalog.");
                     }
+
 
                     using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                             ImportItem(xpathItem, yahooStoreID);
                         }
 
-                        // Legacty format
+                        // Legacy format
                         iterator = xpath.Select("/StoreExport/Products/Product");
 
                         total = iterator.Count;
@@ -172,7 +172,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// </summary>
         private static void ImportItem(XPathNavigator xpath, long yahooStoreID)
         {
-            // product id 
+            // product id
             string id = XPathUtility.Evaluate(xpath, "@ID", "");
 
             // get the shipweight
@@ -198,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         }
 
         /// <summary>
-        /// Adds an inentory record to the database
+        /// Adds an inventory record to the database
         /// </summary>
         private static void AddToDatabase(long yahooStoreID, string productID, double weight)
         {
@@ -219,7 +219,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                 inventoryItem.YahooProductID = productID;
                 inventoryItem.Weight = weight;
 
-                // insert or update 
+                // insert or update
                 adapter.SaveEntity(inventoryItem);
 
                 adapter.Commit();

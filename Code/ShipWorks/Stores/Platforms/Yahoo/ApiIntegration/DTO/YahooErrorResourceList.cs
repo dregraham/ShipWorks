@@ -12,6 +12,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
         public List<YahooError> Error { get; set; }
     }
 
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    [XmlRoot(ElementName = "Error")]
     public class YahooError
     {
         [XmlElement(ElementName = "Code")]

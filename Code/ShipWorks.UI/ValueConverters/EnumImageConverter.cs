@@ -21,8 +21,6 @@ namespace ShipWorks.UI.ValueConverters
         /// <summary>
         /// Convert an enum value into an image for use in an Image control
         /// </summary>
-        //[SuppressMessage("SonarQube", "S2930:\"IDisposables\" should be disposed", 
-        //    Justification = "BitmapImage will dispose the stream after loading")]
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (DesignModeDetector.IsDesignerHosted())
@@ -47,6 +45,14 @@ namespace ShipWorks.UI.ValueConverters
             }
         }
 
+        /// <summary>
+        /// Converts the image back to an enum value
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="targetType">Type of the target.</param>
+        /// <param name="parameter">The parameter.</param>
+        /// <param name="culture">The culture.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

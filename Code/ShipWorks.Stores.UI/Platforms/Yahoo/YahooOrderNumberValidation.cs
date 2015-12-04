@@ -12,14 +12,14 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo
     {
         [Description("Valid")]
         [ImageResource("check16")]
-        Valid,
+        Valid = 0,
 
         [Description("Invalid")]
         [ImageResource("error16")]
-        Invalid,
+        Invalid = 1,
 
         [Description("Validating")]
         [ImageResource("circle_ball_blue")]
-        Validating
+        Validating = 2
     }
 }

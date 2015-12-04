@@ -13,7 +13,7 @@ using ShipWorks.UI.Wizard;
 namespace ShipWorks.Stores.UI.Platforms.Yahoo
 {
     /// <summary>
-    /// Make necessary registations for Yahoo
+    /// Make necessary registrations for Yahoo
     /// </summary>
     public class YahooStoreModule : Module
     {
@@ -23,13 +23,15 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<YahooApiAccountPageViewModel>();
+
             builder.RegisterType<YahooApiAccountSettingsViewModel>();
 
             builder.RegisterType<YahooApiAccountPageHost>()
                 .Keyed<WizardPage>(StoreTypeCode.Yahoo)
                 .ExternallyOwned();
 
-            builder.RegisterType<YahooApiWebClient>().AsImplementedInterfaces();
+            builder.RegisterType<YahooApiWebClient>()
+                .AsImplementedInterfaces();
 
             builder.Register(GetAccountSettingsControlBase)
                 .Keyed<AccountSettingsControlBase>(StoreTypeCode.Yahoo)

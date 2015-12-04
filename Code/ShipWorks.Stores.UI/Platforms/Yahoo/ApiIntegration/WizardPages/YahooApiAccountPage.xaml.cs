@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="RequestNavigateEventArgs"/> instance containing the event data.</param>
-        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void HyperlinkOnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;

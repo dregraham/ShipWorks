@@ -146,9 +146,9 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
                 .Throttle(TimeSpan.FromMilliseconds(350))
                 .ObserveOn(TaskPoolScheduler.Default)
                 .Select(ValidateBackupOrderNumber)
-                .Select(x => x ? YahooOrderNumberValidation.Valid : YahooOrderNumberValidation.Invalid)
+                .Select(validationStatus => validationStatus ? YahooOrderNumberValidation.Valid : YahooOrderNumberValidation.Invalid)
                 .ObserveOn(DispatcherScheduler.Current)
-                .Subscribe(x => IsValid = x);
+                .Subscribe(validationStatus => IsValid = validationStatus);
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -27,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Initializes a new instance of the <see cref="YahooApiOnlineUpdater"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
-        public YahooApiOnlineUpdater(YahooStoreEntity store) : this(LogManager.GetLogger(typeof (YahooApiOnlineUpdater)), new YahooApiWebClient(store))
+        public YahooApiOnlineUpdater(YahooStoreEntity store) :
+            this(LogManager.GetLogger(typeof (YahooApiOnlineUpdater)), new YahooApiWebClient(store))
         {
         }
 
@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 // Check to see if shipment exists
                 if (shipment == null)
                 {
-                    log.InfoFormat("Not uploading orderid {0} has no items.", orderKey);
+                    log.InfoFormat("Not uploading order ID {0}: Has no items.", orderKey);
                     continue;
                 }
 
@@ -143,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             // Yahoo only supports usps, ups, fedex, dhl and airborne.
             // so if the carrier is something else (OnTrac, iparcel...)
             // just give an empty string and we just won't upload the carrier
-            switch (((ShipmentTypeCode) shipment.ShipmentType))
+            switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:

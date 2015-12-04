@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml;
 using Interapptive.Shared.Utility;
 using log4net;
+using Quartz.Util;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -110,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                 throw new YahooException("The email account associated with the store has been destroyed.");
             }
 
-            // This would only happen if the user skipped setup during migration/upgrade, and they didn't have 
+            // This would only happen if the user skipped setup during migration/upgrade, and they didn't have
             // Yahoo! updates configured in V2.
             if (String.IsNullOrEmpty(account.OutgoingServer))
             {
@@ -214,12 +215,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             string tempTrackingNumber = shipment.TrackingNumber;
             string tempShipperString = GetShipperString(shipment);
 
-            if (ShipmentTypeManager.IsUps((ShipmentTypeCode)shipment.ShipmentType) && UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
+            if (ShipmentTypeManager.IsUps((ShipmentTypeCode)shipment.ShipmentType) &&
+                UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service) &&
+                !shipment.Ups.UspsTrackingNumber.IsNullOrWhiteSpace())
             {
-                if (shipment.Ups.UspsTrackingNumber.Length > 0)
-                {
-                    tempTrackingNumber = shipment.Ups.UspsTrackingNumber;
-                }
+                tempTrackingNumber = shipment.Ups.UspsTrackingNumber;
             }
 
             shipperString = tempShipperString;
@@ -243,12 +243,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                     {
                         return "Dhl";
                     }
-                    
+
                     if (ShipmentTypeManager.IsConsolidator(service))
                     {
                         return "Consolidator";
                     }
-                    
+
                     return "Usps";
 
                 case ShipmentTypeCode.Express1Endicia:
@@ -258,12 +258,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
-                    if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                    if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service) && !shipment.Ups.UspsTrackingNumber.IsNullOrWhiteSpace())
                     {
-                        if (shipment.Ups.UspsTrackingNumber.Length > 0)
-                        {
-                            return "Usps";
-                        }
+                        return "Usps";
                     }
 
                     return "Ups";

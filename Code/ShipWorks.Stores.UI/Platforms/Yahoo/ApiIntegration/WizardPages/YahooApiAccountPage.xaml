@@ -68,8 +68,8 @@
         </Grid>
         <TextBlock Style="{StaticResource Section}"
                    Margin="0,8,0,0">
-            <Run>For help adding your Yahoo store,</Run>
-            <Hyperlink NavigateUri="{Binding HelpUrl}" RequestNavigate="Hyperlink_OnRequestNavigate">click here</Hyperlink>
+            <Run>For help adding your Yahoo store, </Run>
+            <Hyperlink NavigateUri="{Binding HelpUrl}" RequestNavigate="HyperlinkOnRequestNavigate">click here</Hyperlink>
         </TextBlock>
     </StackPanel>
 </UserControl>

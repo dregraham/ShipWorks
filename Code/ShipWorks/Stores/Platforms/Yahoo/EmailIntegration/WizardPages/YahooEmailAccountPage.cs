@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages
         }
 
         /// <summary>
-        /// Add an email account to shipworks
+        /// Add an email account to ShipWorks
         /// </summary>
         private void OnAddAccount(object sender, EventArgs e)
         {
