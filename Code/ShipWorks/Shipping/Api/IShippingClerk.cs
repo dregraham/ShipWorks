@@ -44,9 +44,8 @@ namespace ShipWorks.Shipping.Carriers.Api
         /// Gets the shipping rates from the carrier for the given shipment.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="certificateInspector">The certificate inspector to use when getting rates.</param>
         /// <returns>A RateGroup containing the rates received from the carrier.</returns>
-        RateGroup GetRates(ShipmentEntity shipment, ICertificateInspector certificateInspector);
+        RateGroup GetRates(ShipmentEntity shipment);
 
         /// <summary>
         /// Track a shipment

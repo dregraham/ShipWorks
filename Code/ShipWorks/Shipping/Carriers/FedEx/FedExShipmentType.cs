@@ -997,7 +997,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
+                IShippingClerk shippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(shipment, new FedExSettingsRepository());
                 return shippingClerk.Track(shipment);
             }
             catch (FedExException ex)

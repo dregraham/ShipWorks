@@ -3480,7 +3480,7 @@ namespace ShipWorks
 
                 bool anyClosed = false;
 
-                IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, new FedExSettingsRepository());
+                IFedExShippingClerk shippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(null, new FedExSettingsRepository());
 
                 // Process all accounts with configured hub ids
                 foreach (FedExAccountEntity account in FedExAccountManager.Accounts.Where(a => XElement.Parse(a.SmartPostHubList).Descendants("HubID").Any()))

@@ -197,14 +197,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         }
 
         /// <summary>
-        /// Fims does not use a certificateInspector
-        /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment, ICertificateInspector certificateInspector)
-        {
-            return GetRates(shipment);
-        }
-
-        /// <summary>
         /// Does not get rates as FIMS does not support getting rates.
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)

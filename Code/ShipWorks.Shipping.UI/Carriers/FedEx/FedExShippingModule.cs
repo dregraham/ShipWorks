@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System;
+using System.Linq;
+using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -33,18 +35,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 .AsSelf();
 
             builder.RegisterType<FedExRateHashingService>()
-                .AsSelf()
-                .Keyed<IRateHashingService>(ShipmentTypeCode.FedEx);
+                .Keyed<IRateHashingService>(ShipmentTypeCode.FedEx)
+                .AsSelf();
 
             builder.RegisterType<FedExRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.FedEx);
 
-            builder.Register<IShippingClerk>((container, parameters) =>
-            {
-                return FedExShippingClerkFactory.CreateShippingClerk(
-                    parameters.TypedAs<ShipmentEntity>(),
-                    container.ResolveKeyed<ICarrierSettingsRepository>(ShipmentTypeCode.FedEx));
-            });
+            builder.RegisterType<FedExShippingClerkFactory>()
+                .AsSelf();
         }
     }
 }

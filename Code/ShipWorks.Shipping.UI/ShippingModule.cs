@@ -20,13 +20,30 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces();
 
             builder.RegisterType<CachedRatesService>()
+                .AsSelf()
                 .AsImplementedInterfaces();
-
+            
             builder.RegisterType<RateHashingService>()
                 .AsSelf();
 
+            // Return a ICertificateInspector
+            // if no string is passed it will return a
+            // certificate inspector that always returns trusted
             builder.Register<ICertificateInspector>(
-                (contaner, parameters) => new CertificateInspector(parameters.TypedAs<string>()));
+                (contaner, parameters) =>
+                {
+                    string certVerificationData = parameters.TypedAs<string>();
+
+                    if (string.IsNullOrWhiteSpace(certVerificationData))
+                    {
+                        return new TrustingCertificateInspector();
+                    }
+                    return new CertificateInspector(certVerificationData);
+                });
+            
+            builder.Register(
+                (container, parameters) =>
+                    container.ResolveKeyed<IRateHashingService>(parameters.TypedAs<ShipmentTypeCode>()));
         }
     }
 }
