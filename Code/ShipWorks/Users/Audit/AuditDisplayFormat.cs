@@ -1,34 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
-using ShipWorks.Shipping.Carriers.iParcel;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Stores.Content;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.UI.Controls;
-using ShipWorks.Data;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Business.Geography;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Stores.Platforms.Shopify.Enums;
-using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
-using ShipWorks.ApplicationCore;
-using Autofac;
-using ShipWorks.Shipping.Carriers;
+using ShipWorks.Stores.Platforms.Shopify.Enums;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Users.Audit
 {
@@ -37,13 +31,13 @@ namespace ShipWorks.Users.Audit
     /// </summary>
     public static class AuditDisplayFormat
     {
-        public const int Default  = 0;
-        public const int Hidden   = 1;
+        public const int Default = 0;
+        public const int Hidden = 1;
         public const int Currency = 2;
-        public const int Weight   = 3;
-        public const int Entity   = 4;
-        public const int State    = 5;
-        public const int Country  = 6;
+        public const int Weight = 3;
+        public const int Entity = 4;
+        public const int State = 5;
+        public const int Country = 6;
         public const int DateOnly = 7;
 
         /// <summary>
@@ -124,7 +118,7 @@ namespace ShipWorks.Users.Audit
                     return string.Format("{0:c}", data);
 
                 case Weight:
-                    return WeightControl.FormatWeight(Convert.ToDouble(data));
+                    return WeightConverter.Current.FormatWeight(Convert.ToDouble(data));
 
                 case Entity:
                     return GetEntityLabel(Convert.ToInt64(data));

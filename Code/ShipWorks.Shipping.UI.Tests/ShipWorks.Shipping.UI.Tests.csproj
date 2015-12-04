@@ -165,7 +165,6 @@
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeToAccountsConverterTest.cs" />
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeToOriginAddressesConverterTest.cs" />
     <Compile Include="ShippingPanel\Weight\WeightValidationRuleTest.cs" />
-    <Compile Include="ValueConverters\DoubleToWeightStringConverterTest.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>

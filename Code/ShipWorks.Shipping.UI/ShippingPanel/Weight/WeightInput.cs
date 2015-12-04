@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ShipWorks.Shipping.UI.ValueConverters;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
 {
@@ -13,9 +13,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
     [TemplatePart(Name = "PART_Entry", Type = typeof(TextBox))]
     public class WeightInput : Control
     {
-        static readonly DoubleToWeightStringConverter weightConverter = new DoubleToWeightStringConverter();
-        TextBox entry;
-
         public static readonly DependencyProperty WeightProperty =
             DependencyProperty.Register("Weight", typeof(double), typeof(WeightInput),
                 new FrameworkPropertyMetadata(0.0,
@@ -29,6 +26,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(WeightInput), new FrameworkPropertyMetadata(typeof(WeightInput)));
         }
+
+        TextBox entry;
 
         /// <summary>
         /// Weight in fractional lbs
@@ -67,7 +66,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
         /// </summary>
         private void OnEntryLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            double? weight = weightConverter.ConvertBack(entry.Text, typeof(double), null, null) as double?;
+            double? weight = WeightConverter.Current.ParseWeight(entry.Text);
 
             if (weight.HasValue)
             {
@@ -89,6 +88,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
         /// Set the value of the entry box
         /// </summary>
         private static void SetEntryWeightValue(WeightInput input, double weight) =>
-            input.entry.Text = weightConverter.Convert(weight, typeof(string), null, null) as string;
+            input.entry.Text = WeightConverter.Current.FormatWeight(weight);
     }
 }

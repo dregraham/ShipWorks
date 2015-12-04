@@ -1,21 +1,23 @@
-﻿using Autofac;
-using ShipWorks.Core.Messaging;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.Threading;
+using log4net;
 using ShipWorks.AddressValidation;
+using ShipWorks.Common;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data;
+using ShipWorks.Editions;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
-using System.Linq;
-using System.Reflection;
-using System;
-using System.Windows.Forms;
-using ShipWorks.Common;
-using ShipWorks.Data;
-using ShipWorks.Editions;
-using Interapptive.Shared.Threading;
-using log4net;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -122,6 +124,12 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterType<EditionManagerWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UserSessionWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<WeightConverter>()
                 .AsImplementedInterfaces();
 
             builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));

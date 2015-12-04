@@ -1301,6 +1301,7 @@
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartWebClientThrottleWaitCancelException.cs" />
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
+    <Compile Include="UI\Controls\IWeightConverter.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinder.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinder.cs" />
     <Compile Include="UI\Controls\ResizingRichTextBox.cs">
@@ -3480,6 +3481,7 @@
     <Compile Include="UI\Controls\TimeZoneSelection.Designer.cs">
       <DependentUpon>TimeZoneSelection.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\WeightConverter.cs" />
     <Compile Include="UI\Controls\WeightDisplayFormat.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggDownloader.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggException.cs" />

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Grid.Columns.DisplayTypes.Editors;
-using ShipWorks.UI.Controls;
-using ShipWorks.Users;
+﻿using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -23,7 +17,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                 return string.Empty;
             }
 
-            return WeightControl.FormatWeight((double) value);
+            return WeightConverter.Current.FormatWeight((double) value);
         }
     }
 }

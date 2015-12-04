@@ -5,5 +5,6 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Themes/Controls/WeightInput.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Themes/Controls/ScaleButton.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

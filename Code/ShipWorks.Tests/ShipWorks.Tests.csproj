@@ -581,6 +581,7 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinderTest.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinderTest.cs" />
+    <Compile Include="UI\Controls\WeightConverterTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
   </ItemGroup>
   <ItemGroup>

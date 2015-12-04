@@ -7,7 +7,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type weight:WeightInput}">
-                    <Grid>
+                    <Grid Background="{TemplateBinding Background}"
+                          Margin="{TemplateBinding Margin}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="80" />
                             <ColumnDefinition Width="Auto" />
@@ -16,8 +17,8 @@
                         <TextBox Name="PART_Entry"
                                  Grid.Column="0">
                         </TextBox>
-                        <weight:ScaleControl Grid.Column="1"
-                               Weight="{Binding Text,ElementName=PART_Entry,Mode=OneWayToSource,UpdateSourceTrigger=Explicit}"/>
+                        <weight:ScaleButton x:Name="PART_ScaleButton" Grid.Column="1"
+                               Weight="{Binding Weight,RelativeSource={RelativeSource TemplatedParent},Mode=OneWayToSource}"/>
                         <Image Grid.Column="2"
                                ToolTip="{Binding ElementName=adorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
                                Width="15"

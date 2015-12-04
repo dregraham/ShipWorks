@@ -1,18 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Forms;
-using ShipWorks.UI.Utility;
-using System.Text.RegularExpressions;
-using ShipWorks.Users;
+using System.Reactive.Linq;
+using System.Reflection;
 using System.Threading;
+using System.Windows.Forms;
+using Interapptive.Shared.IO.Hardware.Scales;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.UI.Controls.Design;
-using Interapptive.Shared.IO.Hardware.Scales;
-using Interapptive.Shared.Business;
-using System.Reflection;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
+using ShipWorks.UI.Utility;
+using ShipWorks.Users;
 
 namespace ShipWorks.UI.Controls
 {
@@ -21,29 +18,6 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public partial class WeightControl : UserControl
     {
-        // Match any integer or floating point number
-        static string numberRegex = @"-?([0-9]+(\.[0-9]*)?|\.[0-9]+)";
-
-        // Match the case where both pounds and ounces are present
-        Regex poundsOzRegex = new Regex(
-            @"^(?<Pounds>" + numberRegex + @")\s*(lbs.|lbs|lb.|lb|l|pounds|pound)?\s+" +
-            @"(?<Ounces>" + numberRegex + @")\s*(ounces|ounce|oz.|oz|o)?\s*$",
-            RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
-
-        // Match the case were only ounces is present
-        Regex ouncesRegex = new Regex(
-            @"^(?<Ounces>" + numberRegex + @")\s*(ounces|ounce|oz.|oz|o)\s*$",
-            RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
-
-        // Match the case were only pounds is present
-        Regex poundsRegex = new Regex(
-            @"^(?<Pounds>" + numberRegex + @")\s*(lbs.|lbs|lb.|lb|l|pounds|pound)?\s*$",
-            RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
-
-        // Allowable ranges for the weight
-        double minRange = 0.0;
-        double maxRange = 300.0;
-
         // Display formatting
         WeightDisplayFormat displayFormat = WeightDisplayFormat.FractionalPounds;
 
@@ -100,7 +74,7 @@ namespace ShipWorks.UI.Controls
             scaleSubscription = ScaleReader.ReadEvents
                 .TakeWhile(_ => !(Program.MainForm.Disposing || Program.MainForm.IsDisposed || CrashWindow.IsApplicationCrashed))
                 .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(x => UpdateLiveWeight(x.Status == ScaleReadStatus.Success ? x.Weight : (double?)null));
+                .Subscribe(x => UpdateLiveWeight(x.Status == ScaleReadStatus.Success ? x.Weight : (double?) null));
         }
 
         /// <summary>
@@ -153,34 +127,14 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         [Category("Appearance")]
         [DefaultValue(0)]
-        public double RangeMin
-        {
-            get
-            {
-                return minRange;
-            }
-            set
-            {
-                minRange = value;
-            }
-        }
+        public double RangeMin { get; set; }
 
         /// <summary>
         /// Maximum allowed range
         /// </summary>
         [Category("Appearance")]
         [DefaultValue(150)]
-        public double RangeMax
-        {
-            get
-            {
-                return maxRange;
-            }
-            set
-            {
-                maxRange = value;
-            }
-        }
+        public double RangeMax { get; set; } = 300;
 
         /// <summary>
         /// Determine the format to display the weight
@@ -342,67 +296,6 @@ namespace ShipWorks.UI.Controls
             DisplayFormat = WeightDisplayFormat.PoundsOunces;
         }
 
-        private double? ParseWeight(string weight)
-        {
-            double? newWeight = 0.0;
-
-            try
-            {
-                // See if both pounds and ounces are present
-                Match poundsOzMatch = poundsOzRegex.Match(weight);
-
-                // Did it match
-                if (poundsOzMatch.Success)
-                {
-                    double pounds = double.Parse(poundsOzMatch.Groups["Pounds"].Value);
-                    double ounces = double.Parse(poundsOzMatch.Groups["Ounces"].Value);
-
-                    newWeight = pounds + ounces / 16.0;
-                }
-
-                else
-                {
-                    // Now see if just ounces are present
-                    Match ouncesMatch = ouncesRegex.Match(weight);
-
-                    // Did it match
-                    if (ouncesMatch.Success)
-                    {
-                        newWeight = double.Parse(ouncesMatch.Groups["Ounces"].Value) / 16.0;
-                    }
-
-                    else
-                    {
-                        // Now see if just pounds are present
-                        Match poundsMatch = poundsRegex.Match(weight);
-
-                        // Did it match
-                        if (poundsMatch.Success)
-                        {
-                            newWeight = double.Parse(poundsMatch.Groups["Pounds"].Value);
-                        }
-                        else
-                        {
-                            // Nothing worked!
-                            newWeight = null;
-                        }
-                    }
-                }
-
-                // Ensure the range is valid
-                if (newWeight.HasValue && ValidateRange(newWeight.Value))
-                {
-                    return newWeight;
-                }
-            }
-            catch (FormatException)
-            {
-                // There's nothing to do here; a failed parsed will just return null
-            }
-
-            return null;
-        }
-
         /// <summary>
         /// Sets the parsed weight in the text
         /// </summary>
@@ -422,7 +315,7 @@ namespace ShipWorks.UI.Controls
                 return;
             }
 
-            double? parsedWeight = ParseWeight(textBox.Text);
+            double? parsedWeight = WeightConverter.Current.ParseWeight(textBox.Text);
 
             if (parsedWeight.HasValue)
             {
@@ -457,42 +350,12 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private void FormatWeightText(double weight)
         {
-            string result = FormatWeight(weight, UserSession.User == null ? displayFormat : (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat);
+            string result = WeightConverter.Current.FormatWeight(weight, displayFormat);
 
             lastDisplay = result;
 
             textBox.Text = result;
             textBox.SelectionStart = textBox.Text.Length;
-        }
-
-        /// <summary>
-        /// Format the given weight based on the specified display format.
-        /// </summary>
-        public static string FormatWeight(double weight) =>
-            FormatWeight(weight, WeightDisplayFormat.FractionalPounds);
-
-        /// <summary>
-        /// Format the given weight based on the specified display format.
-        /// </summary>
-        public static string FormatWeight(double weight, WeightDisplayFormat defaultDisplayFormat)
-        {
-            WeightDisplayFormat displayFormat = (WeightDisplayFormat?)UserSession.User?.Settings.ShippingWeightFormat ??
-                defaultDisplayFormat;
-
-            string result;
-
-            if (displayFormat == WeightDisplayFormat.FractionalPounds)
-            {
-                result = string.Format("{0:0.0#} lbs", weight);
-            }
-            else
-            {
-                WeightValue weightValue = new WeightValue(weight);
-
-                result = string.Format("{0} lbs  {1} oz", weightValue.PoundsOnly, Math.Round(weightValue.OuncesOnly, 1, MidpointRounding.AwayFromZero));
-            }
-
-            return result;
         }
 
         /// <summary>
@@ -536,11 +399,10 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private bool ValidateRange(double weight)
         {
-            if (weight >= minRange && weight <= maxRange)
+            if (weight >= RangeMin && weight <= RangeMax)
             {
                 return true;
             }
-
             else
             {
                 SetError("The input value was out of range.");
@@ -595,7 +457,7 @@ namespace ShipWorks.UI.Controls
                 SetParsedWeight();
             }
 
- 	        base.OnLeave(e);
+            base.OnLeave(e);
         }
 
         /// <summary>
@@ -612,7 +474,7 @@ namespace ShipWorks.UI.Controls
             {
                 if (weight != null)
                 {
-                    liveWeight.Text = string.Format("({0})", FormatWeight(weight.Value, (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat));
+                    liveWeight.Text = string.Format("({0})", WeightConverter.Current.FormatWeight(weight.Value));
                     liveWeight.Visible = true;
 
                     // Make sure the error is clear
@@ -652,9 +514,12 @@ namespace ShipWorks.UI.Controls
             errorProvider.SetError(weighToolbar, null);
         }
 
+        /// <summary>
+        /// Contents of the weight entry box have changed
+        /// </summary>
         private void OnTextBoxChanged(object sender, EventArgs e)
         {
-            if (ParseWeight(textBox.Text).HasValue)
+            if (WeightConverter.Current.ParseWeight(textBox.Text).HasValue)
             {
                 ignoreWeightChanges = true;
                 OnWeightChanged();
