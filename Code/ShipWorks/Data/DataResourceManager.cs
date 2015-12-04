@@ -177,6 +177,7 @@ namespace ShipWorks.Data
         /// Ensure a Resource row exists for the given data.  If 'label' contains a filename and the resource does not yet exist, the extension of the filename is used
         /// as the new resource filename extension.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static long EnsureResourceData(byte[] data, string label, bool compress, out string resourceFilename)
         {
             if (data == null)

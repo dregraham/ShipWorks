@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Model.EntityClasses;
@@ -280,6 +281,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Clicking the savings link to view information about ShipWorks insurance
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnClickSave(object sender, EventArgs e)
         {
             if (linkSavings.Tag is InsuranceCost || linkSavings.Tag == null)

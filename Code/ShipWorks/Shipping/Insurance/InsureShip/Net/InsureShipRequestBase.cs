@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -28,6 +29,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <summary>
         /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         protected InsureShipRequestBase(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log, string logFileName)
             : base(ApiLogSource.InsureShip, logFileName)
         {

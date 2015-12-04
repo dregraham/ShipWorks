@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -17,6 +18,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// Add the Shipper info to the FedEx carrier request
         /// </summary>
         /// <param name="request">The FedEx carrier request</param>
+        [NDependIgnoreLongMethod]
         public void Manipulate(CarrierRequest request)
         {
             // Get the RequestedShipment object for the request

@@ -9,6 +9,7 @@ using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Threading;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Common.IO.Hardware.Printers;
 
@@ -156,6 +157,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Create a single instance of the database row for a new shipworks database instance
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void CreateInstance(SqlAdapter adapter)
         {
             ShippingSettingsEntity settings = new ShippingSettingsEntity(true);

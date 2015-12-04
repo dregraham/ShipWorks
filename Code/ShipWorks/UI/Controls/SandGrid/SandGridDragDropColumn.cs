@@ -6,6 +6,7 @@ using Divelements.SandGrid.Rendering;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
+using Interapptive.Shared;
 
 namespace ShipWorks.UI.Controls.SandGrid
 {
@@ -17,6 +18,8 @@ namespace ShipWorks.UI.Controls.SandGrid
         /// <summary>
         /// Draw a single cell
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreTooManyParams]
         protected override void DrawCell(RenderingContext context, GridRow row, object value, Font cellFont, Image image, Rectangle bounds, bool selected, TextFormattingInformation textFormat, Color cellForeColor)
         {
             SandGridDragDropRow gridRow = row as SandGridDragDropRow;

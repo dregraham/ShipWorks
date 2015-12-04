@@ -21,6 +21,7 @@ namespace Interapptive.Shared.Win32
         /// <returns>
         /// The windows error code returned by LsaAddAccountRights
         /// </returns>
+        [NDependIgnoreLongMethod]
         public static void AddPrivilegeToAccount(string domain, string userName, string privilegeName)
         {
             if (!string.IsNullOrWhiteSpace(domain))

@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions.Tasks;
@@ -30,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
         /// <summary>
         /// Initialize the UI for the given store
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void UpdateForStore(StoreEntity store)
         {
             GenericModuleStoreEntity generic = (GenericModuleStoreEntity) store;

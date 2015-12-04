@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -19,6 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
     /// <summary>
     /// Wizard for setting up shipping with Express1
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class Express1SetupWizard : ShipmentTypeSetupWizardForm
     {
         private bool hideDetailedConfiguration;
@@ -37,6 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Usps), the caller needs to provide
         /// the appropriate controls and postage dialog that are specific to the Express1 partner.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog, PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, IEnumerable<IEntity2> existingExpress1Accounts)
         {
             if (postageDialog == null)
@@ -116,6 +119,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// <summary>
         /// Initialization
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(registration.ShipmentTypeCode);

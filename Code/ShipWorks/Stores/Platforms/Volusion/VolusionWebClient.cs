@@ -17,6 +17,7 @@ using System.IO;
 using ShipWorks.Shipping;
 using System.Web;
 using System.Globalization;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -111,6 +112,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Uploads shipment details to Volusion
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void UploadShipmentDetails(ShipmentEntity shipment, bool sendEmail)
         {
             OrderEntity order = shipment.Order;

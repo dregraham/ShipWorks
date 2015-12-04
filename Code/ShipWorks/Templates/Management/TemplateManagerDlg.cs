@@ -13,6 +13,7 @@ using ShipWorks.Users;
 using Microsoft.Win32;
 using ShipWorks.Templates.Controls;
 using System.Windows.Forms.VisualStyles;
+using Interapptive.Shared;
 using ShipWorks.UI.Controls;
 using ShipWorks.Filters;
 using ShipWorks.UI.Utility;
@@ -28,6 +29,7 @@ namespace ShipWorks.Templates.Management
     /// <summary>
     /// Window for managing templates
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class TemplateManagerDlg : Form
     {
         FolderExpansionState folderState;

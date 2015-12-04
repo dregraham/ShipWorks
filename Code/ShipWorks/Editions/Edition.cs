@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using System.Xml.Linq;
+using Interapptive.Shared;
 
 namespace ShipWorks.Editions
 {
@@ -105,6 +106,8 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Get the restrictions imposed by this edition
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public virtual IEnumerable<EditionRestriction> GetRestrictions()
         {
             // Stamps DHL

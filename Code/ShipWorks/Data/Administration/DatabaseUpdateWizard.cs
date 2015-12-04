@@ -48,6 +48,7 @@ namespace ShipWorks.Data.Administration
     /// <summary>
     /// Wizard for walking a user throught upgrading the database
     /// </summary>
+    [NDependIgnoreLongTypes]
     partial class DatabaseUpdateWizard : WizardForm
     {
         // Logger
@@ -196,6 +197,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Stepping into the upgrade info page
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnSteppingIntoUpgradeInfo(object sender, WizardSteppingIntoEventArgs e)
         {
             if (SqlServerInstaller.IsMsdeMigrationInProgress)
@@ -268,6 +270,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Stepping into the login page
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnSteppingIntoLogin(object sender, WizardSteppingIntoEventArgs e)
         {
             if (SqlServerInstaller.IsMsdeMigrationInProgress)

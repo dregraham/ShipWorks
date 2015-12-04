@@ -12,6 +12,7 @@ using System.IO;
 using Interapptive.Shared.Utility;
 using System.Xml.Linq;
 using System.Xml;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -85,6 +86,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Import a token file for the given store.  Any errors are displayed using the given owner.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static bool ImportTokenFile(ProStoresStoreEntity store, IWin32Window owner)
         {
             using (OpenFileDialog dlg = new OpenFileDialog())

@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using Interapptive.Shared;
 
 namespace ShipWorks.UI.Controls.Colors
 {
@@ -65,6 +66,7 @@ namespace ShipWorks.UI.Controls.Colors
             return HSVtoColor(new HSV(H, S, V));
         }
 
+        [NDependIgnoreLongMethod]
         public static RGB HSVtoRGB(HSV HSV) 
         {
             // HSV contains values scaled as in the color wheel:

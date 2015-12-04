@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using log4net;
 using System.Reflection;
+using Interapptive.Shared;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Data;
@@ -136,6 +137,7 @@ namespace ShipWorks.Data.Administration
         /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in 
         /// customer or production scenarios.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void UpdateDatabase(ProgressProvider progressProvider, bool debuggingMode = false)
         {
             Version installed = GetInstalledSchemaVersion();

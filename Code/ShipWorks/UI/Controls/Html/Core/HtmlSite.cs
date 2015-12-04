@@ -12,10 +12,11 @@ using Interapptive.Shared.Win32;
 
 namespace ShipWorks.UI.Controls.Html.Core
 {
-	/// <summary>
-	/// Implements the site on which mshtml is hosted
-	/// </summary>
-	[ComVisible(true), System.CLSCompliant(false)]
+    /// <summary>
+    /// Implements the site on which mshtml is hosted
+    /// </summary>
+    [NDependIgnore]
+    [ComVisible(true), System.CLSCompliant(false)]
 	public sealed class HtmlSite : IDisposable, IOleClientSite, IOleContainer, IDocHostUIHandler,
 			IOleInPlaceFrame, IOleInPlaceSite, IOleInPlaceSiteEx, IOleDocumentSite, IAdviseSink,
             HtmlApi.IHTMLEditDesigner, IComServiceProvider, IDocHostShowUI, IOleInPlaceUIWindow, IPropertyNotifySink 
@@ -237,10 +238,11 @@ namespace ShipWorks.UI.Controls.Html.Core
             set { fullyActive = value; }
         }
 
-		/// <summary>
-		/// Closes the document. Use this to clean up the control.
-		/// </summary>
-		public void CloseDocument() 
+        /// <summary>
+        /// Closes the document. Use this to clean up the control.
+        /// </summary>
+        [NDependIgnoreLongMethod]
+        public void CloseDocument() 
         {
 			try	
             {

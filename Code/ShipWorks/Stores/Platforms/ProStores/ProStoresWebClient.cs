@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using System.Globalization;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -490,6 +491,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Create an XmlWriter initialized with the header for a request for the given store
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static XmlTextWriter CreateXteRequest(ProStoresStoreEntity store, string requestType)
         {
             StreamWriter writer = new StreamWriter(new MemoryStream(), StringUtility.Iso8859Encoding);

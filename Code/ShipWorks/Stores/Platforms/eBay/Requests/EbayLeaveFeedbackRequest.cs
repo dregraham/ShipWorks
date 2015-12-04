@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
@@ -13,11 +14,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
     /// </summary>
     public class EbayLeaveFeedbackRequest : EbayRequest<LeaveFeedbackResponseType, LeaveFeedbackRequestType, LeaveFeedbackResponseType>
     {
-        LeaveFeedbackRequestType request; 
+        LeaveFeedbackRequestType request;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EbayLeaveFeedbackRequest"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public EbayLeaveFeedbackRequest(EbayToken token, long itemID, long transactionID, string targetUserID, CommentTypeCodeType commentType, string comment)
             : base(token, "LeaveFeedback")
         {

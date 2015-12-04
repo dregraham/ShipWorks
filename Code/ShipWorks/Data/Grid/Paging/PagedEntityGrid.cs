@@ -908,6 +908,7 @@ namespace ShipWorks.Data.Grid.Paging
         /// <summary>
         /// Raised when the selection changes
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             if (suspendSelectionProcessing)
@@ -1297,6 +1298,7 @@ namespace ShipWorks.Data.Grid.Paging
         /// <summary>
         /// Background thread for populating peneding row data
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void BackgroundPopulatePending()
         {
             while (!ThreadSafeIsDisposed)
