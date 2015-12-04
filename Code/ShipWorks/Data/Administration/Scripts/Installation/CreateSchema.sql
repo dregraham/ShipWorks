@@ -4261,7 +4261,8 @@ CREATE TABLE [dbo].[FtpAccount]
 [Port] [int] NOT NULL,
 [SecurityType] [int] NOT NULL,
 [Passive] [bit] NOT NULL,
-[InternalOwnerID] [bigint] NULL
+[InternalOwnerID] [bigint] NULL,
+[ReuseControlConnectionSession] [bit] NOT NULL DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_FtpAccount] on [dbo].[FtpAccount]'
