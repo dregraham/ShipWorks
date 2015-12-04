@@ -13,6 +13,7 @@ using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Shipping.UI.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
+using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -90,7 +91,7 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ShipmentPackageBuilderFactory>()
+            builder.RegisterType<ShipmentPackageTypesBuilderFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

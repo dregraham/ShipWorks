@@ -14,6 +14,7 @@ using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 {
@@ -606,7 +607,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
                 testObject.Save();
 
-                shipmentViewModel.Verify(x => x.Save(It.IsAny<ICarrierShipmentAdapter>()));
+                shipmentViewModel.Verify(x => x.Save());
             }
         }
     }

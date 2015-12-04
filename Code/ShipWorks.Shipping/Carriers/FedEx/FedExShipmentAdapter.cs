@@ -154,5 +154,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             return shipmentType.GetPackageAdapters(shipment);
         }
+
+        /// <summary>
+        /// List of package adapters for the shipment
+        /// </summary>
+        public IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
+        {
+            FedExShipmentEntity fedEx = shipment.FedEx;
+
+            // Need more
+            while (fedEx.Packages.Count < numberOfPackages)
+            {
+                FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
+                fedEx.Packages.Add(package);
+            }
+
+            // Need less
+            while (fedEx.Packages.Count > numberOfPackages)
+            {
+                FedExPackageEntity package = fedEx.Packages[fedEx.Packages.Count - 1];
+                fedEx.Packages.Remove(package);
+            }
+
+            return shipmentType.GetPackageAdapters(shipment);
+        }
     }
 }

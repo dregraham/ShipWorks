@@ -3,22 +3,22 @@ using Autofac.Features.Indexed;
 namespace ShipWorks.Shipping.Services.Builders
 {
     /// <summary>
-    /// Retrieves a ShipmentPackageBuilder
+    /// Implementation of IShipmentPackageTypesBuilderFactory
     /// </summary>
-    public class ShipmentPackageBuilderFactory : IShipmentPackageBuilderFactory
+    public class ShipmentPackageTypesBuilderFactory : IShipmentPackageTypesBuilderFactory
     {
         private readonly IIndex<ShipmentTypeCode, IShipmentPackageTypesBuilder> lookup;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShipmentPackageBuilderFactory"/> class.
+        /// Initializes a new instance of the <see cref="ShipmentPackageTypesBuilderFactory"/> class.
         /// </summary>
-        public ShipmentPackageBuilderFactory(IIndex<ShipmentTypeCode, IShipmentPackageTypesBuilder> lookup)
+        public ShipmentPackageTypesBuilderFactory(IIndex<ShipmentTypeCode, IShipmentPackageTypesBuilder> lookup)
         {
             this.lookup = lookup;
         }
 
         /// <summary>
-        /// Gets the ShipmentPackageTypesBuilder based on shipment type code.
+        /// Gets the IShipmentPackageTypesBuilder based on shipment type code.
         /// </summary>
         public IShipmentPackageTypesBuilder Get(ShipmentTypeCode shipmentTypeCode) =>
             lookup[shipmentTypeCode];

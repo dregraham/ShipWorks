@@ -158,5 +158,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         {
             return shipmentType.GetPackageAdapters(shipment);
         }
+
+        /// <summary>
+        /// List of package adapters for the shipment
+        /// </summary>
+        public IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
+        {
+            return shipmentType.GetPackageAdapters(shipment);
+        }
     }
 }

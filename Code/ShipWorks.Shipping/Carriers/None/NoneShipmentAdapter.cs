@@ -145,5 +145,13 @@ namespace ShipWorks.Shipping.Carriers.None
         {
             return shipmentType.GetPackageAdapters(shipment);
         }
+
+        /// <summary>
+        /// List of package adapters for the shipment
+        /// </summary>
+        public IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
+        {
+            return shipmentType.GetPackageAdapters(shipment);
+        }
     }
 }

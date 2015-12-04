@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
+using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {

@@ -155,5 +155,29 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             return shipmentType.GetPackageAdapters(shipment);
         }
+
+        /// <summary>
+        /// List of package adapters for the shipment
+        /// </summary>
+        public IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
+        {
+            UpsShipmentEntity ups = shipment.Ups;
+
+            // Need more
+            while (ups.Packages.Count < numberOfPackages)
+            {
+                UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
+                ups.Packages.Add(package);
+            }
+
+            // Need less
+            while (ups.Packages.Count > numberOfPackages)
+            {
+                UpsPackageEntity package = ups.Packages[ups.Packages.Count - 1];
+                ups.Packages.Remove(package);
+            }
+
+            return shipmentType.GetPackageAdapters(shipment);
+        }
     }
 }

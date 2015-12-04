@@ -76,5 +76,10 @@ namespace ShipWorks.Shipping.Services
         /// List of package adapters for the shipment
         /// </summary>
         IEnumerable<IPackageAdapter> GetPackageAdapters();
+
+        /// <summary>
+        /// Gets specific number of package adapters for the shipment.  
+        /// </summary>
+        IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages);
     }
 }

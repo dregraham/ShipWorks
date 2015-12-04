@@ -1,12 +1,12 @@
 namespace ShipWorks.Shipping.Services.Builders
 {
     /// <summary>
-    /// Factory for a ShipmentServicesBuilder
+    /// Factory for a getting an IShipmentPackageTypesBuilder
     /// </summary>
-    public interface IShipmentPackageBuilderFactory
+    public interface IShipmentPackageTypesBuilderFactory
     {
         /// <summary>
-        /// Gets the ShipmentServicesBuilder based on shipment type code.
+        /// Gets the IShipmentPackageTypesBuilder based on shipment type code.
         /// </summary>
         IShipmentPackageTypesBuilder Get(ShipmentTypeCode shipmentTypeCode);
     }

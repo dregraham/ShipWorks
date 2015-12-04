@@ -283,7 +283,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.SaveToEntity(ShipmentAdapter.Shipment.OriginPerson);
             Destination.SaveToEntity(ShipmentAdapter.Shipment.ShipPerson);
 
-            ShipmentViewModel.Save(ShipmentAdapter);
+            ShipmentViewModel.Save();
 
             IDictionary<ShipmentEntity, Exception> errors = ShipmentAdapter.UpdateDynamicData();
             DisplayError(errors);
@@ -310,12 +310,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Updates the services.
         /// </summary>
-        private void UpdateServices() => ShipmentViewModel.RefreshServiceTypes(ShipmentAdapter);
+        private void UpdateServices() => ShipmentViewModel.RefreshServiceTypes();
 
         /// <summary>
         /// Updates the packages.
         /// </summary>
-        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(ShipmentAdapter);
+        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes();
 
         /// <summary>
         /// Enables the need to update packages.
