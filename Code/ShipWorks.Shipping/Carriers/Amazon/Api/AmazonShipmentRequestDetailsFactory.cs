@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         public ShipmentRequestDetails Create(ShipmentEntity shipment, IAmazonOrder order)
         {
             return new ShipmentRequestDetails
-            {
+            {   Shipment = shipment,
                 AmazonOrderId = order.AmazonOrderID,
                 Insurance = null,
                 ItemList = GetItemList(order),

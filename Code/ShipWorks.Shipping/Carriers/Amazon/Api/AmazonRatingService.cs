@@ -8,41 +8,48 @@ using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
-using System;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
     /// <summary>
     /// Gets the rates from Amazon via the IAmazonShippingWebClient
     /// </summary>
-    public class AmazonRatingService : IAmazonRatingService
+    public class AmazonRatingService : IRatingService
     {
         private readonly IAmazonShippingWebClient webClient;
-        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
         private readonly IOrderManager orderManager;
-        private readonly AmazonShipmentType amazonShipmentType;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IEnumerable<IAmazonRateGroupFilter> rateFilters;
+        private readonly ICachedRatesService cachedRatesService;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRatingService"/> class.
         /// </summary>
-        public AmazonRatingService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory,
-            IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory, AmazonShipmentType amazonShipmentType,
-            IEnumerable<IAmazonRateGroupFilter> rateFilters)
+        public AmazonRatingService(IAmazonShippingWebClient webClient,
+            IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
+            IEnumerable<IAmazonRateGroupFilter> rateFilters, ICachedRatesService cachedRatesService)
         {
             this.webClient = webClient;
-            this.settingsFactory = settingsFactory;
             this.orderManager = orderManager;
             this.requestFactory = requestFactory;
-            this.amazonShipmentType = amazonShipmentType;
             this.rateFilters = rateFilters;
+            this.cachedRatesService = cachedRatesService;
         }
 
         /// <summary>
         /// Gets the rates.
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
+        {
+            RateGroup rateGroup = cachedRatesService.GetCachedRates<AmazonShippingException>(shipment, GetRatesFromApi);
+            Messenger.Current.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
+
+            return rateGroup;
+        }
+
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             orderManager.PopulateOrderDetails(shipment);
             IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
@@ -59,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, amazonOrder);
 
-            GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
+            GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails);
 
             RateGroup rateGroup = GetRateGroupFromResponse(response);
 

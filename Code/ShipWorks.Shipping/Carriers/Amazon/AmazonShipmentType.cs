@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -31,7 +30,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentType : ShipmentType
     {
-        private readonly Func<IAmazonRatingService> amazonRatesFactory;
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
@@ -40,9 +38,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(Func<IAmazonRatingService> amazonRatesFactory, IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, IEditionManager editionManager)
+        public AmazonShipmentType(IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, IEditionManager editionManager)
         {
-            this.amazonRatesFactory = amazonRatesFactory;
             this.storeManager = storeManager;
             this.orderManager = orderManager;
             this.shippingManager = shippingManager;
@@ -170,52 +167,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Gets the rates.
-        /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-            RateGroup rateGroup = GetCachedRates<AmazonShippingException>(shipment, GetRatesFromApi);
-
-            Messenger.Current.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
-
-            return rateGroup;
-        }
-
-        /// <summary>
-        /// Gets rates from the Amazon API
-        /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment) =>
-            amazonRatesFactory().GetRates(shipment);
-
-        /// <summary>
         /// Amazon supports rates
         /// </summary>
         public override bool SupportsGetRates => true;
-
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DeclaredValue);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DeliveryExperience);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsAddWeight);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsHeight);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsLength);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsWeight);
-
-                return ratingField;
-            }
-        }
 
         /// <summary>
         /// Checks whether this shipment type is allowed for the given shipment

@@ -18,6 +18,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
     /// </summary>
     public class AmazonShippingWebClient : IAmazonShippingWebClient
     {
+        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
+
+        public AmazonShippingWebClient(IAmazonMwsWebClientSettingsFactory settingsFactory)
+        {
+            this.settingsFactory = settingsFactory;
+        }
+
         /// <summary>
         /// Validate the given credentials
         /// </summary>
@@ -36,6 +43,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
         }
 
+        /// <summary>
+        /// Gets rates for the given ShipmentRequestDetails
+        /// </summary>
+        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails)
+        {
+            return GetRates(requestDetails, settingsFactory.Create(requestDetails.Shipment.Amazon));
+        }
+        
         /// <summary>
         /// Gets Rates
         /// </summary>

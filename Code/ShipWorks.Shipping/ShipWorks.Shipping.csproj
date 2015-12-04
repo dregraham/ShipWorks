@@ -145,6 +145,7 @@
     <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\IAmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
+    <Compile Include="Carriers\Amazon\AmazonRateHashingService.cs" />
     <Compile Include="Carriers\BestRate\BestRateLabelService.cs" />
     <Compile Include="Carriers\FedEx\FedExLabelService.cs" />
     <Compile Include="Carriers\FedEx\FedExRateHashingService.cs" />

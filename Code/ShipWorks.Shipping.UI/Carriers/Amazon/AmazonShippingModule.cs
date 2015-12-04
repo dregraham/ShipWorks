@@ -50,6 +50,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .SingleInstance();
 
             builder.RegisterType<AmazonRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.Amazon)
                 .AsImplementedInterfaces();
 
             builder.RegisterType<AmazonMwsWebClientSettingsFactory>()
@@ -88,6 +89,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
 
             builder.RegisterType<AmazonAccountValidator>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<AmazonRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.Amazon)
+                .AsSelf();
         }
     }
 }
