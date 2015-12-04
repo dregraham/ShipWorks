@@ -1,29 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     public class FedExRatingService : IRatingService
     {
+        private readonly FedExAccountRepository fedExAccountRepository;
         private readonly ICachedRatesService cachedRatesService;
-        private ICarrierSettingsRepository settingsRepository;
         private readonly FedExShipmentType fedExShipmentType;
         private readonly FedExShippingClerkFactory shippingClerkFactory;
 
-        public FedExRatingService(ICachedRatesService cachedRatesService, 
-            FedExSettingsRepository settingsRepository, 
+        public FedExRatingService(FedExAccountRepository fedExAccountRepository,
+            ICachedRatesService cachedRatesService, 
             FedExShipmentType fedExShipmentType,
             FedExShippingClerkFactory shippingClerkFactory)
-        { 
+        {
+            this.fedExAccountRepository = fedExAccountRepository;
             this.cachedRatesService = cachedRatesService;
-            this.settingsRepository = settingsRepository;
             this.fedExShipmentType = fedExShipmentType;
             this.shippingClerkFactory = shippingClerkFactory;
         }
@@ -58,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             // if there are no FedEx accounts call get rates using counter rates
-            if (!settingsRepository.GetAccounts().Any() && !fedExShipmentType.IsShipmentTypeRestricted)
+            if (!fedExAccountRepository.Accounts.Any() && !fedExShipmentType.IsShipmentTypeRestricted)
             {
                 CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
                 return shippingClerkFactory.CreateShippingClerk(shipment, true).GetRates(shipment);

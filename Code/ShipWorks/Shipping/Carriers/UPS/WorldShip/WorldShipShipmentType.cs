@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -11,10 +9,6 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Templates.Tokens;
-using ShipWorks.UI;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
@@ -26,28 +20,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Indicates if the shipment service type supports return shipments
         /// </summary>
-        public override bool SupportsReturns
-        {
-            get { return false; }
-        }
+        public override bool SupportsReturns => false;
 
         /// <summary>
         /// Type code for WorldShip
         /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode
-        {
-            get { return ShipmentTypeCode.UpsWorldShip; }
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.UpsWorldShip;
 
         /// <summary>
         /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed 
         /// in ShipWorks, then once its processed in WorldShip its completed.  Opted instead of hardcoding WorldShip if statements
         /// to use this instead so its easier to track down all the usgages by doing Find References on this property.
         /// </summary>
-        public override bool ProcessingCompletesExternally
-        {
-            get { return true; }
-        }
+        public override bool ProcessingCompletesExternally => true;
 
         /// <summary>
         /// Create settings control for WorldShip

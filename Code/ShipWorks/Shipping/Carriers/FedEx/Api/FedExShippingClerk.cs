@@ -1104,10 +1104,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 foreach (FedExPackageEntity fedexPackage in shipment.FedEx.Packages)
                 {
-                    FedExShipmentType fedExShipmentType = new FedExShipmentType();
-                    if (!fedExShipmentType.DimensionsAreValid(fedexPackage.DimsLength, fedexPackage.DimsWidth, fedexPackage.DimsHeight))
+                    if (!DimensionsAreValid(fedexPackage))
                     {
-                        exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, System.Environment.NewLine);
+                        exceptionMessage +=
+                            $"Package {packageIndex} has invalid dimensions.{System.Environment.NewLine}";
                     }
 
                     packageIndex++;
@@ -1119,6 +1119,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     throw new InvalidPackageDimensionsException(exceptionMessage);
                 }
             }
+        }
+
+        /// <summary>
+        /// Check to see if a package dimensions are valid for carriers that require dimensions.
+        /// </summary>
+        /// <returns>True if the dimensions are valid.  False otherwise.</returns>
+        private static bool DimensionsAreValid(FedExPackageEntity package)
+        {
+            if (package.DimsLength <= 0 || package.DimsWidth <= 0 || package.DimsHeight <= 0)
+            {
+                return false;
+            }
+
+            // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
+            // This is no longer valid due to new dimensional weight requirements.
+            return !(package.DimsLength.IsEquivalentTo(1) &&
+                     package.DimsWidth.IsEquivalentTo(1) &&
+                     package.DimsHeight.IsEquivalentTo(1));
         }
     }
 }

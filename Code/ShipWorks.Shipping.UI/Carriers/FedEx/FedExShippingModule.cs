@@ -38,8 +38,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 .Keyed<IRateHashingService>(ShipmentTypeCode.FedEx)
                 .AsSelf();
 
-            builder.RegisterType<FedExRateHashingService>()
-                .Keyed<IRateHashingService>(ShipmentTypeCode.FedEx);
+            builder.RegisterType<FedExAccountRepository>()
+                .AsSelf();
 
             builder.RegisterType<FedExShippingClerkFactory>()
                 .AsSelf();

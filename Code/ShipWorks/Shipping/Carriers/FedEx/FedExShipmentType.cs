@@ -1,30 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
-using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -33,12 +26,10 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Api;
-using Interapptive.Shared.Net;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -52,62 +43,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode
-        {
-            get
-            {
-                return ShipmentTypeCode.FedEx;
-            }
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.FedEx;
 
         /// <summary>
         /// FedEx accounts have an address that can be used as the shipment origin
         /// </summary>
-        public override bool SupportsAccountAsOrigin
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SupportsAccountAsOrigin => true;
 
         /// <summary>
         /// FedEx supports rates
         /// </summary>
-        public override bool SupportsGetRates
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SupportsGetRates => true;
 
         /// <summary>
         /// Returns are supported for Online Tools
         /// </summary>
-        public override bool SupportsReturns
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SupportsReturns => true;
 
         /// <summary>
         /// Supports getting counter rates.
         /// </summary>
-        public override bool SupportsCounterRates
-        {
-            get { return true; }
-        }
+        public override bool SupportsCounterRates => true;
 
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
-        public override bool HasAccounts
-        {
-            get { return SettingsRepository.GetAccounts().Any(); }
-        }
+        public override bool HasAccounts => SettingsRepository.GetAccounts().Any();
 
         /// <summary>
         /// Gets a value indicating whether the shipment type [supports multiple packages].
@@ -115,10 +76,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <value>
         /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
         /// </value>
-        public override bool SupportsMultiplePackages
-        {
-            get { return true; }
-        }
+        public override bool SupportsMultiplePackages => true;
 
         /// <summary>
         /// Gets the service types that have been available for this shipment type (i.e have not 
@@ -1096,19 +1054,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             bucket.Relations.Add(ShipmentEntity.Relations.FedExShipmentEntityUsingShipmentID);
 
             adapter.UpdateEntitiesDirectly(new FedExShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
-        }
-
-        /// <summary>
-        /// Check to see if a package dimensions are valid for carriers that require dimensions.
-        /// </summary>
-        public override bool DimensionsAreValid(double length, double width, double height)
-        {
-            if (length < 1 || width < 1 || height < 1)
-            {
-                return false;
-            }
-
-            return base.DimensionsAreValid(length, width, height);
         }
 
         /// <summary>

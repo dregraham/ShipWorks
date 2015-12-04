@@ -27,10 +27,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     /// </summary>
     public class UpsApiRateClient
     {
-        private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private ICarrierAccountRepository<UpsAccountEntity> accountRepository;
         private readonly ILog log;
-        private readonly ICarrierSettingsRepository settingsRepository;
-        private readonly ICertificateInspector certificateInspector;
+        private ICarrierSettingsRepository settingsRepository;
+        private ICertificateInspector certificateInspector;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
@@ -124,6 +124,26 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             return rates;
+        }
+
+        public List<UpsServiceRate> GetRates(ShipmentEntity shipment, bool useCounterRates)
+        {
+            // Create the appropriate settings, certificate inspector
+            if (useCounterRates)
+            {
+                settingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
+                certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
+                accountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
+            }
+            else
+            {
+
+                settingsRepository = new UpsSettingsRepository();
+                certificateInspector = new TrustingCertificateInspector();
+                accountRepository = new UpsAccountRepository();
+            }
+
+            return GetRates(shipment);
         }
 
         /// <summary>

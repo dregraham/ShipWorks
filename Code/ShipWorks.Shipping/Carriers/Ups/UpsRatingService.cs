@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -19,25 +17,25 @@ namespace ShipWorks.Shipping.Carriers.Ups
     public class UpsRatingService : IRatingService
     {
         private readonly ICachedRatesService cachedRatesService;
-        private ICarrierSettingsRepository settingsRepository;
-        private ICarrierAccountRepository<UpsAccountEntity> accountRepository;
-        private ICertificateInspector certificateInspector;
-        private readonly UpsShipmentType shipmentType;
+        private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private readonly UpsApiTransitTimeClient transitTimeClient;
+        private readonly UpsApiRateClient upsApiRateClient;
+        private readonly UpsOltShipmentType shipmentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsRatingService"/> class.
         /// </summary>
         public UpsRatingService(
             ICachedRatesService cachedRatesService,
-            ICarrierSettingsRepository settingsRepository, 
             ICarrierAccountRepository<UpsAccountEntity> accountRepository,
-            ICertificateInspector certificateInspector,
-            UpsShipmentType shipmentType)
+            UpsApiTransitTimeClient transitTimeClient,
+            UpsApiRateClient upsApiRateClient,
+            UpsOltShipmentType shipmentType)
         {
             this.cachedRatesService = cachedRatesService;
-            this.settingsRepository = settingsRepository;
             this.accountRepository = accountRepository;
-            this.certificateInspector = certificateInspector;
+            this.transitTimeClient = transitTimeClient;
+            this.upsApiRateClient = upsApiRateClient;
             this.shipmentType = shipmentType;
         }
 
@@ -46,25 +44,8 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
-            ICarrierSettingsRepository originalSettings = settingsRepository;
-            ICertificateInspector originalInspector = certificateInspector;
-            ICarrierAccountRepository<UpsAccountEntity> originalAccountRepository = accountRepository;
-
             try
             {
-                // Check with the SettingsRepository here rather than UpsAccountManager, so getting 
-                // counter rates from the broker is not impacted
-                if (!settingsRepository.GetAccounts().Any() && !shipmentType.IsShipmentTypeRestricted)
-                {
-                    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
-
-                    // We need to swap out the SettingsRepository and certificate inspector 
-                    // to get UPS counter rates
-                    settingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
-                    certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
-                    accountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
-                }
-
                 return cachedRatesService.GetCachedRates<UpsException>(shipment, GetRatesFromApi);
             }
             catch (CounterRatesOriginAddressException)
@@ -72,13 +53,6 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 RateGroup errorRates = new RateGroup(new List<RateResult>());
                 errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType));
                 return errorRates;
-            }
-            finally
-            {
-                // Switch the settings repository back to the original now that we have counter rates
-                settingsRepository = originalSettings;
-                certificateInspector = originalInspector;
-                accountRepository = originalAccountRepository;
             }
         }
 
@@ -89,16 +63,43 @@ namespace ShipWorks.Shipping.Carriers.Ups
         {
             try
             {
+                // Determine if the user is hoping to get negotiated rates back
+                bool wantedNegotiated = false;
+
+                // Indicates if any of the rates returned were negotiated.
+                bool anyNegotiated = false;
+                bool allNegotiated = false;
+
+                List<UpsServiceRate> serviceRates;
+                List<UpsTransitTime> transitTimes;
+                
+                // If there are no UPS Accounts then use the counter rates
+                if (!accountRepository.Accounts.Any() && !shipmentType.IsShipmentTypeRestricted)
+                {
+                    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+
+                    // Get the transit times and services
+                    transitTimes = transitTimeClient.GetTransitTimes(shipment, true);
+                    serviceRates = upsApiRateClient.GetRates(shipment, true);
+                }
+                else
+                {
+                    // Get the transit times and services
+                    transitTimes = transitTimeClient.GetTransitTimes(shipment, false);
+                    serviceRates = upsApiRateClient.GetRates(shipment, false);
+
+                    // Determine if the user is hoping to get negotiated rates back
+                    wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, accountRepository).RateType == (int)UpsRateType.Negotiated;
+
+                    // Indicates if any of the rates returned were negotiated.
+                    anyNegotiated = serviceRates.Any(s => s.Negotiated);
+                    allNegotiated = serviceRates.All(s => s.Negotiated);
+                }
+
                 // Validate each of the packages dimensions.
                 ValidatePackageDimensions(shipment);
 
                 List<RateResult> rates = new List<RateResult>();
-
-                // Get the transit times and services
-                List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment, accountRepository, settingsRepository, certificateInspector);
-
-                UpsApiRateClient upsApiRateClient = new UpsApiRateClient(accountRepository, settingsRepository, certificateInspector);
-                List<UpsServiceRate> serviceRates = upsApiRateClient.GetRates(shipment);
 
                 if (!serviceRates.Any())
                 {
@@ -106,13 +107,6 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 }
                 else
                 {
-                    // Determine if the user is hoping to get negotiated rates back
-                    bool wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, accountRepository).RateType == (int)UpsRateType.Negotiated;
-
-                    // Indicates if any of the rates returned were negotiated.
-                    bool anyNegotiated = serviceRates.Any(s => s.Negotiated);
-                    bool allNegotiated = serviceRates.All(s => s.Negotiated);
-
                     // Add a rate for each service
                     foreach (UpsServiceRate serviceRate in serviceRates)
                     {
@@ -127,7 +121,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
                             service)
                         {
                             ServiceLevel = UpsServiceLevelConverter.GetServiceLevel(serviceRate, transitTime),
-                            ExpectedDeliveryDate = transitTime == null ? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday) : transitTime.ArrivalDate,
+                            ExpectedDeliveryDate = transitTime?.ArrivalDate ?? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday),
                             ShipmentType = ShipmentTypeCode.UpsOnLineTools,
                             ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools)
                         };
@@ -181,10 +175,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
             {
                 return transitTime.BusinessDays.ToString(CultureInfo.InvariantCulture);
             }
-            else
-            {
-                return "";
-            }
+            return "";
         }
 
         /// <summary>
@@ -229,9 +220,9 @@ namespace ShipWorks.Shipping.Carriers.Ups
             {
                 if (upsPackage.PackagingType == (int)UpsPackagingType.Custom)
                 {
-                    if (!shipmentType.DimensionsAreValid(upsPackage.DimsLength, upsPackage.DimsWidth, upsPackage.DimsHeight))
+                    if (DimensionsAreValid(upsPackage))
                     {
-                        exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, Environment.NewLine);
+                        exceptionMessage += $"Package {packageIndex} has invalid dimensions.{Environment.NewLine}";
                     }
                 }
 
@@ -243,6 +234,27 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 exceptionMessage += "Package dimensions must be greater than 0 and not 1x1x1.  ";
                 throw new InvalidPackageDimensionsException(exceptionMessage);
             }
+        }
+
+        /// <summary>
+        /// Check to see if a package dimensions are valid for carriers that require dimensions.
+        /// </summary>
+        /// <returns>True if the dimensions are valid.  False otherwise.</returns>
+        private static bool DimensionsAreValid(UpsPackageEntity package)
+        {
+            // Only check the dimensions if the package type is custom 
+            if (package.PackagingType != (int)UpsPackagingType.Custom) return true;
+
+            if (package.DimsLength <= 0 || package.DimsWidth <= 0 || package.DimsHeight <= 0)
+            {
+                return false;
+            }
+
+            // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
+            // This is no longer valid due to new dimensional weight requirements.
+            return !(package.DimsLength.IsEquivalentTo(1) &&
+                     package.DimsWidth.IsEquivalentTo(1) &&
+                     package.DimsHeight.IsEquivalentTo(1));
         }
     }
 }
