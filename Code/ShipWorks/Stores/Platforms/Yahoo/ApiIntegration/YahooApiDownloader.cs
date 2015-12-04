@@ -22,6 +22,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
     {
         private readonly IYahooApiWebClient webClient;
         private readonly ISqlAdapterRetry sqlAdapter;
+        private const int InvalidStartRangeErrorCode = 20021;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiDownloader"/> class.
@@ -459,15 +460,15 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 nextOrderNumber = backupNumber.Value;
             }
 
-            int backupTries = 2;
-
             while (!done)
             {
                 YahooResponse response = webClient.GetOrderRange(nextOrderNumber);
 
-                if (CheckForErrors(response, ref backupNumber, ref nextOrderNumber, ref backupTries))
+                long? nextNumberToTry = CheckForErrors(response, nextOrderNumber);
+
+                if (nextNumberToTry != null)
                 {
-                    continue;
+                    nextOrderNumber = nextNumberToTry.Value;
                 }
 
                 // After getting more orders, Check if the last order number in the list is the same
@@ -490,49 +491,66 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 // When the loop starts over, we want to use the last order number we retrieved
                 // as the starting order number for the next retrieval
                 nextOrderNumber = orders.Last();
-
-                backupNumber = null;
             }
 
             return orders;
         }
 
         /// <summary>
-        /// Checks for errors in the response to see if we need to try and use the backup order number
+        /// Checks for invalid start range error and handle it appropriately
         /// </summary>
-        /// <param name="response">The response.</param>
-        /// <param name="backupNumber">The backup order number to try on next invalid starting order number.</param>
-        /// <param name="nextOrderNumber">The next order number.</param>
-        /// <param name="backupTries">The number of times the next backup order number is used.</param>
-        /// <returns>True if errors occurred, false if no errors</returns>
-        private bool CheckForErrors(YahooResponse response, ref long? backupNumber, ref long nextOrderNumber,
-                    ref int backupTries)
+        /// <param name="response">The response to check for errors.</param>
+        /// <param name="backupOrderNumber">The backup order number.</param>
+        /// <returns>A new valid Yahoo order ID or null if no errors</returns>
+        public long? CheckForErrors(YahooResponse response, long? backupOrderNumber)
         {
-            // If invalid start range error occurs try to use the backup order number.
-            // If it is not set, attempt to use the last 5 highest order numbers in ShipWorks.
-            // If none of those work, throw a download error telling the user to go to the
-            // store settings and change the starting order number
+            // Check if any errors in response. If not, return null
             if (response?.ErrorResourceList?.Error == null)
             {
-                return false;
+                return null;
             }
 
-            if (backupNumber != null)
+            // We know we have errors, lets check for the invalid start range error.
+            // If it is, try to use the backup order number if it is set.
+            // If it is not set, try the last 5 order numbers ShipWorks has for that store
+            // and throw a DownloadException telling the user to set a new starting order number
+            // If its not an invalid start range error, throw DownloadException with Yahoo's error message.
+            foreach (YahooError error in response.ErrorResourceList.Error.Where(error => error.Code != InvalidStartRangeErrorCode))
             {
-                nextOrderNumber = backupNumber.Value;
-                backupNumber = null;
-                return true;
+                throw new DownloadException(error.Message);
             }
 
-            if (backupTries >= 7)
+            // If backup order number exists, try that and check for errors
+            if (backupOrderNumber != null)
             {
-                throw new DownloadException(
-                    "You either have no orders to download or need to set a new starting order number in store settings");
+                YahooResponse newResponse = webClient.GetOrderRange(backupOrderNumber.Value);
+
+                if (newResponse?.ErrorResourceList?.Error == null)
+                {
+                    return backupOrderNumber;
+                }
             }
 
-            nextOrderNumber = GetNextOrderNumber() - backupTries;
-            backupTries++;
-            return true;
+            // -2 here because the original order number we tried was GetNextOrderNumber() - 1
+            long nextOrderNumber = GetNextOrderNumber() - 2;
+
+            // Backup order number didn't exist, lets try the last 5 order numbers
+            for (int i = 0; i < 5; i++)
+            {
+                YahooResponse newResponse = webClient.GetOrderRange(nextOrderNumber);
+
+                if (newResponse?.ErrorResourceList?.Error == null)
+                {
+                    return nextOrderNumber;
+                }
+
+                nextOrderNumber--;
+            }
+
+            // If we're here, the user doesn't have a backup order number set and the last 5 order
+            // numbers didn't work. So throw a download exception with a message telling them to
+            // set a new starting order number.
+            throw new DownloadException("You either have no orders to download or need to set a new starting order number in store settings");
         }
 
         /// <summary>
