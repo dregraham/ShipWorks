@@ -22,6 +22,7 @@ using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -38,15 +39,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IEditionManager editionManager;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly Func<IAmazonLabelService> amazonLabelServiceFactory;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IDateTimeProvider dateTimeProvider, 
-            Func<IAmazonRatingService> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory, 
+        [NDependIgnoreTooManyParams]
+        public AmazonShipmentType(IDateTimeProvider dateTimeProvider,
+            Func<IAmazonRatingService> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory,
             IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager,
             IEditionManager editionManager)
         {
+            // TODO: Refactor constuctor params down to 5 or less
             this.amazonRatesFactory = amazonRatesFactory;
             this.amazonLabelServiceFactory = amazonLabelServiceFactory;
             this.storeManager = storeManager;
