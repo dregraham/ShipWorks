@@ -361,10 +361,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             itemEntity.YahooProductID = item.ItemID;
             itemEntity.Code = item.ItemCode;
-            itemEntity.Name = item.ItemCode;
+            itemEntity.Name = item.Description;
             itemEntity.Quantity = item.Quantity;
             itemEntity.UnitPrice = item.UnitPrice;
-            itemEntity.Description = item.Description;
             itemEntity.Url = item.URL;
             itemEntity.Thumbnail = item.ThumbnailUrl;
             itemEntity.Weight = GetItemWeight(item.ItemID);
