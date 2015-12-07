@@ -155,6 +155,8 @@
     <Compile Include="Carriers\iParcel\iParcelRatingService.cs" />
     <Compile Include="Carriers\None\NoneLabelService.cs" />
     <Compile Include="Carriers\OnTrac\OnTracLabelService.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracRateHashingService.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracRatingService.cs" />
     <Compile Include="Carriers\Other\OtherLabelService.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaLabelService.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaLabelService.cs" />

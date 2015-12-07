@@ -176,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             {
                 return EnumHelper.GetEnumList<OnTracServiceType>().Select(x => x.Value);
             }
-        } 
+        }
 
         /// <summary>
         /// Get the OnTrac shipment details
@@ -335,42 +335,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Gets rates
-        /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-            return GetCachedRates<OnTracException>(shipment, GetRatesFromApi);  
-        }
-
-        /// <summary>
-        /// Gets rates from the OnTrac API
-        /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
-        {
-            OnTracAccountEntity account = null;
-
-            try
-            {
-                account = GetAccountForShipment(shipment);
-            }
-            catch (OnTracException ex)
-            {
-                if (ex.Message == "No OnTrac account is selected for the shipment.")
-                {
-                    // Provide a message with additional context
-                    throw new OnTracException("An OnTrac account is required to view rates.", ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            OnTracRates rateRequest = new OnTracRates(account);
-            return rateRequest.GetRates(shipment, GetAvailableServiceTypes().Cast<OnTracServiceType>().Union(new List<OnTracServiceType> { (OnTracServiceType)shipment.OnTrac.Service }));
-        }
-
-        /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
@@ -467,7 +431,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Get the OnTrac account to be used for the given shipment
         /// </summary>
-        private static OnTracAccountEntity GetAccountForShipment(ShipmentEntity shipment)
+        public static OnTracAccountEntity GetAccountForShipment(ShipmentEntity shipment)
         {
             OnTracAccountEntity account = OnTracAccountManager.GetAccount(shipment.OnTrac.OnTracAccountID);
             if (account == null)
@@ -548,35 +512,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new OnTracBestRateBroker();
-        }
-
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.OnTracAccountID);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.CodAmount);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.CodType);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.SaturdayDelivery);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DeclaredValue);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.PackagingType);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsAddWeight);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsHeight);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsLength);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsWidth);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsWeight);
-
-                return ratingField;
-            }
         }
 
         /// <summary>

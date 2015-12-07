@@ -19,9 +19,18 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             builder.RegisterType<OnTracLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.OnTrac);
-            
+
             builder.RegisterType<OnTracAccountRepository>()
                 .As<ICarrierAccountRepository<OnTracAccountEntity>>();
+
+            builder.RegisterType<OnTracRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.OnTrac)
+                .AsSelf();
+
+            builder.RegisterType<OnTracRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.OnTrac)
+                .AsImplementedInterfaces();
+
         }
     }
 }
