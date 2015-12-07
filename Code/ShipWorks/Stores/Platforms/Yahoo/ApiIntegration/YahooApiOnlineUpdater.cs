@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -138,6 +139,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="shipment">The shipment entity.</param>
         /// <returns></returns>
+        [NDependIgnoreComplexMethod]
         public string GetCarrierCode(ShipmentEntity shipment)
         {
             // Yahoo only supports usps, ups, fedex, dhl and airborne.
