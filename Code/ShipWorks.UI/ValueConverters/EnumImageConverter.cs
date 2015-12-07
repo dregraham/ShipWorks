@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Interop;
@@ -16,6 +17,7 @@ namespace ShipWorks.UI.ValueConverters
     /// <summary>
     /// Convert an enum to an image
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class EnumImageConverter : IValueConverter
     {
         /// <summary>
@@ -29,7 +31,7 @@ namespace ShipWorks.UI.ValueConverters
                 return Imaging.CreateBitmapSourceFromHBitmap(Resources.check16.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             }
 
-            Image image = EnumHelper.GetImage((Enum)value);
+            Image image = EnumHelper.GetImage((Enum) value);
             if (image == null)
             {
                 return BitmapSource.Create(2, 2, 96, 96,

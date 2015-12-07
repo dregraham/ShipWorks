@@ -4,7 +4,7 @@ using ShipWorks.Stores.Services;
 namespace ShipWorks.Stores.UI
 {
     /// <summary>
-    /// Module for stores assemby
+    /// Module for stores assembly
     /// </summary>
     public class StoreModule : Module
     {
@@ -15,7 +15,9 @@ namespace ShipWorks.Stores.UI
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-            builder.RegisterType<StoreTypeManagerWrapper>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<StoreTypeManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }
