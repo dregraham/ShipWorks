@@ -17,17 +17,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Gets the rates.
         /// </summary>
-        GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails);
+        GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings);
 
         /// <summary>
         /// Create a shipment
         /// </summary>
-        CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, string shippingServiceId);
+        CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings, string shippingServiceId);
 
         /// <summary>
         /// Voids the shipment
         /// </summary>
-        CancelShipmentResponse CancelShipment(ShipmentEntity shipment);
+        CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, string amazonShipmentId);
 
         /// <summary>
         /// Validates the CreateShipmentREsponse

@@ -21,19 +21,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly IOrderManager orderManager;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IEnumerable<IAmazonRateGroupFilter> rateFilters;
-
+        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRatingService"/> class.
         /// </summary>
         public AmazonRatingService(IAmazonShippingWebClient webClient,
             IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
-            IEnumerable<IAmazonRateGroupFilter> rateFilters)
+            IEnumerable<IAmazonRateGroupFilter> rateFilters,
+            IAmazonMwsWebClientSettingsFactory settingsFactory)
         {
             this.webClient = webClient;
             this.orderManager = orderManager;
             this.requestFactory = requestFactory;
             this.rateFilters = rateFilters;
+            this.settingsFactory = settingsFactory;
         }
 
         /// <summary>
@@ -54,9 +56,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 throw new AmazonShippingException("Not an Amazon Order");
             }
 
-            ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, shipment.Order as IAmazonOrder);
+            ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, amazonOrder);
 
-            GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails);
+            GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
 
             RateGroup rateGroup = GetRateGroupFromResponse(response);
             

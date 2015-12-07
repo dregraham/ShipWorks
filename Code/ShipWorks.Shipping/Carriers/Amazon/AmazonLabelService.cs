@@ -27,6 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IDataResourceManager resourceManager;
         private readonly IEnumerable<IAmazonLabelEnforcer> labelEnforcers;
+        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
         private static readonly ILog log = LogManager.GetLogger(typeof(AmazonLabelService));
 
         /// <summary>
@@ -34,13 +35,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public AmazonLabelService(IAmazonShippingWebClient webClient,
             IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
-            IDataResourceManager resourceManager, IEnumerable<IAmazonLabelEnforcer> labelEnforcers)
+            IDataResourceManager resourceManager, IEnumerable<IAmazonLabelEnforcer> labelEnforcers,
+            IAmazonMwsWebClientSettingsFactory settingsFactory)
         {
             this.webClient = webClient;
             this.orderManager = orderManager;
             this.requestFactory = requestFactory;
             this.resourceManager = resourceManager;
             this.labelEnforcers = labelEnforcers;
+            this.settingsFactory = settingsFactory;
         }
 
         /// <summary>
@@ -71,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 requestDetails.ShippingServiceOptions.DeclaredValue.Amount = 0;
             }
 
-            CreateShipmentResponse labelResponse = webClient.CreateShipment(requestDetails, shipment.Amazon.ShippingServiceID);
+            CreateShipmentResponse labelResponse = webClient.CreateShipment(requestDetails, settingsFactory.Create(shipment.Amazon), shipment.Amazon.ShippingServiceID);
 
             // Save shipment info
             SaveShipmentInfoToEntity(labelResponse.CreateShipmentResult.Shipment, shipment);
@@ -95,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 throw new AmazonShippingException("Amazon shipment is missing the AmazonUniqueShipmentID");
             }
             
-            webClient.CancelShipment(shipment);
+            webClient.CancelShipment(settingsFactory.Create(shipment.Amazon), shipment.Amazon.AmazonUniqueShipmentID);
         }
 
         /// <summary>

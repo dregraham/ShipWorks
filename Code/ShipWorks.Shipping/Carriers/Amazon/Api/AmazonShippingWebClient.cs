@@ -10,7 +10,6 @@ using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -19,13 +18,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
     /// </summary>
     public class AmazonShippingWebClient : IAmazonShippingWebClient
     {
-        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
-
-        public AmazonShippingWebClient(IAmazonMwsWebClientSettingsFactory settingsFactory)
-        {
-            this.settingsFactory = settingsFactory;
-        }
-
         /// <summary>
         /// Validate the given credentials
         /// </summary>
@@ -47,10 +39,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Gets rates for the given ShipmentRequestDetails
         /// </summary>
-        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails)
+        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings)
         {
-            MethodConditions.EnsureArgumentIsNotNull(requestDetails.Shipment, nameof(requestDetails.Shipment));
-
             AmazonMwsApiCall call = AmazonMwsApiCall.GetEligibleShippingServices;
 
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
@@ -59,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             AddShipmentRequestDetails(request, requestDetails);
 
             // Get Response
-            IHttpResponseReader response = ExecuteRequest(request, call, settingsFactory.Create(requestDetails.Shipment.Amazon));
+            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
 
             // Deserialize
             return DeserializeResponse<GetEligibleShippingServicesResponse>(response.ReadResult());
@@ -68,10 +58,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Create a shipment for the given ShipmentRequestDetails
         /// </summary>
-        public CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, string shippingServiceId)
+        public CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings, string shippingServiceId)
         {
-            MethodConditions.EnsureArgumentIsNotNull(requestDetails.Shipment, nameof(requestDetails.Shipment));
-
             AmazonMwsApiCall call = AmazonMwsApiCall.CreateShipment;
 
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
@@ -83,19 +71,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             AddShipmentRequestDetails(request, requestDetails);
 
             // Get Response
-            IHttpResponseReader response = ExecuteRequest(request, call, settingsFactory.Create(requestDetails.Shipment.Amazon));
+            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
 
             // Deserialize
             CreateShipmentResponse createShipmentResponse = DeserializeResponse<CreateShipmentResponse>(response.ReadResult());
 
             return ValidateCreateShipmentResponse(createShipmentResponse);
-        }
-
-        public CancelShipmentResponse CancelShipment(ShipmentEntity shipment)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
-            return CancelShipment(settingsFactory.Create(shipment.Amazon), shipment.Amazon.AmazonUniqueShipmentID);
         }
 
         /// <summary>
