@@ -69,14 +69,12 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         private void OnConnect(object sender, System.EventArgs e)
         {
-            SqlSession session = new SqlSession();
-            session.Configuration.ServerInstance = sqlServer.Text;
-            session.Configuration.DatabaseName = database.Text;
+            var session = SaveToNewSqlSession();
 
-            // Set them to the new settings
-            session.Configuration.Username = username.Text;
-            session.Configuration.Password = password.Text;
-            session.Configuration.WindowsAuth = windowsAuth.Checked;
+            if (!ValidateSession(session))
+            {
+                return;
+            }
 
             try
             {
@@ -100,6 +98,43 @@ namespace ShipWorks.Data.Connection
                     "ShipWorks could not login to SQL Server.\n\n" +
                     "Detail: " + ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Saves to new SQL session (in memory)
+        /// </summary>
+        private SqlSession SaveToNewSqlSession()
+        {
+            SqlSession session = new SqlSession();
+            session.Configuration.ServerInstance = sqlServer.Text;
+            session.Configuration.DatabaseName = database.Text;
+
+            // Set them to the new settings
+            session.Configuration.WindowsAuth = windowsAuth.Checked;
+
+            if (sqlServerAuth.Checked)
+            {
+                session.Configuration.Username = username.Text;
+                session.Configuration.Password = password.Text;
+            }
+            return session;
+        }
+
+        /// <summary>
+        /// Validates the session.
+        /// </summary>
+        private bool ValidateSession(SqlSession session)
+        {
+            if (!session.Configuration.WindowsAuth)
+            {
+                if (string.IsNullOrEmpty(session.Configuration.Username))
+                {
+                    MessageHelper.ShowError(this, $"A Validaiton Error has occured. {Environment.NewLine}{Environment.NewLine} Username is required");
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
