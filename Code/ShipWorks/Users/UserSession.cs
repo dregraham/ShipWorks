@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -138,6 +139,7 @@ namespace ShipWorks.Users
         /// <summary>
         /// Required initialization that must take place after a user logs in to get various resources and managers ready
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void InitializeForCurrentSession()
         {
             ServiceStatusManager.InitializeForCurrentSession();

@@ -13,6 +13,7 @@ using Interapptive.Shared.UI;
 using System.Text.RegularExpressions;
 using System.Collections;
 using System.Xml.Linq;
+using Interapptive.Shared;
 
 namespace ShipWorks.Templates.Processing
 {
@@ -122,6 +123,7 @@ namespace ShipWorks.Templates.Processing
         /// Run the function with the given code and parameters
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [NDependIgnoreTooManyParams]
         public object Function(string code, object value1, object value2, object value3, object value4, object value5)
         {
             return InternalRunCode(code, new List<object> { value1, value2, value3, value4, value5 });
@@ -130,6 +132,7 @@ namespace ShipWorks.Templates.Processing
         /// <summary>
         /// Run the given code with the specified values as inputs
         /// </summary>
+        [NDependIgnoreLongMethod]
         private object InternalRunCode(string code, List<object> values)
         {
             string hashKey = GetCodeHash(code);

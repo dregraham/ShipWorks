@@ -10,6 +10,7 @@ using System.Net.Sockets;
 using System.Diagnostics;
 using Interapptive.Shared.Utility;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 
 namespace ShipWorks.Email.Accounts
 {
@@ -111,6 +112,7 @@ namespace ShipWorks.Email.Accounts
         /// <summary>
         /// Do the actual work of the search. Returns null if canceled, or the results otherwise.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private EmailSettingsSearchResult SearchWorker(string emailAddress, string password)
         {
             ProgressItem progressOutgoingMail = new ProgressItem("Outgoing Mail");
@@ -186,6 +188,7 @@ namespace ShipWorks.Email.Accounts
         /// <summary>
         /// Probe for smtp settings using the list of potential hosts and usernames
         /// </summary>
+        [NDependIgnoreLongMethod]
         private SmtpProbeResult ProbeSmtpSettings(IProgressReporter progress, List<string> smtpHosts, List<string> userNames, string password)
         {
             // List of probes to try in priority order
@@ -252,6 +255,7 @@ namespace ShipWorks.Email.Accounts
         /// <summary>
         /// Probe for IMAP or POP settings using the list of potential hosts and usernames
         /// </summary>
+        [NDependIgnoreLongMethod]
         private IncomingProbeResult ProbeIncomingSettings(IProgressReporter progress, List<string> imapHosts, List<string> pop3Hosts, List<string> userNames, string password)
         {
             // List of IMAP probes to try in priority order

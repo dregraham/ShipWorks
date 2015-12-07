@@ -11,6 +11,7 @@ using ShipWorks.Filters;
 using ShipWorks.Properties;
 using log4net;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.UI.Controls.SandGrid;
 
 namespace ShipWorks.Filters.Controls
@@ -85,6 +86,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// The next frame is ready to be drawn
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void OnFrameChanged(object o, EventArgs e)
         {
             if (!isAnimating)
@@ -156,6 +158,8 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Draw the cell, adding the filter count to it
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreTooManyParams]
         protected override void DrawCell(RenderingContext context, GridRow row, object value, Font cellFont, Image image, Rectangle bounds, bool selected, TextFormattingInformation textFormat, Color cellForeColor)
         {
             FilterTreeGridRow filterTreeRow = (FilterTreeGridRow) row;

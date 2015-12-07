@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using log4net;
 using System.Xml.Linq;
 using System.Xml;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -34,6 +35,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Shows import token dialog, imports token, validates it.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public bool ImportToken(IWin32Window parentWindow, EtsyWebClient webClient)
         {
             if (webClient==null)

@@ -22,6 +22,7 @@ namespace Interapptive.Shared.Net
     /// <summary>
     /// Class for working with PayPal certificates
     /// </summary>
+    [NDependIgnore]
     public class ClientCertificate
     {
         X509Certificate2 certificate;

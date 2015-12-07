@@ -49,6 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         /// <param name="shipment"></param>
         /// <exception cref="ShippingException"></exception>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3215:\"interface\" instances should not be cast to concrete types", Justification = "<Pending>")]
         public void VerifyShipment(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));

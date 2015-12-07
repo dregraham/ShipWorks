@@ -7,6 +7,7 @@ using ShipWorks.Data;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Data.Adapter;
 using System.Data.SqlClient;
+using Interapptive.Shared;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Data;
 
@@ -88,6 +89,7 @@ namespace ShipWorks.Filters.Content.Conditions
         /// <summary>
         /// Convert the user requested operator and dates into an absolute range
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void GetEffectiveOperation(ref DateOperator effectiveOp, ref DateTime effectiveValue1, ref DateTime effectiveValue2)
         {
             DateTime now = SqlSession.Current.GetLocalDate().Date;

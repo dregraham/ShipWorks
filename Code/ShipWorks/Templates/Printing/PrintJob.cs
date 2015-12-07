@@ -334,6 +334,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// The worker thread that executes a print job.  Returns true if the worker completed, or false if it was cancelled.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool PrintWorker(PrintRequest printRequest)
         {
             // Add a progress item for the actual printing

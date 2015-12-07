@@ -13,6 +13,7 @@ using Interapptive.Shared.IO.Text.Csv;
 using Divelements.SandGrid;
 using ShipWorks.Properties;
 using System.Collections;
+using Interapptive.Shared;
 using ShipWorks.Data.Import.Spreadsheet;
 
 namespace ShipWorks.Data.Import.Spreadsheet.Types.Csv.Editing
@@ -66,6 +67,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.Types.Csv.Editing
         /// <summary>
         /// Browse for the sample CSV file
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnBrowse(object sender, EventArgs e)
         {
             using (OpenFileDialog dlg = new OpenFileDialog())
@@ -181,6 +183,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.Types.Csv.Editing
         /// <summary>
         /// Load the column data from the given file with the specified options
         /// </summary>
+        [NDependIgnoreTooManyParams]
         private static List<GenericSpreadsheetSourceColumn> LoadColumnData(string filename, char delimiter, char quote, char escape, string encodingName, int maxSamples)
         {
             try

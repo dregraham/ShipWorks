@@ -28,11 +28,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             switch (shipmentTypeCode)
             {
                 case ShipmentTypeCode.Amazon:
-                    carrierCode = shipment.Amazon.CarrierName;
-                    if (carrierCode.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase))
-                    {
-                        carrierCode = "USPS";
-                    }
+                    carrierCode = GetCarrierCodeForAmazon(shipment);
                     break;
 
                 case ShipmentTypeCode.UpsOnLineTools:
@@ -42,15 +38,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
-                    PostalServiceType postalServiceType = (PostalServiceType)shipment.Postal.Service;
-                    if (ShipmentTypeManager.IsConsolidator(postalServiceType) || ShipmentTypeManager.IsDhl(postalServiceType))
-                    {
-                        carrierCode = "DHL-GLOBAL";
-                    }
-                    else
-                    {
-                        carrierCode = isDomestic ? "USPS" : "USPS-I";
-                    }
+                    carrierCode = GetCarrierCodeForUspsEndicia(shipment, isDomestic);
                     break;
 
                 case ShipmentTypeCode.PostalWebTools:
@@ -79,6 +67,38 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     throw new ArgumentOutOfRangeException("shipment", string.Format("ShipmentType '{0}' not valid for InsureShip", EnumHelper.GetDescription(shipmentTypeCode)));
             }
 
+            return carrierCode;
+        }
+
+        /// <summary>
+        /// Get carrier code for USPS and Endicia
+        /// </summary>
+        private static string GetCarrierCodeForUspsEndicia(ShipmentEntity shipment, bool isDomestic)
+        {
+            string carrierCode;
+            PostalServiceType postalServiceType = (PostalServiceType) shipment.Postal.Service;
+            if (ShipmentTypeManager.IsConsolidator(postalServiceType) || ShipmentTypeManager.IsDhl(postalServiceType))
+            {
+                carrierCode = "DHL-GLOBAL";
+            }
+            else
+            {
+                carrierCode = isDomestic ? "USPS" : "USPS-I";
+            }
+            return carrierCode;
+        }
+
+        /// <summary>
+        /// Get carrier code for Amazon
+        /// </summary>
+        private static string GetCarrierCodeForAmazon(ShipmentEntity shipment)
+        {
+            string carrierCode;
+            carrierCode = shipment.Amazon.CarrierName;
+            if (carrierCode.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase))
+            {
+                carrierCode = "USPS";
+            }
             return carrierCode;
         }
 

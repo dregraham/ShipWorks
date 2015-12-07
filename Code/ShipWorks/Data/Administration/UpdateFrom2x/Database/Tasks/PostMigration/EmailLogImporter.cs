@@ -13,6 +13,7 @@ using ShipWorks.Email;
 using ShipWorks.Templates;
 using ShipWorks.Email.Accounts;
 using System.Data;
+using Interapptive.Shared;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration
 {
@@ -28,6 +29,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// <summary>
         /// Migrate all the email history from ShipWorks 2x
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void ImportEmailHistory(ProgressItem progress)
         {
             progress.Starting();

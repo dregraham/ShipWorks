@@ -21,9 +21,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             Shipment = shipment;
         }
 
+
         /// <summary>
         /// If the package is being insured PennyOne - only applies to FedEx\UPS shipments
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used", Justification = "This is specific only to Amazon.")]
         public bool? InsurancePennyOne
         {
             get { return Shipment.Amazon.CarrierName == "STAMPS_DOT_COM"; }

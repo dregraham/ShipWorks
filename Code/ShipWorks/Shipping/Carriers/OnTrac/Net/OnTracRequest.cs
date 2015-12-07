@@ -8,6 +8,7 @@ using log4net;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using Interapptive.Shared;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.Net
 {
@@ -42,6 +43,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         protected OnTracRequest(long onTracAccountNumber, string onTracPassword, ILogEntryFactory logEntryFactory, ApiLogSource logSource, string actionDescriptionToLog, LogActionType logActionType)
         {
             //THIS CONSTRUCTOR MUST BE CALLED IN THE CONSTRUCTION CHAIN

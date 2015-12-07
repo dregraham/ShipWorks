@@ -198,6 +198,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Get the metadata for the given enum value
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static EnumMetadata GetEnumMetadata(Enum value)
         {
             Type enumType = value.GetType();

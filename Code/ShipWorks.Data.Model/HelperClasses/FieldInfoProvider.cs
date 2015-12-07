@@ -1286,6 +1286,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FtpAccountEntity", "SecurityType", typeof(System.Int32), false, false, false, false,  (int)FtpAccountFieldIndex.SecurityType, 0, 0, 10);
 			base.AddElementFieldInfo("FtpAccountEntity", "Passive", typeof(System.Boolean), false, false, false, false,  (int)FtpAccountFieldIndex.Passive, 0, 0, 0);
 			base.AddElementFieldInfo("FtpAccountEntity", "InternalOwnerID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)FtpAccountFieldIndex.InternalOwnerID, 0, 0, 19);
+			base.AddElementFieldInfo("FtpAccountEntity", "ReuseControlConnectionSession", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FtpAccountFieldIndex.ReuseControlConnectionSession, 0, 0, 0);
 		}
 		/// <summary>Inits GenericFileStoreEntity's FieldInfo objects</summary>
 		private void InitGenericFileStoreEntityInfos()

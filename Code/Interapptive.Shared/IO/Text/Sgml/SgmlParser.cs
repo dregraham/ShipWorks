@@ -12,6 +12,7 @@ namespace Interapptive.Shared.IO.Text.Sgml
         CDATA, SDATA, PI
     };
 
+    [NDependIgnore]
     public class Entity {
         public const Char EOF = (char)65535;
         public string Proxy;
@@ -415,6 +416,7 @@ namespace Interapptive.Shared.IO.Text.Sgml
     }
 
     // This class decodes an HTML/XML stream correctly.
+    [NDependIgnore]
     internal class HtmlStream : TextReader {
         Stream stm;
         byte[] rawBuffer;
@@ -822,6 +824,7 @@ namespace Interapptive.Shared.IO.Text.Sgml
         }
     }
 
+    [NDependIgnore]
     internal abstract class Ucs4Decoder : Decoder {
         internal byte[] temp = new byte[4];
         internal int tempBytes = 0;
@@ -865,6 +868,7 @@ namespace Interapptive.Shared.IO.Text.Sgml
         }
     }
 
+    [NDependIgnore]
     internal class Ucs4DecoderBigEngian : Ucs4Decoder {
         internal override int GetFullChars(byte[] bytes, int byteIndex, int byteCount, char[] chars, int charIndex) {
             UInt32 code;
@@ -891,6 +895,7 @@ namespace Interapptive.Shared.IO.Text.Sgml
         }
     }
 
+    [NDependIgnore]
     internal class Ucs4DecoderLittleEndian : Ucs4Decoder {
         internal override int GetFullChars(byte[] bytes, int byteIndex, int byteCount, char[] chars, int charIndex) {
             UInt32 code;
@@ -917,6 +922,7 @@ namespace Interapptive.Shared.IO.Text.Sgml
         }
     }
 
+    [NDependIgnore]
     public class ElementDecl
     {
         public ElementDecl(string name, bool sto, bool eto, ContentModel cm, string[] inclusions, string[] exclusions)
@@ -986,6 +992,7 @@ namespace Interapptive.Shared.IO.Text.Sgml
         Default, CDATA, RCDATA, EMPTY
     }
 
+    [NDependIgnore]
     public class ContentModel
     {
         public DeclaredContent DeclaredContent;
@@ -1063,6 +1070,7 @@ namespace Interapptive.Shared.IO.Text.Sgml
         Required, Optional, ZeroOrMore, OneOrMore
     }
 
+    [NDependIgnore]
     public class Group
     {
         public Group Parent;
@@ -1316,6 +1324,7 @@ namespace Interapptive.Shared.IO.Text.Sgml
         }
     }
 
+    [NDependIgnore]
     public class SgmlDtd
     {
         public readonly string Name;

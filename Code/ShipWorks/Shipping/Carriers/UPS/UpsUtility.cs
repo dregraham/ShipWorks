@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -289,6 +290,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Get the global instanced UPS access key
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static string FetchAndSaveUpsAccessKey(UpsAccountEntity upsAccount, string upsLicense)
         {
             // Create the client for connecting to the UPS server
