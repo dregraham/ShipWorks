@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
@@ -84,6 +85,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
         /// <summary>
         /// User is moving to the next wizard page, perform any autoconfiguration or credentials saving
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
             if (urlTextBox.Text.Length == 0)

@@ -11,6 +11,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using System.Globalization;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 
@@ -97,6 +98,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Loads the next page of returned orders
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadOrders(InfopiaWebClient client)
         {
             // don't do anything

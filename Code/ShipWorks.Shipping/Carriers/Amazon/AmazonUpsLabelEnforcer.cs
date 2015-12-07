@@ -47,9 +47,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             return EnforcementResult.Success;
         }
 
+
         /// <summary>
         /// Verify that the processed shipment is valid
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3215:\"interface\" instances should not be cast to concrete types", Justification = "<Pending>")]
         public void VerifyShipment(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));

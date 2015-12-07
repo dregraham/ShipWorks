@@ -7,6 +7,7 @@ using ShipWorks.Data.Grid.Columns.ValueProviders;
 using ShipWorks.Stores.Platforms;
 using Divelements.SandGrid;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Data.Grid.Columns
@@ -79,6 +80,7 @@ namespace ShipWorks.Data.Grid.Columns
         /// <summary>
         /// Constructor.  Not visible.  Adds different sortField from displayField.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public GridColumnDefinition(
             string columnGuid, 
             GridColumnDisplayType displayType, 
@@ -101,6 +103,7 @@ namespace ShipWorks.Data.Grid.Columns
         /// <summary>
         /// Constructor.  Not visible. Explicitly provide the value providers.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public GridColumnDefinition(
             string columnGuid,
             GridColumnDisplayType displayType,
@@ -123,6 +126,7 @@ namespace ShipWorks.Data.Grid.Columns
         /// <summary>
         /// Constructor. Most basic.  Specify visibility.  
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public GridColumnDefinition(
             string columnGuid,
             bool defaultVisible,
@@ -145,6 +149,7 @@ namespace ShipWorks.Data.Grid.Columns
         /// <summary>
         /// Constructor. Specify visibility.  Adds different sortField from displayField.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public GridColumnDefinition(
             string columnGuid, 
             bool defaultVisible,
@@ -173,6 +178,7 @@ namespace ShipWorks.Data.Grid.Columns
         /// <summary>
         /// Constructor.  Specify visibility and explicitly provide the value providers.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public GridColumnDefinition(
             string columnGuid,
             bool defaultVisible,

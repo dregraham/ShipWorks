@@ -41,7 +41,18 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Gets the status code provider
         /// </summary>
-        protected LemonStandStatusCodeProvider StatusCodeProvider => statusCodeProvider ?? (statusCodeProvider = new LemonStandStatusCodeProvider(store));
+        protected LemonStandStatusCodeProvider StatusCodeProvider
+        {
+            get
+            {
+                if (statusCodeProvider == null)
+                {
+                    statusCodeProvider = new LemonStandStatusCodeProvider(store);
+                }
+
+                return statusCodeProvider;
+            }
+        } 
 
         /// <summary>
         /// Changes the status of an BigCommerce order to that specified
@@ -66,7 +77,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             LemonStandOrderEntity order = (LemonStandOrderEntity)DataProvider.GetEntity(orderID);
             if (order != null)
             {
-                if (order.IsManual) return;
+                if (order.IsManual)
+                {
+                    return;
+                }
+
                 client.UpdateOrderStatus(order.LemonStandOrderID, StatusCodeProvider.GetCodeName(statusCode));
 
                 // Update the local database with the new status

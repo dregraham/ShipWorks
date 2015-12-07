@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation;
+﻿using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Web.Services.Protocols;
-using System.Net;
-using ShipWorks.Data;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation;
 using ShipWorks.Shipping.Settings;
+using System;
+using System.Collections.Generic;
+using System.Web.Services.Protocols;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -50,6 +47,101 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         public static bool IsResidentialAddress(ShipmentEntity shipment)
         {
+            AddressValidationRequest request = CreateRequest(shipment);
+
+            AddressValidationReply reply = MakeRequest(request);
+
+            return ProcessResponse(reply);
+        }
+
+        /// <summary>
+        /// Processes the FedEx Address Validation response.
+        /// </summary>
+        /// <param name="reply">The reply.</param>
+        /// <returns></returns>
+        /// <exception cref="FedExApiException"></exception>
+        /// <exception cref="FedExException">
+        /// FedEx returned zero results for residential check.
+        /// or
+        /// FedEx returned zero details for residential check.
+        /// or
+        /// FedEx did not determine if the address is commercial or residential.
+        /// or
+        /// FedEx was unable to determine if the address is commercial or residential.
+        /// or
+        /// FedEx was unable to determine if the address is commercial or residential.
+        /// </exception>
+        private static bool ProcessResponse(AddressValidationReply reply)
+        {
+            if (reply.HighestSeverity == NotificationSeverityType.ERROR || reply.HighestSeverity == NotificationSeverityType.FAILURE)
+            {
+                throw new FedExApiException(reply.Notifications);
+            }
+
+            if (reply.AddressResults == null || reply.AddressResults.Length == 0)
+            {
+                throw new FedExException("FedEx returned zero results for residential check.");
+            }
+
+            if (reply.AddressResults[0] == null)
+            {
+                throw new FedExException("FedEx returned zero details for residential check.");
+            }
+
+            AddressValidationResult detail = reply.AddressResults[0];
+
+            if (!detail.ClassificationSpecified)
+            {
+                throw new FedExException("FedEx did not determine if the address is commercial or residential.");
+            }
+
+            switch (detail.Classification)
+            {
+                case FedExAddressClassificationType.BUSINESS:
+                    return false;
+
+                case FedExAddressClassificationType.RESIDENTIAL:
+                    return true;
+
+                case FedExAddressClassificationType.UNKNOWN:
+                    if (detail.Attributes.None(a => a.Name == "POBox" && a.Value == "true"))
+                    {
+                        throw new FedExException("FedEx was unable to determine if the address is commercial or residential.");
+                    }
+                    return false; // It is a POBox
+
+                default:
+                    throw new FedExException("FedEx was unable to determine if the address is commercial or residential.");
+            }
+        }
+
+        /// <summary>
+        /// Makes the request.
+        /// </summary>
+        private static AddressValidationReply MakeRequest(AddressValidationRequest request)
+        {
+            try
+            {
+                using (AddressValidationService webService = CreateWebService("ResidentialCheck"))
+                {
+                    return webService.addressValidation(request);
+                }
+            }
+            catch (SoapException ex)
+            {
+                throw new FedExSoapException(ex);
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(FedExException));
+            }
+        }
+
+        /// <summary>
+        /// Creates the request.
+        /// </summary>
+        private static AddressValidationRequest CreateRequest(ShipmentEntity shipment)
+        {
             FedExShipmentEntity fedex = shipment.FedEx;
 
             FedExAccountEntity account = FedExAccountManager.GetAccount(fedex.FedExAccountID);
@@ -76,8 +168,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             };
 
             // Set the single address that we want to validate
-            request.AddressesToValidate = new [] 
-            { 
+            request.AddressesToValidate = new[]
+            {
                 new AddressToValidate
                 {
                     Address = CreateAddress(new PersonAdapter(shipment, "Ship")),
@@ -87,52 +179,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     }
                 }
             };
-
-            try
-            {
-                using (AddressValidationService webService = CreateWebService("ResidentialCheck"))
-                {
-                    AddressValidationReply reply = webService.addressValidation(request);
-
-                    if (reply.HighestSeverity == NotificationSeverityType.ERROR || reply.HighestSeverity == NotificationSeverityType.FAILURE)
-                    {
-                        throw new FedExApiException(reply.Notifications);
-                    }
-
-                    if (reply.AddressResults == null || reply.AddressResults.Length == 0)
-                    {
-                        throw new FedExException("FedEx returned zero results for residential check.");
-                    }
-
-                    if (reply.AddressResults[0] == null)
-                    {
-                        throw new FedExException("FedEx returned zero details for residential check.");
-                    }
-
-                    AddressValidationResult detail = reply.AddressResults[0];
-
-                    if (!detail.ClassificationSpecified)
-                    {
-                        throw new FedExException("FedEx did not determine if the address is commercial or residential.");
-                    }
-
-                    if (detail.Classification == FedExAddressClassificationType.MIXED ||
-                        detail.Classification == FedExAddressClassificationType.UNKNOWN)
-                    {
-                        throw new FedExException("FedEx was unable to determine if the address is commercial or residential.");
-                    }
-
-                    return detail.Classification == FedExAddressClassificationType.RESIDENTIAL;
-                }
-            }
-            catch (SoapException ex)
-            {
-                throw new FedExSoapException(ex);
-            }
-            catch (Exception ex)
-            {
-                throw WebHelper.TranslateWebException(ex, typeof(FedExException));
-            }
+            return request;
         }
 
         /// <summary>
@@ -142,7 +189,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             ClientDetail clientDetail = new ClientDetail
             {
-                AccountNumber = account.AccountNumber, 
+                AccountNumber = account.AccountNumber,
                 MeterNumber = account.MeterNumber
             };
 
@@ -191,7 +238,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 streetLines.Add(person.Street3);
             }
-            
+
             address.StreetLines = streetLines.ToArray();
             address.City = person.City;
             address.PostalCode = person.PostalCode;

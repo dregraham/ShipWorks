@@ -52,6 +52,7 @@ namespace ShipWorks.Data.Administration
     /// <summary>
     /// Wizard that gets the database configured.
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class DetailedDatabaseSetupWizard : WizardForm
     {
         // Logger
@@ -137,6 +138,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Constructor.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public DetailedDatabaseSetupWizard(SetupMode setupMode)
         {
             InitializeComponent();
@@ -189,6 +191,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Initialization
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
             gridDatabses.Rows.Clear();
@@ -716,6 +719,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// User has chosen if they want to select an existing sql server or install a new one.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnStepNextNewOrExistingSqlServer(object sender, WizardStepEventArgs e)
         {
             if (radioInstallSqlServer.Checked)
@@ -1085,6 +1089,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Connect to the currently selected SQL Server instance
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ConnectToSelectedServerInstance()
         {
             string selectedInstance = (comboSqlServers.Text == localDbDisplayName) ? SqlInstanceUtility.LocalDbServerInstance : comboSqlServers.Text;
@@ -1228,6 +1233,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the database grid
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadDatabaseList(List<SqlDatabaseDetail> databases, SqlSessionConfiguration configuration)
         {
             gridDatabses.Rows.Clear();
@@ -1339,6 +1345,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Stepping next from selecting the sql instance to connect to.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnStepNextSelectSqlInstance(object sender, WizardStepEventArgs e)
         {
             if (comboSqlServers.Text.Length == 0)
@@ -1837,6 +1844,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Stepping into the page to login to be able to restore a ShipWorks backup.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnSteppingIntoRestoreLogin(object sender, WizardSteppingIntoEventArgs e)
         {
             userForRestore = -1;

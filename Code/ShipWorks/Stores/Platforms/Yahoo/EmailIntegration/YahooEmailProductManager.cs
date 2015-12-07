@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Quartz.Util;
@@ -67,6 +68,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Perform the inventory import
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void ImportProductCatalog(ProgressItem progressItem, long yahooStoreID, string catalogUrl)
         {
             catalogUrl = catalogUrl.Trim();

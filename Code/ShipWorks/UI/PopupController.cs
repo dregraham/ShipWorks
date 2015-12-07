@@ -163,6 +163,7 @@ namespace ShipWorks.UI
         /// <summary>
         /// Core method to actually show the popup
         /// </summary>
+        [NDependIgnoreLongMethod]
         private DialogResult ShowCore(Form owner, Point location, int reverseOffset, bool systemAnimation, ToolStripMenuItem menuItem)
         {
             if (control == null)

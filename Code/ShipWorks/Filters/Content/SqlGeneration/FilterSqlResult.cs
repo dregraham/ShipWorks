@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Data;
 using System.Collections;
+using Interapptive.Shared;
 using ShipWorks.SqlServer.Filters.DirtyCounts;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data;
@@ -35,6 +36,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Static constructor
         /// </summary>
+        [NDependIgnoreLongMethod]
         static FilterSqlResult()
         {
             columnMaskTableMap = new Dictionary<EntityType,FilterNodeColumnMaskTable>();
@@ -111,15 +113,17 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public FilterSqlResult(long filterCountID, string initialSql, string updateSql, ICollection<SqlParameter> parameters, ICollection<EntityField2> columnsUsed, ICollection<FilterNodeJoinType> joinsUsed)
             : this(filterCountID, initialSql, updateSql, parameters, CreateColumnMask(columnsUsed), CreateJoinMask(joinsUsed))
         {
 
         }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public FilterSqlResult(long filterCountID, string initialSql, string updateSql, ICollection<SqlParameter> parameters, byte[] columnMask, int joinMask)
         {
             this.columnMask = columnMask;

@@ -558,6 +558,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// The actual installation that occurs in a seperate elevated process
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void UpgradeLocalDbInternal(string instanceName)
         {
             string serverInstance = Environment.MachineName + "\\" + instanceName;
@@ -983,6 +984,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// Upgrade from an installation of MSDE.  We were installing MSDE SP3... to upgrade directly you need MSDE SP4...whose 
         /// installer kind of sucked on Vista, so we are doing some trickery to make this work.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void UpgradeSqlServerFromMSDE(string installerPath, SqlSession sqlSession)
         {
             log.InfoFormat("MSDE detected, upgrade has to jump through hoops.");
@@ -1110,6 +1112,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// Install SQL Server 08 and restore the data from the previously uinstalled MSDE 
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreTooManyParams]
         private static bool InstallSqlServerAfterMsdeUninstall(string installerPath, SqlSession sqlSession, 
             string instance, 
             bool needOverrideSa, 
@@ -1462,6 +1466,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             /// <summary>
             /// Execute the command
             /// </summary>
+            [NDependIgnoreLongMethod]
             public void Execute(List<string> args)
             {
                 string action = null;

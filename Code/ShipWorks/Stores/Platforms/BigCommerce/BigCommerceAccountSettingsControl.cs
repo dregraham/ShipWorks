@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -43,6 +44,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         /// <param name="store"></param>
         /// <returns>True if the entered settings can successfully connect to the store.</returns>
+        [NDependIgnoreLongMethod]
         public override bool SaveToEntity(StoreEntity store)
         {
             // Check the api url for validity

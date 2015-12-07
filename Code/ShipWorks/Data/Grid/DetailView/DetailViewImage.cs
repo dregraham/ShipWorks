@@ -15,6 +15,7 @@ using System.Diagnostics;
 using ShipWorks.Templates;
 using ShipWorks.UI.Controls.Html.Core;
 using Divelements.SandGrid.Rendering;
+using Interapptive.Shared;
 using ShipWorks.UI;
 
 namespace ShipWorks.Data.Grid.DetailView
@@ -326,6 +327,7 @@ namespace ShipWorks.Data.Grid.DetailView
         /// <summary>
         /// Draw a message in the row
         /// </summary>
+        [NDependIgnoreTooManyParams]
         private static int DrawMessage(Graphics g, string message, Font font, Rectangle bounds, Color foreColor, Color backColor)
         {
             if (bounds.Height > 0 && bounds.Width > 0)

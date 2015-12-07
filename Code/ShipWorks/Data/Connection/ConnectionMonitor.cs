@@ -15,6 +15,7 @@ using ShipWorks.UI.Utility;
 using Interapptive.Shared.Data;
 using ShipWorks.Common.Threading;
 using System.Data;
+using Interapptive.Shared;
 
 namespace ShipWorks.Data.Connection
 {
@@ -166,6 +167,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Responsible for opening connections, and attempting to gracefully handle lost connection to the database.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void OpenConnection(SqlConnection con)
         {
             if (con == null)

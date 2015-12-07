@@ -10,6 +10,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared;
 using ShipWorks.Email;
 using ShipWorks.Email.Accounts;
 using ShipWorks.Shipping;
@@ -70,6 +71,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Upload the shipment details of the given shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public EmailOutboundEntity GenerateShipmentUpdateEmail(ShipmentEntity shipment)
         {
             if (shipment.Order.IsManual)

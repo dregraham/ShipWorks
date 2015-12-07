@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -255,6 +256,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the rates for the given shipment based on its settings
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public List<RateResult> GetRates(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);

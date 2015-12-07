@@ -18,6 +18,7 @@ using ShipWorks.Email;
 using ShipWorks.Email.Accounts;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 {
@@ -198,6 +199,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Extract the order from the XML
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadOrder(XPathNavigator xpath)
         {
             // Get the OrderID

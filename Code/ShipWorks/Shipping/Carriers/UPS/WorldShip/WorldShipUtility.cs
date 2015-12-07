@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Enums;
@@ -50,6 +51,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// 
         /// Codes listed here: http://www.ups.com/worldshiphelp/WS12/ENU/AppHelp/Codes/UPS_Service_Codes.htm
         /// </summary>
+        [NDependIgnoreLongMethod]
         static WorldShipUtility()
         {
             upsServiceCodes = new Dictionary<UpsServiceType, string>();
@@ -203,6 +205,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Save the given ShipWorks shipment to the WorldShip export table
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static WorldShipShipmentEntity SaveToShipmentTable(ShipmentEntity shipment, SqlAdapter adapter, bool customsIsRequired, PersonAdapter from, PersonAdapter to)
         {
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository());
@@ -416,6 +420,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Sets QVN fields, taking into consideration MI does not support QVN
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void SetShipmentQvnFields(WorldShipShipmentEntity worldship, UpsShipmentEntity ups, PersonAdapter from, PersonAdapter to)
         {
             bool isMiService = UpsUtility.IsUpsMiService((UpsServiceType) ups.Service); 
@@ -499,6 +504,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Sets QVN fields at the package level
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void SetPackageQvnFields(WorldShipPackageEntity worldshipPackage, UpsShipmentEntity upsShipment, PersonAdapter from, PersonAdapter to)
         {
             bool isMiService = UpsUtility.IsUpsMiService((UpsServiceType)upsShipment.Service); 
@@ -562,10 +568,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 worldshipPackage.Qvn3Email = UpsUtility.GetCorrectedEmailAddress(upsShipment.EmailNotifyOtherAddress);
             }
         }
-        
+
         /// <summary>
         /// Save the given UPS package to the WorldShip export table
         /// </summary>
+        [NDependIgnoreTooManyParams]
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static void SaveToPackageTable(UpsPackageEntity package, WorldShipShipmentEntity worldshipShipment, SqlAdapter adapter, bool customsIsRequired, PersonAdapter from, PersonAdapter to)
         {
             UpsShipmentEntity ups = package.UpsShipment;
@@ -829,6 +838,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Get the code to send to WorldShip for the given packaging type
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         private static string GetPackageTypeCode(UpsPackagingType packagingType)
         {
             switch (packagingType)

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Pdf;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
@@ -40,6 +41,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         /// </summary>
         /// <param name="reply">ProcessShipmentReply from FedEx</param>
         /// <param name="shipment">Shipment whose entity information we sent to FedEx </param>
+        [NDependIgnoreLongMethod]
         private void SavePackageLabels(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
         {
             string certificationId = GetCertificationId(reply);

@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
 using ShipWorks.Properties;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.UI;
 
 namespace ShipWorks.Email.Accounts
@@ -85,6 +86,7 @@ namespace ShipWorks.Email.Accounts
         /// <summary>
         /// Load the imap folders from the result of the async task
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadImapFolders(Task<ImapFolderCollection> getFoldersTask)
         {
             Cursor = Cursors.Default;

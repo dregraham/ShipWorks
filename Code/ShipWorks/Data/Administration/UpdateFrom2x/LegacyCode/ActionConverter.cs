@@ -35,6 +35,7 @@ using ShipWorks.Stores.Platforms.CommerceInterface.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.NetworkSolutions.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
 using System.IO;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
@@ -124,6 +125,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create a V3 action from the given v2 action properties
         /// </summary>
+        [NDependIgnoreTooManyParams]
         private static ActionEntity CreateAction(StoreEntity store, string name, bool enabled)
         {
             return new ActionEntity
@@ -203,6 +205,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Load the v2 trigger data into the given v3 action entity
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void LoadTrigger(ActionEntity action, int v2TriggerType, string v2TriggerSettings)
         {
             ActionTriggerType triggerType;
@@ -348,6 +351,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Instantiate an instance of the given task identifier, bound to the given store if necessary
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static ActionTask InstantiateTask(XElement xTask, StoreEntity store)
         {
             string v2TypeName = (string)xTask.Attribute("type");

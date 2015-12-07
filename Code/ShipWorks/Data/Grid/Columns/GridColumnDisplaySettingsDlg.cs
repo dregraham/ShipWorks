@@ -77,6 +77,7 @@ namespace ShipWorks.Data.Grid.Columns
             /// <summary>
             /// Override the drawing to use the column type of the selected row
             /// </summary>
+            [NDependIgnoreTooManyParams]
             protected override void DrawCell(RenderingContext context, GridRow row, object value, Font cellFont, Image image, Rectangle bounds, bool selected, TextFormattingInformation textFormat, Color cellForeColor)
             {
                 GridPreviewRow previewRow = (GridPreviewRow) row;

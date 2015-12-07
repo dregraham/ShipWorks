@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using Interapptive.Shared.Utility;
@@ -30,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Static constructor
         /// </summary>
+        [NDependIgnoreLongMethod]
         static EbayUtility()
         {
             shippingMethods.Add("NotSelected", "");
