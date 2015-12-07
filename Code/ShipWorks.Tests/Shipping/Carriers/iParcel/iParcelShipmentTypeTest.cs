@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Settings;
 using System.Collections.Generic;
+using Autofac.Extras.Moq;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
@@ -78,7 +79,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             repository.Setup(r => r.GetiParcelAccount(It.IsAny<ShipmentEntity>())).Returns(new IParcelAccountEntity());
             repository.Setup(r => r.SaveLabel(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
             repository.Setup(r => r.SaveTrackingInfoToEntity(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
-            repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
 
             Mock<IExcludedServiceTypeRepository> excludedServiceTypeRepository = new Mock<IExcludedServiceTypeRepository>();
             excludedServiceTypeRepository.Setup(x => x.GetExcludedServiceTypes(It.IsAny<ShipmentType>()))
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             RateCache.Instance.Clear();
 
-            testObject = new iParcelShipmentType(repository.Object, serviceGateway.Object, excludedServiceTypeRepository.Object);
+            testObject = new iParcelShipmentType(repository.Object, serviceGateway.Object);
         }
 
         [Fact]
@@ -157,57 +157,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             TrackingResult trackingResult = testObject.TrackShipment(shipment);
 
             Assert.Equal("<b>Package details received electronically from Seller</b>", trackingResult.Summary);
-        }
-
-        [Fact]
-        public void GetRates_DelegatesToRepositoryForOrderDetails_Test()
-        {
-            serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
-
-            RateGroup rates = testObject.GetRates(shipment);
-
-            repository.Verify(r => r.PopulateOrderDetails(shipment), Times.Once());
-        }
-
-        [Fact]
-        public void GetRates_DelegatesToRepositoryForAccount_Test()
-        {
-            serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
-
-            RateGroup rates = testObject.GetRates(shipment);
-
-            repository.Verify(r => r.GetiParcelAccount(shipment), Times.Once());
-        }
-
-        [Fact]
-        public void GetRates_DelegatesToServiceGateway_Test()
-        {
-            serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
-
-            RateGroup rates = testObject.GetRates(shipment);
-
-            serviceGateway.Verify(s => s.GetRates(It.IsAny<iParcelCredentials>(), shipment), Times.Once());
-        }
-
-        [Fact]
-        public void GetRates_UnsupportedShipments_RateCountIsZero_Test()
-        {
-            serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUnsuppportedRatesInfo);
-
-            RateGroup rates = testObject.GetRates(shipment);
-
-            Assert.Equal(0, rates.Rates.Count);
-        }
-
-
-        [Fact]
-        public void GetRates_RateCountIsTwo_Test()
-        {
-            serviceGateway.Setup(s => s.GetRates(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetRateResultsInfo());
-
-            RateGroup rates = testObject.GetRates(shipment);
-
-            Assert.Equal(2, rates.Rates.Count);
         }
 
         [Fact]

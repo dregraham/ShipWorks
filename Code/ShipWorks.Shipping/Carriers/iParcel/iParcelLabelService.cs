@@ -3,6 +3,7 @@ using System.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -13,14 +14,16 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     {
         private readonly IiParcelRepository repository;
         private readonly IiParcelServiceGateway serviceGateway;
+        private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public iParcelLabelService(IiParcelRepository repository, IiParcelServiceGateway serviceGateway)
+        public iParcelLabelService(IiParcelRepository repository, IiParcelServiceGateway serviceGateway, IOrderManager orderManager)
         {
             this.repository = repository;
             this.serviceGateway = serviceGateway;
+            this.orderManager = orderManager;
         }
 
         /// <summary>
@@ -48,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 iParcelCredentials credentials = new iParcelCredentials(iParcelAccount.Username, iParcelAccount.Password, true, serviceGateway);
 
                 // i-parcel requires that we upload item information, so fetch the order and order items
-                repository.PopulateOrderDetails(shipment);
+                orderManager.PopulateOrderDetails(shipment);
 
                 DataSet response = serviceGateway.SubmitShipment(credentials, shipment);
 

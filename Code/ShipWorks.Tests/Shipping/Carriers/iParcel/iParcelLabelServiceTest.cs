@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Content;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
@@ -22,7 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
         private Mock<IiParcelServiceGateway> serviceGateway;
         private Mock<IiParcelRepository> repository;
-
+        private Mock<IOrderManager> orderManager;
         private ShipmentEntity shipment;
 
         public iParcelLabelServiceTest()
@@ -74,7 +75,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             repository.Setup(r => r.GetiParcelAccount(It.IsAny<ShipmentEntity>())).Returns(new IParcelAccountEntity());
             repository.Setup(r => r.SaveLabel(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
             repository.Setup(r => r.SaveTrackingInfoToEntity(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
-            repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
 
             Mock<IExcludedServiceTypeRepository> excludedServiceTypeRepository = new Mock<IExcludedServiceTypeRepository>();
             excludedServiceTypeRepository.Setup(x => x.GetExcludedServiceTypes(It.IsAny<ShipmentType>()))
@@ -86,8 +86,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             RateCache.Instance.Clear();
 
+            orderManager = new Mock<IOrderManager>();
+            orderManager.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
 
-            labelService = new iParcelLabelService(repository.Object, serviceGateway.Object);
+            labelService = new iParcelLabelService(repository.Object, serviceGateway.Object, orderManager.Object);
         }
 
         [Fact]
@@ -137,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             labelService.Create(shipment);
 
-            repository.Verify(r => r.PopulateOrderDetails(shipment), Times.Once());
+            orderManager.Verify(r => r.PopulateOrderDetails(shipment), Times.Once());
         }
 
         [Fact]
