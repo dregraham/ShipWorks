@@ -151,6 +151,8 @@
     <Compile Include="Carriers\FedEx\FedExRateHashingService.cs" />
     <Compile Include="Carriers\FedEx\FedExRatingService.cs" />
     <Compile Include="Carriers\iParcel\iParcelLabelService.cs" />
+    <Compile Include="Carriers\iParcel\iParcelRateHashingService.cs" />
+    <Compile Include="Carriers\iParcel\iParcelRatingService.cs" />
     <Compile Include="Carriers\None\NoneLabelService.cs" />
     <Compile Include="Carriers\OnTrac\OnTracLabelService.cs" />
     <Compile Include="Carriers\Other\OtherLabelService.cs" />

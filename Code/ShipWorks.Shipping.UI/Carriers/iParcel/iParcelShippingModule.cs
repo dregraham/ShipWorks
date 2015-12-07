@@ -28,6 +28,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             builder.RegisterType<iParcelLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.iParcel);
+
+            builder.RegisterType<iParcelRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.iParcel)
+                .AsSelf();
+
+            builder.RegisterType<iParcelRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.iParcel)
+                .AsImplementedInterfaces();
         }
     }
 }

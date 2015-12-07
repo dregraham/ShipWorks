@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -44,6 +45,9 @@ namespace ShipWorks.Shipping.UI
             builder.Register(
                 (container, parameters) =>
                     container.ResolveKeyed<IRateHashingService>(parameters.TypedAs<ShipmentTypeCode>()));
+
+            builder.RegisterType<ExcludedServiceTypeRepository>()
+                .AsImplementedInterfaces();
         }
     }
 }
