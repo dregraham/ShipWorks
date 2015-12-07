@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             };
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<string>()))
+                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
 
             var testObject = mock.Create<AmazonLabelService>();
@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             labelEnforcers.AddRange(new[] { enforcer1.Object, enforcer2.Object });
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<string>()))
+                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
             
             var testObject = mock.Create<AmazonLabelService>();
@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             labelEnforcers.AddRange(new[] { enforcer1.Object, enforcer2.Object });
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<string>()))
+                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
 
             var shipment = new ShipmentEntity();
@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var settings = mock.Create<IAmazonMwsWebClientSettings>();
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(),It.IsAny<string>()))
+                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
 
             mock.Mock<IAmazonMwsWebClientSettingsFactory>()
@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             testObject.Create(shipment);
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Verify(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<string>()));
+                .Verify(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()));
         }
 
         [Fact]
@@ -227,7 +227,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var settings = mock.Create<IAmazonMwsWebClientSettings>();
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<string>()))
+                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
 
             var testObject = mock.Create<AmazonLabelService>();

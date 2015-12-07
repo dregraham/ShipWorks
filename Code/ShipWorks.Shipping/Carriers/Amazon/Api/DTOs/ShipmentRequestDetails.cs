@@ -15,7 +15,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public DateTime? MustArriveByDate { get; set; }
         public bool SendDateMustArriveBy { get; set; }
         public ShippingServiceOptions ShippingServiceOptions { get; set; }
-        public ShipmentEntity Shipment { get; set; }
     }
 
     public class CurrencyAmount
