@@ -17,7 +17,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.iParcel.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
@@ -38,13 +37,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     {
         private readonly IiParcelRepository repository;
         private readonly IiParcelServiceGateway serviceGateway;
-        private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelShipmentType" /> class.
         /// </summary>
         public iParcelShipmentType()
-            : this(new iParcelDatabaseRepository(), new iParcelServiceGateway(), new ExcludedServiceTypeRepository())
+            : this(new iParcelDatabaseRepository(), new iParcelServiceGateway())
         {
         }
 
@@ -53,11 +51,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="serviceGateway">The service gateway.</param>
-        public iParcelShipmentType(IiParcelRepository repository, IiParcelServiceGateway serviceGateway, IExcludedServiceTypeRepository excludedServiceTypeRepository)
+        public iParcelShipmentType(IiParcelRepository repository, IiParcelServiceGateway serviceGateway)
         {
             this.repository = repository;
             this.serviceGateway = serviceGateway;
-            this.excludedServiceTypeRepository = excludedServiceTypeRepository;
         }
 
         /// <summary>
@@ -98,28 +95,23 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public static IParcelPackageEntity CreateDefaultPackage()
         {
-            IParcelPackageEntity package = new IParcelPackageEntity();
-
-            package.Weight = 0;
-
-            package.DimsProfileID = 0;
-            package.DimsLength = 0;
-            package.DimsWidth = 0;
-            package.DimsHeight = 0;
-            package.DimsWeight = 0;
-            package.DimsAddWeight = true;
-
-            package.Insurance = false;
-            package.InsuranceValue = 0;
-            package.InsurancePennyOne = false;
-            package.DeclaredValue = 0;
-
-            package.TrackingNumber = string.Empty;
-            package.ParcelNumber = string.Empty;
-
-            package.SkuAndQuantities = string.Empty;
-
-            return package;
+            return new IParcelPackageEntity
+            {
+                Weight = 0,
+                DimsProfileID = 0,
+                DimsLength = 0,
+                DimsWidth = 0,
+                DimsHeight = 0,
+                DimsWeight = 0,
+                DimsAddWeight = true,
+                Insurance = false,
+                InsuranceValue = 0,
+                InsurancePennyOne = false,
+                DeclaredValue = 0,
+                TrackingNumber = string.Empty,
+                ParcelNumber = string.Empty,
+                SkuAndQuantities = string.Empty
+            };
         }
 
         /// <summary>
@@ -407,21 +399,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Get the valid services to the given country
-        /// </summary>
-        public static List<iParcelServiceType> GetValidServiceTypes()
-        {
-            // We'll assume all countries are valid, and if one is not, i-Parcel should return us an error upon submission.
-            return new List<iParcelServiceType>
-                {
-                    iParcelServiceType.Immediate,
-                    iParcelServiceType.Preferred,
-                    iParcelServiceType.Saver,
-                    iParcelServiceType.SaverDeferred
-                };
-        }
-
-        /// <summary>
         /// Update the total weight of the shipment based on the individual package weights
         /// </summary>
         public override void UpdateTotalWeight(ShipmentEntity shipment)
@@ -628,7 +605,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 };
             }
 
-            throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");
+            throw new ArgumentException($"'{parcelIndex}' is out of range for the shipment.", "parcelIndex");
         }
 
         /// <summary>
@@ -718,7 +695,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             for (int i = 0; i < iParcelShipment.Packages.Count; i++)
             {
-                trackingList.Add(string.Format("Package {0}: {1}", i + 1, iParcelShipment.Packages[i].TrackingNumber));
+                trackingList.Add($"Package {i + 1}: {iParcelShipment.Packages[i].TrackingNumber}");
             }
 
             return trackingList;
@@ -749,15 +726,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
                 DataSet response = serviceGateway.TrackShipment(credentials, shipment);
 
-                TrackingResult trackingInfo = new TrackingResult();
-                trackingInfo.Summary = GetFormattedTrackingSummary(response);
+                TrackingResult trackingInfo = new TrackingResult {Summary = GetFormattedTrackingSummary(response)};
                 BuildTrackingDetails(trackingInfo, response);
 
                 return trackingInfo;
             }
             catch (Exception exception)
             {
-                string message = string.Format("ShipWorks was unable to obtain tracking information from i-parcel. {0}", exception.Message);
+                string message = $"ShipWorks was unable to obtain tracking information from i-parcel. {exception.Message}";
                 throw new ShippingException(message, exception);
             }
         }
