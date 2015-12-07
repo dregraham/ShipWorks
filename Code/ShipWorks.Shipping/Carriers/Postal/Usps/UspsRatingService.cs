@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             List<RateResult> uspsRates = shipmentType.CreateWebClient().GetRates(shipment);
             uspsRates.ForEach(r => r.ShipmentType = shipmentType.ShipmentTypeCode);
 
-            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, uspsRates));
+            RateGroup rateGroup = new RateGroup(shipmentType.FilterRatesByExcludedServices(shipment, uspsRates));
             AddUspsRatePromotionFootnote(shipment, rateGroup);
 
             return rateGroup;
@@ -305,15 +305,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             return rates;
-        }
-
-        /// <summary>
-        /// Gets the filtered rates based on any excluded services configured for this postal shipment type.
-        /// </summary>
-        protected virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
-        {
-            List<PostalServiceType> availableServiceTypes = shipmentType.GetAvailableServiceTypes().Select(s => (PostalServiceType)s).Union(new List<PostalServiceType> { (PostalServiceType)shipment.Postal.Service }).ToList();
-            return rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)).ToList();
         }
     }
 }
