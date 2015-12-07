@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.OnTrac;
 
-namespace ShipWorks.Shipping.Carriers.OnTrac
+namespace ShipWorks.Shipping.UI.Carriers.OnTrac
 {
     /// <summary>
     /// Shipping module for the OnTrac carrier

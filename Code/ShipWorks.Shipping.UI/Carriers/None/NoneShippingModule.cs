@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using ShipWorks.Shipping.Carriers.None;
 
-namespace ShipWorks.Shipping.Carriers.None
+namespace ShipWorks.Shipping.UI.Carriers.None
 {
     /// <summary>
     /// Shipping module for the None carrier
@@ -15,6 +15,12 @@ namespace ShipWorks.Shipping.Carriers.None
         {
             builder.RegisterType<NoneLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.None);
+
+            builder.RegisterType<EmptyRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.None);
+
+            builder.RegisterType<NoneRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.None);
         }
     }
 }
