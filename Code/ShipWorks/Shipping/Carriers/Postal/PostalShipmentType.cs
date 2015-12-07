@@ -472,7 +472,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <param name="express1ShipmentType">Express1 shipment type</param>
         /// <param name="baseShipmentType">Base type of the shipment</param>
         /// <returns></returns>
-        protected static RateGroup BuildExpress1RateGroup(IEnumerable<RateResult> rates, ShipmentTypeCode express1ShipmentType, ShipmentTypeCode baseShipmentType)
+        public RateGroup BuildExpress1RateGroup(IEnumerable<RateResult> rates, ShipmentTypeCode express1ShipmentType, ShipmentTypeCode baseShipmentType)
         {
             // Express1 rates - return rates filtered by what is available to the user
             List<PostalServiceType> availabelServiceTypes =
@@ -583,7 +583,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             throw new NotImplementedException();
         }
 
-        protected virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        public virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
             throw new NotImplementedException();
         }

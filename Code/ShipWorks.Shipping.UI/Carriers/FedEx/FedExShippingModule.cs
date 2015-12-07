@@ -1,10 +1,5 @@
-﻿using System;
-using System.Linq;
-using Autofac;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using Autofac;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 

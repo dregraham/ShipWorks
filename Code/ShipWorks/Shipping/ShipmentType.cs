@@ -1027,7 +1027,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="shipment">The shipment that generated the given exception.</param>
         /// <param name="exception">The exception</param>
-        protected RateGroup CacheInvalidRateGroup(ShipmentEntity shipment, Exception exception)
+        public RateGroup CacheInvalidRateGroup(ShipmentEntity shipment, Exception exception)
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Interapptive.Shared.Utility;
@@ -52,50 +53,57 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             List<RateResult> results = new List<RateResult>();
 
             iParcelCredentials credentials = new iParcelCredentials(iParcelAccount.Username, iParcelAccount.Password, true, serviceGateway);
-            DataSet ratesResult = serviceGateway.GetRates(credentials, shipment);
 
-            if (RateResultAreValid(ratesResult))
+            try
             {
-                // i-parcel will return a negative value if there was some sort of error or the shipment is not eligible for
-                // this service type (e.g. initial testing indicates rates won't come back for any package over 66 pounds)
-
-                DataTable costInfoTable = ratesResult.Tables["CostInfo"];
-
-                // Find the service types where a valid rate (shipping cost > 0) was given for each of the packages in the shipment
-                IEnumerable<iParcelServiceType> supportedServiceTypes = costInfoTable.AsEnumerable()
-                                                                                        .Where(r => decimal.Parse(r.Field<string>("PackageShipping")) >= 0)
-                                                                                        .GroupBy(r => r["Service"])
-                                                                                        .Where(grp => grp.Count() == shipment.IParcel.Packages.Count)
-                                                                                        .Select(grp => EnumHelper.GetEnumByApiValue<iParcelServiceType>(grp.Key.ToString()));
-
-                IEnumerable<iParcelServiceType> disabledServices = iParcelShipmentType.GetExcludedServiceTypes(excludedServiceTypeRepository)
-                    .Select(s => (iParcelServiceType)s);
-
-
-                // Filter out the excluded service types before creating rate results
-                foreach (iParcelServiceType serviceType in supportedServiceTypes.Except(disabledServices.Where(s => s != (iParcelServiceType)shipment.IParcel.Service)))
+                DataSet ratesResult = serviceGateway.GetRates(credentials, shipment);
+                if (RateResultAreValid(ratesResult))
                 {
-                    // Calculate the total shipment cost for all the package rates for the service type
-                    List<DataRow> serviceRows = costInfoTable.AsEnumerable()
-                                            .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
-                                            .ToList();
+                    // i-parcel will return a negative value if there was some sort of error or the shipment is not eligible for
+                    // this service type (e.g. initial testing indicates rates won't come back for any package over 66 pounds)
 
-                    decimal shippingCost = serviceRows.Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
-                    decimal taxCost = serviceRows.Sum(row => decimal.Parse(row["PackageTax"].ToString()));
-                    decimal dutyCost = serviceRows.Sum(row => decimal.Parse(row["PackageDuty"].ToString()));
-                    decimal totalCost = shippingCost + taxCost + dutyCost;
+                    DataTable costInfoTable = ratesResult.Tables["CostInfo"];
 
-                    RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty,
-                        totalCost, new RateAmountComponents(taxCost, dutyCost, shippingCost),
-                        new iParcelRateSelection(serviceType))
+                    // Find the service types where a valid rate (shipping cost > 0) was given for each of the packages in the shipment
+                    IEnumerable<iParcelServiceType> supportedServiceTypes = costInfoTable.AsEnumerable()
+                                                                                            .Where(r => decimal.Parse(r.Field<string>("PackageShipping")) >= 0)
+                                                                                            .GroupBy(r => r["Service"])
+                                                                                            .Where(grp => grp.Count() == shipment.IParcel.Packages.Count)
+                                                                                            .Select(grp => EnumHelper.GetEnumByApiValue<iParcelServiceType>(grp.Key.ToString()));
+
+                    IEnumerable<iParcelServiceType> disabledServices = iParcelShipmentType.GetExcludedServiceTypes(excludedServiceTypeRepository)
+                        .Select(s => (iParcelServiceType)s);
+
+
+                    // Filter out the excluded service types before creating rate results
+                    foreach (iParcelServiceType serviceType in supportedServiceTypes.Except(disabledServices.Where(s => s != (iParcelServiceType)shipment.IParcel.Service)))
                     {
-                        ServiceLevel = ServiceLevelType.Anytime,
-                        ShipmentType = ShipmentTypeCode.iParcel,
-                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.iParcel)
-                    };
+                        // Calculate the total shipment cost for all the package rates for the service type
+                        List<DataRow> serviceRows = costInfoTable.AsEnumerable()
+                                                .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
+                                                .ToList();
 
-                    results.Add(serviceRate);
+                        decimal shippingCost = serviceRows.Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
+                        decimal taxCost = serviceRows.Sum(row => decimal.Parse(row["PackageTax"].ToString()));
+                        decimal dutyCost = serviceRows.Sum(row => decimal.Parse(row["PackageDuty"].ToString()));
+                        decimal totalCost = shippingCost + taxCost + dutyCost;
+
+                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty,
+                            totalCost, new RateAmountComponents(taxCost, dutyCost, shippingCost),
+                            new iParcelRateSelection(serviceType))
+                        {
+                            ServiceLevel = ServiceLevelType.Anytime,
+                            ShipmentType = ShipmentTypeCode.iParcel,
+                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.iParcel)
+                        };
+
+                        results.Add(serviceRate);
+                    }
                 }
+            }
+            catch (iParcelException ex)
+            {
+                throw new ShippingException(ex.Message, ex);
             }
 
             return new RateGroup(results);

@@ -237,7 +237,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// <summary>
         /// Gets the filtered rates based on any excluded services configured for this postal shipment type.
         /// </summary>
-        protected override List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        public override List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
             List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList();;
 
