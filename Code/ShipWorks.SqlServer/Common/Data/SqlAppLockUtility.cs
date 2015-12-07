@@ -80,7 +80,20 @@ namespace ShipWorks.SqlServer.Common.Data
             cmd.Parameters.AddWithValue("@Resource", name);
             cmd.Parameters.AddWithValue("@LockOwner", "Session");
 
-            cmd.ExecuteNonQuery();
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.IndexOf("because it is not currently held.", StringComparison.OrdinalIgnoreCase) == -1)
+                {
+                    throw;
+                }
+
+                // Just eat the exception if we can't find the lock.
+                return;
+            }
 
             int result = Convert.ToInt32(returnValue.Value);
 
@@ -92,6 +105,7 @@ namespace ShipWorks.SqlServer.Common.Data
 
         /// <summary>
         /// Determines if the given resource name is currently locked.
+        /// FYI: If the current connection has the lock, this will return false.
         /// </summary>
         public static bool IsLocked(SqlConnection con, string name)
         {
