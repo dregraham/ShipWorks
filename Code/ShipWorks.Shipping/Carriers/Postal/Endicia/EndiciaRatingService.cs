@@ -14,17 +14,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Rating service for the Endicia carrier
     /// </summary>
-    public class EndiciaRatingService : IRatingService
+    public class EndiciaRatingService : PostalRatingService
     {
-        private readonly EndiciaShipmentType endiciaShipmentType;
+        private readonly Func<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
         private readonly Func<ShipmentTypeCode, CarrierAccountRepositoryBase<EndiciaAccountEntity>> accountRepository;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public EndiciaRatingService(EndiciaShipmentType endiciaShipmentType, Func<ShipmentTypeCode, CarrierAccountRepositoryBase<EndiciaAccountEntity>> accountRepository)
+        public EndiciaRatingService(Func<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, Func<ShipmentTypeCode, CarrierAccountRepositoryBase<EndiciaAccountEntity>> accountRepository) 
+            : base(shipmentTypeFactory, accountRepository)
         {
-            this.endiciaShipmentType = endiciaShipmentType;
+            this.shipmentTypeFactory = shipmentTypeFactory;
             this.accountRepository = accountRepository;
         }
 
@@ -32,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Get postal rates for the given shipment
         /// </summary>
         /// <param name="shipment">Shipment for which to retrieve rates</param>
-        public RateGroup GetRates(ShipmentEntity shipment)
+        public override RateGroup GetRates(ShipmentEntity shipment)
         {
             try
             {
@@ -55,9 +53,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             
-            // See if this shipment should really go through Express1
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia
-                && !endiciaShipmentType.IsRateDiscountMessagingRestricted
+            EndiciaShipmentType endiciaShipmentType = shipmentTypeFactory((ShipmentTypeCode) shipment.ShipmentType) as EndiciaShipmentType;
+
+            if (endiciaShipmentType == null)
+            {
+                throw new EndiciaException("Could not get endicia shipment type");
+            }
+
+                // See if this shipment should really go through Express1
+                if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia
+                && !shipmentTypeFactory((ShipmentTypeCode)shipment.ShipmentType).IsRateDiscountMessagingRestricted
                 && Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType)
                 && settings.EndiciaAutomaticExpress1)
             {
@@ -78,13 +83,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 shipment.ShipmentType = (int)ShipmentTypeCode.Express1Endicia;
                 shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
                 shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
-
+                
                 try
                 {
                     // Currently this actually recurses into this same method
-                    express1Rates = (endiciaShipmentType.ShouldRetrieveExpress1Rates) ?
-                                        GetRates(shipment).Rates.ToList() :
-                                        new List<RateResult>();
+                    express1Rates = GetRates(shipment).Rates.ToList();
                 }
                 catch (ShippingException)
                 {

@@ -165,6 +165,7 @@
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaLabelService.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1UspsLabelService.cs" />
     <Compile Include="Carriers\Postal\PostalRateHashingService.cs" />
+    <Compile Include="Carriers\Postal\PostalRatingService.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsLabelService.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsRateHashingService.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsRatingService.cs" />

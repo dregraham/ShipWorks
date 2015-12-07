@@ -46,6 +46,10 @@ namespace ShipWorks.Shipping.UI
                 (container, parameters) =>
                     container.ResolveKeyed<IRateHashingService>(parameters.TypedAs<ShipmentTypeCode>()));
 
+            builder.Register(
+                (container, parameters) =>
+                    container.ResolveKeyed<ShipmentType>(parameters.TypedAs<ShipmentTypeCode>()));
+
             builder.RegisterType<ExcludedServiceTypeRepository>()
                 .AsImplementedInterfaces();
         }
