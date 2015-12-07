@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly IOrderManager orderManager;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IEnumerable<IAmazonRateGroupFilter> rateFilters;
-        private readonly ICachedRatesService cachedRatesService;
 
 
         /// <summary>
@@ -29,27 +28,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         public AmazonRatingService(IAmazonShippingWebClient webClient,
             IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
-            IEnumerable<IAmazonRateGroupFilter> rateFilters, ICachedRatesService cachedRatesService)
+            IEnumerable<IAmazonRateGroupFilter> rateFilters)
         {
             this.webClient = webClient;
             this.orderManager = orderManager;
             this.requestFactory = requestFactory;
             this.rateFilters = rateFilters;
-            this.cachedRatesService = cachedRatesService;
         }
 
         /// <summary>
         /// Gets the rates.
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
-        {
-            RateGroup rateGroup = cachedRatesService.GetCachedRates<AmazonShippingException>(shipment, GetRatesFromApi);
-            Messenger.Current.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
-
-            return rateGroup;
-        }
-
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             orderManager.PopulateOrderDetails(shipment);
             IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
@@ -64,11 +54,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 throw new AmazonShippingException("Not an Amazon Order");
             }
 
-            ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, amazonOrder);
+            ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, shipment.Order as IAmazonOrder);
 
             GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails);
 
             RateGroup rateGroup = GetRateGroupFromResponse(response);
+            
+            Messenger.Current.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
 
             return rateFilters.Aggregate(rateGroup, (rates, filter) => filter.Filter(rates));
         }

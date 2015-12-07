@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .SingleInstance();
 
             builder.RegisterType<AmazonServiceControl>()
-                .UsingConstructor(typeof(RateControl), typeof(AmazonServiceViewModel), typeof(AmazonShipmentType))
+                .UsingConstructor(typeof(RateControl), typeof(AmazonServiceViewModel), typeof(AmazonShipmentType), typeof(AmazonRateHashingService))
                 .Keyed<ServiceControlBase>(ShipmentTypeCode.Amazon)
                 .ExternallyOwned();
 

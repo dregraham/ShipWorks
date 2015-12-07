@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             };
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
+                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
 
             var testObject = mock.Create<AmazonLabelService>();
@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             labelEnforcers.AddRange(new[] { enforcer1.Object, enforcer2.Object });
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
+                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
             
             var testObject = mock.Create<AmazonLabelService>();
@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             labelEnforcers.AddRange(new[] { enforcer1.Object, enforcer2.Object });
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
+                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
 
             var shipment = new ShipmentEntity();
@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var settings = mock.Create<IAmazonMwsWebClientSettings>();
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
+                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(),It.IsAny<string>()))
                 .Returns(defaultResponse);
 
             mock.Mock<IAmazonMwsWebClientSettingsFactory>()
@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             testObject.Create(shipment);
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Verify(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), settings, It.IsAny<string>()));
+                .Verify(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<string>()));
         }
 
         [Fact]
@@ -227,7 +227,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var settings = mock.Create<IAmazonMwsWebClientSettings>();
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
+                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
 
             var testObject = mock.Create<AmazonLabelService>();
@@ -264,30 +264,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             }));
 
             Assert.Contains("AmazonUniqueShipmentID", shippingException.Message, StringComparison.OrdinalIgnoreCase);
-        }
-
-        [Fact]
-        public void Void_CallsCancelShipment_ShenAmazonUniqueShipmentIDIsNotNull()
-        {
-            var testObject = mock.Create<AmazonLabelService>();
-
-            var AmazonUniqueShipmentID = "42";
-            
-            mock.Mock<IAmazonShippingWebClient>()
-                .Setup(webClient => webClient.CancelShipment(It.IsAny<IAmazonMwsWebClientSettings>(), "42"))
-                .Verifiable();
-
-            testObject.Void(new ShipmentEntity
-            {
-                Order = new OrderEntity(),
-                Amazon = new AmazonShipmentEntity()
-                {
-                    AmazonUniqueShipmentID = AmazonUniqueShipmentID,
-                    CarrierName = "STAMPS_DOT_COM"
-                }
-            });
-
-            mock.VerifyAll = true;
         }
 
         public void MockRequestDetailsFactory()

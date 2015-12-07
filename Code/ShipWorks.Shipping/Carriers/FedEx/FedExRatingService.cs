@@ -11,7 +11,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public class FedExRatingService : IRatingService
     {
         private readonly FedExAccountRepository fedExAccountRepository;
-        private readonly ICachedRatesService cachedRatesService;
         private readonly FedExShipmentType fedExShipmentType;
         private readonly FedExShippingClerkFactory shippingClerkFactory;
 
@@ -21,7 +20,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             FedExShippingClerkFactory shippingClerkFactory)
         {
             this.fedExAccountRepository = fedExAccountRepository;
-            this.cachedRatesService = cachedRatesService;
             this.fedExShipmentType = fedExShipmentType;
             this.shippingClerkFactory = shippingClerkFactory;
         }
@@ -35,7 +33,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             try
             {
-                return cachedRatesService.GetCachedRates<FedExException>(shipment, GetRatesFromApi);
+                // if there are no FedEx accounts call get rates using counter rates
+                if (!fedExAccountRepository.Accounts.Any() && !fedExShipmentType.IsShipmentTypeRestricted)
+                {
+                    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+                    return shippingClerkFactory.CreateShippingClerk(shipment, true).GetRates(shipment);
+                }
+
+                // there must be at least one FedEx account so we get rates using it
+                return shippingClerkFactory.CreateShippingClerk(shipment, false).GetRates(shipment);
             }
             catch (CounterRatesOriginAddressException)
             {
@@ -48,22 +54,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Switch the settings repository back to the original now that we have counter rates
                 shipment.FedEx.SmartPostHubID = originalHubID;
             }
-        }
-
-        /// <summary>
-        /// Get a list of rates for the FedEx shipment from the FedEx API
-        /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
-        {
-            // if there are no FedEx accounts call get rates using counter rates
-            if (!fedExAccountRepository.Accounts.Any() && !fedExShipmentType.IsShipmentTypeRestricted)
-            {
-                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
-                return shippingClerkFactory.CreateShippingClerk(shipment, true).GetRates(shipment);
-            }
-
-            // there must be at least one FedEx account so we get rates using it
-            return shippingClerkFactory.CreateShippingClerk(shipment, false).GetRates(shipment);
         }
     }
 }

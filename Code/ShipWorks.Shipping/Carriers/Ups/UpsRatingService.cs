@@ -16,7 +16,6 @@ namespace ShipWorks.Shipping.Carriers.Ups
 {
     public class UpsRatingService : IRatingService
     {
-        private readonly ICachedRatesService cachedRatesService;
         private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
         private readonly UpsApiTransitTimeClient transitTimeClient;
         private readonly UpsApiRateClient upsApiRateClient;
@@ -26,13 +25,11 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// Initializes a new instance of the <see cref="UpsRatingService"/> class.
         /// </summary>
         public UpsRatingService(
-            ICachedRatesService cachedRatesService,
             ICarrierAccountRepository<UpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
             UpsApiRateClient upsApiRateClient,
             UpsOltShipmentType shipmentType)
         {
-            this.cachedRatesService = cachedRatesService;
             this.accountRepository = accountRepository;
             this.transitTimeClient = transitTimeClient;
             this.upsApiRateClient = upsApiRateClient;
@@ -46,23 +43,6 @@ namespace ShipWorks.Shipping.Carriers.Ups
         {
             try
             {
-                return cachedRatesService.GetCachedRates<UpsException>(shipment, GetRatesFromApi);
-            }
-            catch (CounterRatesOriginAddressException)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType));
-                return errorRates;
-            }
-        }
-
-        /// <summary>
-        /// Get the UPS rates from the UPS api
-        /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
-        {
-            try
-            {
                 // Determine if the user is hoping to get negotiated rates back
                 bool wantedNegotiated = false;
 
@@ -72,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
 
                 List<UpsServiceRate> serviceRates;
                 List<UpsTransitTime> transitTimes;
-                
+
                 // If there are no UPS Accounts then use the counter rates
                 if (!accountRepository.Accounts.Any() && !shipmentType.IsShipmentTypeRestricted)
                 {
@@ -158,6 +138,12 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
 
                 return finalGroup;
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType));
+                return errorRates;
             }
             catch (InvalidPackageDimensionsException ex)
             {

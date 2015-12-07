@@ -12,6 +12,7 @@ using System.IO;
 using System.Reflection;
 using System.Linq.Expressions;
 using System.Collections.Generic;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;
 using Xunit;
 
@@ -36,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 .Select(x => new ShippingService { Rate = new Rate { Amount = x } }));
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>()))
                 .Returns(response);
 
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
@@ -52,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService());
 
             mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>()))
                     .Returns(response);
 
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
@@ -72,10 +73,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             });
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>()))
                 .Returns(response);
 
+
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+            
 
             RateGroup result = testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes));
             RateResult rateResult = result.Rates.FirstOrDefault();
@@ -95,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             });
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>()))
                 .Returns(response);
 
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
@@ -117,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>()))
                 .Returns(response);
 
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
@@ -136,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>()))
                 .Returns(response);
 
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
@@ -186,7 +189,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 .Callback<RateGroup>(x => filteredRate = x);
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>()))
                 .Returns(response);
 
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
@@ -226,7 +229,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>()))
                     .Returns(ResponseWithService(new ShippingService()));
 
                 AmazonRatingService testObject = mock.Create<AmazonRatingService>();
@@ -234,7 +237,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 testObject.GetRates(shipment);
 
                 mock.Mock<IAmazonShippingWebClient>()
-                    .Verify(x => x.GetRates(It.Is(verifyCall), It.IsAny<IAmazonMwsWebClientSettings>()));
+                    .Verify(x => x.GetRates(It.Is(verifyCall)));
             }
         }
 

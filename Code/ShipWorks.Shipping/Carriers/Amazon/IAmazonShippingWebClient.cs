@@ -22,12 +22,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Create a shipment
         /// </summary>
-        CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings, string shippingServiceId);
+        CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, string shippingServiceId);
 
         /// <summary>
         /// Voids the shipment
         /// </summary>
-        CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, string amazonShipmentId);
+        CancelShipmentResponse CancelShipment(ShipmentEntity shipment);
 
         /// <summary>
         /// Validates the CreateShipmentREsponse

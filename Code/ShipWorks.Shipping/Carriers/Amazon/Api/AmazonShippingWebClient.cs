@@ -10,6 +10,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -48,17 +49,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails)
         {
-            return GetRates(requestDetails, settingsFactory.Create(requestDetails.Shipment.Amazon));
-        }
-        
-        /// <summary>
-        /// Gets Rates
-        /// </summary>
-        /// <param name="requestDetails"></param>
-        /// <param name="mwsSettings"></param>
-        /// <returns></returns>
-        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings)
-        {
+            MethodConditions.EnsureArgumentIsNotNull(requestDetails.Shipment, nameof(requestDetails.Shipment));
+
             AmazonMwsApiCall call = AmazonMwsApiCall.GetEligibleShippingServices;
 
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
@@ -67,10 +59,43 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             AddShipmentRequestDetails(request, requestDetails);
 
             // Get Response
-            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
+            IHttpResponseReader response = ExecuteRequest(request, call, settingsFactory.Create(requestDetails.Shipment.Amazon));
 
             // Deserialize
             return DeserializeResponse<GetEligibleShippingServicesResponse>(response.ReadResult());
+        }
+
+        /// <summary>
+        /// Create a shipment for the given ShipmentRequestDetails
+        /// </summary>
+        public CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, string shippingServiceId)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(requestDetails.Shipment, nameof(requestDetails.Shipment));
+
+            AmazonMwsApiCall call = AmazonMwsApiCall.CreateShipment;
+
+            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+
+            // Add the service
+            request.Variables.Add("ShippingServiceId", shippingServiceId);
+
+            // Add Shipment Information XML
+            AddShipmentRequestDetails(request, requestDetails);
+
+            // Get Response
+            IHttpResponseReader response = ExecuteRequest(request, call, settingsFactory.Create(requestDetails.Shipment.Amazon));
+
+            // Deserialize
+            CreateShipmentResponse createShipmentResponse = DeserializeResponse<CreateShipmentResponse>(response.ReadResult());
+
+            return ValidateCreateShipmentResponse(createShipmentResponse);
+        }
+
+        public CancelShipmentResponse CancelShipment(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+
+            return CancelShipment(settingsFactory.Create(shipment.Amazon), shipment.Amazon.AmazonUniqueShipmentID);
         }
 
         /// <summary>
@@ -90,30 +115,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             // Deserialize
             return DeserializeResponse<CancelShipmentResponse>(response.ReadResult());
-        }
-
-        /// <summary>
-        /// Create Shipment
-        /// </summary>
-        public CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings, string shippingServiceId)
-        {
-            AmazonMwsApiCall call = AmazonMwsApiCall.CreateShipment;
-
-            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-
-            // Add the service
-            request.Variables.Add("ShippingServiceId", shippingServiceId);
-
-            // Add Shipment Information XML
-            AddShipmentRequestDetails(request, requestDetails);
-
-            // Get Response
-            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
-
-            // Deserialize
-            CreateShipmentResponse createShipmentResponse = DeserializeResponse<CreateShipmentResponse>(response.ReadResult());
-
-            return ValidateCreateShipmentResponse(createShipmentResponse);
         }
 
         /// <summary>

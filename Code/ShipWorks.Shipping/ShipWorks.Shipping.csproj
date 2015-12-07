@@ -167,7 +167,6 @@
     <Compile Include="Carriers\Ups\UpsRateHashingService.cs" />
     <Compile Include="Carriers\Ups\UpsRatingService.cs" />
     <Compile Include="Carriers\Ups\WorldShipLabelService.cs" />
-    <Compile Include="ICachedRatesService.cs" />
     <Compile Include="IRateHashingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateHashingService.cs" />

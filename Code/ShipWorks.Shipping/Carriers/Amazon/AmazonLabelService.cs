@@ -9,7 +9,6 @@ using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -24,7 +23,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public class AmazonLabelService : ILabelService
     {
         private readonly IOrderManager orderManager;
-        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IDataResourceManager resourceManager;
@@ -34,12 +32,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonLabelService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory,
+        public AmazonLabelService(IAmazonShippingWebClient webClient,
             IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
             IDataResourceManager resourceManager, IEnumerable<IAmazonLabelEnforcer> labelEnforcers)
         {
             this.webClient = webClient;
-            this.settingsFactory = settingsFactory;
             this.orderManager = orderManager;
             this.requestFactory = requestFactory;
             this.resourceManager = resourceManager;
@@ -62,7 +59,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             EnforceLabelPolicies(shipment);
 
-            IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
 
             // Send a max of $100 in insured value for carriers who aren't Stamps.  Send $0 for Stamps
@@ -75,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 requestDetails.ShippingServiceOptions.DeclaredValue.Amount = 0;
             }
 
-            CreateShipmentResponse labelResponse = webClient.CreateShipment(requestDetails, settings, shipment.Amazon.ShippingServiceID);
+            CreateShipmentResponse labelResponse = webClient.CreateShipment(requestDetails, shipment.Amazon.ShippingServiceID);
 
             // Save shipment info
             SaveShipmentInfoToEntity(labelResponse.CreateShipmentResult.Shipment, shipment);
@@ -98,10 +94,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 log.Error($"Attempting to void shipment with shipment id = {shipment.ShipmentID }, but AmazonUniqueShipmentID was null");
                 throw new AmazonShippingException("Amazon shipment is missing the AmazonUniqueShipmentID");
             }
-
-            IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
             
-            webClient.CancelShipment(settings, shipment.Amazon.AmazonUniqueShipmentID);
+            webClient.CancelShipment(shipment);
         }
 
         /// <summary>

@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
-using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Stores;
