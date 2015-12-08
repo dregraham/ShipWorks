@@ -117,6 +117,7 @@ namespace ShipWorks.Data.Connection
                 session.Configuration.Username = username.Text;
                 session.Configuration.Password = password.Text;
             }
+
             return session;
         }
 
@@ -125,13 +126,10 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         private bool ValidateSession(SqlSession session)
         {
-            if (!session.Configuration.WindowsAuth)
+            if (!session.Configuration.WindowsAuth && string.IsNullOrEmpty(session.Configuration.Username))
             {
-                if (string.IsNullOrEmpty(session.Configuration.Username))
-                {
-                    MessageHelper.ShowError(this, $"A Validaiton Error has occured. {Environment.NewLine}{Environment.NewLine} Username is required");
-                    return false;
-                }
+                MessageHelper.ShowError(this, $"A Validaiton Error has occured. {Environment.NewLine}{Environment.NewLine} Username is required");
+                return false;
             }
 
             return true;

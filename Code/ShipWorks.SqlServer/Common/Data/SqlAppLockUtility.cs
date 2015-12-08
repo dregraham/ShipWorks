@@ -105,8 +105,10 @@ namespace ShipWorks.SqlServer.Common.Data
 
         /// <summary>
         /// Determines if the given resource name is currently locked.
-        /// FYI: If the current connection has the lock, this will return false.
         /// </summary>
+        /// <remarks>
+        /// If the current connection has the lock, this will return false.
+        /// </remarks>
         public static bool IsLocked(SqlConnection con, string name)
         {
             if (con == null)
