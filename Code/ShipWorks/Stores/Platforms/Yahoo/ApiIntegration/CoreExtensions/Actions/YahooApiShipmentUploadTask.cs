@@ -5,6 +5,7 @@ using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -95,13 +96,23 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.CoreExtensions.Actions
         {
             try
             {
+                YahooApiOnlineUpdater updater = new YahooApiOnlineUpdater(store);
+
                 foreach (long shipmentKey in shipmentKeys)
                 {
-                    YahooApiOnlineUpdater updater = new YahooApiOnlineUpdater(store);
-
                     ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
 
-                    updater.UpdateShipmentDetails(shipment);
+                    OrderEntity order = shipment.Order;
+
+                    if (order == null)
+                    {
+                        throw new ActionTaskRunException($"Error getting the order for shipment ID: {shipmentKey}");
+                    }
+
+                    if (!order.IsManual)
+                    {
+                        updater.UpdateShipmentDetails(shipment);
+                    }
                 }
             }
             catch (YahooException ex)
