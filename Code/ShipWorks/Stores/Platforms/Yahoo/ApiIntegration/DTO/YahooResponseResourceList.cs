@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
         [XmlElement(ElementName = "Catalog")]
         public YahooCatalog Catalog { get; set; }
 
-        [XmlElement(ElementName = "CustomOrderStatus")]
-        public YahooCustomOrderStatus CustomOrderStatus { get; set; }
+        [XmlElement(ElementName = "CustomOrderStatusList")]
+        public YahooCustomOrderStatusList CustomOrderStatusList { get; set; }
     }
 }

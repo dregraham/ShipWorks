@@ -158,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="orderEntity">The order entity.</param>
         public YahooOrderEntity LoadOrder(YahooOrder order, YahooOrderEntity orderEntity)
         {
-            orderEntity.OnlineStatusCode = order.StatusList.OrderStatus.Last().StatusID;
+            orderEntity.OnlineStatusCode = order.StatusList.OrderStatus.First().StatusID;
 
             int statusID = int.Parse(orderEntity.OnlineStatusCode.ToString());
 
@@ -168,8 +168,15 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
             else
             {
-                orderEntity.OnlineStatus =
-                    webClient.GetCustomOrderStatus(statusID).ResponseResourceList.CustomOrderStatus.Code;
+                string status = webClient.GetCustomOrderStatus(statusID)
+                        .ResponseResourceList?.CustomOrderStatusList?.CustomOrderStatus?.FirstOrDefault()?
+                        .Code;
+
+                if (status != null)
+                {
+                    orderEntity.OnlineStatus = status;
+                }
+
             }
 
             orderEntity.RequestedShipping = $"{order.CartShipmentInfo.Shipper} {order.ShipMethod}";
@@ -295,6 +302,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 LoadOrderCharge(orderEntity, "COUPON", "Coupon", order.OrderTotals.Coupon);
             }
 
+            if (order.OrderTotals.Discount != 0)
+            {
+                LoadOrderCharge(orderEntity, "DISCOUNT", "Discount", order.OrderTotals.Discount);
+            }
+
             List<YahooAppliedPromotion> promotions = order.OrderTotals?.Promotions?.AppliedPromotion;
 
             if (promotions == null)
@@ -362,7 +374,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             itemEntity.Quantity = item.Quantity;
             itemEntity.UnitPrice = item.UnitPrice;
             itemEntity.Url = item.URL;
-            itemEntity.Thumbnail = item.ThumbnailUrl;
+
+            if (!item.ThumbnailUrl.IsNullOrWhiteSpace())
+            {
+                string url = item.ThumbnailUrl.Substring(item.ThumbnailUrl.IndexOf("http://", StringComparison.Ordinal));
+
+                itemEntity.Thumbnail = url.TrimEnd('>');
+            }
+
             itemEntity.Weight = GetItemWeight(item.ItemID);
 
             LoadOrderItemAttributes(itemEntity, item);
