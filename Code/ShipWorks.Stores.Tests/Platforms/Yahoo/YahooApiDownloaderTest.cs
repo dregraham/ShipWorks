@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
             EntityCollection<NoteEntity> notes = orderEntity.Notes;
             string note = notes.Where(x => x.Visibility == (int)NoteVisibility.Internal).Select(x => x.Text).FirstOrDefault();
 
-            Assert.Equal("This will be a private note", note);
+            Assert.Equal("> 2007 Aug 22 03:16: This will be a private note", note);
         }
 
         [Fact]

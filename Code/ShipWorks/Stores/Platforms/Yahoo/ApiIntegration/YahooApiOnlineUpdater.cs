@@ -142,6 +142,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         [NDependIgnoreComplexMethod]
         public string GetCarrierCode(ShipmentEntity shipment)
         {
+            ShippingManager.EnsureShipmentLoaded(shipment);
+
             // Yahoo only supports usps, ups, fedex, dhl and airborne.
             // so if the carrier is something else (OnTrac, iparcel...)
             // just give an empty string and we just won't upload the carrier
