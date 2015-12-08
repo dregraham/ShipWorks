@@ -154,7 +154,6 @@
     <Compile Include="Carriers\iParcel\iParcelRateHashingService.cs" />
     <Compile Include="Carriers\iParcel\iParcelRatingService.cs" />
     <Compile Include="Carriers\None\NoneLabelService.cs" />
-    <Compile Include="Carriers\None\NoneRateHashingService.cs" />
     <Compile Include="Carriers\OnTrac\OnTracLabelService.cs" />
     <Compile Include="Carriers\OnTrac\OnTracRateHashingService.cs" />
     <Compile Include="Carriers\OnTrac\OnTracRatingService.cs" />
@@ -175,7 +174,9 @@
     <Compile Include="Carriers\Ups\UpsRateHashingService.cs" />
     <Compile Include="Carriers\Ups\UpsRatingService.cs" />
     <Compile Include="Carriers\Ups\WorldShipLabelService.cs" />
+    <Compile Include="EmptyRatingService.cs" />
     <Compile Include="IRateHashingService.cs" />
+    <Compile Include="EmptyRateHashingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateHashingService.cs" />
   </ItemGroup>

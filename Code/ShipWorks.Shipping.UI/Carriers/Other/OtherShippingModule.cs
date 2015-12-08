@@ -18,6 +18,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
 
             builder.RegisterType<EmptyRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.Other);
+
+            builder.RegisterType<EmptyRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.Other);
         }
     }
 }

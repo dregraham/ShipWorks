@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.UI.Carriers.None
             builder.RegisterType<EmptyRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.None);
 
-            builder.RegisterType<NoneRateHashingService>()
+            builder.RegisterType<EmptyRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.None);
         }
     }
