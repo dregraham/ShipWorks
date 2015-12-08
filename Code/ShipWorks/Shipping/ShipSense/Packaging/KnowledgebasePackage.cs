@@ -23,9 +23,9 @@ namespace ShipWorks.Shipping.ShipSense.Packaging
         /// <param name="packageAdapter">The package adapter.</param>
         public KnowledgebasePackage(IPackageAdapter packageAdapter)
         {
-            Length = packageAdapter.Length;
-            Width = packageAdapter.Width;
-            Height = packageAdapter.Height;
+            Length = packageAdapter.DimsLength;
+            Width = packageAdapter.DimsWidth;
+            Height = packageAdapter.DimsHeight;
             Weight = packageAdapter.Weight;
             ApplyAdditionalWeight = packageAdapter.ApplyAdditionalWeight;
             AdditionalWeight = packageAdapter.AdditionalWeight;

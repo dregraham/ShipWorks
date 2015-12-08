@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.UI.ValueConverters
         /// <summary>
         /// Converting back does not make sense here
         /// </summary>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new InvalidOperationException("Cannot convert back");
         }

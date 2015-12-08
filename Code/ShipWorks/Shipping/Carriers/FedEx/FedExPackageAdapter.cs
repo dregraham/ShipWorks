@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Services;
@@ -12,6 +14,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public class FedExPackageAdapter : IPackageAdapter
     {
+        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
+        public virtual event PropertyChangedEventHandler PropertyChanged;
+
         private readonly ShipmentEntity shipmentEntity;
         private readonly FedExPackageEntity packageEntity;
         private PackageTypeBinding packagingType;
@@ -130,6 +135,42 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     shipmentEntity.FedEx.PackagingType = packagingType.PackageTypeID;
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims length.
+        /// </summary>
+        public double DimsLength
+        {
+            get { return packageEntity.DimsLength; }
+            set { packageEntity.DimsLength = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims width.
+        /// </summary>
+        public double DimsWidth
+        {
+            get { return packageEntity.DimsWidth; }
+            set { packageEntity.DimsWidth = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims height.
+        /// </summary>
+        public double DimsHeight
+        {
+            get { return packageEntity.DimsHeight; }
+            set { packageEntity.DimsHeight = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dimension profile id.
+        /// </summary>
+        public long DimsProfileID
+        {
+            get { return packageEntity.DimsProfileID; }
+            set { packageEntity.DimsProfileID = value; }
         }
 
         /// <summary>

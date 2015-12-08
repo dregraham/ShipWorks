@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using ShipWorks.Shipping.Rating;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using GalaSoft.MvvmLight.Command;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
@@ -24,6 +27,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private bool supportsMultiplePackages;
         private bool supportsPackageTypes;
         private ICarrierShipmentAdapter shipmentAdapter;
+        private ObservableCollection<DimensionsProfileEntity> dimensionsProfiles;
+        private DimensionsProfileEntity selectedDimensionsProfile;
 
         /// <summary>
         /// Observable collection of carrier service types
@@ -143,6 +148,47 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             get { return supportsPackageTypes; }
             set { handler.Set(nameof(SupportsPackageTypes), ref supportsPackageTypes, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the packaging type.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public DimensionsProfileEntity SelectedDimensionsProfile
+        {
+            get
+            {
+                return selectedDimensionsProfile;
+            }
+            set
+            {
+                handler.Set(nameof(SelectedDimensionsProfile), ref selectedDimensionsProfile, value, true);
+            }
+        }
+
+        /// <summary>
+        /// Does the shipment support package types?
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ObservableCollection<DimensionsProfileEntity> DimensionsProfiles
+        {
+            get
+            {
+                return dimensionsProfiles;
+            }
+            set { handler.Set(nameof(DimensionsProfiles), ref dimensionsProfiles, value, true); }
+        }
+
+        /// <summary>
+        /// Command for opening the Dimensions Manager dialog
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public RelayCommand DimensionsManagerDlgCommand
+        {
+            get
+            {
+                return new RelayCommand(ManageDimensionsProfiles);
+            }
         }
     }
 }

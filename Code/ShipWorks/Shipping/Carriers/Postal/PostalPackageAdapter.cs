@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
@@ -11,6 +13,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
     /// </summary>
     public class PostalPackageAdapter : IPackageAdapter
     {
+        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
+        public virtual event PropertyChangedEventHandler PropertyChanged;
         private readonly ShipmentEntity shipment;
         private PackageTypeBinding packagingType;
 
@@ -112,6 +116,42 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     shipment.Postal.PackagingType = packagingType.PackageTypeID;
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims length.
+        /// </summary>
+        public double DimsLength
+        {
+            get { return shipment.Postal.DimsLength; }
+            set { shipment.Postal.DimsLength = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims width.
+        /// </summary>
+        public double DimsWidth
+        {
+            get { return shipment.Postal.DimsWidth; }
+            set { shipment.Postal.DimsWidth = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims height.
+        /// </summary>
+        public double DimsHeight
+        {
+            get { return shipment.Postal.DimsHeight; }
+            set { shipment.Postal.DimsHeight = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dimension profile id.
+        /// </summary>
+        public long DimsProfileID
+        {
+            get { return shipment.Postal.DimsProfileID; }
+            set { shipment.Postal.DimsProfileID = value; }
         }
 
         /// <summary>

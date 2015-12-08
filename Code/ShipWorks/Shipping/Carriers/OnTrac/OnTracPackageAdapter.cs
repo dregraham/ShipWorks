@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Services;
@@ -12,6 +14,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// </summary>
     public class OnTracPackageAdapter : IPackageAdapter
     {
+        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
+        public virtual event PropertyChangedEventHandler PropertyChanged;
+
         private readonly ShipmentEntity shipment;
         private PackageTypeBinding packagingType;
 
@@ -113,6 +118,42 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     shipment.OnTrac.PackagingType = packagingType.PackageTypeID;
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims length.
+        /// </summary>
+        public double DimsLength
+        {
+            get { return shipment.OnTrac.DimsLength; }
+            set { shipment.OnTrac.DimsLength = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims width.
+        /// </summary>
+        public double DimsWidth
+        {
+            get { return shipment.OnTrac.DimsWidth; }
+            set { shipment.OnTrac.DimsWidth = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims height.
+        /// </summary>
+        public double DimsHeight
+        {
+            get { return shipment.OnTrac.DimsHeight; }
+            set { shipment.OnTrac.DimsHeight = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dimension profile id.
+        /// </summary>
+        public long DimsProfileID
+        {
+            get { return shipment.OnTrac.DimsProfileID; }
+            set { shipment.OnTrac.DimsProfileID = value; }
         }
 
         /// <summary>

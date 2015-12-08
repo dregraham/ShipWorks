@@ -147,6 +147,10 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShippingViewModelFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<DimensionsManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

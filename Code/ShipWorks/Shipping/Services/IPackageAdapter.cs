@@ -1,30 +1,33 @@
 ﻿
+using System.ComponentModel;
+using ShipWorks.Data.Model.EntityClasses;
+
 namespace ShipWorks.Shipping.Services
 {
     /// <summary>
     /// An interface intended to be used for shuffling package data between classes.
     /// </summary>
-    public interface IPackageAdapter
+    public interface IPackageAdapter : INotifyPropertyChanged
     {
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.
         /// </summary>
         int Index { get; set; }
 
-        /// <summary>
-        /// Gets or sets the length.
-        /// </summary>
-        double Length { get; set; }
+        ///// <summary>
+        ///// Gets or sets the length.
+        ///// </summary>
+        //double Length { get; set; }
 
-        /// <summary>
-        /// Gets or sets the width.
-        /// </summary>
-        double Width { get; set; }
+        ///// <summary>
+        ///// Gets or sets the width.
+        ///// </summary>
+        //double Width { get; set; }
 
-        /// <summary>
-        /// Gets or sets the height.
-        /// </summary>
-        double Height { get; set; }
+        ///// <summary>
+        ///// Gets or sets the height.
+        ///// </summary>
+        //double Height { get; set; }
 
         /// <summary>
         /// Gets or sets the weight.
@@ -42,10 +45,30 @@ namespace ShipWorks.Shipping.Services
         bool ApplyAdditionalWeight { get; set; }
 
         /// <summary>
+        /// Gets or sets the dims length.
+        /// </summary>
+        double DimsLength { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dims width.
+        /// </summary>
+        double DimsWidth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dims height.
+        /// </summary>
+        double DimsHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dimension profile id.
+        /// </summary>
+        long DimsProfileID { get; set; }
+
+        /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
         PackageTypeBinding PackagingType { get; set; }
-
+        
         /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>

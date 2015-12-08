@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
@@ -11,6 +13,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class BestRatePackageAdapter : IPackageAdapter
     {
+        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
+        public virtual event PropertyChangedEventHandler PropertyChanged;
+
         private readonly ShipmentEntity shipment;
 
         /// <summary>
@@ -92,6 +97,42 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             get { return null; }
             set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims length.
+        /// </summary>
+        public double DimsLength
+        {
+            get { return shipment.BestRate.DimsLength; }
+            set { shipment.BestRate.DimsLength = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims width.
+        /// </summary>
+        public double DimsWidth
+        {
+            get { return shipment.BestRate.DimsWidth; }
+            set { shipment.BestRate.DimsWidth = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims height.
+        /// </summary>
+        public double DimsHeight
+        {
+            get { return shipment.BestRate.DimsHeight; }
+            set { shipment.BestRate.DimsHeight = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dimension profile id.
+        /// </summary>
+        public long DimsProfileID
+        {
+            get { return shipment.BestRate.DimsProfileID; }
+            set { shipment.BestRate.DimsProfileID = value; }
         }
 
         /// <summary>

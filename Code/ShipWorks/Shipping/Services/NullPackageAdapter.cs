@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -8,6 +10,9 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public class NullPackageAdapter : IPackageAdapter
     {
+        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
+        public virtual event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.
         /// </summary>
@@ -84,6 +89,42 @@ namespace ShipWorks.Shipping.Services
                     Name = "None"
                 };
             }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims length.
+        /// </summary>
+        public double DimsLength
+        {
+            get { return 0; }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims width.
+        /// </summary>
+        public double DimsWidth
+        {
+            get { return 0; }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims height.
+        /// </summary>
+        public double DimsHeight
+        {
+            get { return 0; }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the dimension profile id.
+        /// </summary>
+        public long DimsProfileID
+        {
+            get { return 0; }
             set { }
         }
 

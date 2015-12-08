@@ -1,20 +1,31 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using Interapptive.Shared.Utility;
+using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// Implementation of the IPackageAdapter interface intended to be used for shuffling package data between classes.
     /// </summary>
-    public class UpsPackageAdapter : IPackageAdapter
+    public class UpsPackageAdapter : IPackageAdapter, INotifyPropertyChanged
     {
         private readonly ShipmentEntity shipmentEntity;
         private readonly UpsPackageEntity packageEntity;
         private PackageTypeBinding packagingType;
+        private int index;
+
+        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
+        public virtual event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangingEventHandler PropertyChanging;
+        private readonly PropertyChangedHandler handler;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsPackageAdapter" /> class.
@@ -24,6 +35,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="packageIndex">The index of this package adapter in a list of package adapters.</param>
         public UpsPackageAdapter(ShipmentEntity shipmentEntity, UpsPackageEntity packageEntity, int packageIndex)
         {
+            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;
             this.Index = packageIndex;
@@ -38,38 +50,57 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.
         /// </summary>
-        public int Index { get; set; }
-
-        /// <summary>
-        /// Gets or sets the length.
-        /// </summary>
-        public double Length
+        [Obfuscation(Exclude = true)]
+        public int Index
         {
-            get { return packageEntity.DimsLength; }
-            set { packageEntity.DimsLength = value; }
+            get { return index; }
+            set
+            {
+                handler.Set(nameof(Index), ref index, value);
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the width.
-        /// </summary>
-        public double Width
-        {
-            get { return packageEntity.DimsWidth; }
-            set { packageEntity.DimsWidth = value; }
-        }
+        ///// <summary>
+        ///// Gets or sets the length.
+        ///// </summary>
+        //public double Length
+        //{
+        //    get { return packageEntity.DimsLength; }
+        //    set
+        //    {
+        //        packageEntity.DimsLength = value;
+        //        handler.Set(nameof(Length), v => packageEntity.DimsLength = value, packageEntity.DimsLength, value, false);
+        //    }
+        //}
 
-        /// <summary>
-        /// Gets or sets the height.
-        /// </summary>
-        public double Height
-        {
-            get { return packageEntity.DimsHeight; }
-            set { packageEntity.DimsHeight = value; }
-        }
+        ///// <summary>
+        ///// Gets or sets the width.
+        ///// </summary>
+        //public double Width
+        //{
+        //    get { return packageEntity.DimsWidth; }
+        //    set
+        //    {
+        //        packageEntity.DimsWidth = value;
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Gets or sets the height.
+        ///// </summary>
+        //public double Height
+        //{
+        //    get { return packageEntity.DimsHeight; }
+        //    set
+        //    {
+        //        packageEntity.DimsHeight = value;
+        //    }
+        //}
 
         /// <summary>
         /// Gets or sets the weight.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double Weight
         {
             get
@@ -88,31 +119,40 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     shipmentEntity.ContentWeight = value;
                 }
 
-                packageEntity.Weight = value;
+                handler.Set(nameof(Weight), v => packageEntity.Weight = value, packageEntity.Weight, value, false);
             }
         }
 
         /// <summary>
         /// Gets or sets the additional weight.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double AdditionalWeight
         {
             get { return packageEntity.DimsWeight; }
-            set { packageEntity.DimsWeight = value; }
+            set
+            {
+                handler.Set(nameof(AdditionalWeight), v => packageEntity.DimsWeight = value, packageEntity.DimsWeight, value, false);
+            }
         }
 
         /// <summary>
         /// Gets or sets the additional weight.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool ApplyAdditionalWeight
         {
             get { return packageEntity.DimsAddWeight; }
-            set { packageEntity.DimsAddWeight = value; }
+            set
+            {
+                handler.Set(nameof(ApplyAdditionalWeight), v => packageEntity.DimsAddWeight = value, packageEntity.DimsAddWeight, value, false);
+            }
         }
 
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public PackageTypeBinding PackagingType
         {
             get
@@ -127,8 +167,60 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // if we have a valid packagingType.
                 if (packagingType != null)
                 {
-                    packageEntity.PackagingType = packagingType.PackageTypeID;
+                    handler.Set(nameof(PackagingType), v => packageEntity.PackagingType = packagingType.PackageTypeID, packageEntity.PackagingType, packagingType.PackageTypeID);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims length.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double DimsLength
+        {
+            get { return packageEntity.DimsLength; }
+            set
+            {
+                handler.Set(nameof(DimsLength), v => packageEntity.DimsLength = value, packageEntity.DimsLength, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims width.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double DimsWidth
+        {
+            get { return packageEntity.DimsWidth; }
+            set
+            {
+                handler.Set(nameof(DimsWidth), v => packageEntity.DimsWidth = value, packageEntity.DimsWidth, value, false);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the dims height.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double DimsHeight
+        {
+            get { return packageEntity.DimsHeight; }
+            set
+            {
+                handler.Set(nameof(DimsHeight), v => packageEntity.DimsHeight = value, packageEntity.DimsHeight, value, false);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the dimension profile id.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public long DimsProfileID
+        {
+            get { return packageEntity.DimsProfileID; }
+            set
+            {
+                handler.Set(nameof(DimsProfileID), v => packageEntity.DimsProfileID = value, packageEntity.DimsProfileID, value, false);
             }
         }
 
@@ -139,7 +231,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             StringHash stringHash = new StringHash();
 
-            string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", Length, Width, Height, Weight, AdditionalWeight, ApplyAdditionalWeight);
+            string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", DimsLength, DimsWidth, DimsHeight, Weight, AdditionalWeight, ApplyAdditionalWeight);
 
             return stringHash.Hash(rawValue, string.Empty);
         }

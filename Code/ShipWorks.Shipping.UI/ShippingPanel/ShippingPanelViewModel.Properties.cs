@@ -1,5 +1,8 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Input;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;

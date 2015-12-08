@@ -72,6 +72,35 @@ namespace ShipWorks.Core.UI
         }
 
         /// <summary>
+        /// Set the value of a field for a property
+        /// </summary>
+        public bool Set<T>(string name, Action<T> assignmentMethod, T getCurrentValue, T newValue)
+        {
+            return Set(name, assignmentMethod, getCurrentValue, newValue, false);
+        }
+
+        /// <summary>
+        /// Set the value of a field for a property
+        /// </summary>
+        public bool Set<T>(string name, Action<T> assignmentMethod, T getCurrentValue, T newValue, bool forceRaisePropertyChanged)
+        {
+            lock (lockObject)
+            {
+                if (!forceRaisePropertyChanged && Equals(getCurrentValue, newValue))
+                {
+                    return false;
+                }
+
+                RaisePropertyChanging(name);
+                assignmentMethod(newValue);
+            }
+
+            RaisePropertyChanged(name);
+
+            return true;
+        }
+
+        /// <summary>
         /// Raise the changed event for the given property
         /// </summary>
         /// <remarks>This is public so that the event can be raised manually.</remarks>

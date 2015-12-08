@@ -193,6 +193,8 @@
     <Compile Include="Services\Builders\ShipmentServicesBuilderFactory.cs" />
     <Compile Include="Services\CarrierAccountRetrieverFactory.cs" />
     <Compile Include="Services\CarrierShipmentAdapterFactory.cs" />
+    <Compile Include="Services\DimensionsManagerWrapper.cs" />
+    <Compile Include="Services\IDimensionsManager.cs" />
     <Compile Include="Services\IMessageHelper.cs" />
     <Compile Include="Services\IShipmentLoaderService.cs" />
     <Compile Include="Services\IShippingOriginManager.cs" />

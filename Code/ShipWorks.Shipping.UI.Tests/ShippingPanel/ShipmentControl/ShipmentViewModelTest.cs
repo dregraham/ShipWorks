@@ -392,9 +392,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 packageAdapter.Setup(pa => pa.AdditionalWeight).Returns(0.1*i);
                 packageAdapter.Setup(pa => pa.ApplyAdditionalWeight).Returns(false);
                 packageAdapter.Setup(pa => pa.Index).Returns(1*i);
-                packageAdapter.Setup(pa => pa.Height).Returns(2*i);
-                packageAdapter.Setup(pa => pa.Length).Returns(2*i);
-                packageAdapter.Setup(pa => pa.Width).Returns(1*i);
+                packageAdapter.Setup(pa => pa.DimsHeight).Returns(2*i);
+                packageAdapter.Setup(pa => pa.DimsLength).Returns(2*i);
+                packageAdapter.Setup(pa => pa.DimsWidth).Returns(1*i);
                 packageAdapter.Setup(pa => pa.Weight).Returns(0.5*i);
 
                 packageAdapters.Add(packageAdapter.Object);

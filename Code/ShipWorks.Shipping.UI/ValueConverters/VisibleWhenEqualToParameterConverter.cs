@@ -36,7 +36,10 @@ namespace ShipWorks.Shipping.UI.ValueConverters
                 throw new InvalidOperationException("Destination type of value converter must be Visibility");
             }
 
-            return (bool)base.Convert(value, typeof(bool), parameter, culture) ? Visibility.Visible : Visibility.Collapsed;
+            bool b = (bool) base.Convert(value, typeof (bool), parameter, culture);
+            Visibility viz = b ? Visibility.Visible : Visibility.Collapsed;
+
+            return viz;
         }
     }
 }

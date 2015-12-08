@@ -31,10 +31,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             adapter1.SetupAllProperties();
 
             adapter1.Object.AdditionalWeight = 1.2;
-            adapter1.Object.Height = 9.31;
-            adapter1.Object.Length = 11;
+            adapter1.Object.DimsHeight = 9.31;
+            adapter1.Object.DimsLength = 11;
             adapter1.Object.Weight = 34.2;
-            adapter1.Object.Width = 4;
+            adapter1.Object.DimsWidth = 4;
             adapter1.Object.ApplyAdditionalWeight = false;
 
 
@@ -42,10 +42,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             adapter2.SetupAllProperties();
 
             adapter2.Object.AdditionalWeight = 5.4;
-            adapter2.Object.Height = 4.2;
-            adapter2.Object.Length = 1;
+            adapter2.Object.DimsHeight = 4.2;
+            adapter2.Object.DimsLength = 1;
             adapter2.Object.Weight = 12.9;
-            adapter2.Object.Width = 34;
+            adapter2.Object.DimsWidth = 34;
             adapter2.Object.ApplyAdditionalWeight = false;
 
             adapters = new List<IPackageAdapter>()
@@ -132,8 +132,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             // Don't iterate over each element because we want to verify that set 
             // was called via Moq
-            adapter1.VerifySet(a => a.Height = testObject.Packages.ElementAt(0).Height, Times.Once());
-            adapter2.VerifySet(a => a.Height = testObject.Packages.ElementAt(1).Height, Times.Once());
+            adapter1.VerifySet(a => a.DimsHeight = testObject.Packages.ElementAt(0).Height, Times.Once());
+            adapter2.VerifySet(a => a.DimsHeight = testObject.Packages.ElementAt(1).Height, Times.Once());
         }
 
         [Fact]
@@ -143,8 +143,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             // Don't iterate over each element because we want to verify that set 
             // was called via Moq
-            adapter1.VerifySet(a => a.Length = testObject.Packages.ElementAt(0).Length, Times.Once());
-            adapter2.VerifySet(a => a.Length = testObject.Packages.ElementAt(1).Length, Times.Once());
+            adapter1.VerifySet(a => a.DimsLength = testObject.Packages.ElementAt(0).Length, Times.Once());
+            adapter2.VerifySet(a => a.DimsLength = testObject.Packages.ElementAt(1).Length, Times.Once());
         }
 
         [Fact]
@@ -176,8 +176,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             // Don't iterate over each element because we want to verify that set 
             // was called via Moq
-            adapter1.VerifySet(a => a.Width = testObject.Packages.ElementAt(0).Width, Times.Once());
-            adapter2.VerifySet(a => a.Width = testObject.Packages.ElementAt(1).Width, Times.Once());
+            adapter1.VerifySet(a => a.DimsWidth = testObject.Packages.ElementAt(0).Width, Times.Once());
+            adapter2.VerifySet(a => a.DimsWidth = testObject.Packages.ElementAt(1).Width, Times.Once());
         }
 
         [Fact]
@@ -197,7 +197,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.ApplyTo(adapters.Take(1));
 
-            Assert.Equal(testObject.Packages.ElementAt(0).Height, adapter1.Object.Height);
+            Assert.Equal(testObject.Packages.ElementAt(0).Height, adapter1.Object.DimsHeight);
         }
 
         [Fact]
@@ -207,7 +207,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.ApplyTo(adapters.Take(1));
 
-            Assert.Equal(testObject.Packages.ElementAt(0).Length, adapter1.Object.Length);
+            Assert.Equal(testObject.Packages.ElementAt(0).Length, adapter1.Object.DimsLength);
         }
 
         [Fact]
@@ -227,7 +227,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.ApplyTo(adapters.Take(1));
 
-            Assert.Equal(testObject.Packages.ElementAt(0).Width, adapter1.Object.Width);
+            Assert.Equal(testObject.Packages.ElementAt(0).Width, adapter1.Object.DimsWidth);
         }
 
         [Fact]
@@ -318,12 +318,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             // Check that the Get property was called to confirm that the values are not equal 
             // because the adapter value was assigned to
-            adapter1.VerifyGet(a => a.Height, Times.Once());
-            adapter2.VerifyGet(a => a.Height, Times.Once());
+            adapter1.VerifyGet(a => a.DimsHeight, Times.Once());
+            adapter2.VerifyGet(a => a.DimsHeight, Times.Once());
 
             for (int i = 0; i < testObject.Packages.Count(); i++)
             {
-                Assert.Equal(testObject.Packages.ElementAt(i).Height, adapters[i].Height);
+                Assert.Equal(testObject.Packages.ElementAt(i).Height, adapters[i].DimsHeight);
             }
         }
 
@@ -334,12 +334,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             // Check that the Get property was called to confirm that the values are not equal 
             // because the adapter value was assigned to
-            adapter1.VerifyGet(a => a.Length, Times.Once());
-            adapter2.VerifyGet(a => a.Length, Times.Once());
+            adapter1.VerifyGet(a => a.DimsLength, Times.Once());
+            adapter2.VerifyGet(a => a.DimsLength, Times.Once());
 
             for (int i = 0; i < testObject.Packages.Count(); i++)
             {
-                Assert.Equal(testObject.Packages.ElementAt(i).Length, adapters[i].Length);
+                Assert.Equal(testObject.Packages.ElementAt(i).Length, adapters[i].DimsLength);
             }
         }
 
@@ -366,12 +366,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             // Check that the Get property was called to confirm that the values are not equal 
             // because the adapter value was assigned to
-            adapter1.VerifyGet(a => a.Width, Times.Once());
-            adapter2.VerifyGet(a => a.Width, Times.Once());
+            adapter1.VerifyGet(a => a.DimsWidth, Times.Once());
+            adapter2.VerifyGet(a => a.DimsWidth, Times.Once());
 
             for (int i = 0; i < testObject.Packages.Count(); i++)
             {
-                Assert.Equal(testObject.Packages.ElementAt(i).Width, adapters[i].Width);
+                Assert.Equal(testObject.Packages.ElementAt(i).Width, adapters[i].DimsWidth);
             }
         }
 
@@ -454,12 +454,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Quick check some of the adapter stuff
             // Check that the Get property was called to confirm that the values are not equal 
             // because the adapter value was assigned to
-            adapter1.VerifyGet(a => a.Width, Times.Once());
-            adapter2.VerifyGet(a => a.Width, Times.Once());
+            adapter1.VerifyGet(a => a.DimsWidth, Times.Once());
+            adapter2.VerifyGet(a => a.DimsWidth, Times.Once());
 
             for (int i = 0; i < testObject.Packages.Count(); i++)
             {
-                Assert.Equal(testObject.Packages.ElementAt(i).Width, adapters[i].Width);
+                Assert.Equal(testObject.Packages.ElementAt(i).Width, adapters[i].DimsWidth);
             }
 
             // Now check the customs stuff
@@ -620,17 +620,17 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             shipment.FedEx.Packages.Add(new FedExPackageEntity() { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
             shipment.FedEx.Packages[0].Weight = adapter1.Object.Weight;
-            shipment.FedEx.Packages[0].DimsHeight = adapter1.Object.Height;
-            shipment.FedEx.Packages[0].DimsWidth = adapter1.Object.Width;
-            shipment.FedEx.Packages[0].DimsLength = adapter1.Object.Length;
+            shipment.FedEx.Packages[0].DimsHeight = adapter1.Object.DimsHeight;
+            shipment.FedEx.Packages[0].DimsWidth = adapter1.Object.DimsWidth;
+            shipment.FedEx.Packages[0].DimsLength = adapter1.Object.DimsLength;
             shipment.FedEx.Packages[0].DimsWeight = adapter1.Object.AdditionalWeight;
             shipment.FedEx.Packages[0].DimsAddWeight = adapter1.Object.ApplyAdditionalWeight;
 
             shipment.FedEx.Packages.Add(new FedExPackageEntity() { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
             shipment.FedEx.Packages[1].Weight = adapter2.Object.Weight;
-            shipment.FedEx.Packages[1].DimsHeight = adapter2.Object.Height;
-            shipment.FedEx.Packages[1].DimsWidth = adapter2.Object.Width;
-            shipment.FedEx.Packages[1].DimsLength = adapter2.Object.Length;
+            shipment.FedEx.Packages[1].DimsHeight = adapter2.Object.DimsHeight;
+            shipment.FedEx.Packages[1].DimsWidth = adapter2.Object.DimsWidth;
+            shipment.FedEx.Packages[1].DimsLength = adapter2.Object.DimsLength;
             shipment.FedEx.Packages[1].DimsWeight = adapter2.Object.AdditionalWeight;
             shipment.FedEx.Packages[1].DimsAddWeight = adapter2.Object.ApplyAdditionalWeight;
 

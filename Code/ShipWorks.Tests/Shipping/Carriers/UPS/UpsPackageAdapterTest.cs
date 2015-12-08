@@ -30,10 +30,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
                 PackagingType = new PackageTypeBinding() { PackageTypeID = 999999 },
                 AdditionalWeight = 3.1,
                 ApplyAdditionalWeight = true,
-                Height = 2.2,
-                Length = 3.3,
+                DimsHeight = 2.2,
+                DimsLength = 3.3,
                 Weight = 4.4,
-                Width = 5.5
+                DimsWidth = 5.5
             };
 
             string firstTry = testObject.HashCode();

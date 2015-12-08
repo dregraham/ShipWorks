@@ -61,7 +61,7 @@ namespace ShipWorks.ApplicationCore.Logging
             logOptions = LoadLogOptions();
             ApplyLogOptions();
 
-            LogManager.Adapter = new Log4NetLoggerFactoryAdapter(new NameValueCollection());
+            //LogManager.Adapter = new Log4NetLoggerFactoryAdapter(new NameValueCollection());
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace ShipWorks.ApplicationCore.Logging
             log4net.LogManager.ResetConfiguration();
 
             Trace.Listeners.Clear();
-            Trace.Listeners.Add(new DefaultTraceListener());
+            //Trace.Listeners.Add(new DefaultTraceListener());
             
             // Turns on console logging
             BasicConfigurator.Configure(CreateTraceAppender());

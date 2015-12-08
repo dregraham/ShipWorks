@@ -1,11 +1,14 @@
-﻿<UserControl x:Class="ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl.ShipmentControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ <UserControl x:Class="ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl.ShipmentControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI"
              xmlns:converters="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
+             xmlns:behaviors="clr-namespace:ShipWorks.Shipping.UI.Behaviors"
              xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -17,23 +20,35 @@
 
             </ResourceDictionary.MergedDictionaries>
 
-            <Style TargetType="RowDefinition" x:Key="SupportsMultiplePackagesRowStyle">
+
+            <SolidColorBrush x:Key="brushWatermarkForeground" Color="LightSteelBlue" />
+
+            <converters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+            <converters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
+            <converters:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <converters:StringEmptyWhenEqualToParameterConverter x:Key="StringEmptyWhenEqualToParameter" />
+
+
+
+
+            <Style TargetType="{x:Type RowDefinition}" x:Key="SupportsMultiplePackagesRowStyle">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=SupportsMultiplePackages}" Value="True">
-                        <Setter Property="RowDefinition.Height" Value="Auto"/>
+                    <DataTrigger Binding="{Binding SupportsMultiplePackages}" Value="True">
+                        <Setter Property="Height" Value="Auto"/>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=SupportsMultiplePackages}" Value="False">
-                        <Setter Property="RowDefinition.Height" Value="0"/>
+                    <DataTrigger Binding="{Binding SupportsMultiplePackages}" Value="False">
+                        <Setter Property="Height" Value="0"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-            <Style TargetType="RowDefinition" x:Key="SupportsPackageTypesRowStyle">
+            <Style TargetType="{x:Type RowDefinition}" x:Key="SupportsPackageTypesRowStyle">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=SupportsPackageTypes}" Value="True">
-                        <Setter Property="RowDefinition.Height" Value="Auto"/>
+                    <DataTrigger Binding="{Binding SupportsPackageTypes}" Value="True">
+                        <Setter Property="Height" Value="Auto"/>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=SupportsPackageTypes}" Value="False">
-                        <Setter Property="RowDefinition.Height" Value="0"/>
+                    <DataTrigger Binding="{Binding SupportsPackageTypes}" Value="False">
+                        <Setter Property="Height" Value="0"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -59,78 +74,164 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}">Service:</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}"><Run Text="Service:"/></TextBlock>
             <ComboBox Grid.Row="0" Grid.Column="1"
-                      ItemsSource="{Binding Services, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedValue="{Binding ServiceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedValuePath="Key"
-                      DisplayMemberPath="Value"
+				ItemsSource="{Binding Services, UpdateSourceTrigger=PropertyChanged}"
+				SelectedValue="{Binding ServiceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				SelectedValuePath="Key"
+				DisplayMemberPath="Value"
                       />
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource GridLabel}">Ship date:</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource GridLabel}"><Run Text="Ship date:"/></TextBlock>
             <DatePicker Grid.Row="1" Grid.Column="1" Width="125" HorizontalAlignment="Left" Margin="4 0 0 0" SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <TextBlock Grid.Row="2" Grid.Column="0"
-                       Style="{StaticResource GridLabel}">Packages:</TextBlock>
+				Style="{StaticResource GridLabel}"><Run Text="Packages:"/></TextBlock>
             <ComboBox  Grid.Row="2" Grid.Column="1"
-                       ItemsSource="{Binding PackageCountList}"
-                       SelectedValue="{Binding NumberOfPackages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				ItemsSource="{Binding PackageCountList}"
+				SelectedValue="{Binding NumberOfPackages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <ListView Name="PackagesList" Grid.Row="3" Grid.Column="1" Margin="4 0 0 0"
-                      ItemsSource="{Binding PackageAdapters}"
-                      SelectedValue ="{Binding Path=SelectedPackageAdapter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+            <ListView x:Name="PackagesList" Grid.Row="3" Grid.Column="1" Margin="4 0 0 0"
+				ItemsSource="{Binding PackageAdapters}"
+				SelectedValue ="{Binding SelectedPackageAdapter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Packages (Select to Edit)" Width="Auto"
-                                        DisplayMemberBinding="{Binding Index, StringFormat='Package {0}'}"></GridViewColumn>
+							DisplayMemberBinding="{Binding Index, StringFormat=Package \{0\}}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
 
-            <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource GridLabel}">Packaging:</TextBlock>
+            <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource GridLabel}"><Run Text="Packaging:"/></TextBlock>
             <ComboBox Grid.Row="4" Grid.Column="1"
-                      ItemsSource ="{Binding PackageTypes, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedValue="{Binding Path=SelectedPackageAdapter.PackagingType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      DisplayMemberPath="Name" />
+				ItemsSource ="{Binding PackageTypes, UpdateSourceTrigger=PropertyChanged}"
+				SelectedValue="{Binding SelectedPackageAdapter.PackagingType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				DisplayMemberPath="Name" />
 
-            <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource GridLabel}">Weight:</TextBlock>
+            <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource GridLabel}"><Run Text="Weight:"/></TextBlock>
 
             <weight:WeightInput Grid.Row="5" Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Weight="{Binding TotalWeight}"/>
+				Margin="0,0,0,0"
+				HorizontalAlignment="Left"
+				Weight="{Binding TotalWeight}"/>
 
-            <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource GridLabel}">Dimensions:</TextBlock>
-            <ComboBox Grid.Row="6" Grid.Column="1"/>
-
+            <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource GridLabel}"><Run Text="Dimensions:"/></TextBlock>
+            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
+                <ComboBox MinWidth="139"
+					ItemsSource ="{Binding DimensionsProfiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					SelectedValue="{Binding SelectedDimensionsProfile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock>
+                                    <TextBlock.Visibility>
+                                        <Binding Path="DimensionsProfileID" Converter="{StaticResource VisibleWhenNotEqualToParameter}">
+                                            <Binding.ConverterParameter>
+                                                <sys:Int64>0</sys:Int64>
+                                            </Binding.ConverterParameter>
+                                        </Binding>
+                                    </TextBlock.Visibility>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat=" ({0} x {1} x {2})">
+                                            <Binding Path="Length" UpdateSourceTrigger="PropertyChanged"/>
+                                            <Binding Path="Width" UpdateSourceTrigger="PropertyChanged"/>
+                                            <Binding Path="Height" UpdateSourceTrigger="PropertyChanged"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Margin="5" Content="Manage..." Cursor="Hand" Command="{Binding DimensionsManagerDlgCommand}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <TextBlock TextDecorations="Underline"><InlineUIContainer>
+									<ContentPresenter />
+								</InlineUIContainer></TextBlock>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Foreground" Value="Blue" />
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Foreground" Value="Red" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
             <!--
                 Dimensions
             -->
             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
-                <TextBox Width="40" Margin="5 0 5 0"/>
-                <TextBox Width="40" Margin="5 0 5 0"/>
-                <TextBox Width="40" Margin="5 0 5 0"/>
+                <StackPanel.IsEnabled>
+                    <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
+                        <Binding.ConverterParameter>
+                            <sys:Int64>0</sys:Int64>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </StackPanel.IsEnabled>
+                <TextBlock Margin="3 1 0 0"><Run Text="L:"/></TextBlock>
+                <TextBox Width="40" Margin="1 0 5 0" x:Name="dimsLength"
+					Text="{Binding SelectedDimensionsProfile.Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                    <i:Interaction.Behaviors>
+                        <behaviors:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="" MaxLength="3" />
+                    </i:Interaction.Behaviors>
+                </TextBox>
+                <TextBlock Margin="0 1 0 0"><Run Text="W:"/></TextBlock>
+                <TextBox Width="40" Margin="1 0 5 0" 
+					Text="{Binding SelectedDimensionsProfile.Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Behaviors>
+                        <behaviors:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="0" MaxLength="3" />
+                    </i:Interaction.Behaviors>
+                </TextBox>
+                <TextBlock Margin="0 1 0 0"><Run Text="H:"/></TextBlock>
+                <TextBox Width="40" Margin="1 0 5 0"
+					Text="{Binding SelectedDimensionsProfile.Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                    <i:Interaction.Behaviors>
+                        <behaviors:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="0" MaxLength="3" />
+                    </i:Interaction.Behaviors>
+                </TextBox>
+                <TextBlock Margin="0 1 0 0"><Run Text="in."/></TextBlock>
             </StackPanel>
 
             <!--
                 Add Weight
             -->
-            <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Style="{StaticResource GridLabel}">Add to weight</TextBlock>
-                <CheckBox/>
+            <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" Margin="4 5 0 0">
+                <TextBlock Margin="0 4 0 0" Style="{StaticResource GridLabel}"><Run Text="Add to weight"/></TextBlock>
+                <CheckBox Margin="4 4 0 0" 
+					IsChecked="{Binding SelectedPackageAdapter.ApplyAdditionalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <weight:WeightInput 
+					Margin="0,1,0,0"
+					HorizontalAlignment="Left"
+					Weight="{Binding SelectedDimensionsProfile.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <weight:WeightInput.IsEnabled>
+                        <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
+                            <Binding.ConverterParameter>
+                                <sys:Int64>0</sys:Int64>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </weight:WeightInput.IsEnabled>
+                </weight:WeightInput>
             </StackPanel>
 
             <!--
                 Insurance
             -->
-            <TextBlock Grid.Row="9" Grid.Column="0" Style="{StaticResource GridLabel}">Insurance:</TextBlock>
+            <TextBlock Grid.Row="9" Grid.Column="0" Style="{StaticResource GridLabel}"><Run Text="Insurance:"/></TextBlock>
             <StackPanel  Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
-                <CheckBox IsChecked="{Binding Insurance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <CheckBox Margin="4 4 0 0" 
+					IsChecked="{Binding Insurance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock/>
             </StackPanel>
 
             <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Style="{StaticResource GridLabel}">Insured Value:</TextBlock>
+                <TextBlock Style="{StaticResource GridLabel}"><Run Text="Insured Value:"/></TextBlock>
                 <TextBox Width="40"/>
             </StackPanel>
         </Grid>
