@@ -65,7 +65,10 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// <returns></returns>
         public override bool SaveToEntity(StoreEntity store)
         {
-            string message = viewModel.Save(store as YahooStoreEntity);
+            // Check for null here because this method is called when trying to save any
+            // store settings page. Because only the account settings page has a viewmodel
+            // ShipWorks will crash when trying to save from any other page.
+            string message = viewModel?.Save(store as YahooStoreEntity);
 
             if (string.IsNullOrEmpty(message))
             {

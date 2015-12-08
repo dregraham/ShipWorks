@@ -159,8 +159,19 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         public YahooOrderEntity LoadOrder(YahooOrder order, YahooOrderEntity orderEntity)
         {
             orderEntity.OnlineStatusCode = order.StatusList.OrderStatus.Last().StatusID;
-            orderEntity.OnlineStatus =
-                EnumHelper.GetDescription((YahooApiOrderStatus) int.Parse(orderEntity.OnlineStatusCode.ToString()));
+
+            int statusID = int.Parse(orderEntity.OnlineStatusCode.ToString());
+
+            if (statusID >= 0 && statusID <= 8)
+            {
+                orderEntity.OnlineStatus = EnumHelper.GetDescription((YahooApiOrderStatus) statusID);
+            }
+            else
+            {
+                orderEntity.OnlineStatus =
+                    webClient.GetCustomOrderStatus(statusID).ResponseResourceList.CustomOrderStatus.Code;
+            }
+
             orderEntity.RequestedShipping = $"{order.CartShipmentInfo.Shipper} {order.ShipMethod}";
             orderEntity.OrderDate = ParseYahooDateTime(order.CreationTime);
             orderEntity.OnlineLastModified = ParseYahooDateTime(order.LastUpdatedTime);

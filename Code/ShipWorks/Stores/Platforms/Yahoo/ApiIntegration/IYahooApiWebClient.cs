@@ -31,6 +31,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         YahooResponse ValidateCredentials();
 
         /// <summary>
+        /// Gets the custom order status.
+        /// </summary>
+        /// <param name="statusID">The status identifier.</param>
+        YahooResponse GetCustomOrderStatus(int statusID);
+
+        /// <summary>
         /// Uploads the shipment details.
         /// </summary>
         /// <param name="orderID">The order's Yahoo Order ID</param>

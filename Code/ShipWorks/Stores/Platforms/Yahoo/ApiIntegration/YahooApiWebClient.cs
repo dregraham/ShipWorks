@@ -42,6 +42,30 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
+        /// Gets the custom order status.
+        /// </summary>
+        /// <param name="statusID">The status identifier.</param>
+        public YahooResponse GetCustomOrderStatus(int statusID)
+        {
+            string body = RequestBodyIntro + GetRequestBodyIntro +
+                          "<CustomOrderStatusListQuery>" +
+                          "<CustomQueryParams>" +
+                          "<StatusID>16</StatusID>" +
+                          "</CustomQueryParams>" +
+                          "</CustomOrderStatusListQuery>" +
+                          "</ResourceList>" +
+                          "</ystorewsRequest>";
+
+            HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
+            {
+                Verb = HttpVerb.Post,
+                Uri = new Uri(yahooOrderEndpoint + "/order")
+            };
+
+            return ProcessRequest(submitter, "GetCustomOrderStatus");
+        }
+
+        /// <summary>
         /// Gets an order.
         /// </summary>
         /// <param name="orderID">The Yahoo Order ID</param>
