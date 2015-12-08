@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
@@ -14,23 +16,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public class EndiciaLabelService : ILabelService
     {
-        private readonly EndiciaShipmentType endiciaShipmentType;
-        private readonly Express1EndiciaShipmentType express1EndiciaShipmentType;
         private readonly Express1EndiciaLabelService express1EndiciaLabelService;
+        private readonly EndiciaRatingService endiciaRatingService;
+        private readonly Express1EndiciaShipmentType express1EndiciaShipmentType;
+        private readonly EndiciaShipmentType endiciaShipmentType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaLabelService(EndiciaShipmentType endiciaShipmentType, Express1EndiciaShipmentType express1EndiciaShipmentType, Express1EndiciaLabelService express1EndiciaLabelService)
+        public EndiciaLabelService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, Express1EndiciaLabelService express1EndiciaLabelService, EndiciaRatingService endiciaRatingService)
         {
-            //TODO: stop using the ShipmentType when we pull rating into its own service
-            this.endiciaShipmentType = endiciaShipmentType;
-            this.express1EndiciaShipmentType = express1EndiciaShipmentType;
             this.express1EndiciaLabelService = express1EndiciaLabelService;
+            this.endiciaRatingService = endiciaRatingService;
+            
+            express1EndiciaShipmentType = shipmentTypeFactory[ShipmentTypeCode.Express1Endicia] as Express1EndiciaShipmentType;
+            endiciaShipmentType = shipmentTypeFactory[ShipmentTypeCode.Endicia] as EndiciaShipmentType;
+
+            MethodConditions.EnsureArgumentIsNotNull(express1EndiciaShipmentType, nameof(express1EndiciaShipmentType));
+            MethodConditions.EnsureArgumentIsNotNull(endiciaShipmentType, nameof(endiciaShipmentType));
         }
 
-
-
+        
         /// <summary>
         /// Creates an Endicia label
         /// </summary>
@@ -68,8 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
                     // Instantiate the Express1 shipment type, so the correct account repository is used when getting rates
-                    ShipmentType express1Type = ShipmentTypeManager.GetType(shipment);
-                    RateGroup express1Rates = express1Type.GetRates(shipment);
+                    RateGroup express1Rates = endiciaRatingService.GetRates(shipment);
                     RateResult express1Rate = express1Rates.Rates.Where(er => er.Selectable).FirstOrDefault(er =>
                                                                                                       ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
                                                                                                       && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);

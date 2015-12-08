@@ -2,7 +2,7 @@
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
-    public class EndiciaRateHashingService : RateHashingService
+    public class EndiciaRateHashingService : PostalRateHashingService
     {
         /// <summary>
         /// Gets the fields used for rating a shipment.
