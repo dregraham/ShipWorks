@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 {
     public abstract class PostalRatingService : IRatingService
     {
-        private readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
+        protected readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
 
         protected PostalRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory)
         {
