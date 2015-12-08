@@ -1,5 +1,7 @@
 ﻿using System;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping
@@ -32,7 +34,16 @@ namespace ShipWorks.Shipping
 
             if (RateCache.Instance.Contains(rateHash))
             {
-                return RateCache.Instance.GetRateGroup(rateHash);
+                RateGroup rateGroup = RateCache.Instance.GetRateGroup(rateHash);
+
+                // If we are getting a cached amazon rate send the AmazonRatesRetrievedMessage
+                // to update the Amazon shipping service control
+                if ((ShipmentTypeCode)shipment.ShipmentType == ShipmentTypeCode.Amazon)
+                {
+                    Messenger.Current.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
+                }
+
+                return rateGroup;
             }
 
             try

@@ -43,6 +43,7 @@ using System.Xml.Linq;
 using ShipWorks.Stores.Content;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Shipping
 {
@@ -777,7 +778,7 @@ namespace ShipWorks.Shipping
                     rateResults = ratingService.GetRates(clonedShipment);
                 }
             }
-            
+
             // Copy back any best rate events that were set on the clone
             shipment.BestRateEvents |= clonedShipment.BestRateEvents;
 

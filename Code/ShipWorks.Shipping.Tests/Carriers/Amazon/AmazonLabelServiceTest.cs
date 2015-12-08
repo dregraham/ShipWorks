@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             CreateShipmentResult = new CreateShipmentResult()
             {
-                Shipment = new Shipment()
+                AmazonShipment = new AmazonShipment()
                 {
                     TrackingId = "123",
                     ShipmentId = "456",

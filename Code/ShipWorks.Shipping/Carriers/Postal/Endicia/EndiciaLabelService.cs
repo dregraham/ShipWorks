@@ -35,7 +35,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             MethodConditions.EnsureArgumentIsNotNull(express1EndiciaShipmentType, nameof(express1EndiciaShipmentType));
             MethodConditions.EnsureArgumentIsNotNull(endiciaShipmentType, nameof(endiciaShipmentType));
         }
-
         
         /// <summary>
         /// Creates an Endicia label

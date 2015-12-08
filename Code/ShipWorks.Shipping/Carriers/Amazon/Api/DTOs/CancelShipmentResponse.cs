@@ -3,7 +3,7 @@
 namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
 {
     [XmlRoot(ElementName = "CancelShipmentResponse", Namespace = "https://mws.amazonservices.com/MerchantFulfillment/2015-06-01")]
-    public class CancelShipmentResponse
+    public class CancelShipmentResponse : IShipmentResponse
     {
         [XmlElement(ElementName = "CancelShipmentResult")]
         public CancelShipmentResult CancelShipmentResult { get; set; }
@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
     public class CancelShipmentResult
     {
         [XmlElement(ElementName = "Shipment")]
-        public Shipment Shipment { get; set; }
+        public AmazonShipment AmazonShipment { get; set; }
     }
 
 }

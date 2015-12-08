@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         public CreateShipmentResponse ValidateCreateShipmentResponse(CreateShipmentResponse createShipmentResponse)
         {
-            if (createShipmentResponse?.CreateShipmentResult?.Shipment?.Label?.FileContents == null)
+            if (createShipmentResponse?.CreateShipmentResult?.AmazonShipment?.Label?.FileContents == null)
             {
                 throw new AmazonShippingException("Amazon failed to return a label for the Shipment.");
             }

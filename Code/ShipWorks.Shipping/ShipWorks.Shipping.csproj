@@ -110,12 +110,14 @@
     </Compile>
     <Compile Include="CachedRatesService.cs" />
     <Compile Include="Carriers\Amazon\AmazonAllowedCarriersRateGroupFilter.cs" />
+    <Compile Include="Carriers\Amazon\AmazonCancelShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\AmazonInsuranceChoice.cs" />
     <Compile Include="Carriers\Amazon\AmazonLabelService.cs" />
     <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Carriers\Amazon\AmazonPackageAdapter.cs" />
     <Compile Include="Carriers\Amazon\AmazonRatesRetrievedMessage.cs" />
+    <Compile Include="Carriers\Amazon\AmazonCreateShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
@@ -134,6 +136,9 @@
     <Compile Include="Carriers\Amazon\Api\DTOs\CreateShipmentResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\ErrorResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\IResponseMetadata.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\IShipmentResponse.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\IShipmentResult.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonRatingService.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonShipmentRequestDetailsFactory.cs" />
@@ -142,6 +147,7 @@
     <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
     <Compile Include="Carriers\Amazon\IAmazonLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonRequest.cs" />
     <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\IAmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />

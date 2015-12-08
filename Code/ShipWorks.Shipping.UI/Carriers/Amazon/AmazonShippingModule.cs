@@ -6,6 +6,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
@@ -89,6 +90,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
 
             builder.RegisterType<AmazonAccountValidator>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<AmazonCreateShipmentRequest>()
+                .Keyed<IAmazonShipmentRequest>(AmazonMwsApiCall.CreateShipment);
+
+            builder.RegisterType<AmazonCancelShipmentRequest>()
+                .Keyed<IAmazonShipmentRequest>(AmazonMwsApiCall.CancelShipment);
 
             builder.RegisterType<AmazonRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.Amazon)
