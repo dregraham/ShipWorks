@@ -16,13 +16,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public class EndiciaRatingService : PostalRatingService
     {
-        private readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
         private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
 
         public EndiciaRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository) 
             : base(shipmentTypeFactory)
         {
-            this.shipmentTypeFactory = shipmentTypeFactory;
             this.accountRepository = accountRepository;
         }
 
