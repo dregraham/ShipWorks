@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,11 +16,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public class EndiciaRatingService : PostalRatingService
     {
-        private readonly Func<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
-        private readonly Func<ShipmentTypeCode, CarrierAccountRepositoryBase<EndiciaAccountEntity>> accountRepository;
+        private readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
+        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
 
-        public EndiciaRatingService(Func<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, Func<ShipmentTypeCode, CarrierAccountRepositoryBase<EndiciaAccountEntity>> accountRepository) 
-            : base(shipmentTypeFactory, accountRepository)
+        public EndiciaRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository) 
+            : base(shipmentTypeFactory)
         {
             this.shipmentTypeFactory = shipmentTypeFactory;
             this.accountRepository = accountRepository;
@@ -53,25 +53,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             
-            EndiciaShipmentType endiciaShipmentType = shipmentTypeFactory((ShipmentTypeCode) shipment.ShipmentType) as EndiciaShipmentType;
-
-            if (endiciaShipmentType == null)
-            {
-                throw new EndiciaException("Could not get endicia shipment type");
-            }
-
                 // See if this shipment should really go through Express1
                 if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia
-                && !shipmentTypeFactory((ShipmentTypeCode)shipment.ShipmentType).IsRateDiscountMessagingRestricted
+                && !shipmentTypeFactory[(ShipmentTypeCode)shipment.ShipmentType].IsRateDiscountMessagingRestricted
                 && Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType)
                 && settings.EndiciaAutomaticExpress1)
             {
                 // We don't have any Endicia accounts, so let the user know they need an account.
-                if (!accountRepository((ShipmentTypeCode)shipment.ShipmentType).Accounts.Any())
+                if (!accountRepository[(ShipmentTypeCode)shipment.ShipmentType].Accounts.Any())
                 {
                     throw new EndiciaException($"An account is required to view {EnumHelper.GetDescription(ShipmentTypeCode.Endicia)} rates.");
                 }
-
+                
                 var express1Account = EndiciaAccountManager.GetAccount(settings.EndiciaAutomaticExpress1Account);
 
                 if (express1Account == null)
@@ -101,7 +94,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
 
-            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(accountRepository((ShipmentTypeCode)shipment.ShipmentType), endiciaShipmentType.LogEntryFactory, endiciaShipmentType.CertificateInspector);
+            EndiciaShipmentType endiciaShipmentType = shipmentTypeFactory[(ShipmentTypeCode)shipment.ShipmentType] as EndiciaShipmentType;
+
+            if (endiciaShipmentType == null)
+            {
+                throw new EndiciaException("Could not get endicia shipment type");
+            }
+
+            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(accountRepository[(ShipmentTypeCode)shipment.ShipmentType], endiciaShipmentType.LogEntryFactory, endiciaShipmentType.CertificateInspector);
 
             List<RateResult> allEndiciaRates = (InterapptiveOnly.MagicKeysDown) ?
                                                 endiciaApiClient.GetRatesSlow(shipment, endiciaShipmentType) :

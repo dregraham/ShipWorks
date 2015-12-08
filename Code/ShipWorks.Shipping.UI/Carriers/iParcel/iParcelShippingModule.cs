@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Autofac;
-using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -36,6 +36,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             builder.RegisterType<iParcelRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.iParcel)
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<iParcelAccountRepository>()
+                .Keyed<CarrierAccountRepositoryBase<IParcelAccountEntity>>(ShipmentTypeCode.iParcel)
+                .AsSelf();
         }
     }
 }

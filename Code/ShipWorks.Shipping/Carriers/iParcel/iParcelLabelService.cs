@@ -12,6 +12,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// </summary>
     public class iParcelLabelService : ILabelService
     {
+        private readonly ICarrierAccountRepository<IParcelAccountEntity> accountRepository;
         private readonly IiParcelRepository repository;
         private readonly IiParcelServiceGateway serviceGateway;
         private readonly IOrderManager orderManager;
@@ -19,8 +20,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Constructor
         /// </summary>
-        public iParcelLabelService(IiParcelRepository repository, IiParcelServiceGateway serviceGateway, IOrderManager orderManager)
+        public iParcelLabelService(ICarrierAccountRepository<IParcelAccountEntity> accountRepository, IiParcelRepository repository, IiParcelServiceGateway serviceGateway, IOrderManager orderManager)
         {
+            this.accountRepository = accountRepository;
             this.repository = repository;
             this.serviceGateway = serviceGateway;
             this.orderManager = orderManager;
@@ -47,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     shipment.RequestedLabelFormat
                     : (int?) null;
 
-                IParcelAccountEntity iParcelAccount = repository.GetiParcelAccount(shipment);
+                IParcelAccountEntity iParcelAccount = accountRepository.GetAccount(shipment.IParcel.IParcelAccountID);
                 iParcelCredentials credentials = new iParcelCredentials(iParcelAccount.Username, iParcelAccount.Password, true, serviceGateway);
 
                 // i-parcel requires that we upload item information, so fetch the order and order items

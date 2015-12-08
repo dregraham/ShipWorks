@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using Autofac;
+using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 using Xunit;
 
@@ -19,11 +15,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
     public class iParcelLabelServiceTest
     {
-        private iParcelLabelService labelService;
-
-        private Mock<IiParcelServiceGateway> serviceGateway;
-        private Mock<IiParcelRepository> repository;
-        private Mock<IOrderManager> orderManager;
         private ShipmentEntity shipment;
 
         public iParcelLabelServiceTest()
@@ -65,105 +56,151 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             };
 
             shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6 });
-
-            serviceGateway = new Mock<IiParcelServiceGateway>();
-            serviceGateway.Setup(g => g.SubmitShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(new DataSet());
-            serviceGateway.Setup(g => g.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetDeliveredPackageTrackingInfo());
-
-            repository = new Mock<IiParcelRepository>();
-            repository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity());
-            repository.Setup(r => r.GetiParcelAccount(It.IsAny<ShipmentEntity>())).Returns(new IParcelAccountEntity());
-            repository.Setup(r => r.SaveLabel(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
-            repository.Setup(r => r.SaveTrackingInfoToEntity(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
-
-            Mock<IExcludedServiceTypeRepository> excludedServiceTypeRepository = new Mock<IExcludedServiceTypeRepository>();
-            excludedServiceTypeRepository.Setup(x => x.GetExcludedServiceTypes(It.IsAny<ShipmentType>()))
-                .Returns(new List<ExcludedServiceTypeEntity>
-                {
-                    new ExcludedServiceTypeEntity((int)ShipmentTypeCode.iParcel, (int)iParcelServiceType.Saver)
-                });
-
-
-            RateCache.Instance.Clear();
-
-            orderManager = new Mock<IOrderManager>();
-            orderManager.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
-
-            labelService = new iParcelLabelService(repository.Object, serviceGateway.Object, orderManager.Object);
         }
 
         [Fact]
         public void ProcessShipment_ThrowsArgumentNullException_WhenShipmentEntityIsNull_Test()
         {
-            Assert.Throws<ArgumentNullException>(() => labelService.Create(null));
+            using (var mock = AutoMock.GetLoose())
+            {
+                var labelService = mock.Create<iParcelLabelService>();
+
+                Assert.Throws<ArgumentNullException>(() => labelService.Create(null));
+            }
         }
 
         [Fact]
         public void ProcessShipment_ThermalTypeIsZPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsZPL_Test()
         {
-            shipment.RequestedLabelFormat = (int)ThermalLanguage.ZPL;
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                    .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
-            labelService.Create(shipment);
+                var labelService = mock.Create<iParcelLabelService>();
 
-            Assert.Equal((int)ThermalLanguage.ZPL, shipment.ActualLabelFormat);
+                shipment.RequestedLabelFormat = (int)ThermalLanguage.ZPL;
+
+                labelService.Create(shipment);
+
+                Assert.Equal((int)ThermalLanguage.ZPL, shipment.ActualLabelFormat);
+            }
         }
 
         [Fact]
         public void ProcessShipment_ThermalTypeIsEPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsEPL_Test()
         {
-            shipment.RequestedLabelFormat = (int)ThermalLanguage.EPL;
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                    .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
-            labelService.Create(shipment);
+                var labelService = mock.Create<iParcelLabelService>();
 
-            Assert.Equal((int)ThermalLanguage.EPL, shipment.ActualLabelFormat);
+                shipment.RequestedLabelFormat = (int) ThermalLanguage.EPL;
+            
+                labelService.Create(shipment);
+
+                Assert.Equal((int)ThermalLanguage.EPL, shipment.ActualLabelFormat);
+            }
         }
 
         [Fact]
         public void ProcessShipment_ThermalTypeIsNull_WhenThermalTypeSettingIsFalse_Test()
         {
-            labelService.Create(shipment);
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                    .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
-            Assert.Null(shipment.ActualLabelFormat);
+                var labelService = mock.Create<iParcelLabelService>();
+
+                labelService.Create(shipment);
+
+                Assert.Null(shipment.ActualLabelFormat);
+            }
         }
 
         [Fact]
         public void ProcessShipment_DelegatesToRepositoryForAccount_Test()
         {
-            labelService.Create(shipment);
+            using (var mock = AutoMock.GetLoose())
+            {
+                //shipment.IParcel.IParcelAccountID = 4;
 
-            repository.Verify(r => r.GetiParcelAccount(shipment), Times.Once());
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                    .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
+                
+                var labelService = mock.Create<iParcelLabelService>();
+
+                labelService.Create(shipment);
+                
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>().Verify(x => x.GetAccount(shipment.IParcel.IParcelAccountID), Times.Once);
+            }
         }
 
         [Fact]
         public void ProcessShipment_DelegatesToRepositoryForOrderDetails_Test()
         {
-            labelService.Create(shipment);
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                    .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
-            orderManager.Verify(r => r.PopulateOrderDetails(shipment), Times.Once());
+                var labelService = mock.Create<iParcelLabelService>();
+
+                labelService.Create(shipment);
+
+                mock.Mock<IOrderManager>().Verify(x => x.PopulateOrderDetails(shipment), Times.Once);
+            }
         }
 
         [Fact]
         public void ProcessShipment_DelegatesToServiceGateway_Test()
         {
-            labelService.Create(shipment);
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                    .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
-            serviceGateway.Verify(g => g.SubmitShipment(It.IsAny<iParcelCredentials>(), shipment), Times.Once());
+                var labelService = mock.Create<iParcelLabelService>();
+
+                labelService.Create(shipment);
+
+                mock.Mock<IiParcelServiceGateway>().Verify(g => g.SubmitShipment(It.IsAny<iParcelCredentials>(), shipment), Times.Once);
+            }
         }
 
         [Fact]
         public void ProcessShipment_DelegatesToRepositoryToSaveLabel_Test()
         {
-            labelService.Create(shipment);
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                    .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
-            repository.Verify(r => r.SaveLabel(shipment, It.IsAny<DataSet>()), Times.Once());
+                var labelService = mock.Create<iParcelLabelService>();
+
+                labelService.Create(shipment);
+
+                mock.Mock<IiParcelRepository>().Verify(r => r.SaveLabel(shipment, It.IsAny<DataSet>()), Times.Once());
+            }
         }
 
         [Fact]
         public void ProcessShipment_DelegatesToRepositoryToSaveTracking_Test()
         {
-            labelService.Create(shipment);
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                    .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
-            repository.Verify(r => r.SaveTrackingInfoToEntity(shipment, It.IsAny<DataSet>()), Times.Once());
+                var labelService = mock.Create<iParcelLabelService>();
+
+                labelService.Create(shipment);
+
+                mock.Mock<IiParcelRepository>().Verify(r => r.SaveTrackingInfoToEntity(shipment, It.IsAny<DataSet>()), Times.Once());
+            }
         }
 
         private DataSet GetDeliveredPackageTrackingInfo()

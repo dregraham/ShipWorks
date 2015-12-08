@@ -24,9 +24,11 @@ namespace ShipWorks.Shipping.Carriers.Endicia
                 .Keyed<ILabelService>(ShipmentTypeCode.Endicia);
 
             builder.RegisterType<EndiciaAccountRepository>()
+                .Keyed<ICarrierAccountRepository<EndiciaAccountEntity>>(ShipmentTypeCode.Endicia)
                 .AsSelf();
 
             builder.RegisterType<Express1EndiciaAccountRepository>()
+                .Keyed<ICarrierAccountRepository<EndiciaAccountEntity>>(ShipmentTypeCode.Express1Endicia)
                 .AsSelf();
             
             builder.RegisterType<EndiciaRatingService>()
@@ -37,17 +39,6 @@ namespace ShipWorks.Shipping.Carriers.Endicia
                 .Keyed<IRateHashingService>(ShipmentTypeCode.Endicia)
                 .Keyed<IRateHashingService>(ShipmentTypeCode.Express1Endicia)
                 .AsSelf();
-
-            builder.Register<CarrierAccountRepositoryBase<EndiciaAccountEntity>>((container, parameters) =>
-            {
-                if (parameters.TypedAs<ShipmentTypeCode>() == ShipmentTypeCode.Express1Endicia)
-                {
-                    return container.Resolve<Express1EndiciaAccountRepository>();
-                }
-                return container.Resolve<EndiciaAccountRepository>();
-            });
-
-
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -12,13 +13,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
 {
     public abstract class PostalRatingService : IRatingService
     {
-        private readonly Func<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
-        private readonly Func<ShipmentTypeCode, CarrierAccountRepositoryBase<EndiciaAccountEntity>> accountRepository;
+        private readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
 
-        protected PostalRatingService(Func<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, Func<ShipmentTypeCode, CarrierAccountRepositoryBase<EndiciaAccountEntity>> accountRepository)
+        protected PostalRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory)
         {
             this.shipmentTypeFactory = shipmentTypeFactory;
-            this.accountRepository = accountRepository;
         }
 
         public abstract RateGroup GetRates(ShipmentEntity shipment);
@@ -36,13 +35,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentTypeFactory((ShipmentTypeCode)shipment.ShipmentType)));
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentTypeFactory[(ShipmentTypeCode)shipment.ShipmentType]));
                 return errorRates;
             }
 
             RateGroup rates = new RateGroup(new List<RateResult>());
 
-            if (!shipmentTypeFactory((ShipmentTypeCode)shipment.ShipmentType).IsShipmentTypeRestricted)
+            if (!shipmentTypeFactory[(ShipmentTypeCode)shipment.ShipmentType].IsShipmentTypeRestricted)
             {
                 // Only get counter rates if the shipment type has not been restricted
                 rates = new PostalWebShipmentType().GetRates(shipment);
@@ -64,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         protected virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
-            List<PostalServiceType> availableServiceTypes = shipmentTypeFactory((ShipmentTypeCode)shipment.ShipmentType).GetAvailableServiceTypes().Select(s => (PostalServiceType)s).Union(new List<PostalServiceType> { (PostalServiceType)shipment.Postal.Service }).ToList();
+            List<PostalServiceType> availableServiceTypes = shipmentTypeFactory[(ShipmentTypeCode)shipment.ShipmentType].GetAvailableServiceTypes().Select(s => (PostalServiceType)s).Union(new List<PostalServiceType> { (PostalServiceType)shipment.Postal.Service }).ToList();
             return rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)).ToList();
         }
     }

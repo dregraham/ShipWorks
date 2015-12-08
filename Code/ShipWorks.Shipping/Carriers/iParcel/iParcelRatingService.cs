@@ -14,15 +14,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 {
     public class iParcelRatingService : IRatingService
     {
-        private readonly IiParcelRepository repository;
+        private readonly ICarrierAccountRepository<IParcelAccountEntity> accountRepository;
         private readonly IiParcelServiceGateway serviceGateway;
         private readonly iParcelShipmentType iParcelShipmentType;
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
         private readonly IOrderManager orderManager;
 
-        public iParcelRatingService(IiParcelRepository repository, IiParcelServiceGateway serviceGateway, iParcelShipmentType iParcelShipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository, IOrderManager orderManager)
+        public iParcelRatingService(ICarrierAccountRepository<IParcelAccountEntity> accountRepository, IiParcelServiceGateway serviceGateway, iParcelShipmentType iParcelShipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository, IOrderManager orderManager)
         {
-            this.repository = repository;
+            this.accountRepository = accountRepository;
             this.serviceGateway = serviceGateway;
             this.iParcelShipmentType = iParcelShipmentType;
             this.excludedServiceTypeRepository = excludedServiceTypeRepository;
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             try
             {
-                iParcelAccount = repository.GetiParcelAccount(shipment);
+                iParcelAccount = accountRepository.GetAccount(shipment.IParcel.IParcelAccountID);
             }
             catch (iParcelException ex)
             {
