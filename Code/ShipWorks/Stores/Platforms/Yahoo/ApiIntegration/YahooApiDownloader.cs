@@ -244,22 +244,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             if (!order.MerchantNotes.IsNullOrWhiteSpace())
             {
-                // Merchant notes combines all notes into one string, separated by a '>'
-                string[] noteArray = order.MerchantNotes.Split('>');
-
-                foreach (string note in noteArray.Where(note => !note.IsNullOrWhiteSpace()))
-                {
-                    // Here we are extracting the date that prefixes the note. The date and note are separated by a ':'.
-                    // But because the time contains a ':', we'll combine the first 2 pieces for the time, and the last
-                    // part will be the notes text
-                    string[] splitNote = note.Split(':');
-
-                    DateTime noteDate = DateTime.Parse($"{splitNote[0]}:{splitNote[1]}");
-
-                    string noteText = splitNote[2].TrimStart(' ');
-
-                    InstantiateNote(orderEntity, noteText, noteDate, NoteVisibility.Internal);
-                }
+                InstantiateNote(orderEntity, order.MerchantNotes, ParseYahooDateTime(order.CreationTime),
+                    NoteVisibility.Internal);
             }
 
             if (!order.BuyerComments.IsNullOrWhiteSpace())
