@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 
-namespace ShipWorks.Shipping.Carriers.WebTools
+namespace ShipWorks.Shipping.UI.Carriers.Postal.WebTools
 {
     public class WebToolsShippingModule : Module
     {
@@ -16,6 +16,12 @@ namespace ShipWorks.Shipping.Carriers.WebTools
 
             builder.RegisterType<WebToolsLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.PostalWebTools);
+
+            builder.RegisterType<WebToolsRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.PostalWebTools);
+
+            builder.RegisterType<WebToolsRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.PostalWebTools);
         }
     }
 }

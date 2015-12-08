@@ -3,6 +3,9 @@ using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
+    /// <summary>
+    /// Rate hashing service for OnTrac
+    /// </summary>
     public class OnTracRateHashingService : RateHashingService
     {
         /// <summary>

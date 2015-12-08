@@ -7,15 +7,29 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
+    /// <summary>
+    /// Rating service for OnTrac
+    /// </summary>
     public class OnTracRatingService : IRatingService
     {
         private readonly OnTracShipmentType onTracShipmentType;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OnTracRatingService"/> class.
+        /// </summary>
+        /// <param name="onTracShipmentType">Type of the on trac shipment.</param>
         public OnTracRatingService(OnTracShipmentType onTracShipmentType)
         {
             this.onTracShipmentType = onTracShipmentType;
         }
 
+        /// <summary>
+        /// Gets rates for the given shipment
+        /// </summary>
+        /// <param name="shipment">The shipment</param>
+        /// <returns>RateGroup for the shipment</returns>
+        /// <exception cref="OnTracException">An OnTrac account is required to view rates.</exception>
+        /// <exception cref="ShippingException"></exception>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
             try
