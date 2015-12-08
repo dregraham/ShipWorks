@@ -22,13 +22,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
     {
         private readonly ILog log;
         private readonly IYahooApiWebClient client;
+        private readonly IShippingManager shippingManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiOnlineUpdater"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
         public YahooApiOnlineUpdater(YahooStoreEntity store) :
-            this(LogManager.GetLogger(typeof (YahooApiOnlineUpdater)), new YahooApiWebClient(store))
+            this(LogManager.GetLogger(typeof (YahooApiOnlineUpdater)), new YahooApiWebClient(store), new ShippingManagerWrapper())
         {
         }
 
@@ -37,10 +38,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="log">The logger</param>
         /// <param name="client">The api web client.</param>
-        public YahooApiOnlineUpdater(ILog log, IYahooApiWebClient client)
+        /// <param name="shippingManager"></param>
+        public YahooApiOnlineUpdater(ILog log, IYahooApiWebClient client, IShippingManager shippingManager)
         {
             this.log = log;
             this.client = client;
+            this.shippingManager = shippingManager;
         }
 
         /// <summary>
@@ -142,7 +145,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         [NDependIgnoreComplexMethod]
         public string GetCarrierCode(ShipmentEntity shipment)
         {
-            ShippingManager.EnsureShipmentLoaded(shipment);
+            shippingManager.EnsureShipmentLoaded(shipment);
 
             // Yahoo only supports usps, ups, fedex, dhl and airborne.
             // so if the carrier is something else (OnTrac, iparcel...)

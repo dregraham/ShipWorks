@@ -1,4 +1,5 @@
 ﻿using System;
+using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -17,19 +18,23 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         private readonly UpsShipmentEntity upsEntity;
         private readonly YahooApiOnlineUpdater testObject;
         readonly Mock<YahooStoreEntity> yahooApiStore = new Mock<YahooStoreEntity>();
+        readonly Mock<IShippingManager> shippingManager = new Mock<IShippingManager>();
 
         public YahooApiOnlineUpdaterTest()
         {
             yahooApiStore.Setup(x => x.TypeCode).Returns(2);
             yahooApiStore.Setup(x => x.YahooStoreID).Returns("ysht-123456789");
 
-            testObject = new YahooApiOnlineUpdater(yahooApiStore.Object);
-
             OrderEntity orderEntity = new YahooOrderEntity { OrderNumber = 123456 };
             shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow };
             postalShipmentEntity = new PostalShipmentEntity { Service = (int)PostalServiceType.FirstClass };
             otherShipmentEntity = new OtherShipmentEntity { Carrier = "Some other carrier", Service = "Fast Ground" };
             upsEntity = new UpsShipmentEntity { Service = (int)UpsServiceType.UpsGround, UspsTrackingNumber = "mi tracking #" };
+
+
+            shippingManager.Setup(x => x.EnsureShipmentLoaded(shipmentEntity));
+
+            testObject = new YahooApiOnlineUpdater(LogManager.GetLogger(typeof(YahooApiOnlineUpdater)), new YahooApiWebClient(yahooApiStore.Object), shippingManager.Object);
         }
 
         [Fact]

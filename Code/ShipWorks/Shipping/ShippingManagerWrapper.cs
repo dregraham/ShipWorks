@@ -32,5 +32,13 @@ namespace ShipWorks.Shipping
         public string GetServiceUsed(ShipmentEntity shipment) =>
             ShippingManager.GetServiceUsed(shipment);
 
+        /// <summary>
+        /// Ensure the carrier-specific data for the shipment exists, like the associated FedEx table row.  Also ensures
+        /// that the custom's data is loaded.  Can throw a SqlForeignKeyException  if the shipment's order has been deleted,
+        /// or ObjectDeletedException if the shipment itself has been deleted.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public void EnsureShipmentLoaded(ShipmentEntity shipment) =>
+                    ShippingManager.EnsureShipmentLoaded(shipment);
     }
 }
