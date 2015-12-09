@@ -14,6 +14,23 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             builder.RegisterType<BestRateLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.BestRate);
+
+            builder.RegisterType<BestRateShipmentType>()
+                .AsSelf()
+                .Keyed<ShipmentType>(ShipmentTypeCode.BestRate);
+
+            builder.RegisterType<BestRateRatingService>()
+                .As<IBestRateBrokerRatingService>()
+                .AsSelf()
+                .Keyed<IRatingService>(ShipmentTypeCode.BestRate);
+
+            builder.RegisterType<BestRateShippingBrokerFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<BestRateRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.BestRate)
+                .AsSelf();
+
         }
     }
 }
