@@ -136,46 +136,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
             base.UpdateDynamicShipmentData(shipment);
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
         }
-
-        /// <summary>
-        /// Get postal rates for the given shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        protected override RateGroup GetRatesInternal(ShipmentEntity shipment)
-        {
-            // Overridden here otherwise relying on the UspsShipmentType to get rates
-            // would result in infinite recursion when using auto-routing since the UspsShipmentType 
-            // is just calling GetRatesInternal on an Express1UspsShipmentType which then creates a new
-            // Express1UspsShipmentType and gets rates, and on and on...
-
-            return GetCachedRates<UspsException>(shipment, GetRatesFromApi);
-        }
-
-        /// <summary>
-        /// Gets the rates from the Exprss1 API.
-        /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
-        {
-            List<RateResult> rateResults = CreateWebClient().GetRates(shipment);
-            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, rateResults));
-
-            if (UspsAccountManager.UspsAccounts.All(a => a.ContractType != (int) UspsAccountContractType.Reseller))
-            {
-                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
-            }
-
-            return rateGroup;
-        }
-
-        /// <summary>
-        /// Gets counter rates for a postal shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        protected override RateGroup GetCounterRates(ShipmentEntity shipment)
-        {
-            return GetCachedRates<UspsException>(shipment, entity => { throw new UspsException("An account is required to view Express1 rates."); });
-        }
-
+        
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
@@ -234,23 +195,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
             };
         }
 
-        /// <summary>
-        /// Gets the filtered rates based on any excluded services configured for this postal shipment type.
-        /// </summary>
-        public override List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
-        {
-            List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList();;
-
-            if (shipment.ShipmentType == (int) this.ShipmentTypeCode)
-            {
-                availableServiceTypes.Add((PostalServiceType)shipment.Postal.Service);
-            }
-
-            List<RateResult> rateResults = rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)).ToList();
-
-            rateResults.ForEach(r=> r.ShipmentType = ShipmentTypeCode);
-
-            return rateResults;
-        }
     }
 }

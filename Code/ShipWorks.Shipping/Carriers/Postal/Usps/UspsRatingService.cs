@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
         private ICarrierAccountRepository<UspsAccountEntity> accountRepository;
         private ICertificateInspector certificateInspector;
-        private readonly ICachedRatesService cachedRatesService;
+        protected readonly ICachedRatesService cachedRatesService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsRatingService"/> class.
@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets the type of the shipment.
         /// </summary>
-        private UspsShipmentType GetShipmentType(ShipmentEntity shipment)
+        protected UspsShipmentType GetShipmentType(ShipmentEntity shipment)
         {
             UspsShipmentType shipmentType = (UspsShipmentType) shipmentTypeFactory[(ShipmentTypeCode) shipment.ShipmentType];
 
