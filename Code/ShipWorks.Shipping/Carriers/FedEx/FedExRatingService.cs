@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -10,10 +11,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 {
     public class FedExRatingService : IRatingService
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(FedExRatingService));
+
         private readonly FedExAccountRepository fedExAccountRepository;
         private readonly FedExShipmentType fedExShipmentType;
         private readonly FedExShippingClerkFactory shippingClerkFactory;
-
+        
         public FedExRatingService(FedExAccountRepository fedExAccountRepository,
             ICachedRatesService cachedRatesService, 
             FedExShipmentType fedExShipmentType,
@@ -42,6 +45,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 // there must be at least one FedEx account so we get rates using it
                 return shippingClerkFactory.CreateShippingClerk(shipment, false).GetRates(shipment);
+            }
+            catch (FedExException ex)
+            {
+                log.Error("Translating FedEx exception to Shipping Exception", ex);
+                throw new ShippingException(ex.Message, ex);
             }
             catch (CounterRatesOriginAddressException)
             {
