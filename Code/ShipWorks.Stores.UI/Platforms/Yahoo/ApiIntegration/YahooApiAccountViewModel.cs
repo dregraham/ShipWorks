@@ -15,8 +15,8 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
     /// </summary>
     public class YahooApiAccountViewModel
     {
-        private readonly Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient;
-        protected readonly PropertyChangedHandler handler;
+        protected readonly Func<YahooStoreEntity, IYahooApiWebClient> StoreWebClient;
+        protected readonly PropertyChangedHandler Handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string yahooStoreID;
         private string accessToken;
@@ -29,8 +29,8 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// <param name="storeWebClient">The store web client.</param>
         public YahooApiAccountViewModel(Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient)
         {
-            this.storeWebClient = storeWebClient;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            this.StoreWebClient = storeWebClient;
+            Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         public string YahooStoreID
         {
             get { return yahooStoreID; }
-            set { handler.Set(nameof(YahooStoreID), ref yahooStoreID, value); }
+            set { Handler.Set(nameof(YahooStoreID), ref yahooStoreID, value); }
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         public string AccessToken
         {
             get { return accessToken; }
-            set { handler.Set(nameof(AccessToken), ref accessToken, value); }
+            set { Handler.Set(nameof(AccessToken), ref accessToken, value); }
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         public long? BackupOrderNumber
         {
             get { return backupOrderNumber; }
-            set { handler.Set(nameof(BackupOrderNumber), ref backupOrderNumber, value); }
+            set { Handler.Set(nameof(BackupOrderNumber), ref backupOrderNumber, value); }
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         public YahooOrderNumberValidation IsValid
         {
             get { return isValid; }
-            set { handler.Set(nameof(IsValid), ref isValid, value); }
+            set { Handler.Set(nameof(IsValid), ref isValid, value); }
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         {
             try
             {
-                YahooResponse response = storeWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
+                YahooResponse response = StoreWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
                             .GetOrderRange(BackupOrderNumber.GetValueOrDefault());
 
                 return response.ErrorResourceList == null;
@@ -140,7 +140,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// </summary>
         protected void HandleChanges()
         {
-            handler.Where(IsValidationProperty)
+            Handler.Where(IsValidationProperty)
                 .Where(IsValidationPropertyEntered)
                 .Do(_ => IsValid = YahooOrderNumberValidation.Validating)
                 .Throttle(TimeSpan.FromMilliseconds(350))
@@ -157,7 +157,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="store">The store.</param>
         /// <returns></returns>
-        public string Save(YahooStoreEntity store)
+        public virtual string Save(YahooStoreEntity store)
         {
             store.YahooStoreID = YahooStoreID;
             store.AccessToken = AccessToken;
@@ -180,7 +180,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 
             try
             {
-                YahooResponse response = storeWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
+                YahooResponse response = StoreWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
                     .ValidateCredentials();
 
                 return response.ErrorMessages == null ? string.Empty : CheckCredentialsError(response);

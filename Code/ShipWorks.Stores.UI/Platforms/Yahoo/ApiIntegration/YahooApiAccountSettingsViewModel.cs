@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
+using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
 namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 {
@@ -38,22 +39,35 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// <param name="store">The store.</param>
         public new string Save(YahooStoreEntity store)
         {
-            string error = base.Save(store);
+            store.YahooStoreID = YahooStoreID;
+            store.AccessToken = AccessToken;
+            store.BackupOrderNumber = BackupOrderNumber;
 
-            if (!string.IsNullOrWhiteSpace(error))
+            if (string.IsNullOrWhiteSpace(YahooStoreID))
             {
-                return error;
+                return "Please enter your Store URL";
             }
 
-            switch (IsValid)
+            if (string.IsNullOrWhiteSpace(AccessToken))
             {
-                case YahooOrderNumberValidation.Validating:
-                    return "Please wait while ShipWorks validates the order number you entered.";
-                case YahooOrderNumberValidation.Invalid:
-                    return "The order number you entered does not exist for this Yahoo store. Please enter an existing order number to start downloading from.";
-                default:
-                    return string.Empty;
+                return "Please enter your Access Token";
             }
+
+            string error;
+
+            try
+            {
+                YahooResponse response = StoreWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
+                    .ValidateCredentials();
+
+                error = response.ErrorMessages == null ? string.Empty : CheckCredentialsError(response);
+            }
+            catch (Exception ex)
+            {
+                return $"Error connecting to Yahoo Api: {ex.Message}";
+            }
+
+            return error;
         }
     }
 }

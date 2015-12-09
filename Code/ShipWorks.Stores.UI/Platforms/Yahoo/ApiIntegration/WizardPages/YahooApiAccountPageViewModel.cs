@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
         public string HelpUrl
         {
             get { return helpUrl; }
-            set { handler.Set(nameof(HelpUrl), ref helpUrl, value); }
+            set { Handler.Set(nameof(HelpUrl), ref helpUrl, value); }
         }
 
         /// <summary>
