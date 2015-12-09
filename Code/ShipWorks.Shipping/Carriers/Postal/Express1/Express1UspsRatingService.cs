@@ -17,8 +17,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public Express1UspsRatingService(
             IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, 
             Express1UspsAccountRepository accountRepository, 
-            ICachedRatesService cachedRatesService) : 
-            base(shipmentTypeFactory, accountRepository, cachedRatesService)
+            ICachedRatesService cachedRatesService,
+            IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory) : 
+            base(shipmentTypeFactory, accountRepository, cachedRatesService, ratingServiceFactory)
         {}
 
         /// <summary>

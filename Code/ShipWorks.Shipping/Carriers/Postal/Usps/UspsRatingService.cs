@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
@@ -28,6 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private ICarrierAccountRepository<UspsAccountEntity> accountRepository;
         private ICertificateInspector certificateInspector;
         protected readonly ICachedRatesService cachedRatesService;
+        private readonly IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsRatingService"/> class.
@@ -35,11 +37,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public UspsRatingService(
             IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
             ICarrierAccountRepository<UspsAccountEntity> accountRepository,
-            ICachedRatesService cachedRatesService) : base(shipmentTypeFactory)
+            ICachedRatesService cachedRatesService,
+            IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory) : base(shipmentTypeFactory)
         {
             this.accountRepository = accountRepository;
             this.certificateInspector = new TrustingCertificateInspector();
             this.cachedRatesService = cachedRatesService;
+            this.ratingServiceFactory = ratingServiceFactory;
         }
 
         /// <summary>
@@ -208,7 +212,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             return Task.Factory.StartNew(() =>
             {
-                RateGroup rateGroup = new Express1UspsShipmentType().GetRates(express1Shipment);
+                RateGroup rateGroup = ratingServiceFactory[ShipmentTypeCode.Express1Usps].GetRates(express1Shipment);
                 foreach (RateResult rate in rateGroup.Rates)
                 {
                     PostalRateSelection tag = rate.Tag as PostalRateSelection;
