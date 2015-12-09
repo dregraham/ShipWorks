@@ -12,6 +12,9 @@ using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
+    /// <summary>
+    /// I-Parcel rating service
+    /// </summary>
     public class iParcelRatingService : IRatingService
     {
         private readonly ICarrierAccountRepository<IParcelAccountEntity> accountRepository;
@@ -20,7 +23,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
         private readonly IOrderManager orderManager;
 
-        public iParcelRatingService(ICarrierAccountRepository<IParcelAccountEntity> accountRepository, IiParcelServiceGateway serviceGateway, iParcelShipmentType iParcelShipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository, IOrderManager orderManager)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="iParcelRatingService"/> class.
+        /// </summary>
+        public iParcelRatingService(iParcelAccountRepository accountRepository, IiParcelServiceGateway serviceGateway, iParcelShipmentType iParcelShipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository, IOrderManager orderManager)
         {
             this.accountRepository = accountRepository;
             this.serviceGateway = serviceGateway;
@@ -29,6 +35,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.orderManager = orderManager;
         }
 
+        /// <summary>
+        /// Gets the rates.
+        /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
             IParcelAccountEntity iParcelAccount;
@@ -109,6 +118,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             return new RateGroup(results);
         }
 
+        /// <summary>
+        /// Confirm rate results are valid
+        /// </summary>
         private static bool RateResultAreValid(DataSet ratesResult)
         {
             return ratesResult != null && ratesResult.Tables.Count != 0 && ratesResult.Tables[0].Rows.Count != 0 &&
