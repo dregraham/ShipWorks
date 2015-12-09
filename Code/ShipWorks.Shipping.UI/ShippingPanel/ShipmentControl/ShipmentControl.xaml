@@ -193,6 +193,7 @@
                 <weight:WeightInput
 					Margin="0,1,0,0"
 					HorizontalAlignment="Left"
+                    Width="60"
 					Weight="{Binding SelectedDimensionsProfile.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <weight:WeightInput.IsEnabled>
                         <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
