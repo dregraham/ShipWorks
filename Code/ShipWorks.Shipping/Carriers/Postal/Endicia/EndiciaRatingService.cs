@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                                                 endiciaApiClient.GetRatesFast(shipment, endiciaShipmentType);
 
             // Filter out any excluded services, but always include the service that the shipment is configured with
-            List<RateResult> endiciaRates = endiciaShipmentType.FilterRatesByExcludedServices(shipment, allEndiciaRates);
+            List<RateResult> endiciaRates = FilterRatesByExcludedServices(shipment, allEndiciaRates);
 
 
             // For endicia, we want to either promote Express1 or show the Express1 savings
@@ -158,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
 
                     // Filter out any excluded services, but always include the service that the shipment is configured with
-                    List<RateResult> finalRatesFilteredByAvailableServices = endiciaShipmentType.FilterRatesByExcludedServices(shipment, finalRates.Select(e =>
+                    List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, finalRates.Select(e =>
                     {
                         e.ShipmentType = ShipmentTypeCode.Endicia;
                         return e;
@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Express1 wasn't used, so we want to promote USPS
 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
-                RateGroup finalEndiciaOnlyRates = new RateGroup(endiciaShipmentType.FilterRatesByExcludedServices(shipment, endiciaRates));
+                RateGroup finalEndiciaOnlyRates = new RateGroup(FilterRatesByExcludedServices(shipment, endiciaRates));
 
                 if (endiciaShipmentType.IsRateDiscountMessagingRestricted)
                 {

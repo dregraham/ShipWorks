@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
                     serviceRates = upsApiRateClient.GetRates(shipment, false);
 
                     // Determine if the user is hoping to get negotiated rates back
-                    wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, accountRepository).RateType == (int)UpsRateType.Negotiated;
+                    wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, accountRepository).RateType == (int) UpsRateType.Negotiated;
 
                     // Indicates if any of the rates returned were negotiated.
                     anyNegotiated = serviceRates.Any(s => s.Negotiated);
@@ -145,9 +145,9 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType));
                 return errorRates;
             }
-            catch (InvalidPackageDimensionsException ex)
+            catch (Exception ex) when (ex is UpsException || ex is InvalidPackageDimensionsException)
             {
-                throw new UpsException(ex.Message, ex);
+                throw new ShippingException(ex.Message, ex);
             }
         }
 
@@ -206,7 +206,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
             {
                 if (upsPackage.PackagingType == (int)UpsPackagingType.Custom)
                 {
-                    if (DimensionsAreValid(upsPackage))
+                    if (!DimensionsAreValid(upsPackage))
                     {
                         exceptionMessage += $"Package {packageIndex} has invalid dimensions.{Environment.NewLine}";
                     }

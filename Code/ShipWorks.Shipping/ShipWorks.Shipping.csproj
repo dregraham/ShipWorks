@@ -170,7 +170,9 @@
     <Compile Include="Carriers\Postal\Endicia\EndiciaRateHashingService.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaRatingService.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaLabelService.cs" />
+    <Compile Include="Carriers\Postal\Express1\Express1EndiciaRatingService.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1UspsLabelService.cs" />
+    <Compile Include="Carriers\Postal\Express1\Express1UspsRatingService.cs" />
     <Compile Include="Carriers\Postal\PostalRateHashingService.cs" />
     <Compile Include="Carriers\Postal\PostalRatingService.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsLabelService.cs" />

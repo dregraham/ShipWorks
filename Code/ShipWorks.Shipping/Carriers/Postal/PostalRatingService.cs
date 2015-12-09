@@ -11,15 +11,24 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
+    /// <summary>
+    /// PostalRatingService
+    /// </summary>
     public abstract class PostalRatingService : IRatingService
     {
         protected readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PostalRatingService"/> class.
+        /// </summary>
         protected PostalRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory)
         {
             this.shipmentTypeFactory = shipmentTypeFactory;
         }
 
+        /// <summary>
+        /// Gets the rates.
+        /// </summary>
         public abstract RateGroup GetRates(ShipmentEntity shipment);
 
         /// <summary>
