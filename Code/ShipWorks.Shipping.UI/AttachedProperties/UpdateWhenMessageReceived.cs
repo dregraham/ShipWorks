@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// </summary>
         public static readonly DependencyProperty MessageTypeProperty = DependencyProperty.RegisterAttached("MessageType", typeof(Type),
                 typeof(UpdateWhenMessageReceived), new PropertyMetadata(null, OnMessageTypeChanged));
-        
+
         private static readonly DependencyProperty SubscriptionProperty =
             DependencyProperty.RegisterAttached("Subscription", typeof(IDisposable), typeof(UpdateWhenMessageReceived));
 
@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// Reset the selection of the items control so it matches the item in the collection
         /// </summary>
         /// <remarks>
-        /// If we don't clear the selected value first, the control 
+        /// If we don't clear the selected value first, the control
         /// doesn't think anything has changed when we update the binding
         /// </remarks>
         private static void ResetSelection(Selector selector)
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
             {
                 return;
             }
-            
+
             selector.SetCurrentValue(Selector.SelectedValueProperty, null);
             BindingOperations.GetBindingExpressionBase(selector, Selector.SelectedValueProperty)?.UpdateTarget();
 
@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// Update the displayed text of the combo box
         /// </summary>
         /// <remarks>
-        /// The Text property updates correctly when we reset the selection, 
+        /// The Text property updates correctly when we reset the selection,
         /// but the displayed text does not
         /// </remarks>
         private static void UpdateComboBoxText(ComboBox comboBox)

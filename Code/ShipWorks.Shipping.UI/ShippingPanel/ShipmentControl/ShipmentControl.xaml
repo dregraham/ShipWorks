@@ -110,7 +110,7 @@
 
             <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource GridLabel}"><Run Text="Weight:"/></TextBlock>
 
-            <weight:WeightInput Grid.Row="5" Grid.Column="1"
+            <weight:WeightControl Grid.Row="5" Grid.Column="1"
 				Margin="0,0,0,0"
 				HorizontalAlignment="Left"
 				Weight="{Binding TotalWeight}"/>

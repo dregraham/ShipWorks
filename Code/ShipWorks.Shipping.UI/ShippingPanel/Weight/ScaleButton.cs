@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Interapptive.Shared.IO.Hardware.Scales;
 using ShipWorks.UI.Controls;
+using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
 {
@@ -80,6 +81,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
         /// </summary>
         private void SetupWeightEventStream(bool visible)
         {
+            if (DesignModeDetector.IsDesignerHosted())
+            {
+                return;
+            }
+
             weightSubscription?.Dispose();
 
             if (visible && display != null)

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
@@ -22,12 +22,38 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                     new PropertyChangedCallback(OnWeightChanged)));
 
+        public static readonly DependencyProperty TextProperty =
+            DependencyProperty.Register("Text", typeof(string), typeof(WeightInput),
+                new FrameworkPropertyMetadata(string.Empty,
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                    new PropertyChangedCallback(OnTextChanged),
+                    new CoerceValueCallback(CoerceTextPropertyChanges)));
+
+        /// <summary>
+        /// The text has changed
+        /// </summary>
+        private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            // We need to handle text changes to also handle coercion
+        }
+
         /// <summary>
         /// Static constructor
         /// </summary>
         static WeightInput()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(WeightInput), new FrameworkPropertyMetadata(typeof(WeightInput)));
+        }
+
+        /// <summary>
+        /// Textual representation of the weight
+        /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
+        public string Text
+        {
+            get { return (string) GetValue(TextProperty); }
+            set { SetValue(TextProperty, value); }
         }
 
         /// <summary>
@@ -47,12 +73,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
         {
             base.OnApplyTemplate();
 
-            if (entry != null)
-            {
-                entry.LostKeyboardFocus -= OnEntryLostKeyboardFocus;
-                entry.TextChanged -= OnEntryTextChanged;
-            }
-
             entry = GetTemplateChild("PART_Entry") as TextBox;
 
             if (entry == null)
@@ -60,41 +80,28 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
                 throw new InvalidOperationException("PART_Entry is not available in the template");
             }
 
-            entry.LostKeyboardFocus += OnEntryLostKeyboardFocus;
-            entry.TextChanged += OnEntryTextChanged;
-        }
-
-        private void OnEntryTextChanged(object sender, TextChangedEventArgs e)
-        {
-            BindingExpressionBase bindingExpressionBase =
-                BindingOperations.GetBindingExpressionBase(this, WeightProperty);
-            Validation.ClearInvalid(bindingExpressionBase);
+            Binding textBinding = new Binding();
+            textBinding.Source = this;
+            textBinding.Path = new PropertyPath(nameof(Text));
+            textBinding.Mode = BindingMode.TwoWay;
+            entry.SetBinding(TextBox.TextProperty, textBinding);
         }
 
         /// <summary>
-        /// The entry box has lost keyboard focus
+        /// Coerce entered text into text that we expect for weight input
         /// </summary>
-        private void OnEntryLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private static object CoerceTextPropertyChanges(DependencyObject d, object baseValue)
         {
-            double? weight = WeightConverter.Current.ParseWeight(entry.Text);
+            double? weight = WeightConverter.Current.ParseWeight(baseValue as string);
 
             if (weight.HasValue)
             {
-                SetCurrentValue(WeightProperty, weight.Value);
+                d.SetCurrentValue(WeightProperty, weight.Value);
+                return WeightConverter.Current.FormatWeight(weight.Value);
             }
             else
             {
-                SetEntryWeightValue(this, Weight);
-
-                BindingExpression bindingExpression = BindingOperations.GetBindingExpression(this, WeightProperty);
-
-                BindingExpressionBase bindingExpressionBase =
-                    BindingOperations.GetBindingExpressionBase(this, WeightProperty);
-
-                ValidationError validationError =
-                    new ValidationError(new ExceptionValidationRule(), bindingExpression);
-
-                Validation.MarkInvalid(bindingExpressionBase, validationError);
+                return WeightConverter.Current.FormatWeight((double) d.GetValue(WeightProperty));
             }
         }
 

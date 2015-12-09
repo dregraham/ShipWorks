@@ -319,6 +319,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingModule.cs" />
     <Compile Include="ShippingPanel\Weight\ScaleButton.cs" />
+    <Compile Include="ShippingPanel\Weight\WeightControl.cs" />
     <Compile Include="ShippingPanel\Weight\WeightInput.cs" />
     <Compile Include="ShippingPanel\Weight\WeightValidationRule.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />
@@ -457,6 +458,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Controls\ScaleButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Controls\WeightControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
