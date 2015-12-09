@@ -25,15 +25,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 ratingField.ShipmentFields.Add(IParcelShipmentFields.TrackByEmail);
                 ratingField.ShipmentFields.Add(IParcelShipmentFields.TrackBySMS);
 
-                ratingField.ShipmentFields.Add(IParcelPackageFields.Weight);
-                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsWeight);
-                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsWidth);
-                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsHeight);
-                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsLength);
-                ratingField.ShipmentFields.Add(IParcelPackageFields.DeclaredValue);
-                ratingField.ShipmentFields.Add(IParcelPackageFields.InsuranceValue);
-                ratingField.ShipmentFields.Add(IParcelPackageFields.Insurance);
-                ratingField.ShipmentFields.Add(IParcelPackageFields.InsurancePennyOne);
+                ratingField.PackageFields.Add(IParcelPackageFields.Weight);
+                ratingField.PackageFields.Add(IParcelPackageFields.DimsWeight);
+                ratingField.PackageFields.Add(IParcelPackageFields.DimsWidth);
+                ratingField.PackageFields.Add(IParcelPackageFields.DimsHeight);
+                ratingField.PackageFields.Add(IParcelPackageFields.DimsLength);
+                ratingField.PackageFields.Add(IParcelPackageFields.DeclaredValue);
+                ratingField.PackageFields.Add(IParcelPackageFields.InsuranceValue);
+                ratingField.PackageFields.Add(IParcelPackageFields.Insurance);
+                ratingField.PackageFields.Add(IParcelPackageFields.InsurancePennyOne);
 
                 return ratingField;
             }
