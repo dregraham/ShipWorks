@@ -1,21 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
+using Interapptive.Shared;
+using Interapptive.Shared.Imaging;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Pdf;
-using Interapptive.Shared.Imaging;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using Interapptive.Shared;
-using log4net;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IDataResourceManager resourceManager;
         private readonly IEnumerable<IAmazonLabelEnforcer> labelEnforcers;
         private static readonly ILog log = LogManager.GetLogger(typeof(AmazonLabelService));
+        private readonly IObjectReferenceManager objectReferenceManager;
 
         /// <summary>
         /// Constructor
@@ -38,7 +39,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         [NDependIgnoreTooManyParams]
         public AmazonLabelService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory,
             IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
-            IDataResourceManager resourceManager, IEnumerable<IAmazonLabelEnforcer> labelEnforcers)
+            IDataResourceManager resourceManager, IEnumerable<IAmazonLabelEnforcer> labelEnforcers,
+            IObjectReferenceManager objectReferenceManager)
         {
             // TODO: refactor to get parameters down to 5 or less
 
@@ -48,6 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.requestFactory = requestFactory;
             this.resourceManager = resourceManager;
             this.labelEnforcers = labelEnforcers;
+            this.objectReferenceManager = objectReferenceManager;
         }
 
 
@@ -106,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
-            
+
             webClient.CancelShipment(settings, shipment.Amazon.AmazonUniqueShipmentID);
         }
 
@@ -126,10 +129,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void SaveLabel(FileContents fileContents, long shipmentID)
         {
+            // Interapptive users have an Unprocess button.  If we are reprocessing we need to clear the old images
+            objectReferenceManager.ClearReferences(shipmentID);
+
             // Decompress the label string
             byte[] labelBytes = GZipUtility.Decompress(Convert.FromBase64String(fileContents.Contents));
 
-            // If its a pdf we need to convert it
+            // If it's a PDF we need to convert it
             if (fileContents.FileType == "application/pdf")
             {
                 using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
@@ -153,17 +159,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Converts Ppf to Cropped label image
+        /// Converts PDF to Cropped label image
         /// </summary>
         private bool SavePdfLabel(PdfDocument pdf, long shipmentID)
         {
             // We need to convert the PDF into images and register each image as a resource in the database
             List<Stream> images = pdf.ToImages().ToList();
 
-            // Try to crop the label 
+            // Try to crop the label
             try
             {
-                // loop each image, if the pdf had multiple pages
+                // loop each image, if the PDF had multiple pages
                 for (int i = 0; i < images.Count; i++)
                 {
                     using (MemoryStream memoryStream = new MemoryStream())

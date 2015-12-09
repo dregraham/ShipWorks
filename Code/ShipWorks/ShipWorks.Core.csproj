@@ -705,6 +705,8 @@
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
+    <Compile Include="Data\IObjectReferenceManager.cs" />
+    <Compile Include="Data\ObjectReferenceManagerWrapper.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
     <Compile Include="Editions\EditionManagerWrapper.cs" />
     <Compile Include="Editions\IEditionManager.cs" />

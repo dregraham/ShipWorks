@@ -1,35 +1,29 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Security.Cryptography;
-using Interapptive.Shared.Data;
-using Interapptive.Shared.Utility;
-using ShipWorks.Actions.Tasks.Common;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data;
 using System.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.SqlServer.Common.Data;
-using log4net;
+using System.Data.SqlClient;
 using System.Diagnostics;
-using Interapptive.Shared;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
-using ShipWorks.Users;
-using ShipWorks.Data.Connection;
+using Interapptive.Shared;
+using Interapptive.Shared.IO.Zip;
+using Interapptive.Shared.Pdf;
+using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using System.Data.SqlClient;
-using Interapptive.Shared.IO.Zip;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Collections;
-using Interapptive.Shared.Pdf;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Data
 {
@@ -61,7 +55,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Provide methhod for background process to register thread to clean up resource cache
+        /// Provide method for background process to register thread to clean up resource cache
         /// </summary>
         public static void RegisterResourceCacheCleanup()
         {
@@ -77,7 +71,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Regsister the file as a resource in the database.  If already present, the existing reference is returned.
+        /// Register the file as a resource in the database.  If already present, the existing reference is returned.
         /// </summary>
         public static DataResourceReference CreateFromFile(string filename, long consumerID)
         {
@@ -97,7 +91,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Regsister the data as a resource in the database.  If already present, the existing reference is returned.
+        /// Register the data as a resource in the database.  If already present, the existing reference is returned.
         /// </summary>
         public static DataResourceReference CreateFromText(string text, long consumerID)
         {
@@ -132,8 +126,16 @@ namespace ShipWorks.Data
                 {
                     images[i].CopyTo(memoryStream);
 
+                    // When there is a multi-page PDF, only rename subsequent pages so code that assumes resources
+                    // of a given name exist still work correctly when they must be renamed
+                    string labelName = label;
+                    if (i > 0)
+                    {
+                        labelName += $"-{i}";
+                    }
+
                     // Adjust the resource label in the event that there are multiple pages in the PDF
-                    resourceReferences.Add(InstantiateResource(memoryStream.ToArray(), consumerID, string.Format("{0}{1}", label, images.Count > 1 ? "-" + i.ToString() : string.Empty), false));
+                    resourceReferences.Add(InstantiateResource(memoryStream.ToArray(), consumerID, labelName, false));
                 }
             }
 
@@ -232,7 +234,7 @@ namespace ShipWorks.Data
                         resource.Compressed = compress;
                         resource.Filename = resourceFilename;
 
-                        // Don't refectch b\c we don't want to pull back the Data
+                        // Don't refetch b\c we don't want to pull back the Data
                         adapter.SaveEntity(resource, false);
 
                         // Get the resource id
@@ -243,7 +245,7 @@ namespace ShipWorks.Data
 
                     adapter.Commit();
                 }
-                
+
                 string filePath = Path.Combine(DataPath.CurrentResources, resourceFilename);
 
                 try
@@ -280,7 +282,7 @@ namespace ShipWorks.Data
             // Get the resource information
             DataResourceReference resourceReference = GetResourceReference(referenceID);
 
-            // If we couldnt get it, no such resource exists.
+            // If we couldn't get it, no such resource exists.
             if (resourceReference == null)
             {
                 log.InfoFormat("Resource reference {0} does not exist in the database.", referenceID);
@@ -322,7 +324,7 @@ namespace ShipWorks.Data
                 // Get the resource information
                 DataResourceReference resourceReference = GetResourceReference(referenceID);
 
-                // If we couldnt get it, no such resource exists.
+                // If we couldn't get it, no such resource exists.
                 if (resourceReference == null)
                 {
                     log.InfoFormat("Resource reference {0} does not exist in the database.", referenceID);
@@ -434,7 +436,7 @@ namespace ShipWorks.Data
         {
             using (new LoggedStopwatch(log, "Delete abandoned resources."))
             {
-                // Set the timeout to unlimited.  The proc will take care of it's run time.
+                // Set the timeout to unlimited.  The stored procedure will take care of it's run time.
                 const int timeoutSeconds = 0;
                 string scriptName = EnumHelper.GetApiValue(PurgeDatabaseType.AbandonedResources);
 
@@ -464,7 +466,7 @@ namespace ShipWorks.Data
                                 string exceptionMessage = ex.Message.ToLower();
                                 if (exceptionMessage.Contains("sqllockexception") || exceptionMessage.Contains("could not acquire applock"))
                                 {
-                                    log.Warn(ex.Message);                                
+                                    log.Warn(ex.Message);
                                 }
                                 else
                                 {
@@ -514,7 +516,7 @@ namespace ShipWorks.Data
                                 File.Delete(fsi.FullName);
                             }
 
-                            // If there's a bunch of stuff to delete, we don't want to peg the cpu
+                            // If there's a bunch of stuff to delete, we don't want to peg the CPU
                             Thread.Sleep(2);
                         }
 

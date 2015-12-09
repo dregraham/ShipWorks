@@ -78,6 +78,9 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<ObjectReferenceManagerWrapper>()
+                .AsImplementedInterfaces();
+
             current = builder.Build();
         }
     }
