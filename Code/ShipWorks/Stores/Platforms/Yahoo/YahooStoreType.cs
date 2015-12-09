@@ -27,7 +27,7 @@ using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
-using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
 
@@ -460,7 +460,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 throw new YahooException("Attempted to create Yahoo online update action control for a non Yahoo store");
             }
 
-            return store.YahooStoreID.IsNullOrWhiteSpace() ? null : new OnlineUpdateShipmentUpdateActionControl(typeof(YahooApiShipmentUploadTask));
+            return store.YahooStoreID.IsNullOrWhiteSpace() ? null : new OnlineUpdateShipmentUpdateActionControl(typeof(YahooShipmentUploadTask));
         }
 
         /// <summary>

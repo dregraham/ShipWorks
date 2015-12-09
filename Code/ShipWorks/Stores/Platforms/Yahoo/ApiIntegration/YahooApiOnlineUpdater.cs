@@ -112,8 +112,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 YahooOrderEntity order = (YahooOrderEntity)shipment.Order;
                 if (!order.IsManual)
                 {
-                    client.UploadShipmentDetails(order.OrderNumber.ToString(), shipment.TrackingNumber, GetCarrierCode(shipment),
-                        order.OnlineStatus);
+                    client.UploadShipmentDetails(order.OrderNumber.ToString(), shipment.TrackingNumber, GetCarrierCode(shipment));
                 }
             }
         }
@@ -132,8 +131,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             if (!order.IsManual)
             {
-                client.UploadShipmentDetails(order.OrderNumber.ToString(), shipment.TrackingNumber, GetCarrierCode(shipment),
-                        order.OnlineStatus);
+                client.UploadShipmentDetails(order.OrderNumber.ToString(), shipment.TrackingNumber, GetCarrierCode(shipment));
             }
         }
 

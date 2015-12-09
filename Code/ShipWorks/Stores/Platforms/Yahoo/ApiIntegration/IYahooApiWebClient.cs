@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="trackingNumber">The tracking number to upload</param>
         /// <param name="shipper">The shipping carrier used</param>
         /// <param name="status">The order status to upload</param>
-        void UploadShipmentDetails(string orderID, string trackingNumber, string shipper, string status);
+        void UploadShipmentDetails(string orderID, string trackingNumber, string shipper);
 
         /// <summary>
         /// Uploads the order status.

@@ -2,7 +2,7 @@
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages
 {
@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages
         {
             if (statusUpdate.Checked)
             {
-                return new List<ActionTask> { new ActionTaskDescriptorBinding(typeof(YahooEmailShipmentUploadTask), store).CreateInstance() };
+                return new List<ActionTask> { new ActionTaskDescriptorBinding(typeof(YahooShipmentUploadTask), store).CreateInstance() };
             }
 
             return null;

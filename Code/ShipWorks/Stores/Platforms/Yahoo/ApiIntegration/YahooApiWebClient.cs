@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Gets a "page" of orders from a starting order number
         /// </summary>
-        /// <param name="start">The Yahoo Order ID to start from</param>
+        /// <param name="startingOrderNumber">The Yahoo Order ID to start from</param>
         public YahooResponse GetOrderRange(long startingOrderNumber)
         {
             string body = RequestBodyIntro + GetRequestBodyIntro +
@@ -137,21 +137,24 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="orderID">The order's Yahoo Order ID</param>
         /// <param name="trackingNumber">The tracking number to upload</param>
         /// <param name="shipper">The shipping carrier used</param>
-        /// <param name="status">The order status to upload</param>
-        public void UploadShipmentDetails(string orderID, string trackingNumber, string shipper, string status)
+        public void UploadShipmentDetails(string orderID, string trackingNumber, string shipper)
         {
             string body = RequestBodyIntro + UpdateRequestBodyIntro +
                           "<Order>" +
                           $"<OrderID>{orderID}</OrderID>" +
-                          "<CartShipmentInfo>" +
-                          $"<TrackingNumber>{trackingNumber}</TrackingNumber>";
+                          "<CartShipmentInfo>";
+
+            if (!trackingNumber.IsNullOrWhiteSpace())
+            {
+                body += $"<TrackingNumber>{trackingNumber}</TrackingNumber>";
+            }
 
             if (!shipper.IsNullOrWhiteSpace())
             {
                 body += $"<Shipper>{shipper}</Shipper>";
             }
 
-            body += $"<ShipState>{status}</ShipState>" +
+            body += "<ShipState>shipped</ShipState>" +
                 "</CartShipmentInfo>" +
                 "</Order>" +
                 "</ResourceList>" +

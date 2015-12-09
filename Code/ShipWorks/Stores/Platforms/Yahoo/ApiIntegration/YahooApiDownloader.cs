@@ -62,6 +62,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 {
                     throw new YahooException("Error checking for orders");
                 }
+                if (orderList.Count != 0)
+                {
+                    orderList.RemoveAt(0);
+                }
 
                 if (orderList.Count == 0)
                 {
@@ -72,6 +76,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 else
                 {
                     Progress.Detail = "Downloading new orders...";
+
                     DownloadNewOrders(orderList);
 
                     ((YahooStoreEntity)Store).BackupOrderNumber = null;
@@ -115,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 // Set the progress detail
                 Progress.Detail = $"Processing order {QuantitySaved + 1} of {expectedCount} ...";
-                Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
+                Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
                 CreateOrder(response.ResponseResourceList.OrderList.Order.FirstOrDefault());
 
@@ -474,19 +479,41 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 throw new DownloadException("Attempted to check for orders on a null store");
             }
 
-            List<long> orders = new List<long>();
-
-            bool done = false;
-
             long nextOrderNumber = GetNextOrderNumber() - 1;
 
             long? backupNumber = store.BackupOrderNumber;
 
+            List<long> orders = new List<long>();
+
+            bool initialDownload = false;
             // This should only happen on the store's initial download
             if (nextOrderNumber == 0 && backupNumber != null)
             {
                 nextOrderNumber = backupNumber.Value;
+                initialDownload = true;
+                orders.Add(-1);
             }
+
+            orders.AddRange(GetOrderNumbers(nextOrderNumber));
+
+            // This means no new orders retrieved
+            if (!initialDownload && orders.Count == 1)
+            {
+                return new List<long>();
+            }
+
+            return orders;
+        }
+
+        /// <summary>
+        /// Gets a list of order numbers to download
+        /// </summary>
+        /// <param name="nextOrderNumber">The next order number to start from</param>
+        private List<long> GetOrderNumbers(long nextOrderNumber)
+        {
+            bool done = false;
+
+            List<long> orders = new List<long>();
 
             while (!done)
             {

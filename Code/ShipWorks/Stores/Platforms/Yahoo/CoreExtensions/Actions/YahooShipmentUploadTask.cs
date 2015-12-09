@@ -1,43 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Actions;
+using Quartz.Util;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model;
+using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
+using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
 
-namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.CoreExtensions.Actions
+namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
 {
     /// <summary>
-    /// Action task for uploading shipment details to Yahoo
+    /// Task for uploading shipment details to a yahoo Store
     /// </summary>
-    [ActionTask("Upload shipment details", "YahooApiShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
-    public class YahooApiShipmentUploadTask : StoreInstanceTaskBase
+    [ActionTask("Upload shipment details", "YahooShipmentUpload", ActionTaskCategory.UpdateOnline)]
+    public class YahooShipmentUploadTask : StoreInstanceTaskBase
     {
-        /// <summary>
-        /// The maximum batch size
-        /// </summary>
         private const long maxBatchSize = 1000;
-
-        /// <summary>
-        /// This task is for Shipments
-        /// </summary>
-        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
-
-        /// <summary>
-        /// Instantiates the editor for the action
-        /// </summary>
-        /// <returns></returns>
-        public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
-
-        /// <summary>
-        ///     Descriptive label which appears on the task editor
-        /// </summary>
-        public override string InputLabel => "Upload the tracking number for:";
 
         /// <summary>
         /// Indicates if the task is supported for the specified store
@@ -47,10 +30,23 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.CoreExtensions.Actions
         public override bool SupportsStore(StoreEntity store) => store is YahooStoreEntity;
 
         /// <summary>
-        /// Run the task
+        /// Descriptive label which appears on the task editor
         /// </summary>
-        /// <param name="inputKeys">The input keys.</param>
-        /// <param name="context">The context.</param>
+        public override string InputLabel => "Upload tracking number of:";
+
+        /// <summary>
+        /// This task only operates on orders
+        /// </summary>
+        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
+
+        /// <summary>
+        /// Instantiates the editor for this action
+        /// </summary>
+        public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
+
+        /// <summary>
+        /// Execute the details upload
+        /// </summary>
         public override void Run(List<long> inputKeys, ActionStepContext context)
         {
             if (inputKeys == null)
@@ -70,6 +66,18 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.CoreExtensions.Actions
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
             }
 
+            if (store.YahooStoreID.IsNullOrWhiteSpace())
+            {
+                EmailShipmentUploadTask(inputKeys, context);
+            }
+            else
+            {
+                ApiShipmentUploadTask(inputKeys, context, store);
+            }
+        }
+
+        private void ApiShipmentUploadTask(List<long> inputKeys, ActionStepContext context, YahooStoreEntity store)
+        {
             // Get any postponed data we've previously stored away
             List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>)d).ToList();
 
@@ -118,6 +126,27 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.CoreExtensions.Actions
             catch (YahooException ex)
             {
                 throw new ActionTaskRunException(ex.Message, ex);
+            }
+        }
+
+        private void EmailShipmentUploadTask(List<long> inputKeys, ActionStepContext context)
+        {
+            foreach (long entityID in inputKeys)
+            {
+                try
+                {
+                    YahooEmailOnlineUpdater updater = new YahooEmailOnlineUpdater();
+                    EmailOutboundEntity email = updater.GenerateShipmentUpdateEmail(entityID);
+
+                    if (email != null)
+                    {
+                        context.AddGeneratedEmail(email);
+                    }
+                }
+                catch (YahooException ex)
+                {
+                    throw new ActionTaskRunException(ex.Message, ex);
+                }
             }
         }
     }
