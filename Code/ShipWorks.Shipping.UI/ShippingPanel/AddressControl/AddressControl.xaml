@@ -17,6 +17,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/ShippingPanel/Styles/ServiceControlStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <valueConverters:StateProvinceConverter x:Key="StateProvinceConverter" />
             <valueConverters:EnumDescriptionConverter x:Key="EnumDescription" />
@@ -76,15 +77,22 @@
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center">
-                    <TextBlock Visibility="{Binding CanValidateAddress, Converter={StaticResource BooleanToVisibility}}">
-                        <Hyperlink Command="{Binding ValidateCommand}">Validate</Hyperlink>
-                    </TextBlock>
-                    <TextBlock Visibility="{Binding CanShowSuggestions, Converter={StaticResource BooleanToVisibility}}">
-                        <Hyperlink props:PopupClickManager.OpenPopup="{Binding ElementName=AddressPopup}"><Run Text="{Binding SuggestionCount}" /> Suggestions</Hyperlink>
-                    </TextBlock>
-                    <TextBlock Visibility="{Binding CanShowValidationMessage, Converter={StaticResource BooleanToVisibility}}">
-                        <Hyperlink Command="{Binding ShowValidationMessageCommand}">Details...</Hyperlink>
-                    </TextBlock>
+                    <StackPanel.Resources>
+                        <Style BasedOn="{StaticResource LinkButtonStyle}"
+                               TargetType="Button" />
+                    </StackPanel.Resources>
+                    <Button Visibility="{Binding CanValidateAddress, Converter={StaticResource BooleanToVisibility}}"
+                            Command="{Binding ValidateCommand}">
+                        Validate
+                    </Button>
+                    <Button Visibility="{Binding CanShowSuggestions, Converter={StaticResource BooleanToVisibility}}"
+                            props:PopupClickManager.OpenPopup="{Binding ElementName=AddressPopup}">
+                        Suggestions
+                    </Button>
+                    <Button Visibility="{Binding CanShowValidationMessage, Converter={StaticResource BooleanToVisibility}}"
+                            Command="{Binding ShowValidationMessageCommand}">
+                        Details...
+                    </Button>
                 </StackPanel>
             </controls:AlignmentWrapPanel>
 
