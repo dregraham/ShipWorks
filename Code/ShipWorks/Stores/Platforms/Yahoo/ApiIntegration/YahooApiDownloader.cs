@@ -158,7 +158,20 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="orderEntity">The order entity.</param>
         public YahooOrderEntity LoadOrder(YahooOrder order, YahooOrderEntity orderEntity)
         {
-            orderEntity.OnlineStatusCode = order.StatusList.OrderStatus.First().StatusID;
+            // Yahoo gives a list of all that statuses an order has had. Typically, the
+            // most recent one is the last in the list. However, if you manually change
+            // an order status on Yahoo's backend, it comes down as the first status in
+            // the list. So here we grab the first status, if it's 0 that means it hasn't
+            // been updated manually, so take the last one instead. If not, that is the
+            // manually updated status, so keep it
+            string code = order.StatusList.OrderStatus.First().StatusID;
+
+            if (code.Equals("0"))
+            {
+                code = order.StatusList.OrderStatus.Last().StatusID;
+            }
+
+            orderEntity.OnlineStatusCode = code;
 
             int statusID = int.Parse(orderEntity.OnlineStatusCode.ToString());
 
