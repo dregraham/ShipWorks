@@ -2,8 +2,10 @@
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using Interapptive.Shared.UI;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
@@ -21,6 +23,17 @@ namespace ShipWorks.Shipping.Editing
         public DimensionsManagerDlg()
         {
             InitializeComponent();
+
+            this.Closing += OnClosing;
+        }
+
+        /// <summary>
+        /// Handles the closing event.
+        /// </summary>
+        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Send a message that dimensions profiles have changed.
+            Messenger.Current.Send(new DimensionsProfilesChangedMessage(null));
         }
 
         /// <summary>

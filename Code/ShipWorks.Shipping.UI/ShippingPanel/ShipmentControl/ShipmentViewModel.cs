@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using ShipWorks.Core.Messaging;
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     public partial class ShipmentViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
     {
         private readonly IRateSelectionFactory rateSelectionFactory;
-        private readonly IDisposable subscription;
+        private readonly IDisposable subscriptions;
         private readonly PropertyChangedHandler handler;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
         private readonly IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory;
@@ -57,7 +58,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             this.dimensionsManager = dimensionsManager;
 
-            subscription = messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage);
+            subscriptions = new CompositeDisposable(
+                messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
+                messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage));
         }
 
         /// <summary>
@@ -144,11 +147,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             shipmentAdapter.UsingInsurance = UsingInsurance;
             shipmentAdapter.ServiceType = ServiceType;
 
-            SelectedPackageAdapter.DimsProfileID = SelectedDimensionsProfile.DimensionsProfileID;
-            SelectedPackageAdapter.DimsLength = SelectedDimensionsProfile.Length;
-            SelectedPackageAdapter.DimsWidth = SelectedDimensionsProfile.Width;
-            SelectedPackageAdapter.DimsHeight = SelectedDimensionsProfile.Height;
-            SelectedPackageAdapter.AdditionalWeight = SelectedDimensionsProfile.Weight;
+            if (SelectedDimensionsProfile != null)
+            {
+                SelectedPackageAdapter.DimsProfileID = SelectedDimensionsProfile.DimensionsProfileID;
+                SelectedPackageAdapter.DimsLength = SelectedDimensionsProfile.Length;
+                SelectedPackageAdapter.DimsWidth = SelectedDimensionsProfile.Width;
+                SelectedPackageAdapter.DimsHeight = SelectedDimensionsProfile.Height;
+                SelectedPackageAdapter.AdditionalWeight = SelectedDimensionsProfile.Weight;
+            }
         }
 
         /// <summary>
@@ -162,14 +168,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             ServiceType = rateSelection.ServiceType;
         }
 
-        private void ManageDimensionsProfiles()
+        private void ManageDimensionsProfiles(DimensionsProfilesChangedMessage message)
         {
             long originalDimensionsProfileID = SelectedDimensionsProfile?.DimensionsProfileID ?? 0;
-
-            using (DimensionsManagerDlg dlg = new DimensionsManagerDlg())
-            {
-                dlg.ShowDialog();
-            }
 
             // Refresh the dimensions profiles.
             RefreshDimensionsProfiles();
@@ -217,7 +218,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         public void Dispose()
         {
-            subscription.Dispose();
+            subscriptions.Dispose();
         }
     }
 }

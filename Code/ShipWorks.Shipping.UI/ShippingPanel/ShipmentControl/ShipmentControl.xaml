@@ -146,7 +146,7 @@
                 <Button Margin="5"
                         Content="Manage..."
                         Style="{StaticResource LinkButtonStyle}"
-                        Command="{Binding DimensionsManagerDlgCommand}" />
+                <Button Margin="5" Content="Manage..." Cursor="Hand" Command="{Binding DimensionsManagerDlgCommand}">
             </StackPanel>
             <!--
                 Dimensions

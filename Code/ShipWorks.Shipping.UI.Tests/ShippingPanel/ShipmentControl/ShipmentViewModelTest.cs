@@ -26,10 +26,29 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         private Mock<IShipmentServicesBuilderFactory> shipmentServicesBuilderFactory;
         private Mock<IShipmentPackageTypesBuilder> shipmentPackageTypesBuilder;
         private Mock<IShipmentPackageTypesBuilderFactory> shipmentPackageTypesBuilderFactory;
+        private Mock<IDimensionsManager> dimensionsManager;
         private Mock<IRateSelectionFactory> rateSelectionFactory;
         private Dictionary<int, string> expectedServices = new Dictionary<int, string>();
         private Dictionary<int, string> expectedPackageTypes = new Dictionary<int, string>();
         private readonly List<IPackageAdapter> packageAdapters = new List<IPackageAdapter>();
+
+        public ShipmentViewModelTest()
+        {
+            List<DimensionsProfileEntity> dimensionsProfileEntities = new List<DimensionsProfileEntity>()
+            {
+                new DimensionsProfileEntity(0)
+                {
+                    Name = "Profile 1",
+                    Length = 6,
+                    Width = 4,
+                    Height = 1,
+                    Weight = 0.5
+                }
+            };
+
+            dimensionsManager = new Mock<IDimensionsManager>();
+            dimensionsManager.Setup(dm => dm.Profiles(It.IsAny<IPackageAdapter>())).Returns(dimensionsProfileEntities);
+        }
 
         [Fact]
         public void ShipDate_MatchesShipmentAdapterValue_Test()
@@ -304,6 +323,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 testObject.UsingInsurance = !testObject.UsingInsurance;
                 testObject.ServiceType = testObject.ServiceType++;
 
+                
+                testObject.SelectedDimensionsProfile = dimensionsManager.Object.Profiles(testObject.PackageAdapters.First()).FirstOrDefault();
+
                 testObject.Save();
 
                 shipmentAdapter.VerifySet(sa => sa.ShipDate = testObject.ShipDate, Times.Once());
@@ -346,8 +368,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
         private Dictionary<int, string> CreateDefaultShipmentAdapter(AutoMock mock, int numberOfPackages)
         {
-
-
             shipmentServicesBuilder = mock.Mock<IShipmentServicesBuilder>();
             shipmentServicesBuilder.Setup(sb => sb.BuildServiceTypeDictionary(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(expectedServices);
 

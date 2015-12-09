@@ -178,17 +178,5 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
             set { handler.Set(nameof(DimensionsProfiles), ref dimensionsProfiles, value, true); }
         }
-
-        /// <summary>
-        /// Command for opening the Dimensions Manager dialog
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public RelayCommand DimensionsManagerDlgCommand
-        {
-            get
-            {
-                return new RelayCommand(ManageDimensionsProfiles);
-            }
-        }
     }
 }
