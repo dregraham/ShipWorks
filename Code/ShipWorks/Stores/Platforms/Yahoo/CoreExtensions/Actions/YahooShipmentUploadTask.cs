@@ -76,6 +76,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
             }
         }
 
+        /// <summary>
+        /// Shipment upload task for API integration
+        /// </summary>
         private void ApiShipmentUploadTask(List<long> inputKeys, ActionStepContext context, YahooStoreEntity store)
         {
             // Get any postponed data we've previously stored away
@@ -129,6 +132,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
             }
         }
 
+        /// <summary>
+        /// Shipment upload task for Email integration
+        /// </summary>
+        /// <param name="inputKeys">The input keys.</param>
+        /// <param name="context">The context.</param>
         private void EmailShipmentUploadTask(List<long> inputKeys, ActionStepContext context)
         {
             foreach (long entityID in inputKeys)

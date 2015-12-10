@@ -63,6 +63,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 {
                     throw new YahooException("Error checking for orders");
                 }
+
+                // Here we remove the first order in the list, because we already
+                // have it. In the case of the stores very first download, the first
+                // order number will be set to -1, so that no orders are lost.
                 if (orderList.Count != 0)
                 {
                     orderList.RemoveAt(0);
@@ -181,7 +185,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             int statusID = int.Parse(orderEntity.OnlineStatusCode.ToString());
 
-            if (statusID >= 0 && statusID <= 8)
+            if (statusID >= 0 && statusID <= EnumHelper.GetEnumList<YahooApiOrderStatus>().Count)
             {
                 orderEntity.OnlineStatus = EnumHelper.GetDescription((YahooApiOrderStatus) statusID);
             }
@@ -534,7 +538,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 // After getting more orders, Check if the last order number in the list is the same
                 // as the starting order number last used to retrieve orders. If so we know we
                 // have retrieved all of the orders.
-                if (orders.Count != 0 && orders.Last() == nextOrderNumber)
+                if (orders.Count != 0 && response.ResponseResourceList.OrderList.Order.Last().OrderID == nextOrderNumber)
                 {
                     done = true;
                     continue;
@@ -544,6 +548,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 // to the running list of orders to download.
                 if (response != null)
                 {
+                    // if orders isn't empty we want to remove the last in the list,
+                    // since it will be the first in the new list.
+                    if (orders.Count > 0)
+                    {
+                        orders.RemoveAt(orders.Count - 1);
+                    }
+
                     orders.AddRange(
                         response.ResponseResourceList.OrderList.Order.Select(order => order.OrderID).ToList());
                 }
