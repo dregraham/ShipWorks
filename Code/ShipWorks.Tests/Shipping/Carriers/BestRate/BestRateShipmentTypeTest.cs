@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using Autofac.Extras.Moq;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Tests.Shipping.Carriers.BestRate.Fake;
-using log4net;
 using Xunit;
 using Moq;
-using Moq.Language.Flow;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Insurance;
@@ -20,15 +15,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
     public class BestRateShipmentTypeTest
     {
-        private BestRateShipmentType testObject;
         private BestRateLabelService labelService;
         
-        private Mock<ILog> log;
-
-        private List<RateResult> rates;
         private ShipmentEntity shipment;
-
-        private RateGroup rateGroupWithNoFootnote;
+        
         private RateGroup rateGroupWithFooterWithAssociatedAmount;
         private RateGroup rateGroupWithFooterNotAssociatedWithAmount;
 
@@ -41,12 +31,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
         public BestRateShipmentTypeTest()
         {
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate xyz", "5", 4.23M),
-                CreateRateResult("Rate 123", "4", 6.23M)
-            };
-
             shipment = new ShipmentEntity
             {
                 BestRate = new BestRateShipmentEntity()
@@ -60,9 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             filterFactory = new Mock<IRateGroupFilterFactory>();
             filterFactory.Setup(f => f.CreateFilters(It.IsAny<ShipmentEntity>())).Returns(new List<IRateGroupFilter>());
-
-            log = new Mock<ILog>();
-
+            
             //testObject = new BestRateShipmentType(brokerFactory.Object, log.Object,);
 
             labelService = new BestRateLabelService();
@@ -183,9 +165,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             associatedWithAmountFooterFootnoteFactory = new Mock<IRateFootnoteFactory>();
             associatedWithAmountFooterFootnoteFactory.Setup(f => f.CreateFootnote(null)).Returns(new FakeRateFootnoteControl(true));
-
-            rateGroupWithNoFootnote = new RateGroup(new List<RateResult> { new RateResult("result1", "2"), new RateResult("result2", "2") });
-
+            
             rateGroupWithFooterWithAssociatedAmount = new RateGroup(new List<RateResult>
             {
                 new RateResult("result1", "2") { AmountFootnote = new Bitmap(1, 1), Tag = new BestRateResultTag() { ResultKey = "result1"}},
@@ -277,11 +257,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         //}
 
         // Helper methods for creating rate results
-        private RateResult CreateRateResult(string description, string days, decimal amount)
-        {
-            return CreateRateResult(description, days, amount, description);
-        }
-
         private RateResult CreateRateResult(string description, string days, decimal amount, string tagResultKey)
         {
             return new RateResult(description, days, amount, new BestRateResultTag() { ResultKey = tagResultKey });
