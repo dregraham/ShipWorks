@@ -12,9 +12,9 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
+using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.Tests.Shared;
 using Xunit;
-using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 {
@@ -599,7 +599,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 Mock<ShipmentViewModel> shipmentViewModel = new Mock<ShipmentViewModel>();
 
                 mock.Mock<IShippingViewModelFactory>()
-                    .SetupSequence(s => s.GetShipmentViewModel())
+                    .SetupSequence(s => s.GetShipmentViewModel(It.IsAny<ShipmentTypeCode>()))
                     .Returns(shipmentViewModel.Object)
                     .Returns(new Mock<ShipmentViewModel>().Object);
 

@@ -26,13 +26,13 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         static SelectDefaultWhenValueIsNull()
         {
             Selector.SelectedValueProperty.OverrideMetadata(typeof(ComboBox),
-                new FrameworkPropertyMetadata(null, new CoerceValueCallback(HandleValueCoersion)));
+                new FrameworkPropertyMetadata(null, new CoerceValueCallback(HandleValueCoercion)));
         }
 
         /// <summary>
-        /// Handle value coersion when the selected value of a combobox is changed
+        /// Handle value coercion when the selected value of a combobox is changed
         /// </summary>
-        private static object HandleValueCoersion(DependencyObject d, object value)
+        private static object HandleValueCoercion(DependencyObject d, object value)
         {
             object newValue = existingMetadata.CoerceValueCallback(d, value);
 
@@ -61,8 +61,8 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
             }
 
             // Using BeginInvoke will put selection of the new item on the event loop, which will let this
-            // coersion complete before changing the value to something valid
-            combo.Dispatcher.BeginInvoke((Action)(() =>
+            // coercion complete before changing the value to something valid
+            combo.Dispatcher.BeginInvoke((Action) (() =>
             {
                 combo.SelectedItem = relativeIndex == RelativeIndex.Last ?
                     combo.Items.OfType<object>().Last() :
@@ -79,11 +79,13 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// <summary>
         /// Get the current value of the property
         /// </summary>
-        public static RelativeIndex GetRelativeIndex(DependencyObject d) => (RelativeIndex)d.GetValue(RelativeIndexProperty);
+        public static RelativeIndex GetRelativeIndex(DependencyObject d) =>
+            (RelativeIndex) d.GetValue(RelativeIndexProperty);
 
         /// <summary>
         /// Set the current value of the property
         /// </summary>
-        public static void SetRelativeIndex(DependencyObject d, RelativeIndex value) => d.SetValue(RelativeIndexProperty, value);
+        public static void SetRelativeIndex(DependencyObject d, RelativeIndex value) =>
+            d.SetValue(RelativeIndexProperty, value);
     }
 }

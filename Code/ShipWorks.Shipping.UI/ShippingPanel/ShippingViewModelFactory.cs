@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
@@ -13,13 +9,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     /// </summary>
     public class ShippingViewModelFactory : IShippingViewModelFactory
     {
-        private readonly Func<ShipmentViewModel> shipmentViewModelFactory;
+        private readonly Func<ShipmentTypeCode, IShipmentViewModel> shipmentViewModelFactory;
         private readonly Func<AddressViewModel> addressViewModelFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingViewModelFactory(Func<ShipmentViewModel> shipmentViewModelFactory, Func<AddressViewModel> addressViewModelFactory)
+        public ShippingViewModelFactory(Func<ShipmentTypeCode, IShipmentViewModel> shipmentViewModelFactory, Func<AddressViewModel> addressViewModelFactory)
         {
             this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.addressViewModelFactory = addressViewModelFactory;
@@ -38,9 +34,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Return a new ShipmentViewModel
         /// </summary>
         /// <returns></returns>
-        public ShipmentViewModel GetShipmentViewModel()
+        public IShipmentViewModel GetShipmentViewModel(ShipmentTypeCode shipmentType)
         {
-            return shipmentViewModelFactory();
+            return shipmentViewModelFactory(shipmentType);
         }
     }
 }

@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows.Input;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
@@ -23,6 +20,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private ShippingAddressEditStateType destinationAddressEditableState;
         private bool supportsAccounts;
         private string domesticInternationalText;
+        private IShipmentViewModel shipmentViewModel;
 
         /// <summary>
         /// Command to create a label
@@ -152,7 +150,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// The Shipment view model.
         /// </summary>
-        public ShipmentViewModel ShipmentViewModel { get; set; }
+        [Obfuscation(Exclude = true)]
+        public IShipmentViewModel ShipmentViewModel
+        {
+            get { return shipmentViewModel; }
+            set { handler.Set(nameof(ShipmentViewModel), ref shipmentViewModel, value); }
+        }
 
         /// <summary>
         /// True if the carrier supports accounts, false otherwise.

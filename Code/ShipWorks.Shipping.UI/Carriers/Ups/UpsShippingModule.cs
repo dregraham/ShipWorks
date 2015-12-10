@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -30,7 +29,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<WorldShipShipmentType>()
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.UpsWorldShip);
-            
+
             builder.RegisterType<UpsShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsOnLineTools)
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsWorldShip)
@@ -40,6 +39,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .AsImplementedInterfaces();
 
             builder.RegisterType<UpsAccountRepository>()
+                .AsImplementedInterfaces()
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.UpsOnLineTools)
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.UpsWorldShip)
                 .SingleInstance();

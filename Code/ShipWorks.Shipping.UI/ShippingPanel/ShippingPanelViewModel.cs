@@ -13,6 +13,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
+using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -28,6 +29,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IMessenger messenger;
         private readonly IDisposable subscriptions;
         private readonly IMessageHelper messageHelper;
+        private readonly IShippingViewModelFactory shippingViewModelFactory;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -53,11 +55,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.shippingManager = shippingManager;
             this.messenger = messenger;
             this.messageHelper = messageHelper;
+            this.shippingViewModelFactory = shippingViewModelFactory;
 
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
             Destination.IsAddressValidationEnabled = true;
-            ShipmentViewModel = shippingViewModelFactory.GetShipmentViewModel();
 
             Origin.PropertyChangeStream
                 .Select(_ => ShipmentAdapter?.Shipment?.OriginPerson)
@@ -222,6 +224,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             // Set the shipment type without going back through the shipment changed machinery
             selectedShipmentType = ShipmentAdapter.ShipmentTypeCode;
 
+            ShipmentViewModel?.Dispose();
+            ShipmentViewModel = shippingViewModelFactory.GetShipmentViewModel(selectedShipmentType);
+
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShipmentType)));
 
             RequestedShippingMethod = orderSelectionLoaded.Order?.RequestedShipping;
@@ -310,12 +315,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Updates the services.
         /// </summary>
-        private void UpdateServices() => ShipmentViewModel.RefreshServiceTypes();
+        private void UpdateServices() => (ShipmentViewModel as ShipmentViewModel)?.RefreshServiceTypes();
 
         /// <summary>
         /// Updates the packages.
         /// </summary>
-        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes();
+        private void UpdatePackages() => (ShipmentViewModel as ShipmentViewModel)?.RefreshPackageTypes();
 
         /// <summary>
         /// Enables the need to update packages.

@@ -212,6 +212,7 @@
                               IsExpanded="{Binding IsDetailsExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                               DataContext="{Binding ShipmentViewModel}"
                               Style="{StaticResource ExpanderStyle}">
+
                             <StackPanel>
                                 <shipmentControl:ShipmentControl Visibility="{
                                     Binding DataContext.ShipmentType,

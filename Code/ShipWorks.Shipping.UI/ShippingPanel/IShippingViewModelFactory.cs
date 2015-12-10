@@ -16,6 +16,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Get the shipment control view model
         /// </summary>
-        ShipmentViewModel GetShipmentViewModel();
+        IShipmentViewModel GetShipmentViewModel(ShipmentTypeCode shipmentType);
     }
 }

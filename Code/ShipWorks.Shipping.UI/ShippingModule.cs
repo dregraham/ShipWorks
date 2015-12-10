@@ -41,6 +41,15 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShipmentViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 
+            builder.RegisterType<OtherShipmentViewModel>();
+
+            builder.Register((container, parameters) =>
+            {
+                return parameters.TypedAs<ShipmentTypeCode>() == ShipmentTypeCode.Other ?
+                    (IShipmentViewModel) container.Resolve<OtherShipmentViewModel>() :
+                     container.Resolve<ShipmentViewModel>();
+            });
+
             builder.RegisterType<RatingPanelViewModel>();
 
             builder.RegisterType<ShippingConfiguration>()

@@ -209,13 +209,16 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentDeletedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipeline.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\IShipmentViewModel.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentControl.xaml.cs">
       <DependentUpon>OtherShipmentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml.cs">
       <DependentUpon>ShipmentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentViewModel.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentViewModel.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentViewModel.Properties.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentViewModel.Properties.cs" />
     <Compile Include="ShippingPanel\ShippingPanel.cs">
       <SubType>UserControl</SubType>

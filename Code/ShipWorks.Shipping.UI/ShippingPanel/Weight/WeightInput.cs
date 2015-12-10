@@ -114,7 +114,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.Weight
         /// <summary>
         /// Set the value of the entry box
         /// </summary>
-        private static void SetEntryWeightValue(WeightInput input, double weight) =>
-            input.entry.Text = WeightConverter.Current.FormatWeight(weight);
+        private static void SetEntryWeightValue(WeightInput input, double weight)
+        {
+            if (input?.entry != null)
+            {
+                input.entry.Text = WeightConverter.Current.FormatWeight(weight);
+            }
+        }
     }
 }

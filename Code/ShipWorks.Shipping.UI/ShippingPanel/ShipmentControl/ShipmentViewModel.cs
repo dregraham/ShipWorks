@@ -6,12 +6,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reflection;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
@@ -22,7 +20,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// <summary>
     /// View model for use by ShipmentControl
     /// </summary>
-    public partial class ShipmentViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
+    public partial class ShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging
     {
         private readonly IRateSelectionFactory rateSelectionFactory;
         private readonly IDisposable subscriptions;
@@ -31,7 +29,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private readonly IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory;
         private readonly IDimensionsManager dimensionsManager;
 
-        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
+        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual",
+            Justification = "Event is virtual to allow tests to fire it")]
         public virtual event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
@@ -87,8 +86,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             RefreshDimensionsProfiles();
 
-            SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) ? 
-                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) : 
+            SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) ?
+                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) :
                 DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0);
         }
 
@@ -194,9 +193,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
         /// <summary>
         /// Updates the Dimensions selected item.
-        /// There's an issue with the combob box when updating it's data source where the items in the drop down will be updated
-        /// but the text displayed as the selcted item, when the drop down items are not show, is still the old value.
-        /// 
+        /// There's an issue with the combo box when updating it's data source where the items in the drop down will be updated
+        /// but the text displayed as the selected item, when the drop down items are not show, is still the old value.
+        ///
         /// The hack to get it updated is to switch the selected item, SelectedDimensionsProfile, and then switch it back to the
         /// real selected item.
         /// </summary>
@@ -204,13 +203,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private void UpdateDimensionsSelectedText(long originalDimensionsProfileID)
         {
             // First change to a different selected profile
-            SelectedDimensionsProfile = originalDimensionsProfileID != 0 ? 
-                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0) : 
+            SelectedDimensionsProfile = originalDimensionsProfileID != 0 ?
+                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0) :
                 DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID != 0);
 
             // Now change back to the real selected one so that the selected text updates correctly.
-            SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == originalDimensionsProfileID) ? 
-                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == originalDimensionsProfileID) : 
+            SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == originalDimensionsProfileID) ?
+                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == originalDimensionsProfileID) :
                 DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0);
         }
 
