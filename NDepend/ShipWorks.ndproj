@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="ShipWorks" Platform="DotNet">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
@@ -66,6 +66,9 @@
     <Name>SD.LLBLGen.Pro.DQE.SqlServer.NET20</Name>
     <Name>Common.Logging.Log4Net1213</Name>
     <Name>mscorlib</Name>
+    <Name>System.Reactive.Linq</Name>
+    <Name>System.Reactive.Interfaces</Name>
+    <Name>System.Reactive.Core</Name>
   </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319</Dir>
@@ -138,9 +141,8 @@
   <SourceFileRebasing FromPath="" ToPath="" />
   <PathVariables />
   <RuleFiles />
-  <ProjectRules AreActive="True" />
-  <Queries>
-    <Group Name="Code Quality" Active="True" ShownInReport="False">
+  <ProjectRules AreActive="True" /><Queries>
+    <Group Name="Code Quality" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types too big - critical</Name>
 warnif count > 0 from t in JustMyCode.Types where 
    t.NbLinesOfCode > 500 
@@ -357,7 +359,7 @@ select new { t, t.LCOM, t.LCOMHS,
 // See the definition of the LCOM metric here 
 // http://www.ndepend.com/Metrics.aspx#LCOM]]></Query>
     </Group>
-    <Group Name="Code Quality Regression" Active="True" ShownInReport="False">
+    <Group Name="Code Quality Regression" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>From now, all methods added or refactored should respect basic quality principles</Name>
 warnif count > 0 from m in JustMyCode.Methods where
 
@@ -585,7 +587,7 @@ select new { t,
              newCount = newNbInstanceFields.Count() ,
              newInstanceFields }]]></Query>
     </Group>
-    <Group Name="Object Oriented Design" Active="True" ShownInReport="True">
+    <Group Name="Object Oriented Design" Active="False" ShownInReport="True">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Base class should not use derivatives</Name>
 warnif count > 0 
 from baseClass in JustMyCode.Types
@@ -958,7 +960,7 @@ select new { t.ClassConstructor,
              fieldsUsed 
 }]]></Query>
     </Group>
-    <Group Name="Design" Active="True" ShownInReport="False">
+    <Group Name="Design" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid custom delegates</Name>
 
 // Prefer using one of the standard generic delegate type in
@@ -1183,7 +1185,7 @@ where equalsMethod == null
 select m
 ]]></Query>
     </Group>
-    <Group Name="Architecture and Layering" Active="True" ShownInReport="False">
+    <Group Name="Architecture and Layering" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid namespaces mutually dependent</Name>
 warnif count > 0
 // Foreach pair of namespace mutually dependent, this rule lists pairs.
@@ -1436,7 +1438,7 @@ let concreteNamespacesUsed = namespacesUsed.Except(abstractNamespaces)
 let abstractNamespacesUsed = namespacesUsed.Except(concreteNamespaces)
 select new { n, concreteNamespacesUsed , abstractNamespacesUsed }]]></Query>
     </Group>
-    <Group Name="API Breaking Changes" Active="True" ShownInReport="True">
+    <Group Name="API Breaking Changes" Active="False" ShownInReport="True">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>API Breaking Changes: Types</Name>
 // This rule warns if a publicly visible type is 
 // not publicly visible anymore or if it has been removed.
@@ -1623,7 +1625,7 @@ where f.IsPubliclyVisible &&
 select new { f,
              OldVisibility = (f.WasAdded() ? " " : f.OlderVersion().Visibility.ToString()) }]]></Query>
     </Group>
-    <Group Name="Code Diff Summary" Active="True" ShownInReport="True">
+    <Group Name="Code Diff Summary" Active="False" ShownInReport="True">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>New assemblies</Name>
 from a in Application.Assemblies where a.WasAdded()
 select new { a, a.NbLinesOfCode }
@@ -1802,7 +1804,7 @@ from f in codeBase.OlderVersion().Fields where
  !f.ParentType.IsNotUsedAnymore()
 select new { f, MethodsThatUsedMe = f.MethodsUsingMe }]]></Query>
     </Group>
-    <Group Name="Test and Code Coverage" Active="True" ShownInReport="True">
+    <Group Name="Test and Code Coverage" Active="False" ShownInReport="True">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>C.R.A.P method code metric</Name>
 // Change Risk Analyzer and Predictor (i.e. CRAP) code metric
 // This code metric helps in pinpointing overly complex and untested code.
@@ -2150,7 +2152,7 @@ let fields = from f in Application.Fields where
 where types.Count() > 0 || methods.Count() > 0 || fields.Count() > 0
 select new { tAttr, types , methods, fields }]]></Query>
     </Group>
-    <Group Name="Visibility" Active="True" ShownInReport="False">
+    <Group Name="Visibility" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Methods that could have a lower visibility</Name>
 // This rule tells which methods can be declared with a lower visibility.
 // (like 'private' is a visibility lower than 'internal' which is lower than 'public').
@@ -2391,7 +2393,7 @@ select new { m,m.Visibility }
 // -> A method name contains the type of its parameters.
 // -> All EventArgs derived types have the suffix "EventArgs".]]></Query>
     </Group>
-    <Group Name="Purity - Immutability - Side-Effects" Active="True" ShownInReport="False">
+    <Group Name="Purity - Immutability - Side-Effects" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Fields should be marked as ReadOnly when possible</Name>
 warnif count > 0 
 from f in JustMyCode.Fields where 
@@ -2658,7 +2660,7 @@ select new { m, m.NbLinesOfCode }
 // or you can use as well System.Diagnostics.Contract.PureAttribute
 // introduced with .NET v4.0.]]></Query>
     </Group>
-    <Group Name="Naming Conventions" Active="True" ShownInReport="False">
+    <Group Name="Naming Conventions" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Instance fields should be prefixed with a 'm_'</Name>
 warnif count > 0 from f in Application.Fields where 
   !f.NameLike (@"^m_") && 
@@ -2894,7 +2896,7 @@ from m in Application.Methods where
   m.ReturnType.FullName != "System.Boolean"
 select new { m, m.ReturnType }]]></Query>
     </Group>
-    <Group Name="Source Files Organization" Active="True" ShownInReport="False">
+    <Group Name="Source Files Organization" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid referencing source file out of Visual Studio project directory</Name>
 
 // A source file located outside of the VS project directory can be add through:
@@ -3082,7 +3084,7 @@ select new { @namespace,
 
              mainDir = mainDir.ToString() }]]></Query>
     </Group>
-    <Group Name=".NET Framework Usage" Active="True" ShownInReport="False">
+    <Group Name=".NET Framework Usage" Active="False" ShownInReport="False">
       <Group Name="System" Active="True" ShownInReport="False">
         <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Mark ISerializable types with SerializableAttribute</Name>
 from t in Application.Types where 
@@ -3612,7 +3614,7 @@ ThirdParty.Methods.Select(m => m)]]></Query>
 ThirdParty.Fields.Select(f => f)]]></Query>
       </Group>
     </Group>
-    <Group Name="Trend Metrics" Active="True" ShownInReport="False">
+    <Group Name="Trend Metrics" Active="False" ShownInReport="False">
       <Group Name="Code Size" Active="True" ShownInReport="False">
         <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <TrendMetric Name="# Lines of Code" Unit="LoC" />  
 Application.Assemblies.Sum(a => a.NbLinesOfCode)]]></Query>
@@ -4199,76 +4201,80 @@ select new { n, n.NbLinesOfCode } ]]></Query>
     </Group>
     <Group Name="Jenkins Critical Rules" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of complex methods allowed exceeded</Name>
-warnif count > 85 from m in JustMyCode.Methods where 
-  m.CyclomaticComplexity > 20
+warnif count > 0 from m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+
+  m.CyclomaticComplexity > 20 &&
+  !m.HasAttribute("Interapptive.Shared.NDependIgnoreComplexMethodAttribute")
   orderby m.CyclomaticComplexity descending
 
 select new { m, m.CyclomaticComplexity }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # long methods allowed exceeded</Name>
-warnif  count > 402
-from  m in JustMyCode.Methods where 
-  m.NbLinesOfCode > 30
+warnif  count > 0
+from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+  m.NbLinesOfCode > 30 &&
+  !(m.ParentType.HasAttribute("Interapptive.Shared.NDependIgnoreAttribute") ||
+   m.HasAttribute("Interapptive.Shared.NDependIgnoreLongMethodAttribute"))
 
 select new { m, m.NbLinesOfCode }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of methods w/ too many parameters exceeded</Name>
-warnif count > 85 from  m in JustMyCode.Methods where
- m.NbParameters > 5
+warnif count > 0 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+ m.NbParameters > 5  &&
+  !(m.HasAttribute("Interapptive.Shared.NDependIgnoreTooManyParamsAttribute") ||
+    m.ParentType.HasAttribute("Interapptive.Shared.NDependIgnoreAttribute"))
+
  orderby m.NbParameters
 
 select new { m, m.NbParameters }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # large types allowed exceeded</Name>
-warnif count > 41 from  t in JustMyCode.Types where
- t.NbLinesOfCode > 500
+warnif count > 0 from  t in JustMyCode.Types where !t.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+ t.NbLinesOfCode > 500 &&
+  !t.HasAttribute("Interapptive.Shared.NDependIgnoreLongTypesAttribute")
  orderby t.NbLinesOfCode
 
 select new { t, t.NbLinesOfCode }]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed long methods</Name>
-from m in JustMyCode.Methods where m.CodeWasChanged() &&
-    m.NbLinesOfCode > 30 &&
-    m.NbLinesOfCode > m.OlderVersion().NbLinesOfCode &&
-    m.OlderVersion().NbLinesOfCode <= 30
-select new { 
-   m, 
-   m.NbLinesOfCode, 
-   oldNbLinesOfCode = m.OlderVersion().NbLinesOfCode ,
-   delta = (int?) m.NbLinesOfCode - m.OlderVersion().NbLinesOfCode 
-} ]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed complex methods</Name>
-from m in JustMyCode.Methods where m.CodeWasChanged() &&
-    m.CyclomaticComplexity > 20 &&
-    m.CyclomaticComplexity > m.OlderVersion().CyclomaticComplexity &&
-    m.OlderVersion().CyclomaticComplexity <= 20
-select new { 
-   m, 
-   m.CyclomaticComplexity , 
-   oldValue = m.OlderVersion().CyclomaticComplexity ,
-   delta = (int?) m.CyclomaticComplexity - m.OlderVersion().CyclomaticComplexity 
-}]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed methods w/ too many params</Name>
-from m in JustMyCode.Methods where m.CodeWasChanged() &&
-    m.NbParameters > 5 &&
-    m.NbParameters > m.OlderVersion().NbParameters &&
-    m.OlderVersion().NbParameters <= 5
-select new { 
-   m, 
-   m.NbParameters , 
-   oldValue = m.OlderVersion().NbParameters ,
-   delta = (int?) m.NbParameters - m.OlderVersion().NbParameters 
-}]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: Changed types that are too long</Name>
-from t in JustMyCode.Types 
-where t.CodeWasChanged() &&
-    t.NbLinesOfCode> 500  &&
-    t.NbLinesOfCode> t.OlderVersion().NbLinesOfCode &&
-    t.OlderVersion().NbLinesOfCode <= 500
-orderby t.NbLinesOfCode descending
-select new { 
-   t, 
-   t.NbLinesOfCode, 
-   oldValue = t.OlderVersion().NbLinesOfCode,
-   delta = (int?) t.NbLinesOfCode- t.OlderVersion().NbLinesOfCode
-}
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreAttribute attributes reached</Name>
+warnif count > 19
+
+from m in JustMyCode.Types.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreAttribute*") 
+)
+orderby m.FullName
+select new { m }
+
 ]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreComplexMethod attributes reached</Name>
+warnif count > 83
+
+from m in JustMyCode.Methods.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreComplexMethod*") 
+)
+orderby m.FullName
+select new { m }
+]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreTooManyParams attributes reached</Name>
+warnif count > 59
+
+from m in JustMyCode.Methods.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreTooManyParams*") 
+)
+orderby m.FullName
+select new { m }
+]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongTypes attributes reached</Name>
+warnif count > 40
+
+from m in JustMyCode.Types.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreLongTypes*") 
+)
+orderby m.FullName
+select new { m }]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongMethod attributes reached</Name>
+warnif count > 381
+
+from m in JustMyCode.Methods.Where(m=> 
+        m.HasAttribute("*.NDependIgnoreLongMethod*") 
+)
+orderby m.FullName
+select new { m }]]></Query>
     </Group>
-  </Queries>
-</NDepend>
+  </Queries></NDepend>

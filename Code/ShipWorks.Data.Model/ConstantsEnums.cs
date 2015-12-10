@@ -3778,6 +3778,8 @@ namespace ShipWorks.Data.Model
 		Passive,
 		///<summary>InternalOwnerID. </summary>
 		InternalOwnerID,
+		///<summary>ReuseControlConnectionSession. </summary>
+		ReuseControlConnectionSession,
 		/// <summary></summary>
 		AmountOfFields
 	}
