@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -57,7 +58,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Create the label
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3240:The simplest possible condition syntax should be used", Justification = "More readable this way.")]
+        [SuppressMessage("SonarQube", "S3240:The simplest possible condition syntax should be used",
+            Justification = "More readable this way.")]
         public void Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));

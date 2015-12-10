@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Reller of Endicia services.  
+        /// Reller of Endicia services.
         /// </summary>
         public virtual EndiciaReseller EndiciaReseller
         {
@@ -312,7 +312,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
-            
+
             // A null reference error was being thrown.  Discoverred by Crash Reports.
             // Let's figure out what is null....
             if (shipment == null)
@@ -452,7 +452,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            
+
             // See if this shipment should really go through Express1
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia
                 && !IsRateDiscountMessagingRestricted
@@ -579,7 +579,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     if (IsRateDiscountMessagingRestricted)
                     {
-                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS 
+                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS
                         bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any();
                         finalEndiciaOnlyRates.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
                     }
@@ -594,7 +594,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 RateGroup express1Group = BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
                 if (IsRateDiscountMessagingRestricted)
                 {
-                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS 
+                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS
                     // poromo footnote to show single account marketing dialog
                     express1Group.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
                 }
@@ -653,7 +653,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     // Instantiate the Express1 shipment type, so the correct account repository is used when getting rates
                     ShipmentType express1Type = ShipmentTypeManager.GetType(shipment);
-                    RateGroup express1Rates = express1Type.GetRates(shipment); 
+                    RateGroup express1Rates = express1Type.GetRates(shipment);
                     RateResult express1Rate = express1Rates.Rates.Where(er => er.Selectable).FirstOrDefault(er =>
                                                                                                       ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
                                                                                                       && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
@@ -916,7 +916,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             if (shipment.Postal != null && shipment.Postal.Endicia != null)
             {
-                shipment.Postal.Endicia.RequestedLabelFormat = (int)requestedLabelFormat;                
+                shipment.Postal.Endicia.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
 

@@ -1,29 +1,28 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.Amazon.Api;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
-using ShipWorks.Stores;
-using ShipWorks.Shipping.Profiles;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
-using System.Diagnostics;
-using Interapptive.Shared;
-using ShipWorks.Editions;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -74,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ShippingManager.EnsureShipmentLoaded(shipment);
             }
 
-            return new[] {new AmazonPackageAdapter(shipment)};
+            return new[] { new AmazonPackageAdapter(shipment) };
         }
 
         /// <summary>
@@ -92,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment) => 
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
             shipment.Amazon.ShippingServiceName;
 
         /// <summary>
@@ -149,25 +148,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            List<TemplateLabelData> labelData = new List<TemplateLabelData>();
-
-            // Get the resource list for our shipment
-            List<DataResourceReference> resources =
-                DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID);
-
-            if (resources.Count > 0)
-            {
-                // Add our standard label output
-                DataResourceReference labelResource = resources.Single(i => i.Label == "LabelPrimary");
-                labelData.Add(new TemplateLabelData(null, "Label", TemplateLabelCategory.Primary, labelResource));
-            }
-
-            return labelData;
+            return DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID)
+                .Where(x => x.Label.StartsWith("LabelPrimary"))
+                .Select(x => new TemplateLabelData(null, "Label", TemplateLabelCategory.Primary, x))
+                .ToList();
         }
 
         /// <summary>
@@ -188,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             IAmazonOrder amazonCredentials = shipment.Order as IAmazonOrder;
 
             Debug.Assert(amazonCredentials != null);
-            
+
             amazonShipment.DimsWeight = shipment.ContentWeight;
 
             base.ConfigureNewShipment(shipment);
@@ -230,7 +216,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 }
 
                 ratingField = base.RatingFields;
-                
+
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DeclaredValue);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DeliveryExperience);
                 ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsAddWeight);
@@ -263,7 +249,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
         /// <summary>
         /// Gets a value indicating whether this instance is shipment type restricted.
-        /// 
+        ///
         /// Overridden to use dependency
         /// </summary>
         public override bool IsShipmentTypeRestricted
@@ -292,7 +278,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             base.ConfigurePrimaryProfile(profile);
 
             AmazonProfileEntity amazon = profile.Amazon;
-            
+
             amazon.DeliveryExperience = (int) AmazonDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
             amazon.Weight = 0;
 
@@ -310,7 +296,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
         {
             base.ApplyProfile(shipment, profile);
-            
+
             if (shipment.Amazon == null)
             {
                 return;
@@ -318,7 +304,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
             AmazonProfileEntity amazonProfile = profile.Amazon;
-            
+
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
 
             if (amazonProfile.Weight != null && amazonProfile.Weight.Value != 0)
@@ -399,7 +385,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             ShipmentCommonDetail commonDetail = new ShipmentCommonDetail();
 
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
-            
+
             commonDetail.PackageLength = amazonShipment.DimsLength;
             commonDetail.PackageWidth = amazonShipment.DimsWidth;
             commonDetail.PackageHeight = amazonShipment.DimsHeight;
