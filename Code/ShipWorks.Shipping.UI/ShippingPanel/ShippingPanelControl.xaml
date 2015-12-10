@@ -19,9 +19,9 @@
              xmlns:messages="clr-namespace:ShipWorks.Messaging.Messages;assembly=ShipWorks.Core"
              xmlns:loading="clr-namespace:ShipWorks.Shipping.Loading;assembly=ShipWorks.Shipping"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shippingPanel:ShippingPanelViewModel}"
-             d:DesignHeight="1304" d:DesignWidth="350"
+             d:DesignHeight="1272.618" d:DesignWidth="350"
              SnapsToDevicePixels="True"
-             Focusable="True" 
+             Focusable="True"
              IsTabStop="True">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -50,12 +50,12 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Visible" 
+    <ScrollViewer VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Disabled"
                   >
         <StackPanel Margin="6,6,6,6" >
             <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Success}}">
-                <Grid IsEnabled="{Binding AllowEditing}"> 
+                <Grid IsEnabled="{Binding AllowEditing}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -186,8 +186,8 @@
                                         <TextBlock Margin="20,0,8,0" Foreground="Gray" Visibility="{Binding DestinationAddressEditableState, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static shippingcore:ShippingAddressEditStateType.Editable}}">
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}({0})">
-                                                    <Binding Path="DestinationAddressEditableState" 
-                                                             Converter="{StaticResource EnumDescription}" 
+                                                    <Binding Path="DestinationAddressEditableState"
+                                                             Converter="{StaticResource EnumDescription}"
                                                              ConverterParameter="{x:Static shippingcore:ShippingAddressEditStateType.Editable}"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
@@ -212,7 +212,18 @@
                               IsExpanded="{Binding IsDetailsExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
                               DataContext="{Binding ShipmentViewModel}"
                               Style="{StaticResource ExpanderStyle}">
-                            <shipmentControl:ShipmentControl />
+                            <StackPanel>
+                                <shipmentControl:ShipmentControl Visibility="{
+                                    Binding DataContext.ShipmentType,
+                                    RelativeSource={RelativeSource AncestorType=UserControl},
+                                    Converter={StaticResource VisibleWhenNotEqualToParameter},
+                                    ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}" />
+                                <shipmentControl:OtherShipmentControl Visibility="{
+                                    Binding DataContext.ShipmentType,
+                                    RelativeSource={RelativeSource AncestorType=UserControl},
+                                    Converter={StaticResource VisibleWhenEqualToParameter},
+                                    ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}" />
+                            </StackPanel>
                         </Expander>
                     </Border>
                     <Grid Margin="{StaticResource SectionMargin}">

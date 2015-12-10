@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using GalaSoft.MvvmLight.Command;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
@@ -30,7 +26,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private ICarrierShipmentAdapter shipmentAdapter;
         private ObservableCollection<DimensionsProfileEntity> dimensionsProfiles;
         private DimensionsProfileEntity selectedDimensionsProfile;
-        private ShipmentTypeCode shipmentTypeCode;
 
         /// <summary>
         /// Observable collection of carrier service types
@@ -65,7 +60,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         }
 
         /// <summary>
-        /// Is the shipment using insurance? 
+        /// Is the shipment using insurance?
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool UsingInsurance
@@ -73,7 +68,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             get { return usingInsurance; }
             set { handler.Set(nameof(UsingInsurance), ref usingInsurance, value); }
         }
-        
+
         /// <summary>
         /// Shipment selected service type
         /// </summary>

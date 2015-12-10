@@ -209,6 +209,9 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentDeletedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipeline.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentControl.xaml.cs">
+      <DependentUpon>OtherShipmentControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml.cs">
       <DependentUpon>ShipmentControl.xaml</DependentUpon>
     </Compile>
@@ -428,6 +431,10 @@
     <Page Include="ShippingPanel\AddressControl\AddressControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShippingPanel\ShipmentControl\OtherShipmentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml">
       <Generator>MSBuild:Compile</Generator>
