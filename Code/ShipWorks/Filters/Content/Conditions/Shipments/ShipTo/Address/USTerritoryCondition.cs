@@ -1,4 +1,5 @@
 ﻿using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 

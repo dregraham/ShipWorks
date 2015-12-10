@@ -1,4 +1,5 @@
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.AddressValidation.Predicates

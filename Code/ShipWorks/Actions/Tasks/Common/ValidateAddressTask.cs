@@ -5,6 +5,7 @@ using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
