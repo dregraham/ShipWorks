@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Autofac.Extras.Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Editing.Rating;
@@ -9,6 +10,7 @@ using ShipWorks.Tests.Shipping.Carriers.BestRate.Fake;
 using log4net;
 using Xunit;
 using Moq;
+using Moq.Language.Flow;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Insurance;
@@ -20,9 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
     {
         private BestRateShipmentType testObject;
         private BestRateLabelService labelService;
-
-        private Mock<IBestRateShippingBrokerFactory> brokerFactory;
-        private Mock<IBestRateShippingBroker> broker;
+        
         private Mock<ILog> log;
 
         private List<RateResult> rates;
@@ -36,6 +36,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         private Mock<IRateFootnoteFactory> notAssociatedWithAmountFooterFootnoteFactory;
 
         private Mock<IRateGroupFilterFactory> filterFactory;
+        private AutoMock mock;
+
 
         public BestRateShipmentTypeTest()
         {
@@ -50,11 +52,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
                 BestRate = new BestRateShipmentEntity()
             };
 
-            broker = new Mock<IBestRateShippingBroker>();
-            broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<List<BrokerException>>())).Returns(new RateGroup(rates));
+            //broker = new Mock<IBestRateShippingBroker>();
+            //broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<List<BrokerException>>())).Returns(new RateGroup(rates));
 
-            brokerFactory = new Mock<IBestRateShippingBrokerFactory>();
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
+            //brokerFactory = new Mock<IBestRateShippingBrokerFactory>();
+           // brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
             filterFactory = new Mock<IRateGroupFilterFactory>();
             filterFactory.Setup(f => f.CreateFilters(It.IsAny<ShipmentEntity>())).Returns(new List<IRateGroupFilter>());
@@ -65,9 +67,70 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             labelService = new BestRateLabelService();
 
+
+            mock = AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
+
             InitializeFootnoteTests();
         }
-        
+
+        [Fact]
+        public void GetShipmentInsuranceProvider_ReturnsInvalid_OneBrokersWithNoAccounts_Test()
+        {
+            var bestRateShipmentType = mock.Create<BestRateShipmentType>();
+
+            Assert.Equal(InsuranceProvider.Invalid, bestRateShipmentType.GetShipmentInsuranceProvider(new ShipmentEntity()));
+        }
+
+        [Fact]
+        public void SupportsGetRates_ReturnsTrue_Test()
+        {
+            BestRateShipmentType bestRateShipmentType = mock.Create<BestRateShipmentType>();
+
+            Assert.True(bestRateShipmentType.SupportsGetRates);
+        }
+
+        [Fact]
+        public void GetShipmentInsuranceProvider_ReturnsShipWorks_TwoBrokersWithAccountsAndShipWorksInsurance_Test()
+        {
+            mock.Mock<IBestRateShippingBroker>().Setup(b => b.HasAccounts).Returns(true);
+            mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.ShipWorks);
+            IBestRateShippingBroker broker = mock.Create<IBestRateShippingBroker>();
+            
+            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker, broker });
+            
+            var bestRateShipmentType = mock.Create<BestRateShipmentType>();
+
+            Assert.Equal(InsuranceProvider.ShipWorks, bestRateShipmentType.GetShipmentInsuranceProvider(new ShipmentEntity()));
+        }
+
+        [Fact]
+        public void GetShipmentInsuranceProvider_ReturnsInvalid_TwoBrokersWithAccountsAndCarrierInsurance_Test()
+        {
+            mock.Mock<IBestRateShippingBroker>().Setup(b => b.HasAccounts).Returns(true);
+            mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
+            IBestRateShippingBroker broker = mock.Create<IBestRateShippingBroker>();
+            
+            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker, broker });
+
+            var bestRateShipmentType = mock.Create<BestRateShipmentType>();
+
+            Assert.Equal(InsuranceProvider.Invalid, bestRateShipmentType.GetShipmentInsuranceProvider(new ShipmentEntity()));
+        }
+
+        [Fact]
+        public void GetShipmentInsuranceProvider_ReturnsCarrier_TwoBrokersWithAccountsAndCarrierInsurance_Test()
+        {
+            mock.Mock<IBestRateShippingBroker>().Setup(b => b.HasAccounts).Returns(true);
+            mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
+            IBestRateShippingBroker broker = mock.Create<IBestRateShippingBroker>();
+
+            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker });
+
+            var bestRateShipmentType = mock.Create<BestRateShipmentType>();
+
+            Assert.Equal(InsuranceProvider.Carrier, bestRateShipmentType.GetShipmentInsuranceProvider(new ShipmentEntity()));
+        }
+
         [Fact]
         public void ProcessShipment_ThrowsInvalidOperationException_Test()
         {
