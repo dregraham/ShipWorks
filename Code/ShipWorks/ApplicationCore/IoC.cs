@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Settings;
@@ -6,6 +7,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using System.Reflection;
 using Interapptive.Shared.Messaging;
+using log4net;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
@@ -77,7 +79,7 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
-
+            
             current = builder.Build();
         }
     }

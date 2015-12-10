@@ -2,27 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
+using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
+    /// <summary>
+    /// Rating service for the BestRate carrier
+    /// </summary>
     public class BestRateRatingService : IRatingService, IBestRateBrokerRatingService
     {
-        private readonly BestRateShipmentType bestRateShipmentType;
+        private readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
+        private readonly IRateGroupFilterFactory filterFactory;
 
-        public BestRateRatingService(BestRateShipmentType bestRateShipmentType, IBestRateShippingBrokerFactory brokerFactory)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public BestRateRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, IBestRateShippingBrokerFactory brokerFactory, IRateGroupFilterFactory filterFactory)
         {
-            this.bestRateShipmentType = bestRateShipmentType;
+            this.shipmentTypeFactory = shipmentTypeFactory;
             this.brokerFactory = brokerFactory;
+            this.filterFactory = filterFactory;
         }
 
         /// <summary>
         /// Called to get the latest rates for the shipment. This implementation will accumulate the
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
+        /// <param name="shipment">Shipment for which to get rates</param>
+        /// <returns>RateGroup of best rates for all carriers enabled for best rate</returns>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
             try
@@ -32,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 List<BrokerException> brokerExceptions = new List<BrokerException>();
                 IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
 
-                RateGroup rateGroup = bestRateShipmentType.CompileBestRates(shipment, rateGroups);
+                RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
 
                 // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
                 IEnumerable<BrokerException> distinctExceptions = brokerExceptions
@@ -44,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 if (distinctExceptions.Any())
                 {
-                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(bestRateShipmentType, distinctExceptions));
+                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.BestRate], distinctExceptions));
                 }
 
                 return rateGroup;
@@ -63,6 +75,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Called to get the latest rates for the shipment. This implementation will accumulate the
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
+        /// <param name="shipment">Shipment for which to get rates</param>
+        /// <param name="exceptionHandler">Handler for exceptions generated while getting rates</param>
+        /// <returns>IEnumerable of RateGroup for each carrier enabled for best rate</returns>
         public IEnumerable<RateGroup> GetRates(ShipmentEntity shipment, List<BrokerException> exceptionHandler)
         {
             List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment, true).ToList();
@@ -86,7 +101,32 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             return tasks.Select(x => x.Result);
         }
 
+        /// <summary>
+        /// Create a single, filtered rate group from a collection of rate groups
+        /// </summary>
+        public RateGroup CompileBestRates(ShipmentEntity shipment, IEnumerable<RateGroup> rateGroups)
+        {
+            RateGroup compiledRateGroup = new RateGroup(rateGroups.SelectMany(x => x.Rates));
 
+            // Add the footnotes from all returned RateGroups into the new compiled RateGroup
+            foreach (IRateFootnoteFactory footnoteFactory in rateGroups.SelectMany(x => x.FootnoteFactories))
+            {
+                compiledRateGroup.AddFootnoteFactory(footnoteFactory);
+            }
+
+            // Filter out any rates as necessary
+            compiledRateGroup = filterFactory.CreateFilters(shipment)
+                .Aggregate(compiledRateGroup, (current, rateGroupFilter) => rateGroupFilter.Filter(current));
+
+            // Allow each rate result the chance to mask its description if needed based on the
+            // other rate results in the list. This is for UPS that does not want its named-rates
+            // intermingled with rates from other carriers
+            compiledRateGroup.Rates.ForEach(x => x.MaskDescription(compiledRateGroup.Rates));
+            compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
+
+            return compiledRateGroup;
+        }
+        
         /// <summary>
         /// Starts getting rates for a broker
         /// </summary>

@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping
                     return new iParcelShipmentType();
 
                 case ShipmentTypeCode.BestRate:
-                    return new BestRateShipmentType();
+                    return lifetimeScope.Resolve<BestRateShipmentType>();
 
                 case ShipmentTypeCode.Usps:
                     return new UspsShipmentType();

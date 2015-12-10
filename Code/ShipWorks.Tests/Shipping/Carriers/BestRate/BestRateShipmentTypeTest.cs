@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             log = new Mock<ILog>();
 
-            testObject = new BestRateShipmentType(brokerFactory.Object, filterFactory.Object, log.Object);
+            //testObject = new BestRateShipmentType(brokerFactory.Object, log.Object,);
 
             labelService = new BestRateLabelService();
 
@@ -384,7 +384,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             shipment.BestRateEvents = 0;
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
-            testObject.ApplySelectedShipmentRate(shipment, rate);
+            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.Equal((int)BestRateEventTypes.RateSelected, shipment.BestRateEvents);
         }
@@ -394,7 +394,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             shipment.BestRateEvents = (int)BestRateEventTypes.RatesCompared;
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
-            testObject.ApplySelectedShipmentRate(shipment, rate);
+            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.Equal(BestRateEventTypes.RatesCompared, (BestRateEventTypes)shipment.BestRateEvents & BestRateEventTypes.RatesCompared);
         }
@@ -404,7 +404,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             ShipmentEntity calledShipment = null;
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => calledShipment = entity } };
-            testObject.ApplySelectedShipmentRate(shipment, rate);
+            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.Equal(shipment, calledShipment);
         }
@@ -416,7 +416,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             bool? signUpActionResult = null;
 
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => calledShipment = entity } };
-            testObject.ApplySelectedShipmentRate(shipment, rate);
+            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.False(signUpActionResult.HasValue);
         }

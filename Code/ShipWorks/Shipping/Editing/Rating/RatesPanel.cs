@@ -302,37 +302,52 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         private ShipmentType PrepareShipmentAndGetShipmentType(ShipmentEntity shipment)
         {
-            ShipmentType shipmentType;
-            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
-
-            // Only change this to best rate for non-USPS postal types
-            if (ConsolidatePostalRates &&
-                PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
-                !PostalUtility.IsPostalSetup() && 
-                shipmentTypeCode != ShipmentTypeCode.Usps &&
-                shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
-                shipmentTypeCode != ShipmentTypeCode.Express1Usps)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}));
+                ShipmentType shipmentType;
+                ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
 
-                shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
-                ShippingManager.EnsureShipmentLoaded(shipment);
+                // Only change this to best rate for non-USPS postal types
+                if (ConsolidatePostalRates &&
+                    PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
+                    !PostalUtility.IsPostalSetup() &&
+                    shipmentTypeCode != ShipmentTypeCode.Usps &&
+                    shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
+                    shipmentTypeCode != ShipmentTypeCode.Express1Usps)
+                {
+                    IBestRateShippingBrokerFactory brokerFactory =
+                        new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>
+                        {
+                            new PostalCounterBrokerFilter(),
+                            new PostalOnlyBrokerFilter()
+                        });
 
-                shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
-                shipment.BestRate.DimsLength = shipment.Postal.DimsLength;
-                shipment.BestRate.DimsWidth = shipment.Postal.DimsWidth;
-                shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
-                shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
-                shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
-                shipment.BestRate.ServiceLevel = (int)ServiceLevelType.Anytime;
-                shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
+
+                    shipmentType =
+                        lifetimeScope.Resolve<BestRateShipmentType>(
+                            new TypedParameter(typeof (IBestRateShippingBrokerFactory),
+                                brokerFactory));
+
+
+                    shipment.ShipmentType = (int) ShipmentTypeCode.BestRate;
+                    ShippingManager.EnsureShipmentLoaded(shipment);
+
+                    shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
+                    shipment.BestRate.DimsLength = shipment.Postal.DimsLength;
+                    shipment.BestRate.DimsWidth = shipment.Postal.DimsWidth;
+                    shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
+                    shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
+                    shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
+                    shipment.BestRate.ServiceLevel = (int) ServiceLevelType.Anytime;
+                    shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
+                }
+                else
+                {
+                    shipmentType = ShipmentTypeManager.GetType(shipment);
+                }
+
+                return shipmentType;
             }
-            else
-            {
-                shipmentType = ShipmentTypeManager.GetType(shipment);
-            }
-
-            return shipmentType;
         }
 
         /// <summary>

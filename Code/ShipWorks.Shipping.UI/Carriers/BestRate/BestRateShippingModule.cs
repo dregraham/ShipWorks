@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -29,6 +30,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             builder.RegisterType<BestRateRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.BestRate)
+                .AsSelf();
+
+            builder.RegisterType<BestRateFilterFactory>()
+                .As<IRateGroupFilterFactory>()
                 .AsSelf();
 
         }
