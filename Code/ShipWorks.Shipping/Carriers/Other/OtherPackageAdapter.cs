@@ -3,7 +3,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Interapptive.Shared.Utility;
+using ShipWorks.Core.UI;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Other
@@ -17,6 +19,9 @@ namespace ShipWorks.Shipping.Carriers.Other
     {
         [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
         public virtual event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangingEventHandler PropertyChanging;
+        private readonly PropertyChangedHandler handler;
+
         private readonly ShipmentEntity shipment;
 
         /// <summary>
@@ -25,63 +30,47 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <param name="shipment">The shipment.</param>
         public OtherPackageAdapter(ShipmentEntity shipment)
         {
+            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
         }
 
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.
         /// </summary>
-        public int Index { get; set; } = 1;
-
-        /// <summary>
-        /// Gets or sets the length.
-        /// </summary>
-        public double Length
+        [Obfuscation(Exclude = true)]
+        public int Index
         {
-            get { return 0; }
-            set { /* We don't care about this value */ }
-        }
-
-        /// <summary>
-        /// Gets or sets the width.
-        /// </summary>
-        public double Width
-        {
-            get { return 0; }
-            set { /* We don't care about this value */ }
-        }
-
-        /// <summary>
-        /// Gets or sets the height.
-        /// </summary>
-        public double Height
-        {
-            get { return 0; }
+            get { return 1; }
             set { /* We don't care about this value */ }
         }
 
         /// <summary>
         /// Gets or sets the weight.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double Weight
         {
             get { return shipment.ContentWeight; }
-            set { shipment.ContentWeight = value; }
+            set
+            {
+                handler.Set(nameof(Weight), v => shipment.ContentWeight = value, shipment.ContentWeight, value, false);
+            }
         }
 
         /// <summary>
         /// Gets or sets the additional weight.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double AdditionalWeight
         {
             get { return 0; }
             set { /* We don't care about this value */ }
         }
 
-
         /// <summary>
         /// Gets or sets the additional weight.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool ApplyAdditionalWeight
         {
             get { return true; }
@@ -91,11 +80,17 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        public PackageTypeBinding PackagingType { get; set; } = null;
+        [Obfuscation(Exclude = true)]
+        public PackageTypeBinding PackagingType
+        {
+            get { return null; }
+            set { /* We don't care about this value */ }
+        }
 
         /// <summary>
         /// Gets or sets the dims length.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double DimsLength
         {
             get { return 0; }
@@ -105,6 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Gets or sets the dims width.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double DimsWidth
         {
             get { return 0; }
@@ -114,6 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Gets or sets the dims height.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double DimsHeight
         {
             get { return 0; }
@@ -123,6 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Gets or sets the dimension profile id.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public long DimsProfileID
         {
             get { return 0; }
@@ -136,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         {
             StringHash stringHash = new StringHash();
 
-            string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", Length, Width, Height, Weight, AdditionalWeight, ApplyAdditionalWeight);
+            string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", DimsLength, DimsWidth, DimsHeight, Weight, AdditionalWeight, ApplyAdditionalWeight);
 
             return stringHash.Hash(rawValue, string.Empty);
         }

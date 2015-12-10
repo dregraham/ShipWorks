@@ -14,21 +14,6 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         int Index { get; set; }
 
-        ///// <summary>
-        ///// Gets or sets the length.
-        ///// </summary>
-        //double Length { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets the width.
-        ///// </summary>
-        //double Width { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets the height.
-        ///// </summary>
-        //double Height { get; set; }
-
         /// <summary>
         /// Gets or sets the weight.
         /// </summary>

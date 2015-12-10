@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// Implementation of the IPackageAdapter interface intended to be used for shuffling package data between classes.
     /// </summary>
-    public class UpsPackageAdapter : IPackageAdapter, INotifyPropertyChanged
+    public class UpsPackageAdapter : IPackageAdapter
     {
         private readonly ShipmentEntity shipmentEntity;
         private readonly UpsPackageEntity packageEntity;
@@ -59,43 +59,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 handler.Set(nameof(Index), ref index, value);
             }
         }
-
-        ///// <summary>
-        ///// Gets or sets the length.
-        ///// </summary>
-        //public double Length
-        //{
-        //    get { return packageEntity.DimsLength; }
-        //    set
-        //    {
-        //        packageEntity.DimsLength = value;
-        //        handler.Set(nameof(Length), v => packageEntity.DimsLength = value, packageEntity.DimsLength, value, false);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Gets or sets the width.
-        ///// </summary>
-        //public double Width
-        //{
-        //    get { return packageEntity.DimsWidth; }
-        //    set
-        //    {
-        //        packageEntity.DimsWidth = value;
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Gets or sets the height.
-        ///// </summary>
-        //public double Height
-        //{
-        //    get { return packageEntity.DimsHeight; }
-        //    set
-        //    {
-        //        packageEntity.DimsHeight = value;
-        //    }
-        //}
 
         /// <summary>
         /// Gets or sets the weight.

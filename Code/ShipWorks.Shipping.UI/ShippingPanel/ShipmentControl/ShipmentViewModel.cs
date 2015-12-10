@@ -75,6 +75,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             UsingInsurance = shipmentAdapter.UsingInsurance;
             SupportsPackageTypes = shipmentAdapter.SupportsPackageTypes;
             SupportsMultiplePackages = shipmentAdapter.SupportsMultiplePackages;
+            SupportsDimensions = shipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.Other;
 
             RefreshServiceTypes();
             RefreshPackageTypes();

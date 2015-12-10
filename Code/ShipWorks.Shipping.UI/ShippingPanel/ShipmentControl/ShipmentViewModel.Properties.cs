@@ -26,9 +26,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private IPackageAdapter selectedPackageAdapter;
         private bool supportsMultiplePackages;
         private bool supportsPackageTypes;
+        private bool supportsDimensions;
         private ICarrierShipmentAdapter shipmentAdapter;
         private ObservableCollection<DimensionsProfileEntity> dimensionsProfiles;
         private DimensionsProfileEntity selectedDimensionsProfile;
+        private ShipmentTypeCode shipmentTypeCode;
 
         /// <summary>
         /// Observable collection of carrier service types
@@ -148,6 +150,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             get { return supportsPackageTypes; }
             set { handler.Set(nameof(SupportsPackageTypes), ref supportsPackageTypes, value); }
+        }
+
+        /// <summary>
+        /// Does the shipment support dimensions?
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool SupportsDimensions
+        {
+            get { return supportsDimensions; }
+            set { handler.Set(nameof(SupportsDimensions), ref supportsDimensions, value); }
         }
 
         /// <summary>

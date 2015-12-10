@@ -19,7 +19,6 @@
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/BlinkingRedErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-
             <SolidColorBrush x:Key="brushWatermarkForeground" Color="LightSteelBlue" />
 
             <converters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
@@ -28,9 +27,16 @@
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <converters:StringEmptyWhenEqualToParameterConverter x:Key="StringEmptyWhenEqualToParameter" />
 
-
-
-
+            <Style TargetType="{x:Type RowDefinition}" x:Key="SupportsDimensionsRowStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding SupportsDimensions}" Value="True">
+                        <Setter Property="Height" Value="Auto"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding SupportsDimensions}" Value="False">
+                        <Setter Property="Height" Value="0"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
             <Style TargetType="{x:Type RowDefinition}" x:Key="SupportsMultiplePackagesRowStyle">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding SupportsMultiplePackages}" Value="True">
@@ -66,9 +72,9 @@
                 <RowDefinition Style="{StaticResource SupportsMultiplePackagesRowStyle}" />
                 <RowDefinition Style="{StaticResource SupportsPackageTypesRowStyle}" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" />
+                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" />
+                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -146,7 +152,8 @@
                 <Button Margin="5"
                         Content="Manage..."
                         Style="{StaticResource LinkButtonStyle}"
-                <Button Margin="5" Content="Manage..." Cursor="Hand" Command="{Binding DimensionsManagerDlgCommand}">
+                        Click="OnManageDimensionsProfiles"
+                        />
             </StackPanel>
             <!--
                 Dimensions

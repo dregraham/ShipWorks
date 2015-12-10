@@ -11,7 +11,9 @@ namespace ShipWorks.Shipping.Services
     public class NullPackageAdapter : IPackageAdapter
     {
         [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
+#pragma warning disable CS0067
         public virtual event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore CS0067
 
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.
@@ -19,33 +21,6 @@ namespace ShipWorks.Shipping.Services
         public int Index
         {
             get { return 1; }
-            set { }
-        }
-
-        /// <summary>
-        /// Gets or sets the length.
-        /// </summary>
-        public double Length
-        {
-            get { return 0; }
-            set{}
-        }
-
-        /// <summary>
-        /// Gets or sets the width.
-        /// </summary>
-        public double Width
-        {
-            get { return 0; }
-            set { }
-        }
-
-        /// <summary>
-        /// Gets or sets the height.
-        /// </summary>
-        public double Height
-        {
-            get { return 0; }
             set { }
         }
 
@@ -135,7 +110,7 @@ namespace ShipWorks.Shipping.Services
         {
             StringHash stringHash = new StringHash();
 
-            string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", Length, Width, Height, Weight, AdditionalWeight, ApplyAdditionalWeight);
+            string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", DimsLength, DimsWidth, DimsHeight, Weight, AdditionalWeight, ApplyAdditionalWeight);
 
             return stringHash.Hash(rawValue, string.Empty);
         }

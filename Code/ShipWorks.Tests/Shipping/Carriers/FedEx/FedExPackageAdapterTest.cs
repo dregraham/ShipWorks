@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Services;
 using Xunit;
 
@@ -12,6 +13,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 {
     public class FedExPackageAdapterTest
     {
+        private ShipmentEntity shipment;
+        private FedExPackageEntity package;
+        private IPackageAdapter testObject;
+
+        public FedExPackageAdapterTest()
+        {
+            PopulateDefaultObjects();
+        }
+
         /// <summary>
         /// To support ShipSense, we do not want to have PackagingType added to the hash of the package adapter.
         /// </summary>
@@ -30,10 +40,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
                 PackagingType = new PackageTypeBinding() { PackageTypeID = 999999 },
                 AdditionalWeight = 3.1,
                 ApplyAdditionalWeight = true,
-                Height = 2.2,
-                Length = 3.3,
+                DimsHeight = 2.2,
+                DimsLength = 3.3,
                 Weight = 4.4,
-                Width = 5.5
+                DimsWidth = 5.5
             };
 
             string firstTry = testObject.HashCode();
@@ -43,6 +53,150 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 
             // Make sure PackagingType WAS NOT PART OF THE HASH!
             Assert.Equal(firstTry, secondTry);
+        }
+
+        [Fact]
+        public void Constructor_PopulatesValues_Correctly_Test()
+        {
+            Assert.Equal(shipment.FedEx.PackagingType, testObject.PackagingType.PackageTypeID);
+            Assert.Equal(1, testObject.Index);
+            Assert.Equal(package.DimsLength, testObject.DimsLength);
+            Assert.Equal(package.DimsWidth, testObject.DimsWidth);
+            Assert.Equal(package.DimsHeight, testObject.DimsHeight);
+            Assert.Equal(package.DimsWeight, testObject.AdditionalWeight);
+            Assert.Equal(package.DimsAddWeight, testObject.ApplyAdditionalWeight);
+            Assert.Equal(package.DimsProfileID, testObject.DimsProfileID);
+        }
+
+        [Fact]
+        public void Changing_Weight_ForSinglePackage_Updates_Correctly_Test()
+        {
+            testObject.Weight = 88.98;
+
+            Assert.Equal(testObject.Weight, shipment.ContentWeight);
+            Assert.Equal(testObject.Weight, package.Weight);
+        }
+
+        [Fact]
+        public void Changing_Weight_ForTwoPackages_Updates_Correctly_Test()
+        {
+            double originalShipmentWeight = shipment.ContentWeight;
+            FedExPackageEntity secondPackage = new FedExPackageEntity()
+            {
+                Weight = 3,
+                DimsLength = 6,
+                DimsWidth = 4,
+                DimsHeight = 1,
+                DimsWeight = 3,
+                DimsAddWeight = false,
+                DimsProfileID = 1049
+            };
+
+            shipment.FedEx.Packages.Add(secondPackage);
+
+            FedExPackageAdapter secondPackageAdapter = new FedExPackageAdapter(shipment, secondPackage, 2);
+            secondPackageAdapter.Weight = 5;
+
+            Assert.Equal(originalShipmentWeight, shipment.ContentWeight);
+            Assert.Equal(testObject.Weight, package.Weight);
+            Assert.Equal(secondPackageAdapter.Weight, secondPackage.Weight);
+        }
+
+        [Fact]
+        public void Changing_AdditionalWeight_UpdatesCorrectly_Test()
+        {
+            testObject.AdditionalWeight = 5.4;
+
+            Assert.Equal(testObject.AdditionalWeight, package.DimsWeight);
+        }
+
+        [Fact]
+        public void Changing_ApplyAdditionalWeight_UpdatesCorrectly_Test()
+        {
+            testObject.ApplyAdditionalWeight = !package.DimsAddWeight;
+
+            Assert.Equal(testObject.ApplyAdditionalWeight, package.DimsAddWeight);
+        }
+
+        [Fact]
+        public void Changing_PackagingType_UpdatesCorrectly_WhenNotNull_Test()
+        {
+            shipment.FedEx.PackagingType = (int)FedExPackagingType.Box25Kg;
+            testObject.PackagingType = new PackageTypeBinding() { PackageTypeID = (int)FedExPackagingType.Custom };
+
+            Assert.Equal(testObject.PackagingType.PackageTypeID, shipment.FedEx.PackagingType);
+        }
+
+        [Fact]
+        public void Changing_PackagingType_UpdatesCorrectly_WhenNull_Test()
+        {
+            shipment.FedEx.PackagingType = (int)FedExPackagingType.Box25Kg;
+            testObject.PackagingType = null;
+
+            Assert.Null(testObject.PackagingType);
+            Assert.Equal((int)FedExPackagingType.Box25Kg, shipment.FedEx.PackagingType);
+        }
+
+        [Fact]
+        public void Changing_DimsLength_UpdatesCorrectly_Test()
+        {
+            double newValue = package.DimsLength + 2.1;
+            testObject.DimsLength = package.DimsLength + newValue;
+
+            Assert.Equal(testObject.DimsLength, package.DimsLength);
+        }
+
+        [Fact]
+        public void Changing_DimsWidth_UpdatesCorrectly_Test()
+        {
+            double newValue = package.DimsWidth + 2.1;
+            testObject.DimsWidth = package.DimsWidth + newValue;
+
+            Assert.Equal(testObject.DimsWidth, package.DimsWidth);
+        }
+
+        [Fact]
+        public void Changing_DimsHeight_UpdatesCorrectly_Test()
+        {
+            double newValue = package.DimsHeight + 2.1;
+            testObject.DimsHeight = package.DimsHeight + newValue;
+
+            Assert.Equal(testObject.DimsHeight, package.DimsHeight);
+        }
+
+        [Fact]
+        public void Changing_DimsProfileID_UpdatesCorrectly_Test()
+        {
+            long newValue = package.DimsProfileID + 2;
+            testObject.DimsProfileID = package.DimsProfileID + newValue;
+
+            Assert.Equal(testObject.DimsProfileID, package.DimsProfileID);
+        }
+
+        private void PopulateDefaultObjects()
+        {
+            package = new FedExPackageEntity()
+            {
+                Weight = 3,
+                DimsLength = 6,
+                DimsWidth = 4,
+                DimsHeight = 1,
+                DimsWeight = 3,
+                DimsAddWeight = false,
+                DimsProfileID = 1049
+            };
+
+            shipment = new ShipmentEntity()
+            {
+                ContentWeight = 3,
+                FedEx = new FedExShipmentEntity()
+                {
+                    PackagingType = (int)FedExPackagingType.Box25Kg,
+                    Packages = { package }
+                }
+            };
+
+            testObject = new FedExPackageAdapter(shipment, package, 1);
         }
     }
 }

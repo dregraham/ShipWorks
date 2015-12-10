@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         private Mock<IShipmentServicesBuilderFactory> shipmentServicesBuilderFactory;
         private Mock<IShipmentPackageTypesBuilder> shipmentPackageTypesBuilder;
         private Mock<IShipmentPackageTypesBuilderFactory> shipmentPackageTypesBuilderFactory;
-        private Mock<IDimensionsManager> dimensionsManager;
+        private readonly Mock<IDimensionsManager> dimensionsManager;
         private Mock<IRateSelectionFactory> rateSelectionFactory;
         private Dictionary<int, string> expectedServices = new Dictionary<int, string>();
         private Dictionary<int, string> expectedPackageTypes = new Dictionary<int, string>();
