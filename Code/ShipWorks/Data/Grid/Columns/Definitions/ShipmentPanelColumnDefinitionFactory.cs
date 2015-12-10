@@ -19,6 +19,7 @@ using ShipWorks.Stores.Content.Panels;
 using ShipWorks.Shipping.CoreExtensions.Grid;
 using ShipWorks.Stores.Content.Panels.CoreExtensions.Grid;
 using Interapptive.Shared.Utility;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.ShipSense;
