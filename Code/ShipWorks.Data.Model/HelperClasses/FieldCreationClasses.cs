@@ -8072,6 +8072,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FtpAccountFieldIndex.InternalOwnerID);}
 		}
+		/// <summary>Creates a new FtpAccountEntity.ReuseControlConnectionSession field instance</summary>
+		public static EntityField2 ReuseControlConnectionSession
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FtpAccountFieldIndex.ReuseControlConnectionSession);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity GenericFileStoreEntity</summary>

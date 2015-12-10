@@ -50,6 +50,7 @@ namespace ShipWorks.FileTransfer
             account.Passive = true;
 
             account.InternalOwnerID = null;
+            account.ReuseControlConnectionSession = true;
 
             return account;
         }
@@ -76,12 +77,18 @@ namespace ShipWorks.FileTransfer
                 }
             }
 
-            // Explicit
-            if (CheckFtpSecurityExplicit(portOverride, account))
+            // Explicit with ReuseControlConnectionSession true
+            if (CheckFtpSecurityExplicit(portOverride, account, true))
             {
                 return account;
             }
 
+            // Explicit with ReuseControlConnectionSession false
+            if (CheckFtpSecurityExplicit(portOverride, account, false))
+            {
+                return account;
+            }
+            
             // Implicit
             if (CheckFtpSecurityImplicit(portOverride, account))
             {
@@ -156,7 +163,7 @@ namespace ShipWorks.FileTransfer
         /// <summary>
         /// Check ftp security as explicit
         /// </summary>
-        private static bool CheckFtpSecurityExplicit(int portOverride, FtpAccountEntity account)
+        private static bool CheckFtpSecurityExplicit(int portOverride, FtpAccountEntity account, bool reuseControlConnectionSession)
         {
             log.InfoFormat("Testing Explicit FTP security...");
 
@@ -166,6 +173,7 @@ namespace ShipWorks.FileTransfer
                 account.Port = GetDefaultPort(FtpSecurityType.Explicit);
             }
             account.SecurityType = (int) FtpSecurityType.Explicit;
+            account.ReuseControlConnectionSession = reuseControlConnectionSession;
 
             return TestPassiveActiveModes(account);
         }
@@ -308,11 +316,13 @@ namespace ShipWorks.FileTransfer
 
             Ftp ftp = new Ftp();
             ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
-            ftp.Connect(account.Host, account.Port, tls, (FtpSecurity) account.SecurityType);
+            ftp.Settings.ReuseControlConnectionSession = (bool)account.ReuseControlConnectionSession;
 
+            ftp.Connect(account.Host, account.Port, tls, (FtpSecurity) account.SecurityType);
+            
             return ftp;
         }
-
+        
         /// <summary>
         /// Connect an login to the given FTP account
         /// </summary>

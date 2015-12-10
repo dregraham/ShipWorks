@@ -1338,7 +1338,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits FtpAccountEntity's mappings</summary>
 		private void InitFtpAccountEntityMappings()
 		{
-			base.AddElementMapping( "FtpAccountEntity", "ShipWorksLocal", @"dbo", "FtpAccount", 8 );
+			base.AddElementMapping( "FtpAccountEntity", "ShipWorksLocal", @"dbo", "FtpAccount", 9 );
 			base.AddElementFieldMapping( "FtpAccountEntity", "FtpAccountID", "FtpAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "FtpAccountEntity", "Host", "Host", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "FtpAccountEntity", "Username", "Username", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -1347,6 +1347,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "FtpAccountEntity", "SecurityType", "SecurityType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 5 );
 			base.AddElementFieldMapping( "FtpAccountEntity", "Passive", "Passive", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 6 );
 			base.AddElementFieldMapping( "FtpAccountEntity", "InternalOwnerID", "InternalOwnerID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
+			base.AddElementFieldMapping( "FtpAccountEntity", "ReuseControlConnectionSession", "ReuseControlConnectionSession", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 8 );
 		}
 		/// <summary>Inits GenericFileStoreEntity's mappings</summary>
 		private void InitGenericFileStoreEntityMappings()

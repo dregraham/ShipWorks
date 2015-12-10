@@ -9,6 +9,7 @@ using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 using System;
+using Interapptive.Shared;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -20,7 +21,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
         private readonly IOrderManager orderManager;
-        private readonly AmazonShipmentType amazonShipmentType;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IEnumerable<IAmazonRateGroupFilter> rateFilters;
 
@@ -28,14 +28,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// Initializes a new instance of the <see cref="AmazonRatingService"/> class.
         /// </summary>
         public AmazonRatingService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory,
-            IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory, AmazonShipmentType amazonShipmentType,
+            IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
             IEnumerable<IAmazonRateGroupFilter> rateFilters)
         {
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
             this.orderManager = orderManager;
             this.requestFactory = requestFactory;
-            this.amazonShipmentType = amazonShipmentType;
             this.rateFilters = rateFilters;
         }
 
