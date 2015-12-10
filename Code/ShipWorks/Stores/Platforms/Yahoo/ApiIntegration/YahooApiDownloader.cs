@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
@@ -387,8 +388,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             YahooOrderItemEntity itemEntity = (YahooOrderItemEntity)InstantiateOrderItem(orderEntity);
 
             itemEntity.YahooProductID = item.ItemID;
-            itemEntity.Code = item.ItemCode;
-            itemEntity.Name = item.Description;
+            itemEntity.Code = WebUtility.HtmlDecode(item.ItemCode);
+            itemEntity.Name = WebUtility.HtmlDecode(item.Description);
             itemEntity.Quantity = item.Quantity;
             itemEntity.UnitPrice = item.UnitPrice;
             itemEntity.Url = item.URL;
@@ -460,8 +461,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             {
                 OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(itemEntity);
 
-                attribute.Name = option.Name;
-                attribute.Description = option.Value;
+                attribute.Name = WebUtility.HtmlDecode(option.Name);
+                attribute.Description = WebUtility.HtmlDecode(option.Value);
                 attribute.UnitPrice = 0;
             }
         }
@@ -479,6 +480,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 throw new DownloadException("Attempted to check for orders on a null store");
             }
 
+            // We want to use the highest order number we have as our next
+            // starting number. We want to make sure the order number we
+            // start with exists in Yahoo, so we don't get an error.
             long nextOrderNumber = GetNextOrderNumber() - 1;
 
             long? backupNumber = store.BackupOrderNumber;
@@ -486,6 +490,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             List<long> orders = new List<long>();
 
             bool initialDownload = false;
+
             // This should only happen on the store's initial download
             if (nextOrderNumber == 0 && backupNumber != null)
             {
@@ -642,6 +647,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
 
             return result.ToUniversalTime();
+        }
+
+        /// <summary>
+        /// Changes html encoded quotes to regular quotes.
+        /// </summary>
+        private string QuoteClean(string storeText)
+        {
+            return storeText.Replace("&quot;", "\"");
         }
     }
 }

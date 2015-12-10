@@ -177,7 +177,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             {
                 return xmlView.ContentString;
             }
-            
+
             // Didn't find it - non ShipWorks message must be assumed
             return null;
         }
@@ -403,14 +403,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             {
                 LoadOption(item, attributeNode);
             }
-        }
-
-        /// <summary>
-        /// Changes html encoded quotes to regular quotes.
-        /// </summary>
-        private string QuoteReplace(string text)
-        {
-            return text.Replace("&quot;", "\"");
         }
 
         /// <summary>

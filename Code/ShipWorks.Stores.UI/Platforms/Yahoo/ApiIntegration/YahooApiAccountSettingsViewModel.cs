@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 
             if (string.IsNullOrWhiteSpace(YahooStoreID))
             {
-                return "Please enter your Store URL";
+                return "Please enter your Yahoo Store ID";
             }
 
             if (string.IsNullOrWhiteSpace(AccessToken))
