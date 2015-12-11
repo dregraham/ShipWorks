@@ -159,6 +159,7 @@
     <Compile Include="Collections\ArrayUtility.cs" />
     <Compile Include="Collections\CollectionChangedEvent.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
+    <Compile Include="Collections\ObservableExtensions.cs" />
     <Compile Include="Imaging\EdgeDetection.cs" />
     <Compile Include="InterapptiveOnly.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />

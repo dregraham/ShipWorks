@@ -554,7 +554,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 testObject.UnloadShipment();
 
                 Assert.Null(testObject.ShipmentAdapter);
-                Assert.Equal(ShippingPanelLoadedShipmentResult.Deleted, testObject.LoadedShipmentResult);
             }
         }
 
