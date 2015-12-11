@@ -154,6 +154,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
+            UpdateDynamicData();
             return shipmentType.GetPackageAdapters(shipment);
         }
 
@@ -162,7 +163,23 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
         {
-            return shipmentType.GetPackageAdapters(shipment);
+            IParcelShipmentEntity iParcel = shipment.IParcel;
+
+            // Need more
+            while (iParcel.Packages.Count < numberOfPackages)
+            {
+                IParcelPackageEntity package = iParcelShipmentType.CreateDefaultPackage();
+                iParcel.Packages.Add(package);
+            }
+
+            // Need less
+            while (iParcel.Packages.Count > numberOfPackages)
+            {
+                IParcelPackageEntity package = iParcel.Packages[iParcel.Packages.Count - 1];
+                iParcel.Packages.Remove(package);
+            }
+
+            return GetPackageAdapters();
         }
     }
 }

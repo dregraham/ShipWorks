@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public static bool AllFedExShipments(IEnumerable<IInsuranceChoice> choices)
         {
-            return choices.All(c => ShipmentTypeManager.IsFedEx((ShipmentTypeCode)c.Shipment.ShipmentType));
+            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.FedEx);
         }
 
         /// <summary>
@@ -127,7 +127,8 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public static bool AllUpsShipments(IEnumerable<IInsuranceChoice> choices)
         {
-            return choices.All(c => ShipmentTypeManager.IsUps((ShipmentTypeCode)c.Shipment.ShipmentType));
+            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType == ShipmentTypeCode.UpsOnLineTools || 
+                                     (ShipmentTypeCode)c.Shipment.ShipmentType == ShipmentTypeCode.UpsWorldShip));
         }
 
         /// <summary>

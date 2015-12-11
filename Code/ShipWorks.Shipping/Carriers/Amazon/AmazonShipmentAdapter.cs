@@ -150,6 +150,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
+            UpdateDynamicData();
             return shipmentType.GetPackageAdapters(shipment);
         }
 
@@ -158,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
         {
-            return shipmentType.GetPackageAdapters(shipment);
+            return GetPackageAdapters();
         }
     }
 }

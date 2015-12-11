@@ -102,5 +102,10 @@ namespace ShipWorks.Shipping
         /// Gets the service used.
         /// </summary>
         string GetServiceUsed(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Gets the shipment type carrier name.
+        /// </summary>
+        string GetCarrierName(ShipmentTypeCode shipmentTypeCode);
     }
 }

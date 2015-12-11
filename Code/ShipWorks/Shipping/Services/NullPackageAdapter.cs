@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -101,6 +103,16 @@ namespace ShipWorks.Shipping.Services
         {
             get { return 0; }
             set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the insurance choice.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IInsuranceChoice InsuranceChoice
+        {
+            get { return null; }
+            set { /*  Not relevant to a NullPackageAdapter */ }
         }
 
         /// <summary>

@@ -50,6 +50,9 @@ namespace ShipWorks.Shipping.UI
                      container.Resolve<ShipmentViewModel>();
             });
 
+            builder.RegisterType<InsuranceViewModel>()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
+
             builder.RegisterType<RatingPanelViewModel>();
 
             builder.RegisterType<ShippingConfiguration>()

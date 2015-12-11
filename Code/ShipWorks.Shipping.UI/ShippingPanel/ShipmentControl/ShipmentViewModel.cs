@@ -28,6 +28,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
         private readonly IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory;
         private readonly IDimensionsManager dimensionsManager;
+        private readonly IShippingViewModelFactory shippingViewModelFactory;
+        
 
         [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual",
             Justification = "Event is virtual to allow tests to fire it")]
@@ -50,12 +52,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory, IMessenger messenger,
             IRateSelectionFactory rateSelectionFactory,
-            IDimensionsManager dimensionsManager) : this()
+            IDimensionsManager dimensionsManager,
+            IShippingViewModelFactory shippingViewModelFactory) : this()
         {
             this.shipmentPackageTypesBuilderFactory = shipmentPackageTypesBuilderFactory;
             this.rateSelectionFactory = rateSelectionFactory;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             this.dimensionsManager = dimensionsManager;
+            this.shippingViewModelFactory = shippingViewModelFactory;
+
+            insuranceViewModel = shippingViewModelFactory.GetSInsuranceViewModel();
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
@@ -85,6 +91,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             SelectedPackageAdapter = PackageAdapters.FirstOrDefault();
 
             RefreshDimensionsProfiles();
+
+            InsuranceViewModel.Load(PackageAdapters, SelectedPackageAdapter);
 
             SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) ?
                 DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) :

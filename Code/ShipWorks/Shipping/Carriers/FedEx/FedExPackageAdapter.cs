@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
@@ -25,6 +26,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private readonly FedExPackageEntity packageEntity;
         private PackageTypeBinding packagingType;
         private int index;
+        private IInsuranceChoice insuranceChoice;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExPackageAdapter" /> class.
@@ -38,6 +40,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;
             this.Index = packageIndex;
+            this.insuranceChoice = new InsuranceChoice(shipmentEntity, packageEntity, packageEntity, packageEntity);
 
             packagingType = new PackageTypeBinding()
             {
@@ -183,6 +186,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             set
             {
                 handler.Set(nameof(DimsProfileID), v => packageEntity.DimsProfileID = value, packageEntity.DimsProfileID, value, false);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the insurance choice.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IInsuranceChoice InsuranceChoice
+        {
+            get { return insuranceChoice; }
+            set
+            {
+                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
             }
         }
 

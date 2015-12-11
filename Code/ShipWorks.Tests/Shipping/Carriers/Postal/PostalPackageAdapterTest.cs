@@ -78,7 +78,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             testObject.Weight = 88.98;
 
             Assert.Equal(testObject.Weight, shipment.ContentWeight);
-            Assert.Equal(testObject.Weight, shipment.Postal.DimsWeight);
         }
 
         [Fact]

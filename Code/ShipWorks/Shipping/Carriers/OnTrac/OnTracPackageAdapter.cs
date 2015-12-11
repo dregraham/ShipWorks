@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
@@ -23,6 +24,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
         private readonly ShipmentEntity shipment;
         private PackageTypeBinding packagingType;
+        private IInsuranceChoice insuranceChoice;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OnTracPackageAdapter"/> class.
@@ -32,6 +34,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
+            this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac);
 
             packagingType = new PackageTypeBinding()
             {
@@ -161,6 +164,19 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             set
             {
                 handler.Set(nameof(DimsProfileID), v => shipment.OnTrac.DimsProfileID = value, shipment.OnTrac.DimsProfileID, value, false);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the insurance choice.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IInsuranceChoice InsuranceChoice
+        {
+            get { return insuranceChoice; }
+            set
+            {
+                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
             }
         }
 

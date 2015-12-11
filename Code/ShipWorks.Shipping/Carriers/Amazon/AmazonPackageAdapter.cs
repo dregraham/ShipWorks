@@ -4,6 +4,7 @@ using System.Reflection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
@@ -20,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public virtual event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
         private readonly PropertyChangedHandler handler;
+        private IInsuranceChoice insuranceChoice;
 
         private readonly ShipmentEntity shipment;
 
@@ -31,13 +33,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
+            this.insuranceChoice = new AmazonInsuranceChoice(shipment);
         }
 
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public int Index { get; set; } = 1;
+        public int Index
+        {
+            get { return 1; }
+            set { /* Not applicable */ }
+        } 
 
         /// <summary>
         /// Gets or sets the length.
@@ -121,7 +128,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Gets or sets the packaging type.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public PackageTypeBinding PackagingType { get; set; } = null;
+        public PackageTypeBinding PackagingType
+        {
+            get { return null; } 
+            set { /* Not applicable */} 
+        } 
 
         /// <summary>
         /// Gets or sets the dims length.
@@ -172,6 +183,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             set
             {
                 handler.Set(nameof(DimsProfileID), v => shipment.Amazon.DimsProfileID = value, shipment.Amazon.DimsProfileID, value, false);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the insurance choice.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IInsuranceChoice InsuranceChoice
+        {
+            get { return insuranceChoice; }
+            set
+            {
+                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
             }
         }
 

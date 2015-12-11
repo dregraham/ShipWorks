@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Other
@@ -21,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         public virtual event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
         private readonly PropertyChangedHandler handler;
+        private IInsuranceChoice insuranceChoice;
 
         private readonly ShipmentEntity shipment;
 
@@ -32,6 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
+            this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Other, null);
         }
 
         /// <summary>
@@ -125,6 +128,19 @@ namespace ShipWorks.Shipping.Carriers.Other
         {
             get { return 0; }
             set { /* We don't care about this value */ }
+        }
+
+        /// <summary>
+        /// Gets or sets the insurance choice.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IInsuranceChoice InsuranceChoice
+        {
+            get { return insuranceChoice; }
+            set
+            {
+                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
+            }
         }
 
         /// <summary>

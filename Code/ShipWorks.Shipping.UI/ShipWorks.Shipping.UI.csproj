@@ -197,6 +197,8 @@
     <Compile Include="ShippingPanel\AddressControl\AddressControl.xaml.cs">
       <DependentUpon>AddressControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShippingPanel\InsuranceViewModel.Properties.cs" />
+    <Compile Include="ShippingPanel\InsuranceViewModel.cs" />
     <Compile Include="ShippingPanel\IShippingViewModelFactory.cs" />
     <Compile Include="ShippingPanel\AddressControl\AddressViewModel.cs" />
     <Compile Include="ShippingPanel\AddressControl\AddressViewModel.Properties.cs" />

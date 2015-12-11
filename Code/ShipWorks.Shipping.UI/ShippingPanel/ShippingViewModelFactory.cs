@@ -11,14 +11,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     {
         private readonly Func<ShipmentTypeCode, IShipmentViewModel> shipmentViewModelFactory;
         private readonly Func<AddressViewModel> addressViewModelFactory;
+        private readonly Func<InsuranceViewModel> insuranceViewModelFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingViewModelFactory(Func<ShipmentTypeCode, IShipmentViewModel> shipmentViewModelFactory, Func<AddressViewModel> addressViewModelFactory)
+        public ShippingViewModelFactory(Func<ShipmentTypeCode, IShipmentViewModel> shipmentViewModelFactory, 
+                                        Func<AddressViewModel> addressViewModelFactory, 
+                                        Func<InsuranceViewModel> insuranceViewModelFactory)
         {
             this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.addressViewModelFactory = addressViewModelFactory;
+            this.insuranceViewModelFactory = insuranceViewModelFactory;
         }
 
         /// <summary>
@@ -37,6 +41,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public IShipmentViewModel GetShipmentViewModel(ShipmentTypeCode shipmentType)
         {
             return shipmentViewModelFactory(shipmentType);
+        }
+
+        /// <summary>
+        /// Return a new InsuranceViewModel
+        /// </summary>
+        /// <returns></returns>
+        public InsuranceViewModel GetSInsuranceViewModel()
+        {
+            return insuranceViewModelFactory();
         }
     }
 }

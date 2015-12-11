@@ -26,6 +26,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private ICarrierShipmentAdapter shipmentAdapter;
         private ObservableCollection<DimensionsProfileEntity> dimensionsProfiles;
         private DimensionsProfileEntity selectedDimensionsProfile;
+        private InsuranceViewModel insuranceViewModel;
+
+        /// <summary>
+        /// The insurance view model to use.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public InsuranceViewModel InsuranceViewModel
+        {
+            get { return insuranceViewModel; }
+            set { handler.Set(nameof(InsuranceViewModel), ref insuranceViewModel, value); }
+        }
 
         /// <summary>
         /// Observable collection of carrier service types
@@ -114,7 +125,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public IEnumerable<IPackageAdapter> PackageAdapters
         {
             get { return packageAdapters; }
-            set { handler.Set(nameof(PackageAdapters), ref packageAdapters, value, true); }
+            set
+            {
+                handler.Set(nameof(PackageAdapters), ref packageAdapters, value, true);
+                InsuranceViewModel.PackageAdapters = PackageAdapters;
+            }
         }
 
         /// <summary>
@@ -124,7 +139,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public IPackageAdapter SelectedPackageAdapter
         {
             get { return selectedPackageAdapter; }
-            set { handler.Set(nameof(SelectedPackageAdapter), ref selectedPackageAdapter, value, true); }
+            set
+            {
+                handler.Set(nameof(SelectedPackageAdapter), ref selectedPackageAdapter, value, true);
+                InsuranceViewModel.SelectedPackageAdapter = SelectedPackageAdapter;
+            }
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -53,7 +54,12 @@ namespace ShipWorks.Shipping.Services
         /// Gets or sets the packaging type.
         /// </summary>
         PackageTypeBinding PackagingType { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the insurance choice.
+        /// </summary>
+        IInsuranceChoice InsuranceChoice { get; set; }
+
         /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>

@@ -4,6 +4,7 @@ using System.Reflection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
@@ -21,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly PropertyChangedHandler handler;
 
         private readonly ShipmentEntity shipment;
+        private IInsuranceChoice insuranceChoice;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRatePackageAdapter"/> class.
@@ -30,6 +32,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
+            this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.BestRate, null);
         }
 
         /// <summary>
@@ -140,6 +143,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             set
             {
                 handler.Set(nameof(DimsProfileID), v => shipment.BestRate.DimsProfileID = value, shipment.BestRate.DimsProfileID, value, false);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the insurance choice.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IInsuranceChoice InsuranceChoice
+        {
+            get { return insuranceChoice; }
+            set
+            {
+                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
             }
         }
 

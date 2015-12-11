@@ -4,6 +4,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Configuration;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -153,6 +155,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
+            UpdateDynamicData();
             return shipmentType.GetPackageAdapters(shipment);
         }
 
@@ -177,7 +180,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ups.Packages.Remove(package);
             }
 
-            return shipmentType.GetPackageAdapters(shipment);
+            return GetPackageAdapters();
         }
     }
 }

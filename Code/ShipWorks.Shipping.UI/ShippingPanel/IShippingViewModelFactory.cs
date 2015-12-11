@@ -17,5 +17,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Get the shipment control view model
         /// </summary>
         IShipmentViewModel GetShipmentViewModel(ShipmentTypeCode shipmentType);
+
+        /// <summary>
+        /// Return a new InsuranceViewModel
+        /// </summary>
+        /// <returns></returns>
+        InsuranceViewModel GetSInsuranceViewModel();
     }
 }

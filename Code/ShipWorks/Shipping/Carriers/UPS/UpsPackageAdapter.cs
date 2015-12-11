@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Reflection;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -26,6 +27,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public virtual event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
         private readonly PropertyChangedHandler handler;
+        private IInsuranceChoice insuranceChoice;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsPackageAdapter" /> class.
@@ -39,6 +41,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;
             this.Index = packageIndex;
+            this.insuranceChoice = new InsuranceChoice(shipmentEntity, packageEntity, packageEntity, packageEntity);
 
             packagingType = new PackageTypeBinding()
             {
@@ -184,6 +187,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
             set
             {
                 handler.Set(nameof(DimsProfileID), v => packageEntity.DimsProfileID = value, packageEntity.DimsProfileID, value, false);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the insurance choice.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IInsuranceChoice InsuranceChoice
+        {
+            get { return insuranceChoice; }
+            set
+            {
+                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
             }
         }
 

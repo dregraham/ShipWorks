@@ -197,5 +197,11 @@ namespace ShipWorks.Shipping
         /// </summary>
         public string GetServiceUsed(ShipmentEntity shipment) =>
             ShippingManager.GetServiceUsed(shipment);
+
+        /// <summary>
+        /// Gets the service used.
+        /// </summary>
+        public string GetCarrierName(ShipmentTypeCode shipmentTypeCode) =>
+            ShippingManager.GetCarrierName(shipmentTypeCode);
     }
 }

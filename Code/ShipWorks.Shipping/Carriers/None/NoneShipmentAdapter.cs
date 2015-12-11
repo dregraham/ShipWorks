@@ -143,6 +143,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// </summary>
         public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
+            UpdateDynamicData();
             return shipmentType.GetPackageAdapters(shipment);
         }
 
@@ -151,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// </summary>
         public IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
         {
-            return shipmentType.GetPackageAdapters(shipment);
+            return GetPackageAdapters();
         }
     }
 }

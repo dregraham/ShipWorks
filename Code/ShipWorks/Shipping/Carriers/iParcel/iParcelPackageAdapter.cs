@@ -4,6 +4,7 @@ using System.Reflection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
@@ -23,6 +24,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private readonly ShipmentEntity shipmentEntity;
         private readonly IParcelPackageEntity packageEntity;
         private int index;
+        private IInsuranceChoice insuranceChoice;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelPackageAdapter" /> class.
@@ -36,6 +38,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;
             this.Index = packageIndex;
+            this.insuranceChoice = new InsuranceChoice(shipmentEntity, packageEntity, packageEntity, packageEntity);
         }
 
         /// <summary>
@@ -162,6 +165,19 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             set
             {
                 handler.Set(nameof(DimsProfileID), v => packageEntity.DimsProfileID = value, packageEntity.DimsProfileID, value, false);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the insurance choice.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IInsuranceChoice InsuranceChoice
+        {
+            get { return insuranceChoice; }
+            set
+            {
+                handler.Set(nameof(InsuranceChoice), ref insuranceChoice, value);
             }
         }
 

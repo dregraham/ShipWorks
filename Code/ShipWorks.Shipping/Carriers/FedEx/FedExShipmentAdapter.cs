@@ -152,6 +152,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
+            UpdateDynamicData();
             return shipmentType.GetPackageAdapters(shipment);
         }
 
@@ -176,7 +177,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 fedEx.Packages.Remove(package);
             }
 
-            return shipmentType.GetPackageAdapters(shipment);
+            return GetPackageAdapters();
         }
     }
 }

@@ -218,16 +218,20 @@
             <!--
                 Insurance
             -->
-            <TextBlock Grid.Row="9" Grid.Column="0" Style="{StaticResource GridLabel}">Insurance:</TextBlock>
+            <TextBlock Grid.Row="9" Grid.Column="0" Style="{StaticResource GridLabel}" 
+                       Text="{Binding InsuranceViewModel.InsuranceLabelDisplayText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance:'}"></TextBlock>
             <StackPanel  Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
                 <CheckBox Margin="4 4 0 0"
-					IsChecked="{Binding Insurance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock/>
+					IsChecked="{Binding InsuranceViewModel.InsuranceChoice.Insured, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock  Margin="4 4 0 0"
+                    Text="{Binding InsuranceViewModel.InsuranceTypeLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance Type'}"></TextBlock>
             </StackPanel>
 
             <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Style="{StaticResource GridLabel}">Insured Value:</TextBlock>
-                <TextBox Width="40"/>
+                <TextBlock Style="{StaticResource GridLabel}" 
+                           Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insured Value:'}"></TextBlock>
+                <TextBox Width="80"  Margin="4 4 0 0"
+                         Text="{Binding InsuranceViewModel.InsuranceChoice.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=c, FallbackValue='50.50'}"/>
             </StackPanel>
         </Grid>
     </StackPanel>
