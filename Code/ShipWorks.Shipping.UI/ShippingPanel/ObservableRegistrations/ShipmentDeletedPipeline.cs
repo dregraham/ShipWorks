@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Loading;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -28,7 +29,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             return messages.OfType<ShipmentDeletedMessage>()
                 .Where(x => x.DeletedShipmentId == viewModel.Shipment?.ShipmentID)
-                .Subscribe(x => viewModel.UnloadShipment());
+                .Subscribe(x =>
+                {
+                    viewModel.LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Deleted;
+                    viewModel.UnloadShipment();
+                });
         }
     }
 }

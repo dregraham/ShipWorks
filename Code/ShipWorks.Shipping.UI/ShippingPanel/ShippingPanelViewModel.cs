@@ -277,7 +277,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void Save()
         {
-            if (ShipmentAdapter.Shipment?.Processed == true)
+            if (ShipmentAdapter?.Shipment?.Processed == true)
             {
                 return;
             }
@@ -417,7 +417,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public virtual void UnloadShipment()
         {
-            LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Deleted;
             ShipmentAdapter = null;
         }
 

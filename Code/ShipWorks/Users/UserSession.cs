@@ -14,6 +14,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Services;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
@@ -23,6 +24,7 @@ using ShipWorks.FileTransfer;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Grid;
 using ShipWorks.Filters.Search;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -100,7 +102,7 @@ namespace ShipWorks.Users
 
             bool wasLoggedIn = (User != null);
 
-            
+
             Reset();
 
             if (!SqlSession.IsConfigured)
@@ -171,7 +173,7 @@ namespace ShipWorks.Users
             ShippingProviderRuleManager.InitializeForCurrentSession();
             OnTracAccountManager.InitializeForCurrentSession();
             iParcelAccountManager.InitializeForCurrentSession();
-            
+
             foreach (IInitializeForCurrentSession service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
             {
                 service.InitializeForCurrentSession();
@@ -259,8 +261,8 @@ namespace ShipWorks.Users
             {
                 // The basics that we always have to have are the user and computer
                 string basics = string.Format("{0:X5}{1:X5}",
-                                              (UserSession.User != null) ? (UserSession.User.UserID - 2)/1000 : 0,
-                                              (UserSession.Computer != null) ? (UserSession.Computer.ComputerID - 1)/1000 : 0);
+                                              (UserSession.User != null) ? (UserSession.User.UserID - 2) / 1000 : 0,
+                                              (UserSession.Computer != null) ? (UserSession.Computer.ComputerID - 1) / 1000 : 0);
 
                 // We start with just the basics
                 string workStationID = basics;
@@ -287,7 +289,7 @@ namespace ShipWorks.Users
 
                     string additional = string.Format("{0}{1:X1}{2}",
                                                       auditEnabledFlag,
-                                                      (int)AuditReason.ReasonType,
+                                                      (int) AuditReason.ReasonType,
                                                       AuditReason.ReasonDetail);
 
                     // SQL Server limits this to a max of 128.  The "- 2" is to make room for our terminator
@@ -432,6 +434,8 @@ namespace ShipWorks.Users
                 throw new InvalidOperationException("No user is logged on.");
             }
 
+            Messenger.Current.Send(new WindowResettingMessage(Program.MainForm));
+
             log.InfoFormat("Logging off '{0}'.", loggedInUser.Username);
 
             // Nothing to do to logoff the SuperUser
@@ -516,7 +520,7 @@ namespace ShipWorks.Users
             {
                 // The guid isnt enough.  They could restore the database to a different path, essentially copying it.  In which
                 // case the guid will be the same, but the path will be different.
-                string targetPhysDb = (string)SqlCommandProvider.ExecuteScalar(con, "select physical_name from sys.database_files where type_desc = 'ROWS'");
+                string targetPhysDb = (string) SqlCommandProvider.ExecuteScalar(con, "select physical_name from sys.database_files where type_desc = 'ROWS'");
 
                 // Of course, they could also copy the same database, on two different machines, that would have the same path. So to
                 // uniqueify that, we use the machine name.
