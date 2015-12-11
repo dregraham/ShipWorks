@@ -19,13 +19,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShippingBrokerFactory"/> class.
         /// </summary>
-        public BestRateShippingBrokerFactory()
-            : this(new List<IShippingBrokerFilter> { new UpsWorldShipBrokerFilter(), new PostalCounterBrokerFilter(), new UpsBestRateRestrictionBrokerFilter() })
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BestRateShippingBrokerFactory"/> class.
-        /// </summary>
         /// <param name="filters">The filters.</param>
         public BestRateShippingBrokerFactory(IEnumerable<IShippingBrokerFilter> filters)
         {

@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.UI
                     }
                     return new CertificateInspector(certVerificationData);
                 });
-            
+
             builder.Register(
                 (container, parameters) =>
                     container.ResolveKeyed<IRateHashingService>(parameters.TypedAs<ShipmentTypeCode>()));

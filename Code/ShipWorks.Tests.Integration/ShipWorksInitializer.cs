@@ -130,9 +130,6 @@ namespace ShipWorks.Tests.Integration.MSTest
                     case "berger-pc":
                         instance = Guid.Parse("{AABB7285-a889-46af-87b8-69c10cdbAABB}");
                         break;
-                    case "berger-pc":
-                        instance = Guid.Parse("{AABB7285-a889-46af-87b8-69c10cdbAABB}");
-                        break;
                     default:
                         throw new ApplicationException("Enter your machine and ShipWorks instance GUID in the ShipWorksInitializer");
                 }

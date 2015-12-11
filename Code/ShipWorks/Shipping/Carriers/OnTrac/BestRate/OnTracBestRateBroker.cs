@@ -92,9 +92,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// </summary>
         protected override BrokerException WrapShippingException(ShippingException ex)
         {
-            OnTracException onTracException = ex.InnerException as OnTracException;
-
-            if (onTracException != null && onTracException.DoesNotServiceLocation)
+            if (ex.Message == "The \"Ship To\" zip code entered is invalid or not serviced by OnTrac.  Please verify that the \"Ship To\" zip code is correct and try again.\nOnTrac services all zip codes in CA.\nIn AZ,CO, ID, NV, OR, UT and WA, OnTrac services all major metro areas, but not all zip codes.")
             {
                 return new BrokerException(ex, BrokerExceptionSeverityLevel.Warning, ShipmentType);
             }

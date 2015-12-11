@@ -1,5 +1,11 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autofac;
+using Autofac.Core;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
+using ShipWorks.Shipping.Carriers.Postal.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -24,9 +30,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 .As<IBestRateBrokerRatingService>()
                 .AsSelf()
                 .Keyed<IRatingService>(ShipmentTypeCode.BestRate);
-
-            builder.RegisterType<BestRateShippingBrokerFactory>()
-                .AsImplementedInterfaces();
+            
+            builder.Register(GenerateBestRateBrokerFactory);
 
             builder.RegisterType<BestRateRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.BestRate)
@@ -35,7 +40,32 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             builder.RegisterType<BestRateFilterFactory>()
                 .As<IRateGroupFilterFactory>()
                 .AsSelf();
+        }
 
+        /// <summary>
+        /// Creates a BestRateBrokerFactory based on the BestRateConsolidatePostalRates enum
+        /// </summary>
+        private IBestRateShippingBrokerFactory GenerateBestRateBrokerFactory(IComponentContext c, IEnumerable<Parameter> p)
+        {
+            IEnumerable<Parameter> parameters = p as Parameter[] ?? p.ToArray();
+            if (parameters.ToArray().FirstOrDefault() == null || parameters.TypedAs<BestRateConsolidatePostalRates>() == BestRateConsolidatePostalRates.No)
+            {
+                // return BestRateShippingBrokerFactory with default behavior
+                return new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>
+                {
+                    new UpsWorldShipBrokerFilter(),
+                    new PostalCounterBrokerFilter(),
+                    new UpsBestRateRestrictionBrokerFilter()
+                });
+            }
+
+            // return BestRateShippingBrokerFactory with default behavior
+            return new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>
+            {
+                new UpsWorldShipBrokerFilter(),
+                new PostalCounterBrokerFilter(),
+                new UpsBestRateRestrictionBrokerFilter()
+            });
         }
     }
 }
