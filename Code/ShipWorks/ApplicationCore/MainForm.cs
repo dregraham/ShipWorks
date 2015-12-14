@@ -364,9 +364,9 @@ namespace ShipWorks
                 SqlChangeTracking sqlChangeTracking = new SqlChangeTracking();
                 sqlChangeTracking.Enable();
 
-                ShipSenseLoader.LoadDataAsync();
-
                 LogonToShipWorks();
+
+                ShipSenseLoader.LoadDataAsync();
             }
             else
             {
