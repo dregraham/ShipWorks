@@ -61,7 +61,7 @@
         <TextBlock Grid.Row="4" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Cost:</TextBlock>
         <TextBox Grid.Row="4" Grid.Column="1"
-                 Text="{Binding Cost,StringFormat={}{0:C}}" />
+                 Text="{Binding Cost,StringFormat=C}" />
 
         <TextBlock Grid.Row="5" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Tracking #:</TextBlock>

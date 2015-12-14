@@ -14,8 +14,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     {
         private readonly ILog log;
         private readonly IShippingManager shippingManager;
-        //private IDisposable subscription;
-        //public ShippingPanelViewModel viewModel;
 
         /// <summary>
         /// Constructor
@@ -36,27 +34,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(x => viewModel.IsProcessed.HasValue && !viewModel.IsProcessed.Value)
                 .Select(_ => ChangeShipmentType(viewModel))
                 .SubscribeWithRetry(x => viewModel.Populate(x), HandleException);
-
-
-
-            //viewModel = registrationViewModel;
-
-            //CreateSubscription();
-
-            //return Disposable.Create(() => subscription?.Dispose());
         }
-
-        ///// <summary>
-        ///// Create the subscription that will handle changing the shipment type
-        ///// </summary>
-        //private void CreateSubscription()
-        //{
-        //    subscription = viewModel.PropertyChangeStream
-        //        .Where(x => x == nameof(viewModel.ShipmentType))
-        //        .Where(x => viewModel.IsProcessed.HasValue && !viewModel.IsProcessed.Value)
-        //        .Select(_ => ChangeShipmentType())
-        //        .Subscribe(x => viewModel.Populate(x), HandleException);
-        //}
 
         /// <summary>
         /// Get a shipping adapter from the changed shipment type

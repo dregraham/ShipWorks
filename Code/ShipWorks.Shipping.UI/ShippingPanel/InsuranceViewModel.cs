@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reactive.Disposables;
-using System.Reflection;
-using System.Text;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
@@ -86,7 +82,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 if (AllDelcaredValueType(choices))
                 {
                     // loadedInsurance will always have at least one value when insurance provider is not null
-                    string carrierName = shippingManager.GetCarrierName((ShipmentTypeCode)SelectedPackageAdapter.InsuranceChoice.Shipment.ShipmentType);
+                    string carrierName = shippingManager.GetCarrierName(SelectedPackageAdapter.InsuranceChoice.Shipment.ShipmentTypeCode);
 
                     value = $"{carrierName} Declared Value";
                 }
