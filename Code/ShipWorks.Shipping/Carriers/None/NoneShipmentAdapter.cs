@@ -125,6 +125,15 @@ namespace ShipWorks.Shipping.Carriers.None
         }
 
         /// <summary>
+        /// Content weight of the shipment
+        /// </summary>
+        public double ContentWeight
+        {
+            get { return shipment.ContentWeight; }
+            set { shipment.ContentWeight = value; }
+        }
+
+        /// <summary>
         /// Is Insurance requested?
         /// </summary>
         public bool UsingInsurance

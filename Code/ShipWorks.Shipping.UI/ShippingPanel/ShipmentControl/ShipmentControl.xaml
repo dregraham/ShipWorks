@@ -117,11 +117,10 @@
 				DisplayMemberPath="Name" />
 
             <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource GridLabel}">Weight:</TextBlock>
-
             <weight:WeightControl Grid.Row="5" Grid.Column="1"
 				Margin="0,0,0,0"
 				HorizontalAlignment="Left"
-				Weight="{Binding TotalWeight}"/>
+				Weight="{Binding SelectedPackageAdapter.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource GridLabel}">Dimensions:</TextBlock>
             <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
@@ -171,21 +170,21 @@
                 </StackPanel.IsEnabled>
                 <TextBlock Margin="3 1 0 0">L:</TextBlock>
                 <TextBox Width="40" Margin="1 0 5 0" x:Name="dimsLength"
-					Text="{Binding SelectedDimensionsProfile.Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+					Text="{Binding SelectedPackageAdapter.DimsLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                     <i:Interaction.Behaviors>
                         <behaviors:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="" MaxLength="3" />
                     </i:Interaction.Behaviors>
                 </TextBox>
                 <TextBlock Margin="0 1 0 0">W:</TextBlock>
                 <TextBox Width="40" Margin="1 0 5 0"
-					Text="{Binding SelectedDimensionsProfile.Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					Text="{Binding SelectedPackageAdapter.DimsWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <i:Interaction.Behaviors>
                         <behaviors:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="0" MaxLength="3" />
                     </i:Interaction.Behaviors>
                 </TextBox>
                 <TextBlock Margin="0 1 0 0">H:</TextBlock>
                 <TextBox Width="40" Margin="1 0 5 0"
-					Text="{Binding SelectedDimensionsProfile.Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+					Text="{Binding SelectedPackageAdapter.DimsHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                     <i:Interaction.Behaviors>
                         <behaviors:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="0" MaxLength="3" />
                     </i:Interaction.Behaviors>
@@ -204,7 +203,7 @@
 					Margin="0,1,0,0"
 					HorizontalAlignment="Left"
                     Width="60"
-					Weight="{Binding SelectedDimensionsProfile.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					Weight="{Binding SelectedPackageAdapter.AdditionalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <weight:WeightInput.IsEnabled>
                         <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
                             <Binding.ConverterParameter>

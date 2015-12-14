@@ -88,15 +88,23 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             PackageAdapters = shipmentAdapter.GetPackageAdapters();
             NumberOfPackages = PackageAdapters.Count();
 
-            SelectedPackageAdapter = PackageAdapters.FirstOrDefault();
-
             RefreshDimensionsProfiles();
+
+            SelectedPackageAdapter = PackageAdapters.FirstOrDefault();
 
             InsuranceViewModel.Load(PackageAdapters, SelectedPackageAdapter);
 
-            SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) ?
-                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) :
-                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0);
+            UpdateSelectedDimensionsProfile();
+        }
+
+        /// <summary>
+        /// Updates the selected dimensions profile based on SelectedPackageAdapter
+        /// </summary>
+        private void UpdateSelectedDimensionsProfile()
+        {
+            SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID)
+                    ? DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID)
+                    : DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0);
         }
 
         /// <summary>
@@ -151,18 +159,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public virtual void Save()
         {
             shipmentAdapter.ShipDate = ShipDate;
-            // shipmentAdapter.TotalWeight = TotalWeight
             shipmentAdapter.UsingInsurance = UsingInsurance;
             shipmentAdapter.ServiceType = ServiceType;
+            
+            shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
 
-            if (SelectedDimensionsProfile != null)
-            {
-                SelectedPackageAdapter.DimsProfileID = SelectedDimensionsProfile.DimensionsProfileID;
-                SelectedPackageAdapter.DimsLength = SelectedDimensionsProfile.Length;
-                SelectedPackageAdapter.DimsWidth = SelectedDimensionsProfile.Width;
-                SelectedPackageAdapter.DimsHeight = SelectedDimensionsProfile.Height;
-                SelectedPackageAdapter.AdditionalWeight = SelectedDimensionsProfile.Weight;
-            }
+            shipmentAdapter.UpdateDynamicData();
         }
 
         /// <summary>
@@ -176,6 +178,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             ServiceType = rateSelection.ServiceType;
         }
 
+        /// <summary>
+        /// Handles the dimensions profiles changed message so that we can update the list of dimensions profiles.
+        /// </summary>
         private void ManageDimensionsProfiles(DimensionsProfilesChangedMessage message)
         {
             long originalDimensionsProfileID = SelectedDimensionsProfile?.DimensionsProfileID ?? 0;

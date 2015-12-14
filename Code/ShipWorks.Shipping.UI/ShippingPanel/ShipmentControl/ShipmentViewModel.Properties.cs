@@ -143,6 +143,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             {
                 handler.Set(nameof(SelectedPackageAdapter), ref selectedPackageAdapter, value, true);
                 InsuranceViewModel.SelectedPackageAdapter = SelectedPackageAdapter;
+                UpdateSelectedDimensionsProfile();
             }
         }
 
@@ -189,6 +190,22 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             set
             {
                 handler.Set(nameof(SelectedDimensionsProfile), ref selectedDimensionsProfile, value, true);
+
+                if (SelectedDimensionsProfile != null)
+                {
+                    if (SelectedDimensionsProfile.DimensionsProfileID == 0)
+                    {
+                        SelectedPackageAdapter.DimsProfileID = 0;
+                    }
+                    else
+                    {
+                        SelectedPackageAdapter.DimsProfileID = SelectedDimensionsProfile.DimensionsProfileID;
+                        SelectedPackageAdapter.DimsLength = SelectedDimensionsProfile.Length;
+                        SelectedPackageAdapter.DimsWidth = SelectedDimensionsProfile.Width;
+                        SelectedPackageAdapter.DimsHeight = SelectedDimensionsProfile.Height;
+                        SelectedPackageAdapter.AdditionalWeight = SelectedDimensionsProfile.Weight;
+                    }
+                }
             }
         }
 

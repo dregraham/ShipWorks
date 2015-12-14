@@ -63,6 +63,11 @@ namespace ShipWorks.Shipping.Services
         double TotalWeight { get; }
 
         /// <summary>
+        /// Content weight of the shipment
+        /// </summary>
+        double ContentWeight { get; set; }
+
+        /// <summary>
         /// Is Insurance requested?
         /// </summary>
         bool UsingInsurance { get; set; }
