@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using Xunit;
 
@@ -105,6 +106,33 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
         }
 
         [Fact]
+        public void InsuranceChoice_PopulatesCorrectly_Test()
+        {
+            AmazonInsuranceChoice expected = new AmazonInsuranceChoice(shipment);
+
+            Assert.Equal(expected.Insured, testObject.InsuranceChoice.Insured);
+            Assert.Equal(expected.InsurancePennyOne, testObject.InsuranceChoice.InsurancePennyOne);
+            Assert.Equal(expected.InsuranceProvider, testObject.InsuranceChoice.InsuranceProvider);
+            Assert.Equal(expected.InsuranceValue, testObject.InsuranceChoice.InsuranceValue);
+        }
+
+        [Fact]
+        public void InsuranceChoice_UpdatesCorrectly_Test()
+        {
+            AmazonInsuranceChoice expected = new AmazonInsuranceChoice(shipment);
+            expected.Insured = !expected.Insured;
+            expected.InsurancePennyOne = !expected.InsurancePennyOne;
+            expected.InsuranceValue++;
+
+            testObject.InsuranceChoice = expected;
+
+            Assert.Equal(expected.Insured, testObject.InsuranceChoice.Insured);
+            Assert.Equal(expected.InsurancePennyOne, testObject.InsuranceChoice.InsurancePennyOne);
+            Assert.Equal(expected.InsuranceProvider, testObject.InsuranceChoice.InsuranceProvider);
+            Assert.Equal(expected.InsuranceValue, testObject.InsuranceChoice.InsuranceValue);
+        }
+
+        [Fact]
         public void Changing_PackagingType_IsStillNull_Test()
         {
             testObject.PackagingType = new PackageTypeBinding();
@@ -153,6 +181,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
             shipment = new ShipmentEntity()
             {
                 ContentWeight = 3,
+                Insurance = false,
+                InsuranceProvider = (int)InsuranceProvider.Carrier,
                 Amazon = new AmazonShipmentEntity()
                 {
                     DimsLength = 6,

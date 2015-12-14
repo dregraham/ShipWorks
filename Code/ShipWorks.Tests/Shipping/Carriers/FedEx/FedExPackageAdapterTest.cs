@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using Xunit;
 
@@ -74,6 +75,33 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
             Assert.Equal(package.DimsWeight, testObject.AdditionalWeight);
             Assert.Equal(package.DimsAddWeight, testObject.ApplyAdditionalWeight);
             Assert.Equal(package.DimsProfileID, testObject.DimsProfileID);
+        }
+
+        [Fact]
+        public void InsuranceChoice_PopulatesCorrectly_Test()
+        {
+            IInsuranceChoice expected = new InsuranceChoice(shipment, package, package, package);
+
+            Assert.Equal(expected.Insured, testObject.InsuranceChoice.Insured);
+            Assert.Equal(expected.InsurancePennyOne, testObject.InsuranceChoice.InsurancePennyOne);
+            Assert.Equal(expected.InsuranceProvider, testObject.InsuranceChoice.InsuranceProvider);
+            Assert.Equal(expected.InsuranceValue, testObject.InsuranceChoice.InsuranceValue);
+        }
+
+        [Fact]
+        public void InsuranceChoice_UpdatesCorrectly_Test()
+        {
+            IInsuranceChoice expected = new InsuranceChoice(shipment, package, package, package);
+            expected.Insured = !expected.Insured;
+            expected.InsurancePennyOne = !expected.InsurancePennyOne;
+            expected.InsuranceValue++;
+
+            testObject.InsuranceChoice = expected;
+
+            Assert.Equal(expected.Insured, testObject.InsuranceChoice.Insured);
+            Assert.Equal(expected.InsurancePennyOne, testObject.InsuranceChoice.InsurancePennyOne);
+            Assert.Equal(expected.InsuranceProvider, testObject.InsuranceChoice.InsuranceProvider);
+            Assert.Equal(expected.InsuranceValue, testObject.InsuranceChoice.InsuranceValue);
         }
 
         [Fact]
@@ -191,16 +219,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
                 DimsHeight = 1,
                 DimsWeight = 3,
                 DimsAddWeight = false,
-                DimsProfileID = 1049
+                DimsProfileID = 1049,
+                Insurance = false,
+                InsurancePennyOne = false,
+                InsuranceValue = 5.55M
             };
 
             shipment = new ShipmentEntity()
             {
                 ContentWeight = 3,
+                InsuranceProvider = (int) InsuranceProvider.Carrier,
+                Insurance = package.Insurance,
                 FedEx = new FedExShipmentEntity()
                 {
                     PackagingType = (int)FedExPackagingType.Box25Kg,
-                    Packages = { package }
+                    Packages = { package },
                 }
             };
 
