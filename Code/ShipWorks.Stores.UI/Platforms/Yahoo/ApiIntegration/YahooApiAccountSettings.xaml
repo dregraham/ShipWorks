@@ -44,9 +44,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="Store ID:"/></TextBlock>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding YahooStoreID, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="0"
+                     Grid.Column="1"
+                     MaxLength="50"
+                     Text="{Binding YahooStoreID, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Grid.Row="1" Grid.Column="0"><Run Text="Access Token:"/></TextBlock>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AccessToken, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Text="{Binding AccessToken, UpdateSourceTrigger=PropertyChanged}"
+                     MaxLength="200"/>
         </Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -66,6 +72,7 @@
 				Text="{Binding BackupOrderNumber, UpdateSourceTrigger=PropertyChanged}"
 				Margin="8,0,4,0"
 				VerticalAlignment="Center"
+                MaxLength="19"
 				Padding="2,2,2,2"/>
             <Image Grid.Column="2"
 				Source="{Binding IsValid, Converter={StaticResource EnumImage}}"
