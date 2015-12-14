@@ -18,7 +18,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private readonly FedExShippingClerkFactory shippingClerkFactory;
         
         public FedExRatingService(FedExAccountRepository fedExAccountRepository,
-            ICachedRatesService cachedRatesService, 
             FedExShipmentType fedExShipmentType,
             FedExShippingClerkFactory shippingClerkFactory)
         {

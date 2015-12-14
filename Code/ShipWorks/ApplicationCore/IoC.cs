@@ -8,6 +8,7 @@ using ShipWorks.Stores.Content;
 using System.Reflection;
 using Interapptive.Shared.Messaging;
 using log4net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
@@ -79,7 +80,11 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
-            
+
+            builder.RegisterType<LogEntryFactory>()
+                .AsImplementedInterfaces()
+                .AsSelf();
+
             current = builder.Build();
         }
     }

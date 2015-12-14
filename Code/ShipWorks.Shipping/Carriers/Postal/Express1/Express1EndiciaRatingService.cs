@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Editing.Rating;
@@ -12,8 +14,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     public class Express1EndiciaRatingService : EndiciaRatingService
     {
         public Express1EndiciaRatingService(
-            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, 
-            IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository) : base(shipmentTypeFactory, accountRepository)
+            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
+            IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository,
+            LogEntryFactory logEntryFactory, Func<string, ICertificateInspector> certificateInspectorFactory)
+            : base(shipmentTypeFactory, accountRepository, logEntryFactory, certificateInspectorFactory)
         {}
 
         /// <summary>

@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
@@ -17,11 +20,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public class EndiciaRatingService : PostalRatingService
     {
         private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
+        private readonly LogEntryFactory logEntryFactory;
+        private readonly Func<string, ICertificateInspector> certificateInspectorFactory;
 
-        public EndiciaRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository) 
+        public EndiciaRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
+            IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository,
+            LogEntryFactory logEntryFactory,
+            Func<string, ICertificateInspector> certificateInspectorFactory)
             : base(shipmentTypeFactory)
         {
             this.accountRepository = accountRepository;
+            this.logEntryFactory = logEntryFactory;
+            this.certificateInspectorFactory = certificateInspectorFactory;
         }
 
         /// <summary>
@@ -77,7 +87,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw new EndiciaException("Could not get endicia shipment type");
             }
 
-            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(accountRepository[(ShipmentTypeCode)shipment.ShipmentType], endiciaShipmentType.LogEntryFactory, endiciaShipmentType.CertificateInspector);
+            EndiciaApiClient endiciaApiClient =
+                new EndiciaApiClient(GetAccountRepository((ShipmentTypeCode) shipment.ShipmentType), logEntryFactory,
+                    certificateInspectorFactory(string.Empty));
 
             List<RateResult> allEndiciaRates = (InterapptiveOnly.MagicKeysDown)? 
                 endiciaApiClient.GetRatesSlow(shipment, endiciaShipmentType): 
@@ -123,7 +135,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                                 }
 
                                 finalRates.Add(express1Rate);
-                                //hasExpress1Savings = true;
                             }
                             else
                             {
