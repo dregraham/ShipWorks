@@ -7,7 +7,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Tests.Shipping.Carriers.BestRate.Fake;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.BestRate

@@ -134,6 +134,7 @@
     <Compile Include="Carriers\Amazon\Api\AmazonRatingServiceTests.cs" />
     <Compile Include="Carriers\Amazon\Api\GetEligibleShippingServicesResponseTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateRatingServiceTest.cs" />
+    <Compile Include="Carriers\BestRate\FakeExceptionHandlerBroker.cs" />
     <Compile Include="Carriers\EmptyRateHashingServiceTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelLabelServiceTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelRateHashingServiceTest.cs" />
@@ -164,10 +165,6 @@
     <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj">
       <Project>{c53624d5-5b3b-48a6-9729-52a573726de9}</Project>
       <Name>ShipWorks.Stores</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Tests\ShipWorks.Tests.csproj">
-      <Project>{14A91D06-21A1-4496-8F41-25E53BDD88ED}</Project>
-      <Name>ShipWorks.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
