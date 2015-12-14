@@ -393,16 +393,18 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 return false;
             }
 
+            bool isSameField = EntityUtility.IsSameField(field, OrderItemFields.Name);
+
             YahooOrderItemEntity item = entity as YahooOrderItemEntity;
 
-            if (item != null)
+            if (item != null && isSameField)
             {
                 return !item.Url.IsNullOrWhiteSpace();
             }
 
-            return EntityUtility.IsSameField(field, OrderItemFields.Name);
+            return isSameField;
         }
-        
+
         /// <summary>
         ///     Handle a link click for the given field
         /// </summary>

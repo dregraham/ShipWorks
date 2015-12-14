@@ -22,6 +22,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         readonly Mock<YahooStoreEntity> yahooApiStore = new Mock<YahooStoreEntity>();
         private readonly Mock<YahooStoreEntity> yahooEmailStore = new Mock<YahooStoreEntity>();
         private readonly List<EnumEntry<YahooApiOrderStatus>> orderStatuses = EnumHelper.GetEnumList<YahooApiOrderStatus>();
+        private YahooOrderItemEntity item;
+
 
         public YahooStoreTypeTest()
         {
@@ -33,6 +35,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
 
             apiTestObject = new YahooStoreType(yahooApiStore.Object);
             emailTestObject = new YahooStoreType(yahooEmailStore.Object);
+
+            item = new YahooOrderItemEntity()
+            {
+                Url = "a url"
+            };
         }
 
         [Fact]
@@ -170,19 +177,21 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         [Fact]
         public void GridHyperlinkSupported_ReturnsTrue_WhenApiUserAndFieldIsOrderItemName_Test()
         {
-            Assert.True(apiTestObject.GridHyperlinkSupported(OrderItemFields.Name));
+
+
+            Assert.True(apiTestObject.GridHyperlinkSupported(item, OrderItemFields.Name));
         }
 
         [Fact]
         public void GridHyperlinkSupported_ReturnsFalse_WhenApiUserAndFieldIsNotOrderItemName_Test()
         {
-            Assert.False(apiTestObject.GridHyperlinkSupported(OrderFields.BillFirstName));
+            Assert.False(apiTestObject.GridHyperlinkSupported(item, OrderFields.BillFirstName));
         }
 
         [Fact]
         public void GridHyperlinkSupported_ReturnsFalse_WhenEmailUser_Test()
         {
-            Assert.False(emailTestObject.GridHyperlinkSupported(OrderItemFields.Name));
+            Assert.False(emailTestObject.GridHyperlinkSupported(item, OrderItemFields.Name));
         }
 
         [Fact]
