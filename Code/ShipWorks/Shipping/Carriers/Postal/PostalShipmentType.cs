@@ -323,7 +323,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
-            return String.Format("USPS {0}", EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service));
+            return $"USPS {EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service)}";
         }
 
         /// <summary>
@@ -577,16 +577,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             };
 
             return eligibleCountryCodes;
-        }
-        
-        protected virtual RateGroup GetCounterRates(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual RateGroup GetRatesInternal(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException();
         }
     }
 }

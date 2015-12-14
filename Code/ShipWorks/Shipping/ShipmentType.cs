@@ -1005,49 +1005,6 @@ namespace ShipWorks.Shipping
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
         public abstract IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment);
 
-        protected RatingFields ratingField = null;
-
-        public virtual RatingFields RatingFields
-        {
-            [NDependIgnoreLongMethod]
-            get
-            {
-               throw new NotImplementedException();
-            }
-        }
-
-        /// <summary>
-        /// Gets the rating hash based on the shipment's configuration.
-        /// </summary>
-        public virtual string GetRatingHash(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// This is intended to be used when there is (most likely) a bad configuration
-        /// with the shipment on some level, so an empty rate group with a exception footer
-        /// is cached.
-        /// </summary>
-        /// <param name="shipment">The shipment that generated the given exception.</param>
-        /// <param name="exception">The exception</param>
-        public RateGroup CacheInvalidRateGroup(ShipmentEntity shipment, Exception exception)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Gets rates, retrieving them from the cache if possible
-        /// </summary>
-        /// <typeparam name="T">Type of exception that the carrier will throw on an error</typeparam>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        /// <param name="getRatesFunction">Function to retrieve the rates from the carrier if not in the cache</param>
-        /// <returns></returns>
-        protected RateGroup GetCachedRates<T>(ShipmentEntity shipment, Func<ShipmentEntity, RateGroup> getRatesFunction) where T : Exception
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
         /// actually processing the shipment. In most cases this is checking to see if an account exists
@@ -1213,27 +1170,6 @@ namespace ShipWorks.Shipping
             PersonAdapter address = new PersonAdapter(entity, fieldPrefix);
             return address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ||
                 (address.CountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && address.StateProvCode.Equals("PR", StringComparison.OrdinalIgnoreCase));
-        }
-
-        /// <summary>
-        /// Check to see if a package dimensions are valid for carriers that require dimensions.
-        /// </summary>
-        /// <returns>True if the dimensions are valid.  False otherwise.</returns>
-        public virtual bool DimensionsAreValid(double length, double width, double height)
-        {
-            if (length <= 0 || width <= 0 || height <= 0)
-            {
-                return false;
-            }
-
-            // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
-            // This is no longer valid due to new dimensional weight requirements.
-            if (length == 1.0 && width == 1.0 && height == 1.0)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         /// <summary>

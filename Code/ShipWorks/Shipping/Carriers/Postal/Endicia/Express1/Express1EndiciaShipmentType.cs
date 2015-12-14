@@ -85,15 +85,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
-        /// Gets counter rates for a postal shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        protected override RateGroup GetCounterRates(ShipmentEntity shipment)
-        {
-            return GetCachedRates<EndiciaException>(shipment, entity => { throw new EndiciaException("An account is required to view Express1 rates."); });
-        }
-
-        /// <summary>
         /// Create the setup wizard for configuring an Express 1 account.
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()

@@ -712,9 +712,16 @@ namespace ShipWorks.Shipping
 
             // Because this is coming from the rate control, and the only thing that causes rate changes from the rate control
             // is the Express1 promo footer, we need to remove the shipment from the cache before we get rates
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-            string cacheHash = shipmentType.GetRatingHash(shipment);
-            RateCache.Instance.Remove(cacheHash);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                if (lifetimeScope.IsRegisteredWithKey<IRateHashingService>((ShipmentTypeCode)shipment.ShipmentType))
+                {
+                    IRateHashingService rateHashingService = lifetimeScope.ResolveKeyed<IRateHashingService>((ShipmentTypeCode)shipment.ShipmentType);
+
+                    string cacheHash = rateHashingService.GetRatingHash(shipment);
+                    RateCache.Instance.Remove(cacheHash);
+                }
+            }
         }
 
         /// <summary>

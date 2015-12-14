@@ -500,26 +500,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             shipment.RequestedLabelFormat = shipment.BestRate.RequestedLabelFormat;
         }
 
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsAddWeight);
-                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsHeight);
-                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsLength);
-                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsWidth);
-                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsWeight);
-
-                return ratingField;
-            }
-        }
-
         /// <summary>
         /// Gets the shipment insurance provider based on carriers selected.
         /// </summary>

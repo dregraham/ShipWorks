@@ -154,7 +154,7 @@
     <Compile Include="Carriers\Amazon\AmazonRateHashingService.cs" />
     <Compile Include="Carriers\BestRate\BestRateLabelService.cs" />
     <Compile Include="Carriers\BestRate\BestRateRatingService.cs" />
-    <Compile Include="Carriers\BestRate\FedExRateHashingService.cs" />
+    <Compile Include="Carriers\BestRate\BestRateRateHashingService.cs" />
     <Compile Include="Carriers\FedEx\FedExLabelService.cs" />
     <Compile Include="Carriers\FedEx\FedExRateHashingService.cs" />
     <Compile Include="Carriers\FedEx\FedExRatingService.cs" />
@@ -187,7 +187,6 @@
     <Compile Include="Carriers\Ups\UpsRatingService.cs" />
     <Compile Include="Carriers\Ups\WorldShipLabelService.cs" />
     <Compile Include="EmptyRatingService.cs" />
-    <Compile Include="IRateHashingService.cs" />
     <Compile Include="EmptyRateHashingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateHashingService.cs" />
