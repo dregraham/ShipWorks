@@ -42,6 +42,7 @@ using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
 using ShipWorks.Stores.Content;
 using Autofac;
+using ShipWorks.AddressValidation.Enums;
 using Interapptive.Shared;
 using Interapptive.Shared.Messaging;
 

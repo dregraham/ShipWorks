@@ -1063,7 +1063,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
             if (FedExUtility.IsSmartPostEnabled(shipment) 
-                && Geography.IsUSInternationalTerritory(shipment.ShipPerson)
+                && shipment.ShipPerson.IsUSInternationalTerritory()
                 && ((FedExServiceType)shipment.FedEx.Service) == FedExServiceType.SmartPost)
             {
                 return false;

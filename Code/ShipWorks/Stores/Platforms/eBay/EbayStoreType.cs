@@ -33,6 +33,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.OrderItems;
 using Interapptive.Shared.Net;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.Properties;
 using ShipWorks.ApplicationCore.Dashboard;
