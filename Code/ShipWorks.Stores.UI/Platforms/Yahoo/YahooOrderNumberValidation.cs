@@ -10,16 +10,19 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum YahooOrderNumberValidation
     {
-        [Description("Valid")]
-        [ImageResource("check16")]
-        Valid = 0,
-
-        [Description("Invalid")]
-        [ImageResource("error16")]
-        Invalid = 1,
+        [Description("Not Validated")]
+        NotValidated = 0,
 
         [Description("Validating")]
         [ImageResource("circle_ball_blue")]
-        Validating = 2
+        Validating = 1,
+
+        [Description("Valid")]
+        [ImageResource("check16")]
+        Valid = 2,
+
+        [Description("Invalid")]
+        [ImageResource("error16")]
+        Invalid = 3
     }
 }

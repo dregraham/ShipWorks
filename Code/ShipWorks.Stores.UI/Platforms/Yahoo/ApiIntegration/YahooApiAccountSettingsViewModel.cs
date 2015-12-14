@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// If errors occur while validating the information, return the error message.
         /// </summary>
         /// <param name="store">The store.</param>
-        public new string Save(YahooStoreEntity store)
+        public override string Save(YahooStoreEntity store)
         {
             store.YahooStoreID = YahooStoreID;
             store.AccessToken = AccessToken;
@@ -51,6 +51,11 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
             if (string.IsNullOrWhiteSpace(AccessToken))
             {
                 return "Please enter your Access Token";
+            }
+
+            if (BackupOrderNumber != null && BackupOrderNumber < 0)
+            {
+                return "Yahoo does not support negative order numbers";
             }
 
             string error;
