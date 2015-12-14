@@ -468,33 +468,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Builds a RateGroup from a list of express 1 rates
-        /// </summary>
-        /// <param name="rates">List of rates that should be filtered and added to the group</param>
-        /// <param name="express1ShipmentType">Express1 shipment type</param>
-        /// <param name="baseShipmentType">Base type of the shipment</param>
-        /// <returns></returns>
-        public RateGroup BuildExpress1RateGroup(IEnumerable<RateResult> rates, ShipmentTypeCode express1ShipmentType, ShipmentTypeCode baseShipmentType)
-        {
-            // Express1 rates - return rates filtered by what is available to the user
-            List<PostalServiceType> availabelServiceTypes =
-                PostalUtility.GetDomesticServices(express1ShipmentType)
-                    .Concat(PostalUtility.GetInternationalServices(express1ShipmentType))
-                    .ToList();
-
-            var validExpress1Rates = rates
-                .Where(e => availabelServiceTypes.Contains(((PostalRateSelection)e.OriginalTag).ServiceType))
-                .ToList();
-
-            validExpress1Rates.ForEach(e => {
-                e.ShipmentType = baseShipmentType;
-                e.ProviderLogo = e.ProviderLogo != null ? EnumHelper.GetImage(express1ShipmentType) : null;
-            });
-
-            return new RateGroup(validExpress1Rates);
-        }
-
-        /// <summary>
         /// Add adult signature restricted values
         /// </summary>
         private static IEnumerable<PostalServicePackagingCombination> GetAdultSignatureServiceAndPackagingCombinations()
