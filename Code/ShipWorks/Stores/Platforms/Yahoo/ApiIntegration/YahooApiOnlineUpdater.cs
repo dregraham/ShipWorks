@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Interapptive.Shared;
 using log4net;
+using Quartz.Util;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -51,22 +52,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         public void UpdateOrderStatus(long orderID, string status)
         {
-            UnitOfWork2 unitOfWork = new UnitOfWork2();
-            UpdateOrderStatus(orderID, status, unitOfWork);
+            YahooOrderEntity order = (YahooOrderEntity) DataProvider.GetEntity(orderID);
 
-            using (SqlAdapter adapter = new SqlAdapter(true))
-            {
-                unitOfWork.Commit(adapter);
-                adapter.Commit();
-            }
-        }
-
-        /// <summary>
-        /// Changes the status of a Yahoo order to that specified
-        /// </summary>
-        private void UpdateOrderStatus(long orderID, string status, UnitOfWork2 unitOfWork)
-        {
-            YahooOrderEntity order = (YahooOrderEntity)DataProvider.GetEntity(orderID);
             if (order != null)
             {
                 if (order.IsManual)
@@ -76,15 +63,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 client.UploadOrderStatus(order.YahooOrderID, status);
 
-                // Update the local database with the new status
-                OrderEntity basePrototype = new OrderEntity(orderID)
-                {
-                    IsNew = false,
-                    OnlineStatusCode = status,
-                    OnlineStatus = status
-                };
-
-                unitOfWork.AddForSave(basePrototype);
+                SaveOrderStatus(orderID, status);
             }
             else
             {
@@ -109,11 +88,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     continue;
                 }
 
-                YahooOrderEntity order = (YahooOrderEntity)shipment.Order;
-                if (!order.IsManual)
-                {
-                    client.UploadShipmentDetails(order.OrderNumber.ToString(), shipment.TrackingNumber, GetCarrierCode(shipment));
-                }
+                UpdateShipmentDetails(shipment);
             }
         }
 
@@ -132,6 +107,31 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             if (!order.IsManual)
             {
                 client.UploadShipmentDetails(order.OrderNumber.ToString(), shipment.TrackingNumber, GetCarrierCode(shipment));
+            }
+
+            string status = shipment.TrackingNumber.IsNullOrWhiteSpace() ? "Shipped" : "Tracked";
+
+            SaveOrderStatus(order.OrderID, status);
+        }
+
+        private void SaveOrderStatus(long orderID, string status)
+        {
+            UnitOfWork2 unitOfWork = new UnitOfWork2();
+
+            // Update the local database with the new status
+            OrderEntity basePrototype = new OrderEntity(orderID)
+            {
+                IsNew = false,
+                OnlineStatusCode = status,
+                OnlineStatus = status
+            };
+
+            unitOfWork.AddForSave(basePrototype);
+
+            using (SqlAdapter adapter = new SqlAdapter(true))
+            {
+                unitOfWork.Commit(adapter);
+                adapter.Commit();
             }
         }
 

@@ -384,13 +384,25 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         ///     Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityField2 field)
+        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
         {
             YahooStoreEntity store = (YahooStoreEntity)Store;
 
-            return !store.YahooStoreID.IsNullOrWhiteSpace() && EntityUtility.IsSameField(field, OrderItemFields.Name);
-        }
+            if (store.YahooStoreID.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
 
+            YahooOrderItemEntity item = entity as YahooOrderItemEntity;
+
+            if (item != null)
+            {
+                return !item.Url.IsNullOrWhiteSpace();
+            }
+
+            return EntityUtility.IsSameField(field, OrderItemFields.Name);
+        }
+        
         /// <summary>
         ///     Handle a link click for the given field
         /// </summary>
