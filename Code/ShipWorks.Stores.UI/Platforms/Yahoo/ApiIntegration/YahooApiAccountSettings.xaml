@@ -48,9 +48,6 @@
             <TextBlock Grid.Row="1" Grid.Column="0"><Run Text="Access Token:"/></TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AccessToken, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
-        <TextBlock Margin="0, 8, 0, 8">
-            <Run Text="Download Information:"/>
-        </TextBlock>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -59,11 +56,11 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
-				VerticalAlignment="Center"
-                Margin="24, 0, 0, 0">
-                <Run Text="Starting Order Number:"/>
+				VerticalAlignment="Center">
+                <Run Text="Download orders starting from order number:"/>
             </TextBlock>
             <TextBox Grid.Column="1"
 				Text="{Binding BackupOrderNumber, UpdateSourceTrigger=PropertyChanged}"
@@ -75,6 +72,12 @@
 				VerticalAlignment="Center"
                 HorizontalAlignment="Right"
 				Stretch="None"/>
-        </Grid>
+            <TextBlock Grid.Column="3" HorizontalAlignment="Center"
+                   Text="{Binding ValidationErrorMessage}"
+                   Margin="8, 0, 4, 0"
+                   VerticalAlignment="Center"
+                   Foreground="Red"/>
+            </Grid>
+
     </StackPanel>
 </UserControl>

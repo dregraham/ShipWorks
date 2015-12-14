@@ -22,6 +22,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         private string accessToken;
         private long? backupOrderNumber;
         private YahooOrderNumberValidation isValid;
+        private string validationErrorMessage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiAccountViewModel"/> class.
@@ -76,6 +77,16 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
+        /// The message to display if credential or order number validation fails
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ValidationErrorMessage
+        {
+            get { return validationErrorMessage;}
+            set { Handler.Set(nameof(ValidationErrorMessage), ref validationErrorMessage, value); }
+        }
+
+        /// <summary>
         /// Determines whether the properties we are tracking are all filled in
         /// </summary>
         private bool IsValidationPropertyEntered(string propertyName)
@@ -92,8 +103,8 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         private bool IsValidationProperty(string propertyName)
         {
             return propertyName == nameof(BackupOrderNumber) ||
-                propertyName == nameof(YahooStoreID) ||
-                propertyName == nameof(AccessToken);
+                   propertyName == nameof(YahooStoreID) ||
+                   propertyName == nameof(AccessToken);
         }
 
         /// <summary>
@@ -106,6 +117,8 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
                 YahooResponse response = StoreWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
                             .GetOrderRange(BackupOrderNumber.GetValueOrDefault());
 
+                CheckCredentialsError(response);
+
                 return response.ErrorResourceList == null;
             }
             catch (Exception)
@@ -116,19 +129,51 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 
         /// <summary>
         /// If we are here there is an error in the response, see if it is
-        /// because of an invalid store id or access token
+        /// because of an invalid store id, access token, or order number
         /// </summary>
         /// <param name="response">The response to check for errors</param>
         protected string CheckCredentialsError(YahooResponse response)
         {
-            foreach (YahooError error in response.ErrorMessages.Error)
+            ValidationErrorMessage = string.Empty;
+
+            // Here we check both ErrorMessages and ErrorResponseList because
+            // Yahoo gives the same information, 2 different ways, based on
+            // whether you are hitting the order or catalog endpoint.
+            if (response.ErrorMessages != null)
             {
-                switch (error.Code)
+                foreach (YahooError error in response.ErrorMessages.Error)
                 {
-                    case 10010:
-                        return "Invalid Yahoo Store ID";
-                    case 10009:
-                        return "Invalid Access Token";
+                    switch (error.Code)
+                    {
+                        case 10010:
+                            ValidationErrorMessage = "Invalid Yahoo Store ID";
+                            return ValidationErrorMessage;
+                        case 10009:
+                            ValidationErrorMessage = "Invalid Access Token";
+                            return ValidationErrorMessage;
+                        case 20021:
+                            ValidationErrorMessage = $"Order #{BackupOrderNumber} does not exist";
+                            break;
+                    }
+                }
+            }
+
+            if (response.ErrorResourceList != null)
+            {
+                foreach (YahooError error in response.ErrorResourceList.Error)
+                {
+                    switch (error.Code)
+                    {
+                        case 10010:
+                            ValidationErrorMessage = "Invalid Yahoo Store ID";
+                            return ValidationErrorMessage;
+                        case 10009:
+                            ValidationErrorMessage = "Invalid Access Token";
+                            return ValidationErrorMessage;
+                        case 20021:
+                            ValidationErrorMessage = $"Order #{BackupOrderNumber} does not exist";
+                            break;
+                    }
                 }
             }
 
@@ -175,7 +220,13 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 
             if (string.IsNullOrWhiteSpace(BackupOrderNumber.ToString()))
             {
-                return "Please enter a starting order number";
+                return "Please enter a starting order number. If you do not currently have any orders " +
+                       "for this store, enter any number and you can reset it later.";
+            }
+
+            if (BackupOrderNumber != null && BackupOrderNumber < 0)
+            {
+                return "Yahoo does not support negative order numbers";
             }
 
             try

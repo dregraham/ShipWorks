@@ -40,19 +40,32 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0">Store ID:</TextBlock>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding YahooStoreID, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <TextBlock Grid.Row="1" Grid.Column="0">Access Token:</TextBlock>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AccessToken, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0">
+                Store ID:
+            </TextBlock>
+            <TextBox Grid.Row="0"
+                     Grid.Column="1"
+                     MaxLength="50"
+                     Text="{Binding YahooStoreID, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0">
+                Access Token:
+            </TextBlock>
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     MaxLength="200"
+                     Text="{Binding AccessToken, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"> </RowDefinition>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="80"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
                        VerticalAlignment="Center">Download orders starting from order number:</TextBlock>
@@ -60,16 +73,25 @@
                      Text="{Binding BackupOrderNumber, UpdateSourceTrigger=PropertyChanged}"
                      Margin="8,0,4,0"
                      VerticalAlignment="Center"
-                     Padding="2,2,2,2"></TextBox>
+                     Padding="2,2,2,2"
+                     MaxLength="19"/>
             <Image Grid.Column="2"
                    Source="{Binding IsValid, Converter={StaticResource EnumImage}}"
                    VerticalAlignment="Center"
-                   Stretch="None"></Image>
+                   Stretch="None"/>
+            <TextBlock Grid.Column="3" HorizontalAlignment="Center"
+                   Text="{Binding ValidationErrorMessage}"
+                   Margin="8, 0, 4, 0"
+                   VerticalAlignment="Center"
+                   Foreground="Red"/>
         </Grid>
         <TextBlock Style="{StaticResource Section}"
                    Margin="0,8,0,0">
             <Run>For help adding your Yahoo store, </Run>
-            <Hyperlink NavigateUri="{Binding HelpUrl}" RequestNavigate="HyperlinkOnRequestNavigate">click here</Hyperlink>
+            <Hyperlink NavigateUri="{Binding HelpUrl}"
+                       RequestNavigate="HyperlinkOnRequestNavigate">
+                click here
+            </Hyperlink>
         </TextBlock>
     </StackPanel>
 </UserControl>
