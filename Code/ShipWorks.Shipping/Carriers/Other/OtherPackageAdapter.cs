@@ -32,6 +32,8 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <param name="shipment">The shipment.</param>
         public OtherPackageAdapter(ShipmentEntity shipment)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Other, nameof(shipment.Other));
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
             this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Other, null);

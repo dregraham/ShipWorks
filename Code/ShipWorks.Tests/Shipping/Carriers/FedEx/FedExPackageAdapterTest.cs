@@ -56,6 +56,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
         }
 
         [Fact]
+        public void Constructor_Throws_WhenFedExShipmentEntityIsNull_Test()
+        {
+            shipment.FedEx = null;
+
+            Assert.Throws<ArgumentNullException>(nameof(shipment.FedEx), () => new FedExPackageAdapter(shipment, package, 1));
+        }
+
+        [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
             Assert.Equal(shipment.FedEx.PackagingType, testObject.PackagingType.PackageTypeID);

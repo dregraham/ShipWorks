@@ -52,6 +52,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
         }
 
         [Fact]
+        public void Constructor_Throws_WhenAmazonShipmentEntityIsNull_Test()
+        {
+            shipment.Amazon = null;
+
+            Assert.Throws<ArgumentNullException>(nameof(shipment.Amazon), () => new AmazonPackageAdapter(shipment));
+        }
+
+        [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
             Assert.Null(testObject.PackagingType);

@@ -52,6 +52,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Other
         }
 
         [Fact]
+        public void Constructor_Throws_WhenOtherShipmentEntityIsNull_Test()
+        {
+            shipment.Other = null;
+
+            Assert.Throws<ArgumentNullException>(nameof(shipment.Other), () => new OtherPackageAdapter(shipment));
+        }
+
+        [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
             Assert.Null(testObject.PackagingType);

@@ -36,6 +36,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <param name="packageIndex">The index of this package adapter in a list of package adapters.</param>
         public FedExPackageAdapter(ShipmentEntity shipmentEntity, FedExPackageEntity packageEntity, int packageIndex)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipmentEntity.FedEx, nameof(shipmentEntity.FedEx));
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;

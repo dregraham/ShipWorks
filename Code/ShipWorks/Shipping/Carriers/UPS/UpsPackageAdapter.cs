@@ -37,6 +37,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="packageIndex">The index of this package adapter in a list of package adapters.</param>
         public UpsPackageAdapter(ShipmentEntity shipmentEntity, UpsPackageEntity packageEntity, int packageIndex)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipmentEntity.Ups, nameof(shipmentEntity.Ups));
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;

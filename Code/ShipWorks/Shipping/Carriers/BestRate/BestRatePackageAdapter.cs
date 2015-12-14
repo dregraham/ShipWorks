@@ -30,6 +30,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipment">The shipment.</param>
         public BestRatePackageAdapter(ShipmentEntity shipment)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipment.BestRate, nameof(shipment.BestRate));
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
             this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.BestRate, null);

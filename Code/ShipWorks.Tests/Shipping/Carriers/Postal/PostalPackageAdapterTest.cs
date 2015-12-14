@@ -52,6 +52,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         }
 
         [Fact]
+        public void Constructor_Throws_WhenPostalShipmentEntityIsNull_Test()
+        {
+            shipment.Postal = null;
+
+            Assert.Throws<ArgumentNullException>(nameof(shipment.Postal), () => new PostalPackageAdapter(shipment));
+        }
+
+        [Fact]
         public void Changing_Index_IsStillOne_Test()
         {
             testObject.Index = 3;

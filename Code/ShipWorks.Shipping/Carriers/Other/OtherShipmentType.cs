@@ -27,8 +27,11 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment) =>
-            new List<IPackageAdapter> { new OtherPackageAdapter(shipment) };
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            ShippingManager.EnsureShipmentLoaded(shipment);
+            return new List<IPackageAdapter> {new OtherPackageAdapter(shipment)};
+        }
 
         /// <summary>
         /// Ensures that the Other specific data for the shipment is loaded.  If the data already exists nothing is done, it is not refreshed.

@@ -30,6 +30,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <param name="shipment">The shipment.</param>
         public PostalPackageAdapter(ShipmentEntity shipment)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Postal, nameof(shipment.Postal));
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
             this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Postal, null);

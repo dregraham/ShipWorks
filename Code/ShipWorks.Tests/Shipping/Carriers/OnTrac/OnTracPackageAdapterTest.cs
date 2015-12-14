@@ -53,6 +53,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
         }
 
         [Fact]
+        public void Constructor_Throws_WhenOnTracShipmentEntityIsNull_Test()
+        {
+            shipment.OnTrac = null;
+
+            Assert.Throws<ArgumentNullException>(nameof(shipment.OnTrac), () => new OnTracPackageAdapter(shipment));
+        }
+
+        [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
             Assert.Equal(shipment.OnTrac.PackagingType, testObject.PackagingType.PackageTypeID);

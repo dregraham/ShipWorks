@@ -55,6 +55,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
+        public void Constructor_Throws_WhenIParcelShipmentEntityIsNull_Test()
+        {
+            shipment.IParcel = null;
+
+            Assert.Throws<ArgumentNullException>(nameof(shipment.IParcel), () => new iParcelPackageAdapter(shipment, package, 1));
+        }
+
+        [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
             Assert.Null(testObject.PackagingType);

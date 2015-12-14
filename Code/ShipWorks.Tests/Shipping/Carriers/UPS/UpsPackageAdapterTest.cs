@@ -49,6 +49,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [Fact]
+        public void Constructor_Throws_WhenUpsShipmentEntityIsNull_Test()
+        {
+            shipment.Ups = null;
+
+            Assert.Throws<ArgumentNullException>(nameof(shipment.Ups), () => new UpsPackageAdapter(shipment, package, 1));
+        }
+
+        [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
             Assert.Equal(package.PackagingType, testObject.PackagingType.PackageTypeID);

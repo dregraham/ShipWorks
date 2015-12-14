@@ -52,6 +52,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
+        public void Constructor_Throws_WhenBestRateShipmentEntityIsNull_Test()
+        {
+            shipment.BestRate = null;
+
+            Assert.Throws<ArgumentNullException>(nameof(shipment.BestRate), () => new BestRatePackageAdapter(shipment));
+        }
+
+        [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
             Assert.Null(testObject.PackagingType);

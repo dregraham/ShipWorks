@@ -32,6 +32,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <param name="shipment">The shipment.</param>
         public OnTracPackageAdapter(ShipmentEntity shipment)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipment.OnTrac, nameof(shipment.OnTrac));
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
             this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac);

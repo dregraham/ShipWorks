@@ -34,6 +34,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <param name="packageIndex">The index of this package adapter in a list of package adapters.</param>
         public iParcelPackageAdapter(ShipmentEntity shipmentEntity, IParcelPackageEntity packageEntity, int packageIndex)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipmentEntity.IParcel, nameof(shipmentEntity.IParcel));
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;
