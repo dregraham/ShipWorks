@@ -52,13 +52,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             
             // See if this shipment should really go through Express1
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia
-            && !shipmentTypeFactory[ShipmentTypeCode.Endicia].IsRateDiscountMessagingRestricted
-            && Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType)
-            && settings.EndiciaAutomaticExpress1)
+            if (UseExpressOne(shipment, settings))
             {
                 // We don't have any Endicia accounts, so let the user know they need an account.
-                if (!accountRepository[(ShipmentTypeCode)shipment.ShipmentType].Accounts.Any())
+                if (!GetAccountRepository((ShipmentTypeCode)shipment.ShipmentType).Accounts.Any())
                 {
                     throw new EndiciaException($"An account is required to view {EnumHelper.GetDescription(ShipmentTypeCode.Endicia)} rates.");
                 }
@@ -70,26 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     throw new EndiciaException("The Express1 account to automatically use when processing with Endicia has not been selected.");
                 }
 
-                // We temporarily turn this into an Exprss1 shipment to get rated
-                shipment.ShipmentType = (int)ShipmentTypeCode.Express1Endicia;
-                shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
-                shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
-                
-                try
-                {
-                    // Currently this actually recurses into this same method
-                    express1Rates = GetRates(shipment).Rates.ToList();
-                }
-                catch (ShippingException)
-                {
-                    // Eat the exception; we don't want to stop someone from using Endicia if Express1 can't get rates
-                }
-                finally
-                {
-                    shipment.ShipmentType = (int)ShipmentTypeCode.Endicia;
-                    shipment.Postal.Endicia.EndiciaAccountID = shipment.Postal.Endicia.OriginalEndiciaAccountID.Value;
-                    shipment.Postal.Endicia.OriginalEndiciaAccountID = null;
-                }
+                express1Rates = GetExpress1Rates(shipment, express1Account, null);
             }
 
             EndiciaShipmentType endiciaShipmentType = shipmentTypeFactory[(ShipmentTypeCode)shipment.ShipmentType] as EndiciaShipmentType;
@@ -204,6 +182,53 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             return express1Group;
+        }
+
+        /// <summary>
+        /// Get Express1 rates for the given shipment
+        /// </summary>
+        private List<RateResult> GetExpress1Rates(ShipmentEntity shipment, EndiciaAccountEntity express1Account, List<RateResult> express1Rates)
+        {
+            // We temporarily turn this into an Exprss1 shipment to get rated
+            shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
+            shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
+            shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
+
+            try
+            {
+                // Currently this actually recurses into this same method
+                express1Rates = GetRates(shipment).Rates.ToList();
+            }
+            catch (ShippingException)
+            {
+                // Eat the exception; we don't want to stop someone from using Endicia if Express1 can't get rates
+            }
+            finally
+            {
+                shipment.ShipmentType = (int) ShipmentTypeCode.Endicia;
+                shipment.Postal.Endicia.EndiciaAccountID = shipment.Postal.Endicia.OriginalEndiciaAccountID.Value;
+                shipment.Postal.Endicia.OriginalEndiciaAccountID = null;
+            }
+            return express1Rates;
+        }
+
+        /// <summary>
+        /// Returns the an account repository for the given account
+        /// </summary>
+        private ICarrierAccountRepository<EndiciaAccountEntity> GetAccountRepository(ShipmentTypeCode shipmentTypeCode)
+        {
+            return accountRepository[shipmentTypeCode];
+        }
+
+        /// <summary>
+        /// Returns true if we should use express 1
+        /// </summary>
+        private bool UseExpressOne(ShipmentEntity shipment, ShippingSettingsEntity settings)
+        {
+            return shipment.ShipmentType == (int)ShipmentTypeCode.Endicia
+                   && !shipmentTypeFactory[ShipmentTypeCode.Endicia].IsRateDiscountMessagingRestricted
+                   && Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType)
+                   && settings.EndiciaAutomaticExpress1;
         }
     }
 }
