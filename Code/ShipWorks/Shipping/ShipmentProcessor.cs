@@ -1,14 +1,19 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Setup;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -16,11 +21,6 @@ using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping
 {
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentProcessor(Func<Control> ownerRetriever, IShippingErrorManager errorManager, 
+        public ShipmentProcessor(Func<Control> ownerRetriever, IShippingErrorManager errorManager,
             ILifetimeScope lifetimeScope, IShippingManager shippingManager)
         {
             this.shippingManager = shippingManager;
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping
             this.ownerRetriever = ownerRetriever;
             this.lifetimeScope = lifetimeScope;
         }
-        
+
         /// <summary>
         /// Filtered rates that should be displayed after shipping
         /// </summary>
@@ -64,12 +64,12 @@ namespace ShipWorks.Shipping
         /// <param name="chosenRate">Rate that was chosen to use, if there was any</param>
         /// <param name="counterRateCarrierConfiguredWhileProcessing">Execute after a counter rate carrier was configured</param>
         /// <returns></returns>
-        public Task<IEnumerable<ShipmentEntity>> Process(IEnumerable<ShipmentEntity> shipments, ICarrierConfigurationShipmentRefresher shipmentRefresher, RateResult chosenRate, Action counterRateCarrierConfiguredWhileProcessing)
+        public Task<IEnumerable<ProcessShipmentResult>> Process(IEnumerable<ShipmentEntity> shipments, ICarrierConfigurationShipmentRefresher shipmentRefresher, RateResult chosenRate, Action counterRateCarrierConfiguredWhileProcessing)
         {
             owner = ownerRetriever();
 
             // Filter out the ones we know to be already processed, or are not ready
-            shipments = shipments.Where(s => !s.Processed && s.ShipmentType != (int)ShipmentTypeCode.None);
+            shipments = shipments.Where(s => !s.Processed && s.ShipmentType != (int) ShipmentTypeCode.None);
 
             this.counterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessing;
             this.chosenRate = chosenRate;
@@ -85,13 +85,13 @@ namespace ShipWorks.Shipping
             {
                 MessageHelper.ShowMessage(owner, "There are no shipments to process.");
 
-                return TaskEx.FromResult(Enumerable.Empty<ShipmentEntity>());
+                return TaskEx.FromResult(Enumerable.Empty<ProcessShipmentResult>());
             }
 
             // Check restriction
             if (!EditionManager.HandleRestrictionIssue(owner, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SelectionLimit, shipments.Count())))
             {
-                return TaskEx.FromResult(Enumerable.Empty<ShipmentEntity>());
+                return TaskEx.FromResult(Enumerable.Empty<ProcessShipmentResult>());
             }
 
             // Check for shipment type process shipment nudges
@@ -114,8 +114,8 @@ namespace ShipWorks.Shipping
             Dictionary<long, Exception> licenseCheckResults = new Dictionary<long, Exception>();
 
             List<string> orderHashes = new List<string>();
-            
-            TaskCompletionSource<IEnumerable<ShipmentEntity>> completionSource = new TaskCompletionSource<IEnumerable<ShipmentEntity>>();
+
+            TaskCompletionSource<IEnumerable<ProcessShipmentResult>> completionSource = new TaskCompletionSource<IEnumerable<ProcessShipmentResult>>();
 
             // What to do before it gets started (but is on the background thread)
             executor.ExecuteStarting += (object s, EventArgs args) =>
@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping
                 // Reset to true, so that we show the counter rate setup wizard for this batch.
                 showBestRateCounterRateSetupWizard = true;
             };
-            
+
             // Code to execute once background load is complete
             executor.ExecuteCompleted += (sender, e) =>
             {
@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping
                 {
                     WorldShipUtility.LaunchWorldShip(owner);
                 }
-                
+
                 // Refresh/update the ShipSense status of any unprocessed shipments that are outside of the shipping dialog
                 Knowledgebase knowledgebase = new Knowledgebase();
                 foreach (string hash in orderHashes.Distinct())
@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping
 
                 shipmentRefresher.FinishProcessing();
 
-                completionSource.SetResult(shipments);
+                completionSource.SetResult(shipments.Select(CreateResultFromShipment));
             };
 
             // Code to execute for each shipment
@@ -174,19 +174,19 @@ namespace ShipWorks.Shipping
 
                     orderHashes.Add(shipment.Order.ShipSenseHashKey);
 
-                    Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int)ShipmentTypeCode.BestRate ?
-                        (Func<CounterRatesProcessingArgs, DialogResult>)BestRateCounterRatesProcessing :
+                    Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int) ShipmentTypeCode.BestRate ?
+                        (Func<CounterRatesProcessingArgs, DialogResult>) BestRateCounterRatesProcessing :
                         CounterRatesProcessing;
-                    
-                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, 
-                        x => (DialogResult)owner.Invoke(ratesProcessing, x), 
+
+                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults,
+                        x => (DialogResult) owner.Invoke(ratesProcessing, x),
                         selectedRate, lifetimeScope);
 
                     // Clear any previous errors
                     errorManager.Remove(shipmentID);
 
                     // Special case - could refactor to abstract if necessary
-                    worldshipExported |= shipment.ShipmentType == (int)ShipmentTypeCode.UpsWorldShip;
+                    worldshipExported |= shipment.ShipmentType == (int) ShipmentTypeCode.UpsWorldShip;
                 }
                 catch (ORMConcurrencyException ex)
                 {
@@ -231,9 +231,15 @@ namespace ShipWorks.Shipping
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
                 }
             }, shipments, chosenRate); // Each shipment to execute the code for
-            
+
             return completionSource.Task;
         }
+
+        /// <summary>
+        /// Create a process shipment result from the given shipment
+        /// </summary>
+        private ProcessShipmentResult CreateResultFromShipment(ShipmentEntity shipment) =>
+            new ProcessShipmentResult(shipment, errorManager.GetErrorForShipment(shipment.ShipmentID));
 
         /// <summary>
         /// Handle an exception raised during processing, if possible
@@ -284,7 +290,7 @@ namespace ShipWorks.Shipping
         private void ShowShipmentTypeProcessingNudges(IEnumerable<ShipmentEntity> shipments)
         {
             // Get a distinct list of shipment types from the list of shipments to process
-            List<ShipmentTypeCode> shipmentTypeCodes = shipments.Select(s => (ShipmentTypeCode)s.ShipmentType).Distinct().ToList();
+            List<ShipmentTypeCode> shipmentTypeCodes = shipments.Select(s => (ShipmentTypeCode) s.ShipmentType).Distinct().ToList();
 
             // If there is an Endicia shipment in the list, check for ProcessEndicia nudges
             if (shipmentTypeCodes.Contains(ShipmentTypeCode.Endicia))
@@ -301,7 +307,7 @@ namespace ShipWorks.Shipping
         /// <returns></returns>
         private DialogResult CounterRatesProcessing(CounterRatesProcessingArgs counterRatesProcessingArgs)
         {
-            // This is for a specific shipment type, so we're always going to need to show the wizard 
+            // This is for a specific shipment type, so we're always going to need to show the wizard
             // since the user explicitly chose to process with this provider
             ShipmentType shipmentType = ShipmentTypeManager.GetType(counterRatesProcessingArgs.Shipment);
 
@@ -318,7 +324,7 @@ namespace ShipWorks.Shipping
                 MessageHelper.ShowWarning(owner, $"Account registration is disabled for {EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)}");
                 return DialogResult.Cancel;
             }
-            
+
             using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard(lifetimeScope))
             {
                 result = setupWizard.ShowDialog(owner);
@@ -365,7 +371,7 @@ namespace ShipWorks.Shipping
             }
 
             DialogResult setupWizardDialogResult = DialogResult.Cancel;
-            
+
             RateResult selectedRate = chosenRate ?? counterRatesProcessingArgs.FilteredRates.Rates.First();
 
             if (selectedRate.IsCounterRate)

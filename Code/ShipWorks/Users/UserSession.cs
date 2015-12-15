@@ -69,6 +69,7 @@ namespace ShipWorks.Users
         private static string lastUsername = "";
         private static string lastPassword = "";
         private static bool lastRemember;
+        private static ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// One-time initialization of the session
@@ -101,7 +102,6 @@ namespace ShipWorks.Users
             DataResourceManager.InitializeForCurrentDatabase();
 
             bool wasLoggedIn = (User != null);
-
 
             Reset();
 
@@ -174,7 +174,10 @@ namespace ShipWorks.Users
             OnTracAccountManager.InitializeForCurrentSession();
             iParcelAccountManager.InitializeForCurrentSession();
 
-            foreach (IInitializeForCurrentSession service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
+            lifetimeScope?.Dispose();
+            lifetimeScope = IoC.BeginLifetimeScope();
+
+            foreach (IInitializeForCurrentSession service in lifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
             {
                 service.InitializeForCurrentSession();
             }
@@ -189,6 +192,9 @@ namespace ShipWorks.Users
             loggedInUser = null;
             securityContext = null;
             databaseID = null;
+
+            lifetimeScope?.Dispose();
+            lifetimeScope = null;
         }
 
         /// <summary>
@@ -222,7 +228,7 @@ namespace ShipWorks.Users
         {
             get
             {
-                // The the behavior scope is active, or the SuperUser is actually logged in, use the super user security context
+                // The behavior scope is active, or the SuperUser is actually logged in, use the super user security context
                 if (AuditBehaviorScope.IsSuperUserActive || (User != null && User.UserID == SuperUser.UserID))
                 {
                     return SuperUser.SecurityContext;
@@ -309,7 +315,7 @@ namespace ShipWorks.Users
         }
 
         /// <summary>
-        /// Indiciates if a user is currently logged on to ShipWorks
+        /// Indicates if a user is currently logged on to ShipWorks
         /// </summary>
         public static bool IsLoggedOn
         {
@@ -518,7 +524,7 @@ namespace ShipWorks.Users
 
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                // The guid isnt enough.  They could restore the database to a different path, essentially copying it.  In which
+                // The guid isn't enough.  They could restore the database to a different path, essentially copying it.  In which
                 // case the guid will be the same, but the path will be different.
                 string targetPhysDb = (string) SqlCommandProvider.ExecuteScalar(con, "select physical_name from sys.database_files where type_desc = 'ROWS'");
 

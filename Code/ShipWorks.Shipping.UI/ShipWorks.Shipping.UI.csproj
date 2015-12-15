@@ -210,6 +210,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\ObservableRegistrationsModule.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentDeletedPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentsProcessedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\WindowUnloadingPipeline.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\IShipmentViewModel.cs" />
@@ -331,6 +332,7 @@
     <Compile Include="ShippingPanel\Weight\WeightControl.cs" />
     <Compile Include="ShippingPanel\Weight\WeightInput.cs" />
     <Compile Include="ShippingPanel\Weight\WeightValidationRule.cs" />
+    <Compile Include="ValueConverters\BooleanComparisonConverter.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\EnumDescriptionConverter.cs" />
