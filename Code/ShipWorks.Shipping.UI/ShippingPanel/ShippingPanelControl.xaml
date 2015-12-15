@@ -19,7 +19,7 @@
              xmlns:messages="clr-namespace:ShipWorks.Messaging.Messages;assembly=ShipWorks.Core"
              xmlns:loading="clr-namespace:ShipWorks.Shipping.Loading;assembly=ShipWorks.Shipping"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shippingPanel:ShippingPanelViewModel}"
-             d:DesignHeight="1272.618" d:DesignWidth="350"
+             d:DesignHeight="1550" d:DesignWidth="350"
              SnapsToDevicePixels="True"
              Focusable="True"
              IsTabStop="True">
@@ -29,6 +29,7 @@
                 <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="Styles/ShipWorksExpanderStyle.xaml"/>
                 <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <vc:InvertBooleanConverter x:Key="InvertBoolean" />
             <vc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
@@ -231,18 +232,27 @@
                         <Button Command="{Binding CreateLabelCommand}">Create Label</Button>
                     </Grid>
                 </StackPanel>
-                <StackPanel Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.None}}">
+
+                <StackPanel Margin="5 5 " 
+                            Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.None}}">
                     <TextBlock>Select a shipping carrier from the list above.</TextBlock>
                 </StackPanel>
+                <StackPanel Margin="5 5 " Orientation="Horizontal">
+                    <TextBlock>Need to configure specific shipment options?</TextBlock>
+                    <Button Margin="2 0 2 0" Content="Click here" Style="{StaticResource LinkButtonStyle}" Click="OnShowShippingDialog" />
+                    <TextBlock>to use the Shipping Dialog.</TextBlock>
+                </StackPanel>
             </StackPanel>
-            <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Multiple}}">
-                <TextBlock>Multiple shipments.</TextBlock>
-            </StackPanel>
-            <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Deleted}}">
-                <TextBlock>Shipment has been deleted.</TextBlock>
-            </StackPanel>
-            <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.NotCreated}}">
-                <TextBlock>No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
+            <StackPanel Margin="5 5 ">
+                <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Multiple}}">
+                    <TextBlock>Multiple shipments.</TextBlock>
+                </StackPanel>
+                <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Deleted}}">
+                    <TextBlock>Shipment has been deleted.</TextBlock>
+                </StackPanel>
+                <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.NotCreated}}">
+                    <TextBlock>No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

@@ -134,6 +134,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Tell the view model to save to the database
         /// </summary>
-        private void SaveToDatabase() => viewModel?.SaveToDatabase();
+        private void SaveToDatabase()
+        {
+            // Only call save if we were in an "editing" allowed mode.  
+            // This handles the case where we lost focus due to opening the shipping dialog.
+            // The view model needs to save itself before opening the shipping dialog.
+            if (viewModel?.AllowEditing == true)
+            {
+                viewModel.SaveToDatabase();
+            }
+        }
     }
 }

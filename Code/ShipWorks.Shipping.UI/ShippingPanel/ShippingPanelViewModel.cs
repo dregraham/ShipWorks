@@ -421,6 +421,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
+        /// Send a message to open the shipping dialog for the selected shipment
+        /// </summary>
+        public void SendShowShippingDlgMessage()
+        {
+            // Call save before asking the shipping dialog to open, that way the shipment is in the db
+            // prior to the shipping dialog getting the shipment.
+            Save();
+            Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { Shipment }));
+        }
+
+        /// <summary>
         /// Show an error if one is associated with the current shipment
         /// </summary>
         private void DisplayError(IDictionary<ShipmentEntity, Exception> errors)
