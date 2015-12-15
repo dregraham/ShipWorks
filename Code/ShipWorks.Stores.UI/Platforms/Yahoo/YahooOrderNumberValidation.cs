@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 using Interapptive.Shared.Utility;
+using ShipWorks.Properties;
 
 namespace ShipWorks.Stores.UI.Platforms.Yahoo
 {

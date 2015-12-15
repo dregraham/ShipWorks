@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Navigation;
 
 namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
@@ -25,6 +26,16 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+        /// <summary>
+        /// Copies the Yahoo partner ID to the clipboard.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void ButtonBaseOnClick(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText("ypa-005343935941");
         }
     }
 }
