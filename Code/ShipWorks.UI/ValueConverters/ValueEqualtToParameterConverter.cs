@@ -1,6 +1,7 @@
 ﻿using ShipWorks.UI.Controls.Design;
 using System;
 using System.Globalization;
+using System.Reflection;
 using System.Windows.Data;
 
 namespace ShipWorks.UI.ValueConverters
@@ -8,6 +9,7 @@ namespace ShipWorks.UI.ValueConverters
     /// <summary>
     /// Converts to a boolean when the bound value is equal to the converter parameter
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class ValueEqualToParameterConverter : IValueConverter
     {
         readonly bool inDesignMode;
