@@ -156,5 +156,57 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
             IEnumerable<ShipmentTypeListItem> results = testObject.Convert(new object[] { type }, null, null, null) as IEnumerable<ShipmentTypeListItem>;
             Assert.Contains(description, results.Select(x => x.Description));
         }
+
+        [Fact]
+        public void Amazon_IsReturned_WhenInitialShipmentType()
+        {
+            object[] allTypes = new object[]
+            {
+                ShipmentTypeCode.iParcel,
+                ShipmentTypeCode.Other,
+                ShipmentTypeCode.Usps,
+                ShipmentTypeCode.PostalWebTools,
+                ShipmentTypeCode.OnTrac,
+                ShipmentTypeCode.Endicia,
+                ShipmentTypeCode.Express1Usps,
+                ShipmentTypeCode.BestRate,
+                ShipmentTypeCode.Express1Endicia,
+                ShipmentTypeCode.None,
+                ShipmentTypeCode.UpsWorldShip,
+                ShipmentTypeCode.UpsOnLineTools,
+                ShipmentTypeCode.FedEx,
+                ShipmentTypeCode.Amazon
+            };
+
+            ShipmentTypeListConverter testObject = new ShipmentTypeListConverter(x => "foo");
+            IEnumerable<ShipmentTypeListItem> results = testObject.Convert(new object[] { allTypes, ShipmentTypeCode.Amazon }, null, null, null) as IEnumerable<ShipmentTypeListItem>;
+            Assert.Contains(ShipmentTypeCode.Amazon, results.Select(x => x.Value));
+        }
+
+        [Fact]
+        public void Amazon_NotReturned_WhenNotInitialShipmentType()
+        {
+            object[] allTypes = new object[]
+            {
+                ShipmentTypeCode.iParcel,
+                ShipmentTypeCode.Other,
+                ShipmentTypeCode.Usps,
+                ShipmentTypeCode.PostalWebTools,
+                ShipmentTypeCode.OnTrac,
+                ShipmentTypeCode.Endicia,
+                ShipmentTypeCode.Express1Usps,
+                ShipmentTypeCode.BestRate,
+                ShipmentTypeCode.Express1Endicia,
+                ShipmentTypeCode.None,
+                ShipmentTypeCode.UpsWorldShip,
+                ShipmentTypeCode.UpsOnLineTools,
+                ShipmentTypeCode.FedEx,
+                ShipmentTypeCode.Amazon
+            };
+
+            ShipmentTypeListConverter testObject = new ShipmentTypeListConverter(x => "foo");
+            IEnumerable<ShipmentTypeListItem> results = testObject.Convert(new object[] { allTypes, ShipmentTypeCode.FedEx }, null, null, null) as IEnumerable<ShipmentTypeListItem>;
+            Assert.DoesNotContain(ShipmentTypeCode.Amazon, results.Select(x => x.Value));
+        }
     }
 }
