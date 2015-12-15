@@ -29,7 +29,6 @@ namespace ShipWorks.Shipping.Services
             this.messenger = messenger;
             
             messenger.OfType<OrderSelectionChangingMessage>()
-                //.ObserveOn(DispatcherScheduler.Current)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .Throttle(TimeSpan.FromMilliseconds(100))
                 .Subscribe(x => LoadAndNotify(x.OrderIdList));

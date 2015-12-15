@@ -241,6 +241,9 @@
             <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.Deleted}}">
                 <TextBlock>Shipment has been deleted.</TextBlock>
             </StackPanel>
+            <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static loading:ShippingPanelLoadedShipmentResult.NotCreated}}">
+                <TextBlock>No shipments were found for this order.  Shipment auto creation is probably turned off.</TextBlock>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

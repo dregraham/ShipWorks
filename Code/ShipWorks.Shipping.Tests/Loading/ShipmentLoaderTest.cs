@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Tests.Loading
                 OrderSelectionLoaded orderSelectionLoaded = testObject.Load(orderEntity.OrderID);
 
                 Assert.Equal(0, orderSelectionLoaded.ShipmentAdapters.Count());
-                Assert.Equal(null, orderSelectionLoaded.Order);
+                Assert.NotEqual(null, orderSelectionLoaded.Order);
             }
         }
 
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Tests.Loading
                 OrderSelectionLoaded orderSelectionLoaded = testObject.Load(orderEntity.OrderID);
 
                 Assert.Equal(0, orderSelectionLoaded.ShipmentAdapters.Count());
-                Assert.Equal(null, orderSelectionLoaded.Order);
+                Assert.NotEqual(null, orderSelectionLoaded.Order);
             }
         }
 
