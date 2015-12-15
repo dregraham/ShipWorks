@@ -134,6 +134,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Tell the view model to save to the database
         /// </summary>
-        private void SaveToDatabase() => viewModel?.SaveToDatabase();
+        private void SaveToDatabase()
+        {
+            viewModel.SaveToDatabase();
+        }
     }
 }

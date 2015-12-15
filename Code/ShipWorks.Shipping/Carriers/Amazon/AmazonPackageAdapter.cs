@@ -45,7 +45,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public int Index
         {
             get { return 1; }
+#pragma warning disable S3237 // "value" parameters should be used
             set { /* Not applicable */ }
+#pragma warning restore S3237 // "value" parameters should be used
         } 
 
         /// <summary>
@@ -132,9 +134,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         [Obfuscation(Exclude = true)]
         public PackageTypeBinding PackagingType
         {
-            get { return null; } 
-            set { /* Not applicable */} 
-        } 
+            get { return null; }
+#pragma warning disable S3237 // "value" parameters should be used
+            set { /* Not applicable */ }
+#pragma warning restore S3237 // "value" parameters should be used
+        }
 
         /// <summary>
         /// Gets or sets the dims length.

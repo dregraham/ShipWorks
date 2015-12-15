@@ -8,6 +8,7 @@ using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Loading
 {
@@ -23,13 +24,14 @@ namespace ShipWorks.Shipping.Loading
         private readonly IStoreManager storeManager;
         private readonly IStoreTypeManager storeTypeManager;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
+        private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper, 
                               IValidator<ShipmentEntity> addressValidator, IStoreManager storeManager, IStoreTypeManager storeTypeManager,
-                              ICarrierShipmentAdapterFactory shipmentAdapterFactory)
+                              ICarrierShipmentAdapterFactory shipmentAdapterFactory, IOrderManager orderManager)
         {
             this.shippingConfiguration = shippingConfiguration;
             this.shippingManager = shippingManager;
@@ -38,6 +40,7 @@ namespace ShipWorks.Shipping.Loading
             this.storeManager = storeManager;
             this.storeTypeManager = storeTypeManager;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
+            this.orderManager = orderManager;
         }
 
         /// <summary>
@@ -63,7 +66,12 @@ namespace ShipWorks.Shipping.Loading
                 ShippingAddressEditStateType destinationAddressEditable = ShippingAddressEditStateType.Editable;
                 OrderEntity order = firstShipment?.Shipment?.Order;
 
-                if (order != null)
+                if (order == null)
+                {
+                    order = orderManager.FetchOrder(orderID);
+                }
+
+                if (order != null && firstShipment != null)
                 {
                     order.Store = storeManager.GetStore(order.StoreID);
 

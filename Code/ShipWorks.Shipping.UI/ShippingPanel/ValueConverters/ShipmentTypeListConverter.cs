@@ -42,12 +42,19 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
 
             IEnumerable<ShipmentTypeCode> codesFromLists = values.OfType<IEnumerable<ShipmentTypeCode>>().SelectMany(x => x);
 
-            return values.OfType<ShipmentTypeCode>()
+            IEnumerable<ShipmentTypeCode>  results =values.OfType<ShipmentTypeCode>()
                 .Concat(codesFromLists)
                 .Distinct()
-                .OrderBy(x => ShipmentTypeManager.GetSortValue(x))
-                .Select(x => new ShipmentTypeListItem(x, getDescription(x))).ToList() ?? 
-                Enumerable.Empty<ShipmentTypeListItem>();
+                .OrderBy(x => ShipmentTypeManager.GetSortValue(x));
+
+            if (values.Length > 1 && values[1] is ShipmentTypeCode)
+            {
+                // We don't want Amazon in the list, so filter it out, unless the initial shipment type code was amazon
+                ShipmentTypeCode? intialShipmentTypeCode = (ShipmentTypeCode)values[1];
+                results = results.Where(x => x != ShipmentTypeCode.Amazon || (intialShipmentTypeCode.HasValue && intialShipmentTypeCode == x));
+            }
+
+            return results.Select(x => new ShipmentTypeListItem(x, getDescription(x))).ToList() ?? Enumerable.Empty<ShipmentTypeListItem>();
         }
 
         /// <summary>
