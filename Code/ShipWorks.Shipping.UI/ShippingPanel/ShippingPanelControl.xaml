@@ -239,7 +239,7 @@
                 </StackPanel>
                 <WrapPanel Margin="5 5 " Orientation="Horizontal">
                     <TextBlock>Need to configure specific shipment options?</TextBlock>
-                    <Button Margin="2 0 2 0" Content="Click here" Style="{StaticResource LinkButtonStyle}" Click="OnShowShippingDialog" />
+                    <Button Margin="2 0 2 0" Content="Click here" Command="{Binding OpenShippingDialogCommand}" Style="{StaticResource LinkButtonStyle}" />
                     <TextBlock TextWrapping="WrapWithOverflow">to use the Shipping Dialog.</TextBlock>
                 </WrapPanel>
             </StackPanel>

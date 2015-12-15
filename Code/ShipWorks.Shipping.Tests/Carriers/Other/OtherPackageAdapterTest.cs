@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Other
         {
             shipment.Other = null;
 
-            Assert.Throws<ArgumentNullException>(nameof(shipment.Other), () => new OtherPackageAdapter(shipment));
+            Assert.Throws<ArgumentNullException>("Other", () => new OtherPackageAdapter(shipment));
         }
 
         [Fact]

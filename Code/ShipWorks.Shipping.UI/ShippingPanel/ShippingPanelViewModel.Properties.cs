@@ -28,6 +28,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public ICommand CreateLabelCommand { get; }
 
         /// <summary>
+        /// Command to open the shipping dialog
+        /// </summary>
+        public ICommand OpenShippingDialogCommand { get; }
+
+        /// <summary>
         /// Selected shipment type code for the current shipment
         /// </summary>
         [Obfuscation(Exclude = true)]

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Collections;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -56,6 +57,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.messenger = messenger;
             this.messageHelper = messageHelper;
             this.shippingViewModelFactory = shippingViewModelFactory;
+
+            OpenShippingDialogCommand = new RelayCommand(SendShowShippingDlgMessage);
 
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
@@ -149,7 +152,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void SaveToDatabase()
         {
-            if (ShipmentAdapter?.Shipment?.Processed ?? true)
+            if (ShipmentAdapter?.Shipment?.Processed ?? true) 
+            {
+                return;
+            }
+
+            // Only call save if we were in an "editing" allowed mode.  
+            // This handles the case where we lost focus due to opening the shipping dialog.
+            // The view model needs to save itself before opening the shipping dialog.
+            // So just return if we are in a non editing state...no need to save.
+            if (!AllowEditing)
             {
                 return;
             }
@@ -278,6 +290,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public void Save()
         {
             if (ShipmentAdapter?.Shipment?.Processed == true)
+            {
+                return;
+            }
+
+            // Only call save if we were in an "editing" allowed mode.  
+            // This handles the case where we lost focus due to opening the shipping dialog.
+            // The view model needs to save itself before opening the shipping dialog.
+            // So just return if we are in a non editing state...no need to save.
+            if (!AllowEditing)
             {
                 return;
             }
@@ -423,12 +444,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Send a message to open the shipping dialog for the selected shipment
         /// </summary>
-        public void SendShowShippingDlgMessage()
+        private void SendShowShippingDlgMessage()
         {
             // Call save before asking the shipping dialog to open, that way the shipment is in the db
             // prior to the shipping dialog getting the shipment.
             Save();
-            Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { Shipment }));
+
+            AllowEditing = false;
+
+            messenger.Send(new OpenShippingDialogMessage(this, new[] { Shipment }));
         }
 
         /// <summary>
