@@ -270,7 +270,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void ProcessShipment()
         {
-            if (ShipmentAdapter?.Shipment?.Processed ?? true || !AllowEditing)
+            if (!AllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
             {
                 return;
             }
