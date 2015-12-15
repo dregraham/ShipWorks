@@ -14,10 +14,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     public class Express1EndiciaRatingService : EndiciaRatingService
     {
         public Express1EndiciaRatingService(
+            IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory,
             IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
             IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository,
             LogEntryFactory logEntryFactory, Func<string, ICertificateInspector> certificateInspectorFactory)
-            : base(shipmentTypeFactory, accountRepository, logEntryFactory, certificateInspectorFactory)
+            : base(ratingServiceFactory, shipmentTypeFactory, accountRepository, logEntryFactory, certificateInspectorFactory)
         {}
 
         /// <summary>

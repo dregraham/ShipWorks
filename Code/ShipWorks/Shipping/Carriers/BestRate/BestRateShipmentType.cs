@@ -353,7 +353,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 .SelectMany(x => x.Rates)
                 .Where(r => r.Amount == selectedRate.Amount && r.OriginalTag == selectedRate.OriginalTag)
                 .ToList();
-
+            
             if (selectedRate.IsCounterRate)
             {
                 ratesToApplyToReturnedShipments = HandleCounterRate(shipment, rateGroups.ToList(), filteredRates, counterRatesProcessing);

@@ -23,11 +23,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private readonly LogEntryFactory logEntryFactory;
         private readonly Func<string, ICertificateInspector> certificateInspectorFactory;
 
-        public EndiciaRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
+        public EndiciaRatingService(
+            IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory, 
+            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
             IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository,
             LogEntryFactory logEntryFactory,
             Func<string, ICertificateInspector> certificateInspectorFactory)
-            : base(shipmentTypeFactory)
+            : base(ratingServiceFactory, shipmentTypeFactory)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;

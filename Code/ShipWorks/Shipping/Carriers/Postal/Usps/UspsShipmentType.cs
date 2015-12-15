@@ -44,8 +44,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public UspsShipmentType()
         {
-            ShouldRetrieveExpress1Rates = true;
-
             // Use the "live" versions by default
             AccountRepository = new UspsAccountRepository();
             LogEntryFactory = new LogEntryFactory();
@@ -96,11 +94,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Indicates if the shipment type supports accounts as the origin
         /// </summary>
         public override bool SupportsAccountAsOrigin => true;
-
-        /// <summary>
-        /// Should Express1 rates be checked when getting Endicia rates?
-        /// </summary>
-        public bool ShouldRetrieveExpress1Rates { get; set; }        
 
         /// <summary>
         /// Creates the web client to use to contact the underlying carrier API.

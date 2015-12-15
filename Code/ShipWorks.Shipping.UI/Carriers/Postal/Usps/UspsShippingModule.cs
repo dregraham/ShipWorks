@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Ups;
 
 namespace ShipWorks.Shipping.Carriers.Usps
@@ -21,13 +22,15 @@ namespace ShipWorks.Shipping.Carriers.Usps
                 .Keyed<ILabelService>(ShipmentTypeCode.Usps);
 
             builder.RegisterType<UspsRatingService>()
-                .Keyed<IRatingService>(ShipmentTypeCode.Usps);
+                .Keyed<IRatingService>(ShipmentTypeCode.Usps)
+                .Keyed<ISupportExpress1Rates>(ShipmentTypeCode.Usps);
 
             builder.RegisterType<UspsRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.Usps);
 
             builder.RegisterType<UspsAccountRepository>()
                 .As<ICarrierAccountRepository<UspsAccountEntity>>();
+            
         }
     }
 }

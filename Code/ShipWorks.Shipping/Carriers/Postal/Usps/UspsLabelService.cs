@@ -17,15 +17,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private readonly UspsShipmentType uspsShipmentType;
         private readonly Func<Express1UspsShipmentType> express1UspsShipmentType;
         private readonly Func<Express1UspsLabelService> express1UspsLabelService;
+        private readonly UspsRatingService uspsRatingService;
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
-        public UspsLabelService(UspsShipmentType uspsShipmentType, Func<Express1UspsShipmentType> express1UspsShipmentType, Func<Express1UspsLabelService> express1UspsLabelService)
-        { 
+        public UspsLabelService(UspsShipmentType uspsShipmentType,
+            Func<Express1UspsShipmentType> express1UspsShipmentType,
+            Func<Express1UspsLabelService> express1UspsLabelService, UspsRatingService uspsRatingService)
+        {
             this.uspsShipmentType = uspsShipmentType;
             this.express1UspsShipmentType = express1UspsShipmentType;
             this.express1UspsLabelService = express1UspsLabelService;
+            this.uspsRatingService = uspsRatingService;
         }
 
         /// <summary>
@@ -77,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void ProcessShipmentWithRates(ShipmentEntity shipment)
         {
             IUspsWebClient client = uspsShipmentType.CreateWebClient();
-            IEnumerable<UspsAccountEntity> accounts = uspsShipmentType.GetRates(shipment).Rates
+            IEnumerable<UspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
                     .OrderBy(x => x.Amount)
                     .Select(x => x.OriginalTag)
                     .OfType<UspsPostalRateSelection>()

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autofac.Features.Indexed;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -14,13 +17,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
     public class Express1UspsRatingService : UspsRatingService
     {
-        public Express1UspsRatingService(
+        public Express1UspsRatingService(ICachedRatesService cachedRatesService,
             IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, 
-            Express1UspsAccountRepository accountRepository, 
-            ICachedRatesService cachedRatesService,
+            Express1UspsAccountRepository accountRepository,
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory) : 
-            base(shipmentTypeFactory, accountRepository, cachedRatesService, ratingServiceFactory)
-        {}
+            base(cachedRatesService, ratingServiceFactory, shipmentTypeFactory, accountRepository)
+        {
+        }
 
         /// <summary>
         /// Get postal rates for the given shipment
@@ -33,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             // is just calling GetRatesInternal on an Express1UspsShipmentType which then creates a new
             // Express1UspsShipmentType and gets rates, and on and on...
 
-            return cachedRatesService.GetCachedRates<UspsException>(shipment, GetRatesFromApi);
+            return GetRatesFromApi(shipment);
         }
 
         /// <summary>
@@ -41,12 +44,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
-            List<RateResult> rateResults = GetShipmentType(shipment).CreateWebClient().GetRates(shipment);
+            List<RateResult> rateResults = CreateWebClient().GetRates(shipment);
             RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, rateResults));
 
             if (UspsAccountManager.UspsAccounts.All(a => a.ContractType != (int)UspsAccountContractType.Reseller))
             {
-                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(GetShipmentType(shipment), shipment, true));
+                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.Express1Usps], shipment, true));
             }
 
             return rateGroup;
@@ -58,7 +61,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         protected override RateGroup GetCounterRates(ShipmentEntity shipment)
         {
-            return cachedRatesService.GetCachedRates<UspsException>(shipment, entity => { throw new UspsException("An account is required to view Express1 rates."); });
+            throw new ShippingException("An account is required to view Express1 rates.");
+        }
+
+        /// <summary>
+        /// Returns web client
+        /// </summary>
+        protected override IUspsWebClient CreateWebClient()
+        {
+            return new Express1UspsWebClient(accountRepository, new LogEntryFactory(), CertificateInspector());
         }
 
         /// <summary>
@@ -66,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         protected override List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
-            List<PostalServiceType> availableServiceTypes = GetShipmentType(shipment).GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList(); ;
+            List<PostalServiceType> availableServiceTypes = shipmentTypeFactory[ShipmentTypeCode.Express1Usps].GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList(); ;
 
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Usps)
             {

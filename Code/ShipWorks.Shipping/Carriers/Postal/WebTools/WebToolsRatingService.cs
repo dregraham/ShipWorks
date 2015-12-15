@@ -14,8 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Initializes a new instance of the <see cref="WebToolsRatingService"/> class.
         /// </summary>
-        /// <param name="shipmentTypeFactory">The shipment type factory.</param>
-        public WebToolsRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory) : base(shipmentTypeFactory)
+        public WebToolsRatingService(IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory, IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory) : base(ratingServiceFactory, shipmentTypeFactory)
         {
         }
 

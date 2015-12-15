@@ -507,29 +507,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [Fact]
-        public void Configure_SetsRetrieveExpress1RatesToFalse_WhenConfigurationIsTrue()
-        {
-            Configure_ShouldRetrieveExpress1RatesTest(true);
-        }
-
-        [Fact]
-        public void Configure_SetsRetrieveExpress1RatesToFalse_WhenConfigurationIsFalse()
-        {
-            Configure_ShouldRetrieveExpress1RatesTest(false);
-        }
-
-        private void Configure_ShouldRetrieveExpress1RatesTest(bool checkExpress1)
-        {
-            var brokerSettings = new Mock<IBestRateBrokerSettings>();
-            brokerSettings.Setup(x => x.CheckExpress1Rates(It.IsAny<ShipmentType>())).Returns(checkExpress1);
-
-            testObject.Configure(brokerSettings.Object);
-
-            // Best rate should never retrieve Express1 rates
-            Assert.Equal(false, ((UspsShipmentType)testObject.ShipmentType).ShouldRetrieveExpress1Rates);
-        }
-
-        [Fact]
         public void GetBestRates_ReturnsNoRates_WhenShipmentTotalWeightTooHeavy()
         {
             testShipment.TotalWeight = 70.1;

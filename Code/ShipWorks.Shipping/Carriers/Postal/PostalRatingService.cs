@@ -17,13 +17,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
     public abstract class PostalRatingService : IRatingService
     {
         protected readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
+        private readonly IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PostalRatingService"/> class.
         /// </summary>
-        protected PostalRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory)
+        protected PostalRatingService(IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory, IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory)
         {
             this.shipmentTypeFactory = shipmentTypeFactory;
+            this.ratingServiceFactory = ratingServiceFactory;
         }
 
         /// <summary>
@@ -53,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             if (!shipmentTypeFactory[(ShipmentTypeCode)shipment.ShipmentType].IsShipmentTypeRestricted)
             {
                 // Only get counter rates if the shipment type has not been restricted
-                rates = new PostalWebShipmentType().GetRates(shipment);
+                rates = ratingServiceFactory[ShipmentTypeCode.PostalWebTools].GetRates(shipment);
                 rates.Rates.ForEach(x =>
                 {
                     if (x.ProviderLogo != null)

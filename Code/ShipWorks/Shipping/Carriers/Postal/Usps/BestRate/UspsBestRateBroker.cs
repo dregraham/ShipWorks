@@ -1,7 +1,13 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Autofac;
+using Autofac.Features.Indexed;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
 {
@@ -58,24 +64,48 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         /// <summary>
-        /// Configures the specified broker settings. Overridden to explicitly indicate that Express1 rates
-        /// should not be checked.
-        /// </summary>
-        /// <param name="brokerSettings"></param>
-        public override void Configure(IBestRateBrokerSettings brokerSettings)
-        {
-            base.Configure(brokerSettings);
-
-            // Make sure that Express1 rates are not checked.
-            ((UspsShipmentType)ShipmentType).ShouldRetrieveExpress1Rates = false;
-        }
-
-        /// <summary>
         /// Gets a description from the specified account
         /// </summary>
         protected override string AccountDescription(UspsAccountEntity account)
         {
             return account.Description;
+        }
+
+        /// <summary>
+        /// Gets rates from the UspsRatingService without Express1 rates
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        protected override RateGroup GetRates(ShipmentEntity shipment)
+        {
+            RateGroup rates;
+
+            // Get rates from ISupportExpress1Rates if it is registered for the shipmenttypecode
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+
+                UspsShipmentType shipmentType = lifetimeScope.Resolve<UspsShipmentType>();
+
+                shipmentType.UpdateDynamicShipmentData(shipment);
+
+                OrderHeader orderHeader = DataProvider.GetOrderHeader(shipment.OrderID);
+
+                // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
+                StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
+                storeType.OverrideShipmentDetails(shipment);
+
+                ISupportExpress1Rates ratingService =
+                    lifetimeScope.ResolveKeyed<ISupportExpress1Rates>((ShipmentTypeCode)shipment.ShipmentType);
+
+                // Get rates without express1 rates
+                rates = ratingService.GetRates(shipment, false);
+            }
+
+            rates = rates.CopyWithRates(MergeDescriptionsWithNonSelectableRates(rates.Rates));
+            // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
+            rates.Rates.ForEach(UseProperUspsLogo);
+
+            return rates;
         }
     }
 }

@@ -44,15 +44,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
 
             base.UpdateChildAccountId(postalShipmentEntity, account);
         }
-
-        /// <summary>
-        /// Configures the specified broker settings.
-        /// </summary>
-        public override void Configure(IBestRateBrokerSettings brokerSettings)
-        {
-            base.Configure(brokerSettings);
-
-            ((UspsShipmentType)ShipmentType).ShouldRetrieveExpress1Rates = false;
-        }
     }
 }
