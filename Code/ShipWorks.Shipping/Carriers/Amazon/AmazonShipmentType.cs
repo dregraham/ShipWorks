@@ -151,8 +151,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             return DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID)
-                .Where(x => x.Label.StartsWith("LabelPrimary"))
-                .Select(x => new TemplateLabelData(null, "Label", TemplateLabelCategory.Primary, x))
+                .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
+                .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
+                    TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
                 .ToList();
         }
 

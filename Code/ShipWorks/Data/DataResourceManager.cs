@@ -5,13 +5,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using Interapptive.Shared;
 using Interapptive.Shared.IO.Zip;
-using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -109,37 +107,6 @@ namespace ShipWorks.Data
         public static DataResourceReference CreateFromBytes(byte[] data, long consumerID, string label)
         {
             return InstantiateResource(data, consumerID, label, false);
-        }
-
-        /// <summary>
-        /// Register the data as a resource in the database.  If already present, the existing reference is returned.
-        /// </summary>
-        public static IEnumerable<DataResourceReference> CreateFromPdf(PdfDocument pdf, long consumerID, string label)
-        {
-            List<DataResourceReference> resourceReferences = new List<DataResourceReference>();
-
-            // We need to convert the PDF into images and register each image as a resource in the database
-            List<Stream> images = pdf.ToImages().ToList();
-            for (int i = 0; i < images.Count; i++)
-            {
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    images[i].CopyTo(memoryStream);
-
-                    // When there is a multi-page PDF, only rename subsequent pages so code that assumes resources
-                    // of a given name exist still work correctly when they must be renamed
-                    string labelName = label;
-                    if (i > 0)
-                    {
-                        labelName += $"-{i}";
-                    }
-
-                    // Adjust the resource label in the event that there are multiple pages in the PDF
-                    resourceReferences.Add(InstantiateResource(memoryStream.ToArray(), consumerID, labelName, false));
-                }
-            }
-
-            return resourceReferences;
         }
 
         /// <summary>

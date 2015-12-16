@@ -8,7 +8,6 @@ using System.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Imaging;
 using Interapptive.Shared.IO.Zip;
-using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data;
@@ -53,7 +52,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.labelEnforcers = labelEnforcers;
             this.objectReferenceManager = objectReferenceManager;
         }
-
 
         /// <summary>
         /// Create the label
@@ -131,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void SaveLabel(FileContents fileContents, long shipmentID)
         {
-            // Interapptive users have an Unprocess button.  If we are reprocessing we need to clear the old images
+            // Interapptive users have an unprocess button.  If we are reprocessing we need to clear the old images
             objectReferenceManager.ClearReferences(shipmentID);
 
             // Decompress the label string
@@ -142,15 +140,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
                 {
-                    using (PdfDocument pdf = new PdfDocument(pdfBytes))
-                    {
-                        // Convert the PDF to images and then save to database
-                        // If cropping fails we save the pdf without cropping
-                        if (!SavePdfLabel(pdf, shipmentID))
-                        {
-                            resourceManager.CreateFromPdf(pdf, shipmentID, "LabelPrimary");
-                        }
-                    }
+                    resourceManager.CreateFromPdf(pdfBytes, shipmentID,
+                        i => i == 0 ? "LabelPrimary" : $"LabelPart{i}",
+                        SaveCroppedLabel);
                 }
             }
             else
@@ -161,44 +153,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Converts PDF to Cropped label image
+        /// Save the cropped label
         /// </summary>
-        private bool SavePdfLabel(PdfDocument pdf, long shipmentID)
+        private byte[] SaveCroppedLabel(MemoryStream stream)
         {
-            // We need to convert the PDF into images and register each image as a resource in the database
-            List<Stream> images = pdf.ToImages().ToList();
-
-            // Try to crop the label
-            try
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                // loop each image, if the PDF had multiple pages
-                for (int i = 0; i < images.Count; i++)
+                using (Bitmap labelImage = stream.CropImageStream())
                 {
-                    using (MemoryStream memoryStream = new MemoryStream())
-                    {
-                        // Create a cropped image
-                        Bitmap labelImage = EdgeDetection.Crop(images[i]);
-
-                        // Save the cropped image
-                        labelImage.Save(memoryStream, ImageFormat.Png);
-
-                        // If for some reason its a multi part label
-                        string labelName = i == 0 ? "LabelPrimary" : $"LabelPart{i}";
-
-                        // Save the label
-                        resourceManager.CreateFromBytes(memoryStream.ToArray(), shipmentID, labelName);
-                    }
+                    labelImage.Save(memoryStream, ImageFormat.Png);
                 }
+
+                return memoryStream.ToArray();
             }
-            catch (Exception)
-            {
-                // Something went wrong with the cropping
-                // return false and use the old method
-                // of saving a pdf
-                return false;
-            }
-            // everything worked
-            return true;
         }
 
         /// <summary>
