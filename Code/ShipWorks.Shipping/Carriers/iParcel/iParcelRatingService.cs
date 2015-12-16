@@ -79,6 +79,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             return new RateGroup(results);
         }
 
+        /// <summary>
+        /// Builds the RateResult for iParcel
+        /// </summary>
         private void BuildRateResult(ShipmentEntity shipment, DataSet ratesResult, List<RateResult> results)
         {
             // i-parcel will return a negative value if there was some sort of error or the shipment is not eligible for
