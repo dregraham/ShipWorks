@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -69,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
                     serviceRates = upsApiRateClient.GetRates(shipment, false);
 
                     // Determine if the user is hoping to get negotiated rates back
-                    wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, accountRepository).RateType == (int) UpsRateType.Negotiated;
+                    wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, accountRepository).RateType == (int)UpsRateType.Negotiated;
 
                     // Indicates if any of the rates returned were negotiated.
                     anyNegotiated = serviceRates.Any(s => s.Negotiated);
@@ -79,58 +80,9 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 // Validate each of the packages dimensions.
                 ValidatePackageDimensions(shipment);
 
-                List<RateResult> rates = new List<RateResult>();
+                List<RateResult> rates = AddRateForEachService(allNegotiated, serviceRates, transitTimes);
 
-                if (!serviceRates.Any())
-                {
-                    rates.Add(new RateResult("* No rates were returned for the selected Service.", ""));
-                }
-                else
-                {
-                    // Add a rate for each service
-                    foreach (UpsServiceRate serviceRate in serviceRates)
-                    {
-                        UpsServiceType service = serviceRate.Service;
-
-                        UpsTransitTime transitTime = transitTimes.SingleOrDefault(t => t.Service == service);
-
-                        RateResult rateResult = new RateResult(
-                            (serviceRate.Negotiated && !allNegotiated ? "* " : "") + EnumHelper.GetDescription(service),
-                            GetServiceTransitDays(transitTime) + " " + GetServiceEstimatedArrivalTime(transitTime),
-                            serviceRate.Amount,
-                            service)
-                        {
-                            ServiceLevel = UpsServiceLevelConverter.GetServiceLevel(serviceRate, transitTime),
-                            ExpectedDeliveryDate = transitTime?.ArrivalDate ?? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday),
-                            ShipmentType = ShipmentTypeCode.UpsOnLineTools,
-                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools)
-                        };
-
-                        rates.Add(rateResult);
-                    }
-
-                    // If they wanted negotiated rates, we have to show some results
-                    if (wantedNegotiated)
-                    {
-                        if (allNegotiated)
-                        {
-                            rates.Add(new RateResult("* All rates are negotiated rates.", ""));
-                        }
-                        else if (anyNegotiated)
-                        {
-                            rates.Add(new RateResult("* Indicates a negotiated rate.", ""));
-                        }
-                        else
-                        {
-                            rates.Add(new RateResult("* Negotiated rates were not returned. Contact Interapptive.", ""));
-                        }
-                    }
-
-                    if (shipment.ReturnShipment)
-                    {
-                        rates.Add(new RateResult("* Rates reflect the service charge only. This does not include additional fees for returns.", ""));
-                    }
-                }
+                AddMessageResult(shipment, wantedNegotiated, anyNegotiated, allNegotiated, rates);
 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
@@ -148,6 +100,72 @@ namespace ShipWorks.Shipping.Carriers.Ups
             catch (Exception ex) when (ex is UpsException || ex is InvalidPackageDimensionsException)
             {
                 throw new ShippingException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Adds the rate for each service.
+        /// </summary>
+        private List<RateResult> AddRateForEachService(bool allNegotiated, List<UpsServiceRate> serviceRates, List<UpsTransitTime> transitTimes)
+        {
+            List<RateResult> rates = new List<RateResult>();
+
+            // Add a rate for each service
+            foreach (UpsServiceRate serviceRate in serviceRates)
+            {
+                UpsServiceType service = serviceRate.Service;
+
+                UpsTransitTime transitTime = transitTimes.SingleOrDefault(t => t.Service == service);
+
+                RateResult rateResult = new RateResult(
+                    (serviceRate.Negotiated && !allNegotiated ? "* " : "") + EnumHelper.GetDescription(service),
+                    GetServiceTransitDays(transitTime) + " " + GetServiceEstimatedArrivalTime(transitTime),
+                    serviceRate.Amount,
+                    service)
+                {
+                    ServiceLevel = UpsServiceLevelConverter.GetServiceLevel(serviceRate, transitTime),
+                    ExpectedDeliveryDate = transitTime?.ArrivalDate ?? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday),
+                    ShipmentType = ShipmentTypeCode.UpsOnLineTools,
+                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools)
+                };
+
+                rates.Add(rateResult);
+            }
+
+            return rates;
+        }
+
+        /// <summary>
+        /// Adds the message result.
+        /// </summary>
+        private static void AddMessageResult(ShipmentEntity shipment, bool wantedNegotiated, bool anyNegotiated, bool allNegotiated, List<RateResult> rates)
+        {
+            if (rates.None())
+            {
+                rates.Add(new RateResult("* No rates were returned for the selected Service.", ""));
+                return;
+            }
+
+            // If they wanted negotiated rates, we have to show some results
+            if (wantedNegotiated)
+            {
+                if (allNegotiated)
+                {
+                    rates.Add(new RateResult("* All rates are negotiated rates.", ""));
+                }
+                else if (anyNegotiated)
+                {
+                    rates.Add(new RateResult("* Indicates a negotiated rate.", ""));
+                }
+                else
+                {
+                    rates.Add(new RateResult("* Negotiated rates were not returned. Contact Interapptive.", ""));
+                }
+            }
+
+            if (shipment.ReturnShipment)
+            {
+                rates.Add(new RateResult("* Rates reflect the service charge only. This does not include additional fees for returns.", ""));
             }
         }
 

@@ -34,7 +34,14 @@ namespace ShipWorks.Shipping.Carriers.Ups
             // Make sure package dimensions are valid.
             ValidatePackageDimensions(shipment);
 
-            // Clear out any values that aren't allowed for SurePost or MI
+            ConfigureNewUpsPostalLabel(shipment, upsShipmentEntity, upsServiceType);
+        }
+
+        /// <summary>
+        /// Clear out any values that aren't allowed for SurePost or MI 
+        /// </summary>
+        private static void ConfigureNewUpsPostalLabel(ShipmentEntity shipment, UpsShipmentEntity upsShipmentEntity, UpsServiceType upsServiceType)
+        {
             if (UpsUtility.IsUpsMiOrSurePostService(upsServiceType))
             {
                 shipment.ReturnShipment = false;

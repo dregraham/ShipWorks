@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers;
 
@@ -14,6 +15,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Fields of a shipment used to calculate rates
         /// </summary>
+        [NDependIgnoreLongMethod]
         public virtual RatingFields RatingFields
         {
             get

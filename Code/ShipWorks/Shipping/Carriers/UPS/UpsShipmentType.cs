@@ -33,6 +33,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.ApplicationCore;
 using System.Globalization;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -169,6 +170,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Configure data for the newly created shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
             // A null reference error was being thrown.  Discoverred by Crash Reports.
@@ -359,6 +361,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
@@ -415,6 +418,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
         {
             UpsShipmentEntity ups = shipment.Ups;
@@ -605,6 +609,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
