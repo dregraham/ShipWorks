@@ -120,5 +120,25 @@
             <Run>For help adding your Yahoo store,</Run>
             <Hyperlink NavigateUri="{Binding HelpUrl}" RequestNavigate="HyperlinkOnRequestNavigate">click here</Hyperlink>
         </TextBlock>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition Width="26" />
+                <ColumnDefinition Width="43" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Grid.ColumnSpan="3"
+                       Margin="0,10,8,1"
+                       VerticalAlignment="Center"
+                       Text="ShipWorks Yahoo Partner ID: ypa-005343935941" />
+            <Button Grid.Column="3"
+                    Margin="0, 8, 0, 0"
+                    VerticalAlignment="Center"
+                    Click="ButtonBaseOnClick"
+                    Padding="3">
+                Copy to Clipboard
+            </Button>
+        </Grid>
     </StackPanel>
 </UserControl>
