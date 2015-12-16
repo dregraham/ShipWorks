@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Features.OwnedInstances;
@@ -14,7 +13,6 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
     /// <summary>
     /// Winforms element for hosting the WPF Yahoo Account Page
     /// </summary>
-    [Obfuscation(Exclude = true)]
     public partial class YahooApiAccountPageHost : AddStoreWizardPage
     {
         private YahooApiAccountPageViewModel viewModel;

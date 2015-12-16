@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Autofac;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.UI;
@@ -12,7 +11,6 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
     /// <summary>
     /// Winforms element for hosting the WPF Yahoo Account Settings Page
     /// </summary>
-    [Obfuscation(Exclude = true)]
     public partial class YahooApiAccountSettingsHost : AccountSettingsControlBase
     {
         private YahooApiAccountSettingsViewModel viewModel;
