@@ -8973,7 +8973,7 @@
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EmailAccounts.sql" />
     <None Include="Resources\sw_cubes_32x32.png" />
     <None Include="Resources\InfoTip.png" />
-    <None Include="Resources\check.png" />
+    <Resource Include="Resources\check.png" />
     <None Include="Resources\information.png" />
     <EmbeddedResource Include="ApplicationCore\Options\OptionPageLogging.resx">
       <DependentUpon>OptionPageLogging.cs</DependentUpon>
@@ -10015,7 +10015,7 @@
     <None Include="Resources\bullet_triangle_grey.png" />
     <None Include="Resources\arrow_right_green.png" />
     <None Include="Resources\media_play_green.png" />
-    <None Include="Resources\error.png" />
+    <Resource Include="Resources\error.png" />
     <None Include="Resources\check1.png" />
     <None Include="Resources\error1.png" />
     <None Include="Resources\cancelled.png" />
