@@ -41,7 +41,7 @@ namespace ShipWorks.UI.ValueConverters
             bool b = (bool)base.Convert(value, typeof(bool), parameter, culture);
             Visibility viz = b ? Visibility.Visible : Visibility.Collapsed;
 
-            return viz;
+          return viz;
         }
     }
 }

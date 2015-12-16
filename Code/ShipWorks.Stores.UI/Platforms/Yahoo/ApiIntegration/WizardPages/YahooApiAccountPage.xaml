@@ -13,9 +13,7 @@
              d:DesignWidth="400"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <converters:EnumImageConverter x:Key="EnumImage" />
         <converters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
-        <converters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
     </UserControl.Resources>
     <StackPanel Margin="24,8,24,8">
         <StackPanel.Resources>
@@ -77,13 +75,21 @@
                      Text="{Binding BackupOrderNumber,
                                     UpdateSourceTrigger=PropertyChanged}" />
             <Image Grid.Column="2"
+                   HorizontalAlignment="Right"
                    VerticalAlignment="Center"
-                   Source="{Binding IsValid,
-                                    Converter={StaticResource EnumImage}}"
+                   Source="/Shipworks.Core;component/Resources/check.png"
                    Stretch="None"
                    Visibility="{Binding IsValid,
-                                        Converter={StaticResource VisibleWhenNotEqualToParameter},
-                                        ConverterParameter={x:Static yahooValidation:YahooOrderNumberValidation.Validating}}" />
+                                        Converter={StaticResource VisibleWhenEqualToParameter},
+                                        ConverterParameter={x:Static yahooValidation:YahooOrderNumberValidation.Valid}}" />
+            <Image Grid.Column="2"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Source="/Shipworks.Core;component/Resources/error.png"
+                   Stretch="None"
+                   Visibility="{Binding IsValid,
+                                        Converter={StaticResource VisibleWhenEqualToParameter},
+                                        ConverterParameter={x:Static yahooValidation:YahooOrderNumberValidation.Invalid}}" />
             <Image Grid.Column="2"
                    RenderTransformOrigin=".5,.5"
                    Source="/Shipworks.Core;component/Resources/Progress/circle_ball_blue.gif"
