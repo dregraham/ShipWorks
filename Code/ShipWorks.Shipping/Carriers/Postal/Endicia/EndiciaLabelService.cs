@@ -99,14 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // See if this shipment should really go through Express1
             if (useExpress1)
             {
-                // Now we turn this into an Express1 shipment...
-                shipment.ShipmentType = (int)ShipmentTypeCode.Express1Endicia;
-                shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
-                shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
-
-                // Process via Express1
-                express1EndiciaShipmentType.UpdateDynamicShipmentData(shipment);
-                express1EndiciaLabelService.Create(shipment);
+                CreateUsingExpress1(shipment, express1Account);
             }
             else
             {
@@ -122,6 +115,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     throw new ShippingException(ex.Message, ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Create the label via Express1
+        /// </summary>
+        private void CreateUsingExpress1(ShipmentEntity shipment, EndiciaAccountEntity express1Account)
+        {
+            // Now we turn this into an Express1 shipment...
+            shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
+            shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
+            shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
+
+            // Process via Express1
+            express1EndiciaShipmentType.UpdateDynamicShipmentData(shipment);
+            express1EndiciaLabelService.Create(shipment);
         }
 
         private RateResult GetExpress1Rate(ShipmentEntity shipment, EndiciaAccountEntity express1Account)
