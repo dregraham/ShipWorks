@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
@@ -235,6 +236,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Configure data for the newly created shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
             shipment.FedEx.MasterFormID = "";
@@ -471,6 +473,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
@@ -525,6 +528,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
         {
             FedExShipmentEntity fedex = shipment.FedEx;
@@ -712,6 +716,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
