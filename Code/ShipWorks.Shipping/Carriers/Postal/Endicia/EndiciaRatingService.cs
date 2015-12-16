@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // For endicia, we want to either promote Express1 or show the Express1 savings
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia)
             {
-                return CompileEndicaRates(shipment, endiciaShipmentType, endiciaRates, express1Rates);
+                return CompileEndiciaRates(shipment, endiciaShipmentType, endiciaRates, express1Rates);
             }
 
             // Express1 rates - return rates filtered by what is available to the user
@@ -101,53 +101,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             return express1Group;
         }
 
-        private RateGroup CompileEndicaRates(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, List<RateResult> endiciaRates, List<RateResult> express1Rates)
+        /// <summary>
+        /// Compiles the endica rates.
+        /// </summary>
+        private RateGroup CompileEndiciaRates(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, List<RateResult> endiciaRates, List<RateResult> express1Rates)
         {
             if (!endiciaShipmentType.IsRateDiscountMessagingRestricted)
             {
-                List<RateResult> finalRates = new List<RateResult>();
-
-                // Go through each Endicia rate
-                foreach (RateResult endiciaRate in endiciaRates)
-                {
-                    PostalRateSelection endiciaRateDetail = (PostalRateSelection) endiciaRate.OriginalTag;
-
-                    // If it's a rate they could (or have) saved on with Express1, we modify it
-                    if (endiciaRate.Selectable &&
-                        endiciaRateDetail != null &&
-                        Express1Utilities.IsPostageSavingService(endiciaRateDetail.ServiceType))
-                    {
-                        // See if Express1 returned a rate for this servie
-                        RateResult express1Rate = null;
-                        if (express1Rates != null)
-                        {
-                            express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
-                                ((PostalRateSelection) e1r.OriginalTag).ServiceType == endiciaRateDetail.ServiceType &&
-                                ((PostalRateSelection) e1r.OriginalTag).ConfirmationType ==
-                                endiciaRateDetail.ConfirmationType);
-                        }
-
-                        // If Express1 returned a rate, check to make sure it is a lower amount
-                        if (express1Rate != null && express1Rate.Amount <= endiciaRate.Amount)
-                        {
-                            // If the logo is currently set, make sure it's set to Endicia
-                            if (express1Rate.ProviderLogo != null)
-                            {
-                                express1Rate.ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia);
-                            }
-
-                            finalRates.Add(express1Rate);
-                        }
-                        else
-                        {
-                            finalRates.Add(endiciaRate);
-                        }
-                    }
-                    else
-                    {
-                        finalRates.Add(endiciaRate);
-                    }
-                }
+                List<RateResult> finalRates = CompileFinalRates(endiciaRates, express1Rates);
 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, finalRates.Select(e =>
@@ -186,6 +147,62 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             return finalEndiciaOnlyRates;
         }
 
+
+        /// <summary>
+        /// Go Through Endicia rates and add either the endicia rate or express1 rate to final rates.
+        /// </summary>
+        private static List<RateResult> CompileFinalRates(List<RateResult> endiciaRates, List<RateResult> express1Rates)
+        {
+            List<RateResult> finalRates = new List<RateResult>();
+
+            // Go through each Endicia rate
+            foreach (RateResult endiciaRate in endiciaRates)
+            {
+                PostalRateSelection endiciaRateDetail = (PostalRateSelection) endiciaRate.OriginalTag;
+
+                // If it's a rate they could (or have) saved on with Express1, we modify it
+                if (endiciaRate.Selectable &&
+                    endiciaRateDetail != null &&
+                    Express1Utilities.IsPostageSavingService(endiciaRateDetail.ServiceType))
+                {
+                    // See if Express1 returned a rate for this servie
+                    RateResult express1Rate = null;
+                    if (express1Rates != null)
+                    {
+                        express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
+                            ((PostalRateSelection) e1r.OriginalTag).ServiceType == endiciaRateDetail.ServiceType &&
+                            ((PostalRateSelection) e1r.OriginalTag).ConfirmationType ==
+                            endiciaRateDetail.ConfirmationType);
+                    }
+
+                    // If Express1 returned a rate, check to make sure it is a lower amount
+                    if (express1Rate != null && express1Rate.Amount <= endiciaRate.Amount)
+                    {
+                        // If the logo is currently set, make sure it's set to Endicia
+                        if (express1Rate.ProviderLogo != null)
+                        {
+                            express1Rate.ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia);
+                        }
+
+                        finalRates.Add(express1Rate);
+                    }
+                    else
+                    {
+                        finalRates.Add(endiciaRate);
+                    }
+                }
+                else
+                {
+                    finalRates.Add(endiciaRate);
+                }
+            }
+
+            return finalRates;
+        }
+
+        /// <summary>
+        /// Gets the express1 rates.
+        /// </summary>
         private List<RateResult> GetExpress1Rates(ShipmentEntity shipment, List<RateResult> express1Rates, ShippingSettingsEntity settings)
         {
             // See if this shipment should really go through Express1
