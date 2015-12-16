@@ -10,12 +10,12 @@ namespace ShipWorks.Data
     public interface IDataResourceManager
     {
         /// <summary>
-        /// Crate database resource from PDF
+        /// Create database resource from PDF
         /// </summary>
         IEnumerable<DataResourceReference> CreateFromPdf(Stream pdfStream, long consumerID, string label);
 
         /// <summary>
-        /// Crate database resource from PDF
+        /// Create database resource from PDF
         /// </summary>
         /// <param name="pdfStream">Stream that contains the pdf data</param>
         /// <param name="consumerID">Id of the consumer</param>
@@ -25,7 +25,7 @@ namespace ShipWorks.Data
             Func<int, string> createLabelFromIndex, Func<MemoryStream, byte[]> getBytesFromStream);
 
         /// <summary>
-        /// Crate database resource from bytes
+        /// Create database resource from bytes
         /// </summary>
         DataResourceReference CreateFromBytes(byte[] data, long consumerID, string label);
     }
