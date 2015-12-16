@@ -303,7 +303,8 @@
     <ObfuscationExcludedAssemblies Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <ObfuscationExcludedAssemblies Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <ObfuscationExcludedAssemblies Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-	<ObfuscationExcludedAssemblies Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+  	<ObfuscationExcludedAssemblies Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <ObfuscationExcludedAssemblies Include="System.Windows.Interactivity Version=4.0.0.0 Culture=neutral PublicKeyToken=31bf3856ad364e35" />
   </ItemGroup>
   <ItemGroup>
     <ObfuscationExcludedRegEx Include="^(Triggers|UserDefinedFunctions|StoredProcedures)::.+" />
@@ -359,10 +360,10 @@
     <!-- Copy the report to one with the version apart of the name, so its easier to use and identify -->
     <Copy SourceFiles="$(LogDirectory)\ObfuscationReport.xml" DestinationFiles="$(LogDirectory)\ObfuscationReport$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision).xml" />
 
-    <!-- Copy the report for non-internal builds (VersionMajor > 0) to a location that the support team 
+    <!-- Copy the report for non-internal builds (VersionMajor > 0) to a location that the support team
          can access to streamline their work (i.e. not wait on someone from development to manually copy the file) -->
     <Copy Condition="$(VersionMajor) &gt; 0" SourceFiles="$(LogDirectory)\ObfuscationReport.xml" DestinationFiles="$(SupportObfuscationLogDirectory)\ShipWorks$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)\ObfuscationReport.xml" />
-    
+
     <!-- Copy the assemblies that were obfuscated from our original folder so we have an archive of them-->
     <Copy SourceFiles="$(AppDirectory)\%(ObfuscatedAssemblies.Filename)%(ObfuscatedAssemblies.Extension)"
 				DestinationFolder="$(AppDirectory)\Original" />
@@ -404,7 +405,7 @@
       <ExeAppend>_UPS</ExeAppend>
     </InstallerTypes>
   </ItemGroup>
-    
+
   <!-- Create the installer -->
   <Target Name="InnoSetup" >
 
