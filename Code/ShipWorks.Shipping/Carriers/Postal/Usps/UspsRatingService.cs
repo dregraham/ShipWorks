@@ -12,8 +12,11 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing.Rating;
@@ -31,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
         private readonly ICachedRatesService cachedRatesService;
         private readonly IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory;
-        protected readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
+        protected ICarrierAccountRepository<UspsAccountEntity> accountRepository;
 
         /// <summary>
         /// Constructor
@@ -68,7 +71,39 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 GetRatesInternal(shipment) :
                 GetCounterRates(shipment);
         }
+        
+        /// <summary>
+        /// Gets counter rates for a postal shipment
+        /// </summary>
+        protected override RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            // We're going to be temporarily swapping these out to get counter rates, so 
+            // make a note of the original values
+            ICarrierAccountRepository<UspsAccountEntity> originalAccountRepository = accountRepository;
 
+            try
+            {
+                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+                accountRepository = new UspsCounterRateAccountRepository(TangoCredentialStore.Instance);
+
+                // Fetch the rates now that we're setup to use counter rates
+                return GetRates(shipment);
+
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.Usps]));
+
+                return errorRates;
+            }
+            finally
+            {
+                // Set everything back to normal
+                accountRepository = originalAccountRepository;
+            }
+        }
+        
         /// <summary>
         /// Get postal rates for the given shipment
         /// </summary>
@@ -316,13 +351,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         protected ICertificateInspector CertificateInspector()
         {
-            if (accountRepository.Accounts.Any())
+            UspsCounterRateAccountRepository counterRateRepo = accountRepository as UspsCounterRateAccountRepository;
+
+            if (counterRateRepo != null)
             {
-                // There are accounts so we return a trusting certificate inspector
-                return new TrustingCertificateInspector();
+                // The account repository is a CounterRate repo use a certificate insepctor
+                return new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData);
             }
-            // No accounts so we use a real certificate inspector
-            return new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData);
+
+            // we are not using the couter rate repo so 
+            // we can send back a trusting certificate inspector
+            return new TrustingCertificateInspector();
         }
 
         /// <summary>

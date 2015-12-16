@@ -23,7 +23,8 @@ namespace ShipWorks.Shipping.Carriers.Usps
 
             builder.RegisterType<UspsRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.Usps)
-                .Keyed<ISupportExpress1Rates>(ShipmentTypeCode.Usps);
+                .Keyed<ISupportExpress1Rates>(ShipmentTypeCode.Usps)
+                .AsSelf();
 
             builder.RegisterType<UspsRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.Usps);
