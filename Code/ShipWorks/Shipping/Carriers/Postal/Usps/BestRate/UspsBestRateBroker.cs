@@ -33,7 +33,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// <param name="carrierDescription">The carrier description.</param>
         protected UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository, string carrierDescription) :
             base(shipmentType, accountRepository, carrierDescription)
-        { }
+        {
+            GetRatesAction = (shipment, type) => GetRatesFunction(shipment);
+        }
 
         /// <summary>
         /// Gets the insurance provider.
@@ -76,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        protected override RateGroup GetRates(ShipmentEntity shipment)
+        private RateGroup GetRatesFunction(ShipmentEntity shipment)
         {
             RateGroup rates;
 
