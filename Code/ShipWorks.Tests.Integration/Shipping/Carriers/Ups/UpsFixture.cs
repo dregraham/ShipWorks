@@ -77,10 +77,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
 
         protected override decimal RateShipment(ShipmentEntity shipment)
         {
-            UpsOltShipmentType UpsShipmentType = new UpsOltShipmentType();
-            RateGroup response = UpsShipmentType.GetRates(shipment);
-
-            return response.Rates.Sum(x => x.Amount);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IRatingService ratingService = lifetimeScope.ResolveKeyed<IRatingService>(ShipmentTypeCode.UpsOnLineTools);
+                return ratingService.GetRates(shipment).Rates.Sum(x => x.Amount);
+            }
         }
 
         protected override void ShipShipment(ShipmentEntity shipment)

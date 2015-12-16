@@ -36,7 +36,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
 
         private Mock<ICarrierAccountRepository<UspsAccountEntity>> genericRepositoryMock;
         private Mock<UspsShipmentType> genericShipmentTypeMock;
-        
+        private int timesGetRatesCalled = 0;
+
         public UspsBestRateBrokerTest()
         {
             account = new UspsAccountEntity { UspsAccountID = 1, CountryCode = "US"};
@@ -48,6 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             rateGroup = new RateGroup(new[] { rate1, rate2, rate3 });
 
             genericRepositoryMock = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+            
             genericRepositoryMock.Setup(x => x.DefaultProfileAccount)
                                  .Returns(account);
 
@@ -56,9 +58,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
             genericShipmentTypeMock = new Mock<UspsShipmentType>();
             genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
-            genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
-                            .Returns(rateGroup)
-                            .Callback<ShipmentEntity>(e => getRatesShipments.Add(EntityUtility.CloneEntity(e)));
 
             // Mimic the bare minimum of what the configure method is doing
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
@@ -66,7 +65,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
 
             testObject = new UspsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
-                GetRatesAction = (shipment, type) => genericShipmentTypeMock.Object.GetRates(shipment)
+                GetRatesAction = (shipment, type) =>
+                {
+                    getRatesShipments.Add(EntityUtility.CloneEntity(shipment));
+                    timesGetRatesCalled++;
+                    return rateGroup;
+                }
             };
 
             testShipment = new ShipmentEntity
@@ -123,8 +127,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            genericShipmentTypeMock.Verify(x => x.GetRates(It.IsAny<ShipmentEntity>()), Times.Exactly(1));
-
+            Assert.Equal(1, timesGetRatesCalled);
+            
             foreach (var shipment in getRatesShipments)
             {
                 Assert.Equal(ShipmentTypeCode.Usps, (ShipmentTypeCode) shipment.ShipmentType);
@@ -316,7 +320,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         [Fact]
         public void GetBestRates_NoRatesAreReturned_WhenShippingExceptionIsThrown()
         {
-            genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>())).Throws<ShippingException>();
+            testObject.GetRatesAction = (shipment, type) =>
+            {
+                throw new ShippingException();
+            };
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
@@ -329,7 +336,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             ShippingException exception = new ShippingException();
             List<BrokerException> brokerExceptions = new List<BrokerException>();
 
-            genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>())).Throws(exception);
+            testObject.GetRatesAction = (shipment, type) =>
+            {
+                throw new ShippingException();
+            };
 
             testObject.GetBestRates(testShipment, brokerExceptions);
 

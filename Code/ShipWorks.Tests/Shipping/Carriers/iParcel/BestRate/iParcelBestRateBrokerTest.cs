@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.BestRate;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel.BestRate
@@ -22,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.BestRate
 
             testObject = new iParcelBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
-                GetRatesAction = (shipment, type) => genericShipmentTypeMock.Object.GetRates(shipment)
+                GetRatesAction = (shipment, type) => new RateGroup(new List<RateResult>())
             };
         }
 

@@ -890,14 +890,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Called to get the latest rates for the shipment
-        /// </summary>
-        public virtual RateGroup GetRates(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Apply the specified shipment profile to the given shipment.
         /// </summary>
         public virtual void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)

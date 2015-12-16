@@ -31,7 +31,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
             certificateInspector = new Mock<ICertificateInspector>();
 
             fedExShipmentType = new Mock<FedExShipmentType>();
-            fedExShipmentType.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(new RateGroup(new List<RateResult>()));
             fedExShipmentType.SetupAllProperties();
 
             testObject = new FedExCounterRatesBroker(fedExShipmentType.Object, accountRepository.Object, settingsRepository.Object, certificateInspector.Object);

@@ -56,11 +56,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.iParcel
 
         protected override decimal RateShipment(ShipmentEntity shipment)
         {
-            iParcelShipmentType iParcelShipmentType = new iParcelShipmentType();
-            RateGroup response = iParcelShipmentType.GetRates(shipment);
-
-
-            return response.Rates.Sum(x => x.Amount);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IRatingService ratingService = lifetimeScope.ResolveKeyed<IRatingService>(ShipmentTypeCode.iParcel);
+                return ratingService.GetRates(shipment).Rates.Sum(x=>x.Amount);
+            }
         }
 
         protected override void ShipShipment(ShipmentEntity shipment)
