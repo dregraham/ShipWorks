@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +17,7 @@ namespace ShipWorks.UI.Behaviors
 #pragma warning disable S1066 // Collapsible "if" statements should be merged
 #pragma warning disable S121
 #pragma warning disable S1541
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class TextBoxInputRegExBehavior : Behavior<TextBox>
     {
         /// <summary>
