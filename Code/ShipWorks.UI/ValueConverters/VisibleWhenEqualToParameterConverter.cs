@@ -1,7 +1,6 @@
 ﻿using ShipWorks.UI.Controls.Design;
 using System;
 using System.Globalization;
-using System.Reflection;
 using System.Windows;
 
 namespace ShipWorks.UI.ValueConverters
@@ -9,7 +8,6 @@ namespace ShipWorks.UI.ValueConverters
     /// <summary>
     /// Show or hide UI elements based on whether a bound property is equal to the converter parameter
     /// </summary>
-    [Obfuscation(Exclude = true)]
     public class VisibleWhenEqualToParameterConverter : ValueEqualToParameterConverter
     {
         /// <summary>
