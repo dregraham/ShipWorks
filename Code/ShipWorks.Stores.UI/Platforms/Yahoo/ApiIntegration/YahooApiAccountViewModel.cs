@@ -226,7 +226,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 
             if (BackupOrderNumber != null && BackupOrderNumber < 0)
             {
-                return "Yahoo does not support negative order numbers";
+                return "Yahoo only supports positive, numeric order numbers";
             }
 
             try

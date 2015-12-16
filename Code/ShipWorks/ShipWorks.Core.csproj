@@ -10115,7 +10115,7 @@
     <None Include="Resources\Progress\refresh_lightblue.gif" />
     <None Include="Resources\Progress\squares_green.gif" />
     <None Include="Resources\Progress\squares_blue.gif" />
-    <None Include="Resources\Progress\circle_ball_blue.gif" />
+    <Resource Include="Resources\Progress\circle_ball_blue.gif" />
     <None Include="Resources\Progress\kit_blue.gif" />
     <None Include="Resources\Progress\wheel_blue.gif" />
     <None Include="Resources\Progress\wheel_greengray.gif" />
