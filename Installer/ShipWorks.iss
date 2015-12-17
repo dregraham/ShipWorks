@@ -100,9 +100,12 @@ Source: {#AppArtifacts}\Common.Logging.dll; DestDir: {app}; Flags: overwriteread
 Source: {#AppArtifacts}\ComponentFactory.Krypton.Toolkit.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Divelements.SandGrid.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Divelements.SandRibbon.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\GalaSoft.MvvmLight.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\GalaSoft.MvvmLight.Extras.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Interapptive.Shared.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\log4net.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Microsoft.Web.Services3.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Microsoft.Practices.ServiceLocation.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\NAudio.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Newtonsoft.Json.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Quartz.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
