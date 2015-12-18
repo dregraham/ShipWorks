@@ -6,6 +6,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
              xmlns:yahooValidation="clr-namespace:ShipWorks.Stores.UI.Platforms.Yahoo"
              FontFamily="Tahoma"
@@ -71,6 +72,9 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition MinHeight="22" />
+            </Grid.RowDefinitions>
             <Grid.Resources>
                 <Style TargetType="{x:Type Image}">
                     <Setter Property="HorizontalAlignment" Value="Right" />
@@ -86,6 +90,7 @@
                      VerticalAlignment="Center"
                      MaxLength="19"
                      Text="{Binding BackupOrderNumber,
+                                    TargetNullValue={x:Static sys:String.Empty},
                                     UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Behaviors>
                     <behaviors:TextBoxInputRegExBehavior EmptyValue=""
@@ -132,7 +137,15 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Foreground="Red"
-                       Text="{Binding ValidationErrorMessage}" />
+                       Text="{Binding ValidationErrorMessage}"
+                       Visibility="{Binding IsValid,
+                                            Converter={StaticResource VisibleWhenEqualToParameter},
+                                            ConverterParameter={x:Static yahooValidation:YahooOrderNumberValidation.Invalid}}" />
+
         </Grid>
+        <TextBlock Margin="0,8,0,0" Style="{StaticResource Section}">
+            <Run>Invalid Access Token? It may have expired. For more information,</Run>
+            <Hyperlink NavigateUri="{Binding HelpUrl}" RequestNavigate="HyperlinkOnRequestNavigate">click here.</Hyperlink>
+        </TextBlock>
     </StackPanel>
 </UserControl>

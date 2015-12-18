@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Yahoo;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
@@ -11,12 +13,27 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
     /// </summary>
     public class YahooApiAccountSettingsViewModel : YahooApiAccountViewModel, INotifyPropertyChanged
     {
+        private string helpUrl ;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiAccountSettingsViewModel"/> class.
         /// </summary>
+        /// <param name="storeTypeManager"></param>
         /// <param name="storeWebClient">The store web client.</param>
-        public YahooApiAccountSettingsViewModel(Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient) : base(storeWebClient)
+        public YahooApiAccountSettingsViewModel(IStoreTypeManager storeTypeManager, Func<YahooStoreEntity, IYahooApiWebClient> storeWebClient) : base(storeWebClient)
         {
+            YahooStoreType storeType = storeTypeManager.GetType(StoreTypeCode.Yahoo) as YahooStoreType;
+            HelpUrl = storeType?.InvalidAccessTokenHelpUrl;
+        }
+
+        /// <summary>
+        /// Help link URL
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string HelpUrl
+        {
+            get { return helpUrl; }
+            set { Handler.Set(nameof(HelpUrl), ref helpUrl, value); }
         }
 
         /// <summary>

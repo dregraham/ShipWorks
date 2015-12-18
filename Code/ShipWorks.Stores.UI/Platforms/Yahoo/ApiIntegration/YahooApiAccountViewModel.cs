@@ -92,8 +92,8 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         private bool IsValidationPropertyEntered(string propertyName)
         {
             return !string.IsNullOrWhiteSpace(YahooStoreID) &&
-                !string.IsNullOrWhiteSpace(AccessToken) &&
-                BackupOrderNumber.HasValue;
+                   !string.IsNullOrWhiteSpace(AccessToken);
+
         }
 
         /// <summary>
@@ -110,8 +110,14 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Validates the backup order number
         /// </summary>
-        private bool ValidateBackupOrderNumber(string arg)
+        private YahooOrderNumberValidation ValidateBackupOrderNumber(string arg)
         {
+            if (BackupOrderNumber == null)
+            {
+                ValidationErrorMessage = string.Empty;
+                return YahooOrderNumberValidation.NotValidated;
+            }
+
             try
             {
                 YahooResponse response = StoreWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
@@ -119,11 +125,11 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 
                 CheckCredentialsError(response);
 
-                return response.ErrorResourceList == null;
+                return response.ErrorResourceList == null ? YahooOrderNumberValidation.Valid : YahooOrderNumberValidation.Invalid;
             }
             catch (Exception)
             {
-                return false;
+                return YahooOrderNumberValidation.Invalid;
             }
         }
 
@@ -185,13 +191,14 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// </summary>
         protected void HandleChanges()
         {
+
             Handler.Where(IsValidationProperty)
                 .Where(IsValidationPropertyEntered)
-                .Do(_ => IsValid = YahooOrderNumberValidation.Validating)
+                .Do(_ => IsValid = (BackupOrderNumber == null) ? YahooOrderNumberValidation.NotValidated : YahooOrderNumberValidation.Validating)
                 .Throttle(TimeSpan.FromMilliseconds(350))
                 .ObserveOn(TaskPoolScheduler.Default)
                 .Select(ValidateBackupOrderNumber)
-                .Select(validationStatus => validationStatus ? YahooOrderNumberValidation.Valid : YahooOrderNumberValidation.Invalid)
+                .Select(validationStatus => validationStatus)
                 .ObserveOn(DispatcherScheduler.Current)
                 .Subscribe(validationStatus => IsValid = validationStatus);
         }

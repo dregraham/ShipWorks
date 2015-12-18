@@ -85,9 +85,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         }
 
         /// <summary>
-        /// Gets or sets the account settings help URL.
+        /// Link to article on adding a yahoo store
         /// </summary>
         public string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000068682-adding-a-yahoo-store-using-api";
+
+        /// <summary>
+        /// Link to article explaining how to renew an expired access token.
+        /// </summary>
+        public string InvalidAccessTokenHelpUrl => "http://support.shipworks.com/solution/articles/4000068682-adding-a-yahoo-store-using-api";
 
         /// <summary>
         /// Create a new default initialized instance of the store type

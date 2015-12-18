@@ -2,10 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:behaviors="clr-namespace:ShipWorks.UI.Behaviors;assembly=ShipWorks.UI"
-             xmlns:converters="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
              xmlns:wizardPages="clr-namespace:ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages"
              xmlns:yahooValidation="clr-namespace:ShipWorks.Stores.UI.Platforms.Yahoo"
              FontFamily="Tahoma"
@@ -15,7 +16,7 @@
              d:DesignWidth="400"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <converters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+        <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
     </UserControl.Resources>
     <StackPanel Margin="24,8,24,8">
         <StackPanel.Resources>
@@ -71,6 +72,9 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition MinHeight="22" />
+            </Grid.RowDefinitions>
             <Grid.Resources>
                 <Style TargetType="{x:Type Image}">
                     <Setter Property="HorizontalAlignment" Value="Right" />
@@ -86,6 +90,7 @@
                      VerticalAlignment="Center"
                      MaxLength="19"
                      Text="{Binding BackupOrderNumber,
+                                    TargetNullValue={x:Static sys:String.Empty},
                                     UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Behaviors>
                     <behaviors:TextBoxInputRegExBehavior EmptyValue=""
@@ -132,26 +137,32 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Foreground="Red"
-                       Text="{Binding ValidationErrorMessage}" />
+                       Text="{Binding ValidationErrorMessage}"
+                       Visibility="{Binding IsValid,
+                                            Converter={StaticResource VisibleWhenEqualToParameter},
+                                            ConverterParameter={x:Static yahooValidation:YahooOrderNumberValidation.NotValidated}}" />
         </Grid>
         <TextBlock Margin="0,8,0,0" Style="{StaticResource Section}">
             <Run>For help adding your Yahoo store,</Run>
-            <Hyperlink NavigateUri="{Binding HelpUrl}" RequestNavigate="HyperlinkOnRequestNavigate">click here</Hyperlink>
+            <Hyperlink NavigateUri="{Binding HelpUrl}" RequestNavigate="HyperlinkOnRequestNavigate">click here.</Hyperlink>
         </TextBlock>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="180" />
-                <ColumnDefinition Width="26" />
-                <ColumnDefinition Width="43" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
-                       Grid.ColumnSpan="3"
-                       Margin="0,10,8,1"
+                       Margin="0, 8, 0, 0"
                        VerticalAlignment="Center"
-                       Text="ShipWorks Yahoo Partner ID: ypa-005343935941" />
-            <Button Grid.Column="3"
-                    Margin="0, 8, 0, 0"
+                       Text="ShipWorks Yahoo Partner ID: " />
+            <TextBox Grid.Column="1"
+                     Margin="0, 8, 0, 0"
+                     HorizontalAlignment="Center"
+                     IsReadOnly="True"
+                     Text="ypa-005343935941" />
+            <Button Grid.Column="2"
+                    Margin="8, 8, 0, 0"
                     VerticalAlignment="Center"
                     Click="ButtonBaseOnClick"
                     Padding="3">
