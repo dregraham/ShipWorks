@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// Get the USPS rates for a shipment of the given information
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static List<RateResult> GetRates(ShipmentEntity shipment, LogEntryFactory logEntryFactory)
+        public static List<RateResult> GetRates(ShipmentEntity shipment, ILogEntryFactory logEntryFactory)
         {
             string xmlRequest;
 

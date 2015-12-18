@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public class EndiciaApiClient
     {
         private readonly ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
-        private readonly LogEntryFactory logEntryFactory;
+        private readonly ILogEntryFactory logEntryFactory;
         private readonly ICertificateInspector certificateInspector;
         readonly ILog log = LogManager.GetLogger(typeof(EndiciaApiClient));
 
@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="accountRepository">The account repository.</param>
         /// <param name="logEntryFactory">The log entry factory.</param>
         /// <param name="certificateInspector">The certificate inspector.</param>
-        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
+        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;

@@ -82,8 +82,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<LogEntryFactory>()
-                .AsImplementedInterfaces()
-                .AsSelf();
+                .AsImplementedInterfaces();
 
             current = builder.Build();
         }
