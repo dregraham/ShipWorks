@@ -18,6 +18,7 @@
              xmlns:shippingPanel="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel"
              xmlns:messages="clr-namespace:ShipWorks.Messaging.Messages;assembly=ShipWorks.Core"
              xmlns:loading="clr-namespace:ShipWorks.Shipping.Loading;assembly=ShipWorks.Shipping"
+             xmlns:customsControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.CustomsControl"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shippingPanel:ShippingPanelViewModel}"
              d:DesignHeight="1550" d:DesignWidth="350"
              SnapsToDevicePixels="True"
@@ -226,6 +227,15 @@
                                     Converter={StaticResource VisibleWhenEqualToParameter},
                                     ConverterParameter={x:Static shippingshared:ShipmentTypeCode.Other}}" />
                             </StackPanel>
+                        </Expander>
+                    </Border>
+                    <Border 
+                        DataContext="{Binding CustomsControlViewModel}" 
+                        Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}}">
+                        <Expander IsEnabled="True" Header="Customs"
+                                  IsExpanded="{Binding IsCustomsExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
+                                  Style="{StaticResource ExpanderStyle}">
+                            <customsControl:CustomsControl />
                         </Expander>
                     </Border>
                     <Grid Margin="{StaticResource SectionMargin}">

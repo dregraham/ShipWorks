@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
+using ShipWorks.Shipping.UI.ShippingPanel.CustomsControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
@@ -22,6 +23,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Return a new InsuranceViewModel
         /// </summary>
         /// <returns></returns>
-        InsuranceViewModel GetSInsuranceViewModel();
+        InsuranceViewModel GetInsuranceViewModel();
+
+        /// <summary>
+        /// Return a new CustomsControlViewModel
+        /// </summary>
+        /// <returns></returns>
+        CustomsControlViewModel GetCustomsControlViewModel();
     }
 }

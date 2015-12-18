@@ -1,5 +1,6 @@
 ﻿using System;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
+using ShipWorks.Shipping.UI.ShippingPanel.CustomsControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
@@ -12,17 +13,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly Func<ShipmentTypeCode, IShipmentViewModel> shipmentViewModelFactory;
         private readonly Func<AddressViewModel> addressViewModelFactory;
         private readonly Func<InsuranceViewModel> insuranceViewModelFactory;
+        private readonly Func<CustomsControlViewModel> customsControlViewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingViewModelFactory(Func<ShipmentTypeCode, IShipmentViewModel> shipmentViewModelFactory, 
                                         Func<AddressViewModel> addressViewModelFactory, 
-                                        Func<InsuranceViewModel> insuranceViewModelFactory)
+                                        Func<InsuranceViewModel> insuranceViewModelFactory,
+                                        Func<CustomsControlViewModel> customsControlViewModel)
         {
             this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.addressViewModelFactory = addressViewModelFactory;
             this.insuranceViewModelFactory = insuranceViewModelFactory;
+            this.customsControlViewModel = customsControlViewModel;
         }
 
         /// <summary>
@@ -47,9 +51,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Return a new InsuranceViewModel
         /// </summary>
         /// <returns></returns>
-        public InsuranceViewModel GetSInsuranceViewModel()
+        public InsuranceViewModel GetInsuranceViewModel()
         {
             return insuranceViewModelFactory();
+        }
+
+        /// <summary>
+        /// Return a new CustomsControlViewModel
+        /// </summary>
+        /// <returns></returns>
+        public CustomsControlViewModel GetCustomsControlViewModel()
+        {
+            return customsControlViewModel();
         }
     }
 }

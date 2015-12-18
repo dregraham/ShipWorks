@@ -83,5 +83,13 @@ namespace ShipWorks.Shipping
 
             return errors;
         }
+
+        /// <summary>
+        /// Create a new ShipmentCustomsItemEntity for the given shipment, filled in with defaults
+        /// </summary>
+        public ShipmentCustomsItemEntity CreateCustomsItem(ShipmentEntity shipment)
+        {
+            return CustomsManager.CreateCustomsItem(shipment);
+        }
     }
 }

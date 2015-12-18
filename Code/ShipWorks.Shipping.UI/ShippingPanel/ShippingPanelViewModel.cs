@@ -13,6 +13,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.UI.ShippingPanel.CustomsControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
@@ -60,6 +61,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             OpenShippingDialogCommand = new RelayCommand(SendShowShippingDlgMessage);
 
+            CustomsControlViewModel = shippingViewModelFactory.GetCustomsControlViewModel();
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
             Destination.IsAddressValidationEnabled = true;
@@ -265,6 +267,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             SupportsMultiplePackages = ShipmentAdapter.SupportsMultiplePackages;
 
             ShipmentViewModel.Load(ShipmentAdapter);
+            CustomsControlViewModel.Load(ShipmentAdapter);
         }
 
 #pragma warning disable S125 // Sections of code should not be "commented out"

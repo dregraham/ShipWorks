@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -156,6 +157,22 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             get { return shipment.IParcel.Service; }
             set { shipment.IParcel.Service = value; }
+        }
+
+        /// <summary>
+        /// The shipment's customs items
+        /// </summary>
+        public EntityCollection<ShipmentCustomsItemEntity> CustomsItems
+        {
+            get
+            {
+                if (!shipment.CustomsGenerated)
+                {
+                    UpdateDynamicData();
+                }
+
+                return shipment.CustomsItems;
+            }
         }
 
         /// <summary>

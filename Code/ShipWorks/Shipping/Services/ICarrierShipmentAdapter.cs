@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Services
@@ -76,6 +77,11 @@ namespace ShipWorks.Shipping.Services
         /// Service type selected
         /// </summary>
         int ServiceType { get; set; }
+
+        /// <summary>
+        /// Customs Items for the shipment
+        /// </summary>
+        EntityCollection<ShipmentCustomsItemEntity> CustomsItems { get; }
 
         /// <summary>
         /// List of package adapters for the shipment

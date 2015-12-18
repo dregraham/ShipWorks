@@ -10039,7 +10039,7 @@
     <None Include="Resources\data_disk.png" />
     <None Include="Resources\data_into.png" />
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\DropAssembly.sql" />
-    <None Include="Resources\delete2.png" />
+    <Resource Include="Resources\delete2.png" />
     <None Include="Resources\arrow_down_blue.png" />
     <None Include="Resources\arrow_up_blue.png" />
     <None Include="Resources\funnel_add.png" />
@@ -10158,7 +10158,7 @@
     <None Include="Resources\elements1.png" />
     <None Include="Resources\chart.png" />
     <None Include="Resources\preferences.png" />
-    <None Include="Resources\add2.png" />
+    <Resource Include="Resources\add2.png" />
     <None Include="Resources\disk_blue1.png" />
     <None Include="Resources\cut.png" />
     <None Include="Resources\copy.png" />
@@ -10254,7 +10254,7 @@
     <None Include="Resources\gear_run_disabled_16.png" />
     <None Include="Resources\gear_stop.png" />
     <None Include="Resources\media_play.png" />
-    <None Include="Resources\arrows_white.gif" />
+    <Resource Include="Resources\arrows_white.gif" />
     <None Include="Resources\folder_closed.png" />
     <None Include="Resources\funnel2.png" />
     <None Include="Resources\school4.png" />

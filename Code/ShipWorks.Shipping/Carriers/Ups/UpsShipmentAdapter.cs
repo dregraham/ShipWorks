@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Insurance;
@@ -157,6 +158,22 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             get { return shipment.Ups.Service; }
             set { shipment.Ups.Service = value; }
+        }
+
+        /// <summary>
+        /// The shipment's customs items
+        /// </summary>
+        public EntityCollection<ShipmentCustomsItemEntity> CustomsItems
+        {
+            get
+            {
+                if (!shipment.CustomsGenerated)
+                {
+                    UpdateDynamicData();
+                }
+
+                return shipment.CustomsItems;
+            }
         }
 
         /// <summary>

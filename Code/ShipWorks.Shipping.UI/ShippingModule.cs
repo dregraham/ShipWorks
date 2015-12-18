@@ -13,6 +13,7 @@ using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Shipping.UI.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
+using ShipWorks.Shipping.UI.ShippingPanel.CustomsControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
 namespace ShipWorks.Shipping.UI
@@ -52,6 +53,8 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<InsuranceViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
+
+            builder.RegisterType<CustomsControlViewModel>();
 
             builder.RegisterType<RatingPanelViewModel>();
 

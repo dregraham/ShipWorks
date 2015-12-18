@@ -197,6 +197,10 @@
     <Compile Include="ShippingPanel\AddressControl\AddressControl.xaml.cs">
       <DependentUpon>AddressControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShippingPanel\CustomsControl\CustomsControl.xaml.cs">
+      <DependentUpon>CustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingPanel\CustomsControl\CustomsControlViewModel.cs" />
     <Compile Include="ShippingPanel\InsuranceViewModel.Properties.cs" />
     <Compile Include="ShippingPanel\InsuranceViewModel.cs" />
     <Compile Include="ShippingPanel\IShippingViewModelFactory.cs" />
@@ -437,6 +441,10 @@
     <Page Include="ShippingPanel\AddressControl\AddressControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShippingPanel\CustomsControl\CustomsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ShippingPanel\ShipmentControl\OtherShipmentControl.xaml">
       <SubType>Designer</SubType>

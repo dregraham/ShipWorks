@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
@@ -154,6 +155,22 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             get { return shipment.OnTrac.Service; }
             set { shipment.OnTrac.Service = value; }
+        }
+
+        /// <summary>
+        /// The shipment's customs items
+        /// </summary>
+        public EntityCollection<ShipmentCustomsItemEntity> CustomsItems
+        {
+            get
+            {
+                if (!shipment.CustomsGenerated)
+                {
+                    UpdateDynamicData();
+                }
+
+                return shipment.CustomsItems;
+            }
         }
 
         /// <summary>

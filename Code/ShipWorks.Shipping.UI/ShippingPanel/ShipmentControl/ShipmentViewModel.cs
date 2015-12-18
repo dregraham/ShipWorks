@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             this.dimensionsManager = dimensionsManager;
             this.shippingViewModelFactory = shippingViewModelFactory;
 
-            insuranceViewModel = shippingViewModelFactory.GetSInsuranceViewModel();
+            insuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             shipmentAdapter.UsingInsurance = UsingInsurance;
             shipmentAdapter.ServiceType = ServiceType;
             
-            shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
+            //shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
 
             shipmentAdapter.UpdateDynamicData();
         }

@@ -18,5 +18,10 @@ namespace ShipWorks.Shipping
         /// Ensire customs items are loaded if the address or shipment type has changed
         /// </summary>
         IDictionary<ShipmentEntity, Exception> EnsureCustomsLoaded(IEnumerable<ShipmentEntity> shipments);
+
+        /// <summary>
+        /// Create a new ShipmentCustomsItemEntity for the given shipment, filled in with defaults
+        /// </summary>
+        ShipmentCustomsItemEntity CreateCustomsItem(ShipmentEntity shipment);
     }
 }

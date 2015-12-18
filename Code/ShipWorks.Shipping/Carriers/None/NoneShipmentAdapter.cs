@@ -4,6 +4,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 using System.Diagnostics.CodeAnalysis;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.None
 {
@@ -146,6 +147,11 @@ namespace ShipWorks.Shipping.Carriers.None
         /// Service type selected
         /// </summary>
         public int ServiceType { get; set; } = 0;
+
+        /// <summary>
+        /// The shipment's customs items
+        /// </summary>
+        public EntityCollection<ShipmentCustomsItemEntity> CustomsItems => new EntityCollection<ShipmentCustomsItemEntity>();
 
         /// <summary>
         /// List of package adapters for the shipment

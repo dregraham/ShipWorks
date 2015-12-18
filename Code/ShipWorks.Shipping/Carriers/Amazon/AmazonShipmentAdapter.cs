@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -153,6 +154,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Service type selected
         /// </summary>
         public int ServiceType { get; set; } = 0;
+
+        /// <summary>
+        /// The shipment's customs items
+        /// </summary>
+        public EntityCollection<ShipmentCustomsItemEntity> CustomsItems => new EntityCollection<ShipmentCustomsItemEntity>();
 
         /// <summary>
         /// List of package adapters for the shipment

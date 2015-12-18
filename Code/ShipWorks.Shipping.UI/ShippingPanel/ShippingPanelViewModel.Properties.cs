@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
+using ShipWorks.Shipping.UI.ShippingPanel.CustomsControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
@@ -21,6 +22,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private bool supportsAccounts;
         private string domesticInternationalText;
         private IShipmentViewModel shipmentViewModel;
+        private CustomsControlViewModel customsControlViewModel;
 
         /// <summary>
         /// Command to create a label
@@ -160,6 +162,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get { return shipmentViewModel; }
             set { handler.Set(nameof(ShipmentViewModel), ref shipmentViewModel, value); }
+        }
+
+        /// <summary>
+        /// The Customs Control View Model view model.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public CustomsControlViewModel CustomsControlViewModel
+        {
+            get { return customsControlViewModel; }
+            set { handler.Set(nameof(CustomsControlViewModel), ref customsControlViewModel, value); }
         }
 
         /// <summary>

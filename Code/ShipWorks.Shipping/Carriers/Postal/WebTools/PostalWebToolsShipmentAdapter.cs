@@ -5,6 +5,7 @@ using ShipWorks.Shipping.Services;
 using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -158,6 +159,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         {
             get { return shipment.Postal.Service; }
             set { shipment.Postal.Service = value; }
+        }
+
+        /// <summary>
+        /// The shipment's customs items
+        /// </summary>
+        public EntityCollection<ShipmentCustomsItemEntity> CustomsItems
+        {
+            get
+            {
+                if (!shipment.CustomsGenerated)
+                {
+                    UpdateDynamicData();
+                }
+
+                return shipment.CustomsItems;
+            }
         }
 
         /// <summary>
