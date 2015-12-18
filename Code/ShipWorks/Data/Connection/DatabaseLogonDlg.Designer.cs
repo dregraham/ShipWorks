@@ -76,6 +76,7 @@ namespace ShipWorks.Data.Connection
             // username
             // 
             this.username.Location = new System.Drawing.Point(123, 199);
+            this.username.MaxLength = 128;
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(217, 21);
             this.username.TabIndex = 10;
@@ -83,6 +84,7 @@ namespace ShipWorks.Data.Connection
             // password
             // 
             this.password.Location = new System.Drawing.Point(123, 225);
+            this.password.MaxLength = 128;
             this.password.Name = "password";
             this.password.Size = new System.Drawing.Size(217, 21);
             this.password.TabIndex = 12;

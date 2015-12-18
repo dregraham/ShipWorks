@@ -424,11 +424,8 @@ namespace ShipWorks.Shipping.ShipSense.Population
         public void ReleaseAppLock(string appLockName)
         {
             OpenConnection();
-            
-            if (SqlAppLockUtility.IsLocked(connection, appLockName))
-            {
-                SqlAppLockUtility.ReleaseLock(connection, appLockName);
-            }
+
+            SqlAppLockUtility.ReleaseLock(connection, appLockName);
         }
 
         /// <summary>
