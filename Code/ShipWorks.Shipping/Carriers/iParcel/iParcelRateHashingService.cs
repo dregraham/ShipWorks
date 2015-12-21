@@ -46,6 +46,5 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             return RatingFields.GetRatingHash(shipment, shipment.IParcel.Packages);
         }
-
     }
 }

@@ -50,8 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             account1 = new UspsAccountEntity { UspsAccountID = 1, CountryCode = "US" };
             account2 = new UspsAccountEntity { UspsAccountID = 2, CountryCode = "US" };
             account3 = new UspsAccountEntity { UspsAccountID = 3, CountryCode = "US" };
-
-
+            
             rate1 = new RateResult("Account 1a", "4", 12, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.TwoDays };
             rate2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
             rate3 = new RateResult("Account 1c", "1", 15, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };

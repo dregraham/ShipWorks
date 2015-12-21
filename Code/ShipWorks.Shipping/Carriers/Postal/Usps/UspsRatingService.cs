@@ -88,11 +88,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 // Fetch the rates now that we're setup to use counter rates
                 return GetRates(shipment);
-
             }
             catch (CounterRatesOriginAddressException)
             {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                RateGroup errorRates = new RateGroup(Enumerable.Empty<RateResult>());
                 errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.Usps]));
 
                 return errorRates;
@@ -139,7 +138,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             // Create a dummy task that will return an empty result
             TaskCompletionSource<RateGroup> completionSource = new TaskCompletionSource<RateGroup>();
-            completionSource.SetResult(new RateGroup(new List<RateResult>()));
+            completionSource.SetResult(new RateGroup(Enumerable.Empty<RateResult>()));
             return completionSource.Task;
         }
 

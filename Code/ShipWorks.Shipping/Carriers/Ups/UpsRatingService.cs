@@ -15,6 +15,9 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Ups
 {
+    /// <summary>
+    /// Rating service for Ups carrier
+    /// </summary>
     public class UpsRatingService : IRatingService
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;

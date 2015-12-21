@@ -12,14 +12,12 @@ namespace ShipWorks.Shipping
         /// Returns an empty list of rating fields
         /// </summary>
         public RatingFields RatingFields =>
-                    new RatingFields();
+            new RatingFields();
 
         /// <summary>
         /// Returns empty string
         /// </summary>
-        public string GetRatingHash(ShipmentEntity shipment)
-        {
-            return string.Empty;
-        }
+        public string GetRatingHash(ShipmentEntity shipment) =>
+            string.Empty;
     }
 }

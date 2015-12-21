@@ -58,9 +58,7 @@ namespace ShipWorks.Shipping
                 // This is a bad configuration on some level, so cache an empty rate group
                 // before throwing throwing the exceptions
                 RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, ex);
-                InvalidRateGroupShippingException shippingException = new InvalidRateGroupShippingException(invalidRateGroup, ex.Message, ex);
-
-                throw shippingException;
+                throw new InvalidRateGroupShippingException(invalidRateGroup, ex.Message, ex);
             }
         }
 
