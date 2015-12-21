@@ -230,7 +230,7 @@
                         </Expander>
                     </Border>
                     <Border 
-                        DataContext="{Binding CustomsControlViewModel}" 
+                        DataContext="{Binding ShipmentViewModel}" 
                         Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}}">
                         <Expander IsEnabled="True" Header="Customs"
                                   IsExpanded="{Binding IsCustomsExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"

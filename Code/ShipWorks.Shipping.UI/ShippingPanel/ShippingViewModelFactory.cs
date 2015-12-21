@@ -13,20 +13,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly Func<ShipmentTypeCode, IShipmentViewModel> shipmentViewModelFactory;
         private readonly Func<AddressViewModel> addressViewModelFactory;
         private readonly Func<InsuranceViewModel> insuranceViewModelFactory;
-        private readonly Func<CustomsControlViewModel> customsControlViewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingViewModelFactory(Func<ShipmentTypeCode, IShipmentViewModel> shipmentViewModelFactory, 
                                         Func<AddressViewModel> addressViewModelFactory, 
-                                        Func<InsuranceViewModel> insuranceViewModelFactory,
-                                        Func<CustomsControlViewModel> customsControlViewModel)
+                                        Func<InsuranceViewModel> insuranceViewModelFactory)
         {
             this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.addressViewModelFactory = addressViewModelFactory;
             this.insuranceViewModelFactory = insuranceViewModelFactory;
-            this.customsControlViewModel = customsControlViewModel;
         }
 
         /// <summary>
@@ -54,15 +51,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public InsuranceViewModel GetInsuranceViewModel()
         {
             return insuranceViewModelFactory();
-        }
-
-        /// <summary>
-        /// Return a new CustomsControlViewModel
-        /// </summary>
-        /// <returns></returns>
-        public CustomsControlViewModel GetCustomsControlViewModel()
-        {
-            return customsControlViewModel();
         }
     }
 }

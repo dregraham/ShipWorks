@@ -191,7 +191,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             {
                 handler.Set(nameof(SelectedDimensionsProfile), ref selectedDimensionsProfile, value, true);
 
-                if (SelectedDimensionsProfile != null)
+                if (SelectedDimensionsProfile != null && SelectedPackageAdapter != null)
                 {
                     if (SelectedDimensionsProfile.DimensionsProfileID == 0)
                     {

@@ -24,11 +24,5 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         /// <returns></returns>
         InsuranceViewModel GetInsuranceViewModel();
-
-        /// <summary>
-        /// Return a new CustomsControlViewModel
-        /// </summary>
-        /// <returns></returns>
-        CustomsControlViewModel GetCustomsControlViewModel();
     }
 }

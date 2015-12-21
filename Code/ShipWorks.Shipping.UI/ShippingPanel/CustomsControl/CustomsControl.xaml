@@ -69,7 +69,7 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="200"
-							DisplayMemberBinding="{Binding Description, UpdateSourceTrigger=PropertyChanged}">Description</GridViewColumn>
+							DisplayMemberBinding="{Binding Description, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}">Description</GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

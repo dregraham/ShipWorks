@@ -61,7 +61,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             OpenShippingDialogCommand = new RelayCommand(SendShowShippingDlgMessage);
 
-            CustomsControlViewModel = shippingViewModelFactory.GetCustomsControlViewModel();
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
             Destination.IsAddressValidationEnabled = true;
@@ -267,7 +266,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             SupportsMultiplePackages = ShipmentAdapter.SupportsMultiplePackages;
 
             ShipmentViewModel.Load(ShipmentAdapter);
-            CustomsControlViewModel.Load(ShipmentAdapter);
         }
 
 #pragma warning disable S125 // Sections of code should not be "commented out"

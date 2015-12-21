@@ -54,8 +54,6 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<InsuranceViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 
-            builder.RegisterType<CustomsControlViewModel>();
-
             builder.RegisterType<RatingPanelViewModel>();
 
             builder.RegisterType<ShippingConfiguration>()
