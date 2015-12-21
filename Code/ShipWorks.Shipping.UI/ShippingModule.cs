@@ -21,11 +21,9 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces();
 
             builder.RegisterType<CachedRatesService>()
-                .AsSelf()
                 .AsImplementedInterfaces();
-            
-            builder.RegisterType<RateHashingService>()
-                .AsSelf();
+
+            builder.RegisterType<RateHashingService>();
 
             // Return a ICertificateInspector
             // if no string is passed it will return a

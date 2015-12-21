@@ -18,8 +18,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
         {
             base.Load(builder);
 
-            builder.RegisterType<UpsOltShipmentType>()
-                .AsSelf();
+            builder.RegisterType<UpsOltShipmentType>();
 
             builder.RegisterType<UpsAccountRepository>()
                 .AsImplementedInterfaces()

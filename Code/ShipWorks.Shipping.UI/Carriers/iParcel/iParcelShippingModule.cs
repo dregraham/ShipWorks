@@ -30,16 +30,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 .Keyed<ILabelService>(ShipmentTypeCode.iParcel);
 
             builder.RegisterType<iParcelRateHashingService>()
-                .Keyed<IRateHashingService>(ShipmentTypeCode.iParcel)
-                .AsSelf();
+                .Keyed<IRateHashingService>(ShipmentTypeCode.iParcel);
 
             builder.RegisterType<iParcelRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.iParcel)
                 .AsImplementedInterfaces();
 
             builder.RegisterType<iParcelAccountRepository>()
-                .Keyed<CarrierAccountRepositoryBase<IParcelAccountEntity>>(ShipmentTypeCode.iParcel)
-                .AsSelf();
+                .Keyed<CarrierAccountRepositoryBase<IParcelAccountEntity>>(ShipmentTypeCode.iParcel);
         }
     }
 }
