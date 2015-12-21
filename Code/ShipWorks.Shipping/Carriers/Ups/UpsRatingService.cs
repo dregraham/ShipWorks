@@ -45,18 +45,18 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
+            // Determine if the user is hoping to get negotiated rates back
+            bool wantedNegotiated = false;
+
+            // Indicates if any of the rates returned were negotiated.
+            bool anyNegotiated = false;
+            bool allNegotiated = false;
+
+            List<UpsServiceRate> serviceRates;
+            List<UpsTransitTime> transitTimes;
+
             try
             {
-                // Determine if the user is hoping to get negotiated rates back
-                bool wantedNegotiated = false;
-
-                // Indicates if any of the rates returned were negotiated.
-                bool anyNegotiated = false;
-                bool allNegotiated = false;
-
-                List<UpsServiceRate> serviceRates;
-                List<UpsTransitTime> transitTimes;
-
                 // If there are no UPS Accounts then use the counter rates
                 if (!accountRepository.Accounts.Any() && !shipmentType.IsShipmentTypeRestricted)
                 {
@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// <summary>
         /// Adds the message result.
         /// </summary>
-        private static void AddMessageResult(ShipmentEntity shipment, bool wantedNegotiated, bool anyNegotiated, bool allNegotiated, List<RateResult> rates)
+        private static void AddMessageResult(ShipmentEntity shipment, bool wantedNegotiated, bool anyNegotiated, bool allNegotiated, IList<RateResult> rates)
         {
             if (rates.None())
             {
@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
             {
                 return transitTime.BusinessDays.ToString(CultureInfo.InvariantCulture);
             }
-            return "";
+            return string.Empty;
         }
 
         /// <summary>
@@ -208,8 +208,8 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         private List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
-            List<UpsServiceType> availableServices = shipmentType.GetAvailableServiceTypes()
-                .Select(s => (UpsServiceType)s).Union(new List<UpsServiceType> { (UpsServiceType)shipment.Ups.Service }).ToList();
+            IEnumerable<UpsServiceType> availableServices = shipmentType.GetAvailableServiceTypes()
+                .Select(s => (UpsServiceType)s).Union(new List<UpsServiceType> { (UpsServiceType)shipment.Ups.Service });
 
             return rates.Where(r => !(r.Tag is UpsServiceType) || availableServices.Contains(((UpsServiceType)r.Tag))).ToList();
         }
@@ -225,12 +225,9 @@ namespace ShipWorks.Shipping.Carriers.Ups
 
             foreach (UpsPackageEntity upsPackage in shipment.Ups.Packages)
             {
-                if (upsPackage.PackagingType == (int)UpsPackagingType.Custom)
+                if (upsPackage.PackagingType == (int)UpsPackagingType.Custom && !DimensionsAreValid(upsPackage))
                 {
-                    if (!DimensionsAreValid(upsPackage))
-                    {
-                        exceptionMessage += $"Package {packageIndex} has invalid dimensions.{Environment.NewLine}";
-                    }
+                    exceptionMessage += $"Package {packageIndex} has invalid dimensions.{Environment.NewLine}";
                 }
 
                 packageIndex++;
@@ -250,8 +247,11 @@ namespace ShipWorks.Shipping.Carriers.Ups
         private static bool DimensionsAreValid(UpsPackageEntity package)
         {
             // Only check the dimensions if the package type is custom 
-            if (package.PackagingType != (int)UpsPackagingType.Custom) return true;
-
+            if (package.PackagingType != (int) UpsPackagingType.Custom)
+            {
+                return true;
+            }
+                
             if (package.DimsLength <= 0 || package.DimsWidth <= 0 || package.DimsHeight <= 0)
             {
                 return false;
