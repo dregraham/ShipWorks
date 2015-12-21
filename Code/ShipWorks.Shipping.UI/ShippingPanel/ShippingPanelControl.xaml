@@ -193,8 +193,7 @@
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}({0})">
                                                     <Binding Path="DestinationAddressEditableState"
-                                                             Converter="{StaticResource EnumDescription}"
-                                                             ConverterParameter="{x:Static shippingcore:ShippingAddressEditStateType.Editable}"/>
+                                                             Converter="{StaticResource EnumDescription}" />
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>

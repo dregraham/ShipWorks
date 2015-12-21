@@ -42,8 +42,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         public void HandleShipmentsProcessed(ShippingPanelViewModel viewModel, ProcessShipmentResult processResults)
         {
-            ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(processResults.Shipment);
-            viewModel.Populate(shipmentAdapter);
+            if (processResults.IsSuccessful)
+            {
+                ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(processResults.Shipment);
+                viewModel.Populate(shipmentAdapter);
+            }
+            else
+            {
+                //TODO: Show why processing was not successful
+                viewModel.AllowEditing = true;
+            }
         }
     }
 }

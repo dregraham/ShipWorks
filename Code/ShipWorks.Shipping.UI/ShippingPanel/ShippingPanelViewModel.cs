@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void SaveToDatabase()
         {
-            if (ShipmentAdapter?.Shipment?.Processed ?? true)
+            if (!AllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
             {
                 return;
             }

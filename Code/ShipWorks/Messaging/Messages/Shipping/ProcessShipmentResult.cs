@@ -39,6 +39,6 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Was processing successful
         /// </summary>
-        public bool IsSuccessful => Error != null;
+        public bool IsSuccessful => Error == null;
     }
 }

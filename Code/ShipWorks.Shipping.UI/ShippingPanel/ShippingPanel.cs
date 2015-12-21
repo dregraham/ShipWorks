@@ -23,7 +23,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         ShippingPanelControl shippingPanelControl;
         readonly ShippingPanelViewModel viewModel;
         readonly IMessenger messenger;
-        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
