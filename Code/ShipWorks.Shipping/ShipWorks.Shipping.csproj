@@ -179,7 +179,6 @@
     <Compile Include="Carriers\Postal\Usps\UspsRateHashingService.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsRatingService.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsLabelService.cs" />
-    <Compile Include="Carriers\Postal\WebTools\WebToolsRateHashingService.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsRatingService.cs" />
     <Compile Include="Carriers\Ups\UpsLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsOltLabelService.cs" />

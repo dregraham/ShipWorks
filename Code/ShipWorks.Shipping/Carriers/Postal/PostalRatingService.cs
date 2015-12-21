@@ -45,25 +45,22 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
             catch (CounterRatesOriginAddressException)
             {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                RateGroup errorRates = new RateGroup(Enumerable.Empty<RateResult>());
                 errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentTypeFactory[(ShipmentTypeCode)shipment.ShipmentType]));
                 return errorRates;
             }
 
-            RateGroup rates = new RateGroup(new List<RateResult>());
+            RateGroup rates = new RateGroup(Enumerable.Empty<RateResult>());
 
             if (!shipmentTypeFactory[(ShipmentTypeCode)shipment.ShipmentType].IsShipmentTypeRestricted)
             {
                 // Only get counter rates if the shipment type has not been restricted
                 rates = ratingServiceFactory[ShipmentTypeCode.PostalWebTools].GetRates(shipment);
-                rates.Rates.ForEach(x =>
+
+                foreach (RateResult rate in rates.Rates.Where(rate => rate.ProviderLogo != null))
                 {
-                    if (x.ProviderLogo != null)
-                    {
-                        // Only change existing logos; don't set logos for rates that don't have them
-                        x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType);
-                    }
-                });
+                    rate.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType);
+                }
             }
 
             return rates;

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 
 namespace ShipWorks.Shipping.UI.Carriers.Postal.WebTools
@@ -20,7 +21,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.WebTools
             builder.RegisterType<WebToolsRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.PostalWebTools);
 
-            builder.RegisterType<WebToolsRateHashingService>()
+            builder.RegisterType<PostalRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.PostalWebTools);
         }
     }
