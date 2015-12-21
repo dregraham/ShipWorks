@@ -71,9 +71,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Get counter rates if we don't have any Endicia accounts, letting the Postal shipment type take care of caching
             // since it should be using a different cache key
-            return accountRepository.Accounts.Any() ?
-                GetRatesInternal(shipment) :
-                GetCounterRates(shipment);
+            try
+            {
+                return accountRepository.Accounts.Any() ?
+                    GetRatesInternal(shipment) :
+                    GetCounterRates(shipment);
+            }
+            catch (UspsApiException ex)
+            {
+                throw new ShippingException(ex.Message, ex);
+            }
+
         }
         
         /// <summary>
