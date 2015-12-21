@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
@@ -11,6 +10,9 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
+    /// <summary>
+    /// Rating service for Express1 for Endicia
+    /// </summary>
     public class Express1EndiciaRatingService : EndiciaRatingService
     {
         public Express1EndiciaRatingService(
@@ -32,7 +34,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         protected override List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
-            List<PostalServiceType> availableServiceTypes = GetShipmentType(shipment).GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList(); ;
+            List<PostalServiceType> availableServiceTypes =
+                GetShipmentType(shipment).GetAvailableServiceTypes().OfType<PostalServiceType>().ToList();
 
             if (shipment.Postal.Endicia.OriginalEndiciaAccountID == null)
             {

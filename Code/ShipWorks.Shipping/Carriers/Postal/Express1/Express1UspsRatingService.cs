@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -15,13 +14,18 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
+    /// <summary>
+    /// Rating service for the Express1 for Usps carrier
+    /// </summary>
     public class Express1UspsRatingService : UspsRatingService
     {
-        public Express1UspsRatingService(ICachedRatesService cachedRatesService,
+        public Express1UspsRatingService(
+            IDateTimeProvider dateTimeProvider,
+            ICachedRatesService cachedRatesService,
             IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, 
             Express1UspsAccountRepository accountRepository,
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory) : 
-            base(cachedRatesService, ratingServiceFactory, shipmentTypeFactory, accountRepository)
+            base(dateTimeProvider, cachedRatesService, ratingServiceFactory, shipmentTypeFactory, accountRepository)
         {
         }
 
@@ -77,7 +81,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         protected override List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
-            List<PostalServiceType> availableServiceTypes = shipmentTypeFactory[ShipmentTypeCode.Express1Usps].GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList(); ;
+            List<PostalServiceType> availableServiceTypes =
+                shipmentTypeFactory[ShipmentTypeCode.Express1Usps].GetAvailableServiceTypes()
+                    .OfType<PostalServiceType>()
+                    .ToList();
 
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Usps)
             {

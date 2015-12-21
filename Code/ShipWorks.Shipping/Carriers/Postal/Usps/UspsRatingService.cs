@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -32,6 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     {
         private const int MinNumberOfDaysBeforeShowingUspsPromo = 14;
 
+        private readonly IDateTimeProvider dateTimeProvider;
         private readonly ICachedRatesService cachedRatesService;
         private readonly IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory;
         protected ICarrierAccountRepository<UspsAccountEntity> accountRepository;
@@ -39,12 +41,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsRatingService(ICachedRatesService cachedRatesService,
+        public UspsRatingService(IDateTimeProvider dateTimeProvider,
+            ICachedRatesService cachedRatesService,
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory,
             IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
             ICarrierAccountRepository<UspsAccountEntity> accountRepository)
             : base(ratingServiceFactory, shipmentTypeFactory)
         {
+            this.dateTimeProvider = dateTimeProvider;
             this.cachedRatesService = cachedRatesService;
             this.ratingServiceFactory = ratingServiceFactory;
             this.accountRepository = accountRepository;
@@ -254,7 +258,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // to a limitation on USPS' side. (Tango will send these to ShipWorks via data contained
             // in ShipmentTypeFunctionality
             bool accountConversionRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode.Usps).Level == EditionRestrictionLevel.Forbidden;
-            TimeSpan accountCreatedTimespan = DateTime.UtcNow - uspsAccount.CreatedDate;
+            TimeSpan accountCreatedTimespan = dateTimeProvider.UtcNow - uspsAccount.CreatedDate;
 
             if (contractType == UspsAccountContractType.Commercial &&
                 (InterapptiveOnly.MagicKeysDown || accountCreatedTimespan.TotalDays >= MinNumberOfDaysBeforeShowingUspsPromo) &&
@@ -298,41 +302,43 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="account">The account.</param>
         private void UpdateContractType(UspsAccountEntity account)
         {
-            if (account != null)
+            if (account == null)
             {
-                // We want to update the contract if it's not in the cache (or dropped out) or if the contract type is unknown; the cache is used
-                // so we don't have to perform this everytime, but does allow ShipWorks to handle cases where the contract type may have been
-                // updated outside of ShipWorks.
-                if (!UspsContractTypeCache.Contains(account.UspsAccountID) || UspsContractTypeCache.GetContractType(account.UspsAccountID) == UspsAccountContractType.Unknown)
+                return;
+            }
+                
+            // We want to update the contract if it's not in the cache (or dropped out) or if the contract type is unknown; the cache is used
+            // so we don't have to perform this everytime, but does allow ShipWorks to handle cases where the contract type may have been
+            // updated outside of ShipWorks.
+            if (!UspsContractTypeCache.Contains(account.UspsAccountID) || UspsContractTypeCache.GetContractType(account.UspsAccountID) == UspsAccountContractType.Unknown)
+            {
+                try
                 {
-                    try
+                    // Grab contract type from the USPS API 
+                    UspsAccountContractType contractType = CreateWebClient().GetContractType(account);
+
+                    bool hasContractChanged = account.ContractType != (int)contractType;
+                    account.ContractType = (int)contractType;
+
+                    // Save the contract to the DB and update the cache
+                    accountRepository.Save(account);
+                    UspsContractTypeCache.Set(account.UspsAccountID, (UspsAccountContractType)account.ContractType);
+
+                    if (hasContractChanged)
                     {
-                        // Grab contract type from the USPS API 
-                        UspsAccountContractType contractType = CreateWebClient().GetContractType(account);
+                        // Any cached rates are probably invalid now
+                        RateCache.Instance.Clear();
 
-                        bool hasContractChanged = account.ContractType != (int)contractType;
-                        account.ContractType = (int)contractType;
-
-                        // Save the contract to the DB and update the cache
-                        accountRepository.Save(account);
-                        UspsContractTypeCache.Set(account.UspsAccountID, (UspsAccountContractType)account.ContractType);
-
-                        if (hasContractChanged)
-                        {
-                            // Any cached rates are probably invalid now
-                            RateCache.Instance.Clear();
-
-                            // Only notify Tango of changes so it has the latest information (and cuts down on traffic)
-                            ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                            tangoWebClient.LogUspsAccount(account);
-                        }
+                        // Only notify Tango of changes so it has the latest information (and cuts down on traffic)
+                        ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+                        tangoWebClient.LogUspsAccount(account);
                     }
-                    catch (Exception exception)
-                    {
-                        // Log the error
-                        LogManager.GetLogger(GetType()).Error(
-                            $"ShipWorks encountered an error when getting contract type for account {account.Username}.", exception);
-                    }
+                }
+                catch (Exception exception)
+                {
+                    // Log the error
+                    LogManager.GetLogger(GetType()).Error(
+                        $"ShipWorks encountered an error when getting contract type for account {account.Username}.", exception);
                 }
             }
         }

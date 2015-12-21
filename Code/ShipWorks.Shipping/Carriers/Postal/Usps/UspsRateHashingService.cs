@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.HelperClasses;
+﻿using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
+    /// <summary>
+    /// Rate hashing service for the Usps carrier
+    /// </summary>
     public class UspsRateHashingService : PostalRateHashingService
     {
         /// <summary>
