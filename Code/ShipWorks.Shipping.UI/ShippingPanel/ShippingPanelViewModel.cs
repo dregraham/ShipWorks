@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Collections;
 using ShipWorks.Core.Messaging;
@@ -11,6 +12,7 @@ using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
@@ -78,7 +80,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             WireUpObservables();
 
             PropertyChanging += OnPropertyChanging;
+
+            ProcessShipmentCommand = new RelayCommand(ProcessShipment);
         }
+
+        /// <summary>
+        /// Command that triggers processing of the current shipment
+        /// </summary>
+        public ICommand ProcessShipmentCommand { get; }
 
         /// <summary>
         /// Is the current shipment domestic
@@ -152,7 +161,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public void SaveToDatabase()
         {
-            if (ShipmentAdapter?.Shipment?.Processed ?? true) 
+            if (!AllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
             {
                 return;
             }
@@ -267,22 +276,22 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ShipmentViewModel.Load(ShipmentAdapter);
         }
 
-#pragma warning disable S125 // Sections of code should not be "commented out"
-        ///// <summary>
-        ///// Process the current shipment using the specified processor
-        ///// </summary>
-        //public async Task ProcessShipment()
-        //{
-        //    Save();
+        /// <summary>
+        /// Process the current shipment using the specified processor
+        /// </summary>
+        public void ProcessShipment()
+        {
+            if (!AllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
+            {
+                return;
+            }
 
-        //    using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory().Value)
-        //    {
-        //        IEnumerable<ShipmentEntity> shipments = await shipmentProcessor.Process(new[] { shipmentAdapter.Shipment }, refresher, null, null);
-        //        //await LoadOrder(null);
-        //        AllowEditing = (shipments?.FirstOrDefault()?.Processed ?? false) == false;
-        //    }
-        //}
-#pragma warning restore S125 // Sections of code should not be "commented out"
+            SaveToDatabase();
+
+            AllowEditing = false;
+
+            messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment }));
+        }
 
         /// <summary>
         /// Save the UI values to the shipment

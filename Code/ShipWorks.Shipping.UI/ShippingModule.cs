@@ -27,64 +27,31 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ShippingPanelRegistration>()
-                .AsImplementedInterfaces()
-                .PreserveExistingDefaults();
-
-            builder.RegisterType<RatingPanelRegistration>()
-                .AsImplementedInterfaces()
-                .PreserveExistingDefaults();
-
-            builder.RegisterType<ShippingPanelViewModel>()
-                .FindConstructorsWith(new NonDefaultConstructorFinder());
-
-            builder.RegisterType<ShipmentViewModel>()
-                .FindConstructorsWith(new NonDefaultConstructorFinder());
-
-            builder.RegisterType<OtherShipmentViewModel>();
-
-            builder.Register((container, parameters) =>
-            {
-                return parameters.TypedAs<ShipmentTypeCode>() == ShipmentTypeCode.Other ?
-                    (IShipmentViewModel) container.Resolve<OtherShipmentViewModel>() :
-                     container.Resolve<ShipmentViewModel>();
-            });
-
-            builder.RegisterType<InsuranceViewModel>()
-                .FindConstructorsWith(new NonDefaultConstructorFinder());
-
-            builder.RegisterType<RatingPanelViewModel>();
-
-            builder.RegisterType<ShippingConfiguration>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<ShipmentTypeProvider>();
-
-            builder.RegisterType<ShipmentLoader>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<ShipmentAddressValidator>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<RatingPanel.RatingPanel>();
+            builder.RegisterType<AddressValidator>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<AddressViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 
-            builder.RegisterType<ShipmentProcessor>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<ShippingErrorManager>()
+            builder.RegisterType<CarrierAccountRetrieverFactory>()
                 .AsImplementedInterfaces()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<CarrierConfigurationShipmentRefresher>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<ShipmentTypeFactory>()
+            builder.RegisterType<CarrierShipmentAdapterFactory>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
+            builder.RegisterType<CustomsManagerWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<DimensionsManagerWrapper>()
+                            .AsImplementedInterfaces()
+                            .SingleInstance();
+
+            builder.RegisterType<ExcludedPackageTypeRepository>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -92,14 +59,41 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ExcludedPackageTypeRepository>()
+            builder.RegisterType<InsuranceViewModel>()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
+
+            builder.RegisterType<MessageHelperWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<OrderSelectionChangedHandler>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<OtherShipmentViewModel>();
+
+            builder.RegisterType<RatingPanelRegistration>()
+                .AsImplementedInterfaces()
+                .PreserveExistingDefaults();
+
+            builder.RegisterType<RateSelectionFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<CustomsManagerWrapper>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<RatingPanel.RatingPanel>();
 
-            builder.RegisterType<ShipmentServicesBuilderFactory>()
+            builder.RegisterType<RatingPanelViewModel>();
+
+            builder.RegisterType<ShipmentViewModel>()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
+
+            builder.RegisterType<ShipmentAddressValidator>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShipmentLoader>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShipmentLoaderService>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -107,7 +101,13 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<RateSelectionFactory>()
+            builder.RegisterType<ShipmentProcessor>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ShipmentProcessorService>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ShipmentServicesBuilderFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -115,39 +115,43 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<ShipmentTypeFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShipmentTypeProvider>();
+
             builder.RegisterType<ShippingAccountListProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<ShippingConfiguration>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShippingErrorManager>()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<ShippingManagerWrapper>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<ShippingOriginManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<CarrierAccountRetrieverFactory>()
+            builder.RegisterType<ShippingPanelRegistration>()
                 .AsImplementedInterfaces()
-                .SingleInstance();
+                .PreserveExistingDefaults();
 
-            builder.RegisterType<CarrierShipmentAdapterFactory>()
-                .AsImplementedInterfaces()
-                .ExternallyOwned();
-
-            builder.RegisterType<ShipmentLoaderService>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<OrderSelectionChangedHandler>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<MessageHelperWrapper>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<ShippingPanelViewModel>()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
 
             builder.RegisterType<ShippingProfileEditorDlg>();
 
-            builder.RegisterType<ShippingManagerWrapper>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<AddressValidator>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<ShippingViewModelFactory>()
+                            .AsImplementedInterfaces()
+                            .SingleInstance();
 
             builder.RegisterType<StampsAddressValidationWebClient>()
                 .AsImplementedInterfaces();
@@ -156,13 +160,12 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ShippingViewModelFactory>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<DimensionsManagerWrapper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+            builder.Register((container, parameters) =>
+            {
+                return parameters.TypedAs<ShipmentTypeCode>() == ShipmentTypeCode.Other ?
+                    (IShipmentViewModel) container.Resolve<OtherShipmentViewModel>() :
+                     container.Resolve<ShipmentViewModel>();
+            });
         }
     }
 }

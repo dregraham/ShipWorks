@@ -1,7 +1,7 @@
-﻿using ShipWorks.UI.Controls.Design;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Shipping.UI.ValueConverters
 {
@@ -37,16 +37,9 @@ namespace ShipWorks.Shipping.UI.ValueConverters
         /// <summary>
         /// Return true if the bound value is equal to the converter parameter, else false
         /// </summary>
-        public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (targetType != typeof(bool))
-            {
-                throw new InvalidOperationException("Destination type of value converter must be a bool");
-            }
+        public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+            inDesignMode || (Equals(value, parameter) ^ Invert);
 
-            return inDesignMode || (Equals(value, parameter) ^ Invert);
-        }
-        
         /// <summary>
         /// Converting back does not make sense here
         /// </summary>

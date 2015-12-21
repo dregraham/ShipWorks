@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.UI.AttachedProperties
         /// </summary>
         static SelectDefaultWhenValueIsNull()
         {
-            Selector.SelectedValueProperty.OverrideMetadata(typeof(ComboBox),
+            Selector.SelectedValueProperty.OverrideMetadata(typeof(SelectDefaultWhenValueIsNull),
                 new FrameworkPropertyMetadata(null, new CoerceValueCallback(HandleValueCoercion)));
         }
 

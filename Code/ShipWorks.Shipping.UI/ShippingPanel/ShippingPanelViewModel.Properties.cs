@@ -23,11 +23,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private IShipmentViewModel shipmentViewModel;
 
         /// <summary>
-        /// Command to create a label
-        /// </summary>
-        public ICommand CreateLabelCommand { get; }
-
-        /// <summary>
         /// Command to open the shipping dialog
         /// </summary>
         public ICommand OpenShippingDialogCommand { get; }

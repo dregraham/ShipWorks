@@ -1,8 +1,9 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing.Rating;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping
 {
@@ -18,7 +19,8 @@ namespace ShipWorks.Shipping
         /// <param name="chosenRate">Rate that was chosen to use, if there was any</param>
         /// <param name="counterRateCarrierConfiguredWhileProcessing">Execute after a counter rate carrier was configured</param>
         /// <returns></returns>
-        Task<IEnumerable<ShipmentEntity>> Process(IEnumerable<ShipmentEntity> shipments, ICarrierConfigurationShipmentRefresher shipmentRefresher, 
+        Task<IEnumerable<ProcessShipmentResult>> Process(IEnumerable<ShipmentEntity> shipments,
+            ICarrierConfigurationShipmentRefresher shipmentRefresher,
             RateResult chosenRate, Action counterRateCarrierConfiguredWhileProcessing);
 
         /// <summary>

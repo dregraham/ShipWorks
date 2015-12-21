@@ -852,7 +852,6 @@
     <Compile Include="Messaging\IShipWorksMessage.cs" />
     <Compile Include="Messaging\Messages\CarrierConfiguredMessage.cs" />
     <Compile Include="Messaging\Messages\ConfiguringCarrierMessage.cs" />
-    <Compile Include="Messaging\Messages\CreateLabelMessage.cs" />
     <Compile Include="Messaging\Messages\EnabledCarriersChangedMessage.cs" />
     <Compile Include="Messaging\Messages\FedExServiceTypeChangedMessage.cs" />
     <Compile Include="Messaging\Messages\FilterNodeEditedMessage.cs" />
@@ -865,7 +864,10 @@
     <Compile Include="Messaging\Messages\DimensionsProfilesChangedMessage.cs" />
     <Compile Include="Messaging\Messages\ShippingAccountsChangedMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\OrderSelectionLoaded.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ProcessShipmentResult.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ProcessShipmentsMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\ShipmentDeletedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\ShipmentsProcessedMessage.cs" />
     <Compile Include="Messaging\Messages\StoreChangedMessage.cs" />
     <Compile Include="Messaging\Messages\UspsAccountCreatedMessage.cs" />
     <Compile Include="Messaging\Messages\UspsAutomaticExpeditedChangedMessage.cs" />
