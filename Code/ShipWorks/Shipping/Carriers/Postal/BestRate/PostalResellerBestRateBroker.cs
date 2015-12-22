@@ -1,16 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Editing;
-using System;
-using Autofac;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Properties;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
@@ -58,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 
             rates = rates.CopyWithRates(MergeDescriptionsWithNonSelectableRates(rates.Rates));
             // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
-            rates.Rates.ForEach(f => UseProperUspsLogo(f));
+            rates.Rates.ForEach(UseProperUspsLogo);
 
             return rates;
         }
@@ -82,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <param name="rates">Collection of rates to update</param>
         /// <remarks>It is important that these rates are in the same order that they are returned from
         /// the shipment type's GetRates method or the merging could be incorrect</remarks>
-        protected List<RateResult>  MergeDescriptionsWithNonSelectableRates(IEnumerable<RateResult> rates)
+        protected List<RateResult> MergeDescriptionsWithNonSelectableRates(IEnumerable<RateResult> rates)
         {
             Regex beginsWithSpaces = new Regex("^[ ]+");
             Regex removeDeliveryConfirmation = new Regex(@" Delivery Confirmation \(\$\d*\.\d\d\)");
