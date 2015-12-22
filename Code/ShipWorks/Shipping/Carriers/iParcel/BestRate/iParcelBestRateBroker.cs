@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         /// </summary>
         /// <remarks>This is designed to be used within ShipWorks</remarks>
         public iParcelBestRateBroker()
-            : this(new iParcelShipmentType(), new iParcelAccountRepository())
+            : this(ShipmentTypeManager.GetType(ShipmentTypeCode.iParcel), new iParcelAccountRepository())
         {
 
         }

@@ -65,8 +65,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.iParcel
 
         protected override void ShipShipment(ShipmentEntity shipment)
         {
-            iParcelShipmentType iParcelShipmentType = new iParcelShipmentType();
-            
             // remove the default package that gets created in the ConfigureNewShipment method
             using (SqlAdapter adapter = new SqlAdapter(true))
             {

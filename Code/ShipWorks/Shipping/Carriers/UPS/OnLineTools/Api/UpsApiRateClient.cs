@@ -89,7 +89,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 firstExceptionEncountered = e;
             }
             
-
             if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None)
             {
                 UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
@@ -127,6 +126,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             return rates;
         }
 
+        /// <summary>
+        /// Gets rates for the shipment using counter rates if useCounterRates is true
+        /// </summary>
         public List<UpsServiceRate> GetRates(ShipmentEntity shipment, bool useCounterRates)
         {
             // Create the appropriate settings, certificate inspector
@@ -138,7 +140,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
             else
             {
-
                 settingsRepository = new UpsSettingsRepository();
                 certificateInspector = new TrustingCertificateInspector();
                 accountRepository = new UpsAccountRepository();

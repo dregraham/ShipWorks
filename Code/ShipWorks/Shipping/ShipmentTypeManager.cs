@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping
                     return new OnTracShipmentType();
 
                 case ShipmentTypeCode.iParcel:
-                    return new iParcelShipmentType();
+                    return lifetimeScope.Resolve<iParcelShipmentType>();
 
                 case ShipmentTypeCode.BestRate:
                     return lifetimeScope.Resolve<BestRateShipmentType>();

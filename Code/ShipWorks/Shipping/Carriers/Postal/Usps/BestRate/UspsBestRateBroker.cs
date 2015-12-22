@@ -85,7 +85,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
             // Get rates from ISupportExpress1Rates if it is registered for the shipmenttypecode
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-
                 UspsShipmentType shipmentType = lifetimeScope.Resolve<UspsShipmentType>();
 
                 shipmentType.UpdateDynamicShipmentData(shipment);

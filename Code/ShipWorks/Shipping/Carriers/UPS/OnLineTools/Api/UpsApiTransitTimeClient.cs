@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// Get transit times for the given shipment
         /// Uses counter rates if sepecified 
         /// </summary>
-        public List<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, bool useCounterRates)
+        public IEnumerable<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, bool useCounterRates)
         {
             ICarrierSettingsRepository settingsRepository = null;
             ICertificateInspector certificateInspector = null;
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Get transit times for the given shipment
         /// </summary>
-        public List<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+        public IEnumerable<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
         {
             List<UpsTransitTime> upsTransitTimes = new List<UpsTransitTime>();
 

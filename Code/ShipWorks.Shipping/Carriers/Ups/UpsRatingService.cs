@@ -52,8 +52,8 @@ namespace ShipWorks.Shipping.Carriers.Ups
             bool anyNegotiated = false;
             bool allNegotiated = false;
 
-            List<UpsServiceRate> serviceRates;
-            List<UpsTransitTime> transitTimes;
+            IEnumerable<UpsServiceRate> serviceRates;
+            IEnumerable<UpsTransitTime> transitTimes;
 
             try
             {
@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// <summary>
         /// Adds the rate for each service.
         /// </summary>
-        private List<RateResult> AddRateForEachService(bool allNegotiated, List<UpsServiceRate> serviceRates, List<UpsTransitTime> transitTimes)
+        private List<RateResult> AddRateForEachService(bool allNegotiated, IEnumerable<UpsServiceRate> serviceRates, IEnumerable<UpsTransitTime> transitTimes)
         {
             List<RateResult> rates = new List<RateResult>();
 

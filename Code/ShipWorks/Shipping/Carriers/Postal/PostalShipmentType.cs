@@ -323,7 +323,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
-            return $"USPS {EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service)}";
+            return string.Format("USPS {0}", EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service));
         }
 
         /// <summary>

@@ -42,14 +42,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelShipmentType" /> class.
         /// </summary>
-        public iParcelShipmentType()
-            : this(new iParcelDatabaseRepository(), new iParcelServiceGateway())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="iParcelShipmentType" /> class.
-        /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="serviceGateway">The service gateway.</param>
         public iParcelShipmentType(IiParcelRepository repository, IiParcelServiceGateway serviceGateway)
@@ -735,7 +727,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
             catch (Exception exception)
             {
-                string message = $"ShipWorks was unable to obtain tracking information from i-parcel. {exception.Message}";
+                string message = "ShipWorks was unable to obtain tracking information from i-parcel. " + exception.Message;
                 throw new ShippingException(message, exception);
             }
         }
