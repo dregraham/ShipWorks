@@ -247,23 +247,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     order.RequestedShipping = $"{carrier} - {shippingClass}";
                 }
 
-                order.IsPrime = (int)GetIsPrime(shippingClass, carrier);
+                order.IsPrime = (int)ChannelAdvisorHelper.GetIsPrime(shippingClass, carrier);
             }
-        }
-
-        /// <summary>
-        /// Gets the prime status based on the shippingClass
-        /// </summary>
-        public static ChannelAdvisorIsAmazonPrime GetIsPrime(string shippingClass, string carrier)
-        {
-            if (string.IsNullOrEmpty(shippingClass) || string.IsNullOrEmpty(carrier))
-            {
-                return ChannelAdvisorIsAmazonPrime.Unknown;
-            }
-
-            return shippingClass.IndexOf("Prime", StringComparison.OrdinalIgnoreCase) >= 0 &&
-                   carrier.IndexOf("Amazon", StringComparison.OrdinalIgnoreCase) >= 0 ?
-                ChannelAdvisorIsAmazonPrime.Yes : ChannelAdvisorIsAmazonPrime.No;
         }
 
         /// <summary>
