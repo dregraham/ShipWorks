@@ -4,6 +4,9 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping
 {
+    /// <summary>
+    /// Interface for Cached Rates
+    /// </summary>
     public interface ICachedRatesService
     {
         /// <summary>

@@ -136,9 +136,6 @@
     <Compile Include="Carriers\Amazon\Api\DTOs\CreateShipmentResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\ErrorResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
-    <Compile Include="Carriers\Amazon\Api\DTOs\IResponseMetadata.cs" />
-    <Compile Include="Carriers\Amazon\Api\DTOs\IShipmentResponse.cs" />
-    <Compile Include="Carriers\Amazon\Api\DTOs\IShipmentResult.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonRatingService.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonShipmentRequestDetailsFactory.cs" />

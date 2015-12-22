@@ -767,24 +767,13 @@ namespace ShipWorks.Shipping
             // Get rates from rating service if it is registered, otherwise get rate from the shipmenttype
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                if (lifetimeScope.IsRegisteredWithKey<IRatingService>((ShipmentTypeCode)shipment.ShipmentType))
-                {
-                    ICachedRatesService cachedRatesService = lifetimeScope.Resolve<ICachedRatesService>();
+                ICachedRatesService cachedRatesService = lifetimeScope.Resolve<ICachedRatesService>();
 
-                    IRatingService ratingService =
-                        lifetimeScope.ResolveKeyed<IRatingService>((ShipmentTypeCode)shipment.ShipmentType);
+                IRatingService ratingService =
+                    lifetimeScope.ResolveKeyed<IRatingService>((ShipmentTypeCode)shipment.ShipmentType);
 
-                    // Check to see if the rate is cached, if not call the rating service
-                    rateResults = cachedRatesService.GetCachedRates<ShippingException>(clonedShipment, ratingService.GetRates);
-                }
-                else
-                {
-                    // Use the cloned shipment with the potentially adjusted shipping address to get the rates
-                    IRatingService ratingService =
-                        lifetimeScope.ResolveKeyed<IRatingService>(ShipmentTypeCode.Other);
-
-                    rateResults = ratingService.GetRates(clonedShipment);
-                }
+                // Check to see if the rate is cached, if not call the rating service
+                rateResults = cachedRatesService.GetCachedRates<ShippingException>(clonedShipment, ratingService.GetRates);
             }
 
             // Copy back any best rate events that were set on the clone
