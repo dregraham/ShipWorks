@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Core.Messaging;
@@ -19,8 +15,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 {
     public class ShipmentsProcessedPipelineTest : IDisposable
     {
-        AutoMock mock;
-        Subject<IShipWorksMessage> subject;
+        readonly AutoMock mock;
+        readonly Subject<IShipWorksMessage> subject;
 
         public ShipmentsProcessedPipelineTest()
         {
@@ -89,6 +85,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
         public void Dispose()
         {
+            subject.Dispose();
             mock.Dispose();
         }
     }

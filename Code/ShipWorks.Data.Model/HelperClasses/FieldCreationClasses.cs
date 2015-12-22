@@ -8042,6 +8042,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FtpAccountFieldIndex.InternalOwnerID);}
 		}
+		/// <summary>Creates a new FtpAccountEntity.ReuseControlConnectionSession field instance</summary>
+		public static EntityField2 ReuseControlConnectionSession
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FtpAccountFieldIndex.ReuseControlConnectionSession);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity GenericFileStoreEntity</summary>
@@ -22982,6 +22987,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.YahooProductID);}
 		}
+		/// <summary>Creates a new YahooOrderItemEntity.Url field instance</summary>
+		public static EntityField2 Url
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.Url);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity YahooProductEntity</summary>
@@ -23171,6 +23181,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 TrackingUpdatePassword
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.TrackingUpdatePassword);}
+		}
+		/// <summary>Creates a new YahooStoreEntity.YahooStoreID field instance</summary>
+		public static EntityField2 YahooStoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.YahooStoreID);}
+		}
+		/// <summary>Creates a new YahooStoreEntity.AccessToken field instance</summary>
+		public static EntityField2 AccessToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.AccessToken);}
+		}
+		/// <summary>Creates a new YahooStoreEntity.BackupOrderNumber field instance</summary>
+		public static EntityField2 BackupOrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.BackupOrderNumber);}
 		}
 	}
 	

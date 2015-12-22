@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -157,6 +158,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         /// <summary>
         /// Load our cache of UpsServiceMappings
         /// </summary>
+        [NDependIgnoreLongMethod]
         private List<UpsServiceMapping> LoadUpsServiceMappings()
         {
             List<UpsServiceMapping> tmpUpsServiceTypeMapping = new List<UpsServiceMapping>();

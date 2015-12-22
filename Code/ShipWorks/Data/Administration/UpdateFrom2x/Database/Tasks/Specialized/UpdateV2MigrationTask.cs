@@ -11,6 +11,7 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.IO.Zip;
 using System.Data;
 using System.Transactions;
+using Interapptive.Shared;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 
@@ -144,6 +145,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// These were upgrade definitions copied from v2 and changed into RegisterScripts() calls.
         /// New v2 update scripts go at the end.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void PrepareUpdateBatches()
         {
             #region V2 Scripts

@@ -149,7 +149,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
-
             var testObject = mock.Create<AmazonLabelService>();
             Assert.Throws<AmazonShippingException>(() => testObject.Create(defaultShipment));
 
@@ -223,7 +222,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 .Verifiable();
 
             labelEnforcers.AddRange(new[] { enforcer1.Object, enforcer2.Object });
-
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);

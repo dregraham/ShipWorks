@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             Shipment = shipment;
         }
 
+
         /// <summary>
         /// If the package is being insured PennyOne - only applies to FedEx\UPS shipments
         /// </summary>

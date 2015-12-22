@@ -14,6 +14,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using System.Security;
 using Common.Logging.Log4Net;
 using Common.Logging;
+using Interapptive.Shared;
 using NameValueCollection = Common.Logging.Configuration.NameValueCollection;
 
 namespace ShipWorks.ApplicationCore.Logging
@@ -276,6 +277,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// <summary>
         /// Runs on a schedule to see if any log files are in need of deleting.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void CleanupThread()
         {
             try

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -13,6 +14,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// <summary>
     /// OnTrac Shipping Profile
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class OnTracProfileControl : ShippingProfileControlBase
     {
         /// <summary>

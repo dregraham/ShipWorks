@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -47,6 +48,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Window from which all shipments are created
     /// </summary>
+    [NDependIgnoreLongTypes]
     partial class ShippingDlg : Form
     {
         // Logger
@@ -104,6 +106,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreLongMethod]
         public ShippingDlg(OpenShippingDialogMessage message, IShippingManager shippingManager, IShippingErrorManager errorManager,
             IMessenger messenger, ILifetimeScope lifetimeScope, Func<IShipmentProcessor> createShipmentProcessor,
             ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher, IShipmentTypeFactory shipmentTypeFactory,
@@ -180,6 +183,8 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets all the shipments currently listed in the shipment control
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public IEnumerable<ShipmentEntity> FetchShipmentsFromShipmentControl() =>
             shipmentControl.AllRows.Select(x => x.Shipment);
 
@@ -542,6 +547,7 @@ namespace ShipWorks.Shipping
         /// if there were concurrency or deleted errors detected.  Upon return of false, depending on when\where this is called, the grid should
         /// be reloaded following.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool SaveUIDisplayedShipments()
         {
             // Save all changes from the UI to the entities loaded into the UI
@@ -571,6 +577,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The second part of the load selected shipments routine, after we have assured all carrier specific data has been loaded
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadSelectedShipmentsCompleted(object sender, BackgroundExecutorCompletedEventArgs<ShipmentEntity> e)
         {
             loadingSelectedShipments = false;
@@ -2021,6 +2028,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Void the selected shipments that are processed, and have not yet been already voided.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnVoid(object sender, EventArgs e)
         {
             // Confirm they want to void
@@ -2161,6 +2169,8 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Process the given list of shipments
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private async Task Process(IEnumerable<ShipmentEntity> shipments)
         {
             Cursor.Current = Cursors.WaitCursor;

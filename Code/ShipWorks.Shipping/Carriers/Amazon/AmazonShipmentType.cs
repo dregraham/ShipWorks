@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Editions;
 using ShipWorks.Core.Messaging;
 using System.Diagnostics.CodeAnalysis;
@@ -49,11 +50,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public AmazonShipmentType(IDateTimeProvider dateTimeProvider,
             Func<IAmazonRatingService> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory,
             IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager,
             IEditionManager editionManager)
         {
+            // TODO: Refactor constuctor params down to 5 or less
             this.amazonRatesFactory = amazonRatesFactory;
             this.amazonLabelServiceFactory = amazonLabelServiceFactory;
             this.storeManager = storeManager;
@@ -353,6 +356,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 shipment.TotalWeight += shipment.Amazon.DimsWeight;
             }
         }
+
 
         /// <summary>
         /// Tracks the shipment.

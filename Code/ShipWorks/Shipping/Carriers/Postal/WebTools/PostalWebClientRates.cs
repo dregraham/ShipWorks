@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using System.Web;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Carriers.BestRate;
 
@@ -27,6 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Get the USPS rates for a shipment of the given information
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static List<RateResult> GetRates(ShipmentEntity shipment, LogEntryFactory logEntryFactory)
         {
             string xmlRequest;
@@ -200,6 +202,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Process the response document and generate the rates from it
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static List<RateResult> ProcessXmlDomesticResponse(XmlDocument xmlDocument, PostalPackagingType packaging)
         {
             List<RateResult> rates = new List<RateResult>();
@@ -313,6 +316,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Determine the best rate node to use based on the given service type and packaging type
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         private static XPathNavigator DetermineDomesticRateMatch(List<XPathNavigator> rateNodes, PostalServiceType serviceType, PostalPackagingType packaging)
         {
             XPathNavigator bestNode = rateNodes[0];
@@ -471,6 +475,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Determine the best international rate to use from the given list based on the service type and packaging
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         private static XPathNavigator DetermineInternationalRateMatch(List<XPathNavigator> rateNodes, PostalServiceType serviceType, PostalPackagingType packaging)
         {
             XPathNavigator bestNode = rateNodes[0];

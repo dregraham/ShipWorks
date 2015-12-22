@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -293,6 +294,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="shipment">Shipment to validate</param>
         /// <param name="validator">Address validator to use</param>
         /// <param name="retryCount">How many times should validation be retried</param>
+        [NDependIgnoreLongMethod]
         private static async Task ValidateShipmentAsync(ShipmentEntity shipment, AddressValidator validator, int retryCount)
         {
             AddressAdapter shipmentAdapter = new AddressAdapter(shipment, "Ship");

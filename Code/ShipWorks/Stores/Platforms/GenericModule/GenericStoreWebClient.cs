@@ -15,6 +15,7 @@ using log4net;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Schema;
+using Interapptive.Shared;
 using ShipWorks.Shipping;
 using ShipWorks.Data.Import.Xml.Schema;
 
@@ -236,6 +237,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Submits a request to the online store and returns the response
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected virtual GenericModuleResponse ProcessRequest(HttpVariableRequestSubmitter request, string action)
         {
             GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity)store;

@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data;
 using Divelements.SandGrid;
+using Interapptive.Shared;
 using ShipWorks.Data.Grid.DetailView;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Net;
@@ -178,6 +179,8 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Load the data for the list of shipments into the control
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public virtual void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             if (shipments == null)

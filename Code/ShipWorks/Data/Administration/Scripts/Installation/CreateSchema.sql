@@ -3883,7 +3883,8 @@ GO
 CREATE TABLE [dbo].[YahooOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
-[YahooProductID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[YahooProductID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Url] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL Default ''
 )
 GO
 PRINT N'Creating primary key [PK_YahooOrderItem] on [dbo].[YahooOrderItem]'
@@ -3896,7 +3897,10 @@ CREATE TABLE [dbo].[YahooStore]
 (
 [StoreID] [bigint] NOT NULL,
 [YahooEmailAccountID] [bigint] NOT NULL,
-[TrackingUpdatePassword] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[TrackingUpdatePassword] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[YahooStoreID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT '',
+[AccessToken] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT '',
+[BackupOrderNumber] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_YahooStore] on [dbo].[YahooStore]'
@@ -4262,7 +4266,8 @@ CREATE TABLE [dbo].[FtpAccount]
 [Port] [int] NOT NULL,
 [SecurityType] [int] NOT NULL,
 [Passive] [bit] NOT NULL,
-[InternalOwnerID] [bigint] NULL
+[InternalOwnerID] [bigint] NULL,
+[ReuseControlConnectionSession] [bit] NOT NULL DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_FtpAccount] on [dbo].[FtpAccount]'

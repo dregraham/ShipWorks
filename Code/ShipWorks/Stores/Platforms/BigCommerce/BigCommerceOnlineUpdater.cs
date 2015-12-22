@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -123,6 +124,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Push the online status for an shipment.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void UpdateShipmentDetails(ShipmentEntity shipment)
         {
             OrderEntity order = shipment.Order;

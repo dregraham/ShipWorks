@@ -2,21 +2,22 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Connection;
+using Interapptive.Shared;
+using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Model;
+using ShipWorks.AddressValidation;
+using ShipWorks.Common.Threading;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
 using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Filters;
-using System.Threading.Tasks;
-using Interapptive.Shared.Utility;
-using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Shipping
 {
@@ -27,14 +28,14 @@ namespace ShipWorks.Shipping
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsLoader));
 
-        ConcurrentQueue<ShipmentEntity> shipmentsToValidate; 
+        ConcurrentQueue<ShipmentEntity> shipmentsToValidate;
         List<ShipmentEntity> globalShipments;
         bool wasCanceled;
         bool finishedLoadingShipments;
         Control owner;
 
         /// <summary>
-        /// Raised when an asyn load as completed
+        /// Raised when an async load as completed
         /// </summary>
         public event ShipmentsLoadedEventHandler LoadCompleted;
 
@@ -84,12 +85,13 @@ namespace ShipWorks.Shipping
             progressDlg.Title = "Load Shipments";
             progressDlg.Description = "ShipWorks is loading shipments for the selected orders.";
             progressDlg.Show(owner);
-            
-            Task loadShipmentsTask = TaskEx.Run(() => {
+
+            Task loadShipmentsTask = TaskEx.Run(() =>
+            {
                 LoadShipmentsInternal(workProgress, keys.ToList());
                 finishedLoadingShipments = true;
             });
-            
+
             Task validateTask;
 
             if (ShouldValidate)
@@ -98,7 +100,7 @@ namespace ShipWorks.Shipping
                 ProgressItem validationProgress = new ProgressItem("Validate Shipment Addresses");
                 progressProvider.ProgressItems.Add(validationProgress);
 
-                validateTask = ValidateShipmentsInternal(validationProgress, count); 
+                validateTask = ValidateShipmentsInternal(validationProgress, count);
             }
             else
             {
@@ -109,11 +111,11 @@ namespace ShipWorks.Shipping
             {
                 await TaskEx.WhenAll(loadShipmentsTask, validateTask);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.Error(ex);
             }
-            
+
             progressDlg.CloseForced();
             OnLoadShipmentsCompleted();
         }
@@ -123,6 +125,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Load all the shipments on a background thread
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadShipmentsInternal(ProgressItem workProgress, IList<long> keys)
         {
             // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
@@ -174,8 +177,8 @@ namespace ShipWorks.Shipping
                     // Queue the shipments to be validated
                     foreach (ShipmentEntity shipment in iterationShipments)
                     {
-                        shipmentsToValidate.Enqueue(shipment);    
-                    }   
+                        shipmentsToValidate.Enqueue(shipment);
+                    }
                 }
                 catch (SqlForeignKeyException)
                 {
@@ -252,11 +255,11 @@ namespace ShipWorks.Shipping
                 ShipmentsLoadedEventArgs args = new ShipmentsLoadedEventArgs(null, wasCanceled, null, globalShipments);
                 if (owner.InvokeRequired)
                 {
-                    owner.Invoke((Action)(() => handler(this, args)));
+                    owner.Invoke((Action) (() => handler(this, args)));
                 }
                 else
                 {
-                    handler(this, args);   
+                    handler(this, args);
                 }
             }
         }

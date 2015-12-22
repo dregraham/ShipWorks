@@ -33,8 +33,9 @@ using Debug = System.Diagnostics.Debug;
 namespace Interapptive.Shared.IO.Text.Csv
 {
     /// <summary>
-    /// Represents a reader that provides fast, non-cached, forward-only access to CSV data.
+	/// Represents a reader that provides fast, non-cached, forward-only access to CSV data.  
     /// </summary>
+    [NDependIgnoreLongTypes]
     public class CsvReader
         : IDataReader, IEnumerable, IDisposable
     {
@@ -301,6 +302,7 @@ namespace Interapptive.Shared.IO.Text.Csv
         /// <exception cref="T:ArgumentException">
         ///		Cannot read from <paramref name="reader"/>.
         /// </exception>
+		[NDependIgnoreTooManyParams]
         public CsvReader(TextReader reader, bool hasHeaders, char delimiter, char quote, char escape, char comment, bool trimSpaces)
             : this(reader, hasHeaders, delimiter, quote, escape, comment, trimSpaces, DefaultBufferSize)
         {
@@ -326,6 +328,7 @@ namespace Interapptive.Shared.IO.Text.Csv
         /// <exception cref="ArgumentOutOfRangeException">
         ///		<paramref name="bufferSize"/> must be 1 or more.
         /// </exception>
+        [NDependIgnoreTooManyParams]
         public CsvReader(TextReader reader, bool hasHeaders, char delimiter, char quote, char escape, char comment, bool trimSpaces, int bufferSize)
         {
 #if DEBUG
@@ -1077,7 +1080,7 @@ namespace Interapptive.Shared.IO.Text.Csv
         /// <param name="initializing">Indicates if the reader is currently initializing.</param>
         /// <param name="discardValue">Indicates if the value(s) are discarded.</param>
         /// <returns>
-        /// The field at the specified index.
+		/// The field at the specified index. 
         /// A <see langword="null"/> indicates that an error occured or that the last field has been reached during initialization.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">
@@ -1095,6 +1098,8 @@ namespace Interapptive.Shared.IO.Text.Csv
         /// <exception cref="T:System.ComponentModel.ObjectDisposedException">
         ///	The instance has been disposed of.
         /// </exception>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private string ReadField(int field, bool initializing, bool discardValue)
         {
             if (!initializing)
@@ -1429,13 +1434,15 @@ namespace Interapptive.Shared.IO.Text.Csv
         /// <see langword="true"/> if it stops after having read headers; otherwise, <see langword="false"/>.
         /// </param>
         /// <param name="skipToNextLine">
-        /// Indicates if the reader will skip directly to the next line without parsing the current one.
+		/// Indicates if the reader will skip directly to the next line without parsing the current one. 
         /// To be used when an error occurs.
         /// </param>
         /// <returns><see langword="true"/> if a record has been successfully reads; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="T:System.ComponentModel.ObjectDisposedException">
         ///	The instance has been disposed of.
         /// </exception>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         protected virtual bool ReadNextRecord(bool onlyReadHeaders, bool skipToNextLine)
         {
             if (_eof)
@@ -1933,6 +1940,7 @@ namespace Interapptive.Shared.IO.Text.Csv
             }
         }
 
+        [NDependIgnoreLongMethod]
         DataTable IDataReader.GetSchemaTable()
         {
             EnsureInitialize();

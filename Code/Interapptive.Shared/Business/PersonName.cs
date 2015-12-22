@@ -90,6 +90,8 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Parses a string to a FullName object
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public static PersonName Parse(string input)
         {
             PersonName personName = new PersonName();

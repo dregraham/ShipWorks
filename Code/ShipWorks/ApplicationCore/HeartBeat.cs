@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Crashes;
@@ -389,6 +390,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Runs the actual heartbeat. 
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected virtual void ProcessHeartbeat(bool changesDetected, bool forceReload)
         {
             bool storesChanged = false;

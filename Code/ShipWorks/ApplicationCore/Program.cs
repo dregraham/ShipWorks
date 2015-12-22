@@ -164,11 +164,12 @@ namespace ShipWorks
             }
 
             Environment.Exit(Environment.ExitCode);
-        }       
+        }
 
         /// <summary>
         /// Check that all system requirements for running are met
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static bool CheckSystemRequirements()
         {
             // Verify native, which won't be caught by CLR since its not .net

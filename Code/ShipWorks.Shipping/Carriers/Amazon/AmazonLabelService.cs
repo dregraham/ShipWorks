@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using Interapptive.Shared;
 using log4net;
 using System.Diagnostics.CodeAnalysis;
 
@@ -35,10 +36,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public AmazonLabelService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory,
             IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
             IDataResourceManager resourceManager, IEnumerable<IAmazonLabelEnforcer> labelEnforcers)
         {
+            // TODO: refactor to get parameters down to 5 or less
+
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
             this.orderManager = orderManager;
@@ -46,6 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.resourceManager = resourceManager;
             this.labelEnforcers = labelEnforcers;
         }
+
 
         /// <summary>
         /// Create the label

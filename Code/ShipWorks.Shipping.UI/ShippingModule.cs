@@ -156,10 +156,6 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<StampsAddressValidationWebClient>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<StoreTypeManagerWrapper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.Register((container, parameters) =>
             {
                 return parameters.TypedAs<ShipmentTypeCode>() == ShipmentTypeCode.Other ?

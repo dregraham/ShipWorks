@@ -7,6 +7,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -66,6 +67,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Prepares the transit request.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static XmlTextWriter PrepareTransitRequest(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
         {
             // Create the client for connecting to the UPS server

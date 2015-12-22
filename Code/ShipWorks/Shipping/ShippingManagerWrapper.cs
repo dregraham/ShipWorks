@@ -1,16 +1,16 @@
-using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
 using System;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Connection;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
-using System.Threading.Tasks;
-using System.Threading;
 using ShipWorks.Shipping.Services;
-using System.Linq;
 
 namespace ShipWorks.Shipping
 {
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping
             ShippingManager.EnsureShipmentLoaded(shipment);
             return shipment;
         }
-        
+
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping
             {
                 return new Dictionary<ShipmentEntity, Exception>();
             }
-            
+
             Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
 
             foreach (ShipmentEntity shipment in shipments)
@@ -134,7 +134,7 @@ namespace ShipWorks.Shipping
                     // changes had been made by other users we pick up the concurrency violation.
                     if (forceSave && !shipment.IsDirty)
                     {
-                        shipment.Fields[(int)ShipmentFieldIndex.ShipmentType].IsChanged = true;
+                        shipment.Fields[(int) ShipmentFieldIndex.ShipmentType].IsChanged = true;
                         shipment.Fields.IsDirty = true;
                     }
 
@@ -172,7 +172,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Indicates if the given shipment type code is enabled for selection in the shipping window
         /// </summary>
-        public bool IsShipmentTypeEnabled(ShipmentTypeCode shipmentTypeCode) => 
+        public bool IsShipmentTypeEnabled(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.IsShipmentTypeEnabled(shipmentTypeCode);
 
         /// <summary>
@@ -185,8 +185,8 @@ namespace ShipWorks.Shipping
         /// it was voided is logged to tango.
         /// </summary>
         public void VoidShipment(long shipmentID) => ShippingManager.VoidShipment(shipmentID);
-			
-		/// <summary>
+
+        /// <summary>
         /// Indicates if the shipment type of the given type code has gone through the full setup wizard \ configuration
         /// </summary>
         public bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode) =>

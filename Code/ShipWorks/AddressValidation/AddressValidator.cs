@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using log4net;
@@ -86,6 +87,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="addressAdapter">Address that should be validated</param>
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
+        [NDependIgnoreLongMethod]
         public async Task ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
             // We don't want to validate already validated addresses because we'll lose the original address

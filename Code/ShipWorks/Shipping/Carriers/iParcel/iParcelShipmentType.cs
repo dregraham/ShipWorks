@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -261,6 +262,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
         {
             IParcelShipmentEntity iParcel = shipment.IParcel;

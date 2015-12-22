@@ -1338,7 +1338,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits FtpAccountEntity's mappings</summary>
 		private void InitFtpAccountEntityMappings()
 		{
-			base.AddElementMapping( "FtpAccountEntity", "ShipWorksLocal", @"dbo", "FtpAccount", 8 );
+			base.AddElementMapping( "FtpAccountEntity", "ShipWorksLocal", @"dbo", "FtpAccount", 9 );
 			base.AddElementFieldMapping( "FtpAccountEntity", "FtpAccountID", "FtpAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "FtpAccountEntity", "Host", "Host", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "FtpAccountEntity", "Username", "Username", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -1347,6 +1347,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "FtpAccountEntity", "SecurityType", "SecurityType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 5 );
 			base.AddElementFieldMapping( "FtpAccountEntity", "Passive", "Passive", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 6 );
 			base.AddElementFieldMapping( "FtpAccountEntity", "InternalOwnerID", "InternalOwnerID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
+			base.AddElementFieldMapping( "FtpAccountEntity", "ReuseControlConnectionSession", "ReuseControlConnectionSession", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 8 );
 		}
 		/// <summary>Inits GenericFileStoreEntity's mappings</summary>
 		private void InitGenericFileStoreEntityMappings()
@@ -3157,9 +3158,10 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits YahooOrderItemEntity's mappings</summary>
 		private void InitYahooOrderItemEntityMappings()
 		{
-			base.AddElementMapping( "YahooOrderItemEntity", "ShipWorksLocal", @"dbo", "YahooOrderItem", 2 );
+			base.AddElementMapping( "YahooOrderItemEntity", "ShipWorksLocal", @"dbo", "YahooOrderItem", 3 );
 			base.AddElementFieldMapping( "YahooOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "YahooOrderItemEntity", "YahooProductID", "YahooProductID", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "YahooOrderItemEntity", "Url", "Url", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
 		}
 		/// <summary>Inits YahooProductEntity's mappings</summary>
 		private void InitYahooProductEntityMappings()
@@ -3172,10 +3174,13 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits YahooStoreEntity's mappings</summary>
 		private void InitYahooStoreEntityMappings()
 		{
-			base.AddElementMapping( "YahooStoreEntity", "ShipWorksLocal", @"dbo", "YahooStore", 3 );
+			base.AddElementMapping( "YahooStoreEntity", "ShipWorksLocal", @"dbo", "YahooStore", 6 );
 			base.AddElementFieldMapping( "YahooStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "YahooStoreEntity", "YahooEmailAccountID", "YahooEmailAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "YahooStoreEntity", "TrackingUpdatePassword", "TrackingUpdatePassword", false, (int)SqlDbType.VarChar, 100, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "YahooStoreEntity", "YahooStoreID", "YahooStoreID", false, (int)SqlDbType.VarChar, 50, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "YahooStoreEntity", "AccessToken", "AccessToken", false, (int)SqlDbType.VarChar, 200, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "YahooStoreEntity", "BackupOrderNumber", "BackupOrderNumber", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 5 );
 		}
 
 	}

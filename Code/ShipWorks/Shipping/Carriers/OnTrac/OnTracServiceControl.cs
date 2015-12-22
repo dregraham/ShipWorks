@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -17,6 +18,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// <summary>
     /// UserControl for editing the OnTrac service settings
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class OnTracServiceControl : ServiceControlBase
     {
         /// <summary>
@@ -235,6 +237,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();

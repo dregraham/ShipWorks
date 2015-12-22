@@ -23,6 +23,7 @@ using ShipWorks.Data.Connection;
 using Interapptive.Shared.UI;
 using ShipWorks.UI.Utility;
 using System.Collections;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
@@ -36,6 +37,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// UserControl for editing the UPS OLT service settings
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class UpsServiceControl : ServiceControlBase
     {
         /// <summary>
@@ -44,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="shipmentTypeCode"></param>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        [NDependIgnoreLongMethod]
         public UpsServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
             : base (shipmentTypeCode, rateControl)
         {
@@ -162,6 +165,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Load all the shipment details
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadShipmentDetails()
         {
             List<UpsServiceType> serviceTypes = new List<UpsServiceType>();
@@ -279,6 +283,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();

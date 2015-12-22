@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Forms;
+using Autofac;
+using Autofac.Features.OwnedInstances;
+using Interapptive.Shared;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -14,19 +20,14 @@ using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
-using Autofac;
-using ShipWorks.ApplicationCore;
-using Autofac.Features.OwnedInstances;
-using ShipWorks.Messaging.Messages;
-using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
     /// <summary>
-    /// User control that will fetch and 
-    /// show rates for an order that has been selected. If an order doesn't have 
-    /// any shipments, a shipment will be created; for orders that have multiple 
-    /// shipments, the first unprocessed shipment is used for rating. Rates are 
+    /// User control that will fetch and
+    /// show rates for an order that has been selected. If an order doesn't have
+    /// any shipments, a shipment will be created; for orders that have multiple
+    /// shipments, the first unprocessed shipment is used for rating. Rates are
     /// not retrieved for orders that only have processed shipments.
     /// </summary>
     public partial class RatesPanel : UserControl
@@ -74,7 +75,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             // Refresh the shipment data and then the rates
             ShipmentEntity shipment = ShippingManager.GetShipment(selectedShipmentID.Value);
             ShippingManager.RefreshShipment(shipment);
-                
+
             FetchRates(shipment, false);
         }
 
@@ -110,18 +111,18 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public void ChangeShipment(long? shipmentID)
         {
-            // This method can get triggered when the shipment dialog closes but the 
-            // shipment ID did not actually chagne. We only want to reset the collapsible 
+            // This method can get triggered when the shipment dialog closes but the
+            // shipment ID did not actually change. We only want to reset the collapsible
             // state when the shipment ID actually changes.
             resetCollapsibleStateRequired = selectedShipmentID != shipmentID;
             selectedShipmentID = shipmentID;
 
-            
+
             // Refresh the rates in the panel; using cached rates is fine here since nothing
             // about the shipment has changed, so don't force a re-fetch
             RefreshRates(false);
         }
-        
+
         /// <summary>
         /// When the size of the rate control changes, we have to update our size to match. This is what makes the auto-scrolling in the containing panel work
         /// </summary>
@@ -187,10 +188,11 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-        /// Fetches the rates from the shipment type and 
+        /// Fetches the rates from the shipment type and
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
+        [NDependIgnoreLongMethod]
         private void FetchRates(ShipmentEntity shipment, bool ignoreCache)
         {
             using (BackgroundWorker ratesWorker = new BackgroundWorker())
@@ -259,7 +261,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                             rates = new RateGroup(new List<RateResult>());
                             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                             {
-                                ShipmentType exceptionShipmentType = shipmentType ?? 
+                                ShipmentType exceptionShipmentType = shipmentType ??
                                     lifetimeScope.ResolveKeyed<Owned<ShipmentType>>(ShipmentTypeCode.None).Value;
                                 rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(exceptionShipmentType, ex));
                             }
@@ -289,10 +291,10 @@ namespace ShipWorks.Shipping.Editing.Rating
                     }
                     else
                     {
-                        ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
+                        ShipmentEntity ratedShipment = (ShipmentEntity) args.Result;
                         if (ratedShipment != null && ratedShipment.ShipmentID == selectedShipmentID)
                         {
-                            // Only update the rate control if the shipment is for the currently selected 
+                            // Only update the rate control if the shipment is for the currently selected
                             // order to avoid the appearance of lag when a user is quickly clicking around
                             // the rate grid
                             LoadRates(panelRateGroup);
@@ -318,14 +320,14 @@ namespace ShipWorks.Shipping.Editing.Rating
             // Only change this to best rate for non-USPS postal types
             if (ConsolidatePostalRates &&
                 PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
-                !PostalUtility.IsPostalSetup() && 
+                !PostalUtility.IsPostalSetup() &&
                 shipmentTypeCode != ShipmentTypeCode.Usps &&
                 shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
                 shipmentTypeCode != ShipmentTypeCode.Express1Usps)
             {
-                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}));
+                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter> { new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter() }));
 
-                shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
+                shipment.ShipmentType = (int) ShipmentTypeCode.BestRate;
                 ShippingManager.EnsureShipmentLoaded(shipment);
 
                 shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
@@ -334,7 +336,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
                 shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
                 shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
-                shipment.BestRate.ServiceLevel = (int)ServiceLevelType.Anytime;
+                shipment.BestRate.ServiceLevel = (int) ServiceLevelType.Anytime;
                 shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
             }
             else
@@ -351,7 +353,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <param name="rateGroup">The rate group.</param>
         private void LoadRates(ShipmentRateGroup rateGroup)
         {
-            // Reset the rate control to show all rates and let the policy change the 
+            // Reset the rate control to show all rates and let the policy change the
             // behavior if it's necessary
             rateControl.ShowAllRates = true;
             rateControl.ShowSingleRate = false;
@@ -362,7 +364,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             }
 
             // Apply any applicable policies to the rate control prior to loading the rates
-            ShippingPolicies.Current.Apply((ShipmentTypeCode)rateGroup.Shipment.ShipmentType, rateControl);
+            ShippingPolicies.Current.Apply((ShipmentTypeCode) rateGroup.Shipment.ShipmentType, rateControl);
             rateControl.LoadRates(rateGroup);
         }
 
@@ -373,7 +375,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <param name="rateSelectedEventArgs">The <see cref="RateSelectedEventArgs"/> instance containing the event data.</param>
         private void OnConfigureRateClicked(object sender, RateSelectedEventArgs rateSelectedEventArgs)
         {
-            ShipmentRateGroup rateGroup = (ShipmentRateGroup)rateControl.RateGroup;
+            ShipmentRateGroup rateGroup = (ShipmentRateGroup) rateControl.RateGroup;
             ShipmentEntity shipment = rateGroup.Shipment;
 
             BestRateResultTag resultTag = rateSelectedEventArgs.Rate.Tag as BestRateResultTag;

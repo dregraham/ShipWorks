@@ -11,6 +11,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using System.Reflection;
+using Interapptive.Shared;
 
 namespace ShipWorks.Templates.Media
 {
@@ -72,6 +73,8 @@ namespace ShipWorks.Templates.Media
         /// <summary>
         /// Load the available system printers into the control, selecting the given printer and paper source as the initial selection.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public void LoadPrinters(string selectedPrinter, int selectedPaperSource, PrinterSelectionInvalidPrinterBehavior preserveBehavior)
         {
             List<string> installedPrinters;

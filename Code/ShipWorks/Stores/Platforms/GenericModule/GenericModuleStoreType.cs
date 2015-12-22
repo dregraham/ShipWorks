@@ -24,6 +24,7 @@ using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Grid;
@@ -213,6 +214,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// Read the details of the module from a call to the "GetModule" call.  This only does something if the module
         /// has been changed. If nothing has changed false is returned.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void UpdateOnlineModuleInfo()
         {
             GenericStoreWebClient webClient = this.CreateWebClient();

@@ -11,6 +11,7 @@ using System.Data;
 using System.Collections;
 using log4net;
 using System.Threading;
+using Interapptive.Shared;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration;
 
@@ -104,6 +105,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         /// <summary>
         /// Creates and configure the migration engine for moving data from a V2 database to V3.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static MigrationController CreateV2ToV3Controller(Version installedDBVersion)
         {
             MigrationController controller = new MigrationController(installedDBVersion, "ShipWorks.Data.Administration.UpdateFrom2x.Database.Scripts");
