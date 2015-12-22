@@ -14,7 +14,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     {
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
-        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonLabelService));
 
         /// <summary>
         /// Constructor
