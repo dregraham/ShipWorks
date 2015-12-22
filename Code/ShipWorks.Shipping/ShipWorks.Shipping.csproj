@@ -204,6 +204,7 @@
     <Compile Include="Services\ShipmentProcessorService.cs" />
     <Compile Include="Services\ShipmentTypeManagerWrapper.cs" />
     <Compile Include="Services\ShipmentTypeProvider.cs" />
+    <Compile Include="Services\ShippingManagerWrapper.cs" />
     <Compile Include="ShipmentAddressValidator.cs" />
     <Compile Include="ShipmentTypeFactory.cs" />
     <Compile Include="ShippingErrorManager.cs" />

@@ -121,7 +121,7 @@ namespace ShipWorks.Shipping
             List<ShipmentEntity> shipments = GetShipments(orderID, false);
 
             // If there are none, then we can just create a new single shipment attached to the order, and know that's all that needs attached
-            if (shipments.Count == 0)
+            if (shipments.None())
             {
                 return InternalCreateFirstShipment(orderID);
             }
@@ -132,16 +132,36 @@ namespace ShipWorks.Shipping
             }
         }
 
+        ///// <summary>
+        ///// Create a new shipment for the order.
+        ///// </summary>
+        //public static ShipmentEntity CreateShipment(OrderEntity order)
+        //{
+        //    // First let's see if there are any shipments already for the order
+        //    List<ShipmentEntity> shipments = GetShipments(orderID, false);
+
+        //    // If there are none, then we can just create a new single shipment attached to the order, and know that's all that needs attached
+        //    if (shipments.None())
+        //    {
+        //        return InternalCreateFirstShipment(orderID);
+        //    }
+        //    else
+        //    {
+        //        // Create a new shipment from one of the siblings
+        //        return CreateShipment(shipments[0]);
+        //    }
+        //}
+
         /// <summary>
         /// Create a new shipment as a sibling of the given shipment
         /// </summary>
         public static ShipmentEntity CreateShipment(ShipmentEntity sibling)
         {
-            return InternalCreateShipment(sibling.Order);
+            return CreateShipment(sibling.Order);
         }
 
         /// <summary>
-        /// Create what we konw to be the first shipment for an order
+        /// Create what we know to be the first shipment for an order
         /// </summary>
         private static ShipmentEntity InternalCreateFirstShipment(long orderID)
         {
@@ -153,14 +173,14 @@ namespace ShipWorks.Shipping
                 throw new SqlForeignKeyException("The order has been deleted.");
             }
 
-            return InternalCreateShipment(order);
+            return CreateShipment(order);
         }
 
         /// <summary>
         /// Create a shipment for the given order.  The order\shipment reference is created between the two objects.
         /// </summary>
         [NDependIgnoreLongMethod]
-        private static ShipmentEntity InternalCreateShipment(OrderEntity order)
+        public static ShipmentEntity CreateShipment(OrderEntity order)
         {
             UserSession.Security.DemandPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID);
 

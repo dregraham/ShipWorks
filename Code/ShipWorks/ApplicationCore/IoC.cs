@@ -9,9 +9,9 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Common;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
 using ShipWorks.Filters;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -93,9 +93,6 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ShippingManagerWrapper>()
-                .AsImplementedInterfaces();
-
             builder.RegisterType<ValidatedAddressScope>()
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
@@ -119,9 +116,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
 
-            builder.Register(context => Messenger.Current)
-                .AsImplementedInterfaces()
-                .SingleInstance();
+            //builder.Register(context => Messenger.Current)
+            //    .AsImplementedInterfaces()
+            //    .SingleInstance();
 
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
@@ -133,6 +130,8 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
+
+            builder.Register((_, parameters) => new SqlAdapter(parameters.TypedAs<bool>()));
 
             current = builder.Build();
         }
