@@ -4,6 +4,9 @@ using ShipWorks.Shipping.Carriers.Postal.WebTools;
 
 namespace ShipWorks.Shipping.UI.Carriers.Postal.WebTools
 {
+    /// <summary>
+    /// Service registrations for the WebTools shipping carrier
+    /// </summary>
     public class WebToolsShippingModule : Module
     {
         /// <summary>

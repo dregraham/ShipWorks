@@ -28,7 +28,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             builder.RegisterType<BestRateRatingService>()
                 .As<IBestRateBrokerRatingService>()
-                .AsSelf()
                 .Keyed<IRatingService>(ShipmentTypeCode.BestRate);
             
             builder.Register(GenerateBestRateBrokerFactory);
@@ -47,18 +46,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private IBestRateShippingBrokerFactory GenerateBestRateBrokerFactory(IComponentContext c, IEnumerable<Parameter> p)
         {
-            IEnumerable<Parameter> parameters = p as Parameter[] ?? p.ToArray();
-            if (parameters.ToArray().FirstOrDefault() == null || parameters.TypedAs<BestRateConsolidatePostalRates>() == BestRateConsolidatePostalRates.No)
-            {
-                // return BestRateShippingBrokerFactory with default behavior
-                return new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>
-                {
-                    new UpsWorldShipBrokerFilter(),
-                    new PostalCounterBrokerFilter(),
-                    new UpsBestRateRestrictionBrokerFilter()
-                });
-            }
-
             // return BestRateShippingBrokerFactory with default behavior
             return new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>
             {

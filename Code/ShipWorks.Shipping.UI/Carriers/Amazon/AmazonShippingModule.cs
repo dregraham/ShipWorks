@@ -40,7 +40,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .SingleInstance();
 
             builder.RegisterType<AmazonServiceControl>()
-                .UsingConstructor(typeof(RateControl), typeof(AmazonServiceViewModel), typeof(AmazonShipmentType), typeof(AmazonRateHashingService))
                 .Keyed<ServiceControlBase>(ShipmentTypeCode.Amazon)
                 .ExternallyOwned();
 
@@ -51,8 +50,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .SingleInstance();
 
             builder.RegisterType<AmazonRatingService>()
-                .Keyed<IRatingService>(ShipmentTypeCode.Amazon)
-                .AsImplementedInterfaces();
+                .Keyed<IRatingService>(ShipmentTypeCode.Amazon);
 
             builder.RegisterType<AmazonMwsWebClientSettingsFactory>()
                 .As<IAmazonMwsWebClientSettingsFactory>();

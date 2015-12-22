@@ -18,7 +18,6 @@ namespace ShipWorks.Shipping.Carriers.Usps
                 .Keyed<ShipmentType>(ShipmentTypeCode.Usps);
 
             builder.RegisterType<UspsLabelService>()
-                .AsSelf()
                 .Keyed<ILabelService>(ShipmentTypeCode.Usps);
 
             builder.RegisterType<UspsRatingService>()

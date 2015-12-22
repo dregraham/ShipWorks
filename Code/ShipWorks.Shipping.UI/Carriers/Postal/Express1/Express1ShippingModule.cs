@@ -45,10 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Express1
             builder.RegisterType<Express1EndiciaRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.Express1Endicia);
 
-            builder.RegisterType<Express1UspsAccountRepository>()
-                .AsSelf();
-
-            
+            builder.RegisterType<Express1UspsAccountRepository>();
         }
     }
 }

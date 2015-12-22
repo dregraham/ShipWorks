@@ -35,14 +35,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             builder.RegisterType<UpsRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.UpsOnLineTools)
-                .Keyed<IRateHashingService>(ShipmentTypeCode.UpsWorldShip)
-                .AsSelf();
+                .Keyed<IRateHashingService>(ShipmentTypeCode.UpsWorldShip);
 
-            builder.RegisterType<UpsApiTransitTimeClient>()
-                .AsSelf();
+            builder.RegisterType<UpsApiTransitTimeClient>();
 
-            builder.RegisterType<UpsApiRateClient>()
-                .AsSelf();
+            builder.RegisterType<UpsApiRateClient>();
 
             builder.RegisterType<UpsRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.UpsOnLineTools)

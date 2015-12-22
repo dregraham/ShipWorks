@@ -30,14 +30,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 .AsSelf();
 
             builder.RegisterType<FedExRateHashingService>()
-                .Keyed<IRateHashingService>(ShipmentTypeCode.FedEx)
-                .AsSelf();
+                .Keyed<IRateHashingService>(ShipmentTypeCode.FedEx);
 
-            builder.RegisterType<FedExAccountRepository>()
-                .AsSelf();
+            builder.RegisterType<FedExAccountRepository>();
 
-            builder.RegisterType<FedExShippingClerkFactory>()
-                .AsSelf();
+            builder.RegisterType<FedExShippingClerkFactory>();
         }
     }
 }
