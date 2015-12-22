@@ -117,6 +117,7 @@
       <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -142,6 +143,7 @@
     <Compile Include="Stores\StoreTypeIdentity.cs" />
     <Compile Include="Stores\StoreTypeIdentityAttribute.cs" />
     <Compile Include="Templates\TemplateBuiltinFolders.cs" />
+    <Compile Include="Properties\XamlNamespaces.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -10,9 +10,7 @@ using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.UI.MessageHandlers;
 using ShipWorks.Shipping.UI.RatingPanel;
-using ShipWorks.Shipping.UI.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
-using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
 namespace ShipWorks.Shipping.UI
@@ -29,9 +27,6 @@ namespace ShipWorks.Shipping.UI
         {
             builder.RegisterType<AddressValidator>()
                 .AsImplementedInterfaces();
-
-            builder.RegisterType<AddressViewModel>()
-                .FindConstructorsWith(new NonDefaultConstructorFinder());
 
             builder.RegisterType<CarrierAccountRetrieverFactory>()
                 .AsImplementedInterfaces()
@@ -61,9 +56,6 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<InsuranceViewModel>()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
-
-            builder.RegisterType<MessageHelperWrapper>()
-                .AsImplementedInterfaces();
 
             builder.RegisterType<OrderSelectionChangedHandler>()
                 .AsImplementedInterfaces();

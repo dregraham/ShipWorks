@@ -1,6 +1,6 @@
 ﻿using System;
-using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
+using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -16,8 +16,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingViewModelFactory(Func<ShipmentTypeCode, IShipmentViewModel> shipmentViewModelFactory, 
-                                        Func<AddressViewModel> addressViewModelFactory, 
+        public ShippingViewModelFactory(Func<ShipmentTypeCode, IShipmentViewModel> shipmentViewModelFactory,
+                                        Func<AddressViewModel> addressViewModelFactory,
                                         Func<InsuranceViewModel> insuranceViewModelFactory)
         {
             this.shipmentViewModelFactory = shipmentViewModelFactory;

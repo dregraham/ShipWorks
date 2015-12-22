@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Threading;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
+using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {

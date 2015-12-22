@@ -1,5 +1,5 @@
-﻿using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
-using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
+﻿using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
+using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {

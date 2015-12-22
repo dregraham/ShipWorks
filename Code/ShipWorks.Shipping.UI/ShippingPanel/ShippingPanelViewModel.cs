@@ -17,6 +17,7 @@ using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
+using ShipWorks.UI;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -166,7 +167,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return;
             }
 
-            // Only call save if we were in an "editing" allowed mode.  
+            // Only call save if we were in an "editing" allowed mode.
             // This handles the case where we lost focus due to opening the shipping dialog.
             // The view model needs to save itself before opening the shipping dialog.
             // So just return if we are in a non editing state...no need to save.
@@ -303,7 +304,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return;
             }
 
-            // Only call save if we were in an "editing" allowed mode.  
+            // Only call save if we were in an "editing" allowed mode.
             // This handles the case where we lost focus due to opening the shipping dialog.
             // The view model needs to save itself before opening the shipping dialog.
             // So just return if we are in a non editing state...no need to save.

@@ -147,7 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShippingPanel\AddressControl\AddressViewModelTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\DomesticInternationalDisplayPipelineTest.cs" />
@@ -164,7 +163,6 @@
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeToAccountsConverterTest.cs" />
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeToOriginAddressesConverterTest.cs" />
     <Compile Include="ShippingPanel\Weight\WeightValidationRuleTest.cs" />
-    <Compile Include="ValueConverters\ValueEqualToParameterConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -190,6 +188,10 @@
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
+      <Project>{1f6a1dc6-dd72-4279-8747-6789f83711ff}</Project>
+      <Name>ShipWorks.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>

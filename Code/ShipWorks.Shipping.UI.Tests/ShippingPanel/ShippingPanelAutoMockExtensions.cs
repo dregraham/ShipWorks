@@ -4,7 +4,7 @@ using Moq;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.UI.ShippingPanel;
-using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
+using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 {
