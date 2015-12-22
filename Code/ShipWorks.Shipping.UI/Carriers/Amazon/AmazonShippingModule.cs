@@ -100,6 +100,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<AmazonRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.Amazon)
                 .AsSelf();
+
+            builder.RegisterType<AmazonRateGroupFactory>()
+                .AsImplementedInterfaces();
         }
     }
 }

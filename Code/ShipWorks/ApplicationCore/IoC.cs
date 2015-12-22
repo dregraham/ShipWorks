@@ -76,6 +76,10 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterInstance(Messenger.Current)
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterAssemblyModules(assemblies);
 
             builder.RegisterType<EditionManagerWrapper>()

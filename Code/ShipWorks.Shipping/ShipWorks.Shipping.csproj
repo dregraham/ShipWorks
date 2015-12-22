@@ -128,6 +128,7 @@
     <Compile Include="Carriers\Amazon\AmazonUpsRateFilter.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsRateFilter.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonRateGroupFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRatingService.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShipmentRequestDetailsFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Carriers\Amazon\Api\DTOs\ErrorResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
+    <Compile Include="Carriers\Amazon\Api\IAmazonRateGroupFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonRatingService.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonShipmentRequestDetailsFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\OperationResponse.cs" />
