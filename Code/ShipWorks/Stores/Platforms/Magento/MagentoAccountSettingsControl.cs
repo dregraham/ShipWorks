@@ -1,4 +1,5 @@
-﻿using ShipWorks.Stores.Platforms.GenericModule;
+﻿using System;
+using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model;
 using System.Net;

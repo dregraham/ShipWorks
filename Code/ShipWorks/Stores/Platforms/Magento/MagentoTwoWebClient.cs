@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 using Interapptive.Shared.Net;
-using ShipWorks.Stores.Platforms.Magento.WebServices;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using System.Xml.Linq;
@@ -16,14 +13,16 @@ namespace ShipWorks.Stores.Platforms.Magento
 {
     class MagentoTwoWebClient : MagentoWebClient
     {
+        private readonly MagentoStoreEntity store;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public MagentoTwoWebClient(MagentoStoreEntity store) : base(store)
         {
-
+            this.store = store;
         }
-        
+
         /// <summary>
         /// Intercept GenericStore requests and execute REST requests 
         /// for our Magento 2 module
@@ -57,17 +56,20 @@ namespace ShipWorks.Stores.Platforms.Magento
 
         private GenericModuleResponse ProcessGetStore(HttpVariableRequestSubmitter request)
         {
-            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter();
-
-            xmlRequest.Uri = new Uri(Store.ModuleUrl + "/store");
-
+            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
+            {
+                Uri = new Uri(Store.ModuleUrl + "/store")
+            };
+            
             return ProcessRequestInternal(xmlRequest, "GetStore");
         }
 
         private GenericModuleResponse ProcessUpdateOrder(HttpVariableRequestSubmitter request)
         {
-            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter();
-            xmlRequest.Uri = new Uri(Store.ModuleUrl + "/orders/update");
+            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
+            {
+                Uri = new Uri(Store.ModuleUrl + "/orders/update")
+            };
 
             XElement requestXml = new XElement("request");
 
@@ -87,20 +89,21 @@ namespace ShipWorks.Stores.Platforms.Magento
 
         private GenericModuleResponse ProcessGetModule(HttpVariableRequestSubmitter request)
         {
-            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter();
-
-            xmlRequest.Uri = new Uri(Store.ModuleUrl + "/module");
-
+            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
+            {
+                Uri = new Uri(Store.ModuleUrl + "/module")
+            };
+            
             return ProcessRequestInternal(xmlRequest, "GetModule");
         }
 
         private GenericModuleResponse ProcessGetCount(HttpVariableRequestSubmitter request)
         {
-            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter();
-            xmlRequest.Uri = new Uri(Store.ModuleUrl + "/orders/count");
-
-            HttpVariable start = request.Variables.Where(v => v.Name == "start").FirstOrDefault();
-
+            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
+            {
+                Uri = new Uri(Store.ModuleUrl + "/orders/count")
+            };
+            
             XElement body = new XElement("Request");
 
             foreach (HttpVariable var in request.Variables)
@@ -115,8 +118,10 @@ namespace ShipWorks.Stores.Platforms.Magento
 
         private GenericModuleResponse ProcessGetOrders(HttpVariableRequestSubmitter request)
         {
-            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter();
-            xmlRequest.Uri = new Uri(Store.ModuleUrl + "/orders");
+            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
+            {
+                Uri = new Uri(Store.ModuleUrl + "/orders")
+            };
 
             XElement body = new XElement("Request");
 
@@ -132,9 +137,10 @@ namespace ShipWorks.Stores.Platforms.Magento
 
         private GenericModuleResponse ProcessGetStatusCodes(HttpVariableRequestSubmitter request)
         {
-            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter();
-
-            xmlRequest.Uri = new Uri(Store.ModuleUrl + "/store/statuscodes");
+            HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
+            {
+                Uri = new Uri(Store.ModuleUrl + "/store/statuscodes")
+            };
 
             return ProcessRequestInternal(xmlRequest, "GetStatusCodes");
         }
@@ -144,22 +150,22 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private GenericModuleResponse ProcessRequestInternal(HttpXmlVariableRequestSubmitter request, string action)
         {
+            request.Headers.Add(HttpRequestHeader.Authorization,
+                $"Bearer {SecureText.Decrypt(store.ModulePassword, store.ModuleUsername)}");
+
+            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Magento, action);
+            logEntry.LogRequest(request);
+
             try
             {
-                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Magento, action);
-                logEntry.LogRequest(request);
-
                 using (IHttpResponseReader reader = request.GetResponse())
                 {
                     string result = reader.ReadResult();
                     
                     logEntry.LogResponse(result, "txt");
 
-                    XmlDocument xmlResponse = new XmlDocument();
-
-                    // we don't want to resolve external entities.
-                    xmlResponse.XmlResolver = null;
-
+                    XmlDocument xmlResponse = new XmlDocument {XmlResolver = null};
+                    
                     xmlResponse.LoadXml(result);
 
                     XPathNavigator xpath = xmlResponse.CreateNavigator();
@@ -183,8 +189,5 @@ namespace ShipWorks.Stores.Platforms.Magento
                 throw WebHelper.TranslateWebException(ex, typeof(GenericStoreException));
             }
         }
-
-        
-
     }
 }
