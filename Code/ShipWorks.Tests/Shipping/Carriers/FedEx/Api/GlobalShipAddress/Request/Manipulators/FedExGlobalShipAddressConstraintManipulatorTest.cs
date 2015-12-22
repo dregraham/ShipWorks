@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators
 {
-    [TestClass]
     public class FedExGlobalShipAddressConstraintManipulatorTest
     {
         private Mock<CarrierRequest> mockCarrierRequest;
@@ -20,8 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
 
         private FedExGlobalShipAddressConstraintManipulator testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExGlobalShipAddressConstraintManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
@@ -32,43 +30,43 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             testObject = new FedExGlobalShipAddressConstraintManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_RequestedHoldSerivceGround_ShipmentIsGround_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
 
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(SupportedRedirectToHoldServiceType.FEDEX_GROUND, request.Constraints.SupportedRedirectToHoldServices[0]);
+            Assert.Equal(SupportedRedirectToHoldServiceType.FEDEX_GROUND, request.Constraints.SupportedRedirectToHoldServices[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_RequestedHoldSerivceGroundHome_ShipmentIsGroundHome_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
 
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(SupportedRedirectToHoldServiceType.FEDEX_GROUND_HOME_DELIVERY, request.Constraints.SupportedRedirectToHoldServices[0]);
+            Assert.Equal(SupportedRedirectToHoldServiceType.FEDEX_GROUND_HOME_DELIVERY, request.Constraints.SupportedRedirectToHoldServices[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_RequestedHoldSerivceExpress_ShipmentIs2Day_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx2Day;
 
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(SupportedRedirectToHoldServiceType.FEDEX_EXPRESS, request.Constraints.SupportedRedirectToHoldServices[0]);
+            Assert.Equal(SupportedRedirectToHoldServiceType.FEDEX_EXPRESS, request.Constraints.SupportedRedirectToHoldServices[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_MultipleMatchesSet_ShipmentIsValid_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(MultipleMatchesActionType.RETURN_ALL, request.MultipleMatchesAction);
-            Assert.IsTrue(request.MultipleMatchesActionSpecified);
+            Assert.Equal(MultipleMatchesActionType.RETURN_ALL, request.MultipleMatchesAction);
+            Assert.True(request.MultipleMatchesActionSpecified);
         }
 
 

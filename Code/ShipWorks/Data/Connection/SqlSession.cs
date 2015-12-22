@@ -26,7 +26,7 @@ namespace ShipWorks.Data.Connection
     /// <summary>
     /// Class for managing the login session and connectivity to SQL Server
     /// </summary>
-    public class SqlSession
+    public class SqlSession : ISqlSession
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SqlSession));
 
@@ -323,6 +323,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Gets the list of any missing permissions minimally required to run ShipWorks
         /// </summary>
+        [NDependIgnoreLongMethod]
         public List<string> DetermineMissingPermissions(SqlSessionPermissionSet permissionSet)
         {
             List<string> missing = new List<string>();

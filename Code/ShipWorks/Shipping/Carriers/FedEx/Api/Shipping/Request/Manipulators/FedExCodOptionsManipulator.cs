@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 string currency = EnumHelper.GetApiValue(ShipmentType.GetCurrencyForCountryCode(shipmentEntity.AdjustedShipCountryCode()));
                 
 
-                if (shipmentEntity.FedEx.Service == (int)FedExServiceType.FedExGround || shipmentEntity.FedEx.Service == (int)FedExServiceType.GroundHomeDelivery)
+                if (FedExUtility.IsGroundService((FedExServiceType)shipmentEntity.FedEx.Service))
                 {
                     // Ground services require configuring the COD settings at the package level
                     ConfigurePackageDetails(nativeRequest, shipmentEntity, codDetail, currency);

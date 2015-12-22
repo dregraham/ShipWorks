@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Common.Net;
 using ShipWorks.Stores.Platforms.Amazon;
 using System.Net;
@@ -19,7 +19,6 @@ namespace ShipWorks.Tests.Stores.Amazon
     /// <summary>
     /// Testing of the Amazon Event Notification Service communication via WCF.
     /// </summary>
-    [TestClass]
     public class EnsClientTest
     {
         static ClientCertificate clientCert;
@@ -43,9 +42,8 @@ namespace ShipWorks.Tests.Stores.Amazon
                 }
             }
         }
-
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
+        
+        static EnsClientTest()
         {
             // SSL certificate policy
             ServicePointManager.ServerCertificateValidationCallback = WebHelper.TrustAllCertificatePolicy;
@@ -67,7 +65,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         /// 
         /// Failed with a COMException "logon failure"
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void DomainTest()
         {
             Domain domain = Domain.GetCurrentDomain();
@@ -78,7 +76,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         /// <summary>
         /// Adding a certificate to the sytem cert store
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void InstallCertificate()
         {
             clientCert.AddToCertificateStore(System.Security.Cryptography.X509Certificates.StoreName.My, System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser);

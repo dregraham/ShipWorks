@@ -5,7 +5,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -44,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// FedEx implementation of ShipmentType
     /// </summary>
-    public class FedExShipmentType : ShipmentType
+    public class FedExShipmentType : ShipmentType, ICustomsRequired
     {
         private ICarrierSettingsRepository settingsRepository;
         
@@ -187,7 +189,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Create the UserControl used to edit the overall fedex settings
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             FedExSettingsControl control = new FedExSettingsControl();
             control.Initialize(ShipmentTypeCode);
@@ -205,7 +207,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Create the UserControl used to edit FedEx profiles.
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new FedExProfileControl();
         }
@@ -276,6 +278,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Configure data for the newly created shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
             shipment.FedEx.MasterFormID = "";
@@ -512,6 +515,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
@@ -528,6 +532,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.PackagingType = (int) FedExPackagingType.Custom;
             profile.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
             profile.FedEx.NonStandardContainer = false;
+            profile.FedEx.ReferenceFIMS = "";
             profile.FedEx.ReferenceCustomer = "Order {//Order/Number}";
             profile.FedEx.ReferenceInvoice = "";
             profile.FedEx.ReferencePO = "";
@@ -565,6 +570,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
         {
             FedExShipmentEntity fedex = shipment.FedEx;
@@ -670,10 +676,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ShippingProfileUtility.ApplyProfileValue(source.Service, fedex, FedExShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(source.PackagingType, fedex, FedExShipmentFields.PackagingType);
             ShippingProfileUtility.ApplyProfileValue(source.DropoffType, fedex, FedExShipmentFields.DropoffType);
+            ShippingProfileUtility.ApplyProfileValue(source.ReturnsClearance, fedex, FedExShipmentFields.ReturnsClearance);
             ShippingProfileUtility.ApplyProfileValue(source.NonStandardContainer, fedex, FedExShipmentFields.NonStandardContainer);
             ShippingProfileUtility.ApplyProfileValue(source.OriginResidentialDetermination, fedex, FedExShipmentFields.OriginResidentialDetermination);
 
             ShippingProfileUtility.ApplyProfileValue(source.Signature, fedex, FedExShipmentFields.Signature);
+            ShippingProfileUtility.ApplyProfileValue(source.ReferenceFIMS, fedex, FedExShipmentFields.ReferenceFIMS);
             ShippingProfileUtility.ApplyProfileValue(source.ReferenceCustomer, fedex, FedExShipmentFields.ReferenceCustomer);
             ShippingProfileUtility.ApplyProfileValue(source.ReferenceInvoice, fedex, FedExShipmentFields.ReferenceInvoice);
             ShippingProfileUtility.ApplyProfileValue(source.ReferencePO, fedex, FedExShipmentFields.ReferencePO);
@@ -750,6 +758,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
@@ -948,7 +957,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 return new ShipmentParcel(shipment, package.FedExPackageID, package.TrackingNumber,
                     new InsuranceChoice(shipment, package, package, package),
-                    new DimensionsAdapter(package));
+                    new DimensionsAdapter(package))
+                {
+                    TotalWeight = package.Weight + package.DimsWeight
+                };
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");
@@ -1028,7 +1040,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
-            return new FedExShippingClerk(SettingsRepository, CertificateInspector).GetRates(shipment);
+            return FedExShippingClerkFactory.CreateShippingClerk(shipment, SettingsRepository).GetRates(shipment);
         }
 
         /// <summary>
@@ -1038,7 +1050,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
+                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
                 return shippingClerk.Track(shipment);
             }
             catch (FedExException ex)
@@ -1059,7 +1071,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new FedExShipmentProcessingSynchronizer();
         }
@@ -1074,7 +1086,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Okay to "new up" the shipping clerk here, as this class is the root consumer 
                 // that drives the underlying FedEx API and outside of the current scope of unit testing,
                 // so there isn't a need to be able to specify the dependencies of the shipping clerk
-                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
+                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
                 shippingClerk.Ship(shipment);
             }
             catch (FedExException ex)
@@ -1090,7 +1102,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
+                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
                 shippingClerk.Void(shipment);
             }
             catch (FedExException ex)
@@ -1153,47 +1165,48 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
         }
 
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
-            
-            fields.AddRange
-            (
-                new List<IEntityField2>()
-                {
-                    shipment.FedEx.Fields[FedExShipmentFields.FedExAccountID.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.WeightUnitType.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.Signature.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.Service.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.PackagingType.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.DropoffType.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.OriginResidentialDetermination.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostHubID.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostIndicia.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostEndorsement.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.CodEnabled.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.NonStandardContainer.FieldIndex]
-                }
-            );
-
-            // Grab all the fields for all the package in this shipment
-            foreach (FedExPackageEntity package in shipment.FedEx.Packages)
+            get
             {
-                fields.Add(package.Fields[FedExPackageFields.DimsWeight.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.DeclaredValue.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.DimsLength.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.DimsHeight.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.DimsWidth.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.ContainsAlcohol.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.DryIceWeight.FieldIndex]);
-            }
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-            return fields;
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(FedExShipmentFields.FedExAccountID);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.WeightUnitType);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.Signature);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.Service);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.PackagingType);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.DropoffType);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.SaturdayDelivery);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.OriginResidentialDetermination);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostHubID);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostIndicia);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostEndorsement);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.CodEnabled);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.NonStandardContainer);
+
+                ratingField.PackageFields.Add(FedExPackageFields.DimsWeight);
+                ratingField.PackageFields.Add(FedExPackageFields.DeclaredValue);
+                ratingField.PackageFields.Add(FedExPackageFields.DimsLength);
+                ratingField.PackageFields.Add(FedExPackageFields.DimsHeight);
+                ratingField.PackageFields.Add(FedExPackageFields.DimsWidth);
+                ratingField.PackageFields.Add(FedExPackageFields.ContainsAlcohol);
+                ratingField.PackageFields.Add(FedExPackageFields.DryIceWeight);
+
+                return ratingField;
+            }
+        }
+
+        /// <summary>
+        /// Gets the rating hash based on the shipment's configuration.
+        /// </summary>
+        public override string GetRatingHash(ShipmentEntity shipment)
+        {
+            return RatingFields.GetRatingHash(shipment, shipment.FedEx.Packages);
         }
 
         /// <summary>
@@ -1228,6 +1241,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return base.DimensionsAreValid(length, width, height);
+        }
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address.
+        /// </summary>
+        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        {
+            if (FedExUtility.IsSmartPostEnabled(shipment) 
+                && Geography.IsUSInternationalTerritory(shipment.ShipPerson)
+                && ((FedExServiceType)shipment.FedEx.Service) == FedExServiceType.SmartPost)
+            {
+                return false;
+            }
+
+            return base.IsCustomsRequiredByShipment(shipment);
         }
     }
 }

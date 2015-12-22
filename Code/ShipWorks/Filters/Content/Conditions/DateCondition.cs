@@ -7,6 +7,7 @@ using ShipWorks.Data;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Data.Adapter;
 using System.Data.SqlClient;
+using Interapptive.Shared;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Data;
 
@@ -88,6 +89,7 @@ namespace ShipWorks.Filters.Content.Conditions
         /// <summary>
         /// Convert the user requested operator and dates into an absolute range
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void GetEffectiveOperation(ref DateOperator effectiveOp, ref DateTime effectiveValue1, ref DateTime effectiveValue2)
         {
             DateTime now = SqlSession.Current.GetLocalDate().Date;
@@ -120,6 +122,14 @@ namespace ShipWorks.Filters.Content.Conditions
                 effectiveOp = DateOperator.Between;
                 effectiveValue1 = now.AddDays(-1);
                 effectiveValue2 = now.AddDays(-1);
+            }
+
+            // Tomorrow is a Between of the start and end of Tomorrow
+            if (op == DateOperator.Tomorrow)
+            {
+                effectiveOp = DateOperator.Between;
+                effectiveValue1 = now.AddDays(1);
+                effectiveValue2 = now.AddDays(1);
             }
 
             // Equal is a Between of the begining and end of the configured day
@@ -179,28 +189,7 @@ namespace ShipWorks.Filters.Content.Conditions
                     firstDate = GetFirstDateOf(effectiveWithinUnit);
                 }
 
-                switch (effectiveWithinUnit)
-                {
-                    case DateWithinUnit.Days:
-                        effectiveValue1 = firstDate.AddDays(-effectiveWithinAmount);
-                        break;
-
-                    case DateWithinUnit.Weeks:
-                        effectiveValue1 = firstDate.AddDays(-(effectiveWithinAmount * 7));
-                        break;
-
-                    case DateWithinUnit.Months:
-                        effectiveValue1 = firstDate.AddMonths(-effectiveWithinAmount);
-                        break;
-
-                    case DateWithinUnit.Quarters:
-                        effectiveValue1 = firstDate.AddMonths(-(effectiveWithinAmount * 3));
-                        break;
-
-                    case DateWithinUnit.Years:
-                        effectiveValue1 = firstDate.AddYears(-effectiveWithinAmount);
-                        break;
-                }
+                effectiveValue1 = addDateUnit(firstDate, effectiveWithinUnit, -effectiveWithinAmount);
 
                 if (effectiveWithinInclusive == DateWithinRangeType.WholeExclusive)
                 {
@@ -211,6 +200,32 @@ namespace ShipWorks.Filters.Content.Conditions
                 {
                     effectiveOp = DateOperator.GreaterThanOrEqual;
                 }
+            }
+
+            if (op == DateOperator.Next)
+            {
+                effectiveOp = DateOperator.Between;
+
+                DateTime firstDate;
+                firstDate = now;
+
+                switch (withinRangeType)
+                {
+                    case DateWithinRangeType.WholeInclusive:
+                        // Gets the date including the current unit
+                        effectiveValue1 = GetFirstDateOf(withinUnit);
+                        break;
+                    case DateWithinRangeType.WholeExclusive:
+                        // Add one unit to exclude the unit we are on
+                        effectiveValue1 = addDateUnit(effectiveValue1, withinUnit, 1);
+                        break;
+                    case DateWithinRangeType.FromToday:
+                    default:
+                        effectiveValue1 = now;
+                        break;
+                }
+
+                effectiveValue2 = addDateUnit(effectiveValue1, withinUnit, withinAmount);
             }
         }
 
@@ -261,6 +276,29 @@ namespace ShipWorks.Filters.Content.Conditions
 
             throw new InvalidOperationException("Invalid DateWithinUnit value.");
 
+        }
+
+        /// <summary>
+        /// Adds the specified date unit to the supplied date
+        /// </summary>
+        /// <returns></returns>
+        private static DateTime addDateUnit(DateTime date, DateWithinUnit unit, int value)
+        {
+            switch (unit)
+            {
+                case DateWithinUnit.Days:
+                    return date.AddDays(value);
+                case DateWithinUnit.Weeks:
+                    return date.AddDays((value * 7));
+                case DateWithinUnit.Months:
+                    return date.AddMonths(value);
+                case DateWithinUnit.Quarters:
+                    return date.AddMonths((value * 3));
+                case DateWithinUnit.Years:
+                    return date.AddYears(value);
+            }
+
+            throw new InvalidOperationException("Invalid DateWithinUnit value.");
         }
 
         /// <summary>
@@ -415,9 +453,11 @@ namespace ShipWorks.Filters.Content.Conditions
             {
                 case DateOperator.Today:
                 case DateOperator.Yesterday:
+                case DateOperator.Tomorrow:
                 case DateOperator.This:
                 case DateOperator.Last:
                 case DateOperator.WithinTheLast:
+                case DateOperator.Next:
                     return true;
             }
 

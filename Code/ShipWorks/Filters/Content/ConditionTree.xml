@@ -90,11 +90,14 @@
         <Condition identifier="Amazon.OrderID" />
         <Condition identifier="Amazon.FulfillmentChannel" displayAs="Amazon Fulfilled By" />
         <Condition identifier="Amazon.IsPrime" displayAs="Amazon Prime" />
+        <Condition identifier="Amazon.EarliestExpectedDeliveryDate" displayAs="Amazon Earliest Delivery" />
+        <Condition identifier="Amazon.LatestExpectedDeliveryDate" displayAs="Amazon Latest Delivery" />
         <Condition identifier="ChannelAdvisorOrder.CustomOrderIdentifier" />
         <Condition identifier="ChannelAdvisorOrder.ShippingStatus" />
         <Condition identifier="ChannelAdvisorOrder.PaymentStatus" />
         <Condition identifier="ChannelAdvisorOrder.CheckoutStatus" />
         <Condition identifier="ChannelAdvisorOrder.FlagType" />
+        <Condition identifier="ChannelAdvisorOrder.IsPrime" />
         <Condition identifier="CommerceInterfaceOrder.CommerceInterfaceOrderNumber" />
         <Condition identifier="EbayOrder.EbayBuyerID" />
         <Condition identifier="EbayOrder.SellingManagerRecord" />
@@ -222,6 +225,7 @@
       <Condition identifier="ChannelAdvisorOrderItem.DistributionCenter" />
       <Condition identifier="ChannelAdvisorOrderItem.IsFBA" />
       <Condition identifier="ChannelAdvisorOrderItem.MPN" />
+      <Condition identifier="ChannelAdvisorOrderItem.Classification" />
       <Condition identifier="EbayOrderItem.SellingManagerRecord" />
       <Condition identifier="EbayOrderItem.Feedback" />
       <Condition identifier="EbayOrderItem.PaymentMethod" />

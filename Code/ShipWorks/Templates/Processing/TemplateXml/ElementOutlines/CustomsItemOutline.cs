@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {

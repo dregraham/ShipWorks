@@ -935,6 +935,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("FimsAirWaybill", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ReturnsClearance", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("MaskedData", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ReferenceFIMS", fieldHashtable);
 		}
 		#endregion
 
@@ -2691,6 +2703,50 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)FedExShipmentFieldIndex.RequestedLabelFormat, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.RequestedLabelFormat, value); }
+		}
+
+		/// <summary> The FimsAirWaybill property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."FimsAirWaybill"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String FimsAirWaybill
+		{
+			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.FimsAirWaybill, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.FimsAirWaybill, value); }
+		}
+
+		/// <summary> The ReturnsClearance property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."ReturnsClearance"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ReturnsClearance
+		{
+			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.ReturnsClearance, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.ReturnsClearance, value); }
+		}
+
+		/// <summary> The MaskedData property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."MaskedData"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> MaskedData
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)FedExShipmentFieldIndex.MaskedData, false); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.MaskedData, value); }
+		}
+
+		/// <summary> The ReferenceFIMS property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."ReferenceFIMS"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ReferenceFIMS
+		{
+			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.ReferenceFIMS, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.ReferenceFIMS, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExPackageEntity' which are related to this entity via a relation of type '1:n'.

@@ -7,6 +7,7 @@ using System.ComponentModel;
 using ShipWorks.Common.Threading;
 using System.Threading;
 using System.Collections;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Common.Threading
@@ -211,6 +212,7 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// Executes on the background thread
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void InternalExecute(object state)
         {
             OperationState<T> operationState = (OperationState<T>) state;

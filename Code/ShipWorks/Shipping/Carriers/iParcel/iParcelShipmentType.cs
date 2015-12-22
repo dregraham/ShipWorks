@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -140,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Create the UserControl that is used to edit a profile for the service
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new iParcelProfileControl();
         }
@@ -259,6 +260,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
         {
             IParcelShipmentEntity iParcel = shipment.IParcel;
@@ -372,7 +374,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 {
                     adapter.FetchEntityCollection(iParcelProfileEntityParcel.Packages,
                                                   new RelationPredicateBucket(IParcelProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
-                    
+
                     iParcelProfileEntityParcel.Packages.Sort((int) IParcelProfilePackageFieldIndex.IParcelProfilePackageID, ListSortDirection.Ascending);
                 }
             }
@@ -518,7 +520,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
         /// <returns>An iParcelSettingsControl object.</returns>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             iParcelSettingsControl settingsControl = new iParcelSettingsControl();
             settingsControl.Initialize(ShipmentTypeCode);
@@ -590,11 +592,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 throw new NotFoundException("Primary package not found.");
             }
         }
-        
+
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new iParcelShipmentProcessingSynchronizer();
         }
@@ -618,7 +620,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 {
                     throw new ArgumentNullException("shipment");
                 }
-                
+
                 if (shipment.RequestedLabelFormat != (int) ThermalLanguage.None)
                 {
                     shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
@@ -685,7 +687,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
                 return new ShipmentParcel(shipment, package.IParcelPackageID, package.TrackingNumber,
                     new InsuranceChoice(shipment, package, package, package),
-                    new DimensionsAdapter(package));
+                    new DimensionsAdapter(package))
+                {
+                    TotalWeight = package.Weight + package.DimsWeight
+                };
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");
@@ -818,7 +823,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
                     IEnumerable<iParcelServiceType> disabledServices = GetExcludedServiceTypes(excludedServiceTypeRepository)
                         .Select(s => (iParcelServiceType)s);
-                    
+
 
                     // Filter out the excluded service types before creating rate results
                     foreach (iParcelServiceType serviceType in supportedServiceTypes.Except(disabledServices.Where(s => (iParcelServiceType)s != (iParcelServiceType)shipment.IParcel.Service)))
@@ -833,7 +838,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                         decimal dutyCost = serviceRows.Sum(row => decimal.Parse(row["PackageDuty"].ToString()));
                         decimal totalCost = shippingCost + taxCost + dutyCost;
 
-                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalCost, dutyCost, taxCost, shippingCost, new iParcelRateSelection(serviceType))
+                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty,
+                            totalCost, new RateAmountComponents(taxCost, dutyCost, shippingCost),
+                            new iParcelRateSelection(serviceType))
                         {
                             ServiceLevel = ServiceLevelType.Anytime,
                             ShipmentType = ShipmentTypeCode.iParcel,
@@ -865,7 +872,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 return base.GetTrackingNumbers(shipment);
             }
-            
+
             List<string> trackingList = new List<string>();
 
             for (int i = 0; i < iParcelShipment.Packages.Count; i++)
@@ -932,7 +939,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 throw new iParcelException("ShipWorks could not find the tracking information in the response from i-parcel.");
             }
-            
+
             StringBuilder summary = new StringBuilder();
 
             // Event history is in descending order so grab the first row
@@ -989,13 +996,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     Time = eventDate.ToString("h:mm tt"),
                     Location = GetTrackingDetailLocation(response, rowIndex)
                 };
-                
+
                 trackingResult.Details.Add(detail);
             }
         }
 
         /// <summary>
-        /// Gets the tracking detail location for a specific trackable event in the DataSet 
+        /// Gets the tracking detail location for a specific trackable event in the DataSet
         /// denoted by the given row index.
         /// </summary>
         /// <param name="response">The response.</param>
@@ -1067,9 +1074,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <returns>An instance of an iParcelBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            // There was a conscious decision made with input from Rich that for now we can assume the origin 
+            // There was a conscious decision made with input from Rich that for now we can assume the origin
             // country will always be US when the shipment is configured to ship from the account address
-            string originCountryCode = (ShipmentOriginSource)shipment.OriginOriginID == ShipmentOriginSource.Account ? 
+            string originCountryCode = (ShipmentOriginSource)shipment.OriginOriginID == ShipmentOriginSource.Account ?
                                         "US" : shipment.AdjustedOriginCountryCode();
 
             // We only want to check i-parcel for international shipments originating in the US
@@ -1107,37 +1114,43 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
-
-            fields.AddRange
-            (
-                new List<IEntityField2>()
-                {
-                    shipment.IParcel.Fields[IParcelShipmentFields.IParcelAccountID.FieldIndex],
-                    shipment.IParcel.Fields[IParcelShipmentFields.IsDeliveryDutyPaid.FieldIndex],
-                    shipment.Order.Fields[OrderFields.OrderTotal.FieldIndex],
-                    shipment.Order.Fields[OrderFields.RollupItemCount.FieldIndex],
-                    shipment.IParcel.Fields[IParcelShipmentFields.TrackByEmail.FieldIndex],
-                    shipment.IParcel.Fields[IParcelShipmentFields.TrackBySMS.FieldIndex],
-                }
-            );
-
-            // Grab all the fields for all the package in this shipment
-            foreach (IParcelPackageEntity package in shipment.IParcel.Packages)
+            get
             {
-                fields.Add(package.Fields[IParcelPackageFields.Weight.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.DimsWeight.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.DimsWidth.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.DimsHeight.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.DeclaredValue.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.InsuranceValue.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.Insurance.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.InsurancePennyOne.FieldIndex]);
-            }
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-            return fields;
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(IParcelShipmentFields.IParcelAccountID);
+                ratingField.ShipmentFields.Add(IParcelShipmentFields.IsDeliveryDutyPaid);
+                ratingField.ShipmentFields.Add(OrderFields.OrderTotal);
+                ratingField.ShipmentFields.Add(OrderFields.RollupItemCount);
+                ratingField.ShipmentFields.Add(IParcelShipmentFields.TrackByEmail);
+                ratingField.ShipmentFields.Add(IParcelShipmentFields.TrackBySMS);
+
+                ratingField.ShipmentFields.Add(IParcelPackageFields.Weight);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsWeight);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsWidth);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsHeight);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsLength);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.DeclaredValue);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.InsuranceValue);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.Insurance);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.InsurancePennyOne);
+
+                return ratingField;
+            }
+        }
+
+        /// <summary>
+        /// Gets the rating hash based on the shipment's configuration.
+        /// </summary>
+        public override string GetRatingHash(ShipmentEntity shipment)
+        {
+            return RatingFields.GetRatingHash(shipment, shipment.IParcel.Packages);
         }
 
         /// <summary>

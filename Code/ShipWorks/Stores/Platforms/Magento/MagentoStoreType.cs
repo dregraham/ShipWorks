@@ -37,24 +37,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Identifies the store type
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.Magento;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Magento;
 
         /// <summary>
         /// Log request/responses as Magento
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.Magento;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.Magento;
 
         /// <summary>
         /// Create the magento-specific store entity
@@ -271,5 +259,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     throw new NotImplementedException("Magento Version not supported");
             }
         }
+
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000049745";
     }
 }

@@ -12,7 +12,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
     /// </summary>
     public class FedExSettings
     {
-        // TODO: add the production URL when we receive it from FedEx
         private const string ProductionUrl = "https://ws.fedex.com:443/web-services/";
 
         private const string TestingUrl = "https://wsbeta.fedex.com:443/web-services/";
@@ -20,6 +19,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         private readonly ICarrierSettingsRepository settingsRepository;
 
         private readonly ShippingSettingsEntity shippingSettings;
+
+        private const string FimsMailViewShipUrl = "http://www.fimsform.com/pkgFedex/pkgFormService";
+        private const string FimsMailViewTrackUrlFormat = "http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID={0}";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExSettings" /> class.
@@ -51,7 +53,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "fOilEsjTTKLzuwNi";
+                // 2015 credential key
+                return "HmTIi6ILfEtv3p42";
             }
         }
 
@@ -63,7 +66,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return SecureText.Decrypt("ED92wCRD8FOLC7+3XBElFwZiMTc3af91XMaxrxLLF4g=", "apptive");
+                // 2015 password - YcLZTdWF7NALqoCD0szKwVnif
+                return SecureText.Decrypt("nezzUnZ15oqRucZWu/UnNBaktSIXqglmQalC9U1uN9Q=", "apptive");
             }
         }
 
@@ -98,7 +102,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "ITSW";
+                // This is the first part of the 2015 VersionCaptureId: IEOQ7038
+                return "IEOQ";
             }
         }
 
@@ -112,7 +117,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "5236";
+                // This is the last part of the 2015 VersionCaptureId: IEOQ7038
+                return "7038";
             }
         }
 
@@ -140,15 +146,58 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         }
 
         /// <summary>
+        /// Get the FedEx FIMS tracking endpoint URL to use
+        /// </summary>
+        public string FimsTrackEndpointUrlFormat
+        {
+            get
+            {
+                return FimsMailViewTrackUrlFormat;
+            }
+        }
+
+        /// <summary>
+        /// Get the FedEx FIMS Ship endpoint URL to use
+        /// </summary>
+        public string FimsShipEndpointUrl
+        {
+            get
+            {
+                return FimsMailViewShipUrl;
+            }
+        }
+
+        /// <summary>
+        /// Get the FedEx FIMS username to use
+        /// </summary>
+        public string FimsUsername
+        {
+            get
+            {
+                return shippingSettings.FedExFimsUsername;
+            }
+        }
+
+        /// <summary>
+        /// Get the FedEx FIMS password to use
+        /// </summary>
+        public string FimsPassword
+        {
+            get
+            {
+                return shippingSettings.FedExFimsPassword;
+            }
+        }
+
+        /// <summary>
         /// Gets the ship version number.
         /// </summary>
-        public const string ShipVersionNumber = "15";
+        public const string ShipVersionNumber = "17";
 
         /// <summary>
         /// Gets the open ship version number.
         /// </summary>
-        public const string OpenShipVersionNumber = "7";
-            
+        public const string OpenShipVersionNumber = "9";
 
         /// <summary>
         /// Gets the type of the currency.

@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ComponentFactory.Krypton.Toolkit;
+using Interapptive.Shared;
 using ShipWorks.Templates.Printing;
 using ShipWorks.UI.Controls.Design;
 using SandContextPopup = Divelements.SandRibbon.ContextPopup;
@@ -148,6 +149,7 @@ namespace ShipWorks.Templates.Media
         /// <summary>
         /// Load the context menu
         /// </summary>
+        [NDependIgnoreLongMethod]
         private SandContextPopup LoadContextMenu()
         {
             SandContextPopup contextMenu = new SandContextPopup();

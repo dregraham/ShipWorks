@@ -8,7 +8,7 @@
         /// <summary>
         /// Gets the corresponding shipment type for the factory.
         /// </summary>
-        ShipmentType ShipmentType { get; }
+        ShipmentTypeCode ShipmentTypeCode { get; }
 
         /// <summary>
         /// Creates a footnote control.

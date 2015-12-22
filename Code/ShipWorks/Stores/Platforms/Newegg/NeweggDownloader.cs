@@ -16,7 +16,7 @@ using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
 using log4net;
 using System.Globalization;
-
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download;
 using ShipWorks.Stores.Platforms.Newegg.Enums;

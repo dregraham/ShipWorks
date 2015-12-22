@@ -238,6 +238,7 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Load the state of the window from the registry
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void RestoreWindowState(string windowName)
         {
             if (string.IsNullOrEmpty(windowName))

@@ -1,21 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Interapptive.Shared.Collections
 {
-    public delegate void CollectionChangedEventHandler<T>(object sender, CollectionChangedEventArgs<T> e) where T: class;
+    public delegate void CollectionChangedEventHandler<T>(object sender, CollectionChangedEventArgs<T> e) where T : class;
 
     /// <summary>
     /// EventArgs for the CollectionChanged event
     /// </summary>
-    public class CollectionChangedEventArgs<T> : EventArgs
+    public class CollectionChangedEventArgs<T> : EventArgs where T : class
     {
-        T newItem;
-        T oldItem;
-
-        int index;
-
         /// <summary>
         /// Consructor
         /// </summary>
@@ -26,42 +19,24 @@ namespace Interapptive.Shared.Collections
                 throw new ArgumentException("Both newItem and oldItem cannot be null.");
             }
 
-            this.newItem = newItem;
-            this.oldItem = oldItem;
-            this.index = index;
+            NewItem = newItem;
+            OldItem = oldItem;
+            Index = index;
         }
 
         /// <summary>
         /// The newly added item in the collection
         /// </summary>
-        public T NewItem
-        {
-            get
-            {
-                return newItem;
-            }
-        }
+        public T NewItem { get; }
 
         /// <summary>
         /// The item that was removed or replaced in the collection
         /// </summary>
-        public T OldItem
-        {
-            get
-            {
-                return oldItem;
-            }
-        }
+        public T OldItem { get; }
 
         /// <summary>
         /// The index of the addition, removal, or insertion.
         /// </summary>
-        public int Index
-        {
-            get
-            {
-                return index;
-            }
-        }
+        public int Index { get; }
     }
 }

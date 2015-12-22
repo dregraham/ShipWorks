@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -13,7 +13,6 @@ using ShipWorks.Shipping.Carriers.iParcel.Net.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
-    [TestClass]
     public class iParcelSkuQuantityParserTest
     {
         private iParcelSkuQuantityParser testObject;
@@ -21,8 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         private ShipmentEntity shipment;
         private Mock<ITokenProcessor> tokenProcessor;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelSkuQuantityParserTest()
         {
             shipment = new ShipmentEntity()
             {
@@ -60,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             shipment.Order.OrderItems.Add(new OrderItemEntity { Description = "some description", Quantity = 2, Weight = 1.54, UnitPrice = 3.40M, SKU = "12345678" });
             shipment.Order.OrderItems.Add(new OrderItemEntity { Description = "another description", Quantity = 1, Weight = 5.54, UnitPrice = 4.90M, SKU = "12345678" });
-           
+
             // Setup the token processor to just return the string that was passed in
             tokenProcessor = new Mock<ITokenProcessor>();
             tokenProcessor.Setup(t => t.Process(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns((string token, ShipmentEntity s) => token);
@@ -68,71 +66,71 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject = new iParcelSkuQuantityParser(shipment, tokenProcessor.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_SkuQuantity_Test()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45 | XYZ, 2343");
 
-            Assert.AreEqual(2, items.Keys.Count);
-            Assert.AreEqual("ABC123", items.Keys.First());
-            Assert.AreEqual("XYZ", items.Keys.Last());
+            Assert.Equal(2, items.Keys.Count);
+            Assert.Equal("ABC123", items.Keys.First());
+            Assert.Equal("XYZ", items.Keys.Last());
 
-            Assert.AreEqual(45, items["ABC123"]);
-            Assert.AreEqual(2343, items["XYZ"]);
+            Assert.Equal(45, items["ABC123"]);
+            Assert.Equal(2343, items["XYZ"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_SkuQuantity_SingleItem_Test()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45");
 
-            Assert.AreEqual(1, items.Count);
-            Assert.IsTrue(items.ContainsKey("ABC123"));
-            Assert.AreEqual(45, items["ABC123"]);
+            Assert.Equal(1, items.Count);
+            Assert.True(items.ContainsKey("ABC123"));
+            Assert.Equal(45, items["ABC123"]);
 
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_SkuQuantity_SkuContainsPunctuation_Test()
         {
             Dictionary<string, int> items = testObject.Parse("ABC._~;123, 45 | XYZ, 2343");
 
-            Assert.AreEqual(2, items.Count);
+            Assert.Equal(2, items.Count);
 
-            Assert.IsTrue(items.ContainsKey("ABC._~;123"));
-            Assert.IsTrue(items.ContainsKey("XYZ"));
+            Assert.True(items.ContainsKey("ABC._~;123"));
+            Assert.True(items.ContainsKey("XYZ"));
 
-            Assert.AreEqual(45, items["ABC._~;123"]);
-            Assert.AreEqual(2343, items["XYZ"]);
+            Assert.Equal(45, items["ABC._~;123"]);
+            Assert.Equal(2343, items["XYZ"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_SkuQuantity_DanglingPipe_Test()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45 | XYZ, 2343|");
 
-            Assert.AreEqual(2, items.Count);
-            Assert.IsTrue(items.ContainsKey("ABC123"));
-            Assert.IsTrue(items.ContainsKey("XYZ"));
+            Assert.Equal(2, items.Count);
+            Assert.True(items.ContainsKey("ABC123"));
+            Assert.True(items.ContainsKey("XYZ"));
 
-            Assert.AreEqual(45, items["ABC123"]);
-            Assert.AreEqual(2343, items["XYZ"]);
+            Assert.Equal(45, items["ABC123"]);
+            Assert.Equal(2343, items["XYZ"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_SkuQuantity_DanglingPipeAndTrailingWhitespace_Test()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45 | XYZ, 2343|        ");
 
-            Assert.AreEqual(2, items.Count);
-            Assert.IsTrue(items.ContainsKey("ABC123"));
-            Assert.IsTrue(items.ContainsKey("XYZ"));
+            Assert.Equal(2, items.Count);
+            Assert.True(items.ContainsKey("ABC123"));
+            Assert.True(items.ContainsKey("XYZ"));
 
-            Assert.AreEqual(45, items["ABC123"]);
-            Assert.AreEqual(2343, items["XYZ"]);
+            Assert.Equal(45, items["ABC123"]);
+            Assert.Equal(2343, items["XYZ"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_DelegatesToTokenProcessor_Test()
         {
             testObject.Parse("000000, 5 | 111111, 6");
@@ -141,41 +139,37 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             tokenProcessor.Verify(t => t.Process("000000, 5 | 111111, 6", shipment), Times.Once());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(iParcelException))]
+        [Fact]
         public void Parse_ThrowsiParcelException_WhenSkuQuantityGroupingLengthIsNotTwo_Test()
         {
+
             // This will generate a skuQuantity array with only a single item (2343)
-            testObject.Parse("ABC123, 45 | 2343");
+            Assert.Throws<iParcelException>(() => testObject.Parse("ABC123, 45 | 2343"));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(iParcelException))]
+        [Fact]
         public void Parse_ThrowsiParcelException_WhenSkuQuantityGroupingIsMissingPipe_Test()
         {
             // Pipe is missing after the first quantity value
-            testObject.Parse("ABC123, 45 XYZ, 2343");
+            Assert.Throws<iParcelException>(() => testObject.Parse("ABC123, 45 XYZ, 2343"));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(iParcelException))]
+        [Fact]
         public void Parse_ThrowsiParcelException_WhenSkuQuantityListIsMissingSku_Test()
         {
-            testObject.Parse("123456789, 45 | , 2343");
+            Assert.Throws<iParcelException>(() => testObject.Parse("123456789, 45 | , 2343"));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(iParcelException))]
+        [Fact]
         public void Parse_ThrowsiParcelException_WhenQuantityIsString_Test()
         {
-            testObject.Parse("123456789, 45 | 123, ABC");
+            Assert.Throws<iParcelException>(() => testObject.Parse("123456789, 45 | 123, ABC"));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(iParcelException))]
+        [Fact]
         public void Parse_ThrowsiParcelException_WhenQuantityIsDecimal_Test()
         {
-            testObject.Parse("123456789, 45 | 123, 45.4");
+            Assert.Throws<iParcelException>(() => testObject.Parse("123456789, 45 | 123, 45.4"));
         }
     }
 }

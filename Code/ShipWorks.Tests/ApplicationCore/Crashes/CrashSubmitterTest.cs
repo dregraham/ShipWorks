@@ -6,13 +6,12 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Crashes;
 
 namespace ShipWorks.Tests.ApplicationCore.Crashes
 {
-    [TestClass]
     public class CrashSubmitterTest
     {
         private Mock<Exception> testException;
@@ -25,8 +24,7 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
         private string stackTrace = "StackTrace";
         private string innerStackTrace = "InnerStackTrace";
 
-        [TestInitialize]
-        public void Initialize()
+        public CrashSubmitterTest()
         {
             Assembly assembly = typeof(CrashSubmitter).Assembly;
             version = string.Format("V{0}", assembly.GetName().Version.ToString());
@@ -49,17 +47,17 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
             testIoInnerException.Setup(e => e.StackTrace).Returns(innerStackTrace);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetIdentifier_NoInnerException_ReturnsCorrectIdentifier_Test()
         {
             string expectedIdentifier = string.Format("{0} {1}{2},None{3}", version, testException.Object.GetType().Name, exceptionMessage, stackTrace);
 
             string returnedIdentifier = CrashSubmitter.GetIdentifier(testException.Object);
 
-            Assert.AreEqual(expectedIdentifier, returnedIdentifier);
+            Assert.Equal(expectedIdentifier, returnedIdentifier);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetIdentifier_WithInnerException_ReturnsCorrectIdentifier_Test()
         {
 
@@ -70,20 +68,20 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
 
             string returnedIdentifier = CrashSubmitter.GetIdentifier(testException);
 
-            Assert.AreEqual(expectedIdentifier, returnedIdentifier);
+            Assert.Equal(expectedIdentifier, returnedIdentifier);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetIdentifier_NoInnerExceptionAndIsIoException_ReturnsCorrectIdentifier_Test()
         {
             string expectedIdentifier = string.Format("{0} {1}{2},None{3}", version, testIoException.Object.GetType().Name, exceptionMessage, stackTrace);
 
             string returnedIdentifier = CrashSubmitter.GetIdentifier(testIoException.Object);
 
-            Assert.AreEqual(expectedIdentifier, returnedIdentifier);
+            Assert.Equal(expectedIdentifier, returnedIdentifier);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetIdentifier_WithInnerExceptionAndIsIoException_ReturnsCorrectIdentifier_Test()
         {
             IOException testInnerException = new IOException(innerExceptionMessage);
@@ -93,7 +91,7 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
 
             string returnedIdentifier = CrashSubmitter.GetIdentifier(testException);
 
-            Assert.AreEqual(expectedIdentifier, returnedIdentifier);
+            Assert.Equal(expectedIdentifier, returnedIdentifier);
         }
     }
 }

@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Templates.Processing.TemplateXml;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Shipping.Carriers.BestRate;
+using Autofac;
 
 namespace ShipWorks.Shipping.Carriers.None
 {
@@ -82,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             // PreProcess is overridden to do nothing, so there is nothing to synchronize
             return null;
@@ -92,10 +88,11 @@ namespace ShipWorks.Shipping.Carriers.None
         /// There's nothing to do for this shipment type, so it just returns a single 
         /// item list of the shipment provided.
         /// </summary> 
-        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, System.Windows.Forms.DialogResult> counterRatesProcessing, RateResult selectedRate)
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, System.Windows.Forms.DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
         {
             return new List<ShipmentEntity>() { shipment };
         }
+
         /// <summary>
         /// Process the shipment
         /// </summary>
@@ -113,5 +110,10 @@ namespace ShipWorks.Shipping.Carriers.None
         {
             return new NullShippingBroker();
         }
+
+        /// <summary>
+        /// Checks whether this shipment type is allowed for the given shipment
+        /// </summary>
+        public override bool IsAllowedFor(ShipmentEntity shipment) => true;
     }
 }

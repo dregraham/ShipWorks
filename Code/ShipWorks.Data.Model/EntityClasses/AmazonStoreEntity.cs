@@ -525,6 +525,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("DomainName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("AmazonShippingToken", fieldHashtable);
 		}
 		#endregion
 
@@ -783,6 +786,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.DomainName, true); }
 			set	{ SetValue((int)AmazonStoreFieldIndex.DomainName, value); }
+		}
+
+		/// <summary> The AmazonShippingToken property of the Entity AmazonStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonStore"."AmazonShippingToken"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 500<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AmazonShippingToken
+		{
+			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.AmazonShippingToken, true); }
+			set	{ SetValue((int)AmazonStoreFieldIndex.AmazonShippingToken, value); }
 		}
 
 

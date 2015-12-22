@@ -14,6 +14,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Adapter.Custom;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -23,6 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// Control for editing fedex profiles
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FedExProfileControl : ShippingProfileControlBase
     {
         /// <summary>
@@ -46,6 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Load the data from the given profile into the UI
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void LoadProfile(ShippingProfileEntity profile)
         {
             base.LoadProfile(profile);
@@ -92,6 +95,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(fedex, FedExProfileFields.DropoffType, dropoffTypeState, dropoffType, labelDropoffType);
 
             AddValueMapping(fedex, FedExProfileFields.Signature, signatureState, signature, labelSignature);
+            AddValueMapping(fedex, FedExProfileFields.ReferenceFIMS, referenceFimsState, referenceFIMS, labelFimsReference);
             AddValueMapping(fedex, FedExProfileFields.ReferenceCustomer, referenceCustomerState, referenceCustomer, labelReference);
             AddValueMapping(fedex, FedExProfileFields.ReferenceInvoice, referenceInvoiceState, referenceInvoice, labelInvoice);
             AddValueMapping(fedex, FedExProfileFields.ReferencePO, referencePoState, referencePO, labelPO);
@@ -115,6 +119,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(fedex, FedExProfileFields.ReturnSaturdayPickup, saturdayReturnState, saturdayReturn);
 
             AddValueMapping(fedex, FedExProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);
+            AddValueMapping(fedex, FedExProfileFields.ReturnsClearance, returnsClearanceState, returnsClearance, labelReturnsClearance);
+
 
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderShip, labelEmailSender);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderException);
@@ -362,9 +368,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
 
-                okService =
-                    serviceType == FedExServiceType.GroundHomeDelivery ||
-                    serviceType == FedExServiceType.FedExGround;
+                okService = FedExUtility.IsGroundService(serviceType);
             }
 
             // No packaging selected

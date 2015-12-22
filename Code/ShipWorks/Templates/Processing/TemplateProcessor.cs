@@ -14,6 +14,7 @@ using ShipWorks.Data;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.IO;
+using Interapptive.Shared;
 
 namespace ShipWorks.Templates.Processing
 {
@@ -40,6 +41,7 @@ namespace ShipWorks.Templates.Processing
         /// Process the given template for the specified list of selected entities.  If the progress item has not already been started, it
         /// will be started and completed by this function. If if has alread been started, it will be left in the Running state.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static IList<TemplateResult> ProcessTemplate(TemplateEntity template, List<long> idList, IProgressReporter progress)
         {
             if (idList == null)
@@ -131,6 +133,7 @@ namespace ShipWorks.Templates.Processing
         /// Process the template using the given list of entities as the primary input.  Can result in more than one result
         /// if the template utilizes the "TemplatePartition" tag.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static List<TemplateResult> PerformTemplateTransform(TemplateEntity template, TemplateTranslationContext context)
         {
             context.ProgressDetail = "Processing template...";

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
+using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -15,9 +15,6 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipSense;
-using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
-using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -28,19 +25,20 @@ using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Stores;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.HelperClasses;
-using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
 using ShipWorks.Shipping.Tracking;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
-using System.Security.Cryptography;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
+using Interapptive.Shared;
+using Interapptive.Shared.Business.Geography;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping
 {
@@ -53,7 +51,7 @@ namespace ShipWorks.Shipping
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentType));
 
         /// <summary>
-        /// HTTPS certificate inspector to use. 
+        /// HTTPS certificate inspector to use.
         /// </summary>
         private ICertificateInspector certificateInspector;
 
@@ -144,7 +142,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed 
+        /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed
         /// in ShipWorks, then once its processed in WorldShip its completed.  Opted instead of hardcoding WorldShip if statements
         /// to use this instead so its easier to track down all the usgages by doing Find References on this property.
         /// </summary>
@@ -154,8 +152,8 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Gets or sets the certificate inspector that should be used when wanting to add additional security 
-        /// around API calls to shipping partners. This is defaulted to the trusting inspector so that calls 
+        /// Gets or sets the certificate inspector that should be used when wanting to add additional security
+        /// around API calls to shipping partners. This is defaulted to the trusting inspector so that calls
         /// will continue to work as expected. Calls that require specific inspection should assign this property
         /// accordingly.
         /// </summary>
@@ -208,6 +206,25 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Checks whether this shipment type is allowed for the given shipment
+        /// </summary>
+        public virtual bool IsAllowedFor(ShipmentEntity shipment)
+        {
+            // Amazon prime orders can only be shipped via the Amazon carrier
+            // this is restriction is per Amazon. 
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IOrderManager orderManager = lifetimeScope.Resolve<IOrderManager>();
+                orderManager.PopulateOrderDetails(shipment);
+
+                IAmazonOrder order = shipment.Order as IAmazonOrder;
+
+                // If the order is Amazon Prime return false 
+                return !order?.IsPrime ?? true;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
         public virtual bool HasAccounts
@@ -233,23 +250,39 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
+        /// null if the shipment type does not require setup
+        /// </summary>
+        /// <remarks>This overload will use the current lifetime scope to resolve the wizard if it is registered.
+        /// If it is not, it will fall back to the other version of this method</remarks>
+        public virtual ShipmentTypeSetupWizardForm CreateSetupWizard(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<ShipmentTypeSetupWizardForm>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode) :
+                CreateSetupWizard();
+        }
+
+        /// <summary>
         /// Creates the UserControl that is used to edit service options for the shipment type
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        public ServiceControlBase CreateServiceControl(RateControl rateControl)
+        public ServiceControlBase CreateServiceControl(RateControl rateControl, ILifetimeScope lifetimeScope)
         {
             ServiceControlBase serviceControlBase = null;
             int retries = 0;
 
-            // Sometimes the krypton tools will crash when trying to get font heights.  This code will try to create 
+            // Sometimes the krypton tools will crash when trying to get font heights.  This code will try to create
             // the specific shipment type service control, and if an ArgumentException is encountered and it has GetHeight
             // in it's stack or source, will attempt to create the service control a number of times, sleeping between tries.
             while (retries < 5)
             {
                 try
                 {
-                    serviceControlBase = InternalCreateServiceControl(rateControl);
+                    serviceControlBase = lifetimeScope.IsRegisteredWithKey<ServiceControlBase>(ShipmentTypeCode) ?
+                        lifetimeScope.ResolveKeyed<ServiceControlBase>(ShipmentTypeCode, TypedParameter.From(rateControl)) :
+                        InternalCreateServiceControl(rateControl);
+
                     break;
                 }
                 catch (ArgumentException ex)
@@ -284,7 +317,10 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        protected abstract ServiceControlBase InternalCreateServiceControl(RateControl rateControl);
+        protected virtual ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
+        {
+            throw new NotImplementedException("Either override InternalCreateServiceControl or register one with the IoC container");
+        }
 
         /// <summary>
         /// Creates the UserControl taht is used to edit customs options
@@ -305,7 +341,25 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
-        public virtual SettingsControlBase CreateSettingsControl()
+        protected virtual SettingsControlBase CreateSettingsControl()
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Creates the UserControl that is used to edit the defaults\settings for the service
+        /// </summary>
+        public virtual SettingsControlBase CreateSettingsControl(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<SettingsControlBase>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<SettingsControlBase>(ShipmentTypeCode) :
+                CreateSettingsControl();
+        }
+
+        /// <summary>
+        /// Create the UserControl that is used to edit a profile for the service
+        /// </summary>
+        protected virtual ShippingProfileControlBase CreateProfileControl()
         {
             return null;
         }
@@ -313,15 +367,17 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create the UserControl that is used to edit a profile for the service
         /// </summary>
-        public virtual ShippingProfileControlBase CreateProfileControl()
+        public virtual ShippingProfileControlBase CreateProfileControl(ILifetimeScope lifetimeScope)
         {
-            return null;
+            return lifetimeScope.IsRegisteredWithKey<ShippingProfileControlBase>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<ShippingProfileControlBase>(ShipmentTypeCode) :
+                CreateProfileControl();
         }
-        
+
         /// <summary>
-        /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have 
-        /// been excluded for this shipment type. The integer values are intended to correspond to 
-        /// the appropriate enumeration values of the specific shipment type (i.e. the integer values 
+        /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have
+        /// been excluded for this shipment type. The integer values are intended to correspond to
+        /// the appropriate enumeration values of the specific shipment type (i.e. the integer values
         /// would correspond to PostalServiceType values for a UspsShipmentType).
         /// </summary>
         public IEnumerable<int> GetExcludedServiceTypes()
@@ -330,9 +386,9 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Gets the service types that have been excluded for this shipment type. The integer 
+        /// Gets the service types that have been excluded for this shipment type. The integer
         /// values are intended to correspond to the appropriate enumeration values of the specific
-        /// shipment type (i.e. the integer values would correspond to PostalServiceType values 
+        /// shipment type (i.e. the integer values would correspond to PostalServiceType values
         /// for a UspsShipmentType).
         /// </summary>
         /// <param name="repository">The repository from which the service types are fetched.</param>
@@ -343,9 +399,9 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have 
-        /// are available for this shipment type (i.e have not been excluded). The integer values are 
-        /// intended to correspond to the appropriate enumeration values of the specific shipment type 
+        /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have
+        /// are available for this shipment type (i.e have not been excluded). The integer values are
+        /// intended to correspond to the appropriate enumeration values of the specific shipment type
         /// (i.e. the integer values would correspond to PostalServiceType values for a UspsShipmentType).
         /// </summary>
         public IEnumerable<int> GetAvailableServiceTypes()
@@ -366,9 +422,9 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have 
-        /// been excluded for this shipment type. The integer values are intended to correspond to 
-        /// the appropriate enumeration values of the specific shipment type (i.e. the integer values 
+        /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have
+        /// been excluded for this shipment type. The integer values are intended to correspond to
+        /// the appropriate enumeration values of the specific shipment type (i.e. the integer values
         /// would correspond to PostalPackageType values for a UspsShipmentType).
         /// </summary>
         public IEnumerable<int> GetExcludedPackageTypes()
@@ -377,9 +433,9 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Gets the Package types that have been excluded for this shipment type. The integer 
+        /// Gets the Package types that have been excluded for this shipment type. The integer
         /// values are intended to correspond to the appropriate enumeration values of the specific
-        /// shipment type (i.e. the integer values would correspond to PostalPackageType values 
+        /// shipment type (i.e. the integer values would correspond to PostalPackageType values
         /// for a UspsShipmentType).
         /// </summary>
         /// <param name="repository">The repository from which the Package types are fetched.</param>
@@ -390,9 +446,9 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have 
-        /// are available for this shipment type (i.e have not been excluded). The integer values are 
-        /// intended to correspond to the appropriate enumeration values of the specific shipment type 
+        /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have
+        /// are available for this shipment type (i.e have not been excluded). The integer values are
+        /// intended to correspond to the appropriate enumeration values of the specific shipment type
         /// (i.e. the integer values would correspond to PostalPackageType values for a UspsShipmentType).
         /// </summary>
         public IEnumerable<int> GetAvailablePackageTypes()
@@ -462,6 +518,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Attempts to apply ShipSense values to the given shipment.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ApplyShipSense(ShipmentEntity shipment)
         {
             if (!ShouldApplyShipSense)
@@ -503,12 +560,12 @@ namespace ShipWorks.Shipping
 
             if (!knowledgebaseEntry.IsNew)
             {
-                // We have a valid knowledge base entry for this order, so we need to check to 
+                // We have a valid knowledge base entry for this order, so we need to check to
                 // see if we can apply ShipSense
                 bool applyShipSense = true;
                 if (knowledgebaseEntry.Packages.Count() > 1)
                 {
-                    // Don't want to apply ShipSense when the entry is configured for multiple 
+                    // Don't want to apply ShipSense when the entry is configured for multiple
                     // packages and the shipment type does not support multiple packages
                     applyShipSense = SupportsMultiplePackages;
                 }
@@ -516,7 +573,7 @@ namespace ShipWorks.Shipping
                 if (applyShipSense)
                 {
                     // Do any shipment type specific to get the shipment in sync with the knowledge base
-                    // entry (e.g. setting up the shipment to have the same number of packages as the 
+                    // entry (e.g. setting up the shipment to have the same number of packages as the
                     // KB entry for carriers that support multiple package shipments)
                     SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
                     List<IPackageAdapter> packageAdapters = GetPackageAdapters(shipment).ToList();
@@ -524,7 +581,7 @@ namespace ShipWorks.Shipping
                     if (IsCustomsRequired(shipment))
                     {
                         // Make sure the customs items are loaded before applying the knowledge base entry
-                        // data to the shipment/packages and customs info otherwise the customs data of 
+                        // data to the shipment/packages and customs info otherwise the customs data of
                         // the "before" data will be empty in the first change set
                         CustomsManager.LoadCustomsItems(shipment, false);
                         knowledgebaseEntry.ApplyTo(packageAdapters, shipment.CustomsItems);
@@ -728,20 +785,9 @@ namespace ShipWorks.Shipping
             {
                 StoreEntity store = StoreManager.GetStore(shipment.Order.StoreID);
 
-                // Create an intermediate person to setup the source information, so we can copy it all at one time. If we dot it in stages, it can
-                // look edited when it really shouldn't and cause problems with concurrency.
-                PersonAdapter source = new PersonAdapter();
-                PersonAdapter.Copy(store, "", source);
+                PersonAdapter.Copy(store, "", person);
 
-                // Store doesn't maintain a first\last name - so we need to create it from the StoreName
-                PersonName name = PersonName.Parse(store.StoreName);
-
-                // Apply the name to the source
-                source.FirstName = name.First;
-                source.MiddleName = name.Middle;
-                source.LastName = name.LastWithSuffix;
-
-                PersonAdapter.Copy(source, person);
+                person.ParsedName = PersonName.Parse(store.StoreName);
 
                 return true;
             }
@@ -865,14 +911,14 @@ namespace ShipWorks.Shipping
         {
             ShippingProfileUtility.ApplyProfileValue(profile.OriginID, shipment, ShipmentFields.OriginOriginID);
             ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
-            
+
             ShippingProfileUtility.ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
             SaveRequestedLabelFormat((ThermalLanguage)shipment.RequestedLabelFormat, shipment);
 
             // Special case for insurance
             for (int i = 0; i < GetParcelCount(shipment); i++)
             {
-                InsuranceChoice insuranceChoice = GetParcelDetail(shipment, i).Insurance;
+                IInsuranceChoice insuranceChoice = GetParcelDetail(shipment, i).Insurance;
 
                 if (profile.Insurance != null)
                 {
@@ -979,47 +1025,53 @@ namespace ShipWorks.Shipping
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
         public abstract IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment);
 
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        protected virtual IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        protected RatingFields ratingField = null;
+
+        public virtual RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>()
-	        {
-	            shipment.Fields[ShipmentFields.ShipmentType.FieldIndex],
-	            shipment.Fields[ShipmentFields.ContentWeight.FieldIndex],
-	            shipment.Fields[ShipmentFields.TotalWeight.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipmentCost.FieldIndex],
-	            shipment.Fields[ShipmentFields.CustomsValue.FieldIndex],
+            [NDependIgnoreLongMethod]
+            get
+            {
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-                shipment.Fields[ShipmentFields.ShipDate.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipCompany.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStreet1.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStreet2.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStreet3.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipCity.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStateProvCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipPostalCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipCountryCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.ResidentialDetermination.FieldIndex],
-	            shipment.Fields[ShipmentFields.ResidentialResult.FieldIndex],
+                ratingField = new RatingFields();
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentType);
+                ratingField.ShipmentFields.Add(ShipmentFields.ContentWeight);
+                ratingField.ShipmentFields.Add(ShipmentFields.TotalWeight);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentCost);
+                ratingField.ShipmentFields.Add(ShipmentFields.CustomsValue);
 
-	            shipment.Fields[ShipmentFields.OriginOriginID.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginCompany.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStreet1.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStreet2.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStreet3.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginCity.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStateProvCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginPostalCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginCountryCode.FieldIndex],
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipDate);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipCompany);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet1);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet2);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet3);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipCity);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStateProvCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipPostalCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipCountryCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialDetermination);
+                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialResult);
 
-	            shipment.Fields[ShipmentFields.ReturnShipment.FieldIndex],
-	            shipment.Fields[ShipmentFields.Insurance.FieldIndex],
-	            shipment.Fields[ShipmentFields.InsuranceProvider.FieldIndex]
-	        };
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginOriginID);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginCompany);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet1);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet2);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet3);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginCity);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStateProvCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginPostalCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginCountryCode);
 
-            return fields;
+                ratingField.ShipmentFields.Add(ShipmentFields.ReturnShipment);
+                ratingField.ShipmentFields.Add(ShipmentFields.Insurance);
+                ratingField.ShipmentFields.Add(ShipmentFields.InsuranceProvider);
+
+                return ratingField;
+            }
         }
 
         /// <summary>
@@ -1027,19 +1079,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual string GetRatingHash(ShipmentEntity shipment)
         {
-            StringBuilder valueToBeHashed = new StringBuilder();
-            IEnumerable<IEntityField2> ratingFields = GetRatingFields(shipment);
-
-            foreach (IEntityField2 field in ratingFields)
-            {
-                valueToBeHashed.Append(field.CurrentValue ?? string.Empty);
-            }
-
-            using (SHA256Managed sha256 = new SHA256Managed())
-            {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(valueToBeHashed.ToString()));
-                return Convert.ToBase64String(bytes);
-            }
+            return RatingFields.GetRatingHash(shipment);
         }
 
         /// <summary>
@@ -1095,16 +1135,16 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
         /// actually processing the shipment. In most cases this is checking to see if an account exists
-        /// and will call the counterRatesProcessing callback provided when trying to process a shipment 
+        /// and will call the counterRatesProcessing callback provided when trying to process a shipment
         /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
         /// </summary>
         /// <returns>The updates shipment (or shipments) that is ready to be processed. A null value may
         /// be returned to indicate that processing should be halted completely.</returns>
-        public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
         {
-            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
+            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer(lifetimeScope);
             ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
-            
+
             return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
         }
 
@@ -1113,13 +1153,26 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual void ClearDataForCopiedShipment(ShipmentEntity shipment)
         {
-            
+
         }
 
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public abstract IShipmentProcessingSynchronizer GetProcessingSynchronizer();
+        protected virtual IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            throw new NotImplementedException("Either override GetProcessingSynchronizer or register one with the IoC container");
+        }
+
+        /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        public virtual IShipmentProcessingSynchronizer GetProcessingSynchronizer(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<IShipmentProcessingSynchronizer>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode) :
+                GetProcessingSynchronizer();
+        }
 
         /// <summary>
         /// Indicates if customs forms may be required to ship the shipment based on the
@@ -1129,8 +1182,8 @@ namespace ShipWorks.Shipping
         public virtual bool IsCustomsRequired(ShipmentEntity shipment)
         {
             // Some carts have an international shipping program in place that allow
-            // sellers to ship international orders to a domestic facility meaning 
-            // customs is not required despite the international shipping address, so 
+            // sellers to ship international orders to a domestic facility meaning
+            // customs is not required despite the international shipping address, so
             // let the store take a look at the shipment as well to determine if customs
             // are required in addition to the just looking at the shipping address.
 
@@ -1154,6 +1207,7 @@ namespace ShipWorks.Shipping
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address.
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         protected virtual bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
             bool requiresCustoms = !IsDomestic(shipment);
@@ -1212,7 +1266,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
         {
-            
+
         }
 
         /// <summary>
@@ -1251,7 +1305,7 @@ namespace ShipWorks.Shipping
         /// <returns>True if the dimensions are valid.  False otherwise.</returns>
         public virtual bool DimensionsAreValid(double length, double width, double height)
         {
-            if (length <= 0 || width <= 0 || height <= 0) 
+            if (length <= 0 || width <= 0 || height <= 0)
             {
                 return false;
             }

@@ -6,6 +6,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -70,9 +72,12 @@ namespace ShipWorks.Shipping.Settings
             }
             else
             {
-                if (SetupShipmentType(this, shipmentType.ShipmentTypeCode, shipmentType.CreateSetupWizard()))
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    RaiseSetupComplete();
+                    if (SetupShipmentType(this, shipmentType.ShipmentTypeCode, shipmentType.CreateSetupWizard(lifetimeScope)))
+                    {
+                        RaiseSetupComplete();
+                    }   
                 }
             }
         }

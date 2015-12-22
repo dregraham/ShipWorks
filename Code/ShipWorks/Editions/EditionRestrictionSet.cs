@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 
 namespace ShipWorks.Editions
 {
@@ -46,8 +47,11 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Check the restriction level of the given feature. 'data' is relative in context to the specified feature, and must be 
         /// of the type the feature expectes
+        /// 
+        /// virtual for unit tests
         /// </summary>
-        public EditionRestrictionIssue CheckRestriction(EditionFeature feature, object data)
+        [NDependIgnoreComplexMethodAttribute]
+        public virtual EditionRestrictionIssue CheckRestriction(EditionFeature feature, object data)
         {
             switch (feature)
             {

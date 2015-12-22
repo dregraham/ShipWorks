@@ -7,6 +7,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using log4net;
 using System.Web;
+using Interapptive.Shared;
 using Interapptive.Shared.Net;
 
 namespace ShipWorks.Stores.Platforms.Volusion
@@ -61,6 +62,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Performa  login on the Volusion website
         /// </summary>
+        [NDependIgnoreLongMethod]
         public bool LogOn(string username, string password)
         {
             if (loggedIn)
@@ -361,6 +363,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Creates a Volusion QueryBank saved query and returns the title so it can be exported
         /// </summary>
+        [NDependIgnoreLongMethod]
         private string CreateQueryBankQuery(ReportType reportType)
         {
             if (!loggedIn)

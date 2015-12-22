@@ -18,6 +18,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using Interapptive.Shared;
 using ShipWorks.Templates;
 
 namespace ShipWorks.Data
@@ -50,6 +51,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Static constructor
         /// </summary>
+        [NDependIgnoreLongMethod]
         static EntityUtility()
         {
             entitySeedValues[EntityType.ComputerEntity] = 1;
@@ -286,7 +288,37 @@ namespace ShipWorks.Data
             return entityField.CurrentValue;
         }
 
+        /// <summary>
+        /// Get the value of the given field for the specified entity.  This overloaded version will also check depending relations if requested.  For example,
+        /// if a ShipmentEntity is passed in but the field is a FedExField, it will try to find shipment.FedEx's field.
+        /// </summary>
+        public static object GetFieldValue(EntityBase2 entity, EntityField2 field, bool checkDependingRelations)
+        {
+            // Try to get the field value on this entity.
+            object fieldValue = GetFieldValue(entity, field);
 
+            // If the field wasn't found and checking depending relations was requested, do so
+            if (checkDependingRelations && fieldValue == null)
+            {
+                // Get the lest of depending entities
+                List<IEntity2> entitiesToSearch = entity.GetDependingRelatedEntities();
+
+                // Try to find the value for each depending entity
+                foreach (IEntity2 entity2 in entitiesToSearch)
+                {
+                    fieldValue = GetFieldValue(entity2 as EntityBase2, field, true);
+
+                    // If the value isn't null, we found it.  Break and return the value.
+                    if (fieldValue != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return fieldValue;
+        }
+        
         /// <summary>
         /// Find a chain of relations that goes from the given entity to the given entity. OneToMany relationships are considered.
         /// Returns null if no such chain is found. Many to Many relationships are never considered.
@@ -300,6 +332,7 @@ namespace ShipWorks.Data
         /// Find a chain of relations that goes from the given entity to the given entity. Returns null if no such chain is found.
         /// Many to Many relationships are never considered.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static RelationCollection FindRelationChain(EntityType fromEntityType, EntityType toEntityType, bool allowOneToMany)
         {
             // Try it bottom-to-top with the given entities
@@ -434,6 +467,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Find a chain of relations that goes from the given entity to the given entity. Returns null if no such chain is found.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static RelationCollection FindRelationChain(EntityType fromEntityType, EntityType toEntityType, List<EntityType> visitedEntityTypes)
         {
             // If this is the type we are looking for, we are done.  Just return an empty relation collection (since no relation is needed to get from an
@@ -638,6 +672,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get an image of the given entity of the given size
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         public static Image GetEntityImage(EntityType entityType, int size)
         {
             if (size != 16 && size != 32)

@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using Moq;
 using Quartz;
 using ShipWorks.Actions.Scheduling.QuartzNet;
@@ -8,10 +8,9 @@ using System.Linq;
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
 {
-    [TestClass]
     public class IntervalCalendarTests
     {
-        [TestMethod]
+        [Fact]
         public void IsTimeIncluded_ChainsWithBase()
         {
             var calendarBase = new Mock<ICalendar>().Object;
@@ -22,13 +21,13 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
                 RepeatIntervalUnit = IntervalUnit.Week
             };
 
-            Assert.IsFalse(
+            Assert.False(
                 target.IsTimeIncluded(target.StartTimeUtc)
             );
         }
 
 
-        [TestMethod]
+        [Fact]
         public void FirstWeekIsIncluded()
         {
             var target = new IntervalCalendar {
@@ -37,14 +36,14 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
                 RepeatIntervalUnit = IntervalUnit.Week
             };
 
-            Assert.IsTrue(
+            Assert.True(
                 Enumerable.Range(0, 7).All(x => 
                     target.IsTimeIncluded(target.StartTimeUtc.AddDays(x))
                 )
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void OffWeeksAreExcluded()
         {
             var target = new IntervalCalendar {
@@ -53,14 +52,14 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
                 RepeatIntervalUnit = IntervalUnit.Week
             };
 
-            Assert.IsFalse(
+            Assert.False(
                 Enumerable.Range(7, 14).Any(x => 
                     target.IsTimeIncluded(target.StartTimeUtc.AddDays(x))
                 )
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void IntervalWeekIsIncluded()
         {
             var target = new IntervalCalendar {
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
                 RepeatIntervalUnit = IntervalUnit.Week
             };
 
-            Assert.IsTrue(
+            Assert.True(
                 Enumerable.Range(14, 7).All(x =>
                     target.IsTimeIncluded(target.StartTimeUtc.AddDays(x))
                 )

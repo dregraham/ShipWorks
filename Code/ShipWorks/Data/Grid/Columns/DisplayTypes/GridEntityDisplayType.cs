@@ -28,6 +28,9 @@ using ShipWorks.Stores.Content.Panels;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
+using ShipWorks.ApplicationCore;
+using Autofac;
+using Interapptive.Shared;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -252,6 +255,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Virtual to allow derived classes a chance at processing the link
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected virtual void OnLinkClicked(EntityGridRow row, EntityGridColumn column)
         {
             GridEntityDisplayInfo info = (GridEntityDisplayInfo) row.GetFormattedValue(column).Value;
@@ -318,9 +322,12 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                             }
                             else
                             {
-                                using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }))
+                                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                                 {
-                                    dlg.ShowDialog(owner);
+                                    using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, lifetimeScope))
+                                    {
+                                        dlg.ShowDialog(owner);
+                                    }
                                 }
                             }
                         }

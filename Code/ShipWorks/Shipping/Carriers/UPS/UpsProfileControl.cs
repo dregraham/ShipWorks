@@ -9,8 +9,10 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 
@@ -19,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// UserControl for editing ups specific profile settings
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class UpsProfileControl : ShippingProfileControlBase
     {
         /// <summary>
@@ -64,6 +67,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Load the data from the given profile into the UI
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void LoadProfile(ShippingProfileEntity profile)
         {
             base.LoadProfile(profile);

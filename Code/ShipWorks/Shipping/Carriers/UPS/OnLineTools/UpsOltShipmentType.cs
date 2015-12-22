@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// <summary>
         /// Create the settings control for UPS
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             UpsOltSettingsControl control = new UpsOltSettingsControl();
             control.Initialize(ShipmentTypeCode);

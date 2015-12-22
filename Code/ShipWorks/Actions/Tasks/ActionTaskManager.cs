@@ -15,6 +15,7 @@ using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using SandMenu = Divelements.SandRibbon.Menu;
 using SandHeading = Divelements.SandRibbon.PopupHeading;
 using System.Drawing;
+using Interapptive.Shared;
 
 namespace ShipWorks.Actions.Tasks
 {
@@ -94,6 +95,8 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Create a menu that can be used to select task types
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public static SandContextPopup CreateTasksMenu()
         {
             List<ActionTaskDescriptorBinding> commonBindings = new List<ActionTaskDescriptorBinding>();
@@ -213,6 +216,7 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Add the 'Update Online' section of the tasks menu
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void AddUpdateOnlineTasksMenu(SandContextPopup contextMenu, Dictionary<StoreTypeCode, DescriptorStoreInfo> storeBindingsMap)
         {
             // Indiciates if the commands from each storetype should be put under a sub-menu of that type code.
@@ -321,8 +325,10 @@ namespace ShipWorks.Actions.Tasks
         {
             taskDescriptors = new Dictionary<string, ActionTaskDescriptor>();
 
+            IEnumerable<Type> allTypes = Assembly.Load("ShipWorks.Stores").GetTypes().Union(Assembly.GetExecutingAssembly().GetTypes());
+            
             // Look for the ConditionAttribute on each type in the assembly
-            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+            foreach (Type type in allTypes)
             {
                 if (Attribute.IsDefined(type, typeof(ActionTaskAttribute)))
                 {

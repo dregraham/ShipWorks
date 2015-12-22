@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using Interapptive.Shared.Messaging;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -17,9 +18,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                fedExServiceChangedToken?.Dispose();
+
+                if (components != null)
+                {
+                    components.Dispose();    
+                }
             }
             base.Dispose(disposing);
         }

@@ -25,17 +25,20 @@ using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using ShipWorks.UI;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Appearance;
 using Interapptive.Shared.UI;
 using ShipWorks.Data;
 using ShipWorks.Editions;
 using ShipWorks.Filters.Search;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Filters.Controls
 {
     /// <summary>
     /// Control for displaying filters in a hierarchical tree display.
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FilterTree : UserControl
     {
         // Logger
@@ -78,7 +81,7 @@ namespace ShipWorks.Filters.Controls
         // The quick filter node, if any
         FilterNodeEntity quickFilterNode = null;
         bool quickFilterSelected = false;
-        private readonly MessengerToken filterEditedToken;
+        private readonly IDisposable filterEditedToken;
         private readonly FilterControlDisplayManager quickFilterDisplayManager;
 
         // Event raised when a drag-drop operation has taken place
@@ -113,12 +116,13 @@ namespace ShipWorks.Filters.Controls
 
             UpdateQuickFilterDisplay();
 
-            filterEditedToken = Messenger.Current.Handle<FilterNodeEditedMessage>(this, HandleFilterEdited);
+            filterEditedToken = Messenger.Current.OfType<FilterNodeEditedMessage>().Subscribe(HandleFilterEdited);
         }
 
         /// <summary>
         /// Initialize the filter tree's context menu
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void InitializeContextMenu()
         {
             editionGuiHelper = new ShipWorks.Editions.EditionGuiHelper(this.components);

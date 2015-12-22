@@ -88,6 +88,12 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.AmazonOrderItemEntity:
 					toReturn = this.AmazonOrderItem;
 					break;
+				case ShipWorks.Data.Model.EntityType.AmazonProfileEntity:
+					toReturn = this.AmazonProfile;
+					break;
+				case ShipWorks.Data.Model.EntityType.AmazonShipmentEntity:
+					toReturn = this.AmazonShipment;
+					break;
 				case ShipWorks.Data.Model.EntityType.AmazonStoreEntity:
 					toReturn = this.AmazonStore;
 					break;
@@ -291,6 +297,15 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.LabelSheetEntity:
 					toReturn = this.LabelSheet;
+					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandOrderEntity:
+					toReturn = this.LemonStandOrder;
+					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandOrderItemEntity:
+					toReturn = this.LemonStandOrderItem;
+					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandStoreEntity:
+					toReturn = this.LemonStandStore;
 					break;
 				case ShipWorks.Data.Model.EntityType.MagentoOrderEntity:
 					toReturn = this.MagentoOrder;
@@ -621,6 +636,18 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<AmazonOrderItemEntity> AmazonOrderItem
 		{
 			get { return new DataSource2<AmazonOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonProfileEntity instances in the database.</summary>
+		public DataSource2<AmazonProfileEntity> AmazonProfile
+		{
+			get { return new DataSource2<AmazonProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonShipmentEntity instances in the database.</summary>
+		public DataSource2<AmazonShipmentEntity> AmazonShipment
+		{
+			get { return new DataSource2<AmazonShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting AmazonStoreEntity instances in the database.</summary>
@@ -1029,6 +1056,24 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<LabelSheetEntity> LabelSheet
 		{
 			get { return new DataSource2<LabelSheetEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting LemonStandOrderEntity instances in the database.</summary>
+		public DataSource2<LemonStandOrderEntity> LemonStandOrder
+		{
+			get { return new DataSource2<LemonStandOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting LemonStandOrderItemEntity instances in the database.</summary>
+		public DataSource2<LemonStandOrderItemEntity> LemonStandOrderItem
+		{
+			get { return new DataSource2<LemonStandOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting LemonStandStoreEntity instances in the database.</summary>
+		public DataSource2<LemonStandStoreEntity> LemonStandStore
+		{
+			get { return new DataSource2<LemonStandStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting MagentoOrderEntity instances in the database.</summary>

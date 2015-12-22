@@ -171,11 +171,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(56, 254);
+            this.label4.Location = new System.Drawing.Point(83, 254);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(93, 13);
+            this.label4.Size = new System.Drawing.Size(66, 13);
             this.label4.TabIndex = 66;
-            this.label4.Text = "MWS Auth Token:";
+            this.label4.Text = "Auth Token:";
             // 
             // accountNumber
             // 
@@ -200,11 +200,11 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(79, 227);
+            this.label27.Location = new System.Drawing.Point(98, 227);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(70, 13);
+            this.label27.Size = new System.Drawing.Size(51, 13);
             this.label27.TabIndex = 61;
-            this.label27.Text = "Merchant ID:";
+            this.label27.Text = "Seller ID:";
             // 
             // mwsLink
             // 
@@ -224,10 +224,10 @@
             this.label26.AutoSize = true;
             this.label26.Location = new System.Drawing.Point(-3, 204);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(456, 13);
+            this.label26.Size = new System.Drawing.Size(410, 13);
             this.label26.TabIndex = 60;
-            this.label26.Text = "8.  Copy the Merchant ID and MWS Auth Token from the confirmation page and enter " +
-    "it here:";
+            this.label26.Text = "8.  Copy the Seller ID and Auth Token from the confirmation page and enter it her" +
+    "e:";
             // 
             // label25
             // 

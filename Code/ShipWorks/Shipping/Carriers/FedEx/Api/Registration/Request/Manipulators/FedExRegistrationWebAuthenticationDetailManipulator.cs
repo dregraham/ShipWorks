@@ -51,10 +51,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
                 VersionCaptureRequest nativeRequest = request.NativeRequest as VersionCaptureRequest;
                 nativeRequest.WebAuthenticationDetail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(fedExSettings);
             }
-            else if (requestType == typeof(RegisterWebCspUserRequest))
+            else if (requestType == typeof(RegisterWebUserRequest))
             {
                 // We can safely cast this since we've passed validation
-                RegisterWebCspUserRequest nativeRequest = request.NativeRequest as RegisterWebCspUserRequest;
+                RegisterWebUserRequest nativeRequest = request.NativeRequest as RegisterWebUserRequest;
                 nativeRequest.WebAuthenticationDetail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(fedExSettings);
 
                 // Null out the user credential nodes otherwise FedEx will fail the request due to a schema validation error (since the user doesn't
@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
             }
 
             requestType = request.NativeRequest.GetType();
-            if (requestType != typeof(VersionCaptureRequest) && requestType != typeof(RegisterWebCspUserRequest) && requestType != typeof(SubscriptionRequest))
+            if (requestType != typeof(VersionCaptureRequest) && requestType != typeof(RegisterWebUserRequest) && requestType != typeof(SubscriptionRequest))
             {
                 // Abort - we have an unexpected native request
                 throw new CarrierException("An unexpected request type was provided.");

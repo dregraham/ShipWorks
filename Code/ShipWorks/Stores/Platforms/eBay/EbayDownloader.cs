@@ -6,7 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using Common.Logging;
 using ComponentFactory.Krypton.Toolkit;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using Microsoft.Web.Services3.Referral;
@@ -31,6 +33,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// <summary>
     /// Downloader for eBay
     /// </summary>
+    [NDependIgnoreLongTypes]
     public class EbayDownloader : StoreDownloader
     {
         // Logger 
@@ -182,6 +185,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Process the given eBay order
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private void ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overriden FindOrder implementation
@@ -298,6 +303,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Save the given order, handling all the given abandoned items that have now moved to the new order
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void SaveOrder(EbayOrderEntity order, List<OrderItemEntity> abandonedItems)
         {
             List<OrderEntity> affectedOrders = new List<OrderEntity>();
@@ -325,7 +331,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     foreach (OrderItemEntity item in abandonedItems)
                     {
                         // Detatch it from the order
-                        affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.Single(i => i.OrderItemID == item.OrderItemID).Order = null;
+                        // This is to get the appropriate orderitem instance
+                        OrderItemEntity orderItem = affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.SingleOrDefault(i => i.OrderItemID == item.OrderItemID);
+                        if (orderItem != null)
+                        {
+                            orderItem.Order = null;
+                        }
+                        else
+                        {
+                            log.Info($"Item {item.OrderItemID} does not belong to an order.");
+                        }
+                        
                         // Make sure the detachment works both ways
                         Debug.Assert(affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.All(i => i.OrderItemID != item.OrderItemID));
 
@@ -981,6 +997,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <param name="isGsp">if set to <c>true</c> [is global shipping program order].</param>
         /// <param name="gspDetails">The multi leg shipping details.</param>
         /// <exception cref="EbayException">eBay did not provide a reference ID for an order designated for the Global Shipping Program.</exception>
+        [NDependIgnoreLongMethod]
         private void UpdateGlobalShippingProgramInfo(EbayOrderEntity order, bool isGsp, MultiLegShippingDetailsType gspDetails)
         {
             order.GspEligible = isGsp;

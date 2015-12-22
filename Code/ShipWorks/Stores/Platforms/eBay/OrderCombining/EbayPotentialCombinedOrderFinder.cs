@@ -12,6 +12,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using System.Threading;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 
@@ -55,6 +56,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// <summary>
         /// Asyncronously search for orders that can be combined with the provided orders.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public void SearchAsync(ICollection<long> orderKeys, object userState, EbayCombinedOrderType combineType)
         {
             #region validation

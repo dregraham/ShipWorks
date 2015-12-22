@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
@@ -14,7 +14,6 @@ using log4net;
 
 namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
 {
-    [TestClass]
     public class InsureShipSubmitClaimResponseTest
     {
         private InsureShipSubmitClaimResponse testObject;
@@ -28,8 +27,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
 
         private ShipmentEntity shipment;
 
-        [TestInitialize]
-        public void Initialize()
+        public InsureShipSubmitClaimResponseTest()
         {
             shipment = new ShipmentEntity(100031)
             {
@@ -58,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
             testObject = new InsureShipSubmitClaimResponse(request.Object, log.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_UsesRawResponse_FromRequest_Test()
         {
             testObject.Process();
@@ -66,16 +64,15 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
             request.Verify(r => r.ResponseContent, Times.Once());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InsureShipResponseException))]
+        [Fact]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotExpected_Test()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
 
-            testObject.Process();
+            Assert.Throws<InsureShipResponseException>(() => testObject.Process());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_LogsMessage_WhenStatusCodeIsNotRecognized_Test()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
@@ -90,26 +87,24 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
             log.Verify(l => l.Error("An unknown response code was received from the InsureShip API for shipment 100031: 302"));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InsureShipResponseException))]
+        [Fact]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
 
-            testObject.Process();
+            Assert.Throws<InsureShipResponseException>(() => testObject.Process());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InsureShipResponseException))]
+        [Fact]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful_Test()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
             request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
 
-            testObject.Process();
+            Assert.Throws<InsureShipResponseException>(() => testObject.Process());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_LogsMessage_WhenStatusCodeIs419_ButNotSuccessful_Test()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
@@ -125,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
             log.Verify(l => l.Error("An error occurred trying to submit a claim for shipment 100031 with the InsureShip API: 419"));
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_LogsMessage_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
@@ -140,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
             log.Verify(l => l.Error("An error occurred trying to submit a claim for shipment 100031 with the InsureShip API: 409"));
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_SuccessfulResponse_Test()
         {
             // Response code of 200 is success
@@ -149,42 +144,39 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_SetsClaimId_WhenResponseIsSuccesful_Test()
         {
             testObject.Process();
 
-            Assert.AreEqual(312, shipment.InsurancePolicy.ClaimID);
+            Assert.Equal(312, shipment.InsurancePolicy.ClaimID);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InsureShipException))]
+        [Fact]
         public void Process_ThrowsInsureShipException_WhenClaimIDIsMissing_Test()
         {
             // Setup the simulated response from the request
             const string simulatedResponseBody = "{\"claim_id\":\"\",\"message\":\"Claim created successfully with claim_id 312\"}";
             request.Setup(r => r.ResponseContent).Returns(simulatedResponseBody);
 
-            testObject.Process();            
+            Assert.Throws<InsureShipException>(() => testObject.Process());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InsureShipException))]
+        [Fact]
         public void Process_ThrowsInsureShipException_WhenResponseContentIsEmpty_Test()
         {
             // Setup the simulated response from the request
             request.Setup(r => r.ResponseContent).Returns(string.Empty);
 
-            testObject.Process();
+            Assert.Throws<InsureShipException>(() => testObject.Process());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InsureShipException))]
+        [Fact]
         public void Process_ThrowsInsureShipException_WhenResponseStreamIsNull_Test()
         {
-            request.Setup(r => r.ResponseContent).Returns((string) null);
+            request.Setup(r => r.ResponseContent).Returns((string)null);
 
-            testObject.Process();
+            Assert.Throws<InsureShipException>(() => testObject.Process());
         }
     }
 }

@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.UI.Controls;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using System.Collections.Generic;
+using Interapptive.Shared;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -31,6 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Saves to shipment entity.
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
+        [NDependIgnoreLongMethod]
         public void SaveToShipment(ShipmentEntity shipmentEntity)
         {
             holdAtLocation.ReadMultiCheck(c => shipmentEntity.FedEx.FedExHoldAtLocationEnabled = c);
@@ -289,6 +291,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 if (!string.IsNullOrEmpty(address.PostalCode))
                 {
                     formattedLocation.AppendFormat(" {0}", address.PostalCode);
+                }
+            }
+
+            if (contactInfo != null)
+            {
+                // Write the contact phone number
+                if (!string.IsNullOrEmpty(contactInfo.TollFreePhoneNumber))
+                {
+                    formattedLocation.AppendFormat("{0}{1}", Environment.NewLine, contactInfo.TollFreePhoneNumber);
+                }
+                if (!string.IsNullOrEmpty(contactInfo.PhoneNumber))
+                {
+                    formattedLocation.AppendFormat("{0}{1}", Environment.NewLine, contactInfo.PhoneNumber);
                 }
             }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -23,6 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <param name="fedExService">The FedEx service used to route the request to FedEx.</param>
         /// <param name="responseFactory">The response factory that should be used to create the ICarrierResponse object returned from the Submit method.</param>
+        [NDependIgnoreTooManyParams]
         public FedExShipRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, ShipmentEntity shipmentEntity, IFedExServiceGateway fedExService, ICarrierResponseFactory responseFactory, ICarrierSettingsRepository settingsRepository, IFedExNativeShipmentRequest shipmentRequest)
             : base(requestManipulators, shipmentEntity)
         {

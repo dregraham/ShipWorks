@@ -1,47 +1,46 @@
 ﻿using System;
 using log4net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Tests.Stores.Platforms.GenericModule
 {
-    [TestClass]
     public class GenericStoreStatusCodeProviderTest
     {
         private static readonly MockRepository mockRepository = new MockRepository(MockBehavior.Loose);
 
-        [TestMethod]
+        [Fact]
         public void ConvertCodeValue_ReturnsText_WhenStoreUsesText()
         {
             GenericStoreStatusCodeProvider provider = CreateTestProvider(GenericVariantDataType.Text);
 
             string codeValue = (string)provider.ConvertCodeValue("Foo");
-            Assert.AreEqual("Foo", codeValue);
+            Assert.Equal("Foo", codeValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConvertCodeValue_ReturnsNumberAsText_WhenStoreUsesText()
         {
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Text };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
             string codeValue = (string)provider.ConvertCodeValue(55);
-            Assert.AreEqual("55", codeValue);
+            Assert.Equal("55", codeValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConvertCodeValue_ReturnsNull_WhenStoreUsesTextAndValueIsNull()
         {
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Text };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
             object codeValue = provider.ConvertCodeValue(null);
-            Assert.IsNull(codeValue);
+            Assert.Null(codeValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConvertCodeValue_LogsWarning_WhenStoreUsesTextAndValueIsNull()
         {
             Mock<ILog> logger = mockRepository.Create<ILog>();
@@ -51,27 +50,27 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             logger.Verify(x => x.Warn(It.IsAny<string>()));
         }
 
-        [TestMethod]
+        [Fact]
         public void ConvertCodeValue_ReturnsNumber_WhenStoreUsesNumeric()
         {
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Numeric };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
             long codeValue = (long)provider.ConvertCodeValue(55);
-            Assert.AreEqual(55, codeValue);
+            Assert.Equal(55, codeValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConvertCodeValue_ReturnsNull_WhenStoreUsesNumericAndValueCannotBeConverted()
         {
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Numeric };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
             object codeValue = provider.ConvertCodeValue("Foo");
-            Assert.IsNull(codeValue);
+            Assert.Null(codeValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConvertCodeValue_LogsWarning_WhenStoreUsesNumericAndValueCannotBeConverted()
         {
             Mock<ILog> logger = mockRepository.Create<ILog>();
@@ -81,67 +80,67 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             logger.Verify(x => x.Warn(It.IsAny<string>(), It.IsAny<FormatException>()));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValidCode_ReturnsTrue_WhenTypeAndValueAreText()
         {
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Text };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsTrue(provider.IsValidCode("Foo"));
+            Assert.True(provider.IsValidCode("Foo"));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValidCode_ReturnsFalse_WhenTypeIsTextAndValueIsNot()
         {
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Text };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsFalse(provider.IsValidCode(55));
+            Assert.False(provider.IsValidCode(55));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValidCode_ReturnsFalse_WhenTypeIsTextAndValueIsNull()
         {
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Text };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsFalse(provider.IsValidCode(null));
+            Assert.False(provider.IsValidCode(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValidCode_ReturnsTrue_WhenTypeAndValueAreNumeric()
         {
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Numeric };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsTrue(provider.IsValidCode(55));
+            Assert.True(provider.IsValidCode(55));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValidCode_ReturnsTrue_WhenTypeAndValueAreNumericAndValueIsLong()
         {
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Numeric };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsTrue(provider.IsValidCode(55L));
+            Assert.True(provider.IsValidCode(55L));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValidCode_ReturnsFalse_WhenTypeIsNumericAndValueIsNot()
         {
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Numeric };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsFalse(provider.IsValidCode("Foo"));
+            Assert.False(provider.IsValidCode("Foo"));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValidCode_ReturnsFalse_WhenTypeIsNumericAndValueIsNull()
         {
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Numeric };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsFalse(provider.IsValidCode(null));
+            Assert.False(provider.IsValidCode(null));
         }
 
         /// <summary>

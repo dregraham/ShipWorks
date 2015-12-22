@@ -32,6 +32,7 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -42,6 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Wraps access to the Endicia API
     /// </summary>
+    [NDependIgnoreLongTypes]
     public class EndiciaApiClient
     {
         private readonly ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
@@ -203,6 +205,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Process the given shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public void ProcessShipment(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             PostalShipmentEntity postal = shipment.Postal;
@@ -422,7 +426,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.Machinable = postal.NonMachinable ? "FALSE" : "TRUE";
 
             // Hidden postage
-            request.IncludePostage = postal.Endicia.NoPostage ? "FALSE" : "TRUE";
+            request.IncludePostage = postal.NoPostage ? "FALSE" : "TRUE";
             request.Stealth = postal.Endicia.StealthPostage ? "TRUE" : "FALSE";
 
             // Service options
@@ -434,7 +438,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // request.Services.DeliveryConfirmation = (postal.Confirmation == (int) PostalConfirmationType.Delivery) ? "ON" : "OFF"; -> Documented as set automatically and ignored by ELS
 
             // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
-            if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType) && request.Services.SignatureConfirmation != "ON")
+            if (endiciaShipmentType.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType) && request.Services.SignatureConfirmation != "ON")
             {
                 request.Services.DeliveryConfirmation = "ON";
             }
@@ -623,7 +627,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     // Tracking and cost
                     shipment.TrackingNumber = response.TrackingNumber;
-                    shipment.ShipmentCost = postal.Endicia.NoPostage ? 0 : response.FinalPostage;
+                    shipment.ShipmentCost = postal.NoPostage ? 0 : response.FinalPostage;
                     shipment.Postal.Endicia.TransactionID = response.TransactionID;
 
                     SaveLabelImages(shipment, response);
@@ -818,6 +822,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get postal rates for the given shipment for all possible mail classes and rates.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public List<RateResult> GetRatesFast(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             PostalShipmentEntity postal = shipment.Postal;
@@ -1109,6 +1115,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get postal rates for the given shipment for all possible mail classes and rates.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public List<RateResult> GetRatesSlow(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             List<RateResult> results = new List<RateResult>();
@@ -1282,6 +1289,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the postal rate for the given shipment, service, and confirmation selection.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private RateResult GetRate(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType, PostalConfirmationType confirmation)
         {
             PostalShipmentEntity postal = shipment.Postal;

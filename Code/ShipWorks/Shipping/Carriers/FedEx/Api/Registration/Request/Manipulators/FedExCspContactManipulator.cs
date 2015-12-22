@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
             InitializeRequest(request);
 
             // We can safely cast this since we've passed validation
-            RegisterWebCspUserRequest nativeRequest = request.NativeRequest as RegisterWebCspUserRequest;
+            RegisterWebUserRequest nativeRequest = request.NativeRequest as RegisterWebUserRequest;
 
             FedExAccountEntity account = request.CarrierAccountEntity as FedExAccountEntity;
             PersonAdapter person = new PersonAdapter(account, string.Empty);
@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
             }
 
             // The native FedEx request type should be a VersionCaptureRequest
-            RegisterWebCspUserRequest nativeRequest = request.NativeRequest as RegisterWebCspUserRequest;
+            RegisterWebUserRequest nativeRequest = request.NativeRequest as RegisterWebUserRequest;
             if (nativeRequest == null)
             {
                 // Abort - we have an unexpected native request

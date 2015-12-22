@@ -41,7 +41,7 @@ namespace ShipWorks.Filters.Grid
 
             // Add the columns
             grid.Columns.Clear();
-            grid.Columns.AddRange(layout.CreateSandGridColumns());
+            grid.Columns.AddRange(layout.CreateSandGridColumns().OrderByDescending(c=>c.Visible).ToArray());
 
             // Apply the detail settings
             grid.DetailViewSettings = layout.DetailViewSettings;

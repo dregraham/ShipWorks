@@ -1,10 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using Microsoft.Win32;
 using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
-    [TestClass]
     public class TangoWebClientFactoryTest
     {
         private readonly TangoWebClientFactory testObject;
@@ -22,8 +21,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         // NOTE: These are highly dependent on the environment since they require reading and writing of 
         // the registry. All tests have been commented out for the build process for this reason.
         
-        //[TestInitialize]
-        //public void Initialize()
+        //public TangoWebClientFactoryTest()
         //{
         //    RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Interapptive\ShipWorks\Internal");
         //    if (key != null)
@@ -71,7 +69,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    }
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Create_ReturnsCustomTangoWebClient_WhenRegistryKeyValueIsConfiguredWithExistingType_AndIsInterapptiveUser_Test()
         //{
         //    const string fakeClientTypeName = "ShipWorks.ApplicationCore.Licensing.FakeTangoWebClient";
@@ -80,10 +78,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    ConfigureInterapptiveUser(true);
 
         //    ITangoWebClient client = testObject.CreateWebClient();
-        //    Assert.IsInstanceOfType(client, typeof(FakeTangoWebClient));
+        //    Assert.IsAssignableFrom<FakeTangoWebClient>(client);
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Create_ReturnsTangoWebClientWrapper_WhenRegistryKeyValueIsConfiguredWithExisting_AndIsNotInterapptiveUser_Test()
         //{
         //    const string fakeClientTypeName = "ShipWorks.ApplicationCore.Licensing.FakeTangoWebClient";
@@ -92,10 +90,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    ConfigureInterapptiveUser(false);
 
         //    ITangoWebClient client = testObject.CreateWebClient();
-        //    Assert.IsInstanceOfType(client, typeof(TangoWebClientWrapper));
+        //    Assert.IsAssignableFrom<TangoWebClientWrapper>(client);
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Create_ReturnsTangoWebClientWrapper_WhenRegistryKeyValueIsConfiguredWithNonExistingType_AndIsInterapptiveUser_Test()
         //{
         //    const string typeThatDoesNotExist = "ShipWorks.ApplicationCore.Licensing.SomeTypeThatDoesNotExist";
@@ -104,10 +102,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    ConfigureInterapptiveUser(false);
 
         //    ITangoWebClient client = testObject.CreateWebClient();
-        //    Assert.IsInstanceOfType(client, typeof(TangoWebClientWrapper));
+        //    Assert.IsAssignableFrom<TangoWebClientWrapper>(client);
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Create_ReturnsTangoWebClientWrapper_WhenRegistryKeyValueIsEmpty_AndIsInterapptiveUser_Test()
         //{
         //    const string typeThatDoesNotExist = "ShipWorks.ApplicationCore.Licensing.SomeTypeThatDoesNotExist";
@@ -116,10 +114,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    ConfigureInterapptiveUser(false);
 
         //    ITangoWebClient client = testObject.CreateWebClient();
-        //    Assert.IsInstanceOfType(client, typeof(TangoWebClientWrapper));
+        //    Assert.IsAssignableFrom<TangoWebClientWrapper>(client);
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Create_ReturnsTangoWebClientWrapper_WhenRegistryKeyValueDoesNotExist_AndIsInterapptiveUser_Test()
         //{
         //    RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Interapptive\ShipWorks\Internal");
@@ -128,7 +126,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    ConfigureInterapptiveUser(false);
 
         //    ITangoWebClient client = testObject.CreateWebClient();
-        //    Assert.IsInstanceOfType(client, typeof(TangoWebClientWrapper));
+        //    Assert.IsAssignableFrom<TangoWebClientWrapper>(client);
         //}
     }
 }

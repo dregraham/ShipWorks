@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Interapptive.Shared;
 using System.Security.Cryptography;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class SecureTextTests
     {
-        [TestMethod]
+        [Fact]
         public void EncryptDecrypt()
         {
             string original = "Abcd Efgh 12345 $%^*(";
@@ -19,14 +18,14 @@ namespace ShipWorks.Tests.Core
 
             string encrypted = SecureText.Encrypt(original, salt);
 
-            Assert.AreNotEqual(original, encrypted);
+            Assert.NotEqual(original, encrypted);
 
             string decrypted = SecureText.Decrypt(encrypted, salt);
 
-            Assert.AreEqual(original, decrypted);
+            Assert.Equal(original, decrypted);
         }
 
-        [TestMethod]
+        [Fact]
         public void EncryptDecryptDifferentSalt()
         {
             string original = "Abcd Efgh 12345 $%^*(";
@@ -34,14 +33,14 @@ namespace ShipWorks.Tests.Core
 
             string encrypted = SecureText.Encrypt(original, salt);
 
-            Assert.AreNotEqual(original, encrypted);
+            Assert.NotEqual(original, encrypted);
 
             string decrypted = SecureText.Decrypt(encrypted, "whatever");
 
-            Assert.AreEqual(string.Empty, decrypted);
+            Assert.Equal(string.Empty, decrypted);
         }
 
-        [TestMethod]
+        [Fact]
         public void EncryptDecryptEmptySalt()
         {
             string original = "asdf $%^*(";
@@ -49,39 +48,35 @@ namespace ShipWorks.Tests.Core
 
             string encrypted = SecureText.Encrypt(original, salt);
 
-            Assert.AreNotEqual(original, encrypted);
+            Assert.NotEqual(original, encrypted);
 
             string decrypted = SecureText.Decrypt(encrypted, salt);
 
-            Assert.AreEqual(original, decrypted);
+            Assert.Equal(original, decrypted);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void EncryptNullSalt()
         {
-            SecureText.Encrypt("", null);
+            Assert.Throws<ArgumentNullException>(() => SecureText.Encrypt("", null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void EncryptNullValue()
         {
-            SecureText.Encrypt(null, "");
+            Assert.Throws<ArgumentNullException>(() => SecureText.Encrypt(null, ""));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void DecryptNullSalt()
         {
-            SecureText.Decrypt("", null);
+            Assert.Throws<ArgumentNullException>(() => SecureText.Decrypt("", null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void DecryptNullValue()
         {
-            SecureText.Decrypt(null, "");
+            Assert.Throws<ArgumentNullException>(() => SecureText.Decrypt(null, ""));
         }
     }
 }

@@ -32,8 +32,8 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.EmailOutboundRelation] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderPaymentDetail] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.DownloadDetail] = 9;
-            tableBitCount[(int) FilterNodeColumnMaskTable.AmazonOrder] = 5;
-            tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrder] = 10;
+            tableBitCount[(int) FilterNodeColumnMaskTable.AmazonOrder] = 7;
+            tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrder] = 11;
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrderItem] = 10;
             tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrder] = 24;
             tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderItem] = 18;
@@ -41,9 +41,9 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderMotionOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.PayPalOrder] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.ProStoresOrder] = 4;
-            tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 21;
+            tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 22;
             tableBitCount[(int) FilterNodeColumnMaskTable.UpsShipment] = 51;
-            tableBitCount[(int) FilterNodeColumnMaskTable.FedExShipment] = 149;
+            tableBitCount[(int) FilterNodeColumnMaskTable.FedExShipment] = 153;
             tableBitCount[(int) FilterNodeColumnMaskTable.CommerceInterfaceOrder] = 2;
             tableBitCount[(int) FilterNodeColumnMaskTable.ShopifyOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.EtsyOrder] = 3;
@@ -54,7 +54,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.BigCommerceOrderItem] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.InsurancePolicy] = 10;
             tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrder] = 2;
-
+            tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrder] = 2;
 
             tableBitOffset = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitOffset[0] = 0;

@@ -245,6 +245,8 @@ namespace Interapptive.Shared.IO.Text.Sgml {
     /// SgmlReader is an XmlReader API over any SGML document (including built in 
     /// support for HTML).  
     /// </summary>
+    [NDependIgnore]
+    [NDependIgnoreLongTypes]
     public class SgmlReader : XmlReader {
         const string UNDEFINED_NAMESPACE = "#unknown";
 
@@ -586,8 +588,11 @@ namespace Interapptive.Shared.IO.Text.Sgml {
             }
         }
 
-        public override string NamespaceURI {
-            get {
+        public override string NamespaceURI
+        {
+            [NDependIgnoreComplexMethod]
+            get
+            {
                 // SGML has no namespaces, unless this turned out to be an xmlns attribute.
                 if (this.state == State.Attr && (string.Compare(this.a.Name, "xmlns", StringComparison.InvariantCulture) == 0)) {
                     return "http://www.w3.org/2000/xmlns/";
@@ -887,6 +892,7 @@ namespace Interapptive.Shared.IO.Text.Sgml {
             }
         }
 
+        [NDependIgnoreComplexMethodAttribute]
         public override bool Read() {
             if (current == null) {
                 OpenInput();
@@ -1095,6 +1101,8 @@ namespace Interapptive.Shared.IO.Text.Sgml {
         static string tagterm = " \t\r\n=/><";
         static string aterm = " \t\r\n='\"/>";
         static string avterm = " \t\r\n>";
+
+        [NDependIgnoreComplexMethodAttribute]
         bool ParseStartTag(char ch) {
             string name = null;
             if (state != State.PseudoStartTag){
@@ -1403,6 +1411,7 @@ namespace Interapptive.Shared.IO.Text.Sgml {
             return sb.ToString();
         }
 
+        [NDependIgnoreComplexMethodAttribute]
         bool ParseCData() {
             // Like ParseText(), only it doesn't allow elements in the content.  
             // It allows comments and processing instructions and text only and

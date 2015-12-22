@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using log4net;
 using System.Reflection;
+using Interapptive.Shared;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Data;
@@ -13,7 +14,11 @@ using ShipWorks.Filters;
 using ShipWorks.Users.Audit;
 using ShipWorks.ApplicationCore.Interaction;
 using NDesk.Options;
+using ShipWorks.Actions;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Data.Administration
 {
@@ -132,6 +137,7 @@ namespace ShipWorks.Data.Administration
         /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in 
         /// customer or production scenarios.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void UpdateDatabase(ProgressProvider progressProvider, bool debuggingMode = false)
         {
             Version installed = GetInstalledSchemaVersion();
@@ -285,7 +291,7 @@ namespace ShipWorks.Data.Administration
                                 AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
                                 ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
                             }
-
+                            
                             // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it everytime, even if not needed)
                             SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
 
@@ -295,13 +301,47 @@ namespace ShipWorks.Data.Administration
                             {
                                 SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
                             }
+
+                            // If we were upgrading from this version, Regenerate scheduled actions 
+                            // To fix issue caused by breaking out assemblies
+                            if (installed < new Version(4, 5, 0, 0))
+                            {
+                                // Grab all of the actions that are enabled and schedule based
+                                ActionManager.InitializeForCurrentSession();
+                                IEnumerable<ActionEntity> actions = ActionManager.Actions.Where(a => a.Enabled && a.TriggerType == (int)ActionTriggerType.Scheduled);
+                                using (SqlAdapter adapter = new SqlAdapter())
+                                {
+                                    foreach (ActionEntity action in actions)
+                                    {
+                                        // Some trigger's state depend on the enabledness of the action
+                                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
+
+                                        if (scheduledTrigger?.Schedule != null )
+                                        {
+                                            // Check to see if the action is a One Time action and in the past, if so we disable it
+                                            if (scheduledTrigger.Schedule.StartDateTimeInUtc < DateTime.UtcNow &&
+                                                scheduledTrigger.Schedule.ScheduleType == ActionScheduleType.OneTime)
+                                            {
+                                                action.Enabled = false;
+                                            }
+                                            else
+                                            {
+                                                scheduledTrigger.SaveExtraState(action, adapter);
+                                            }
+                                        }
+                                        
+                                        ActionManager.SaveAction(action, adapter);
+                                    }
+
+                                    adapter.Commit();
+                                }
+                            }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
                     log.Error("UpdateDatabase failed", ex);
-
                     throw;
                 }
             }

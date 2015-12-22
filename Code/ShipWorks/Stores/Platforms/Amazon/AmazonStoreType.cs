@@ -25,6 +25,7 @@ using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.Amazon.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
+using ShipWorks.Shipping.Carriers.Amazon;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -356,7 +357,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
             storeEntity.MarketplaceID = "";
             storeEntity.ExcludeFBA = true;
             storeEntity.DomainName = string.Empty;
+
+            storeEntity.SetShippingToken(new AmazonShippingToken()
+            {
+                ErrorDate = new DateTime(2001, 1, 1),
+                ErrorReason = string.Empty
+            });
             
+
             // Assign the default weight downloading priority
             List<AmazonWeightField> weightPriority = new List<AmazonWeightField>()
             {
@@ -438,6 +446,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
             outline.AddElement("Commission", () => order.Value.AmazonCommission);
             outline.AddElement("FulfilledBy", () => EnumHelper.GetDescription((AmazonMwsFulfillmentChannel) order.Value.FulfillmentChannel));
             outline.AddElement("Prime", () => EnumHelper.GetDescription((AmazonMwsIsPrime)order.Value.IsPrime));
+            outline.AddElement("LatestDeliveryDate", () => order.Value.LatestExpectedDeliveryDate);
+            outline.AddElement("EarliestDeliveryDate", () => order.Value.EarliestExpectedDeliveryDate);
         }
 
         /// <summary>
@@ -528,7 +538,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         if (marketplaces != null)
                         {
                             // Lookup the marketplace based on the marketplace ID, so we get the correct domain name
-                            // in the event the merchant ID is setup with  multiple marketplaces
+                            // in the event the merchant ID (aka Seller ID) is setup with  multiple marketplaces
                             AmazonMwsMarketplace marketplace = marketplaces.FirstOrDefault(m => m.MarketplaceID.ToUpperInvariant() == amazonStore.MarketplaceID.ToUpperInvariant());
                             string domainName = marketplace == null || string.IsNullOrWhiteSpace(marketplace.DomainName) ? string.Empty : marketplace.DomainName;
 

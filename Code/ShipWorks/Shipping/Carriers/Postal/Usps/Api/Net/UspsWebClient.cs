@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -88,23 +88,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private static string ServiceUrl
         {
-            get { return UseTestServer ? "https://swsim.testing.stamps.com/swsim/SwsimV45.asmx" : "https://swsim.stamps.com/swsim/SwsimV45.asmx"; }
+            get { return UseTestServer ? "https://swsim.testing.stamps.com/swsim/SwsimV49.asmx" : "https://swsim.stamps.com/swsim/SwsimV49.asmx"; }
         }
 
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private SwsimV45 CreateWebService(string logName)
+        private SwsimV49 CreateWebService(string logName)
         {
             return CreateWebService(logName, LogActionType.Other);
         }
 
         /// <summary>
+        /// Returns the current type of the web service.  Used to remove the namespace in exceptions received from Stamps.
+        /// </summary>
+        public static Type WebServiceType
+        {
+            get { return typeof (SwsimV49); }
+        }
+
+        /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private SwsimV45 CreateWebService(string logName, LogActionType logActionType)
+        private SwsimV49 CreateWebService(string logName, LogActionType logActionType)
         {
-            SwsimV45 webService = new SwsimV45(logEntryFactory.GetLogEntry(ApiLogSource.Usps, logName, logActionType))
+            SwsimV49 webService = new SwsimV49(logEntryFactory.GetLogEntry(ApiLogSource.Usps, logName, logActionType))
             {
                 Url = ServiceUrl
             };
@@ -127,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 bool passwordExpired = false;
                 bool codewordsSet;
 
-                using (SwsimV45 webService = CreateWebService("Authenticate"))
+                using (SwsimV49 webService = CreateWebService("Authenticate"))
                 {
                     CheckCertificate(webService.Url);
 
@@ -179,7 +187,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             AccountInfo accountInfo;
 
-            using (SwsimV45 webService = CreateWebService("GetAccountInfo"))
+            using (SwsimV49 webService = CreateWebService("GetAccountInfo"))
             {
                 // Address and CustomerEmail are not returned by Express1, so do not use them.
                 Address address;
@@ -206,7 +214,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             string url;
 
-            using (SwsimV45 webService = CreateWebService("GetURL"))
+            using (SwsimV49 webService = CreateWebService("GetURL"))
             {
                 webService.GetURL(GetCredentials(account), urlType, string.Empty, out url);
             }
@@ -234,7 +242,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             bool miRequired_Unused;
 
-            using (SwsimV45 webService = CreateWebService("PurchasePostage"))
+            using (SwsimV49 webService = CreateWebService("PurchasePostage"))
             {
                 webService.PurchasePostage(GetCredentials(account), amount, controlTotal, null, null, out purchaseStatus, out transactionID, out postageBalance, out rejectionReason, out miRequired_Unused);
             }
@@ -248,6 +256,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the rates for the given shipment based on its settings
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public List<RateResult> GetRates(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
@@ -266,7 +276,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 List<RateResult> rates = new List<RateResult>();
 
-                foreach (RateV17 uspsRate in ExceptionWrapper(() => GetRatesInternal(shipment, account), account))
+                foreach (RateV18 uspsRate in ExceptionWrapper(() => GetRatesInternal(shipment, account), account))
                 {
                     PostalServiceType serviceType = UspsUtility.GetPostalServiceType(uspsRate.ServiceType);
 
@@ -327,7 +337,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Iterates through each rate add on and creates a rate for each
         /// </summary>
-        private static void AddRatesForAddOns(RateV17 uspsRate, PostalServiceType serviceType, UspsAccountEntity account, List<RateResult> rates)
+        private static void AddRatesForAddOns(RateV18 uspsRate, PostalServiceType serviceType, UspsAccountEntity account, List<RateResult> rates)
         {
             // Add a rate for each add-on
             foreach (AddOnV7 addOn in uspsRate.AddOns)
@@ -376,24 +386,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private List<RateV17> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private List<RateV18> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            RateV17 rate = CreateRateForRating(shipment, account);
+            RateV18 rate = CreateRateForRating(shipment, account);
 
-            List<RateV17> rateResults;
+            List<RateV18> rateResults;
 
-            using (SwsimV45 webService = CreateWebService("GetRates", LogActionType.GetRates))
+            using (SwsimV49 webService = CreateWebService("GetRates", LogActionType.GetRates))
             {
                 CheckCertificate(webService.Url);
 
-                RateV17[] ratesArray;
+                RateV18[] ratesArray;
 
                 webService.GetRates(GetCredentials(account), rate, out ratesArray);
 
                 rateResults = ratesArray.ToList();
             }
 
-            List<RateV17> noConfirmationServiceRates = new List<RateV17>();
+            List<RateV18> noConfirmationServiceRates = new List<RateV18>();
 
             // If its a "Flat" then FirstClass and Priority can't have a confirmation
             PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
@@ -403,7 +413,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             // Remove the Delivery and Signature add ons from all those that shouldn't support it
-            foreach (RateV17 noConfirmationServiceRate in noConfirmationServiceRates)
+            foreach (RateV18 noConfirmationServiceRate in noConfirmationServiceRates)
             {
                 if (noConfirmationServiceRate != null && noConfirmationServiceRate.AddOns != null)
                 {
@@ -475,25 +485,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
             address.Country = person.AdjustedCountryCode(ShipmentTypeCode.Usps);
 
-            using (SwsimV45 webService = CreateWebService("CleanseAddress"))
+            using (SwsimV49 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
             {
-                bool addressMatch;
-                bool cityStateZipOk;
-                ResidentialDeliveryIndicatorType residentialIndicator;
-                bool? isPoBox;
+                bool addressMatch = false;
+                bool cityStateZipOk = false;
+                ResidentialDeliveryIndicatorType residentialIndicator = ResidentialDeliveryIndicatorType.Unknown;
+                bool? isPoBox = null;
                 bool isPoBoxSpecified;
-                Address[] candidates;
+                Address[] candidates = null;
                 StatusCodes statusCodes;
-            	RateV17[] rates;
+            	RateV18[] rates;
                 string badAddressMessage = null;
-
-                webService.OnlyLogOnMagicKeys = true;
-
+                
                 try
                 {
                     using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
                     {
-                        webService.CleanseAddress(
+                        ActionRetry.ExecuteWithRetry<InvalidOperationException>(2, () => webService.CleanseAddress(
                             GetCredentials(account, true),
                             ref address,
                             null, // from zip code.  Sending the from zip code makes the call take longer and we don't use the extra that is returned. 
@@ -504,7 +512,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                             out isPoBoxSpecified,
                             out candidates,
                             out statusCodes,
-                            out rates);
+                            out rates));
                     }
                 }
                 catch (SoapException ex)
@@ -572,7 +580,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 RegistrationStatus registrationStatus = RegistrationStatus.Fail;
 
-                using (SwsimV45 webService = CreateWebService("RegisterAccount"))
+                using (SwsimV49 webService = CreateWebService("RegisterAccount"))
                 {
                     // Note: API docs say the address must be cleansed prior to registering the account, but the API 
                     // for cleansing an address assumes there are existing credentials. Question is out to USPS
@@ -647,7 +655,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             string scanFormUspsId = string.Empty;
             string scanFormUrl = string.Empty;
             
-            using (SwsimV45 webService = CreateWebService("ScanForm"))
+            using (SwsimV49 webService = CreateWebService("ScanForm"))
             {
                 webService.CreateScanForm
                     (
@@ -710,7 +718,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private void VoidShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            using (SwsimV45 webService = CreateWebService("Void"))
+            using (SwsimV49 webService = CreateWebService("Void"))
             {
                 webService.CancelIndicium(GetCredentials(account), shipment.Postal.Usps.UspsTransactionID);
             }
@@ -782,9 +790,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             FixWebserviceAddresses(account, shipment, out toAddress, out fromAddress);
 
-            RateV17 rate = CreateRateForProcessing(shipment, account);
+            RateV18 rate = CreateRateForProcessing(shipment, account);
             CustomsV3 customs = CreateCustoms(shipment);
-            Usps.WebServices.PostageBalance postageBalance;
+            WebServices.PostageBalance postageBalance;
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
             rate.ToState = toAddress.State;    
@@ -817,7 +825,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 thermalType = null;
 
                 // A separate service call is used for processing envelope according to USPS as of v. 22
-                using (SwsimV45 webService = CreateWebService("Process"))
+                using (SwsimV49 webService = CreateWebService("Process"))
                 {
                     // Always use the personal envelope layout to generate the envelope label
                     rate.PrintLayout = "EnvelopePersonal";
@@ -842,7 +850,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             else
             {
                 // Labels for all other package types other than envelope get created via the CreateIndicium method
-                using (SwsimV45 webService = CreateWebService("Process"))
+                using (SwsimV49 webService = CreateWebService("Process"))
                 {
                     webService.CreateIndicium(GetCredentials(account), ref integratorGuid,
                         ref tracking,
@@ -851,7 +859,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         toAddress,
                         null,
                         customs,
-                        false,
+                        false,  // Sample only,
+                        shipment.Postal.NoPostage ? PostageMode.NoPostage : PostageMode.Normal,
                         thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
                         EltronPrinterDPIType.Default,
                         UspsUtility.BuildMemoField(shipment.Postal), // Memo
@@ -1062,9 +1071,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create a Rate object used as the rate info for the GetRates method
         /// </summary>
-        private static RateV17 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
+        private static RateV18 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            RateV17 rate = new RateV17();
+            RateV18 rate = new RateV18();
 
             string fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode) ? account.MailingPostalCode : shipment.OriginPostalCode;
             string toZipCode = shipment.ShipPostalCode;
@@ -1107,14 +1116,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the rate object for the given shipment
         /// </summary>
-        private static RateV17 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
+        private static RateV18 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
             PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
 
-            RateV17 rate = CreateRateForRating(shipment, account);
+            RateV18 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = UspsUtility.GetApiServiceType(serviceType);
-            rate.PrintLayout = "Normal4x6";
+            rate.PrintLayout = "Normal4X6";
 
             // Get the confirmation type add ons
             List<AddOnV7> addOns = AddConfirmationTypeAddOnsForProcessing(shipment, serviceType, packagingType);
@@ -1192,7 +1201,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         break;
                 }
             }
-            else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
+            else if (((PostalShipmentType) ShipmentTypeManager.GetType(shipment)).IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
             {
                 // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
                 addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USADC });
@@ -1312,7 +1321,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                using (SwsimV45 webService = CreateWebService("ChangePlan"))
+                using (SwsimV49 webService = CreateWebService("ChangePlan"))
                 {
                     webService.Url = ServiceUrl;
 
@@ -1343,7 +1352,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             UspsAccountContractType contract = UspsAccountContractType.Unknown;
             AccountInfo accountInfo;
 
-            using (SwsimV45 webService = CreateWebService("GetContractType"))
+            using (SwsimV49 webService = CreateWebService("GetContractType"))
             {
                 CheckCertificate(webService.Url);
 
@@ -1397,6 +1406,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 throw new UspsApiException(ex);
             }
+            catch (InvalidOperationException ex)
+            {
+                // We had a client that was seeing this exception, so rather than crash, we should fail the operation and 
+                if (ex.Message.Contains("Response is not well-formed XML"))
+                {
+                    throw new UspsException(ex.Message, ex);
+                }
+
+                throw;
+            }
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(UspsException));
@@ -1424,8 +1443,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             return new Credentials
             {
                 IntegrationID = integrationID,
-                Username = account==null ? "" : account.Username,
-                Password = account==null ? "" : SecureText.Decrypt(account.Password, account.Username)
+                Username = account == null ? "" : account.Username,
+                Password = account == null ? "" : SecureText.Decrypt(account.Password, account.Username)
             };
         }
     }

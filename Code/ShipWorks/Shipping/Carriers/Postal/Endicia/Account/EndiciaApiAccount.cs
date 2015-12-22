@@ -15,6 +15,7 @@ using System.IO;
 using Interapptive.Shared.Business;
 using System.Net;
 using System.Web.Services.Protocols;
+using Interapptive.Shared;
 using Interapptive.Shared.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Account
@@ -40,6 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Account
         /// <summary>
         /// Signup a new endicia label server account given the specified account information
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public static EndiciaAccountEntity Signup(
             EndiciaAccountEntity account,
             EndiciaAccountType accountType, 
@@ -166,7 +168,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Account
             }
 
             // Nothing to refund
-            if (shipment.Postal.Endicia.NoPostage && shipment.Postal.Endicia.TransactionID == 0)
+            if (shipment.Postal.NoPostage && shipment.Postal.Endicia.TransactionID == 0)
             {
                 log.WarnFormat("No refund being required from Endicia for non-postage shipment. {0}", shipment.ShipmentID);
                 return;

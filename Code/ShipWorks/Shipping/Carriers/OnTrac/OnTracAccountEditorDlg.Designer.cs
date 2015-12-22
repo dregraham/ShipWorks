@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // labelPassword
             // 
             this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(9, 55);
+            this.labelPassword.Location = new System.Drawing.Point(9, 58);
             this.labelPassword.Name = "labelPassword";
             this.labelPassword.Size = new System.Drawing.Size(77, 13);
             this.labelPassword.TabIndex = 172;
@@ -127,6 +127,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // 
             // contactInformation
             // 
+            this.contactInformation.AddressSelector = null;
             this.contactInformation.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
@@ -134,7 +135,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             | ShipWorks.Data.Controls.PersonFields.Postal) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
+            this.contactInformation.EnableValidationControls = false;
             this.contactInformation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.contactInformation.FullName = "";
             this.contactInformation.Location = new System.Drawing.Point(15, 101);
             this.contactInformation.MaxStreetLines = 1;
             this.contactInformation.Name = "contactInformation";

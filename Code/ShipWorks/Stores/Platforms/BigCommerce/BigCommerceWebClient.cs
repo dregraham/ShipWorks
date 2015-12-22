@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Newtonsoft.Json;
@@ -21,7 +22,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     public class BigCommerceWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceWebClient));
-        static readonly LruCache<int, BigCommerceProductImage> productImageCache = new LruCache<int, BigCommerceProductImage>(1000);
         readonly List<BigCommerceOrderStatus> bigCommerceOrderStatuses;
         readonly string apiUserName;
         readonly string apiToken;
@@ -104,9 +104,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="orderNumber">The order number of this shipment</param>
         /// <param name="orderAddressID">The BigCommerce order addressID for this shipment</param>
         /// <param name="trackingNumber">Tracking number for this shipment</param>
+        /// <param name="shippingMethod">Carrier and service for this shipment</param>
         /// <param name="orderItems">The list of BigCommerceItem's in this shipment</param>
         /// <exception cref="BigCommerceException" />
-        public void UploadOrderShipmentDetails(long orderNumber, long orderAddressID, string trackingNumber, List<BigCommerceItem> orderItems)
+        public void UploadOrderShipmentDetails(long orderNumber, long orderAddressID, string trackingNumber, string shippingMethod, List<BigCommerceItem> orderItems)
         {
             string uploadShipmentResource = BigCommerceWebClientEndpoints.GetUploadShipmentResource(orderNumber);
 
@@ -117,6 +118,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 {
                     order_address_id = (int)orderAddressID,
                     tracking_number = trackingNumber,
+                    shipping_method = shippingMethod,
                     comments = string.Empty,
                     items = orderItems
                 };
@@ -434,6 +436,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         /// <param name="orderSearchCriteria">Filter by BigCommerceWebClientOrderSearchCriteria.</param>
         /// <returns>List of orders matching criteria, sorted by LastUpdate ascending </returns>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public List<BigCommerceOrder> GetOrders(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria)
         {
             List<BigCommerceOrder> ordersToReturn = new List<BigCommerceOrder>();
@@ -716,6 +720,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Get the order products from BigCommerce for this order
             order.OrderProducts = GetOrderProducts(order);
 
+            // Get the store specific product image cache
+            LruCache<int, BigCommerceProductImage> productImageCache = BigCommerceProductImageCache.Instance.GetStoreProductImageCache(apiUserName, apiUrl, apiToken);
+
             foreach (BigCommerceProduct product in order.OrderProducts)
             {
                 // See if we've already downloaded this product's image
@@ -814,8 +821,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 BigCommerceWebClientOrderSearchCriteria orderSearchCriteria = new BigCommerceWebClientOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType.CreatedDate, 
                     DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow, 
-                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow, 
-                    BigCommerceConstants.OrdersPageSize, 1);
+                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow)
+                    { 
+                        PageSize = BigCommerceConstants.OrdersPageSize, 
+                        Page = 1
+                    };
                 
                 GetOrderCount(orderSearchCriteria);
             }

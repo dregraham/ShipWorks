@@ -6,6 +6,9 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Reflection;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using Autofac;
+using Interapptive.Shared;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping
 {
@@ -21,6 +24,7 @@ namespace ShipWorks.Shipping
         /// it can be optionally refreshed. "shipment" and "parent" could be different in the case of dervied ShipmentTypes, like for USPS
         /// where "parent" is the PostalShipment, not the actual Shipment
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public static void LoadShipmentData(ShipmentType shipmentType, ShipmentEntity shipment, EntityBase2 parent, string childProperty, Type entityType, bool refreshIfPresent)
         {
             PropertyInfo property = GetChildProperty(parent, childProperty);
@@ -68,10 +72,13 @@ namespace ShipWorks.Shipping
                         property.SetValue(parent, childEntity, null);
                     }
 
-                    IShipmentProcessingSynchronizer shipmentProcessingSynchronizer = shipmentType.GetProcessingSynchronizer();
-                    if (shipmentProcessingSynchronizer != null)
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
-                        shipmentProcessingSynchronizer.ReplaceInvalidAccount(shipment);
+                        IShipmentProcessingSynchronizer shipmentProcessingSynchronizer = shipmentType.GetProcessingSynchronizer(lifetimeScope);
+                        if (shipmentProcessingSynchronizer != null)
+                        {
+                            shipmentProcessingSynchronizer.ReplaceInvalidAccount(shipment);
+                        }
                     }
 
                     adapter.Commit();

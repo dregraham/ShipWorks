@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers
             if (accountID.HasValue)
             {
                 account = GetAccount(accountID.Value);
-                if (account == null)
+                if (object.Equals(account, default(T)))
                 {
                     throw new ShippingException(string.Format("An account that no longer exists is associated with the default {0} profile.", EnumHelper.GetDescription(shipmentTypeCode)));
                 }

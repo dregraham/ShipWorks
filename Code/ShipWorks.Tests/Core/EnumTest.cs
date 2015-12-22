@@ -3,15 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping;
+using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class EnumTest
     {
-        [TestMethod]
+        private readonly ITestOutputHelper output;
+
+        public EnumTest(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+
+        [Fact]
         public void Verify_EnumObfuscation_IsSet_Test()
         {
             IEnumerable<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.Contains("ShipWorks")).OrderBy(a => a.FullName);
@@ -50,8 +57,8 @@ namespace ShipWorks.Tests.Core
                     }
                 }
             }
-
-            Assert.AreEqual(0, missingObfuscationAttribute.Length, missingObfuscationAttribute);
+            output.WriteLine(missingObfuscationAttribute);
+            Assert.Equal(0, missingObfuscationAttribute.Length);
         }
 
         /// <summary>
@@ -178,6 +185,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Filters.FilterHelper+FilterImageType".ToUpperInvariant(),
                 "ShipWorks.Filters.Management.FilterEditingResult".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExEmailNotificationType".ToUpperInvariant(),
+                "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExMaskedDataType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment.codType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.Postal.Endicia.Account.EndiciaAccountType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaReseller".ToUpperInvariant(),

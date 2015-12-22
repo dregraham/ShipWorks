@@ -1,33 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+using Interapptive.Shared;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.Business;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     /// <summary>
     /// Customized customs control for FedEx
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FedExCustomsControl : CustomsControlBase
     {
+        private IDisposable fedExServiceChangedToken;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public FedExCustomsControl()
         {
             InitializeComponent();
+
+            fedExServiceChangedToken = Messenger.Current.OfType<FedExServiceTypeChangedMessage>().Subscribe(OnServiceChanged);
         }
 
         /// <summary>
@@ -49,6 +52,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Load the shipment data into the control
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing)
         {
             base.LoadShipments(shipments, enableEditing);
@@ -61,7 +65,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             bool anyCanada = false;
 
-            //documentsOnly.CheckedChanged -= new EventHandler(OnChangeDocumentsOnly);
             naftaEnabled.CheckedChanged -= new EventHandler(OnNaftaEnabled);
 
             using (MultiValueScope scope = new MultiValueScope())
@@ -77,7 +80,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     brokerAccount.ApplyMultiText(shipment.FedEx.BrokerAccount);
 
                     documentsOnly.ApplyMultiCheck(shipment.FedEx.CustomsDocumentsOnly);
-                    //documentDescription.ApplyMultiText(shipment.FedEx.CustomsDocumentsDescription);
 
                     recipientTaxID.ApplyMultiText(shipment.FedEx.CustomsRecipientTIN);
 
@@ -115,14 +117,31 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Update the height based on admissibility visibility
             sectionGeneral.Height = (anyCanada ? admissibilityPackaging.Bottom : electronicExportInfo.Bottom) + 6 + (sectionGeneral.Height - sectionGeneral.ContentPanel.Height);
 
-            // Update the Documents\Products visibiity
-            //OnChangeDocumentsOnly(documentsOnly, EventArgs.Empty);
-            //documentsOnly.CheckedChanged += new EventHandler(OnChangeDocumentsOnly);
-
             //Update the NAFTA controls
             OnNaftaEnabled(naftaEnabled, EventArgs.Empty);
-            naftaEnabled.CheckedChanged += new EventHandler(OnNaftaEnabled);
-            
+            naftaEnabled.CheckedChanged += OnNaftaEnabled;
+
+            UpdateControlVisibility(shipments.All(x => x.FedEx.Service == (int) FedExServiceType.FedExFims));
+        }
+
+        /// <summary>
+        /// Handle when the service type changes
+        /// </summary>
+        private void OnServiceChanged(FedExServiceTypeChangedMessage message)
+        {
+            bool isFims = message.ServiceType == FedExServiceType.FedExFims;
+
+            UpdateControlVisibility(isFims);
+        }
+
+        /// <summary>
+        /// Change the visibility of panels
+        /// </summary>
+        private void UpdateControlVisibility(bool isFims)
+        {
+            sectionNafta.Visible = !isFims;
+            sectionCommercialInvoice.Visible = !isFims;
+            sectionBroker.Visible = !isFims;
         }
 
         /// <summary>
@@ -167,24 +186,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Whether documents or products are avaiable for the shipment
+        /// Handle when Nafta is enabled
         /// </summary>
-        //void OnChangeDocumentsOnly(object sender, EventArgs e)
-        //{
-        //    UpdateDocumentsProductsVisibility(documentsOnly.CheckState != CheckState.Unchecked, documentsOnly.CheckState != CheckState.Checked);
-        //}
-
-        ///// <summary>
-        ///// Update the visibility of the editors for showing document entry vs. product entry
-        ///// </summary>
-        //private void UpdateDocumentsProductsVisibility(bool showDocuments, bool showProducts)
-        //{
-        //    labelDocumentDescription.Visible = showDocuments;
-        //    documentDescription.Visible = showDocuments;
-
-        //    sectionContents.Visible = showProducts;
-        //}
-
         private void OnNaftaEnabled(object sender, EventArgs e)
         {
             EnableNaftaControls(naftaEnabled.Checked);
@@ -205,6 +208,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Save the data in the control to the shipments
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public override void SaveToShipments()
         {
             base.SaveToShipments();
@@ -222,7 +227,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 brokerAccount.ReadMultiText(t => shipment.FedEx.BrokerAccount = t);
 
                 documentsOnly.ReadMultiCheck(c => shipment.FedEx.CustomsDocumentsOnly = c);
-                //documentDescription.ReadMultiText(t => shipment.FedEx.CustomsDocumentsDescription = t);
 
                 recipientTaxID.ReadMultiText(t => shipment.FedEx.CustomsRecipientTIN = t);
 

@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A93F195E-44BC-4C73-8F70-7714A040EA0E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ShipWorks.Shipping.UI</RootNamespace>
+    <AssemblyName>ShipWorks.Shipping.UI</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>true</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Extras.Attributed">
+      <HintPath>..\..\Components\Autofac.Extras.Attributed.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mef">
+      <HintPath>..\..\Components\Autofac.Integration.Mef.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\ComponentFactory.Krypton.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Divelements.SandGrid, Version=2.2.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Divelements.SandGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Divelements.SandRibbon.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.LinqSupportClasses.NET35.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net40\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Interfaces.2.2.5\lib\net40\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net40\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
+      <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedDlg.Designer.cs">
+      <DependentUpon>AmazonNotLinkedDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.Designer.cs">
+      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteFactory.cs" />
+    <Compile Include="Carriers\Amazon\AmazonOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonOptionsControl.Designer.cs">
+      <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonServiceControl.Designer.cs">
+      <DependentUpon>AmazonServiceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonSettingsControl.Designer.cs">
+      <DependentUpon>AmazonSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonShipmentSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonShipmentSetupWizard.Designer.cs">
+      <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonProfileControl.Designer.cs">
+      <DependentUpon>AmazonProfileControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonShippingModule.cs" />
+    <Compile Include="Carriers\Ups\UpsShippingModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShippingModule.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
+      <Project>{1e53a000-fdeb-4e9e-8be0-19cdc14a0282}</Project>
+      <Name>Interapptive.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Adapter\ShipWorks.Data.Adapter.csproj">
+      <Project>{d5eb1eb5-dd70-4461-9377-b462031837dc}</Project>
+      <Name>ShipWorks.Data.Adapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
+      <Project>{6f05267c-1883-4526-8d83-e46b7b2d2faf}</Project>
+      <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
+      <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
+      <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
+      <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
+      <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
+      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+      <Name>ShipWorks.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
+      <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
+      <Name>ShipWorks.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedDlg.resx">
+      <DependentUpon>AmazonNotLinkedDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.resx">
+      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonOptionsControl.resx">
+      <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonServiceControl.resx">
+      <DependentUpon>AmazonServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonSettingsControl.resx">
+      <DependentUpon>AmazonSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonShipmentSetupWizard.resx">
+      <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonProfileControl.resx">
+      <DependentUpon>AmazonProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\interapptive_public.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
+    <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

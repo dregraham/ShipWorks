@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Data.Connection;
 using log4net;
@@ -148,11 +149,23 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             serviceClass = tempServiceClass;
         }
 
-        /// <summary>
+                /// <summary>
         /// Gets the CA shipment Class code
         /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
         /// </summary>
         public static string GetShipmentClassCode(ShipmentEntity shipment)
+        {
+            ChannelAdvisorStoreEntity store = StoreManager.GetStore(shipment.Order.StoreID) as ChannelAdvisorStoreEntity;
+            return GetShipmentClassCode(shipment, store);
+        }
+
+        /// <summary>
+        /// Gets the CA shipment Class code
+        /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
+        /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
+        public static string GetShipmentClassCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
         {
             if (!shipment.Processed)
             {
@@ -161,6 +174,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             // not going through ShippingManager.GetServiceDescription because we need to not include any prefixes like "USPS"
             ShipmentTypeCode type = (ShipmentTypeCode)shipment.ShipmentType;
+            
+            if (type == ShipmentTypeCode.Amazon)
+            {
+                return GetAmazonShipmentClassCode(shipment);
+            }
 
             // If Other, just take the user-entered value
             if (type == ShipmentTypeCode.Other)
@@ -191,6 +209,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     {
                         case FedExServiceType.FedExGround:
                         case FedExServiceType.GroundHomeDelivery:
+                        case FedExServiceType.FedExInternationalGround:
                             return "GROUND";
 
                         case FedExServiceType.FedEx2Day:
@@ -345,7 +364,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                     if (ShipmentTypeManager.IsConsolidator(postalServiceType))
                     {
-                        return "CONSOLIDATOR";
+                        return store.ConsolidatorAsUsps ? "IECONOMY" : "CONSOLIDATOR";
                     }
 
                     if (ShipmentTypeManager.IsDhl(postalServiceType))
@@ -367,6 +386,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public static string GetCarrierCode(ShipmentEntity shipment)
         {
+            ChannelAdvisorStoreEntity store = StoreManager.GetStore(shipment.Order.StoreID) as ChannelAdvisorStoreEntity;
+            return GetCarrierCode(shipment, store);
+        }
+
+        /// <summary>
+        /// Gets the CA shipment Carrier code.  The values are user-customizable in the CA admin site.
+        /// </summary>
+        public static string GetCarrierCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
+        {
             if (!shipment.Processed)
             {
                 return "None";
@@ -374,6 +402,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             switch ((ShipmentTypeCode)shipment.ShipmentType)
             {
+                case ShipmentTypeCode.Amazon:
+                    return GetAmazonCarrierName(shipment);
+
                 case ShipmentTypeCode.FedEx:
                     return "FEDEX";
                 
@@ -396,7 +427,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     }
                     else if (ShipmentTypeManager.IsConsolidator(service))
                     {
-                        return "Consolidator";
+                        return store.ConsolidatorAsUsps ? "USPS" : "Consolidator";
                     }
                     else
                     {
@@ -415,6 +446,81 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 default:
                     return "None";
             }
+        }
+
+        /// <summary>
+        /// Gets the actual carrier for an Amazon shipment
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns></returns>
+        private static string GetAmazonCarrierName(ShipmentEntity shipment)
+        {
+            AmazonShipmentEntity amazonShipment = new AmazonShipmentEntity(shipment.ShipmentID);
+            
+            switch (amazonShipment.CarrierName)
+            {
+                case "FedEx":
+                    return "FEDEX";
+                case "UPS":
+                    return "UPS";
+                case "USPS":
+                    return "USPS";
+                default:
+                    return "None";
+            }
+        }
+
+        /// <summary>
+        /// Gets the actual service for a Amazon shipment
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns></returns>
+        private static string GetAmazonShipmentClassCode(ShipmentEntity shipment)
+        {
+            AmazonShipmentEntity amazonShipment = new AmazonShipmentEntity(shipment.ShipmentID);
+            string service = amazonShipment.ShippingServiceName;
+
+            switch (service)
+            {
+                case "FedEx Priority Overnight®":
+                    return "PRIORITY";
+                case "FedEx Standard Overnight®":
+                    return "OVERNIGHT";
+                case "FedEx 2Day®A.M.":
+                    return "2DAY";
+                case "FedEx 2Day®":
+                    return "2DAY";
+                case "FedEx Express Saver®":
+                    return "EXPSAVER";
+                case "FedEx Home Delivery®":
+                    return "GROUND";
+                case "USPS First Class":
+                    return "FIRSTCLASS";
+                case "USPS Priority Mail":
+                    return "PRIORITY";
+                case "USPS Priority Mail Flat Rate Box":
+                    return "PRIORITY";
+                case "USPS Priority Mail Small Flat Rate Box":
+                    return "PRIORITY";
+                case "USPS Priority Mail Large Flat Rate Box":
+                    return "PRIORITY";
+                case "USPS Priority Mail Flat Rate Envelope":
+                    return "PRIORITY";
+                case "USPS Priority Mail Express":
+                    return "EXPRESS";
+                case "USPS Priority Mail Express Flat Rate Envelope":
+                    return "EXPRESS";
+                case "USPS Parcel Select":
+                    return "PARCELSELECT";
+                case "UPS Ground":
+                    return "GROUND";
+                case "UPS Next Day Air":
+                    return "NEXTDAY";
+                case "UPS Next Day Air Saver":
+                    return "NDAS";
+            }
+
+            return "NONE";
         }
     }
 }

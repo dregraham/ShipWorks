@@ -20,10 +20,11 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Services;
 using NDesk.Options;
 using System.Collections.Generic;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks
 {
-    static class Program
+    public static class Program
     {
         // Indicates if the application is shutting down due to an exception
         static bool isCrashing = false;
@@ -73,7 +74,7 @@ namespace ShipWorks
         /// </summary>
         public static string AppFileName
         {
-            get { return Assembly.GetExecutingAssembly().Location; }
+            get { return Assembly.GetEntryAssembly().Location; }
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace ShipWorks
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
             // These come first regardless of ExecutionMode. Even the ServiceExecutionMode uses UI to prompt for credentials.
             Application.SetCompatibleTextRenderingDefault(false);
@@ -99,6 +100,8 @@ namespace ShipWorks
             MessageHelper.Initialize("ShipWorks");
 
             SetupUnhandledExceptionHandling();
+
+            AuditDisplayFormatAttribute.Register();
 
             try
             {
@@ -161,11 +164,12 @@ namespace ShipWorks
             }
 
             Environment.Exit(Environment.ExitCode);
-        }       
+        }
 
         /// <summary>
         /// Check that all system requirements for running are met
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static bool CheckSystemRequirements()
         {
             // Verify native, which won't be caught by CLR since its not .net

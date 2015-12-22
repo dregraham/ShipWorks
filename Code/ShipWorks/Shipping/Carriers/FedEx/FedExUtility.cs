@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web.Services.Description;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -14,6 +15,10 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Insurance;
 using Interapptive.Shared.Net;
 using System.Xml;
+using Interapptive.Shared;
+using ShipWorks.Shipping.Settings;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -86,10 +91,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             List<FedExServiceType> serviceTypes = new List<FedExServiceType>
             {
                 FedExServiceType.FedExGround,
+                FedExServiceType.StandardOvernight,
                 FedExServiceType.FirstOvernight,
                 FedExServiceType.PriorityOvernight,
                 FedExServiceType.FedEx2Day,
-                FedExServiceType.FedExExpressSaver,
                 FedExServiceType.FedEx1DayFreight,
                 FedExServiceType.FedEx2DayAM
             };
@@ -97,9 +102,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Since all shipments are going to the same country, just pick out the first one
             if (shipments.Count > 0 && shipments.First().AdjustedShipCountryCode() == "US")
             {
+                serviceTypes.Add(FedExServiceType.FedExExpressSaver);
+
                 // Add additional service types for US domestic
                 serviceTypes.Add(FedExServiceType.GroundHomeDelivery);
-                serviceTypes.Add(FedExServiceType.StandardOvernight);
                 serviceTypes.Add(FedExServiceType.SmartPost);
                 serviceTypes.Add(FedExServiceType.FirstFreight);
                 serviceTypes.Add(FedExServiceType.FedEx2DayFreight);
@@ -112,6 +118,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 serviceTypes.Add(FedExServiceType.OneRateExpressSaver);
                 serviceTypes.Add(FedExServiceType.OneRate2Day);
                 serviceTypes.Add(FedExServiceType.OneRate2DayAM);
+            }
+            else if (shipments.Count > 0 && shipments.First().AdjustedShipCountryCode() == "CA")
+            {
+                serviceTypes.Add(FedExServiceType.FedExEconomyCanada);
             }
 
             return serviceTypes;
@@ -137,7 +147,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 (s.AdjustedOriginCountryCode() == "CA" && s.AdjustedShipCountryCode() == "US")))
             {
                 // Ground service is allowed between US and CA
-                serviceTypes.Add(FedExServiceType.FedExGround);
+                serviceTypes.Add(FedExServiceType.FedExInternationalGround);
+            }
+
+            // Add FIMS if enabled
+            if (ShippingSettings.Fetch().FedExFimsEnabled)
+            {
+                serviceTypes.Add(FedExServiceType.FedExFims);
+            }
+
+            if (shipments.All(s => IsSmartPostEnabled(s) && s.ShipPerson.IsUSInternationalTerritory()))
+            {
+                // SmartPost service is allowed between US and US Territories
+                serviceTypes.Add(FedExServiceType.SmartPost);
             }
 
             return serviceTypes;
@@ -157,6 +179,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 case FedExServiceType.FirstOvernight:
                 case FedExServiceType.FedEx2Day:
                 case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.FedExEconomyCanada:
                 case FedExServiceType.InternationalPriority:
                 case FedExServiceType.InternationalEconomy:
                 case FedExServiceType.InternationalFirst:
@@ -168,7 +191,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     types.Add(FedExPackagingType.Tube);
 
                     break;
-                }                    
+                }
             }
 
             switch (service)
@@ -207,6 +230,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Create a new package entity that has default values
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static FedExPackageEntity CreateDefaultPackage()
         {
             FedExPackageEntity package = new FedExPackageEntity();
@@ -256,6 +280,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Determines if the shipment is a FIMS shipment.
+        /// </summary>
+        public static bool IsFimsService(FedExServiceType service)
+        {
+            return service == FedExServiceType.FedExFims;
+        }
+
+        /// <summary>
         /// Indicates if the given service is a freight servce
         /// </summary>
         public static bool IsFreightService(FedExServiceType serviceType)
@@ -285,11 +317,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 case FedExServiceType.StandardOvernight:
                 case FedExServiceType.FedEx2Day:
                 case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.FedExEconomyCanada:
                 case FedExServiceType.FirstFreight:
                 case FedExServiceType.FedEx1DayFreight:
                 case FedExServiceType.FedEx2DayFreight:
                 case FedExServiceType.FedEx3DayFreight:
                 case FedExServiceType.FedExGround:
+                case FedExServiceType.FedExInternationalGround:
                     return true;
             }
 
@@ -427,8 +461,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             string responseFilename = GetCertificationFileName(uniqueId, action, "Response", "xml", false);
             File.AppendAllText(responseFilename, rawSoap.ResponseXml);
-
-
+            
             // Write the request and response to a file that will be unique for each transaction for debugging purposes
             string debugRequestFilename = GetCertificationFileName(uniqueId, action, "Request", "xml", true);
             File.AppendAllText(debugRequestFilename, rawSoap.RequestXml);
@@ -503,6 +536,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return trackingNumber;
+        }
+
+        /// <summary>
+        /// Determines whether shipment service is a ground service
+        /// </summary>
+        public static bool IsGroundService(FedExServiceType service)
+        {
+            return
+                (new List<FedExServiceType>
+                {
+                    FedExServiceType.FedExGround,
+                    FedExServiceType.GroundHomeDelivery,
+                    FedExServiceType.FedExInternationalGround
+                }).Contains(service);
         }
     }
 }

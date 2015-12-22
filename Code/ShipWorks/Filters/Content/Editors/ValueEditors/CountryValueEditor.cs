@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Filters.Content.Conditions;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Filters.Content.Editors.ValueEditors
 {

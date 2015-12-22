@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -10,7 +9,7 @@ namespace ShipWorks.Shipping.Insurance
     /// <summary>
     /// Wraps an entity to provide consist API for accessing insurance information
     /// </summary>
-    public class InsuranceChoice
+    public class InsuranceChoice : IInsuranceChoice
     {
         ShipmentEntity shipment;
 
@@ -115,32 +114,50 @@ namespace ShipWorks.Shipping.Insurance
             }
         }
 
-        public static bool AllFedExShipments(IEnumerable<InsuranceChoice> choices)
+        /// <summary>
+        /// Are all the insurance shipments FedEx?
+        /// </summary>
+        public static bool AllFedExShipments(IEnumerable<IInsuranceChoice> choices)
         {
             return choices.All(c => ShipmentTypeManager.IsFedEx((ShipmentTypeCode)c.Shipment.ShipmentType));
         }
 
-        public static bool AllUpsShipments(IEnumerable<InsuranceChoice> choices)
+        /// <summary>
+        /// Are all the insurance shipments Ups?
+        /// </summary>
+        public static bool AllUpsShipments(IEnumerable<IInsuranceChoice> choices)
         {
             return choices.All(c => ShipmentTypeManager.IsUps((ShipmentTypeCode)c.Shipment.ShipmentType));
         }
 
-        public static bool AllOnTracShipments(IEnumerable<InsuranceChoice> choices)
+        /// <summary>
+        /// Are all the insurance shipments OnTrac?
+        /// </summary>
+        public static bool AllOnTracShipments(IEnumerable<IInsuranceChoice> choices)
         {
             return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.OnTrac);
         }
 
-        public static bool AlliParcelShipments(IEnumerable<InsuranceChoice> choices)
+        /// <summary>
+        /// Are all the insurance shipments iParcel?
+        /// </summary>
+        public static bool AlliParcelShipments(IEnumerable<IInsuranceChoice> choices)
         {
             return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.iParcel);
         }
 
-        public static bool AllEndiciaShipments(IEnumerable<InsuranceChoice> choices)
+        /// <summary>
+        /// Are all the insurance shipments Endicia?
+        /// </summary>
+        public static bool AllEndiciaShipments(IEnumerable<IInsuranceChoice> choices)
         {
             return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.Endicia);
         }
 
-        public static bool AllUspsShipments(IEnumerable<InsuranceChoice> choices)
+        /// <summary>
+        /// Are all the insurance shipments Usps?
+        /// </summary>
+        public static bool AllUspsShipments(IEnumerable<IInsuranceChoice> choices)
         {
             return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.Usps);
         }

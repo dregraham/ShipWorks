@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml;
 using System.Xml.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -495,7 +496,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 throw new TangoException(errorNode.InnerText);
             }
         }
-		
+
         /// <summary>
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
@@ -503,6 +504,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <returns>OnlineShipmentID from Tango.</returns>
         /// <exception cref="System.ArgumentNullException">store</exception>
         /// <exception cref="TangoException"></exception>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public static string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
         {
             if (store == null)
@@ -547,7 +550,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     tracking = "";
                 }
 
-                List<InsuranceChoice> insuredPackages = 
+                List<IInsuranceChoice> insuredPackages = 
                     Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
                     .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                     .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks && choice.InsuranceValue > 0)
@@ -560,7 +563,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 if (insuredPackages.Count > 0)
                 {
-                    InsuranceChoice insuranceChoice = insuredPackages[0];
+                    IInsuranceChoice insuranceChoice = insuredPackages[0];
 
                     shipWorksInsured = true;
                     pennyOne = insuranceChoice.InsurancePennyOne ?? false;
@@ -737,6 +740,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Create a new freemium store in tango
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void CreateFreemiumStore(StoreEntity store, PersonAdapter accountAddress, EndiciaPaymentInfo paymentInfo, string dazzleAccount, bool validateOnly)
         {
             EbayStoreEntity ebayStore = store as EbayStoreEntity;
@@ -1041,6 +1045,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private static void ValidateInterapptiveCertificate(HttpWebRequest httpWebRequest)
         {
+#if !DEBUG
             if (httpWebRequest.ServicePoint == null)
             {
                 throw new TangoException("The SSL certificate on the server is invalid.");
@@ -1058,6 +1063,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new TangoException("The SSL certificate on the server is invalid.");
             }
+#endif
         }
 
 

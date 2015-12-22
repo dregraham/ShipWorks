@@ -1001,7 +1001,17 @@ namespace ShipWorks.Data.Grid
                     c => c.Bounds.Left < clickLocation.X && c.Bounds.Right > clickLocation.X);
             }
 
-            base.WndProc(ref m);
+            // For some reason if you drag a column on the grid and 
+            // put it back in the same position it crashes
+            // logging crash for now
+            try
+            {
+                base.WndProc(ref m);
+            }
+            catch (InvalidOperationException ex)
+            {
+                log.Error(ex.Message);
+            }
         }
 
         #endregion

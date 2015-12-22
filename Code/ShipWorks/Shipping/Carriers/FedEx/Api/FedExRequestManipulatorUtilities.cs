@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -158,6 +159,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get the API service type based on our internal value
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         public static WebServices.Ship.ServiceType GetApiServiceType(FedExServiceType serviceType)
         {
             switch (serviceType)
@@ -184,6 +186,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 case FedExServiceType.FedExExpressSaver:
                 case FedExServiceType.OneRateExpressSaver: 
+                case FedExServiceType.FedExEconomyCanada:
                     return WebServices.Ship.ServiceType.FEDEX_EXPRESS_SAVER;
 
                 case FedExServiceType.InternationalPriority: return WebServices.Ship.ServiceType.INTERNATIONAL_PRIORITY;
@@ -192,7 +195,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.FedEx1DayFreight: return WebServices.Ship.ServiceType.FEDEX_1_DAY_FREIGHT;
                 case FedExServiceType.FedEx2DayFreight: return WebServices.Ship.ServiceType.FEDEX_2_DAY_FREIGHT;
                 case FedExServiceType.FedEx3DayFreight: return WebServices.Ship.ServiceType.FEDEX_3_DAY_FREIGHT;
-                case FedExServiceType.FedExGround: return WebServices.Ship.ServiceType.FEDEX_GROUND;
+                
+                case FedExServiceType.FedExGround: 
+                case FedExServiceType.FedExInternationalGround:
+                    return WebServices.Ship.ServiceType.FEDEX_GROUND;
+                
                 case FedExServiceType.GroundHomeDelivery: return WebServices.Ship.ServiceType.GROUND_HOME_DELIVERY;
                 case FedExServiceType.InternationalPriorityFreight: return WebServices.Ship.ServiceType.INTERNATIONAL_PRIORITY_FREIGHT;
                 case FedExServiceType.InternationalEconomyFreight: return WebServices.Ship.ServiceType.INTERNATIONAL_ECONOMY_FREIGHT;
@@ -212,7 +219,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return new WebServices.Ship.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.Ship.WebAuthenticationCredential
+                ParentCredential = new WebServices.Ship.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
@@ -230,15 +237,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the shipping API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a shipping API request.</returns>
-        public static WebServices.Ship.ClientDetail CreateShippingClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Ship.ClientDetail CreateShippingClientDetail(FedExAccountEntity account)
         {
             return new WebServices.Ship.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
-                ClientProductId = settings.ClientProductId,
-                ClientProductVersion = settings.ClientProductVersion,
                 MeterNumber = account.MeterNumber
             };
         }
@@ -252,7 +256,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return new WebServices.Registration.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.Registration.WebAuthenticationCredential
+                ParentCredential = new WebServices.Registration.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
@@ -270,15 +274,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the shipping API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a shipping API request.</returns>
-        public static WebServices.Registration.ClientDetail CreateRegistrationClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Registration.ClientDetail CreateRegistrationClientDetail(FedExAccountEntity account)
         {
             return new WebServices.Registration.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
-                ClientProductId = settings.ClientProductId,
-                ClientProductVersion = settings.ClientProductVersion,
                 MeterNumber = account.MeterNumber
             };
         }
@@ -315,7 +316,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return new WebServices.Rate.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.Rate.WebAuthenticationCredential
+                ParentCredential = new WebServices.Rate.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
@@ -357,7 +358,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return new WebServices.Close.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.Close.WebAuthenticationCredential
+                ParentCredential = new WebServices.Close.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
@@ -375,15 +376,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the shipping API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a close API request.</returns>
-        public static WebServices.Close.ClientDetail CreateCloseClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Close.ClientDetail CreateCloseClientDetail(FedExAccountEntity account)
         {
             return new WebServices.Close.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
-                ClientProductId = settings.ClientProductId,
-                ClientProductVersion = settings.ClientProductVersion,
                 MeterNumber = account.MeterNumber
             };
         }
@@ -392,9 +390,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the shipping API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a rate API request.</returns>
-        public static WebServices.Rate.ClientDetail CreateRateClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Rate.ClientDetail CreateRateClientDetail(FedExAccountEntity account)
         {
             if (account == null)
             {
@@ -404,8 +401,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             return new WebServices.Rate.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
-                ClientProductId = settings.ClientProductId,
-                ClientProductVersion = settings.ClientProductVersion,
                 MeterNumber = account.MeterNumber
             };
         }
@@ -419,7 +414,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return new WebServices.Ship.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.Ship.WebAuthenticationCredential
+                ParentCredential = new WebServices.Ship.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
@@ -437,15 +432,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the void API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a void API request.</returns>
-        public static WebServices.Ship.ClientDetail CreateVoidClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Ship.ClientDetail CreateVoidClientDetail(FedExAccountEntity account)
         {
             return new WebServices.Ship.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
-                ClientProductId = settings.ClientProductId,
-                ClientProductVersion = settings.ClientProductVersion,
                 MeterNumber = account.MeterNumber
             };
         }
@@ -459,7 +451,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return new WebServices.Track.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.Track.WebAuthenticationCredential
+                ParentCredential = new WebServices.Track.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
@@ -477,15 +469,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the void API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a void API request.</returns>
-        public static WebServices.Track.ClientDetail CreateTrackClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Track.ClientDetail CreateTrackClientDetail(FedExAccountEntity account)
         {
             return new WebServices.Track.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
-                ClientProductId = settings.ClientProductId,
-                ClientProductVersion = settings.ClientProductVersion,
                 MeterNumber = account.MeterNumber
             };
         }

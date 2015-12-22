@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
     /// <summary>
     /// Task for updating online order status for BigCommerce
     /// </summary>
-    [ActionTask("Update online status", "BigCommerceOrderUpdate", ActionTaskCategory.UpdateOnline)]
+    [ActionTask("Update store status", "BigCommerceOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class BigCommerceOrderUpdateTask : StoreInstanceTaskBase
     {
         // Default the status code to an invalid code (so the drop down works correctly)

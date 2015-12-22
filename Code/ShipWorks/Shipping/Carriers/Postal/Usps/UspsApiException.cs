@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web.Services.Protocols;
 using System.Globalization;
 using System.Xml;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -30,11 +30,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override string Message
         {
+            [NDependIgnoreLongMethod]
             get
             {
                 switch (code)
                 {
-                    // Errors coming from the Express1 version of the API (prior to hitting USPS) always 
+                    // Errors coming from the Express1 version of the API (prior to hitting USPS) always
                     // return an error code of 0
                     case 0x00000000: return GetExpress1Message();
 
@@ -43,8 +44,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     case 0x005f0302: return "This account is already a reseller account.";
                     case 0x005f0301: return string.Format("This account is a multi-user account. Multi-user accounts are not eligible to be migrated to a reseller account.{0}{0}Please contact Stamps.com if you need assistance.", Environment.NewLine);
                 }
-                
-                SoapException baseEx = base.InnerException as SoapException;
+
+                SoapException baseEx = InnerException as SoapException;
                 string message = baseEx.Detail.InnerText;
 
                 // Strip out the authenticator junk
@@ -56,16 +57,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 if (string.IsNullOrEmpty(message))
                 {
-                    message = base.InnerException.Message;
+                    message = InnerException.Message;
                 }
 
                 message = message.Replace("Invalid SOAP message due to XML Schema validation failure.", "");
-                message = message.Replace("http://stamps.com/xml/namespace/2008/01/swsim/swsimv1:", "");
-                message = message.Replace("http://stamps.com/xml/namespace/2011/9/swsim/swsimv18:", "");
-                message = message.Replace("http://stamps.com/xml/namespace/2011/11/swsim/swsimv20:", "");
-                message = message.Replace("http://stamps.com/xml/namespace/2013/05/swsim/swsimv29:", "");
-                message = message.Replace("http://stamps.com/xml/namespace/2013/05/swsim/swsimv36:", "");
-            
+                message = RemoveNamespaceFromMessage(message);
+
                 string leftOver = string.Empty;
 
                 int swsIndex = message.IndexOf(" SWS");
@@ -83,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         message = message.Substring(0, swsIndex);
                     }
                 }
-                
+
                 if (!string.IsNullOrEmpty(message) && !message.EndsWith("."))
                 {
                     message += ".";
@@ -103,6 +100,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 return message.Trim();
             }
+        }
+
+        /// <summary>
+        /// Remove the namespace from the message.
+        /// </summary>
+        private static string RemoveNamespaceFromMessage(string message)
+        {
+            SoapDocumentMethodAttribute soapDocumentMethodAttribute = UspsWebClient.WebServiceType.
+                GetMethod("AuthenticateUser").
+                GetCustomAttributes(true).
+                OfType<SoapDocumentMethodAttribute>().
+                FirstOrDefault();
+
+            if (soapDocumentMethodAttribute != null)
+            {
+                message = message.Replace(soapDocumentMethodAttribute.ResponseNamespace + ":", string.Empty);
+            }
+
+            return message;
         }
 
         /// <summary>
@@ -140,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Extracts a message that is specific to the Express1 version of the USPS API (i.e. when the 
+        /// Extracts a message that is specific to the Express1 version of the USPS API (i.e. when the
         /// error code in the SoapException is 0).
         /// </summary>
         private string GetExpress1Message()

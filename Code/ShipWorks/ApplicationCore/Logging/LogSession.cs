@@ -14,6 +14,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using System.Security;
 using Common.Logging.Log4Net;
 using Common.Logging;
+using Interapptive.Shared;
 using NameValueCollection = Common.Logging.Configuration.NameValueCollection;
 
 namespace ShipWorks.ApplicationCore.Logging
@@ -65,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Provide methhod for background process to register thread to clean up logs
+        /// Provide method for background process to register thread to clean up logs
         /// </summary>
         public static void RegisterLogCleanup()
         {
@@ -149,6 +150,8 @@ namespace ShipWorks.ApplicationCore.Logging
             {
                 case LogActionType.GetRates:
                     return logOptions.LogRateCalls;
+                case LogActionType.ExtendedLogging:
+                    return !IsPrivateLoggingEncrypted;
                 default:
                     return true;
             }
@@ -285,6 +288,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// <summary>
         /// Runs on a schedule to see if any log files are in need of deleting.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void CleanupThread()
         {
             try

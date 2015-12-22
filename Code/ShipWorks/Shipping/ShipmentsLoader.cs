@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.ComponentModel;
+using Interapptive.Shared;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Interaction;
@@ -142,6 +143,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Load all the shipments on a background thread
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadShipmentsInternal(ProgressItem workProgress, IList<long> keys)
         {
             // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.

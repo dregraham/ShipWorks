@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C53624D5-5B3B-48A6-9729-52A573726DE9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ShipWorks.Stores</RootNamespace>
+    <AssemblyName>ShipWorks.Stores</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>true</DelaySign>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Components\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\..\Components\Quartz.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Mail">
+      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.LinqSupportClasses.NET35.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net40\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Interfaces.2.2.5\lib\net40\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net40\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
+      <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
+    <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
+    <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
+    <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandBillingAddress.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandCustomer.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandInvoice.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandItem.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandOrder.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandOrderStatus.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandOrderStatuses.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandShipment.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandShippingAddress.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandStatusCode.cs" />
+    <Compile Include="Platforms\LemonStand\DTO\LemonStandStatusCodes.cs" />
+    <Compile Include="Platforms\LemonStand\ILemonStandWebClient.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandDownloader.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandException.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdater.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifier.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandProductCache.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandStatusCodeProvider.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
+      <Project>{1e53a000-fdeb-4e9e-8be0-19cdc14a0282}</Project>
+      <Name>Interapptive.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Adapter\ShipWorks.Data.Adapter.csproj">
+      <Project>{d5eb1eb5-dd70-4461-9377-b462031837dc}</Project>
+      <Name>ShipWorks.Data.Adapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
+      <Project>{6f05267c-1883-4526-8d83-e46b7b2d2faf}</Project>
+      <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
+      <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
+      <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
+      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+      <Name>ShipWorks.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
+      <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
+      <Name>ShipWorks.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\interapptive_public.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

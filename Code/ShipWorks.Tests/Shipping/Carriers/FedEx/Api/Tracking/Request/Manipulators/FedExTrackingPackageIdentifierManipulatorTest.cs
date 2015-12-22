@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
 {
-    [TestClass]
     public class FedExTrackingPackageIdentifierManipulatorTest
     {
         private FedExTrackingPackageIdentifierManipulator testObject;
@@ -17,8 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
         private TrackRequest nativeRequest;
         private const string testTrackingNumber = "999999999999999";
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExTrackingPackageIdentifierManipulatorTest()
         {
             nativeRequest = new TrackRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
@@ -26,44 +24,40 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject = new FedExTrackingPackageIdentifierManipulator();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotTrackingRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new FedExTrackingUtilities());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenShipmentEntityIsNull_Test()
         {
             // Setup the shipment entity to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null, nativeRequest);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_TrackPackageIdentifierMatchesShipmentTrackingNumber_Test()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity();
@@ -73,12 +67,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
-            //Assert.IsNotNull(nativeRequest.PackageIdentifier);
-            //Assert.AreEqual(testTrackingNumber, nativeRequest.PackageIdentifier.Value);
-            //Assert.AreEqual(TrackIdentifierType.TRACKING_NUMBER_OR_DOORTAG, nativeRequest.PackageIdentifier.Type);
+            //Assert.NotNull(nativeRequest.PackageIdentifier);
+            //Assert.Equal(testTrackingNumber, nativeRequest.PackageIdentifier.Value);
+            //Assert.Equal(TrackIdentifierType.TRACKING_NUMBER_OR_DOORTAG, nativeRequest.PackageIdentifier.Type);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_IncludeDetailedScansIsTrue_Test()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity();
@@ -88,8 +82,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
-            //Assert.AreEqual(true, nativeRequest.IncludeDetailedScans);
-            //Assert.AreEqual(true, nativeRequest.IncludeDetailedScansSpecified);
+            //Assert.Equal(true, nativeRequest.IncludeDetailedScans);
+            //Assert.Equal(true, nativeRequest.IncludeDetailedScansSpecified);
         }
     }
 }

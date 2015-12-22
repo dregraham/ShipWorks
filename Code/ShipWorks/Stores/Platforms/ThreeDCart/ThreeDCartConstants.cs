@@ -9,8 +9,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
     /// </summary>
     public static class ThreeDCartConstants
     {
-        // 100 is the max that ThreeDCart allows for all batch queries
-        public const int MaxResultsToReturn = 100;
+        // 100 is the max that ThreeDCart allows for all batch queries, but using 10 to get orders into the db faster.
+        public const int MaxResultsToReturn = 10;
 
         public const int OrderStatusNotCompleted = 7;
     }

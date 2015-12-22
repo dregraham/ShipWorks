@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms;
@@ -9,11 +9,10 @@ using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Tests.Stores.Shopify
 {
-    [TestClass]
     public class ApiTests
     {
 
-        [TestMethod]
+        [Fact]
         public void GenEncryptedApiKeyPwd()
         {
 
@@ -23,8 +22,8 @@ namespace ShipWorks.Tests.Stores.Shopify
             string decryptedKey = SecureText.Decrypt(encryptedKey, "interapptive");
             string decryptedPwd = SecureText.Decrypt(encryptedPwd, "interapptive");
 
-            Assert.AreEqual(decryptedKey, "36d5caf5fa4e17b35e915dbf61add688");
-            Assert.AreEqual(decryptedPwd, "7e7a6b34705570389dd9f6fe976ff7f2");
+            Assert.Equal(decryptedKey, "36d5caf5fa4e17b35e915dbf61add688");
+            Assert.Equal(decryptedPwd, "7e7a6b34705570389dd9f6fe976ff7f2");
 
         }
 

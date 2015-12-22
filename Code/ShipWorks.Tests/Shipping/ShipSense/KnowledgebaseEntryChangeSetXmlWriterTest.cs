@@ -3,23 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.ShipSense;
 
 namespace ShipWorks.Tests.Shipping.ShipSense
 {
-    [TestClass]
     public class KnowledgebaseEntryChangeSetXmlWriterTest
     {
         private KnowledgebaseEntryChangeSetXmlWriter testObject;
-        
+
         private Mock<IChangeSetXmlWriter> packageXmlWriter;
         private Mock<IChangeSetXmlWriter> customsXmlWriter;
         private KnowledgebaseEntry entry;
 
-        [TestInitialize]
-        public void Initialize()
+        public KnowledgebaseEntryChangeSetXmlWriterTest()
         {
             entry = new KnowledgebaseEntry();
             entry.AppliedCustoms = true;
@@ -30,24 +28,23 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject = new KnowledgebaseEntryChangeSetXmlWriter(entry, packageXmlWriter.Object, customsXmlWriter.Object);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ShipSenseException))]
+        [Fact]
         public void AppendChangeSet_ThrowsShipSenseException_WhenArgumentIsNull_Test()
         {
-            testObject.WriteTo(null);
+            Assert.Throws<ShipSenseException>(() => testObject.WriteTo(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void ChangeSet_HasTimestamp_Test()
         {
             XElement changeSets = new XElement("ChangeSets");
 
             testObject.WriteTo(changeSets);
 
-            Assert.IsNotNull(changeSets.Descendants("ChangeSet").First().Attribute("Timestamp"));
+            Assert.NotNull(changeSets.Descendants("ChangeSet").First().Attribute("Timestamp"));
         }
 
-        [TestMethod]
+        [Fact]
         public void ChangeSets_HaveTimestamps_Test()
         {
             XElement changeSets = new XElement("ChangeSets");
@@ -57,10 +54,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             IEnumerable<string> timestamps = changeSets.Descendants("ChangeSet").Select(cs => cs.Attribute("Timestamp").Value);
 
-            Assert.AreEqual(2, timestamps.Count());
+            Assert.Equal(2, timestamps.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void AppendChangeSet_DelegatesToPackageXmlWriter_Test()
         {
             XElement changeSets = new XElement("ChangeSets");
@@ -70,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             packageXmlWriter.Verify(w => w.WriteTo(It.IsAny<XElement>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void AppendChangeSet_DelegatesToCustomsXmlWriter_WhenAppliedCustomsIsTrue_Test()
         {
             entry.AppliedCustoms = true;
@@ -81,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             customsXmlWriter.Verify(w => w.WriteTo(It.IsAny<XElement>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void AppendChangeSet_DoesNotDelegateToCustomsXmlWriter_WhenAppliedCustomsIsFalse_Test()
         {
             entry.AppliedCustoms = false;
@@ -92,14 +89,14 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             customsXmlWriter.Verify(w => w.WriteTo(It.IsAny<XElement>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void AppendChangeSet_AppendsChangeSetNode_ToElementProvided_Test()
         {
             XElement changeSets = new XElement("ChangeSets");
 
             testObject.WriteTo(changeSets);
 
-            Assert.AreEqual(1, changeSets.Descendants("ChangeSet").Count());
+            Assert.Equal(1, changeSets.Descendants("ChangeSet").Count());
         }
 
     }

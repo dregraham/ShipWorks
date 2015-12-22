@@ -13,6 +13,7 @@ using ShipWorks.ApplicationCore;
 using System.Threading;
 using System.Windows.Forms;
 using System.Linq;
+using Interapptive.Shared;
 
 namespace ShipWorks.Templates.Processing
 {
@@ -142,6 +143,7 @@ namespace ShipWorks.Templates.Processing
         /// <summary>
         /// The compiled and loaded XslCompiledTransform.  Will be null of the XSL is not valid.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public TemplateResult Transform(TemplateXPathNavigator xmlSource)
         {
             if (!IsValid)
@@ -264,10 +266,7 @@ namespace ShipWorks.Templates.Processing
         /// <summary>
         /// Since we compile templates from memory, this is the BaseURI that is assigned (as opposed to when you compile from a physical file or web URL, that file or URL is the base)
         /// </summary>
-        public static string XslBaseUri
-        {
-            get { return @"Z:\__shipworks\__templates\__baseuri\"; }
-        }
+        public static string XslBaseUri => @"Z:\__shipworks\__templates\__baseuri\";
 
         /// <summary>
         /// Templates and tokens can reference other templates using xsl:import.  This is a list of all templates

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters;
 using System;
@@ -8,7 +8,6 @@ using System.Linq;
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
-    [TestClass]
     public class DailyActionScheduleAdapterTests
     {
         DailyActionScheduleAdapter target;
@@ -16,27 +15,25 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         private TimeSpan OneDay = new TimeSpan(1, 0, 0, 0);
         private TimeSpan OneHour = new TimeSpan(0, 1, 0, 0);
 
-        [TestInitialize]
-        public void Initialize()
+        public DailyActionScheduleAdapterTests()
         {
             target = new DailyActionScheduleAdapter();
         }
-
-
-        [TestMethod]
+        
+        [Fact]
         public void FiresAtStartTime()
         {
             DailyActionSchedule schedule = new DailyActionSchedule { StartDateTimeInUtc = DateTime.UtcNow };
 
             IList<DateTimeOffset> fireTimes = schedule.ComputeFireTimes(target, 1);
 
-            Assert.AreEqual(schedule.StartDateTimeInUtc, fireTimes[0].DateTime);
+            Assert.Equal(schedule.StartDateTimeInUtc, fireTimes[0].DateTime);
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequency()
         {
-            DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = DateTime.UtcNow };
+            DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = new DateTime(2015, 1, 1) };
 
             DateTimeOffset[] fireTimes = schedule.ComputeFireTimes(target, 5).ToArray();
 
@@ -44,10 +41,10 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.IsTrue(intervals.All(x => x.TotalDays == schedule.FrequencyInDays));
+            Assert.True(intervals.All(x => x.TotalDays == schedule.FrequencyInDays));
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequency_WhenDstEnds()
         {
             DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = DateTime.Parse("10/27/2015").AddHours(4).ToUniversalTime() };
@@ -58,14 +55,14 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.IsTrue(intervals[0] == ThreeDays);
-            Assert.IsTrue(intervals[1] == ThreeDays.Add(OneHour));
-            Assert.IsTrue(intervals[2] == ThreeDays);
-            Assert.IsTrue(intervals[3] == ThreeDays);
+            Assert.True(intervals[0] == ThreeDays);
+            Assert.True(intervals[1] == ThreeDays.Add(OneHour));
+            Assert.True(intervals[2] == ThreeDays);
+            Assert.True(intervals[3] == ThreeDays);
 
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequency_WhenDstStarts()
         {
             DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = DateTime.Parse("3/4/2015").AddHours(4).ToUniversalTime() };
@@ -76,13 +73,13 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.IsTrue(intervals[0] == ThreeDays);
-            Assert.IsTrue(intervals[1] == ThreeDays.Subtract(OneHour));
-            Assert.IsTrue(intervals[2] == ThreeDays);
-            Assert.IsTrue(intervals[3] == ThreeDays);
+            Assert.True(intervals[0] == ThreeDays);
+            Assert.True(intervals[1] == ThreeDays.Subtract(OneHour));
+            Assert.True(intervals[2] == ThreeDays);
+            Assert.True(intervals[3] == ThreeDays);
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresOnceWhenHourRepeats_WhenDstEnds()
         {
             DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 1, StartDateTimeInUtc = DateTime.Parse("10/30/2015 02:30:00 AM").ToUniversalTime() };
@@ -93,10 +90,10 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.IsTrue(intervals[0] == OneDay);
-            Assert.IsTrue(intervals[1] == OneDay.Add(OneHour));
-            Assert.IsTrue(intervals[2] == OneDay);
-            Assert.IsTrue(intervals[3] == OneDay);
+            Assert.True(intervals[0] == OneDay);
+            Assert.True(intervals[1] == OneDay.Add(OneHour));
+            Assert.True(intervals[2] == OneDay);
+            Assert.True(intervals[3] == OneDay);
         }
 
     }

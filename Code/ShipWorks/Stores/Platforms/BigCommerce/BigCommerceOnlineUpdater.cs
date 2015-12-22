@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -10,6 +11,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 using log4net;
+using Quartz.Util;
 using ShipWorks.Data.Model;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
@@ -122,6 +124,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Push the online status for an shipment.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void UpdateShipmentDetails(ShipmentEntity shipment)
         {
             OrderEntity order = shipment.Order;
@@ -191,7 +194,34 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Get the BigCommerceItems to pass to the web client
             List<BigCommerceItem> bigCommerceOrderItems = GetOrderItems(order, orderProducts);
 
-            webClient.UploadOrderShipmentDetails(order.OrderNumber, bigCommerceOrderAddressId, shipment.TrackingNumber, bigCommerceOrderItems);
+            string shippingMethod = GetShippingMethod(shipment);
+
+            webClient.UploadOrderShipmentDetails(order.OrderNumber, bigCommerceOrderAddressId, shipment.TrackingNumber, shippingMethod, bigCommerceOrderItems);
+        }
+
+        /// <summary>
+        /// Gets the shipping method.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns></returns>
+        private static string GetShippingMethod(ShipmentEntity shipment)
+        {
+            string carrier = ShipmentTypeManager.GetType(shipment).ToString();
+            string service = ShippingManager.GetServiceUsed(shipment);
+
+            // If the service starts with the carrier name, cut the carrier name off
+            if (service.StartsWith(carrier))
+            {
+                service = service.Substring(carrier.Length + 1);
+            }
+
+            // Bigcommerce doesn't like it when you set shipping_method to an empty string
+            if (carrier.IsNullOrWhiteSpace() && service.IsNullOrWhiteSpace())
+            {
+                return "No shipping method was entered";
+            }
+
+            return $"{carrier} ({service})";
         }
 
         /// <summary>

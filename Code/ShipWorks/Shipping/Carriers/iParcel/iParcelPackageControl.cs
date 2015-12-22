@@ -10,6 +10,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.UI.Controls;
 using Divelements.SandGrid;
+using Interapptive.Shared;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.DetailView;
@@ -78,6 +79,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Load the shipments into the packaging control
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void LoadShipments(List<ShipmentEntity> shipments, bool enableEditing)
         {
             this.loadedShipments = shipments;
@@ -255,7 +257,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             selectedRows.Clear();
 
             List<DimensionsAdapter> dimensionsToLoad = new List<DimensionsAdapter>();
-            List<InsuranceChoice> insuranceToLoad = new List<InsuranceChoice>();
+            List<IInsuranceChoice> insuranceToLoad = new List<IInsuranceChoice>();
 
             // Stop the dimensions control from listening to weight changes
             dimensionsControl.ShipmentWeightBox = null;

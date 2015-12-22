@@ -16,6 +16,8 @@ using ShipWorks.Stores.Content;
 using System.Diagnostics;
 using ShipWorks.Data.Model.HelperClasses;
 using System.Globalization;
+using Interapptive.Shared;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Stores.Platforms.Amazon
@@ -26,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
     public class AmazonMwsDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsDownloader));
-        
+
         int quantitySeen = 0;
 
         /// <summary>
@@ -150,6 +152,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Loads a single order from the correctly positioned xpathnavigator
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadOrder(AmazonMwsClient client, XPathNamespaceNavigator xpath)
         {
             string amazonOrderID = XPathUtility.Evaluate(xpath, "amz:AmazonOrderId", "");
@@ -168,6 +171,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // basic properties
             order.OrderDate = DateTime.Parse(XPathUtility.Evaluate(xpath, "amz:PurchaseDate", "")).ToUniversalTime();
             order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "amz:LastUpdateDate", "")).ToUniversalTime();
+
+            order.EarliestExpectedDeliveryDate = ParseDeliveryDate(XPathUtility.Evaluate(xpath, "amz:EarliestDeliveryDate", ""));
+            order.LatestExpectedDeliveryDate = ParseDeliveryDate(XPathUtility.Evaluate(xpath, "amz:LatestDeliveryDate", ""));
 
             // set the status
             order.OnlineStatus = orderStatus;
@@ -201,9 +207,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 order.OrderNumber = GetNextOrderNumber();
 
                 LoadOrderItems(client, order);
-                
-                // Load details about the item (weight, image, etc.) Amazon throttles usage, so to conserve on 
-                // calls to Amazon, we load the item details here since we can send more than one item in 
+
+                // Load details about the item (weight, image, etc.) Amazon throttles usage, so to conserve on
+                // calls to Amazon, we load the item details here since we can send more than one item in
                 // a request.
                 LoadOrderItemDetails(order.OrderItems.Cast<AmazonOrderItemEntity>().ToList(), client);
 
@@ -221,7 +227,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     Debug.Fail(warning);
                 }
             }
-            
+
             // save
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmazonMwsDownloader.LoadOrder");
             retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
@@ -258,6 +264,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Loads the order items of an amazon order
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadOrderItems(AmazonMwsClient client, AmazonOrderEntity order)
         {
             foreach (XPathNamespaceNavigator navigator in client.GetOrderItems(order.AmazonOrderID))
@@ -350,7 +357,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             foreach (XPathNavigator product in products)
             {
-                // Use the ASIN to find all of the order items in the original list and update the image and 
+                // Use the ASIN to find all of the order items in the original list and update the image and
                 // weight properties based on the data retrieved from Amazon
                 string productASIN = XPathUtility.Evaluate(product, "amz:Identifiers/amz:MarketplaceASIN/amz:ASIN", string.Empty);
                 List<AmazonOrderItemEntity> matchedItems = items.FindAll(i => i.ASIN == productASIN);
@@ -361,7 +368,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     item.Thumbnail = XPathUtility.Evaluate(product, "amz:AttributeSets/details:ItemAttributes/details:SmallImage/details:URL", string.Empty);
                     item.Image = item.Thumbnail;
 
-                    // There are two ways to obtain the weight of the order item: from the package dimensions and from the 
+                    // There are two ways to obtain the weight of the order item: from the package dimensions and from the
                     // item dimensions. Our preferences is to use the weight of the package dimension, and if that is not
                     // available, we'll fall back to the item's weight
                     double weight = 0.0;
@@ -408,6 +415,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Populates the Shipping Address
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void LoadAddresses(AmazonOrderEntity order, XPathNamespaceNavigator xpath)
         {
             bool addressExists = xpath.SelectSingleNode("amz:ShippingAddress") != null;
@@ -438,32 +446,39 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 string buyerFullName = XPathUtility.Evaluate(xpath, "amz:BuyerName", "");
                 if (!String.IsNullOrEmpty(buyerFullName))
                 {
-                    // parse the name
-                    PersonName buyerName = PersonName.Parse(buyerFullName);
-                    order.BillFirstName = buyerName.First;
-                    order.BillMiddleName = buyerName.Middle;
-                    order.BillLastName = buyerName.LastWithSuffix;
-                    order.BillNameParseStatus = (int)buyerName.ParseStatus;
-                    order.BillUnparsedName = buyerName.UnparsedName;
-
-                    // If first and ladt name on the buyer are the same as the shipping name, copy the rest of hte address too
-                    if ((String.Compare(order.BillFirstName, order.ShipFirstName, StringComparison.OrdinalIgnoreCase) == 0) &&
-                        (String.Compare(order.BillLastName, order.ShipLastName, StringComparison.OrdinalIgnoreCase) == 0))
-                    {
-                        // until Amazon provides some billing information, copy everything to billing from shipping
-                        PersonAdapter.Copy(new PersonAdapter(order, "Ship"), new PersonAdapter(order, "Bill"));
-                    }
+                    SetBuyerName(order, buyerFullName);
                 }
                 else
                 {
                     // until Amazon provides some billing information, copy everything to billing from shipping
                     PersonAdapter.Copy(new PersonAdapter(order, "Ship"), new PersonAdapter(order, "Bill"));
-
                 }
 
                 // Amazon sends buyer email now, use it for billing and shipping
                 order.BillEmail = XPathUtility.Evaluate(xpath, "amz:BuyerEmail", "");
                 order.ShipEmail = order.BillEmail;
+            }
+        }
+
+        /// <summary>
+        /// Set the buyer name while downloading an order
+        /// </summary>
+        private static void SetBuyerName(AmazonOrderEntity order, string buyerFullName)
+        {
+            // parse the name
+            PersonName buyerName = PersonName.Parse(buyerFullName);
+            order.BillFirstName = buyerName.First;
+            order.BillMiddleName = buyerName.Middle;
+            order.BillLastName = buyerName.LastWithSuffix;
+            order.BillNameParseStatus = (int)buyerName.ParseStatus;
+            order.BillUnparsedName = buyerName.UnparsedName;
+
+            // If first and last name on the buyer are the same as the shipping name, copy the rest of hte address too
+            if ((string.Equals(order.BillFirstName, order.ShipFirstName, StringComparison.OrdinalIgnoreCase)) &&
+                (string.Equals(order.BillLastName, order.ShipLastName, StringComparison.OrdinalIgnoreCase)))
+            {
+                // until Amazon provides some billing information, copy everything to billing from shipping
+                PersonAdapter.Copy(new PersonAdapter(order, "Ship"), new PersonAdapter(order, "Bill"));
             }
         }
 
@@ -495,6 +510,20 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Sets delivery date from string, returns null if parse failed
+        /// </summary>
+        private static DateTime? ParseDeliveryDate(string date)
+        {
+            DateTime parsedDate;
+            if (DateTime.TryParse(date, out parsedDate))
+            {
+                return parsedDate.ToUniversalTime();
+            }
+
+            return null;
         }
     }
 }

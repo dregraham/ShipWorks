@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
@@ -21,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
         /// </summary>
         /// <param name="registration">The registration object containing the Express1 account info being saved.</param>
         /// <returns></returns>
+        [NDependIgnoreLongMethod]
         public long Save(Express1Registration registration)
         {
             if (registration == null)

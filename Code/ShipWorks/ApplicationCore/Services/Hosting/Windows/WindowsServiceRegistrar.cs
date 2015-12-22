@@ -24,7 +24,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
             // The equivalent of running "installutil <path>", which invokes the MasterInstaller.
             try
             {
-                ManagedInstallerClass.InstallHelper(new[] { "/LogFile=", Assembly.GetExecutingAssembly().Location });
+                ManagedInstallerClass.InstallHelper(new[] { "/LogFile=", Program.AppFileName });
             }
             catch (InvalidOperationException ex)
             {
@@ -97,7 +97,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
             {
                 try
                 {
-                    ManagedInstallerClass.InstallHelper(new[] { "/u", "/LogFile=", Assembly.GetExecutingAssembly().Location });
+                    ManagedInstallerClass.InstallHelper(new[] { "/u", "/LogFile=", Program.AppFileName });
                 }
                 catch (InstallException ex)
                 {

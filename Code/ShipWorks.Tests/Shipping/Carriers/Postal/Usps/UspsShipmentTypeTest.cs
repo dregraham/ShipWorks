@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -14,7 +14,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
-    [TestClass]
     public class UspsShipmentTypeTest
     {
         private UspsShipmentType testObject;
@@ -24,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         private List<PostalServicePackagingCombination> adultSignatureCombinationsNotAllowed = new List<PostalServicePackagingCombination>();
         private List<PostalServicePackagingCombination> adultSignatureCombinationsAllowed = new List<PostalServicePackagingCombination>();
 
-        [TestInitialize]
-        public void Initialize()
+        public UspsShipmentTypeTest()
         {
             accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
 
@@ -38,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             adultSignatureCombinationsNotAllowed = allCombinations.Except(adultSignatureCombinationsAllowed).ToList();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetShippingBroker_ReturnsUspsCounterRateBroker_WhenNoUspsAccountsExist_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
@@ -46,10 +44,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
 
-            Assert.IsInstanceOfType(broker, typeof(UspsCounterRatesBroker));
+            Assert.IsAssignableFrom<UspsCounterRatesBroker>(broker);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetShippingBroker_ReturnsUspsRateBroker_WhenUspsAccountExists_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity> { new UspsAccountEntity() });
@@ -57,32 +55,34 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
 
-            Assert.IsInstanceOfType(broker, typeof(UspsBestRateBroker));
+            Assert.IsAssignableFrom<UspsBestRateBroker>(broker);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRequred_IsReturned_WhenUspsShipmentTypeAndUsingAllowedCombinations()
         {
             UspsShipmentType uspsShipmentType = new UspsShipmentType();
 
             foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
             {
-                Assert.IsTrue(uspsShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRequired), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
+                Assert.Contains(PostalConfirmationType.AdultSignatureRequired, uspsShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType));
+                //Assert.True(uspsShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRequired), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRestricted_IsReturned_WhenUspsShipmentTypeAndUsingAllowedCombinations()
         {
             UspsShipmentType uspsShipmentType = new UspsShipmentType();
 
             foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
             {
-                Assert.IsTrue(uspsShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRestricted), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
+                Assert.Contains(PostalConfirmationType.AdultSignatureRestricted, uspsShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType));
+                //Assert.True(uspsShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRestricted), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRequred_IsNotReturned_WhenUspsShipmentTypeAndUsingCombinationsThatAreNotAllowed()
         {
             UspsShipmentType uspsShipmentType = new UspsShipmentType();
@@ -91,7 +91,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             {
                 List<PostalConfirmationType> returnedConfirmationTypes = uspsShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType);
 
-                Assert.IsTrue(returnedConfirmationTypes.All(ct => ct != PostalConfirmationType.AdultSignatureRequired), "AdultSignatureRequired should not have been returned for {0}, {1}.", combo.ServiceType, combo.PackagingType);
+                Assert.DoesNotContain(PostalConfirmationType.AdultSignatureRequired, returnedConfirmationTypes);
+                //Assert.True(returnedConfirmationTypes.All(ct => ct != PostalConfirmationType.AdultSignatureRequired), "AdultSignatureRequired should not have been returned for {0}, {1}.", combo.ServiceType, combo.PackagingType);
             }
         }
 

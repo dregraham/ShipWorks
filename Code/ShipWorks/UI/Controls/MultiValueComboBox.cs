@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
+using System.Reflection;
 
 namespace ShipWorks.UI.Controls
 {
@@ -30,10 +31,19 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
+        /// Disable control if multivalued and value of this is true
+        /// </summary>
+        [Category("Behavior")]
+        [DefaultValue(true)]
+        [Obfuscation(Exclude = true)]
+        public bool EnabledWhenMultivalued { get; set; } = true;
+
+        /// <summary>
         /// Get \ set whether the box represents a null value.
         /// </summary>
         [Category("Appearance")]
         [DefaultValue(false)]
+        [Obfuscation(Exclude = true)]
         public bool MultiValued
         {
             get
@@ -48,6 +58,11 @@ namespace ShipWorks.UI.Controls
                 }
 
                 isMultiValued = value;
+
+                if (!EnabledWhenMultivalued)
+                {
+                    Enabled = !isMultiValued;
+                }
 
                 if (isMultiValued)
                 {
@@ -221,7 +236,6 @@ namespace ShipWorks.UI.Controls
                     SelectedIndex = 0;
                 }
             }
-
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
@@ -11,22 +11,20 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 {
-    [TestClass]
     public class BestRateExpress1PromotionFootnoteFilterTest
     {
         private BestRateExpress1PromotionFootnoteFilter testObject;
 
         private Mock<IExpress1SettingsFacade> settings;
 
-        [TestInitialize]
-        public void Initialize()
+        public BestRateExpress1PromotionFootnoteFilterTest()
         {
             settings = new Mock<IExpress1SettingsFacade>();
 
             testObject = new BestRateExpress1PromotionFootnoteFilter();
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RemovesDuplicatePromotionalFootnoteFactories_Test()
         {
             List<RateResult> rates = new List<RateResult>
@@ -50,10 +48,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            Assert.AreEqual(1, filteredRateGroup.FootnoteFactories.Count());
+            Assert.Equal(1, filteredRateGroup.FootnoteFactories.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RetainsOnePromotionalFootnoteFactory_WhenRateGroupHasMultiplePromoFootnoteFactories_Test()
         {
             List<RateResult> rates = new List<RateResult>
@@ -80,10 +78,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             // Already have a test verifying the count, so we know there is already only one item
             IRateFootnoteFactory factory = filteredRateGroup.FootnoteFactories.First();
 
-            Assert.IsInstanceOfType(factory, typeof(Express1PromotionRateFootnoteFactory));
+            Assert.IsAssignableFrom<Express1PromotionRateFootnoteFactory>(factory);
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RemovesNonEndiciaPromotionalFootnoteFactories_WhenRateGroupHasMultiplePromoFootnoteFactories_Test()
         {
             List<RateResult> rates = new List<RateResult>
@@ -110,10 +108,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             // Already have a test verifying the count, so we know there is already only one item
             IRateFootnoteFactory factory = filteredRateGroup.FootnoteFactories.First();
 
-            Assert.AreEqual(ShipmentTypeCode.Endicia, factory.ShipmentType.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Endicia, factory.ShipmentTypeCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RetainsUspsPromotionalFootnoteFactory_WhenRateGroupOnlyHasUspsBasedPromoFootnoteFactory_Test()
         {
             List<RateResult> rates = new List<RateResult>
@@ -138,7 +136,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             // Already have a test verifying the count, so we know there is already only one item
             IRateFootnoteFactory factory = filteredRateGroup.FootnoteFactories.First();
 
-            Assert.AreEqual(ShipmentTypeCode.Usps, factory.ShipmentType.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Usps, factory.ShipmentTypeCode);
         }
     }
 }

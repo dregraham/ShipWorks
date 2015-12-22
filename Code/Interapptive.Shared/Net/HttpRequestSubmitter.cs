@@ -118,6 +118,8 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Execute the request
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public virtual IHttpResponseReader GetResponse()
         {
             // Get the request Uri
@@ -306,6 +308,10 @@ namespace Interapptive.Shared.Net
 
                 case HttpVerb.Put:
                     webRequest.Method = "PUT";
+                    break;
+
+                case HttpVerb.Patch:
+                    webRequest.Method = "PATCH";
                     break;
 
                 default:

@@ -59,6 +59,8 @@ using ShipWorks.Properties;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -89,12 +91,15 @@ using SandButton = Divelements.SandRibbon.Button;
 using SandComboBox = Divelements.SandRibbon.ComboBox;
 using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
+using Autofac;
+using Interapptive.Shared;
 
 namespace ShipWorks
 {
     /// <summary>
     /// Main window of the application.
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class MainForm : RibbonForm
     {
         // Logger
@@ -135,6 +140,8 @@ namespace ShipWorks
         /// <summary>
         /// Form is loading, this is before its visible
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private void OnLoad(object sender, EventArgs e)
         {
             log.Info("Loading main application window.");
@@ -393,6 +400,7 @@ namespace ShipWorks
         /// <summary>
         /// Open the window for logging on to SQL Server
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool LogonToSqlServer()
         {
             // If we are here b\c MSDE was uinstalled, but SQL 08 isn't ready yet, we need to force the user back into the Database Upgrade window when they come back.
@@ -526,6 +534,7 @@ namespace ShipWorks
         /// <summary>
         /// Log on to ShipWorks as a ShipWorks user.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LogonToShipWorks()
         {
             UserManager.InitializeForCurrentUser();
@@ -1403,6 +1412,7 @@ namespace ShipWorks
         /// <summary>
         /// Update the UI that's based on user initiated actions
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void UpdateCustomButtonsActionsUI()
         {
             string ribbonChunkName = "Custom Actions";
@@ -2096,7 +2106,7 @@ namespace ShipWorks
 
             // Update the grid to show the new node
             gridControl.ActiveFilterNode = ((FilterTree)sender).SelectedFilterNode;
-
+            
             // Could be changing to a Null node selection due to logging off.  If that's the case, we don't have to 
             // update UI, b\c its already blank.
             if (UserSession.IsLoggedOn)
@@ -2569,6 +2579,10 @@ namespace ShipWorks
                 MessageHelper.ShowMessage(this, "The customer has been deleted.");
             }
 
+            // Activate the orders grid
+            dockableWindowOrderFilters.Open();
+            orderFilterTree.Focus();
+
             // Ensure the customer grid is active
             orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(customer));
@@ -2961,6 +2975,7 @@ namespace ShipWorks
         /// <summary>
         /// Update the UI controls for the Detail View settings
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void UpdateDetailViewSettingsUI()
         {
             DetailViewSettings settings = gridControl.ActiveDetailViewSettings;
@@ -3119,7 +3134,7 @@ namespace ShipWorks
                 });
 
             // Initialize the orders panel
-            panelOrders.Initialize(new Guid("{06878FA9-7A6D-442c-B4F8-357C1B3F6A45}"), GridColumnDefinitionSet.OrderPanel, (GridColumnLayout layout) =>
+            panelOrders.Initialize(new Guid("{06878FA9-7A6D-442c-B4F8-357C1B3F6A45}"), GridColumnDefinitionSet.OrderPanel, layout =>
             {
                 layout.AllColumns[OrderFields.OrderDate].Visible = false;
                 layout.AllColumns[OrderFields.RollupNoteCount].Visible = false;
@@ -3280,9 +3295,12 @@ namespace ShipWorks
         /// </summary>
         private void OnShippingSettings(object sender, EventArgs e)
         {
-            using (ShippingSettingsDlg dlg = new ShippingSettingsDlg())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                using (ShippingSettingsDlg dlg = new ShippingSettingsDlg(lifetimeScope))
+                {
+                    dlg.ShowDialog(this);
+                }
             }
         }
 
@@ -3403,14 +3421,17 @@ namespace ShipWorks
             // The Tag property hold the value of whether to show shipping, tracking, or insurance
             InitialShippingTabDisplay initialDisplay = (InitialShippingTabDisplay) ((ShipmentsLoader) sender).Tag;
 
-            // Show the shipping window.  
-            using (ShippingDlg dlg = new ShippingDlg(e.Shipments, initialDisplay))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                // Show the shipping window.  
+                using (ShippingDlg dlg = new ShippingDlg(e.Shipments, initialDisplay, lifetimeScope))
+                {
+                    dlg.ShowDialog(this);
 
-                // We always check for new server messages after shipping, since if there was a shipping problem
-                // it could be we put out a server message related to it.
-                DashboardManager.DownloadLatestServerMessages();
+                    // We always check for new server messages after shipping, since if there was a shipping problem
+                    // it could be we put out a server message related to it.
+                    DashboardManager.DownloadLatestServerMessages();
+                }
             }
         }
 
@@ -3466,7 +3487,8 @@ namespace ShipWorks
                 Cursor.Current = Cursors.WaitCursor;
 
                 bool anyClosed = false;
-                FedExShippingClerk shippingClerk = new FedExShippingClerk(new FedExShipmentType().CertificateInspector);
+
+                IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, new FedExSettingsRepository());
 
                 // Process all accounts with configured hub ids
                 foreach (FedExAccountEntity account in FedExAccountManager.Accounts.Where(a => XElement.Parse(a.SmartPostHubList).Descendants("HubID").Any()))

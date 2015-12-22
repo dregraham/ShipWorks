@@ -15,6 +15,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Shipping;
 using System.Net;
+using Interapptive.Shared;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -232,6 +233,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Push the online status for an order.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public void UpdateOnlineStatus(long orderID, bool? paid, bool? shipped, UnitOfWork2 unitOfWork)
         {
             EbayOrderEntity order = DataProvider.GetEntity(orderID) as EbayOrderEntity;
@@ -429,9 +432,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     break;
             }
 
-            carrierCode = carrierType.ToString();
-
             // Now check for any specialty cases.
+            carrierCode = GetCarrierCodeForSpecialtyCases(carrierType, useUpsMailInnovationsCarrierType);
+        }
+
+        /// <summary>
+        /// Determine carrier code for specialty cases like UPS MI and DHL
+        /// </summary>
+        private static string GetCarrierCodeForSpecialtyCases(ShippingCarrierCodeType carrierType, bool useUpsMailInnovationsCarrierType)
+        {
+            string carrierCode = carrierType.ToString();
+
             if (useUpsMailInnovationsCarrierType)
             {
                 carrierCode = "UPS-MI";
@@ -440,6 +451,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 carrierCode = "DHL Global Mail";
             }
+
+            return carrierCode;
         }
     }
 }

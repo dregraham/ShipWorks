@@ -17,8 +17,10 @@ using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using System.Globalization;
+using Interapptive.Shared;
 using ShipWorks.UI;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model;
 using log4net;
@@ -100,6 +102,8 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Load the given shipments customs information into the control
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool resetSelection)
         {
             SuspendShipSenseFieldChangeEvent();

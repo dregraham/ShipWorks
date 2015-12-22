@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -148,15 +149,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create the UserControl used to handle Endicia profiles
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new EndiciaProfileControl(EndiciaReseller);
         }
-        
+
         /// <summary>
         /// Create the settings control for Endicia
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             EndiciaSettingsControl settingsControl = new EndiciaSettingsControl(EndiciaReseller);
             settingsControl.Initialize(ShipmentTypeCode);
@@ -235,7 +236,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             endicia.EndiciaAccountID = Accounts.Count > 0 ? Accounts[0].EndiciaAccountID : 0;
             endicia.StealthPostage = true;
-            endicia.NoPostage = false;
             endicia.ReferenceID = "{//Order/Number}";
             endicia.ScanBasedReturn = false;
         }
@@ -255,7 +255,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.EndiciaAccountID, endiciaShipment, EndiciaShipmentFields.EndiciaAccountID);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.StealthPostage, endiciaShipment, EndiciaShipmentFields.StealthPostage);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.NoPostage, endiciaShipment, EndiciaShipmentFields.NoPostage);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ReferenceID, endiciaShipment, EndiciaShipmentFields.ReferenceID);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ScanBasedReturn, endiciaShipment, EndiciaShipmentFields.ScanBasedReturn);
             }
@@ -271,7 +270,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // If we don't know the packaging or country, it doesn't matter
             if (!string.IsNullOrWhiteSpace(countryCode) && packaging != null)
             {
-                if (PostalUtility.IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
+                if (IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
                 {
                     availablePostalConfirmationTypes.Add(PostalConfirmationType.Delivery);
                     return availablePostalConfirmationTypes;
@@ -447,6 +446,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Get postal rates for the given shipment
         /// </summary>
         /// <param name="shipment">Shipment for which to retrieve rates</param>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> express1Rates = null;
@@ -605,7 +606,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new EndiciaShipmentProcessingSynchronizer();
         }
@@ -613,6 +614,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Process the label server shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ProcessShipment(ShipmentEntity shipment)
         {
             ValidateShipment(shipment);
@@ -888,22 +890,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
-
-            fields.AddRange
-            (
-                new List<IEntityField2>()
+            get
+            {
+                if (ratingField != null)
                 {
-                    shipment.Postal.Endicia.Fields[EndiciaShipmentFields.EndiciaAccountID.FieldIndex],
-                    shipment.Postal.Endicia.Fields[EndiciaShipmentFields.OriginalEndiciaAccountID.FieldIndex],
-                    shipment.Postal.Fields[PostalShipmentFields.SortType.FieldIndex],
-                    shipment.Postal.Fields[PostalShipmentFields.EntryFacility.FieldIndex],
+                    return ratingField;
                 }
-            );
 
-            return fields;
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(EndiciaShipmentFields.EndiciaAccountID);
+                ratingField.ShipmentFields.Add(EndiciaShipmentFields.OriginalEndiciaAccountID);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.SortType);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.EntryFacility);
+
+                return ratingField;
+            }
         }
 
         /// <summary>

@@ -11,6 +11,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using Address = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.Address;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -230,31 +231,66 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="shipment">The shipment.</param>
         private void MaskAccountData(ShippingSettingsEntity shippingSettings, LabelSpecification labelSpecification, ShipmentEntity shipment)
         {
+            List<LabelMaskableDataType> maskableDataTypes = new List<LabelMaskableDataType>();
+
             bool isInternational = !ShipmentTypeManager.GetType(shipment).IsDomestic(shipment);
 
             if (shippingSettings.FedExMaskAccount)
             {
-                CustomerSpecifiedLabelDetail detailDetail = new CustomerSpecifiedLabelDetail();
-
                 if (isInternational)
                 {
                     // Three fields must be applied to mask the account data for international shipments
-                    detailDetail.MaskedData = new LabelMaskableDataType[]
+                    maskableDataTypes.AddRange(new List<LabelMaskableDataType>()
                     {
-                        LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER, 
-                        LabelMaskableDataType.TRANSPORTATION_CHARGES_PAYOR_ACCOUNT_NUMBER, 
+                        LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER,
+                        LabelMaskableDataType.TRANSPORTATION_CHARGES_PAYOR_ACCOUNT_NUMBER,
                         LabelMaskableDataType.DUTIES_AND_TAXES_PAYOR_ACCOUNT_NUMBER,
                         LabelMaskableDataType.CUSTOMS_VALUE
-                    };
+                    });
                 }
                 else
                 {
                     // We just need to supply the shipper account number on domestic shipments
-                    detailDetail.MaskedData = new LabelMaskableDataType[] { LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER };
+                    maskableDataTypes.AddRange(new List<LabelMaskableDataType>()
+                    {
+                        LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER
+                    });
                 }
-                
+            }
 
+            LabelMaskableDataType? maskableDataType = GetFedExLabelMaskableDataType(shipment.FedEx.MaskedData);
+            if (maskableDataType.HasValue)
+            {
+                maskableDataTypes.AddRange(new List<LabelMaskableDataType>()
+                    {
+                        maskableDataType.Value
+                    });
+            }
+
+            if (maskableDataTypes.Any())
+            {
+                CustomerSpecifiedLabelDetail detailDetail = new CustomerSpecifiedLabelDetail();
                 labelSpecification.CustomerSpecifiedDetail = detailDetail;
+                detailDetail.MaskedData = maskableDataTypes.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Given a MaskedDataType (as int) return cooresponding value
+        /// </summary>
+        public static LabelMaskableDataType? GetFedExLabelMaskableDataType([Obfuscation(Exclude = true)] int? maskedDataType)
+        {
+            if (!maskedDataType.HasValue)
+            {
+                return null;
+            }
+
+            switch ((FedExMaskedDataType)maskedDataType.Value)
+            {
+                case FedExMaskedDataType.SecondaryBarcode:
+                    return LabelMaskableDataType.SECONDARY_BARCODE;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(maskedDataType));
             }
         }
 
@@ -283,9 +319,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
                 RegulatoryLabelContentDetail regulatoryLabelContentDetail = new RegulatoryLabelContentDetail()
                 {
-                    Type = RegulatoryLabelType.ALCOHOL_SHIPMENT_LABEL,
-                    TypeSpecified = true,
-                    GenerationOptions = generalOptions.ToArray()
+                    Type = RegulatoryLabelType.ALCOHOL_SHIPMENT_LABEL, TypeSpecified = true, GenerationOptions = generalOptions.ToArray()
                 };
 
                 List<RegulatoryLabelContentDetail> regulatoryLabelContentDetails = new List<RegulatoryLabelContentDetail>() { regulatoryLabelContentDetail };

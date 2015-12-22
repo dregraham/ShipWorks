@@ -617,6 +617,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Memo3", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("NoPostage", fieldHashtable);
 		}
 		#endregion
 
@@ -1044,6 +1047,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)PostalProfileFieldIndex.Memo3, true); }
 			set	{ SetValue((int)PostalProfileFieldIndex.Memo3, value); }
+		}
+
+		/// <summary> The NoPostage property of the Entity PostalProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "PostalProfile"."NoPostage"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> NoPostage
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)PostalProfileFieldIndex.NoPostage, false); }
+			set	{ SetValue((int)PostalProfileFieldIndex.NoPostage, value); }
 		}
 
 

@@ -21,31 +21,16 @@ namespace ShipWorks.Stores.Platforms.Shopperpress
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.Shopperpress;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Shopperpress;
 
         /// <summary>
         /// Log request/responses as Shopperpress
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.Shopperpress;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.Shopperpress;
 
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000022266-connecting-shopperpress-with"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000022266";
     }
 }

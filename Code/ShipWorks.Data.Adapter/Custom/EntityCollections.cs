@@ -9524,5 +9524,290 @@ namespace ShipWorks.Data.Adapter.Custom
 	}
 	
 	
+	/// <summary>
+	/// Strongly typed collection of LemonStandStoreEntity
+	/// </summary>
+	public class LemonStandStoreCollection : EntityCollection<LemonStandStoreEntity>
+	{
+        /// <summary>
+        /// Gets the count of all LemonStandStoreEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all LemonStandStoreEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new LemonStandStoreEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static LemonStandStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static LemonStandStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            LemonStandStoreCollection collection = new LemonStandStoreCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of LemonStandOrderEntity
+	/// </summary>
+	public class LemonStandOrderCollection : EntityCollection<LemonStandOrderEntity>
+	{
+        /// <summary>
+        /// Gets the count of all LemonStandOrderEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all LemonStandOrderEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new LemonStandOrderEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static LemonStandOrderCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static LemonStandOrderCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            LemonStandOrderCollection collection = new LemonStandOrderCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of LemonStandOrderItemEntity
+	/// </summary>
+	public class LemonStandOrderItemCollection : EntityCollection<LemonStandOrderItemEntity>
+	{
+        /// <summary>
+        /// Gets the count of all LemonStandOrderItemEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all LemonStandOrderItemEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new LemonStandOrderItemEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static LemonStandOrderItemCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static LemonStandOrderItemCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            LemonStandOrderItemCollection collection = new LemonStandOrderItemCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of AmazonShipmentEntity
+	/// </summary>
+	public class AmazonShipmentCollection : EntityCollection<AmazonShipmentEntity>
+	{
+        /// <summary>
+        /// Gets the count of all AmazonShipmentEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all AmazonShipmentEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new AmazonShipmentEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static AmazonShipmentCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static AmazonShipmentCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            AmazonShipmentCollection collection = new AmazonShipmentCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of AmazonProfileEntity
+	/// </summary>
+	public class AmazonProfileCollection : EntityCollection<AmazonProfileEntity>
+	{
+        /// <summary>
+        /// Gets the count of all AmazonProfileEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all AmazonProfileEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new AmazonProfileEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static AmazonProfileCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static AmazonProfileCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            AmazonProfileCollection collection = new AmazonProfileCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
 }
 

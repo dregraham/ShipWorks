@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Create the settings control for defaults & settings
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             return new PostalWebSettingsControl();
         }
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Create the control used to edit the profile settings
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new PostalProfileControlBase();
         }
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new WebToolsShipmentProcessingSynchronizer();
         }

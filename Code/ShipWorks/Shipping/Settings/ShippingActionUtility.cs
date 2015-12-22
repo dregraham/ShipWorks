@@ -12,6 +12,7 @@ using ShipWorks.Actions.Triggers;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.Threading;
 
@@ -122,6 +123,8 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// See if we can load the action with the given identifier directly from the database.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreTooManyParams]
         private static ActionEntity CreateAction(
             string baseName, 
             ActionTrigger trigger,

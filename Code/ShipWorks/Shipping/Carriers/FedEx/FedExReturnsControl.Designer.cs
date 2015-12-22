@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.Add(this.returnService);
             this.Controls.Add(this.labelFedExReturnType);
             this.Name = "FedExReturnsControl";
-            this.Size = new System.Drawing.Size(325, 109);
+            this.Size = new System.Drawing.Size(325, 108);
             this.ResumeLayout(false);
             this.PerformLayout();
 

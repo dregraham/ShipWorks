@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -25,6 +26,9 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
+using ShipWorks.ApplicationCore;
+using Autofac;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Users.Audit
 {
@@ -41,6 +45,14 @@ namespace ShipWorks.Users.Audit
         public const int State    = 5;
         public const int Country  = 6;
         public const int DateOnly = 7;
+
+        /// <summary>
+        /// Format constants used by other assemblies
+        /// </summary>
+        public struct Formats
+        {
+            public const int AmazonDeliveryExperienceType = 129;
+        }
 
         // Maps code values for enums to their enum type that should be used to do the formatting
         static Dictionary<int, Type> enumMapping = new Dictionary<int, Type>();
@@ -74,7 +86,26 @@ namespace ShipWorks.Users.Audit
             enumMapping[125] = typeof(WeightUnitOfMeasure);
             enumMapping[126] = typeof(FedExLinearUnitOfMeasure);
             enumMapping[127] = typeof(iParcelServiceType);
-            enumMapping[128] = typeof (EbayShippingMethod);
+            enumMapping[128] = typeof(EbayShippingMethod);
+            enumMapping[Formats.AmazonDeliveryExperienceType] = null; // AmazonDeliveryExperienceType -- ShipWorks.Core does not know about this type so we register it later
+        }
+
+        /// <summary>
+        /// Register an audit display format that is stored in a different assembly
+        /// </summary>
+        public static void RegisterDisplayFormat(int format, Type enumType)
+        {
+            if (!enumMapping.ContainsKey(format))
+            {
+                throw new ArgumentOutOfRangeException($"{format} is not currently registered with a null format");
+            }
+
+            if (enumMapping[format] != null)
+            {
+                throw new InvalidOperationException($"{format} is already registered with {enumMapping[format].GetType().Name}");
+            }
+
+            enumMapping[format] = enumType;
         }
 
         /// <summary>
@@ -89,22 +120,22 @@ namespace ShipWorks.Users.Audit
 
             switch (format)
             {
-                case AuditDisplayFormat.Currency:
+                case Currency:
                     return string.Format("{0:c}", data);
 
-                case AuditDisplayFormat.Weight:
+                case Weight:
                     return WeightControl.FormatWeight(Convert.ToDouble(data), (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat);
 
-                case AuditDisplayFormat.Entity:
+                case Entity:
                     return GetEntityLabel(Convert.ToInt64(data));
 
-                case AuditDisplayFormat.State:
+                case State:
                     return Geography.GetStateProvName(data.ToString());
 
-                case AuditDisplayFormat.Country:
+                case Country:
                     return Geography.GetCountryName(data.ToString());
 
-                case AuditDisplayFormat.DateOnly:
+                case DateOnly:
                     return ((DateTime) data).ToLocalTime().ToShortDateString();
             }
 

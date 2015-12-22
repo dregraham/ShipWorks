@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -14,20 +13,16 @@ using ShipWorks.UI.Controls;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Data;
-using ShipWorks.UI;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Stores;
 using ShipWorks.Data.Controls;
-using ShipWorks.ApplicationCore;
- 
+
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     /// <summary>
     /// The Service tab control for FedEx
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FedExServiceControl : ServiceControlBase
     {
         bool updatingPayorChoices = false;
@@ -158,6 +153,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Load all the shipment details
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadShipmentDetails()
         {
             bool allDomestic = true;
@@ -171,9 +167,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             FedExServiceType? serviceType = null;
             bool allServicesSame = true;
             bool anyGround = false;
-
-            bool allFreight = true;
-            bool allCodAvailable = true;
+            
             bool anyCodEnabled = false;
 
             bool anySaturday = false;
@@ -201,27 +195,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
 
                 FedExServiceType thisService = (FedExServiceType) shipment.FedEx.Service;
-                if (thisService == FedExServiceType.GroundHomeDelivery || thisService == FedExServiceType.FedExGround)
+                if (FedExUtility.IsGroundService(thisService))
                 {
                     anyGround = true;
                 }
 
-                if (!FedExUtility.IsFreightService(thisService))
-                {
-                    allFreight = false;
-                }
-
-                if (!FedExUtility.IsCodAvailable(thisService))
-                {
-                    allCodAvailable = false;
-                }
-                else
-                {
-                    if (shipment.FedEx.CodEnabled)
-                    {
-                        anyCodEnabled = true;
-                    }
-                }
+                anyCodEnabled = FedExUtility.IsCodAvailable(thisService) && shipment.FedEx.CodEnabled;
 
                 if (serviceType == null)
                 {
@@ -289,40 +268,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Make it visible if any of them have saturday dates
             saturdayDelivery.Visible = anySaturday;
-
-            // Only show home delivery section if they are all home delivery
-            sectionHomeDelivery.Visible = allServicesSame && serviceType == FedExServiceType.GroundHomeDelivery;
-
+            
             // Show freight if there are all freight
-            sectionFreight.Visible = allFreight;
             freightInsidePickup.Visible = anyDomestic;
             freightInsideDelivery.Visible = anyDomestic;
             labelLoadAndCount.Visible = !anyDomestic;
             freightLoadAndCount.Visible = !anyDomestic;
 
-            // Show COD only if all have it
-            sectionCOD.Visible = allCodAvailable;
-
             // Enable the COD editing ui if any shipments have COD enabled
             EnableCodUI(anyCodEnabled);
             
-
             // Load the COD values and update the COD Tax UI
             codOrigin.LoadShipments(LoadedShipments, s => new PersonAdapter(s.FedEx, "Cod"));
             EnableCodTaxId(anyCodEnabled && codOrigin.SelectedOrigin == ShipmentOriginSource.Other);
 
             // Only show non-standard for a ground (home or not)
             nonStandardPackaging.Visible = anyGround;
-
-            // Only show SmartPost if they are all SmartPost
-            bool showSmartPost = allServicesSame && serviceType == FedExServiceType.SmartPost;
-            sectionSmartPost.Visible = showSmartPost;
-            
-            // Only show OtherPackageDetails if we are not SmartPost
-            sectionPackageDetails.Visible = !showSmartPost;
-            
-            // Only show Hold At Location if we are not SmartPost
-            sectionHoldAtLocation.Visible = !showSmartPost;
             
             using (MultiValueScope scope = new MultiValueScope())
             {
@@ -331,6 +292,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     fedexAccount.ApplyMultiValue(shipment.FedEx.FedExAccountID);
                     service.ApplyMultiValue((FedExServiceType) shipment.FedEx.Service);
                     dropoffType.ApplyMultiValue((FedExDropoffType) shipment.FedEx.DropoffType);
+                    returnsClearance.ApplyMultiCheck(shipment.FedEx.ReturnsClearance);
                     shipDate.ApplyMultiDate(shipment.ShipDate);
                     packagingType.ApplyMultiValue((FedExPackagingType) shipment.FedEx.PackagingType);
                     nonStandardPackaging.ApplyMultiCheck(shipment.FedEx.NonStandardContainer);
@@ -377,7 +339,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
 
                 fedExHoldAtLocationControl.LoadFromShipment(LoadedShipments);
+                fimsOptionsControl.LoadFromShipment(LoadedShipments);
             }
+            
+            OnChangeService(this, EventArgs.Empty);
 
             // Rehook events
             service.SelectedIndexChanged += new EventHandler(OnChangeService);
@@ -503,7 +468,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             codAddFreight.Enabled = enable;
             codPaymentType.Enabled = enable;
             codOrigin.Enabled = enable;
-
         }
 
         /// <summary>
@@ -530,6 +494,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
@@ -555,6 +521,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 fedexAccount.ReadMultiValue(v => shipment.FedEx.FedExAccountID = (long) v);
                 service.ReadMultiValue(v => { if (v != null) shipment.FedEx.Service = (int) v; });
                 dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = (int) v);
+                returnsClearance.ReadMultiCheck(v => shipment.FedEx.ReturnsClearance = v);
                 shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.AddHours(12));
                 packagingType.ReadMultiValue(v => shipment.FedEx.PackagingType = (int) v);
                 nonStandardPackaging.ReadMultiCheck(c => shipment.FedEx.NonStandardContainer = c);
@@ -599,6 +566,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 SaveEmailNotificationSettings(shipment.FedEx);
                 fedExHoldAtLocationControl.SaveToShipment(shipment);
+                fimsOptionsControl.SaveToShipment(shipment);
             }
 
             ResumeRateCriteriaChangeEvent();
@@ -629,56 +597,99 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         void OnChangeService(object sender, EventArgs e)
         {
+            SuspendLayout();
+
             if (!service.MultiValued && service.SelectedValue != null)
             {
-                FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
-
-                UpdatePackagingChoices(serviceType);
-
-                UpdatePayorChoices(serviceType == FedExServiceType.FedExGround || serviceType == FedExServiceType.GroundHomeDelivery, null);
-                UpdateBillingSectionDisplay();
-
-                // Only show home delivery section if they are all home delivery
-                sectionHomeDelivery.Visible = serviceType == FedExServiceType.GroundHomeDelivery;
-
-                bool isSmartPost = serviceType == FedExServiceType.SmartPost;
-
-                // Only show smartpost if they are all smart post
-                sectionSmartPost.Visible = isSmartPost;
-
-                // Update the smartpost ui
-                sectionPackageDetails.Visible = !isSmartPost;
-
-                // Hide Hold At Location if we are SmartPost
-                sectionHoldAtLocation.Visible = !isSmartPost;
-
-                // Only show freight if its a freight service
-                sectionFreight.Visible = FedExUtility.IsFreightService(serviceType);
-
-                // Update the packges\skids ui
-                packageDetailsControl.UpdateFreightUI(sectionFreight.Visible);
-
-                // Show COD only if applicable
-                sectionCOD.Visible = FedExUtility.IsCodAvailable(serviceType);
-
-                // Only show non-standard for a ground (home or not)
-                nonStandardPackaging.Visible =
-                    serviceType == FedExServiceType.GroundHomeDelivery ||
-                    serviceType == FedExServiceType.FedExGround;
-
-                RaiseRateCriteriaChanged();
-                SyncSelectedRate();
+                UpdateLayoutForSingleService();
             }
             else
             {
-                UpdatePackagingChoices(null);
-
-                // Don't show any selection when multiple services are selected
-                RateControl.ClearSelection();
+                UpdateLayoutForMultipleServices();
             }
+
+            ResumeLayout();
+            PerformLayout();
 
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
+
+            // To support showing/hiding the customs tab for SmartPost, we need to raise the shipment service changed event.
+            RaiseShipmentServiceChanged();
+        }
+
+        /// <summary>
+        /// Update the service control for multiple services
+        /// </summary>
+        private void UpdateLayoutForMultipleServices()
+        {
+            UpdatePackagingChoices(null);
+
+            SetStandardControlVisibility(true);
+
+            // Don't show any selection when multiple services are selected
+            RateControl.ClearSelection();
+        }
+
+        /// <summary>
+        /// Update the service control for a single service
+        /// </summary>
+        private void UpdateLayoutForSingleService()
+        {
+            FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
+
+            UpdatePackagingChoices(serviceType);
+
+            UpdatePayorChoices(FedExUtility.IsGroundService(serviceType), null);
+            UpdateBillingSectionDisplay();
+
+            // Only show home delivery section if they are all home delivery
+            sectionHomeDelivery.Visible = serviceType == FedExServiceType.GroundHomeDelivery;
+
+            bool isSmartPost = serviceType == FedExServiceType.SmartPost;
+            bool isFims = FedExUtility.IsFimsService(serviceType);
+
+            // Only show smartpost if they are all smart post
+            sectionSmartPost.Visible = isSmartPost;
+
+            // Update the smartpost ui
+            sectionPackageDetails.Visible = !isSmartPost && !isFims;
+
+            // Hide Hold At Location if we are SmartPost
+            sectionHoldAtLocation.Visible = !isSmartPost && !isFims;
+
+            // Only show freight if its a freight service
+            sectionFreight.Visible = FedExUtility.IsFreightService(serviceType) && !isFims;
+
+            // Update the packges\skids ui
+            packageDetailsControl.UpdateFreightUI(sectionFreight.Visible);
+
+            // Show COD only if applicable
+            sectionCOD.Visible = FedExUtility.IsCodAvailable(serviceType);
+
+            // Only show non-standard for a ground (home or not)
+            nonStandardPackaging.Visible = FedExUtility.IsGroundService(serviceType);
+
+            sectionFimsOptions.Visible = isFims;
+
+            SetStandardControlVisibility(!isFims);
+
+            RaiseRateCriteriaChanged();
+            SyncSelectedRate();
+
+            Messenger.Current.Send(new FedExServiceTypeChangedMessage(this, serviceType));
+        }
+
+        /// <summary>
+        /// Set visibility of the standard service control panels
+        /// </summary>
+        private void SetStandardControlVisibility(bool visible)
+        {
+            sectionOptions.Visible = visible;
+            sectionBilling.Visible = visible;
+            sectionEmail.Visible = visible;
+            sectionServiceOptions.Visible = visible;
+            sectionLabelOptions.Visible = visible;
         }
 
         /// <summary>
@@ -895,14 +906,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 service.SelectedIndex = oldIndex;
             }
         }
-
-        /// <summary>
-        /// Some aspect of the shipment that affects ShipSense has changed
-        /// </summary>
-        private void OnShipSenseFieldChanged(object sender, EventArgs e)
-        {
-            RaiseShipSenseFieldChanged();
-        }
         
         /// <summary>
         /// Changing the payor transport account
@@ -1083,7 +1086,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Express Saver®\n" +
                 "FedEx Ground®\n" +
 
-                "FedEx One Rate\u2120\n" +
+                "FedEx One Rate®\n" +
 
                 "FedEx Home Delivery®\n" +
                 "FedEx Ground® C.O.D.\n" +
@@ -1103,12 +1106,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Evening Home Delivery®\n" +
                 "FedEx Appointment Home Delivery®\n" +
                 "FedEx SmartPost®\n" + 
-                "FedEx SmartPost Standard A\n" + 
-                "FedEx SmartPost Standard B\n" + 
+                "FedEx SmartPost Parcel Select Lightweight\n" + 
                 "FedEx SmartPost® Bound Printed Matter\n" + 
                 "FedEx SmartPost® Media\n" +
                 "FedEx SmartPost Parcel Select\n" + 
-                "FedEx ShipAlert® (Email ID)\n" +
+                "FedEx ShipAlert®\n" +
                 "FedEx Priority Alert Plus™\n\n" +
 
                 "FedEx® Envelope\n" +

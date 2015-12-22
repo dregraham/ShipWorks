@@ -19,6 +19,8 @@ using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using System.Web;
+using Interapptive.Shared;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -94,6 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Generate the XML request for a domestic express shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void GenerateXmlRequestExpress(XmlTextWriter xmlWriter, PostalShipmentEntity postalShipment)
         {
             ShipmentEntity shipment = postalShipment.Shipment;
@@ -169,6 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Generate the XML request for a domestic shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void GenerateXmlRequestDomestic(XmlTextWriter xmlWriter, PostalShipmentEntity postalShipment)
         {
             ShipmentEntity shipment = postalShipment.Shipment;
@@ -242,6 +246,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Generate the XML request for an international shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void GenerateXmlRequestInternational(XmlTextWriter xmlWriter, PostalShipmentEntity postalShipment)
         {
             ShipmentEntity shipment = postalShipment.Shipment;

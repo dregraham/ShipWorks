@@ -16,6 +16,10 @@ using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Shipping.Settings;
+using Autofac;
+using Interapptive.Shared;
+using ShipWorks.ApplicationCore;
+using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -30,7 +34,7 @@ namespace ShipWorks.Shipping.Editing.Rating
     {
         private long? selectedShipmentID;
         private bool resetCollapsibleStateRequired;
-        private readonly MessengerToken uspsAccountConvertedToken;
+        private readonly IDisposable uspsAccountConvertedToken;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RatesPanel"/> class.
@@ -54,7 +58,7 @@ namespace ShipWorks.Shipping.Editing.Rating
 
             rateControl.Initialize(new FootnoteParameters(() => RefreshRates(false), GetStoreForCurrentShipment));
 
-            uspsAccountConvertedToken = Messenger.Current.Handle<UspsAutomaticExpeditedChangedMessage>(this, OnStampsUspsAutomaticExpeditedChanged);
+            uspsAccountConvertedToken = Messenger.Current.OfType<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
         }
 
         /// <summary>
@@ -188,6 +192,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
+        [NDependIgnoreLongMethod]
         private void FetchRates(ShipmentEntity shipment, bool ignoreCache)
         {
             using (BackgroundWorker ratesWorker = new BackgroundWorker())
@@ -375,9 +380,12 @@ namespace ShipWorks.Shipping.Editing.Rating
             }
             else
             {
-                using (ShippingDlg dialog = new ShippingDlg(shipment, rateSelectedEventArgs))
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    dialog.ShowDialog(this);
+                    using (ShippingDlg dialog = new ShippingDlg(shipment, rateSelectedEventArgs, lifetimeScope))
+                    {
+                        dialog.ShowDialog(this);
+                    }
                 }
             }
         }

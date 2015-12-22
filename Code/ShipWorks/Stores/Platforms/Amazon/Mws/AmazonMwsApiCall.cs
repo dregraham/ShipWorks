@@ -24,6 +24,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         // Product API
         GetMatchingProductForId = 7,
 
-        GetAuthToken = 8
+        GetAuthToken = 8,
+
+        // Fulfilment Api
+        GetEligibleShippingServices = 9,
+        CreateShipment = 10,
+        CancelShipment = 11,
     }
 }

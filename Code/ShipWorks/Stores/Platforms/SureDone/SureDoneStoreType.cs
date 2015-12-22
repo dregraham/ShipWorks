@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -27,24 +25,12 @@ namespace ShipWorks.Stores.Platforms.SureDone
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.SureDone;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.SureDone;
 
         /// <summary>
         /// Log request/responses as SureDone
         /// </summary>
-        public override ApiLogSource LogSource   
-        {
-            get
-            {
-                return ApiLogSource.SureDone;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.SureDone;
 
         /// <summary>
         /// Return value that uniquely identifies this store instance
@@ -79,9 +65,6 @@ namespace ShipWorks.Stores.Platforms.SureDone
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/categories/105240/folders/4000004785/articles/4000022397-connecting-suredone-with"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000022397";
     }
 }

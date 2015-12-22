@@ -28,17 +28,18 @@
           Shipping Cost by Carrier - <xsl:value-of select="count(//Order)" /> Orders
         </h3>
 
-        <xsl:variable name="other" select="sum(//Shipment[Status = 'Processed' and ShipmentType='Other']/TotalCharges)" />
-        <xsl:variable name="fedex" select="sum(//Shipment[Status = 'Processed' and ShipmentType='FedEx']/TotalCharges)" />
-        <xsl:variable name="ups" select="sum(//Shipment[Status = 'Processed' and ShipmentType='UPS']/TotalCharges)" />
-        <xsl:variable name="upsWorldShip" select="sum(//Shipment[Status = 'Processed' and ShipmentType='UPS (WorldShip)']/TotalCharges)" />
-        <xsl:variable name="uspsWeb" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (w/o Postage)']/TotalCharges)" />
-        <xsl:variable name="uspsEndicia" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Endicia)']/TotalCharges)" />
-        <xsl:variable name="usps" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS']/TotalCharges)" />
-        <xsl:variable name="uspsExpress1" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Express1)']/TotalCharges)" />
-        <xsl:variable name="uspsExpress1Endicia" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Express1 for Endicia)']/TotalCharges)" />
-        <xsl:variable name="onTrac" select="sum(//Shipment[Status = 'Processed' and ShipmentType='OnTrac']/TotalCharges)" />
-        <xsl:variable name="iParcel" select="sum(//Shipment[Status = 'Processed' and ShipmentType='i-parcel']/TotalCharges)" />
+        <xsl:variable name="other" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'Other']/TotalCharges)" />
+        <xsl:variable name="fedex" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'FedEx']/TotalCharges)" />
+        <xsl:variable name="ups" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'UPS']/TotalCharges)" />
+        <xsl:variable name="upsWorldShip" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'UPS (WorldShip)']/TotalCharges)" />
+        <xsl:variable name="uspsWeb" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'USPS (w/o Postage)']/TotalCharges)" />
+        <xsl:variable name="uspsEndicia" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'USPS (Endicia)']/TotalCharges)" />
+        <xsl:variable name="usps" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'USPS']/TotalCharges)" />
+        <xsl:variable name="uspsExpress1" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'USPS (Express1)']/TotalCharges)" />
+        <xsl:variable name="uspsExpress1Endicia" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'USPS (Express1 for Endicia)']/TotalCharges)" />
+        <xsl:variable name="onTrac" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'OnTrac']/TotalCharges)" />
+        <xsl:variable name="iParcel" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'i-parcel']/TotalCharges)" />
+        <xsl:variable name="amazon" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'Amazon']/TotalCharges)"/>
         <xsl:variable name="total" select="sum(//Shipment[Status = 'Processed']/TotalCharges)" />
         <table style="width:4in; margin: 0px 0px -6px 0px; border-collapse: collapse;" cellspacing="0">
           <tr>
@@ -97,7 +98,7 @@
               $<xsl:value-of select="format-number($uspsExpress1Endicia, '#,##0.00#')" />
             </td>
           </tr>
-          
+
           <tr>
             <td style="{$rowStyle};">OnTrac</td>
             <td style="{$rowStyle};" align="right">
@@ -110,6 +111,14 @@
               $<xsl:value-of select="format-number($iParcel, '#,##0.00')" />
             </td>
           </tr>
+          <xsl:if test="$amazon &gt; 0">
+            <tr>
+              <td style="{$rowStyle};">Amazon</td>
+              <td style="{$rowStyle};" align="right">
+                $<xsl:value-of select="format-number($amazon, '#,##0.00')" />
+              </td>
+            </tr>
+          </xsl:if>
           <tr>
             <td style="{$rowStyle};">
               <b>Total:</b>

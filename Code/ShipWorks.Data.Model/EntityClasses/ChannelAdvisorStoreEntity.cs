@@ -482,6 +482,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("AttributesToDownload", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ConsolidatorAsUsps", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("AmazonMerchantID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("AmazonAuthToken", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("AmazonApiRegion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("AmazonShippingToken", fieldHashtable);
 		}
 		#endregion
 
@@ -586,6 +601,61 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AttributesToDownload, true); }
 			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AttributesToDownload, value); }
+		}
+
+		/// <summary> The ConsolidatorAsUsps property of the Entity ChannelAdvisorStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."ConsolidatorAsUsps"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ConsolidatorAsUsps
+		{
+			get { return (System.Boolean)GetValue((int)ChannelAdvisorStoreFieldIndex.ConsolidatorAsUsps, true); }
+			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.ConsolidatorAsUsps, value); }
+		}
+
+		/// <summary> The AmazonMerchantID property of the Entity ChannelAdvisorStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."AmazonMerchantID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AmazonMerchantID
+		{
+			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AmazonMerchantID, true); }
+			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AmazonMerchantID, value); }
+		}
+
+		/// <summary> The AmazonAuthToken property of the Entity ChannelAdvisorStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."AmazonAuthToken"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AmazonAuthToken
+		{
+			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AmazonAuthToken, true); }
+			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AmazonAuthToken, value); }
+		}
+
+		/// <summary> The AmazonApiRegion property of the Entity ChannelAdvisorStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."AmazonApiRegion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 2<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AmazonApiRegion
+		{
+			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, true); }
+			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, value); }
+		}
+
+		/// <summary> The AmazonShippingToken property of the Entity ChannelAdvisorStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."AmazonShippingToken"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 500<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AmazonShippingToken
+		{
+			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AmazonShippingToken, true); }
+			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AmazonShippingToken, value); }
 		}
 
 

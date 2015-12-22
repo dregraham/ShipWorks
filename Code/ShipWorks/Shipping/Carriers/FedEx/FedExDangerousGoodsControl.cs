@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Data.Model.EntityClasses;
@@ -59,14 +61,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Saves the state of the controls to the package entities.
         /// </summary>
         /// <param name="packages">The packages.</param>
+        [NDependIgnoreLongMethod]
         public void SaveToPackage(IEnumerable<FedExPackageEntity> packages)
         {
             foreach (FedExPackageEntity package in packages)
             {
                 dangerousGoodsEnabled.ReadMultiCheck(c => package.DangerousGoodsEnabled = c);
 
-                dangerousGoodsMaterialType.ReadMultiValue(v => package.DangerousGoodsType = (int) v);
-                dangerousGoodsAccessibility.ReadMultiValue(v => package.DangerousGoodsAccessibilityType = (int) v);
+                dangerousGoodsMaterialType.ReadMultiValue(v => package.DangerousGoodsType = (int)v);
+                dangerousGoodsAccessibility.ReadMultiValue(v => package.DangerousGoodsAccessibilityType = (int)v);
                 dangerousGoodsCargoAircraftOnly.ReadMultiCheck(c => package.DangerousGoodsCargoAircraftOnly = c);
                 dangerousGoodsPackagingCounts.ReadMultiText(t => package.DangerousGoodsPackagingCount = ReadIntegerValue(t));
                 dangerousGoodsPackagingUnits.ReadMultiValue(v => package.HazardousMaterialQuanityUnits = (int)v);
@@ -78,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 hazardClass.ReadMultiText(t => package.HazardousMaterialClass = t);
                 hazardousMaterialProperName.ReadMultiText(t => package.HazardousMaterialProperName = t);
                 hazardousMaterialTechnicalName.ReadMultiText(t => package.HazardousMaterialTechnicalName = t);
-                hazardousMaterialPackingGroup.ReadMultiValue(v => package.HazardousMaterialPackingGroup = (int) v);
+                hazardousMaterialPackingGroup.ReadMultiValue(v => package.HazardousMaterialPackingGroup = (int)v);
                 hazardousMaterialQuantityValue.ReadMultiText(t => package.HazardousMaterialQuantityValue = ReadDoubleValue(t));
 
             }

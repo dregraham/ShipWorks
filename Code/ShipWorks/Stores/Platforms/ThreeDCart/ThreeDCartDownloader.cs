@@ -6,7 +6,9 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -59,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 if (webClient == null)
                 {
                     //Create the web client used for downloading
-                    webClient = new ThreeDCartWebClient((ThreeDCartStoreEntity)Store);
+                    webClient = new ThreeDCartWebClient((ThreeDCartStoreEntity)Store, Progress);
                 }
 
                 return webClient;
@@ -301,6 +303,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Extract and save the order from the XML
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadOrder(XPathNavigator xmlOrderXPath, XPathNavigator shipmentNode, string invoiceNumberPostFix, bool isSubOrder, bool hasSubOrders)
         {
             // Create a ThreeDCartOrderIdentifier
@@ -518,6 +521,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Load the option(s) of the given item
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadProductAndRelatedObjects(OrderItemEntity item, XPathNavigator xpath)
         {
             ThreeDCartProductDTO product = null;

@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -11,19 +11,17 @@ using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators
 {
-    [TestClass]
     public class FedExGlobalShipAddressAddressManipulatorTest
     {
         private FedExGlobalShipAddressAddressManipulator testObject;
-        
+
         private Mock<CarrierRequest> mockCarrierRequest;
         private SearchLocationsRequest request;
         private ShipmentEntity shipmentEntity;
         private Mock<ICarrierSettingsRepository> settingsRepository;
-        
 
-        [TestInitialize]
-        public void Initialize()
+
+        public FedExGlobalShipAddressAddressManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
@@ -36,87 +34,86 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             testObject = new FedExGlobalShipAddressAddressManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HasAddress_AddressInShipment_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.IsNotNull(request.Address);
+            Assert.NotNull(request.Address);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HasAddressStreetLines_AddressStreetLinesInShipment_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.IsNotNull(request.Address.StreetLines != null);
-            Assert.AreEqual(2, request.Address.StreetLines.Length);
+            Assert.NotNull(request.Address.StreetLines != null);
+            Assert.Equal(2, request.Address.StreetLines.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_StreetLinesMatchRequest_AddressStreetLinesInShipment_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ShipStreet1, request.Address.StreetLines[0]);
-            Assert.AreEqual(shipmentEntity.ShipStreet2, request.Address.StreetLines[1]);
+            Assert.Equal(shipmentEntity.ShipStreet1, request.Address.StreetLines[0]);
+            Assert.Equal(shipmentEntity.ShipStreet2, request.Address.StreetLines[1]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CityCorrect_AddressInRequestHasCity_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ShipCity, request.Address.City);
+            Assert.Equal(shipmentEntity.ShipCity, request.Address.City);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_StateCorrect_AddressInRequestHasState_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ShipStateProvCode, request.Address.StateOrProvinceCode);
+            Assert.Equal(shipmentEntity.ShipStateProvCode, request.Address.StateOrProvinceCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ZipCorrect_AddressInRequestHasZip_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ShipPostalCode, request.Address.PostalCode);
+            Assert.Equal(shipmentEntity.ShipPostalCode, request.Address.PostalCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CountryCorrect_AddressInRequestHasCountry_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ShipCountryCode, request.Address.CountryCode);
+            Assert.Equal(shipmentEntity.ShipCountryCode, request.Address.CountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ResidentialCorrect_AddressInRequestHasResidentialResult_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ResidentialResult, request.Address.Residential);
+            Assert.Equal(shipmentEntity.ResidentialResult, request.Address.Residential);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_OtherCriteriaCorrect_ShipmentValid_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(LocationsSearchCriteriaType.ADDRESS, request.LocationsSearchCriterion);
-            Assert.IsTrue(request.LocationsSearchCriterionSpecified);
+            Assert.Equal(LocationsSearchCriteriaType.ADDRESS, request.LocationsSearchCriterion);
+            Assert.True(request.LocationsSearchCriterionSpecified);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WrongRequestType_Test()
         {
             CarrierRequest wrongRequest = new FedExShipRequest(null, shipmentEntity, null, null, settingsRepository.Object, new ProcessShipmentRequest());
-            testObject.Manipulate(wrongRequest);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(wrongRequest));
         }
     }
 }

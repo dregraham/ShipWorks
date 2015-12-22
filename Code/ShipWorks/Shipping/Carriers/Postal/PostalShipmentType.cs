@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -137,9 +138,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
             postal.SortType = (int) PostalSortType.Nonpresorted;
             postal.EntryFacility = (int) PostalEntryFacility.Other;
 
-            postal.Memo1 = string.Empty;
-            postal.Memo2 = string.Empty;
-            postal.Memo3 = string.Empty;
+            postal.Memo1 = String.Empty;
+            postal.Memo2 = String.Empty;
+            postal.Memo3 = String.Empty;
+
+            postal.NoPostage = false;
         }
 
         /// <summary>
@@ -187,6 +190,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
             ShippingProfileUtility.ApplyProfileValue(postalProfile.Memo2, postalShipment, PostalShipmentFields.Memo2);
             ShippingProfileUtility.ApplyProfileValue(postalProfile.Memo3, postalShipment, PostalShipmentFields.Memo3);
 
+            ShippingProfileUtility.ApplyProfileValue(postalProfile.NoPostage, postalShipment, PostalShipmentFields.NoPostage);
+
             UpdateDynamicShipmentData(shipment);
 
             UpdateTotalWeight(shipment);
@@ -195,6 +200,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Update the dyamic data of the shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
@@ -306,7 +312,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment, shipment.Postal, null),
-                new DimensionsAdapter(shipment.Postal));
+                new DimensionsAdapter(shipment.Postal))
+            {
+                TotalWeight = shipment.TotalWeight
+            };
         }
 
         /// <summary>
@@ -314,7 +323,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
-            return string.Format("USPS {0}", EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service));
+            return String.Format("USPS {0}", EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service));
         }
 
         /// <summary>
@@ -461,27 +470,28 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+            get
+            {
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-            fields.AddRange
-                (
-                    new List<IEntityField2>()
-                    {
-                        shipment.Postal.Fields[PostalShipmentFields.PackagingType.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.DimsHeight.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.DimsLength.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.DimsWidth.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.DimsAddWeight.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.DimsWeight.FieldIndex],                        
-                        shipment.Postal.Fields[PostalShipmentFields.NonMachinable.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.NonRectangular.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.InsuranceValue.FieldIndex]
-                    }
-                );
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(PostalShipmentFields.PackagingType);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsHeight);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsLength);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsWidth);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsAddWeight);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsWeight);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.NonMachinable);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.NonRectangular);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.InsuranceValue);
 
-            return fields;
+                return ratingField;
+            }
         }
 
         /// <summary>
@@ -587,6 +597,58 @@ namespace ShipWorks.Shipping.Carriers.Postal
             adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.CriticalMail, PostalPackagingType.LargeEnvelope));
 
             return adultSignatureAllowed;
+        }
+
+        /// <summary>
+        /// Indicates if the combination of country, service, and packaging qualifies for the free international delivery confirmation
+        /// </summary>
+        public bool IsFreeInternationalDeliveryConfirmation(string countryCode, PostalServiceType serviceType, PostalPackagingType packagingType)
+        {
+            if (CountriesEligibleForFreeInternationalDeliveryConfirmation().Contains(countryCode, StringComparer.OrdinalIgnoreCase))
+            {
+                if (packagingType == PostalPackagingType.FlatRateSmallBox)
+                {
+                    return true;
+                }
+
+                if (serviceType == PostalServiceType.InternationalPriority)
+                {
+                    switch (packagingType)
+                    {
+                        case PostalPackagingType.FlatRateEnvelope:
+                        case PostalPackagingType.FlatRateLegalEnvelope:
+                        case PostalPackagingType.FlatRatePaddedEnvelope:
+                            return true;
+                    }
+                }
+
+                if (serviceType == PostalServiceType.InternationalFirst)
+                {
+                    if (!PostalUtility.IsEnvelopeOrFlat(packagingType))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns a list of countries eligible for free international delivery confirmation.
+        /// </summary>
+        protected virtual List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
+        {
+            // Allowable country codes include Australia, Belgium, Brazil, Canada, Croatia, Denmark, Estonia, Finland,
+            // France, Germany, Gibraltar, Great Britain, Hungary, Northern Ireland, Israel, Italy, Latvia, Lithuania, Luxembourg, Malaysia, 
+            // Malta, Netherlands, New Zealand, Portugal, Singapore, Spain, Switzerland
+            List<string> eligibleCountryCodes = new List<string>
+            {
+                "AU", "BE", "BR", "CA", "HR", "DK", "FR", "DE", "GB", "NB", "IL", "NL", "NZ", "ES", "CH",
+                "EE", "FI", "GI", "HU", "IT", "LV", "LT", "LU", "MY", "MT", "PT", "SG"
+            };
+
+            return eligibleCountryCodes;
         }
     }
 }

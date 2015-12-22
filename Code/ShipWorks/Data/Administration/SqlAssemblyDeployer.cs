@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using Microsoft.SqlServer.Server;
 using System.IO;
 using System.Collections;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
 
 namespace ShipWorks.Data.Administration
@@ -54,6 +55,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Deploy the given assembly to the connection specified by the SQL Session
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void DeployAssembly(Assembly assembly, SqlConnection con, SqlTransaction transaction)
         {
             if (con == null)
@@ -269,6 +271,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get the SQL type declaration for the given .net type
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         private static string GetSqlTypeDeclaration(Type type)
         {
             string typeName = type.Name;

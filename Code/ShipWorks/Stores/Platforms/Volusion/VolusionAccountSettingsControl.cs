@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
@@ -49,6 +50,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Save UI values to the backing entity
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override bool SaveToEntity(StoreEntity store)
         {
             VolusionStoreEntity volusionStore = store as VolusionStoreEntity;

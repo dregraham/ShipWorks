@@ -43,6 +43,7 @@ using ShipWorks.Stores;
 using log4net;
 using log4net.Repository.Hierarchy;
 using System.Globalization;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.UI.Wizard;
 
@@ -51,6 +52,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// ShipmentType implementation for UPS
     /// </summary>
+    [NDependIgnoreLongTypes]
     public abstract class UpsShipmentType : ShipmentType
     {
         protected UpsShipmentType()
@@ -138,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Create the UPS specific profile control
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new UpsProfileControl();
         }
@@ -192,6 +194,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Configure data for the newly created shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
             // A null reference error was being thrown.  Discoverred by Crash Reports.
@@ -382,6 +385,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
@@ -402,7 +406,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.PayorType = (int)UpsPayorType.Sender;
             profile.Ups.PayorAccount = "";
             profile.Ups.PayorPostalCode = "";
-            profile.Ups.PayorCountryCode = UpsAccountManager.Accounts.Count > 0 ? UpsAccountManager.Accounts[0].CountryCode : "US";
+            profile.Ups.PayorCountryCode = GetDefaultCountry();
 
             profile.Ups.EmailNotifySender = (int)UpsEmailNotificationType.None;
             profile.Ups.EmailNotifyRecipient = (int)UpsEmailNotificationType.None;
@@ -430,14 +434,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.Cn22Number = string.Empty;
 
             profile.Ups.ShipmentChargeAccount = string.Empty;
-            profile.Ups.ShipmentChargeCountryCode = string.Empty;
+            profile.Ups.ShipmentChargeCountryCode = GetDefaultCountry();
             profile.Ups.ShipmentChargePostalCode = string.Empty;
             profile.Ups.ShipmentChargeType = (int)UpsShipmentChargeType.BillReceiver;
         }
 
         /// <summary>
+        /// If there is an account, set the country code to the first if account. If no account found, us "US"
+        /// </summary>
+        private static string GetDefaultCountry() =>
+                    UpsAccountManager.Accounts.FirstOrDefault()?.CountryCode ?? "US";
+
+        /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
         {
             UpsShipmentEntity ups = shipment.Ups;
@@ -628,6 +639,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
@@ -799,10 +811,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (parcelIndex >= 0 && parcelIndex < shipment.Ups.Packages.Count)
             {
                 var package = shipment.Ups.Packages[parcelIndex];
-
+               
                 return new ShipmentParcel(shipment, package.UpsPackageID, package.TrackingNumber,
                     new InsuranceChoice(shipment, package, package, package),
-                    new DimensionsAdapter(package));
+                    new DimensionsAdapter(package))
+                {
+                    TotalWeight =  package.Weight + package.DimsWeight
+                };
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");
@@ -913,6 +928,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Get the UPS rates from the UPS api
         /// </summary>
+        [NDependIgnoreLongMethod]
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             try
@@ -1089,11 +1105,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new ShippingException(ex.Message, ex);
             }
         }
-        
+
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new UpsShipmentProcessingSynchronizer();
         }
@@ -1101,6 +1117,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Process the shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ProcessShipment(ShipmentEntity shipment)
         {
             UpsShipmentEntity upsShipmentEntity = shipment.Ups;
@@ -1217,48 +1234,48 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
-
-            fields.AddRange
-                (
-                    new List<IEntityField2>()
-                    {
-                        shipment.Ups.Fields[UpsShipmentFields.UpsAccountID.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.UpsAccountID.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.SaturdayDelivery.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.CodAmount.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.CodEnabled.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.CodPaymentType.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.Service.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.DeliveryConfirmation.FieldIndex]
-                    }
-                );
-
-            // Grab all the fields for all the package in this shipment
-            foreach (UpsPackageEntity package in shipment.Ups.Packages)
+            get
             {
-                fields.Add(package.Fields[UpsPackageFields.PackagingType.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DeclaredValue.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.VerbalConfirmationEnabled.FieldIndex]);
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-                fields.Add(package.Fields[UpsPackageFields.DimsWeight.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DimsLength.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DimsHeight.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DimsWidth.FieldIndex]);
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(UpsShipmentFields.UpsAccountID);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.SaturdayDelivery);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.SaturdayDelivery);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.CodAmount);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.CodEnabled);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.CodPaymentType);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.Service);
+                ratingField.ShipmentFields.Add(UpsShipmentFields.DeliveryConfirmation);
+                ratingField.PackageFields.Add(UpsPackageFields.PackagingType);
+                ratingField.PackageFields.Add(UpsPackageFields.DeclaredValue);
+                ratingField.PackageFields.Add(UpsPackageFields.VerbalConfirmationEnabled);
+                ratingField.PackageFields.Add(UpsPackageFields.DimsWeight);
+                ratingField.PackageFields.Add(UpsPackageFields.DimsLength);
+                ratingField.PackageFields.Add(UpsPackageFields.DimsHeight);
+                ratingField.PackageFields.Add(UpsPackageFields.DimsWidth);
+                ratingField.PackageFields.Add(UpsPackageFields.DryIceEnabled);
+                ratingField.PackageFields.Add(UpsPackageFields.DryIceRegulationSet);
+                ratingField.PackageFields.Add(UpsPackageFields.DryIceWeight);
+                ratingField.PackageFields.Add(UpsPackageFields.DryIceEnabled);
+                ratingField.PackageFields.Add(UpsPackageFields.DryIceIsForMedicalUse);
 
-                fields.Add(package.Fields[UpsPackageFields.DryIceEnabled.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DryIceRegulationSet.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DryIceWeight.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DryIceEnabled.FieldIndex]);
-                fields.Add(package.Fields[UpsPackageFields.DryIceIsForMedicalUse.FieldIndex]);
+                return ratingField;
             }
-
-            return fields;
         }
 
-        
+        /// <summary>
+        /// Gets the rating hash based on the shipment's configuration.
+        /// </summary>
+        public override string GetRatingHash(ShipmentEntity shipment)
+        {
+            return RatingFields.GetRatingHash(shipment, shipment.Ups.Packages);
+        }
 
         /// <summary>
         /// Gets a value indicating whether multiple packages are supported by this shipment type.

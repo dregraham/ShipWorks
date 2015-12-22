@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
@@ -28,6 +30,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
         /// <summary>
         /// Load the data from the given CsvReader, positioned on an order row, into the given OrderEntity.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void Load(OrderEntity order, GenericSpreadsheetReader csv, IOrderElementFactory factory)
         {
             if (order == null)
@@ -230,6 +233,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
         /// <summary>
         /// Load the given line item from the CSV
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadLineItem(int itemIndex)
         {
             OrderItemEntity item = factory.CreateItem(order);

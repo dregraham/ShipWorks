@@ -28,6 +28,7 @@ using ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores;
 using System.Data.SqlClient;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized.Utility;
@@ -43,6 +44,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
     /// <summary>
     /// Responsible for loading a v2 filter XML into a v3 FilterDefinition
     /// </summary>
+    [NDependIgnoreLongTypes]
     public static class FilterDefinitionLoader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FilterDefinitionLoader));
@@ -75,7 +77,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         {
             storeTypeStatusCodesMap = new Dictionary<StoreTypeCode, LocalXmlStatusCodeProvider>();
 
-            using (SqlCommand cmd = SqlCommandProvider.Create(con, 
+            using (SqlCommand cmd = SqlCommandProvider.Create(con,
                 @"SELECT s.TypeCode, g.ModuleStatusCodes FROM Store s INNER JOIN GenericModuleStore g ON s.StoreID = g.StoreID
                     UNION ALL
                   SELECT s.TypeCode, g.StatusCodes FROM Store s INNER JOIN AmeriCommerceStore g ON s.StoreID = g.StoreID
@@ -191,6 +193,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Parse the given v2Condition and create its 3x counterpart
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static Condition LoadCondition(XElement v2Condition, FilterTarget target)
         {
             string conditionType = (string) v2Condition.Element("Type");
@@ -297,6 +301,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create a replica of a v2 "Emailed With" condition
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreateEmailedWithCondition(XElement v2Condition, FilterTarget target)
         {
             StringOperator stringOperator = ParseV2StringOperator((string) v2Condition.Element("Operator"));
@@ -398,6 +403,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create condition to match V2 PayPal payment status condition
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreatePayPalPaymentStatusCondition(XElement v2Condition, FilterTarget target)
         {
             PayPalPaymentStatusCondition condition = new PayPalPaymentStatusCondition();
@@ -429,6 +435,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create the Online Status condition to match v2 volusion
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreateVolusionOnlineStatusCondition(XElement v2Condition, FilterTarget target)
         {
             string code = (string) v2Condition.Element("TargetValue");
@@ -464,6 +471,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create the Online Status condition to match v2 infopia
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreateInfopiaOnlineStatusCondition(XElement v2Condition, FilterTarget target)
         {
             string code = (string) v2Condition.Element("TargetValue");
@@ -496,6 +504,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Read a condition to match an "Online Status" condition from the given v2 store type
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static Condition ReadOnlineStatusCondition(XElement v2Condition, StoreTypeCode storeType)
         {
             string code = (string) v2Condition.Element("TargetValue");
@@ -553,10 +563,10 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                     }
                 }
 
-                // TODO (maybe) ClickCart and SearchFit both need hashcode -> code conversions, but we don't have very many users of them, 
+                // TODO (maybe) ClickCart and SearchFit both need hashcode -> code conversions, but we don't have very many users of them,
                 // and don't currently have any way to create a test store to see what the default codes are.
             }
-            
+
             if (provider != null && provider.CodeValues.Contains(code))
             {
                 condition.TargetValue = provider.GetCodeName(code);
@@ -566,7 +576,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 log.WarnFormat("Could not properly migrate online status condition for type {0} code {1}", storeType, code);
                 condition.TargetValue = "Unknown (V2 Upgrade)";
             }
-            
+
             return condition;
         }
 
@@ -579,7 +589,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
 
             EbayItemPaymentStatusCondition condition = new EbayItemPaymentStatusCondition();
             condition.Operator = EqualityOperator.Equals;
-            
+
             switch (v2Status)
             {
                 case 0: condition.Value = EbayEffectivePaymentStatus.Incomplete; break;
@@ -600,6 +610,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create condition to match v2 Payment Method condition
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreateEbayPaymentMethodCondition(XElement v2Condition, FilterTarget target)
         {
             int v2Method = (int) v2Condition.Element("TargetValue");
@@ -712,6 +723,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Create condition to match v2 status condition
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static Condition CreateShipmentStatusCondition(XElement v2Condition)
         {
             ShipmentStatusType statusType = ShipmentStatusType.Processed;
@@ -744,39 +756,50 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 shipmentType = ShipmentTypeCode.Other;
             }
 
-            if (statusType != ShipmentStatusType.None)
+            return (statusType != ShipmentStatusType.None) ?
+                CreateShipmentStatusConditionForNone(statusType, shipmentType) :
+                CreateShipmentStatusConditionForOther(shipmentType);
+        }
+
+        /// <summary>
+        /// Create condition to match v2 status condition
+        /// </summary>
+        private static Condition CreateShipmentStatusConditionForOther(ShipmentTypeCode shipmentType)
+        {
+            ForAnyShipmentCondition anyShipment = new ForAnyShipmentCondition();
+            anyShipment.Container.FirstGroup.JoinType = ConditionJoinType.Any;
+            anyShipment.Container.FirstGroup.Conditions.Add(new ShipmentStatusCondition { Operator = EqualityOperator.Equals, Value = ShipmentStatusType.None });
+
+            // In v2 -1 meant any type
+            if ((int)shipmentType != -1)
             {
-                ForAnyShipmentCondition anyShipment = new ForAnyShipmentCondition();
-                anyShipment.Container.FirstGroup.JoinType = ConditionJoinType.All;
-                anyShipment.Container.FirstGroup.Conditions.Add(new ShipmentStatusCondition { Operator = EqualityOperator.Equals, Value = statusType });
-
-                // In v2 -1 meant any type
-                if ((int) shipmentType != -1)
-                {
-                    anyShipment.Container.FirstGroup.Conditions.Add(new CarrierCondition { Operator = EqualityOperator.Equals, Value = shipmentType });
-                }
-
-                return anyShipment;
+                anyShipment.Container.FirstGroup.Conditions.Add(new CarrierCondition { Operator = EqualityOperator.NotEqual, Value = shipmentType });
             }
-            else
+
+            CombinedResultCondition combined = new CombinedResultCondition();
+            combined.Container.FirstGroup.JoinType = ConditionJoinType.Any;
+            combined.Container.FirstGroup.Conditions.Add(new OrderShipmentsCondition() { Operator = NumericOperator.Equal, Value1 = 0 });
+            combined.Container.FirstGroup.Conditions.Add(anyShipment);
+
+            return combined;
+        }
+
+        /// <summary>
+        /// Create condition to match v2 status condition
+        /// </summary>
+        private static Condition CreateShipmentStatusConditionForNone(ShipmentStatusType statusType, ShipmentTypeCode shipmentType)
+        {
+            ForAnyShipmentCondition anyShipment = new ForAnyShipmentCondition();
+            anyShipment.Container.FirstGroup.JoinType = ConditionJoinType.All;
+            anyShipment.Container.FirstGroup.Conditions.Add(new ShipmentStatusCondition { Operator = EqualityOperator.Equals, Value = statusType });
+
+            // In v2 -1 meant any type
+            if ((int)shipmentType != -1)
             {
-                ForAnyShipmentCondition anyShipment = new ForAnyShipmentCondition();
-                anyShipment.Container.FirstGroup.JoinType = ConditionJoinType.Any;
-                anyShipment.Container.FirstGroup.Conditions.Add(new ShipmentStatusCondition { Operator = EqualityOperator.Equals, Value = ShipmentStatusType.None });
-
-                // In v2 -1 meant any type
-                if ((int) shipmentType != -1)
-                {
-                    anyShipment.Container.FirstGroup.Conditions.Add(new CarrierCondition { Operator = EqualityOperator.NotEqual, Value = shipmentType });
-                }
-
-                CombinedResultCondition combined = new CombinedResultCondition();
-                combined.Container.FirstGroup.JoinType = ConditionJoinType.Any;
-                combined.Container.FirstGroup.Conditions.Add(new OrderShipmentsCondition() { Operator = NumericOperator.Equal, Value1 = 0 });
-                combined.Container.FirstGroup.Conditions.Add(anyShipment);
-
-                return combined;
+                anyShipment.Container.FirstGroup.Conditions.Add(new CarrierCondition { Operator = EqualityOperator.Equals, Value = shipmentType });
             }
+
+            return anyShipment;
         }
 
         /// <summary>
@@ -884,7 +907,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// Create a condition to match the v2 Order Charge condition
         /// </summary>
         private static Condition CreateOrderChargeCondition(XElement v2Condition, FilterTarget target)
-        {            
+        {
             OrderChargeTypeCondition typeCondition = new OrderChargeTypeCondition();
             typeCondition.TargetValue = (string) v2Condition.Element("ChargeName");
             typeCondition.Operator = StringOperator.Equals;
@@ -1063,7 +1086,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 return anyOrderCondition;
             }
 
-            if (conditionTarget == ConditionEntityTarget.OrderItem || 
+            if (conditionTarget == ConditionEntityTarget.OrderItem ||
                 conditionTarget == ConditionEntityTarget.OrderCharge ||
                 conditionTarget == ConditionEntityTarget.PaymentDetail ||
                 conditionTarget == ConditionEntityTarget.Shipment)
@@ -1230,7 +1253,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         }
 
         /// <summary>
-        /// Parse the 
+        /// Parse the
         /// </summary>
         private static StringOperator ParseV2StringOperator(string value)
         {

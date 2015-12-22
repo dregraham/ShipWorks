@@ -61,7 +61,7 @@ namespace ShipWorks.Data.Grid.Paging
         // How long to wait before we show "Loading..."
         TimeSpan maxFetchWait = TimeSpan.FromSeconds(.1);
 
-        // Rows that will need to have there data fetched
+        // Rows that will need to have their data fetched
         LinkedList<DataPendingRow> rowsPendingDataFetch = new LinkedList<DataPendingRow>();
 
         // Long instead of bool for use with Interlocked
@@ -95,9 +95,9 @@ namespace ShipWorks.Data.Grid.Paging
         //   Enter the problem at hand:
         //   8) So there are 1000 items in the virtual selection.  10 of them are on screen, and the grid only knows that those 10 are selected.  You click on some random row that is not selected.  Which should clear the rest of the selection, which the grid does - but! only to the 10 it knows about.
         //   9) ShipWorks needs to know when this is happening, so it can clear the virtual selection as well.
-        //   10) This is made worse by the fact that when the grid calls “Clear” on the selection collection, it’s not virtual.  But I can inject my custom ArrayList.  However, the grid optimizes when there are few selected items, and calls ArrayList.RemoveAt on each one, instead of ArrayList.Clear.  So to know if SelectedElementCollectino.Clear is really being called, you have to walk the stack from RemoveAt.
+        //   10) This is made worse by the fact that when the grid calls “Clear” on the selection collection, it’s not virtual.  But I can inject my custom ArrayList.  However, the grid optimizes when there are few selected items, and calls ArrayList.RemoveAt on each one, instead of ArrayList.Clear.  So to know if SelectedElementCollection.Clear is really being called, you have to walk the stack from RemoveAt.
         //   11) Once you know that SelectedElementCollection.Clear is being called, it could be called for one of two reasons.  a) To actually do a full clear like I gave an example of.  b) Sometimes to add element X to the selction, it caches the selection, clears it, then adds back in cache + X.
-        //   In case b) it WOULD have added back in the virtual selection had it known about it, so we have to detect whether its case a (and the virtual selection should be cleared) or b (and the virtual selection should stay)        #endregion
+        //   In case b) it WOULD have added back in the virtual selection had it known about it, so we have to detect whether its case a (and the virtual selection should be cleared) or b (and the virtual selection should stay)       
         #endregion
 
         HashSet<long> virtualSelection = new HashSet<long>();
@@ -230,7 +230,7 @@ namespace ShipWorks.Data.Grid.Paging
                 // reflection cold still hold.  You can read the other comments below, and up and the member variable section of the
                 // grid above... but basically
                 //  1) It is assumed that the only method within SelectedElementCollection that calls its own Clear method is the psuedo-clear ("Revert") one.
-                //  2) It as assumed that if the call to SelectedElementCollection.Clear is not called by that psuedo-clear method, its a full clear, and otherwise
+                //  2) It is assumed that if the call to SelectedElementCollection.Clear is not called by that psuedo-clear method, its a full clear, and otherwise
                 //     its not a full clear.
                 if (typeof(SandGrid).Assembly.GetName().Version != new Version("2.2.4.1"))
                 {
@@ -415,6 +415,15 @@ namespace ShipWorks.Data.Grid.Paging
 
             // Have it create instances of our row type
             this.PrimaryGrid.NewRowType = typeof(PagedEntityGridRow);
+        }
+
+        /// <summary>
+        /// When a checkbox is checked or unchecked, update the selection.
+        /// </summary>
+        protected override void OnAfterCheck(GridRowCheckEventArgs e)
+        {
+            e.Row.Selected = e.Row.Checked;
+            base.OnAfterCheck(e);
         }
 
         /// <summary>
@@ -899,6 +908,7 @@ namespace ShipWorks.Data.Grid.Paging
         /// <summary>
         /// Raised when the selection changes
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             if (suspendSelectionProcessing)
@@ -917,10 +927,10 @@ namespace ShipWorks.Data.Grid.Paging
             }
 
             // See if this number of items is restricted
-            EditionRestrictionIssue restriciton = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SelectionLimit, virtualSelection.Count);
-            if (restriciton.Level != EditionRestrictionLevel.None)
+            EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.SelectionLimit, virtualSelection.Count);
+            if (restriction.Level != EditionRestrictionLevel.None)
             {
-                int maxAllowed = (int) restriciton.Data;
+                int maxAllowed = (int) restriction.Data;
 
                 suspendSelectionProcessing = true;
 
@@ -951,9 +961,9 @@ namespace ShipWorks.Data.Grid.Paging
                 Update();
             }
 
-            if (restriciton.Level != EditionRestrictionLevel.None)
+            if (restriction.Level != EditionRestrictionLevel.None)
             {
-                EditionManager.HandleRestrictionIssue(this, restriciton);
+                EditionManager.HandleRestrictionIssue(this, restriction);
             }
         }
 
@@ -1133,7 +1143,9 @@ namespace ShipWorks.Data.Grid.Paging
             // Clear what the grid thinks to be selected (virtual selection is preserved). No reason to maintain the selection, since after sorting
             // the selected row indexes will be different.
             suspendSelectionProcessing = true;
+           
             base.SelectedElements.Clear();
+
             suspendSelectionProcessing = false;
 
             // Reload the grid rows given the new gateway
@@ -1141,7 +1153,7 @@ namespace ShipWorks.Data.Grid.Paging
 
             base.OnSortChanged(e);
         }
-        
+
         /// <summary>
         /// Intercept CTRL-A
         /// </summary>
@@ -1286,6 +1298,7 @@ namespace ShipWorks.Data.Grid.Paging
         /// <summary>
         /// Background thread for populating peneding row data
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void BackgroundPopulatePending()
         {
             while (!ThreadSafeIsDisposed)
@@ -1432,7 +1445,9 @@ namespace ShipWorks.Data.Grid.Paging
             gridRow.LoadRowEntity(entity);
 
             suspendSelectionProcessing = true;
+
             gridRow.Selected = virtualSelection.Contains(entityID);
+            
             suspendSelectionProcessing = false;
         }
 

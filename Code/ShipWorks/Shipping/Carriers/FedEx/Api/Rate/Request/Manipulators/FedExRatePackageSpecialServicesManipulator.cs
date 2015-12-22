@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -121,6 +122,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// <param name="serviceType">Type of the service.</param>
         /// <returns></returns>
         /// <exception cref="System.InvalidOperationException">Invalid FedEx ServiceType  + serviceType</exception>
+        [NDependIgnoreComplexMethodAttribute]
         private static ServiceType GetApiServiceType(FedExServiceType serviceType)
         {
             switch (serviceType)
@@ -147,6 +149,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
                 case FedExServiceType.FedExExpressSaver:
                 case FedExServiceType.OneRateExpressSaver:
+                case FedExServiceType.FedExEconomyCanada:
                     return ServiceType.FEDEX_EXPRESS_SAVER;
                 
                 case FedExServiceType.InternationalPriority: return ServiceType.INTERNATIONAL_PRIORITY;
@@ -155,7 +158,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 case FedExServiceType.FedEx1DayFreight: return ServiceType.FEDEX_1_DAY_FREIGHT;
                 case FedExServiceType.FedEx2DayFreight: return ServiceType.FEDEX_2_DAY_FREIGHT;
                 case FedExServiceType.FedEx3DayFreight: return ServiceType.FEDEX_3_DAY_FREIGHT;
-                case FedExServiceType.FedExGround: return ServiceType.FEDEX_GROUND;
+                
+                case FedExServiceType.FedExGround: 
+                case FedExServiceType.FedExInternationalGround:
+                    return ServiceType.FEDEX_GROUND;
+
                 case FedExServiceType.GroundHomeDelivery: return ServiceType.GROUND_HOME_DELIVERY;
                 case FedExServiceType.InternationalPriorityFreight: return ServiceType.INTERNATIONAL_PRIORITY_FREIGHT;
                 case FedExServiceType.InternationalEconomyFreight: return ServiceType.INTERNATIONAL_ECONOMY_FREIGHT;

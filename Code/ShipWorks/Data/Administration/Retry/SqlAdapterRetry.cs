@@ -3,6 +3,7 @@ using System.Threading;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Data.Administration.Retry
 {
@@ -11,9 +12,11 @@ namespace ShipWorks.Data.Administration.Retry
     /// TException will be compared to any exception and inner exception that is thrown.
     /// If either the exception or inner exception match TException, the command will be retried.
     /// </summary>
-    public class SqlAdapterRetry<TException> where TException : Exception
+    public class SqlAdapterRetry<TException> : ShipWorks.Data.Administration.Retry.ISqlAdapterRetry where TException : Exception
     {
         // Logger - Using the string parameter version so that we don't get the TException.ToString() in the log file
+        [SuppressMessage("SonarQube", "S2743:Static fields should not be used in generic types", 
+            Justification = "It is not a problem if each closed class gets its own logger")]
         private static readonly ILog log = LogManager.GetLogger("SqlAdapterRetry<TException>");
 
         private readonly object lockObject = new object();

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Controls;
 using Divelements.SandGrid;
+using Interapptive.Shared;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.DetailView;
@@ -87,6 +88,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Load the shipments into the packaging control
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void LoadShipments(List<ShipmentEntity> shipments, bool enableEditing)
         {
             this.loadedShipments = shipments;
@@ -338,7 +340,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
 
-            IEnumerable<InsuranceChoice> insuranceToLoad = packagesGrid.SelectedElements.OfType<GridRow>()
+            IEnumerable<IInsuranceChoice> insuranceToLoad = packagesGrid.SelectedElements.OfType<GridRow>()
                 .Select(x => x.Tag).OfType<List<FedExPackageEntity>>()
                 .SelectMany(x => x).Select(x => shipmentType.GetParcelDetail(x.FedExShipment.Shipment, x.FedExShipment.Packages.IndexOf(x)).Insurance);
 

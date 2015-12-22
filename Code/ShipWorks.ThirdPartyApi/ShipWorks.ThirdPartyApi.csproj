@@ -1,0 +1,2302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ShipWorks</RootNamespace>
+    <AssemblyName>ShipWorks.ThirdPartyApi</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <CodeAnalysisModuleSuppressionsFile>AnalysisSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\..\Components\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net1213">
+      <HintPath>..\..\Components\Common.Logging.Log4Net1213.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Microsoft.Web.Services3.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Mail">
+      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.IdentityModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net40\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Interfaces.2.2.5\lib\net40\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net40\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApiLogEncryption.cs" />
+    <Compile Include="IApiLogEntry.cs" />
+    <Compile Include="Properties\AssemblyInfoCommon.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\IFedExNativeShipmentReply.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\IFedExNativeShipmentRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\ProcessShipmentReply.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\ProcessShipmentRequest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageAttribute.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageSoapExtension.cs" />
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.iParcel.WebServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.AmeriCommerce.WebServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.ThreeDCart.WebServices.CartAdvanced\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.ThreeDCart.WebServices.Cart\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebServiceLogger.cs">
+      <DependentUpon>WebServiceLogger.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\interapptive_public.snk" />
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.CustomerService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.Amazon.WebServices.SellerCentral\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Admin\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.Ebay.WebServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.Amazon.WebServices.EventNotification\Reference.cs" />
+    <Compile Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.Infopia.WebServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.Magento.WebServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.MarketplaceAdvisor.WebServices.Oms\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.OrderDynamics.WebServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Stores.Platforms.PayPal.WebServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\CloseServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseDocumentsReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseReportsReprintReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\SmartPostCloseReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\SearchLocationsReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\OpenShipServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\PostalCodeInquiryReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\ServiceAvailabilityReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\RateReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\RateServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Rate\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\RegisterWebCspUserReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\RegistrationServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\SubscriptionReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Registration\VersionCaptureReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CancelPendingShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\CreatePendingShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ProcessTagReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipmentReply1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Ship\ShipServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SendNotificationsReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SignatureProofOfDeliveryFaxReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\SignatureProofOfDeliveryLetterReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.iParcel.WebServices\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.iParcel.WebServices\xmlsoap.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\GlobalShipAddressServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\PackageMovementInformationServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\ChallengeQuestionResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\IndiciumResponse1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PostageRatesResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\ResetSuspendedAccountRequestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.CustomerService\CustomerService.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.CustomerService\CustomerService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.CustomerService\CustomerService0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.CustomerService\CustomerService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.CustomerService\CustomerService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.CustomerService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\AccountStatusResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\ChangePassPhraseRequestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\EwsLabelService.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\EwsLabelService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\LabelRequestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\PostageRateResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\PostageRatesResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\RecreditRequestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\AccountInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\Address.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\PostageBalance.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\PurchaseStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\RateV14.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\RateV9.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\ResidentialDeliveryIndicatorType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\SDCV36Service.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\SDCV36Service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\SDCV36Service0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\AccountInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\Address.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\cost_code_info_v1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\CountryInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\IndiciumData.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\NetStampsImage.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\NetStampsLayout.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\NetstampsStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\PostageBalance.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\PurchaseStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\RateV14.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\RegistrationStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\ResidentialDeliveryIndicatorType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\StatusCodes.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\StoreShippingMethodOption.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\swsimv36.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\TrackingEvent.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\AccountInfo1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\Address1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\Codeword.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\cost_code_info_v11.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\CountryInfo1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\IndiciumData1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\NetStampsImage1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\NetStampsLayout1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\NetstampsStatus1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\PostageBalance1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\PurchaseStatus1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\RateV15.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\RateV17.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ResidentialDeliveryIndicatorType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ShipmentV2.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ShipmentV5.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\StatusCodes1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\StoreShippingMethodOption1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv49.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\TrackingEvent1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\common.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\Error1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\ManageAccountResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\RegisterNAccountMgrSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\RegisterResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\RegistrationNAccountMgr.wsdl" />
+    <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\UPSSecurity.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\common.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\Error1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\OpenAccount.wsdl" />
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\OpenAccountResponse1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\OpenAccountWS.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\UPSSecurity.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Admin\AdminService.wsdl" />
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Admin\APIResultOfArrayOfAuthorizationResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Admin\APIResultOfBoolean.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Admin\APIResultOfString.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Admin\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfArrayOfBoolean.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfAttributeInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfBoolean.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfClassificationConfigurationInformation.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfDoesSkuExistResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfImageInfoResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfInventoryItemResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfInventoryQuantityResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfInventoryUpsellInfoResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfShippingRateInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfString.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfSynchInventoryItemResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfArrayOfUpdateInventoryItemResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfBoolean.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfInt32.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfQuantityInfoResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfStoreInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfString.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\APIResultOfVariationInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\InventoryService.wsdl" />
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\APIResultOfArrayOfBoolean1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\APIResultOfArrayOfInt321.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\APIResultOfArrayOfOrderResponseItem1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\APIResultOfArrayOfOrderUpdateResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\APIResultOfBoolean.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\APIResultOfInt321.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\APIResultOfOrderRefundHistoryResponse1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\APIResultOfRefundOrderResponse1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\APIResultOfString1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\APIResultOfArrayOfOrderShipmentHistoryResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\APIResultOfArrayOfShipmentResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\DisableUnpaidItemAssistanceResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ExtendSiteHostedPicturesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\VerifyRelistItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Magento.WebServices\Magento.wsdl" />
+    <None Include="Web References\Stores.Platforms.Magento.WebServices\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\AddressVerifyResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\BAUpdateResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\BillOutstandingAmountResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\BillUserResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\BMButtonSearchResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\BMCreateButtonResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\BMGetButtonDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\BMGetInventoryResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\BMManageButtonStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\BMSetInventoryResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\BMUpdateButtonResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\CreateBillingAgreementResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\CreateMobilePaymentResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\CreateRecurringPaymentsProfileResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\DoAuthorizationResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\DoCaptureResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\DoDirectPaymentResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\DoExpressCheckoutPaymentResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\DoMobileCheckoutPaymentResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\DoNonReferencedCreditResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\DoReauthorizationResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\DoReferenceTransactionResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\DoUATPAuthorizationResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\DoUATPExpressCheckoutPaymentResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\DoVoidResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\EnhancedDataTypes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\EnterBoardingResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\GetAccessPermissionDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\GetAuthDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\GetBalanceResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\GetBillingAgreementCustomerDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\GetBoardingDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\GetExpressCheckoutDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\GetIncentiveEvaluationResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\GetMobileStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\GetRecurringPaymentsProfileDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\GetTransactionDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\ManagePendingTransactionStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\ManageRecurringPaymentsProfileStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\MassPayResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\RefundTransactionResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\ReverseTransactionResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\SetAccessPermissionsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\SetAuthFlowParamResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\SetCustomerBillingAgreementResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\SetExpressCheckoutResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\SetMobileCheckoutResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\TransactionSearchResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\UpdateAccessPermissionsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\UpdateRecurringPaymentsProfileResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ThreeDCart.WebServices.CartAdvanced\cart_advanced.wsdl" />
+    <None Include="Web References\Stores.Platforms.ThreeDCart.WebServices.CartAdvanced\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.ThreeDCart.WebServices.Cart\cart.wsdl" />
+    <None Include="Web References\Stores.Platforms.ThreeDCart.WebServices.Cart\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\Stores.Platforms.ThreeDCart.WebServices.CartAdvanced\cart_advanced.disco" />
+    <None Include="Web References\Stores.Platforms.ThreeDCart.WebServices.Cart\cart.disco" />
+    <None Include="Web References\Stores.Platforms.AmeriCommerce.WebServices\americommercedb.disco" />
+    <CodeAnalysisDictionary Include="..\..\Build\AnalysisDictionary.xml">
+      <Link>Properties\AnalysisDictionary.xml</Link>
+      <SubType>Designer</SubType>
+    </CodeAnalysisDictionary>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\RegistrationStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\BrowseNodeLookupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\CartAddResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\CartClearResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\CartCreateResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\CartGetResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\CartModifyResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\CustomerContentLookupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\CustomerContentSearchResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\HelpResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\ItemLookupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\ItemSearchResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\ListLookupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\ListSearchResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\MultiOperationResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\SellerListingLookupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\SellerListingSearchResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\SellerLookupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\SimilarityLookupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\TagLookupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\TransactionLookupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\VehiclePartLookupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\VehiclePartSearchResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\VehicleSearchResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.AmeriCommerce.WebServices\AmeriCommerceDb.wsdl" />
+    <None Include="Web References\Stores.Platforms.AmeriCommerce.WebServices\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.Infopia.WebServices\HeadersResponseWrapper.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Infopia.WebServices\LinesResponseWrapper.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Infopia.WebServices\MasterHeaderTypesResponseWrapper.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Infopia.WebServices\StatusesResponseWrapper.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\CreateAttributeResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\CreateCategoryResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\CreateCustomerResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\CreateManufacturerResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\CreateOrderStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\CreatePriceLevelResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\CreateProductResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\CreateWarehouseResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\DeleteAttributeResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\DeleteCategoryResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\DeleteCustomerResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\DeleteManufacturerResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\DeleteOrderStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\DeletePriceLevelResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\DeleteProductResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\DeleteWarehouseResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\GetUserKeyResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\GetUserTokenResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\PerformMultipleResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\ReadAttributeResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\ReadCategoryResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\ReadCustomerResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\ReadManufacturerResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\ReadOrderResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\ReadOrderStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\ReadPaymentResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\ReadPriceLevelResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\ReadProductResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\ReadSiteSettingResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\ReadWarehouseResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\soapservice.wsdl" />
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\UpdateAttributeResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\UpdateCategoryResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\UpdateCustomerResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\UpdateInventoryResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\UpdateManufacturerResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\UpdateOrderResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\UpdateOrderStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\UpdatePriceLevelResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\UpdateProductResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.NetworkSolutions.WebServices\UpdateWarehouseResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.OrderDynamics.WebServices\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.OrderDynamics.WebServices\ShipmentQueueItem.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.OrderDynamics.WebServices\ShipmentQueueService.disco" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\AddressValidationReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\AddressValidationServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\ELSServices.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\AccountStatusResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\ChangePassPhraseRequestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\EwsLabelService.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\GetVersionResults.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\LabelRequestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PostageRateResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\RecreditRequestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddDisputeResponseResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddDisputeResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddFixedPriceItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddItemFromSellingManagerTemplateResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddItemsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddMemberMessageAAQToPartnerResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddMemberMessageRTQResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddMemberMessagesAAQToBidderResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddOrderResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddSecondChanceItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddSellingManagerInventoryFolderResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddSellingManagerProductResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddSellingManagerTemplateResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddToItemDescriptionResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddToWatchListResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\AddTransactionConfirmationItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\CompleteSaleResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ConfirmIdentityResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\DeleteMyMessagesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\DeleteSellingManagerInventoryFolderResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\DeleteSellingManagerItemAutomationRuleResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\DeleteSellingManagerProductResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\DeleteSellingManagerTemplateAutomationRuleResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\DeleteSellingManagerTemplateResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ebaySvc.wsdl" />
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\EndFixedPriceItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\EndItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\EndItemsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\FetchTokenResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetAccountResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetAdFormatLeadsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetAllBiddersResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetApiAccessRulesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetAttributesCSResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetAttributesXSLResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetBestOffersResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetBidderListResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCategoriesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCategory2CSResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCategoryFeaturesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCategoryListingsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCategoryMappingsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCategorySpecificsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetChallengeTokenResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCharitiesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetClientAlertsAuthTokenResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetContextualKeywordsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCrossPromotionsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetDescriptionTemplatesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetDisputeResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GeteBayDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GeteBayOfficialTimeResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetFeedbackResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetHighBiddersResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetItemRecommendationsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetItemsAwaitingFeedbackResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetItemShippingResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetItemTransactionsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetMemberMessagesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetMessagePreferencesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetMyeBayBuyingResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetMyeBayRemindersResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetMyeBaySellingResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetMyMessagesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetNotificationPreferencesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetNotificationsUsageResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetOrdersResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetOrderTransactionsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetPictureManagerDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetPictureManagerOptionsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetPopularKeywordsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductFamilyMembersResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductFinderResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductFinderXSLResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductSearchPageResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductSearchResultsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductSellingPagesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetPromotionalSaleDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetPromotionRulesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSearchResultsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellerDashboardResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellerEventsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellerListResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellerPaymentsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellerTransactionsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellingManagerAlertsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellingManagerEmailLogResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellingManagerInventoryFolderResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellingManagerInventoryResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellingManagerItemAutomationRuleResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellingManagerSaleRecordResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellingManagerSoldListingsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellingManagerTemplateAutomationRuleResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSellingManagerTemplatesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSessionIDResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetShippingDiscountProfilesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetStoreCategoryUpdateStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetStoreCustomPageResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetStoreOptionsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetStorePreferencesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetStoreResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSuggestedCategoriesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetTaxTableResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetTokenStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetUserContactDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetUserDisputesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetUserPreferencesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetUserResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetVeROReasonCodeDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetVeROReportStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetWantItNowPostResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetWantItNowSearchResultsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\IssueRefundResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\LeaveFeedbackResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\MoveSellingManagerInventoryFolderResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\PlaceOfferResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\AWSECommerceService.wsdl" />
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.Associates\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.EventNotification\EventNotificationService.wsdl" />
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.SellerCentral\DocumentDownloadAckStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.SellerCentral\DocumentProcessingInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.SellerCentral\DocumentSubmissionResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.SellerCentral\MerchantDocumentInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.SellerCentral\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.SellerCentral\ReferencedBinary.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.SellerCentral\SummaryInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Amazon.WebServices.SellerCentral\waspcServer.AmzISA.wsdl" />
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\OrderService.wsdl" />
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\APIResultOfArrayOfShippingCarrier.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\APIResultOfBoolean.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\APIResultOfShippingRateResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\APIResultOfString.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\ShippingService.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\RelistFixedPriceItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\RelistItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\RemoveFromWatchListResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\RespondToBestOfferResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\RespondToFeedbackResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\RespondToWantItNowPostResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ReviseCheckoutStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ReviseFixedPriceItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ReviseInventoryStatusResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ReviseItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ReviseMyMessagesFoldersResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ReviseMyMessagesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ReviseSellingManagerInventoryFolderResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ReviseSellingManagerProductResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ReviseSellingManagerSaleRecordResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ReviseSellingManagerTemplateResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\RevokeTokenResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SaveItemToSellingManagerTemplateResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SellerReverseDisputeResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SendInvoiceResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetMessagePreferencesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetNotificationPreferencesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetPictureManagerDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetPromotionalSaleListingsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetPromotionalSaleResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetSellingManagerFeedbackOptionsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetSellingManagerItemAutomationRuleResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetSellingManagerTemplateAutomationRuleResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetShippingDiscountProfilesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetStoreCategoriesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetStoreCustomPageResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetStorePreferencesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetStoreResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetTaxTableResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetUserNotesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetUserPreferencesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\UploadSiteHostedPicturesResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ValidateChallengeInputResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\ValidateTestUserRegistrationResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\VerifyAddFixedPriceItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\VerifyAddItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\VerifyAddSecondChanceItemResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Ebay.WebServices\VeROReportItemsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Infopia.WebServices\HeadersResponseWrapper1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Infopia.WebServices\InfopiaService.wsdl" />
+    <None Include="Web References\Stores.Platforms.Infopia.WebServices\InfopiaTypesV2.xsd" />
+    <None Include="Web References\Stores.Platforms.Infopia.WebServices\LinesResponseWrapper1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Infopia.WebServices\MasterHeaderTypesResponseWrapper1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.Infopia.WebServices\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.Infopia.WebServices\StatusesResponseWrapper1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.MarketplaceAdvisor.WebServices.Oms\omservice.wsdl" />
+    <None Include="Web References\Stores.Platforms.MarketplaceAdvisor.WebServices.Oms\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Stores.Platforms.OrderDynamics.WebServices\ShipmentQueueService.wsdl" />
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\CoreComponentTypes.xsd" />
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\eBLBaseComponents.xsd" />
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\GetPalDetailsResponseType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\PayPalSvc.wsdl" />
+    <None Include="Web References\Stores.Platforms.PayPal.WebServices\Reference.map">
+      <Generator>MsDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v9.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\</RelPath>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v9.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_OpenShip_OpenShipService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v4.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Close\</RelPath>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v4.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v18.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Rate\</RelPath>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v18.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Rate_RateService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v7.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Registration\</RelPath>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v7.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Registration1_RegistrationService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v10.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Track\</RelPath>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v10.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\</RelPath>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_PackageMovement_PackageMovementInformationService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\UPS\OpenAccount\Wsdl\OpenAccount.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\</RelPath>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\UPS\OpenAccount\Wsdl\OpenAccount.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_WebServices_OpenAccount_OpenAccountService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v17.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Ship\</RelPath>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v17.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\</RelPath>
+      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_OnLineTools_WebServices_RegisterMgrAcctService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\</RelPath>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_GlobalShipAddress_GlobalShipAddressService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv36.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.Postal.Usps.WebServices.v36\</RelPath>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv36.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Usps_WebServices_v36_SwsimV36</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://api.3dcart.com/cart.asmx">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.ThreeDCart.WebServices.Cart\</RelPath>
+      <UpdateFromURL>http://api.3dcart.com/cart.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_ThreeDCart_WebServices_Cart_cartAPI</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://api.3dcart.com/cart_advanced.asmx">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.ThreeDCart.WebServices.CartAdvanced\</RelPath>
+      <UpdateFromURL>http://api.3dcart.com/cart_advanced.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_ThreeDCart_WebServices_CartAdvanced_cartAPIAdvanced</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://magento151.interapptive.local/api/soap/%3fwsdl=1">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.Magento.WebServices\</RelPath>
+      <UpdateFromURL>http://magento151.interapptive.local/api/soap/%3fwsdl=1</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_Magento_WebServices_MagentoService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://www.express1dev.com/Services/CustomerService.svc%3fwsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.Postal.Express1.WebServices.CustomerService\</RelPath>
+      <UpdateFromURL>http://www.express1dev.com/Services/CustomerService.svc%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_CustomerService_CustomerService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://www.express1dev.com/Services/EwsLabelService.svc%3fwsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\</RelPath>
+      <UpdateFromURL>http://www.express1dev.com/Services/EwsLabelService.svc%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_RefundService_EwsLabelService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://www.i-parcel.com/soap/xmlsoap.asmx%3fwsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.iParcel.WebServices\</RelPath>
+      <UpdateFromURL>http://www.i-parcel.com/soap/xmlsoap.asmx%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_iParcel_WebServices_XMLSOAP</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://api.channeladvisor.com/ChannelAdvisorAPI/v6/AdminService.asmx%3fWSDL">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.ChannelAdvisor.WebServices.Admin\</RelPath>
+      <UpdateFromURL>https://api.channeladvisor.com/ChannelAdvisorAPI/v6/AdminService.asmx%3fWSDL</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_ChannelAdvisor_WebServices_Admin_AdminService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://service.express1.com/Services/SDCV36Service.svc%3fwsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\</RelPath>
+      <UpdateFromURL>https://service.express1.com/Services/SDCV36Service.svc%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_Stamps_SDCV24Service</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://testbeta1.americommerce.com/store/ws/americommercedb.asmx">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.AmeriCommerce.WebServices\</RelPath>
+      <UpdateFromURL>https://testbeta1.americommerce.com/store/ws/americommercedb.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_AmeriCommerce_WebServices_AmeriCommerceDatabaseIO</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\</RelPath>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_AddressValidation_AddressValidationService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\work\ShipWorks3x\Code\ShipWorks.ThirdPartyApi\Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv49.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.Postal.Usps.WebServices\</RelPath>
+      <UpdateFromURL>C:\work\ShipWorks3x\Code\ShipWorks.ThirdPartyApi\Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv49.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Stamps_WebServices_swsim_v1</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://developer.ebay.com/webservices/latest/ebaySvc.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.Ebay.WebServices\</RelPath>
+      <UpdateFromURL>http://developer.ebay.com/webservices/latest/ebaySvc.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_ShipWorks_Stores_Platforms_Ebay_WebServices_eBayAPIInterfaceService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://sellercentral.amazon.com/help/merchant_documents/WSDL/merchant-interface-dime-dotnet.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.Amazon.WebServices.SellerCentral\</RelPath>
+      <UpdateFromURL>http://sellercentral.amazon.com/help/merchant_documents/WSDL/merchant-interface-dime-dotnet.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_Amazon_WebServices_SellerCentral_merchant_interface_dime</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.Amazon.WebServices.Associates\</RelPath>
+      <UpdateFromURL>http://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_Amazon_WebServices_Associates_AWSECommerceService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://api.channeladvisor.com/ChannelAdvisorAPI/v6/InventoryService.asmx%3fWSDL">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.ChannelAdvisor.WebServices.Inventory\</RelPath>
+      <UpdateFromURL>https://api.channeladvisor.com/ChannelAdvisorAPI/v6/InventoryService.asmx%3fWSDL</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_ChannelAdvisor_WebServices_Inventory_InventoryService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://api.channeladvisor.com/ChannelAdvisorAPI/v6/OrderService.asmx%3fWSDL">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.ChannelAdvisor.WebServices.Order\</RelPath>
+      <UpdateFromURL>https://api.channeladvisor.com/ChannelAdvisorAPI/v6/OrderService.asmx%3fWSDL</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_ChannelAdvisor_WebServices_Order_OrderService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://api.channeladvisor.com/ChannelAdvisorAPI/v6/ShippingService.asmx%3fWSDL">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\</RelPath>
+      <UpdateFromURL>https://api.channeladvisor.com/ChannelAdvisorAPI/v6/ShippingService.asmx%3fWSDL</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_ChannelAdvisor_WebServices_Shipping_ShippingService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://ecomapi.networksolutions.com/soapservice.asmx%3fwsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.NetworkSolutions.WebServices\</RelPath>
+      <UpdateFromURL>https://ecomapi.networksolutions.com/soapservice.asmx%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_NetworkSolutions_WebServices_NetSolEcomService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://manager.orderdynamics.com/webservices/ShipmentQueueService.asmx">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.OrderDynamics.WebServices\</RelPath>
+      <UpdateFromURL>https://manager.orderdynamics.com/webservices/ShipmentQueueService.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_OrderDynamics_WebServices_ShipmentQueueService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://notifications.amazon.com/doc/2007-01-16/EventNotificationService.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.Amazon.WebServices.EventNotification\</RelPath>
+      <UpdateFromURL>https://notifications.amazon.com/doc/2007-01-16/EventNotificationService.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_Amazon_WebServices_EventNotification_EventNotificationService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://sandbox.marketworks.com/nextgen/mwapi/current/omservice.asmx%3fWSDL">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.MarketplaceAdvisor.WebServices.Oms\</RelPath>
+      <UpdateFromURL>https://sandbox.marketworks.com/nextgen/mwapi/current/omservice.asmx%3fWSDL</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_Marketworks_WebServices_Oms_OMService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://test.infopia.com/InfopiaWebServices/wsdl/InfopiaServiceV2.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.Infopia.WebServices\</RelPath>
+      <UpdateFromURL>https://test.infopia.com/InfopiaWebServices/wsdl/InfopiaServiceV2.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_Infopia_WebServices2_InfopiaWebService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx%3fWSDL">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\</RelPath>
+      <UpdateFromURL>https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx%3fWSDL</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Endicia_WebServices_LabelService_EwsLabelService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://www.endicia.com/ELS/ELSServices.cfc%3fwsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\</RelPath>
+      <UpdateFromURL>https://www.endicia.com/ELS/ELSServices.cfc%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Endicia_WebServices_AccountService_ELSServicesService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://www.paypal.com/wsdl/PayPalSvc.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Stores.Platforms.PayPal.WebServices\</RelPath>
+      <UpdateFromURL>https://www.paypal.com/wsdl/PayPalSvc.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Stores_Platforms_PayPal_WebServices_PayPalAPIInterfaceService</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WebServiceLogger.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>WebServiceLogger.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
+      <Project>{1e53a000-fdeb-4e9e-8be0-19cdc14a0282}</Project>
+      <Name>Interapptive.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>  -->
+</Project>

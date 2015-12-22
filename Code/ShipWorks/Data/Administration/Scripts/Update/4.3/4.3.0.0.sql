@@ -2,38 +2,36 @@
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
-PRINT N'Dropping foreign keys from [dbo].[MagentoStore]'
+PRINT N'Dropping foreign keys from [dbo].[ChannelAdvisorStore]'
 GO
-IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_MagentoStore_GenericModuleStore]', 'F') AND parent_object_id = OBJECT_ID(N'[dbo].[MagentoStore]', 'U'))
-ALTER TABLE [dbo].[MagentoStore] DROP CONSTRAINT [FK_MagentoStore_GenericModuleStore]
+ALTER TABLE [dbo].[ChannelAdvisorStore] DROP CONSTRAINT [FK_ChannelAdvisorStore_Store]
 GO
-PRINT N'Dropping constraints from [dbo].[MagentoStore]'
+PRINT N'Dropping constraints from [dbo].[ChannelAdvisorStore]'
 GO
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PK_MagentoStore]', 'PK') AND parent_object_id = OBJECT_ID(N'[dbo].[MagentoStore]', 'U'))
-ALTER TABLE [dbo].[MagentoStore] DROP CONSTRAINT [PK_MagentoStore]
+ALTER TABLE [dbo].[ChannelAdvisorStore] DROP CONSTRAINT [PK_ChannelAdvisorStore]
 GO
-PRINT N'Rebuilding [dbo].[MagentoStore]'
+PRINT N'Rebuilding [dbo].[ChannelAdvisorStore]'
 GO
-CREATE TABLE [dbo].[tmp_rg_xx_MagentoStore]
+CREATE TABLE [dbo].[tmp_rg_xx_ChannelAdvisorStore]
 (
 [StoreID] [bigint] NOT NULL,
-[MagentoTrackingEmails] [bit] NOT NULL,
-[MagentoVersion] [int] NOT NULL
+[AccountKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ProfileID] [int] NOT NULL,
+[AttributesToDownload] [xml] NOT NULL,
+[ConsolidatorAsUsps] [bit] NOT NULL
 )
 GO
-INSERT INTO [dbo].[tmp_rg_xx_MagentoStore]([StoreID], [MagentoTrackingEmails], [MagentoVersion]) SELECT [StoreID], [MagentoTrackingEmails], [MagentoConnect] FROM [dbo].[MagentoStore]
+INSERT INTO [dbo].[tmp_rg_xx_ChannelAdvisorStore]([StoreID], [AccountKey], [ProfileID], [AttributesToDownload], [ConsolidatorAsUsps]) SELECT [StoreID], [AccountKey], [ProfileID], [AttributesToDownload], 0 FROM [dbo].[ChannelAdvisorStore]
 GO
-DROP TABLE [dbo].[MagentoStore]
+DROP TABLE [dbo].[ChannelAdvisorStore]
 GO
-EXEC sp_rename N'[dbo].[tmp_rg_xx_MagentoStore]', N'MagentoStore'
+EXEC sp_rename N'[dbo].[tmp_rg_xx_ChannelAdvisorStore]', N'ChannelAdvisorStore'
 GO
-PRINT N'Creating primary key [PK_MagentoStore] on [dbo].[MagentoStore]'
+PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
 GO
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'PK_MagentoStore' AND object_id = OBJECT_ID(N'[dbo].[MagentoStore]'))
-ALTER TABLE [dbo].[MagentoStore] ADD CONSTRAINT [PK_MagentoStore] PRIMARY KEY CLUSTERED  ([StoreID])
+ALTER TABLE [dbo].[ChannelAdvisorStore] ADD CONSTRAINT [PK_ChannelAdvisorStore] PRIMARY KEY CLUSTERED  ([StoreID])
 GO
-PRINT N'Adding foreign keys to [dbo].[MagentoStore]'
+PRINT N'Adding foreign keys to [dbo].[ChannelAdvisorStore]'
 GO
-IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_MagentoStore_GenericModuleStore]', 'F') AND parent_object_id = OBJECT_ID(N'[dbo].[MagentoStore]', 'U'))
-ALTER TABLE [dbo].[MagentoStore] ADD CONSTRAINT [FK_MagentoStore_GenericModuleStore] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[GenericModuleStore] ([StoreID])
+ALTER TABLE [dbo].[ChannelAdvisorStore] ADD CONSTRAINT [FK_ChannelAdvisorStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO

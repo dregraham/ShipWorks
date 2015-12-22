@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Settings
         {
             if (disposing)
             {
-                Messenger.Current.Remove(carrierConfiguredToken);
+                carrierConfiguredToken?.Dispose();
 
                 if (components != null)
                 {

@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Grid.DetailView;
@@ -121,6 +122,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Load the shipments into the packaging control
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void LoadShipments(List<ShipmentEntity> shipments, bool enableEditing)
         {
             this.loadedShipments = shipments;
@@ -369,7 +371,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
 
-            IEnumerable<InsuranceChoice> insuranceToLoad = packagesGrid.SelectedElements.OfType<GridRow>()
+            IEnumerable<IInsuranceChoice> insuranceToLoad = packagesGrid.SelectedElements.OfType<GridRow>()
                 .Select(x => x.Tag).OfType<List<UpsPackageEntity>>()
                 .SelectMany(x => x).Select(x => shipmentType.GetParcelDetail(x.UpsShipment.Shipment, x.UpsShipment.Packages.IndexOf(x)).Insurance);
 

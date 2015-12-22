@@ -17,6 +17,8 @@ using ShipWorks.Templates.Controls;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Printing;
 using log4net;
+using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -28,6 +30,7 @@ namespace ShipWorks.Shipping.Settings
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentTypeSettingsControl));
 
         ShipmentType shipmentType;
+        private Autofac.ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// The tabs the control supports
@@ -43,10 +46,11 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentTypeSettingsControl(ShipmentType shipmentType)
+        public ShipmentTypeSettingsControl(ShipmentType shipmentType, ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
+            this.lifetimeScope = lifetimeScope;
             this.shipmentType = shipmentType;
 
             // Hide 
@@ -111,7 +115,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void LoadGeneralSettings()
         {
-            SettingsControlBase settingsControl = shipmentType.CreateSettingsControl();
+            SettingsControlBase settingsControl = shipmentType.CreateSettingsControl(lifetimeScope);
             if (settingsControl != null)
             {
                 settingsControl.BackColor = Color.Transparent;

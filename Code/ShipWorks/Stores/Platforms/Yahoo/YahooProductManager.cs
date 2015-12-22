@@ -7,6 +7,7 @@ using ShipWorks.Common.Threading;
 using System.Net;
 using System.IO;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Adapter.Custom;
@@ -68,6 +69,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Perform the inventory import
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void ImportProductCatalog(ProgressItem progressItem, long yahooStoreID, string catalogUrl)
         {
             catalogUrl = catalogUrl.Trim();

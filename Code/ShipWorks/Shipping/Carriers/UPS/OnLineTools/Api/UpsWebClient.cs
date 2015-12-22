@@ -11,6 +11,7 @@ using Interapptive.Shared.Net;
 using System.Net;
 using System.Xml.XPath;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Api;
 using log4net;
 using ShipWorks.Data;
@@ -242,6 +243,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// UPS does not have a record for this shipment, and therefore cannot void the shipment.
         /// or
         /// </exception>
+        [NDependIgnoreLongMethod]
         public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter, LogActionType logActionType, ICertificateInspector certificateInspector)
         {
             // Close out the XML
