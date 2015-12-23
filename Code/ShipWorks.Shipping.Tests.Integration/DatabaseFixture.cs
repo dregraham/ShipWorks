@@ -3,49 +3,67 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Data;
+using ShipWorks.Data.Administration;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Tests.Integration;
 using SQL.LocalDB.Test;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Integration
 {
+    public class ShipWorksLocalDb : TempLocalDb
+    {
+        public ShipWorksLocalDb(string databaseName) : base(databaseName)
+        {
+
+        }
+
+        public override string ConnectionString =>
+            base.ConnectionString +
+                    ";Connect Timeout=10;Application Name=ShipWorks;Workstation ID=0000100001;Transaction Binding=\"Explicit Unbind\"";
+    }
+
     /// <summary>
     /// Fixture that will create a database that can be used to test against
     /// </summary>
     public class DatabaseFixture : IDisposable
     {
-        readonly TempLocalDb db;
+        readonly ShipWorksLocalDb db;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DatabaseFixture()
         {
-            db = new TempLocalDb("ShipWorks");
+            db = new ShipWorksLocalDb("ShipWorks");
+
 
             using (SqlConnection conn = db.Open())
             {
-                using (SqlCommand command = conn.CreateCommand())
+                using (new ExistingConnectionScope(conn))
                 {
-                    command.CommandText = @"ALTER DATABASE ShipWorks
+                    SqlUtility.EnableClr(conn);
+
+                    using (SqlCommand command = conn.CreateCommand())
+                    {
+                        command.CommandText = @"ALTER DATABASE ShipWorks
   SET CHANGE_TRACKING = ON
   (CHANGE_RETENTION = 1 DAYS, AUTO_CLEANUP = ON)";
-                    command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
+                    }
 
-                    using (Stream stream = Assembly.Load("ShipWorks.Core")
-                        .GetManifestResourceStream("ShipWorks.Data.Administration.Scripts.Installation.CreateSchema.sql"))
+                    ShipWorksDatabaseUtility.CreateSchemaAndData(() => db.Open(), inTransaction => new SqlAdapter(db.Open()));
+
+                    using (SqlAdapter sqlAdapter = new SqlAdapter(conn))
                     {
-                        using (StreamReader reader = new StreamReader(stream))
-                        {
-                            foreach (string line in CreateSchemaLines(reader))
-                            {
-                                command.CommandText = line;
-                                command.ExecuteNonQuery();
-                            }
-                        }
+                        EntityBuilder.Create<UserEntity>().WithDefaults().Save(sqlAdapter);
+                        EntityBuilder.Create<ComputerEntity>().WithDefaults().Save(sqlAdapter);
                     }
                 }
+
             }
         }
 

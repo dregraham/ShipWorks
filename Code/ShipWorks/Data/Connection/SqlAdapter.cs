@@ -1,24 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Data;
-using ShipWorks.Data.Adapter;
-using log4net;
-using System.Data.SqlClient;
-using ShipWorks.Data.Model.FactoryClasses;
-using System.Data.Common;
-using System.Windows.Forms;
-using SD.LLBLGen.Pro.DQE.SqlServer;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model;
 using System.ComponentModel;
-using ShipWorks.Data.Adapter.Custom;
-using System.Text.RegularExpressions;
-using System.Linq;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Diagnostics;
-using ShipWorks.SqlServer.General;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Interapptive.Shared.Data;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Adapter;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.SqlServer.General;
 
 namespace ShipWorks.Data.Connection
 {
@@ -48,7 +43,7 @@ namespace ShipWorks.Data.Connection
         // The active TransactionScope, of the adapter was instructed to be required to be in a transaction
         System.Transactions.TransactionScope transactionScope;
 
-        // LLBLgen starts a new "regular" transaction when recursive saving\deleting\updating.  The problem is then if there is an error, it does a direct call to "Rollback", 
+        // LLBLgen starts a new "regular" transaction when recursive saving\deleting\updating.  The problem is then if there is an error, it does a direct call to "Rollback",
         // even though it should really wait and see what the wrapping transaction scope vote ends up doing.  This way LLBLgen sees that there is already
         // a regular transaction and doesn't do that.  Doing "StartTransaction" when InSystemTransaction is true is basically just setting the internal
         // isTransactionInProgress flag to true.
@@ -93,7 +88,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public SqlAdapter() : this(false)
         {
-            
+
         }
 
         /// <summary>
@@ -118,7 +113,7 @@ namespace ShipWorks.Data.Connection
             if (transactionToUse != null)
             {
                 fieldPhysicalTransaction.SetValue(this, transactionToUse);
-                fieldIsTransactionInProgress.SetValue(this, true);   
+                fieldIsTransactionInProgress.SetValue(this, true);
             }
 
             InitializeCommon();
@@ -173,7 +168,7 @@ namespace ShipWorks.Data.Connection
                 }
 
                 return new System.Transactions.TransactionScope(
-                    System.Transactions.TransactionScopeOption.Required, 
+                    System.Transactions.TransactionScopeOption.Required,
                     new System.Transactions.TransactionOptions { IsolationLevel = isolation, Timeout = SqlCommandProvider.DefaultTimeout });
             }
 
@@ -231,7 +226,7 @@ namespace ShipWorks.Data.Connection
 
                 if (overrideConnection.State != ConnectionState.Open)
                 {
-                    throw new InvalidOperationException("The OverrideConnection was not kept open through disposal.");   
+                    throw new InvalidOperationException("The OverrideConnection was not kept open through disposal.");
                 }
             }
 
@@ -278,7 +273,7 @@ namespace ShipWorks.Data.Connection
             {
                 con = (SqlConnection) base.CreateNewPhysicalConnection(connectionString);
             }
-            
+
             if (logInfoMessages)
             {
                 con.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
@@ -370,7 +365,7 @@ namespace ShipWorks.Data.Connection
         }
 
         #endregion
-        
+
         #region InfoMessages
 
         /// <summary>
@@ -388,7 +383,7 @@ namespace ShipWorks.Data.Connection
                 {
                     return;
                 }
-              
+
                 SqlConnection con = (SqlConnection) GetActiveConnection();
 
                 if (value)
@@ -502,7 +497,7 @@ namespace ShipWorks.Data.Connection
 
             try
             {
-                 return base.DeleteEntity(entityToDelete, deleteRestriction);
+                return base.DeleteEntity(entityToDelete, deleteRestriction);
             }
             finally
             {
@@ -518,16 +513,16 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override int DeleteEntityCollection(IEntityCollection2 collectionToDelete)
         {
-             StartFakePyhsicalTransationIfNeeded();
+            StartFakePyhsicalTransationIfNeeded();
 
-             try
-             {
-                 return base.DeleteEntityCollection(collectionToDelete);
-             }
-             finally
-             {
-                 CloseFakePhysicalTransactionIfNeeded();
-             }
+            try
+            {
+                return base.DeleteEntityCollection(collectionToDelete);
+            }
+            finally
+            {
+                CloseFakePhysicalTransactionIfNeeded();
+            }
         }
 
         /// <summary>
@@ -557,16 +552,16 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override int SaveEntityCollection(IEntityCollection2 collectionToSave, bool refetchSavedEntitiesAfterSave, bool recurse)
         {
-             StartFakePyhsicalTransationIfNeeded();
+            StartFakePyhsicalTransationIfNeeded();
 
-             try
-             {
-                 return base.SaveEntityCollection(collectionToSave, refetchSavedEntitiesAfterSave, recurse);
-             }
-             finally
-             {
-                 CloseFakePhysicalTransactionIfNeeded();
-             }
+            try
+            {
+                return base.SaveEntityCollection(collectionToSave, refetchSavedEntitiesAfterSave, recurse);
+            }
+            finally
+            {
+                CloseFakePhysicalTransactionIfNeeded();
+            }
         }
 
         /// <summary>
@@ -609,7 +604,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override bool ExecuteMultiRowDataTableRetrievalQuery(IRetrievalQuery queryToExecute, DbDataAdapter dataAdapterToUse, DataTable tableToFill, IFieldPersistenceInfo[] fieldsPersistenceInfo)
         {
-            // The base implementation does not close the connection in a finally, so it's possible the connection could be left open, and the next call would 
+            // The base implementation does not close the connection in a finally, so it's possible the connection could be left open, and the next call would
             // either potentially promote to DTC, or something else bad.
             try
             {
@@ -706,6 +701,11 @@ namespace ShipWorks.Data.Connection
                 return new SqlAdapter();
             }
         }
+
+        /// <summary>
+        /// Create a new SqlAdapter
+        /// </summary>
+        public static SqlAdapter Create(bool inTransaction) => new SqlAdapter(inTransaction);
 
         #endregion
 
@@ -806,19 +806,19 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         private IEntityFieldCore CloneWithReadOnlyOff(IEntityFieldCore field)
         {
- 	        IEntityFieldCore clone = new EntityField2(
-                new FieldInfo(
-                    field.Name,
-                    field.ContainingObjectName,
-                    field.DataType,
-                    field.IsPrimaryKey,
-                    field.IsForeignKey,
-                    false,
-                    field.IsNullable,
-                    field.FieldIndex,
-                    field.MaxLength,
-                    field.Scale,
-                    field.Precision));
+            IEntityFieldCore clone = new EntityField2(
+               new FieldInfo(
+                   field.Name,
+                   field.ContainingObjectName,
+                   field.DataType,
+                   field.IsPrimaryKey,
+                   field.IsForeignKey,
+                   false,
+                   field.IsNullable,
+                   field.FieldIndex,
+                   field.MaxLength,
+                   field.Scale,
+                   field.Precision));
 
             clone.AggregateFunctionToApply = field.AggregateFunctionToApply;
             clone.Alias = field.Alias;

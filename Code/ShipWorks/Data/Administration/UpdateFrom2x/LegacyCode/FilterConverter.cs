@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Common.Threading;
-using ShipWorks.Users.Audit;
-using System.Transactions;
-using System.Data.SqlClient;
-using ShipWorks.Data.Connection;
-using Interapptive.Shared.Data;
-using ShipWorks.Filters;
-using ShipWorks.Data.Model.EntityClasses;
-using log4net;
-using ShipWorks.Stores;
+﻿using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Transactions;
 using System.Xml.Linq;
+using Interapptive.Shared.Data;
+using log4net;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
 using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Stores;
 using ShipWorks.Templates;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
 {
@@ -123,7 +121,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 {
                     // Create the v3 folder and put it where it belongs in the tree
                     FilterEntity v3Folder = FilterHelper.CreateFilterFolderEntity(folder.Name, (FilterTarget) parentNode.Filter.FilterTarget);
-                    FilterNodeEntity folderNode = FilterLayoutContext.Current.AddFilter(v3Folder, parentNode, nodes.IndexOf(node))[0];
+                    FilterNodeEntity folderNode = FilterLayoutContext.Current.AddFilter(v3Folder, parentNode, nodes.IndexOf(node), SqlAdapter.Create)[0];
 
                     // Now add all it's children
                     CreateFilters(folder.Children, folderNode, progress);
@@ -134,7 +132,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 {
                     // Create the v3 filter and add it where it belongs to the tree
                     FilterEntity v3Filter = FilterHelper.CreateFilterEntity(filter.Name, filter.Definition);
-                    FilterLayoutContext.Current.AddFilter(v3Filter, parentNode, nodes.IndexOf(node));
+                    FilterLayoutContext.Current.AddFilter(v3Filter, parentNode, nodes.IndexOf(node), SqlAdapter.Create);
                 }
             }
         }

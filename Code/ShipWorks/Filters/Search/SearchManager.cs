@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters;
-using ShipWorks.Data.Adapter.Custom;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Filters.Search
 {
@@ -78,9 +74,9 @@ namespace ShipWorks.Filters.Search
         /// Create the single-instance search filter in the database.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void CreateSearchPlaceholder(FilterTarget target)
+        public static void CreateSearchPlaceholder(FilterTarget target, Func<bool, SqlAdapter> createSqlAdapter)
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter adapter = createSqlAdapter(false))
             {
                 // We will be specifying the pk values
                 adapter.IdentityInsert = true;

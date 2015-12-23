@@ -1,30 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using System.Diagnostics;
-using System.Threading;
-using ShipWorks.Data.Adapter;
-using log4net;
-using System.Data.SqlClient;
 using System.Data;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
-using ShipWorks.SqlServer.General;
-using ShipWorks.Users;
-using ShipWorks.Filters.Content.SqlGeneration;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.ApplicationCore.Interaction;
-using Interapptive.Shared.Utility;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Utility;
-using Interapptive.Shared.Data;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Data;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
+using ShipWorks.Filters.Content.SqlGeneration;
+using ShipWorks.SqlServer.General;
 
 namespace ShipWorks.Filters
 {
@@ -37,7 +31,7 @@ namespace ShipWorks.Filters
         static readonly ILog log = LogManager.GetLogger(typeof(FilterContentManager));
 
         // A cache of all the filter counts for each node
-        static Dictionary<long, FilterCount> countCache = new Dictionary<long,FilterCount>();
+        static Dictionary<long, FilterCount> countCache = new Dictionary<long, FilterCount>();
 
         // The max timestamp value we currently have loaded
         static long maxTimestamp = 0;
@@ -188,20 +182,20 @@ namespace ShipWorks.Filters
                         {
                             filterCountList.Add(new FilterCount
                                 (
-                                    (long)reader["FilterNodeID"],
-                                    (long)reader["FilterNodeContentID"],
-                                    (FilterNodePurpose)Convert.ToInt32(reader["Purpose"]),
-                                    (FilterCountStatus)Convert.ToInt32(reader["Status"]),
-                                    (int)reader["Count"],
-                                    (long)reader["CountVersion"],
-		                            (long) reader["RowVersion"],
-		                            (int) reader["cost"]
+                                    (long) reader["FilterNodeID"],
+                                    (long) reader["FilterNodeContentID"],
+                                    (FilterNodePurpose) Convert.ToInt32(reader["Purpose"]),
+                                    (FilterCountStatus) Convert.ToInt32(reader["Status"]),
+                                    (int) reader["Count"],
+                                    (long) reader["CountVersion"],
+                                    (long) reader["RowVersion"],
+                                    (int) reader["cost"]
                                 )
                             );
                         }
 
                         return filterCountList;
-                    }   
+                    }
                 }
             }
         }
@@ -334,7 +328,7 @@ namespace ShipWorks.Filters
 
             // Queue the work to a background thread
             ThreadPool.QueueUserWorkItem(
-                ExceptionMonitor.WrapWorkItem(InitiateCalculationThread), 
+                ExceptionMonitor.WrapWorkItem(InitiateCalculationThread),
                 new object[] { initial, operationToken });
 
             // Wait for it to finish.  It's ok if it doesnt.
@@ -375,13 +369,13 @@ namespace ShipWorks.Filters
 
                     if (initial)
                     {
-                        sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() => 
+                        sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
                             ActionProcedures.CalculateInitialFilterCounts(adapter)
                             );
                     }
                     else
                     {
-                        sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() => 
+                        sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
                             ActionProcedures.CalculateUpdateFilterCounts(adapter)
                             );
                     }
@@ -401,7 +395,7 @@ namespace ShipWorks.Filters
         public static void DeleteAbandonedFilterCounts()
         {
             log.InfoFormat("Deleting abandoned filter counts....");
-            
+
             // Get a connection that will not timeout
             using (SqlConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
             {
@@ -437,7 +431,7 @@ namespace ShipWorks.Filters
         /// </summary>
         public static void CheckRelativeDateFilters()
         {
-            DateTime serverDate = SqlSession.Current.GetLocalDate().Date;
+            DateTime serverDate = SqlDateTimeProvider.Current.GetLocalDate().Date;
 
             // See if we have to update date filters
             if (dateFiltersLastUpdated != serverDate)

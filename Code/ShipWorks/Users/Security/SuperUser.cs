@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Data.SqlClient;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
 using Interapptive.Shared.Data;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Users.Security
 {
@@ -40,7 +37,7 @@ namespace ShipWorks.Users.Security
         /// <summary>
         /// Create the Super User account.  Used when a database is first created.
         /// </summary>
-        public static void Create(SqlAdapter adapter)
+        public static void Create(Func<SqlConnection> openSqlConnection, SqlAdapter adapter)
         {
             // We don't need to go through UserUtility since we don't need all the extras, like user settings, My Filters, etc.
             UserEntity user = new UserEntity();
@@ -57,7 +54,7 @@ namespace ShipWorks.Users.Security
             adapter.IdentityInsert = false;
 
             // Now we have to make sure and reset our seeding back to normal, since the identity insert will have goofed it up
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (SqlConnection con = openSqlConnection())
             {
                 // If there are existing users, we use the current MAX - b\c the next seed given is 1000+ what we reseed to.
                 // Which is also why if there are no users, use just use the raw seed (like 2, not 1002, b\c the first seed will then be given as 1002)
@@ -102,7 +99,7 @@ namespace ShipWorks.Users.Security
         /// </summary>
         public static string DisplayName
         {
-            get { return UserEntity.SuperUserDisplayName;  }
+            get { return UserEntity.SuperUserDisplayName; }
         }
     }
 }

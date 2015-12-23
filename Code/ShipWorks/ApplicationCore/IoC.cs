@@ -79,7 +79,7 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
-                .SingleInstance();
+                .ExternallyOwned();
 
             builder.RegisterType<FilterHelperWrapper>()
                 .AsImplementedInterfaces()
@@ -114,11 +114,11 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<SchedulerProvider>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
+            builder.RegisterInstance(SqlDateTimeProvider.Current)
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
 
-            //builder.Register(context => Messenger.Current)
-            //    .AsImplementedInterfaces()
-            //    .SingleInstance();
+            builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
 
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();

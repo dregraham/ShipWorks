@@ -747,8 +747,9 @@
     <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
-    <Compile Include="Data\Connection\ISqlSession.cs" />
+    <Compile Include="Data\Connection\ISqlDateTimeProvider.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
+    <Compile Include="Data\Connection\SqlDateTimeProvider.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />

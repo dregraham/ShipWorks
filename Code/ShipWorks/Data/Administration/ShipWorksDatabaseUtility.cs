@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Connection;
-using System.Data.SqlClient;
-using Interapptive.Shared.Data;
-using System.IO;
-using ShipWorks.Users.Security;
 using System.Data;
-using Interapptive.Shared.Win32;
-using ShipWorks.ApplicationCore;
-using Microsoft.Win32;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
-using ShipWorks.Data.Administration.SqlServerSetup;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Win32;
 using log4net;
+using Microsoft.Win32;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Administration.SqlServerSetup;
+using ShipWorks.Data.Connection;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Data.Administration
 {
@@ -96,11 +95,19 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Creates an initial ShipWorks database schema 
+        /// Creates an initial ShipWorks database schema
         /// </summary>
         public static void CreateSchemaAndData()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            CreateSchemaAndData(() => SqlSession.Current.OpenConnection(), inTransaction => new SqlAdapter(inTransaction));
+        }
+
+        /// <summary>
+        /// Creates an initial ShipWorks database schema
+        /// </summary>
+        public static void CreateSchemaAndData(Func<SqlConnection> openSqlConnection, Func<bool, SqlAdapter> createSqlAdapter)
+        {
+            using (SqlConnection con = openSqlConnection())
             {
                 // Create the ShipWorks schema
                 sqlLoader["CreateSchema"].Execute(con);
@@ -119,11 +126,11 @@ namespace ShipWorks.Data.Administration
             }
 
             // Create the ShipWorks "SuperUser"
-            SuperUser.Create(SqlAdapter.Default);
+            SuperUser.Create(openSqlConnection, createSqlAdapter(false));
 
             // Create all the data that is needed for a fresh install of shipworks.
-            InitialDataLoader.CreateCoreRequiredData();
-            InitialDataLoader.CreateDefaultFreshInstallData();
+            InitialDataLoader.CreateCoreRequiredData(createSqlAdapter);
+            InitialDataLoader.CreateDefaultFreshInstallData(createSqlAdapter);
         }
 
         /// <summary>
@@ -266,7 +273,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Get all of the deails about all of the databases on the instance of the connection
+        /// Get all of the details about all of the databases on the instance of the connection
         /// </summary>
         public static List<SqlDatabaseDetail> GetDatabaseDetails(SqlConnection con)
         {
@@ -303,7 +310,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Get the first available database name that doesn't conflict with any other databases on the server reprsented by the given connection
+        /// Get the first available database name that doesn't conflict with any other databases on the server represented by the given connection
         /// </summary>
         public static string GetFirstAvailableDatabaseName(SqlConnection con)
         {

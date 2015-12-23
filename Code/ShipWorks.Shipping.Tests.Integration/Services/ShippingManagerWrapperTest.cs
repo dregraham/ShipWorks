@@ -21,18 +21,16 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             using (SqlAdapter sqlAdapter = dbContext.CreateSqlAdapter())
             {
-                GenericModuleStoreEntity store = dbContext.CreateEntityWithDefaults<GenericModuleStoreEntity>();
-                sqlAdapter.SaveAndRefetch(store);
-
-                CustomerEntity customer = dbContext.CreateEntityWithDefaults<CustomerEntity>();
-                sqlAdapter.SaveAndRefetch(customer);
-
-                OrderEntity order = dbContext.CreateEntityWithDefaults<OrderEntity>();
-                order.OrderNumber = 123999;
-                order.Store = store;
-                order.Customer = customer;
-
-                sqlAdapter.SaveAndRefetch(order);
+                var store = EntityBuilder.Create<GenericModuleStoreEntity>().WithDefaults().Save(sqlAdapter);
+                var customer = EntityBuilder.Create<CustomerEntity>().WithDefaults().Save(sqlAdapter);
+                var order = EntityBuilder.Create<OrderEntity>().WithDefaults()
+                    .Configure(x =>
+                    {
+                        x.OrderNumber = 123999;
+                        x.Store = store;
+                        x.Customer = customer;
+                    })
+                    .Save(sqlAdapter);
 
                 createdOrderId = order.OrderID;
             }
