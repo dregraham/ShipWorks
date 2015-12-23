@@ -893,7 +893,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // We only want to check i-parcel for international shipments originating in the US
             if (originCountryCode != shipment.AdjustedShipCountryCode() && originCountryCode == "US")
             {
-                return new iParcelBestRateBroker();
+                return new iParcelBestRateBroker(this, new iParcelAccountRepository());
             }
 
             // This is either a domestic shipment or the shipment does not originate from the US,

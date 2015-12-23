@@ -10,16 +10,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
     public class iParcelBestRateBroker : PackageBasedBestRateBroker<IParcelAccountEntity, IParcelPackageEntity>
     {
         /// <summary>
-        /// Creates a broker with the default shipment type and account repository
-        /// </summary>
-        /// <remarks>This is designed to be used within ShipWorks</remarks>
-        public iParcelBestRateBroker()
-            : this(ShipmentTypeManager.GetType(ShipmentTypeCode.iParcel), new iParcelAccountRepository())
-        {
-
-        }
-
-        /// <summary>
         /// Creates a broker with the specified shipment type and account repository
         /// </summary>
         /// <param name="shipmentType">Instance of a IParcel shipment type that will be used to get rates</param>

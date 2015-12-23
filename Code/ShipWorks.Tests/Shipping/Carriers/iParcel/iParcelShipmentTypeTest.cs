@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Settings;
 using System.Collections.Generic;
+using Autofac;
 using Autofac.Extras.Moq;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
@@ -28,6 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         private Mock<IiParcelRepository> repository;
 
         private ShipmentEntity shipment;
+        private AutoMock mock;
 
         public iParcelShipmentTypeTest()
         {
@@ -89,6 +91,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
 
             RateCache.Instance.Clear();
+
+            mock = AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) {DefaultValue = DefaultValue.Mock});
 
             testObject = new iParcelShipmentType(repository.Object, serviceGateway.Object);
         }
@@ -214,6 +218,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "RU" };
 
+            iParcelShipmentType testObject = mock.Create<iParcelShipmentType>();
+            
             IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
 
             Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
@@ -223,6 +229,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInUK_AndShipmentUsesAccountAddress_Test()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "UK" };
+
+            iParcelShipmentType testObject = mock.Create<iParcelShipmentType>();
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
 
