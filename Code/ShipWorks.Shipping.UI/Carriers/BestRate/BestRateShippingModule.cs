@@ -46,12 +46,24 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private IBestRateShippingBrokerFactory GenerateBestRateBrokerFactory(IComponentContext c, IEnumerable<Parameter> p)
         {
-            // return BestRateShippingBrokerFactory with default behavior
+            IEnumerable<Parameter> parameters = p as Parameter[] ?? p.ToArray();
+            if (parameters.ToArray().FirstOrDefault() == null || parameters.TypedAs<BestRateConsolidatePostalRates>() == BestRateConsolidatePostalRates.No)
+            {
+                // return BestRateShippingBrokerFactory with default behavior
+                return new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>
+                {
+                    new UpsWorldShipBrokerFilter(),
+                    new PostalCounterBrokerFilter(),
+                    new UpsBestRateRestrictionBrokerFilter()
+                });
+            }
+
+            // return BestRateShippingBrokerFactory with filters to consolidate postal rates
+            // used in the rating panel
             return new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>
             {
-                new UpsWorldShipBrokerFilter(),
                 new PostalCounterBrokerFilter(),
-                new UpsBestRateRestrictionBrokerFilter()
+                new PostalOnlyBrokerFilter()
             });
         }
     }

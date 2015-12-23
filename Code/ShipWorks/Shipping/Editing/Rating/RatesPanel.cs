@@ -315,11 +315,13 @@ namespace ShipWorks.Shipping.Editing.Rating
                     shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
                     shipmentTypeCode != ShipmentTypeCode.Express1Usps)
                 {
+                    // Func to create a BestRateShippingBroker factory that takes BestRateConsolidatePostalRates
+                    // and returns a BestRateShippingBrokerFactory with the correct BrokerFilters
                     Func<BestRateConsolidatePostalRates, IBestRateShippingBrokerFactory> brokerFactoryFactory =
                         lifetimeScope.Resolve<Func<BestRateConsolidatePostalRates, IBestRateShippingBrokerFactory>>();
 
-
-
+                    // Resolve the BestRateShipmentType and pass in IBestRateShippingBrokerFactory with 
+                    // BrokerFilters needed to BestRateConsolidatePostalRates
                     shipmentType =
                         lifetimeScope.Resolve<BestRateShipmentType>(
                             new TypedParameter(typeof (IBestRateShippingBrokerFactory),
