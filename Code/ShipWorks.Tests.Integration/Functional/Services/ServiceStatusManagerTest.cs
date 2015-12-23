@@ -18,6 +18,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
+using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Templates;
 using ShipWorks.Users;
@@ -32,6 +33,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Functional.Services
 
         public ServiceStatusManagerTest()
         {
+            ContainerInitializer.Initialize();
+
             executionMode = new Mock<ExecutionMode>();
             executionMode.Setup(m => m.IsUISupported).Returns(true);
 
