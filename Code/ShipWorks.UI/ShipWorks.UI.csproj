@@ -39,10 +39,6 @@
     <DelaySign>true</DelaySign>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37223, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
       <Private>True</Private>
@@ -60,7 +56,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -71,27 +66,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
-    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
-    <Compile Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControl.xaml.cs">
-      <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\CustomerLicenseActivationControl\TangoUserControlViewModel.cs" />
-    <Compile Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControlHost.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControlHost.Designer.cs">
-      <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UIModule.cs" />
     <Compile Include="ValueConverters\EnumImageConverter.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
@@ -130,17 +112,6 @@
     <None Include="app.config" />
     <None Include="interapptive_public.snk" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControlHost.resx">
-      <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

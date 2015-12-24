@@ -79,6 +79,7 @@
             // next
             // 
             this.next.Location = new System.Drawing.Point(380, 379);
+            this.next.ShowShield = true;
             // 
             // cancel
             // 
@@ -90,7 +91,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageUser);
+            this.mainPanel.Controls.Add(this.wizardPageWelcome);
             this.mainPanel.Size = new System.Drawing.Size(548, 307);
             // 
             // etchBottom
@@ -170,6 +171,7 @@
             this.kryptonBorderEdge.Location = new System.Drawing.Point(106, 73);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
             this.kryptonBorderEdge.Size = new System.Drawing.Size(342, 1);
+            this.kryptonBorderEdge.TabIndex = 50;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // labelWelcomeGlad
@@ -333,7 +335,7 @@
             this.wizardPageUser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageUser.Location = new System.Drawing.Point(0, 0);
             this.wizardPageUser.Name = "wizardPageUser";
-            this.wizardPageUser.Size = new System.Drawing.Size(548, 307);
+            this.wizardPageUser.Size = new System.Drawing.Size(548, 271);
             this.wizardPageUser.TabIndex = 0;
             this.wizardPageUser.Title = "ShipWorks Account";
             this.wizardPageUser.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextCreateUsername);
@@ -437,7 +439,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(548, 413);
+            this.ClientSize = new System.Drawing.Size(548, 414);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximumSize = new System.Drawing.Size(564, 452);
             this.MinimumSize = new System.Drawing.Size(564, 452);
