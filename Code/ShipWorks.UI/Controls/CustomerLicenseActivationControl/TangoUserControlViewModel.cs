@@ -1,7 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
+using ShipWorks.Users;
+using static System.String;
 
 namespace ShipWorks.UI.Controls
 {
@@ -51,7 +54,28 @@ namespace ShipWorks.UI.Controls
         /// <returns></returns>
         public string Save()
         {
-            return $"yup that works {Username} {Password}";
+            // Activate the software using the given username/password
+            try
+            {
+                ActivationResponse response = tangoWebClient.ActivateLicense(Username, Password);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+            // Create the username 
+            try
+            {
+                UserUtility.CreateUser(username, username, password, true);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            
+            // nothing went wrong so we return an empty string
+            return string.Empty;
         }
     }
 }

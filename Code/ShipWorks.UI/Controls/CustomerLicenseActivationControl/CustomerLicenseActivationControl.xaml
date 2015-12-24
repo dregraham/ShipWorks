@@ -7,22 +7,53 @@
              FontFamily="Tahoma"
              FontSize="11"
              d:DataContext="{d:DesignInstance local:CustomerLicenseActivationViewModel}"
-             mc:Ignorable="d">
+             mc:Ignorable="d"
+             Width="500" Height="500">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="TextBox">
+                <Setter Property="Margin" Value="0 2 0 2"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right">Username:</Label>
-        <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right">Password:</Label>
+        <Label Grid.Row="0" Grid.Column="0" >Username:</Label>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <TextBox Grid.Row="0" Grid.Column="1" Width="300" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Width="300" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="1" Grid.Column="0" >Password:</Label>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
+
+
+
+
+
+
+
 </UserControl>
