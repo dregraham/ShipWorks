@@ -6,6 +6,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using System.Reflection;
 using Interapptive.Shared.Messaging;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
@@ -76,6 +77,9 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterAssemblyModules(assemblies);
 
             builder.RegisterType<EditionManagerWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<TangoWebClientWrapper>()
                 .AsImplementedInterfaces();
 
             current = builder.Build();

@@ -14,7 +14,9 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
 using System.IO;
+using Autofac;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Email;
 using ShipWorks.Users;
 using ShipWorks.ApplicationCore.Setup;
@@ -41,6 +43,9 @@ namespace ShipWorks.Data.Administration
 
         // How we need to elevate
         ElevatedPreparationType preparationType = ElevatedPreparationType.None;
+
+        // The user setup wizard page
+        private WizardPage tangoUserControlHost;
 
         /// <summary>
         /// What we need to do from elevation
@@ -73,6 +78,12 @@ namespace ShipWorks.Data.Administration
             sqlInstaller = new SqlServerInstaller();
             sqlInstaller.InitializeForCurrentSqlSession();
             sqlInstaller.Exited += new EventHandler(OnPrepareAutomaticDatabaseExited);
+
+            // Resolve the user control
+            tangoUserControlHost = IoC.UnsafeGlobalLifetimeScope.ResolveNamed<WizardPage>("CustomerLicenseActivationControlHost");
+
+            // Replace the user wizard page with the new tango user wizard page
+            Pages[Pages.IndexOf(wizardPageUser)] = tangoUserControlHost;
         }
 
         /// <summary>

@@ -40,6 +40,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         TrialDetail ExtendTrial(StoreEntity store);
 
+        ActivationResponse ActivateLicense(string email, string password);
+
         /// <summary>
         /// Send the user their username using the specified email address
         /// </summary>

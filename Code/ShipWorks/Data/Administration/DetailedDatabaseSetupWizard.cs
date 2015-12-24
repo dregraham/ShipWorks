@@ -40,10 +40,13 @@ using ShipWorks.Data.Administration.UpdateFrom2x;
 using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
 using Interapptive.Shared.Win32;
 using System.Threading.Tasks;
+using Apitron.PDF.Rasterizer;
+using Autofac;
 using ShipWorks.Properties;
 using Divelements.SandGrid;
 using ShipWorks.UI.Controls;
 using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Management;
 using ShipWorks.Users.Logon;
 
@@ -106,6 +109,9 @@ namespace ShipWorks.Data.Administration
         // To mark our special comboBox items
         object serverSearchAgain = new object();
         object serverSearching = new object();
+
+        // Tango credentials wizard page
+        private WizardPage tangoUserControlHost;
 
         /// <summary>
         /// Let's consumers control what the user is allowed to do in the wizard
@@ -186,6 +192,7 @@ namespace ShipWorks.Data.Administration
 
             // Event not available in the designer
             comboSqlServers.MouseWheel += new MouseEventHandler(OnSqlServerMouseWheel);
+            
         }
 
         /// <summary>
@@ -336,6 +343,14 @@ namespace ShipWorks.Data.Administration
                     Pages.Remove(wizardPageManageLocalDb);
                 }
             }
+
+            // Resolve the user control
+            tangoUserControlHost = IoC.UnsafeGlobalLifetimeScope.ResolveNamed<WizardPage>("CustomerLicenseActivationControlHost");
+
+            // insert the new admin page second to last
+            // the last page in the collection does not have a back button only finish
+            // so we have to put this page second to last to ensure it gets a back button
+            Pages.Insert(Pages.Count - 2, tangoUserControlHost);
         }
 
         #region Setup or Connect
@@ -1449,7 +1464,7 @@ namespace ShipWorks.Data.Administration
                         sqlSession.Configuration.DatabaseName = database;
 
                         // Complete
-                        e.NextPage = wizardPageShipWorksAdmin;
+                        e.NextPage = tangoUserControlHost;
                     }
                     else
                     {
@@ -1755,7 +1770,7 @@ namespace ShipWorks.Data.Administration
                         throw;
                     }
 
-                    e.NextPage = wizardPageShipWorksAdmin;
+                    e.NextPage = tangoUserControlHost;
                 }
             }
             catch (SqlException ex)
