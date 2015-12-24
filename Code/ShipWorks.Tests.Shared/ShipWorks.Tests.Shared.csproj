@@ -74,6 +74,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
     </Reference>
+    <Reference Include="SQL.LocalDB.Test, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQL.LocalDB.Test.1.0\lib\net40\SQL.LocalDB.Test.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -93,6 +97,7 @@
       <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -110,6 +115,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMockExtensions.cs" />
+    <Compile Include="Database\DatabaseFixture.cs" />
+    <Compile Include="Database\DataContext.cs" />
+    <Compile Include="EntityBuilders\Create.cs" />
+    <Compile Include="EntityBuilders\EntityBuilder.cs" />
+    <Compile Include="EntityBuilders\EntityFieldExtensions.cs" />
+    <Compile Include="EntityBuilders\FedExShipmentEntityBuilder.cs" />
+    <Compile Include="EntityBuilders\OrderEntityBuilder.cs" />
+    <Compile Include="Database\ShipWorksLocalDb.cs" />
+    <Compile Include="EntityBuilders\IParcelShipmentEntityBuilder.cs" />
+    <Compile Include="EntityBuilders\ShipmentEntityBuilder.cs" />
+    <Compile Include="EntityBuilders\UpsShipmentEntityBuilder.cs" />
+    <Compile Include="EntityBuilders\PostalShipmentEntityBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestMessenger.cs" />
     <Compile Include="TestSchedulerProvider.cs" />
@@ -138,6 +155,10 @@
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
       <Project>{1e53a000-fdeb-4e9e-8be0-19cdc14a0282}</Project>
       <Name>Interapptive.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Adapter\ShipWorks.Data.Adapter.csproj">
+      <Project>{d5eb1eb5-dd70-4461-9377-b462031837dc}</Project>
+      <Name>ShipWorks.Data.Adapter</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
       <Project>{6f05267c-1883-4526-8d83-e46b7b2d2faf}</Project>

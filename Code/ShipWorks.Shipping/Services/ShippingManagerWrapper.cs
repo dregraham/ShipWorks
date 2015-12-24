@@ -88,6 +88,22 @@ namespace ShipWorks.Shipping
             orderPrefetchPath.Add(OrderEntity.PrefetchPathOrderItems);
             IPrefetchPathElement2 shipmentsPath = orderPrefetchPath.Add(OrderEntity.PrefetchPathShipments);
 
+            IPrefetchPathElement2 upsShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathUps);
+            upsShipmentPath.SubPath.Add(UpsShipmentEntity.PrefetchPathPackages);
+
+            IPrefetchPathElement2 postalShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathPostal);
+            postalShipmentPath.SubPath.Add(PostalShipmentEntity.PrefetchPathUsps);
+            postalShipmentPath.SubPath.Add(PostalShipmentEntity.PrefetchPathEndicia);
+
+            IPrefetchPathElement2 iParcelShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathIParcel);
+            iParcelShipmentPath.SubPath.Add(IParcelShipmentEntity.PrefetchPathPackages);
+
+            IPrefetchPathElement2 onTracShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathOnTrac);
+
+            IPrefetchPathElement2 amazonShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathAmazon);
+
+            IPrefetchPathElement2 bestRateShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathBestRate);
+
             IPrefetchPathElement2 fedexShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathFedEx);
             fedexShipmentPath.SubPath.Add(FedExShipmentEntity.PrefetchPathPackages);
 

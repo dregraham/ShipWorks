@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -56,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                     // Save the primary label image
                     if (packageReply.Label != null)
                     {
-                        SaveLabel("LabelImage", packageReply.Label, package.FedExPackageID, certificationId);                        
+                        SaveLabel("LabelImage", packageReply.Label, package.FedExPackageID, certificationId);
                     }
 
                     // Package level COD
@@ -125,11 +124,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
             if (reply.CompletedShipmentDetail.AssociatedShipments != null)
             {
                 using (SqlAdapter adapter = new SqlAdapter())
+                {
                     foreach (AssociatedShipmentDetail associatedShipment in reply.CompletedShipmentDetail.AssociatedShipments
                                                                                  .Where(a => a.Label != null && a.Label.Type == ReturnedShippingDocumentType.COD_RETURN_LABEL))
                     {
                         SaveLabel("COD", associatedShipment.Label, shipment.ShipmentID, GetCertificationId(reply));
                     }
+                }
             }
         }
 

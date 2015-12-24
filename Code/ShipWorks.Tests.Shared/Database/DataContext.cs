@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Connection;
 
-namespace ShipWorks.Shipping.Tests.Integration
+namespace ShipWorks.Tests.Shared.Database
 {
     /// <summary>
     /// Context that can be used to run a data driven test

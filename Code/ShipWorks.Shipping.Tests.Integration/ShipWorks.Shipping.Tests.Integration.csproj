@@ -149,10 +149,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseFixture.cs" />
-    <Compile Include="DataContext.cs" />
-    <Compile Include="EntityBuilder.cs" />
-    <Compile Include="IEntityBuilder.cs" />
+    <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ShippingManagerWrapperTest.cs" />
   </ItemGroup>

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
@@ -21,7 +19,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         static string baseObjectName = new OrderEntity().LLBLGenProEntityName;
 
         /// <summary>
-        /// Set the Prefix for the ordernumber
+        /// Set the Prefix for the order number
         /// </summary>
         public void ApplyOrderNumberPrefix(string prefix)
         {
@@ -31,7 +29,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
-        /// Set the Postfix for the ordernumber
+        /// Set the Postfix for the order number
         /// </summary>
         public void ApplyOrderNumberPostfix(string postfix)
         {
@@ -64,7 +62,7 @@ namespace ShipWorks.Data.Model.EntityClasses
             {
                 UpdateOrderNumberComplete();
             }
-            
+
             base.OnFieldValueChanged(originalValue, field);
         }
 
@@ -84,15 +82,15 @@ namespace ShipWorks.Data.Model.EntityClasses
             settingOrderNumberComplete = false;
         }
         /// <summary>
-        /// Special procesing to ensure change tracking for entity hierarchy
+        /// Special processing to ensure change tracking for entity hierarchy
         /// </summary>
         protected override void OnBeforeEntitySave()
         {
             if (!HasBaseDirtyField(baseObjectName))
             {
                 // Force the timestamp to update.  Update a column we don't filter on, so we don't falsely cause
-                // filters to need to be recalc'd
-                Fields[(int)OrderFieldIndex.BillFax].IsChanged = true;
+                // filters to need to be recalculated
+                Fields[(int) OrderFieldIndex.BillFax].IsChanged = true;
                 Fields.IsDirty = true;
             }
 
@@ -106,5 +104,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             get { return new PersonAdapter(this, "Bill"); }
         }
+
+        /// <summary>
+        /// Get the shipment with the given id, if it exists
+        /// </summary>
+        public ShipmentEntity Shipment(long shipmentId) =>
+            Shipments.FirstOrDefault(x => x.ShipmentID == shipmentId);
     }
 }
