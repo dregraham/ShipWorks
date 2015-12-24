@@ -10,21 +10,6 @@
              mc:Ignorable="d"
              Width="500" Height="500">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <Grid>
         <Grid.Resources>
             <Style TargetType="TextBox">

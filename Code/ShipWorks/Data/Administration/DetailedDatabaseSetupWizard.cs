@@ -346,11 +346,9 @@ namespace ShipWorks.Data.Administration
 
             // Resolve the user control
             tangoUserControlHost = IoC.UnsafeGlobalLifetimeScope.ResolveNamed<WizardPage>("CustomerLicenseActivationControlHost");
-
-            // insert the new admin page second to last
-            // the last page in the collection does not have a back button only finish
-            // so we have to put this page second to last to ensure it gets a back button
-            Pages.Insert(Pages.Count - 2, tangoUserControlHost);
+            
+            // Replace the user wizard page with the new tango user wizard page
+            Pages[Pages.IndexOf(wizardPageShipWorksAdmin)] = tangoUserControlHost;
         }
 
         #region Setup or Connect

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
 using System.Reflection;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Connection;
 using ShipWorks.Users;
 using static System.String;
 
@@ -67,9 +71,13 @@ namespace ShipWorks.UI.Controls
             // Create the username 
             try
             {
-                UserUtility.CreateUser(username, username, password, true);
+                UserUtility.CreateUser(Username, Username, Password, true);
             }
-            catch (Exception ex)
+            catch (SqlException ex)
+            {
+                return ex.Message;
+            }
+            catch (DuplicateNameException ex)
             {
                 return ex.Message;
             }
