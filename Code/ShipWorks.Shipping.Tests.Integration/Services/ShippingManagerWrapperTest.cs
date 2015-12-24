@@ -27,6 +27,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 var customer = Create.Entity<CustomerEntity>().Save(sqlAdapter);
 
                 order = Create.Order(store, customer).WithOrderNumber(123999)
+                    .WithItem()
+                    .WithItem()
                     .WithShipment()
                     .WithShipment()
                     .Save(sqlAdapter);
@@ -41,6 +43,16 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             OrderEntity loadedOrder = wrapper.LoadFullShipmentGraph(order.OrderID);
 
             Assert.Equal(123999, loadedOrder.OrderNumber);
+        }
+
+        [Fact]
+        public void LoadFullShipmentGraph_LoadsOrderItems()
+        {
+            ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
+
+            OrderEntity loadedOrder = wrapper.LoadFullShipmentGraph(order.OrderID);
+
+            Assert.Equal(2, loadedOrder.OrderItems.Count);
         }
 
         [Fact]

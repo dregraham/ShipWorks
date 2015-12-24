@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ShipmentEntityBuilder()
+        public ShipmentEntityBuilder()
         {
             SetField(x => x.ShipSenseChangeSets, new XElement("ChangeSets").ToString());
         }

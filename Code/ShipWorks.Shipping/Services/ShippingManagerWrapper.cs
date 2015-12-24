@@ -98,11 +98,11 @@ namespace ShipWorks.Shipping
             IPrefetchPathElement2 iParcelShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathIParcel);
             iParcelShipmentPath.SubPath.Add(IParcelShipmentEntity.PrefetchPathPackages);
 
-            IPrefetchPathElement2 onTracShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathOnTrac);
+            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathOnTrac);
 
-            IPrefetchPathElement2 amazonShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathAmazon);
+            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathAmazon);
 
-            IPrefetchPathElement2 bestRateShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathBestRate);
+            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathBestRate);
 
             IPrefetchPathElement2 fedexShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathFedEx);
             fedexShipmentPath.SubPath.Add(FedExShipmentEntity.PrefetchPathPackages);
