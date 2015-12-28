@@ -39,12 +39,8 @@ namespace ShipWorks.Shipping.Carriers
         /// Returns true if specified field name is in the shipment fields or package fields.
         /// </summary>
         public bool FieldsContainName(string fieldName)
-        {
-            List<string> allFieldNames = ShipmentFields.Union(PackageFields).Select(f=>f.Name).ToList();
-
-            return allFieldNames.Any(f => f.Equals(fieldName, StringComparison.InvariantCultureIgnoreCase));
-        }
-
+            => ShipmentFields.Any(f => f.Name.Contains(fieldName)) || PackageFields.Any(f => f.Name.Contains(fieldName));
+        
         /// <summary>
         /// Gets the rating hash based on the shipment's configuration.  Package fields will NOT be used.  If package fields are needed, use the overloaded constructor.
         /// </summary>
