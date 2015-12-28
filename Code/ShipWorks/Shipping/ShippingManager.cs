@@ -433,7 +433,7 @@ namespace ShipWorks.Shipping
             {
                 bool rootDirty = shipment.IsDirty;
 
-                // We only wan't the shipment on down saved... if the order was still attached, it would find
+                // We only want the shipment on down saved... if the order was still attached, it would find
                 // everything related to the order, including dirty sibling shipments.
                 OrderEntity order = shipment.Order;
                 shipment.Order = null;

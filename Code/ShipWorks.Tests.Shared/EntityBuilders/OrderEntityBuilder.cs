@@ -38,17 +38,23 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// Add a shipment to the order
         /// </summary>
         public OrderEntityBuilder WithShipment(Action<ShipmentEntityBuilder> builderConfiguration) =>
-            AddItemToCollection(builderConfiguration, x => x.Shipments);
-
-        public OrderEntityBuilder WithItem() => WithItem(null);
-
-        public OrderEntityBuilder WithItem(Action<EntityBuilder<OrderItemEntity>> builderConfiguration) =>
-            AddItemToCollection(builderConfiguration, x => x.OrderItems);
+            CreateCollectionEntity(builderConfiguration, x => x.Shipments);
 
         /// <summary>
-        /// Set the shipment type
+        /// Add an item to the order
         /// </summary>
-        protected OrderEntityBuilder AddItemToCollection<T, TBuilder>(Action<TBuilder> builderConfiguration,
+        public OrderEntityBuilder WithItem() => WithItem(null);
+
+        /// <summary>
+        /// Add an item to the order
+        /// </summary>
+        public OrderEntityBuilder WithItem(Action<EntityBuilder<OrderItemEntity>> builderConfiguration) =>
+            CreateCollectionEntity(builderConfiguration, x => x.OrderItems);
+
+        /// <summary>
+        /// Create an entity and add it to a collection
+        /// </summary>
+        protected OrderEntityBuilder CreateCollectionEntity<T, TBuilder>(Action<TBuilder> builderConfiguration,
             Func<OrderEntity, EntityCollection<T>> addAction)
             where T : EntityBase2, new()
             where TBuilder : EntityBuilder<T>, new()
