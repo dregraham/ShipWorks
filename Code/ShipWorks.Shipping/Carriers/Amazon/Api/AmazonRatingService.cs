@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
-using System.Drawing;
-using System.Linq;
-using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
-using System;
-using Interapptive.Shared;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -119,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         private static Image GetProviderLogo(string carrier)
         {
-            switch (carrier.ToLower())
+            switch (carrier.ToLowerInvariant())
             {
                 case "ups":
                     return EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools);

@@ -760,6 +760,7 @@
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
@@ -847,7 +848,6 @@
       <DependentUpon>DisableLinkedFilterDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Filters\Management\FilterNodeReferenceRepository.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messaging\IMessenger.cs" />
     <Compile Include="Messaging\IShipWorksMessage.cs" />
     <Compile Include="Messaging\Messages\CarrierConfiguredMessage.cs" />

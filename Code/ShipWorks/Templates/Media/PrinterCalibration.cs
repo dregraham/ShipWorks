@@ -1,17 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using ShipWorks.ApplicationCore;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Xml.Linq;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Templates.Media
 {
     /// <summary>
     /// Defines offsets for printers for printing accurate label sheets
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5351: Do not use insecure cryptographic algorithm MD5",
+        Justification = "This is what ShipWorks currently uses")]
     public class PrinterCalibration
     {
         // Printer and tray configured

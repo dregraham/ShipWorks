@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System.Threading.Tasks;
-using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.AddressValidation
 {
@@ -108,7 +108,7 @@ namespace ShipWorks.AddressValidation
                 return true;
             }
 
-            switch ((AddressValidationStatusType)addressAdapter.AddressValidationStatus)
+            switch ((AddressValidationStatusType) addressAdapter.AddressValidationStatus)
             {
                 case AddressValidationStatusType.Fixed:
                 case AddressValidationStatusType.HasSuggestions:
@@ -137,7 +137,7 @@ namespace ShipWorks.AddressValidation
                 return string.Empty;
             }
 
-            switch ((AddressValidationStatusType)addressAdapter.AddressValidationStatus)
+            switch ((AddressValidationStatusType) addressAdapter.AddressValidationStatus)
             {
                 case AddressValidationStatusType.Valid:
                 case AddressValidationStatusType.NotChecked:
@@ -182,9 +182,9 @@ namespace ShipWorks.AddressValidation
         public void ShowAddressOptionMenu(Control owner, AddressAdapter entityAdapter, Point displayPosition, Func<List<ValidatedAddressEntity>> getValidatedAddresses)
         {
             // If we won't validate, an error occured, or the address isn't valid, let the user know why and don't show the address selection menu
-            if (entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.WillNotValidate ||
-                entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.BadAddress ||
-                entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.Error)
+            if (entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.WillNotValidate ||
+                entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.BadAddress ||
+                entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.Error)
             {
                 MessageHelper.ShowInformation(owner, entityAdapter.AddressValidationError);
                 return;
@@ -223,11 +223,12 @@ namespace ShipWorks.AddressValidation
 
             // If has a single suggestion and haven't set any store to ValidateAndApply, show this menu to set all stores to ValidateAndApply
             if (UserSession.Security.HasPermission(PermissionType.ManageStores) &&
-                entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.HasSuggestions &&
+                entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.HasSuggestions &&
                 suggestedAddresses.Count == 1 &&
-                StoreManager.GetAllStores().All(store => store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidateAndApply))
+                StoreManager.GetAllStores().All(store => store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidateAndApply))
             {
-                menuItems.Add(new MenuItem("Always Fix Addresses For All Stores", async (sender, args) => await AlwaysFixAddressesSelected(owner, suggestedAddresses.First(), entityAdapter)));
+                menuItems.Add(new MenuItem("Always Fix Addresses For All Stores", 
+                    async (sender, args) => await AlwaysFixAddressesSelected(owner, suggestedAddresses.First(), entityAdapter)));
             }
 
             return new ContextMenu(menuItems.ToArray());
@@ -251,7 +252,7 @@ namespace ShipWorks.AddressValidation
                 List<StoreEntity> allStores = StoreManager.GetAllStores();
                 allStores.ForEach(store =>
                 {
-                    store.AddressValidationSetting = (int)AddressValidationStoreSettingType.ValidateAndApply;
+                    store.AddressValidationSetting = (int) AddressValidationStoreSettingType.ValidateAndApply;
                     StoreManager.SaveStore(store, sqlAdapter);
                 });
 
@@ -284,8 +285,8 @@ namespace ShipWorks.AddressValidation
             AddressAdapter.Copy(selectedAddress, string.Empty, addressToUpdate);
 
             addressToUpdate.AddressValidationStatus = selectedAddress.IsOriginal ?
-                (int)AddressValidationStatusType.SuggestionIgnored :
-                (int)AddressValidationStatusType.SuggestionSelected;
+                (int) AddressValidationStatusType.SuggestionIgnored :
+                (int) AddressValidationStatusType.SuggestionSelected;
 
             OnAddressSelected(addressToUpdate, originalAddress);
 
@@ -298,15 +299,15 @@ namespace ShipWorks.AddressValidation
         private static Task UpdateSelectedAddressIfRequred(ValidatedAddressEntity selectedAddress)
         {
             if (!selectedAddress.IsOriginal &&
-                selectedAddress.ResidentialStatus == (int)ValidationDetailStatusType.Unknown &&
-                selectedAddress.POBox == (int)ValidationDetailStatusType.Unknown)
+                selectedAddress.ResidentialStatus == (int) ValidationDetailStatusType.Unknown &&
+                selectedAddress.POBox == (int) ValidationDetailStatusType.Unknown)
             {
                 AddressValidator addressValidator = new AddressValidator();
                 return addressValidator.ValidateAsync(selectedAddress, string.Empty, true, (entity, entities) =>
                 {
                     // If we have updated statuses save them.
-                    if ((selectedAddress.ResidentialStatus != (int)ValidationDetailStatusType.Unknown ||
-                        selectedAddress.POBox != (int)ValidationDetailStatusType.Unknown) &&
+                    if ((selectedAddress.ResidentialStatus != (int) ValidationDetailStatusType.Unknown ||
+                        selectedAddress.POBox != (int) ValidationDetailStatusType.Unknown) &&
                         !selectedAddress.IsNew)
                     {
                         using (SqlAdapter sqlAdapter = SqlAdapter.Default)

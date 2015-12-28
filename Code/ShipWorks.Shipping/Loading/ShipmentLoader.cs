@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
-using ShipWorks.Users.Security;
-using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.Loading
 {
     /// <summary>
-    /// Loads a shipment for an order.  
+    /// Loads a shipment for an order.
     /// </summary>
     public class ShipmentLoader : IShipmentLoader
     {
@@ -23,15 +23,14 @@ namespace ShipWorks.Shipping.Loading
         private readonly IValidator<ShipmentEntity> addressValidator;
         private readonly IStoreManager storeManager;
         private readonly IStoreTypeManager storeTypeManager;
-        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper, 
+        public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper,
                               IValidator<ShipmentEntity> addressValidator, IStoreManager storeManager, IStoreTypeManager storeTypeManager,
-                              ICarrierShipmentAdapterFactory shipmentAdapterFactory, IOrderManager orderManager)
+                              IOrderManager orderManager)
         {
             this.shippingConfiguration = shippingConfiguration;
             this.shippingManager = shippingManager;
@@ -39,7 +38,6 @@ namespace ShipWorks.Shipping.Loading
             this.addressValidator = addressValidator;
             this.storeManager = storeManager;
             this.storeTypeManager = storeTypeManager;
-            this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.orderManager = orderManager;
         }
 
@@ -77,7 +75,7 @@ namespace ShipWorks.Shipping.Loading
 
                     destinationAddressEditable = storeTypeManager.GetType(order.Store).ShippingAddressEditableState(firstShipment?.Shipment);
                 }
-                
+
                 return new OrderSelectionLoaded(order, shipments, destinationAddressEditable);
             }
             catch (Exception ex)

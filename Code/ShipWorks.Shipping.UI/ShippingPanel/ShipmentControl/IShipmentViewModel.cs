@@ -17,5 +17,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Save the contents of the view model into the loaded adapter
         /// </summary>
         void Save();
+
+        /// <summary>
+        /// Refresh service types
+        /// </summary>
+        void RefreshServiceTypes();
+
+        /// <summary>
+        /// Refresh package types
+        /// </summary>
+        void RefreshPackageTypes();
     }
 }

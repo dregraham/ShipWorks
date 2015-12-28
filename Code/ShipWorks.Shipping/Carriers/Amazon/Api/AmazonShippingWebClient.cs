@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Globalization;
-using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
-using Interapptive.Shared.Net;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -161,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             // Order ID
             request.Variables.Add("ShipmentRequestDetails.AmazonOrderId", requestDetails.AmazonOrderId);
 
-            AddItemInfo(request,requestDetails);
+            AddItemInfo(request, requestDetails);
             AddFromAddressInfo(request, requestDetails);
             AddPackageInfo(request, requestDetails);
             AddShippingServiceOptions(request, requestDetails);
@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         {
             // ShippingServiceOptions
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp",
-                requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLower());
+                requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLowerInvariant());
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience",
                 requestDetails.ShippingServiceOptions.DeliveryExperience);
 
@@ -278,7 +278,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             string queryString = request.Variables
                 .OrderBy(v => v.Name, StringComparer.Ordinal)
                 .Select(v => v.Name + "=" + AmazonMwsSignature.Encode(v.Value, false))
-                .Aggregate((x,y) => x + "&" + y);
+                .Aggregate((x, y) => x + "&" + y);
 
             string parameterString = $"{verbString}\n{request.Uri.Host}\n{endpointPath}\n{queryString}";
 
@@ -366,8 +366,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 var error = (from e in xdoc.Descendants(ns + "Error")
                              select new
                              {
-                                 Code = (string)e.Element(ns + "Code"),
-                                 Message = (string)e.Element(ns + "Message")
+                                 Code = (string) e.Element(ns + "Code"),
+                                 Message = (string) e.Element(ns + "Message")
                              }).FirstOrDefault();
 
                 if (error != null)

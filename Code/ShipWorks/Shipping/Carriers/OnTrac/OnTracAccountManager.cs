@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
-using System.Text;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
@@ -15,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// <summary>
     /// OnTrac Account Manager
     /// </summary>
-    public class OnTracAccountManager
+    public static class OnTracAccountManager
     {
         static TableSynchronizer<OnTracAccountEntity> synchronizer;
         static bool needCheckForChanges;

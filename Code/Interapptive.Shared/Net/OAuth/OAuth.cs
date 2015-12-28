@@ -1,31 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
 using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Net.OAuth
 {
- /*
-Copyright (c) 2010 <a href="http://www.gutgames.com">James Craig</a>
+    /*
+   Copyright (c) 2010 <a href="http://www.gutgames.com">James Craig</a>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+   The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.*/
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   THE SOFTWARE.*/
 
     /// <summary>
     /// OAuth base class
@@ -44,7 +45,7 @@ THE SOFTWARE.*/
         /// <summary>
         /// Constructor
         /// </summary>
-        public OAuth(string encryptedConsumerKey,string encryptedConsumerSecretKey)
+        public OAuth(string encryptedConsumerKey, string encryptedConsumerSecretKey)
         {
             this.encryptedConsumerKey = encryptedConsumerKey;
             this.encryptedConsumerSecretKey = encryptedConsumerSecretKey;
@@ -77,6 +78,9 @@ THE SOFTWARE.*/
         /// <param name="Url">Url</param>
         /// <param name="Parameters">Parameters</param>
         /// <returns>The signature</returns>
+        [SuppressMessage("CSharp.Analyzers",
+            "CA5350: Do not use insecure cryptographic algorithm SHA1",
+            Justification = "This is what OAuth needs for its signature")]
         protected string GenerateSignature(out string Url, out string Parameters)
         {
             Parameters = "";
@@ -86,9 +90,8 @@ THE SOFTWARE.*/
             using (HMACSHA1 SHA1 = new HMACSHA1())
             {
                 SHA1.Key = Encoding.ASCII.GetBytes(UrlEncode(ConsumerSecretKey) + "&" + (string.IsNullOrEmpty(TokenSecret) ? "" : UrlEncode(TokenSecret)));
-                return Convert.ToBase64String(SHA1.ComputeHash(System.Text.Encoding.ASCII.GetBytes(Base)));
+                return Convert.ToBase64String(SHA1.ComputeHash(Encoding.ASCII.GetBytes(Base)));
             }
-
         }
 
         /// <summary>
@@ -106,7 +109,7 @@ THE SOFTWARE.*/
                 if (unreservedChars.IndexOf(Input[x]) != -1)
                     Result.Append(Input[x]);
                 else
-                    Result.Append("%").Append(String.Format("{0:X2}", (int)Input[x]));
+                    Result.Append("%").Append(String.Format("{0:X2}", (int) Input[x]));
             }
             return Result.ToString();
         }
@@ -232,18 +235,18 @@ THE SOFTWARE.*/
         /// <summary>
         /// Other Parameters
         /// </summary>
-        public Dictionary<string,string> OtherParameters { get; private set; }
+        public Dictionary<string, string> OtherParameters { get; private set; }
 
         /// <summary>
         /// Compilation of parameters
-        /// </summary>               
+        /// </summary>
         private List<Pair<string, string>> Parameters { get; set; }
 
         /// <summary>
         /// Random number generator
         /// </summary>
         private Random RandomGenerator { get; set; }
-        
+
         /// <summary>
         /// ConsumerKey from Etsy, returned decrypted.
         /// </summary>

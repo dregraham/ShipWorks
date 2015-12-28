@@ -16,7 +16,6 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
-using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.UI;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
@@ -346,12 +345,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Updates the services.
         /// </summary>
-        private void UpdateServices() => (ShipmentViewModel as ShipmentViewModel)?.RefreshServiceTypes();
+        private void UpdateServices() => ShipmentViewModel?.RefreshServiceTypes();
 
         /// <summary>
         /// Updates the packages.
         /// </summary>
-        private void UpdatePackages() => (ShipmentViewModel as ShipmentViewModel)?.RefreshPackageTypes();
+        private void UpdatePackages() => ShipmentViewModel?.RefreshPackageTypes();
 
         /// <summary>
         /// Enables the need to update packages.

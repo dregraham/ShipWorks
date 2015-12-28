@@ -1,7 +1,8 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
 using System.Security.Cryptography;
+using System.Text;
 using log4net;
 
 namespace Interapptive.Shared.Utility
@@ -10,6 +11,12 @@ namespace Interapptive.Shared.Utility
     /// Small utility to for decrypting \ encrypting passwords that are going to be
     /// saved locally.  Not totally secure, but better than nothing.
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5351: Do not use broken cryptographic algorithms",
+        Justification = "This is what ShipWorks currently uses")]
+    [SuppressMessage("SonarQube",
+            "S2674: Check the return value of the \"Read\" call to see how many bytes were read",
+            Justification = "Existing behavior")]
     public static class SecureText
     {
         // Logger
@@ -47,7 +54,7 @@ namespace Interapptive.Shared.Utility
                     iv[i] = saltTotal[i];
                 }
 
-                // Dervie the key
+                // Derive the key
                 crypto.IV = iv;
                 crypto.Key = new PasswordDeriveBytes(salt, new byte[0]).CryptDeriveKey("RC2", "MD5", 56, crypto.IV);
 
@@ -98,8 +105,7 @@ namespace Interapptive.Shared.Utility
             }
 
             // Create crypto provider
-            RC2CryptoServiceProvider crypto = new
-                RC2CryptoServiceProvider();
+            RC2CryptoServiceProvider crypto = new RC2CryptoServiceProvider();
 
             // Create IV from salt
             byte[] saltTotal = Encoding.UTF8.GetBytes(salt + salt.Length.ToString());
@@ -109,7 +115,7 @@ namespace Interapptive.Shared.Utility
                 iv[i] = saltTotal[i];
             }
 
-            // Dervie the key
+            // Derive the key
             crypto.IV = iv;
             crypto.Key = new PasswordDeriveBytes(salt, new byte[0]).CryptDeriveKey("RC2", "MD5", 56, crypto.IV);
 

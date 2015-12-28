@@ -74,5 +74,21 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             // No resources to dispose
         }
+
+        /// <summary>
+        /// Updates the services
+        /// </summary>
+        public void RefreshServiceTypes()
+        {
+            // Other shipment type does not support services
+        }
+
+        /// <summary>
+        /// Updates the packages
+        /// </summary>
+        public void RefreshPackageTypes()
+        {
+            // Other shipment type does not support packages
+        }
     }
 }

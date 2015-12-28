@@ -11,7 +11,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
     /// </summary>
     public class PostalShipmentEntityBuilder : EntityBuilder<PostalShipmentEntity>
     {
-        ShipmentEntityBuilder parentBuilder;
+        private readonly ShipmentEntityBuilder parentBuilder;
 
         public PostalShipmentEntityBuilder(ShipmentEntityBuilder builder)
         {
