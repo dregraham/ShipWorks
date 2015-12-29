@@ -14,6 +14,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -26,7 +27,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Editions;
-using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -118,47 +118,20 @@ namespace ShipWorks.Shipping
         public static ShipmentEntity CreateShipment(long orderID)
         {
             // First let's see if there are any shipments already for the order
-            List<ShipmentEntity> shipments = GetShipments(orderID, false);
+            IEnumerable<ShipmentEntity> shipments = GetShipments(orderID, false);
+            ShipmentEntity firstShipment = shipments.FirstOrDefault();
 
-            // If there are none, then we can just create a new single shipment attached to the order, and know that's all that needs attached
-            if (shipments.None())
-            {
-                return InternalCreateFirstShipment(orderID);
-            }
-            else
-            {
-                // Create a new shipment from one of the siblings
-                return CreateShipment(shipments[0]);
-            }
+            // If there are none, then we can just create a new single shipment attached to the order,
+            // and know that's all that needs attached
+            return firstShipment == null ?
+                InternalCreateFirstShipment(orderID) :
+                CreateShipment(firstShipment);
         }
-
-        ///// <summary>
-        ///// Create a new shipment for the order.
-        ///// </summary>
-        //public static ShipmentEntity CreateShipment(OrderEntity order)
-        //{
-        //    // First let's see if there are any shipments already for the order
-        //    List<ShipmentEntity> shipments = GetShipments(orderID, false);
-
-        //    // If there are none, then we can just create a new single shipment attached to the order, and know that's all that needs attached
-        //    if (shipments.None())
-        //    {
-        //        return InternalCreateFirstShipment(orderID);
-        //    }
-        //    else
-        //    {
-        //        // Create a new shipment from one of the siblings
-        //        return CreateShipment(shipments[0]);
-        //    }
-        //}
 
         /// <summary>
         /// Create a new shipment as a sibling of the given shipment
         /// </summary>
-        public static ShipmentEntity CreateShipment(ShipmentEntity sibling)
-        {
-            return CreateShipment(sibling.Order);
-        }
+        public static ShipmentEntity CreateShipment(ShipmentEntity sibling) => CreateShipment(sibling.Order);
 
         /// <summary>
         /// Create what we know to be the first shipment for an order
@@ -176,13 +149,22 @@ namespace ShipWorks.Shipping
             return CreateShipment(order);
         }
 
+        public static ShipmentEntity CreateShipment(OrderEntity order)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return CreateShipment(order, lifetimeScope);
+            }
+        }
+
         /// <summary>
         /// Create a shipment for the given order.  The order\shipment reference is created between the two objects.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static ShipmentEntity CreateShipment(OrderEntity order)
+        public static ShipmentEntity CreateShipment(OrderEntity order, ILifetimeScope lifetimeScope)
         {
-            UserSession.Security.DemandPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID);
+            lifetimeScope.Resolve<ISecurityContext>()
+                .DemandPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID);
 
             // Create the shipment
             ShipmentEntity shipment = new ShipmentEntity();
@@ -191,7 +173,7 @@ namespace ShipWorks.Shipping
             shipment.Order = order;
 
             // Set some defaults
-            shipment.ShipDate = DateTime.Now.Date.AddHours(12);
+            shipment.ShipDate = lifetimeScope.Resolve<IDateTimeProvider>().Now.Date.AddHours(12);
             shipment.ShipmentType = (int) ShipmentTypeCode.None;
             shipment.Processed = false;
             shipment.Voided = false;
@@ -212,7 +194,8 @@ namespace ShipWorks.Shipping
             shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             // We have to get the order items to calculate the weight
-            List<EntityBase2> orderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
+            List<EntityBase2> orderItems = lifetimeScope.Resolve<IDataProvider>()
+                .GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
 
             // Set the initial weights
             shipment.ContentWeight = orderItems.OfType<OrderItemEntity>().Sum(i => i.Quantity * i.Weight);
@@ -241,14 +224,14 @@ namespace ShipWorks.Shipping
             shipment.OriginOriginID = (int) ShipmentOriginSource.Store;
 
             // The from address will be dependent on the specific service type, but we'll default it to that of the store
-            StoreEntity store = StoreManager.GetStore(order.StoreID);
+            StoreEntity store = lifetimeScope.Resolve<IStoreManager>().GetStore(order.StoreID);
             PersonAdapter.Copy(store, "", shipment, "Origin");
             shipment.OriginFirstName = store.StoreName;
 
-            ShipmentType shipmentType = DetermineInitialShipmentType(shipment);
+            ShipmentType shipmentType = lifetimeScope.Resolve<IShippingSettings>().InitialShipmentType(shipment);
 
             // Save the record
-            using (SqlAdapter adapter = new SqlAdapter(true))
+            using (SqlAdapter adapter = lifetimeScope.Resolve<Func<bool, SqlAdapter>>()(true))
             {
                 // Apply the determined shipment type
                 shipment.ShipmentType = (int) shipmentType.ShipmentTypeCode;
@@ -263,7 +246,7 @@ namespace ShipWorks.Shipping
                 adapter.SaveAndRefetch(shipment);
 
                 // Go ahead and create customs if needed
-                CustomsManager.LoadCustomsItems(shipment, false);
+                lifetimeScope.Resolve<ICustomsManager>().LoadCustomsItems(shipment, false);
 
                 ValidatedAddressManager.CopyValidatedAddresses(adapter, order.OrderID, "Ship", shipment.ShipmentID, "Ship");
 
@@ -280,7 +263,10 @@ namespace ShipWorks.Shipping
             // Explicitly save the shipment here to delete any entities in the Removed buckets of the
             // entity collections; after applying ShipSense (where customs items are first loaded in
             // this path), and entities were removed, they were still being persisted to the database.
-            SaveShipment(shipment);
+            SaveShipment(shipment,
+                lifetimeScope.Resolve<IOrderManager>(),
+                lifetimeScope.Resolve<Func<bool, SqlAdapter>>(),
+                lifetimeScope.Resolve<IShipmentTypeFactory>());
 
             lock (siblingData)
             {
@@ -292,30 +278,6 @@ namespace ShipWorks.Shipping
             }
 
             return shipment;
-        }
-
-        /// <summary>
-        /// Determine what the initial shipment type for the given order should be, given the shipping settings rules
-        /// </summary>
-        private static ShipmentType DetermineInitialShipmentType(ShipmentEntity shipment)
-        {
-            ShipmentTypeCode initialShipmentType = (ShipmentTypeCode) ShippingSettings.Fetch().DefaultType;
-
-            // Go through each rule and see if we can find one that is applicable
-            foreach (ShippingProviderRuleEntity rule in ShippingProviderRuleManager.GetRules())
-            {
-                long? filterContentID = FilterHelper.GetFilterNodeContentID(rule.FilterNodeID);
-                if (filterContentID != null)
-                {
-                    if (FilterHelper.IsObjectInFilterContent(shipment.OrderID, filterContentID.Value))
-                    {
-                        initialShipmentType = (ShipmentTypeCode) rule.ShipmentType;
-                    }
-                }
-            }
-
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(initialShipmentType);
-            return shipmentType.IsAllowedFor(shipment) ? shipmentType : ShipmentTypeManager.GetType(ShipmentTypeCode.None);
         }
 
         /// <summary>
@@ -423,13 +385,28 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Save the given shipment.
         /// </summary>
-        [NDependIgnoreLongMethod]
         public static void SaveShipment(ShipmentEntity shipment)
         {
-            // Ensure the latest ShipSense data is recorded for this shipment before saving
-            SaveShipSenseFieldsToShipment(shipment);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                SaveShipment(shipment,
+                    lifetimeScope.Resolve<IOrderManager>(),
+                    lifetimeScope.Resolve<Func<bool, SqlAdapter>>(),
+                    lifetimeScope.Resolve<IShipmentTypeFactory>());
+            }
+        }
 
-            using (SqlAdapter adapter = new SqlAdapter(true))
+        /// <summary>
+        /// Save the given shipment.
+        /// </summary>
+        [NDependIgnoreLongMethod]
+        private static void SaveShipment(ShipmentEntity shipment, IOrderManager orderManager,
+            Func<bool, SqlAdapter> createSqlAdapter, IShipmentTypeFactory shipmentTypeFactory)
+        {
+            // Ensure the latest ShipSense data is recorded for this shipment before saving
+            SaveShipSenseFieldsToShipment(shipment, orderManager, shipmentTypeFactory);
+
+            using (SqlAdapter adapter = createSqlAdapter(true))
             {
                 bool rootDirty = shipment.IsDirty;
 
@@ -513,14 +490,15 @@ namespace ShipWorks.Shipping
         /// Saves the ShipSense fields to shipment.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        private static void SaveShipSenseFieldsToShipment(ShipmentEntity shipment)
+        private static void SaveShipSenseFieldsToShipment(ShipmentEntity shipment, IOrderManager orderManager,
+            IShipmentTypeFactory shipmentTypeFactory)
         {
             if (!shipment.Processed)
             {
                 // Ensure the order details are populated, so we get the correct hash key
-                OrderUtility.PopulateOrderDetails(shipment);
+                orderManager.PopulateOrderDetails(shipment);
 
-                IEnumerable<IPackageAdapter> packageAdapters = ShipmentTypeManager.GetType(shipment).GetPackageAdapters(shipment);
+                IEnumerable<IPackageAdapter> packageAdapters = shipmentTypeFactory.Get(shipment).GetPackageAdapters(shipment);
 
                 // Create a knowledge base entry that represents the current shipment/package and customs configuration
                 KnowledgebaseEntry entry = new KnowledgebaseEntry();

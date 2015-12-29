@@ -57,6 +57,9 @@ namespace ShipWorks.ApplicationCore
         {
             var builder = new ContainerBuilder();
 
+            builder.RegisterType<DataProviderWrapper>()
+                .AsImplementedInterfaces();
+
             builder.RegisterType<ShippingSettingsWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -118,6 +121,10 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
 
+            builder.Register(c => UserSession.Security)
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
             builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
 
             builder.RegisterType<EditionManagerWrapper>()
@@ -128,6 +135,12 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<WeightConverter>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterAssemblyTypes(typeof(IoC).Assembly)
+                .Where(x => x.IsAssignableTo<IInitializeForCurrentSession>() ||
+                    x.IsAssignableTo<ICheckForChangesNeeded>())
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
 

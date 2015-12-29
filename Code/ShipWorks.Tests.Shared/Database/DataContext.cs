@@ -20,7 +20,6 @@ namespace ShipWorks.Tests.Shared.Database
         {
             this.connection = connection;
             transaction = connection.BeginTransaction();
-
             mock.Provide<Func<bool, SqlAdapter>>(x => new SqlAdapter(connection, transaction));
         }
 

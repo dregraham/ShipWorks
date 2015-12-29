@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Reflection;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using Autofac;
 using Interapptive.Shared;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping
 {
@@ -20,8 +18,8 @@ namespace ShipWorks.Shipping
         static Dictionary<string, PropertyInfo> propertyMap = new Dictionary<string, PropertyInfo>();
 
         /// <summary>
-        /// Load an existing shipment data into the parent entity, or create if it doesnt exist.  If its already loaded and present
-        /// it can be optionally refreshed. "shipment" and "parent" could be different in the case of dervied ShipmentTypes, like for USPS
+        /// Load an existing shipment data into the parent entity, or create if it doesn't exist.  If its already loaded and present
+        /// it can be optionally refreshed. "shipment" and "parent" could be different in the case of derived ShipmentTypes, like for USPS
         /// where "parent" is the PostalShipment, not the actual Shipment
         /// </summary>
         [NDependIgnoreTooManyParams]
@@ -57,10 +55,10 @@ namespace ShipWorks.Shipping
                     // Apply the reference
                     property.SetValue(parent, childEntity, null);
 
-                    // If it didnt exist, then we have to create to save it as new
+                    // If it didn't exist, then we have to create to save it as new
                     if (childEntity.Fields.State != EntityState.Fetched)
                     {
-                        // Reset the object to new and apply 
+                        // Reset the object to new and apply
                         childEntity.Fields.State = EntityState.New;
 
                         // Configure the newly created shipment
@@ -83,7 +81,7 @@ namespace ShipWorks.Shipping
 
                     adapter.Commit();
                 }
-           }
+            }
         }
 
         /// <summary>
@@ -108,13 +106,13 @@ namespace ShipWorks.Shipping
                 // Try to fetch the existing profile data for the shipment
                 if (parent.Fields.State != EntityState.New)
                 {
-                    childEntity = (EntityBase2)Activator.CreateInstance(profileType, parent.Fields["ShippingProfileID"].CurrentValue);
+                    childEntity = (EntityBase2) Activator.CreateInstance(profileType, parent.Fields["ShippingProfileID"].CurrentValue);
                     SqlAdapter.Default.FetchEntity(childEntity);
                 }
                 // If the parent is new, just create a new child.
                 else
                 {
-                    childEntity = (EntityBase2)Activator.CreateInstance(profileType);
+                    childEntity = (EntityBase2) Activator.CreateInstance(profileType);
                 }
 
                 // Apply the reference
@@ -123,7 +121,7 @@ namespace ShipWorks.Shipping
                 // If it doesnt exist, then we have to create to save it as new
                 if (childEntity.Fields.State != EntityState.Fetched)
                 {
-                    // Reset the object to new and apply 
+                    // Reset the object to new and apply
                     childEntity.Fields.State = EntityState.New;
                 }
             }

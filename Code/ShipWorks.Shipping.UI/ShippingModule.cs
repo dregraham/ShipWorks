@@ -43,8 +43,8 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces();
 
             builder.RegisterType<DimensionsManagerWrapper>()
-                            .AsImplementedInterfaces()
-                            .SingleInstance();
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             builder.RegisterType<ExcludedPackageTypeRepository>()
                 .AsImplementedInterfaces()

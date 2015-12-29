@@ -31,7 +31,7 @@ namespace ShipWorks.Data.Connection
         // Indicates if we should be logging all InfoMessage events from the underlying connection
         bool logInfoMessages = false;
 
-        // Indiciates if the SET IDENTITY INSERT should be set before inserts, allowing pk values to be explicitly set
+        // Indicates if the SET IDENTITY INSERT should be set before inserts, allowing pk values to be explicitly set
         bool identityInsert = false;
 
         // Lets us track if any entity is saved in a recursive save operation
@@ -59,6 +59,7 @@ namespace ShipWorks.Data.Connection
 
         // Needed to allow SqlAdapter to use an existing SqlTransaction
         private static System.Reflection.FieldInfo fieldPhysicalTransaction;
+        private readonly SqlTransaction externalTransaction;
 
         /// <summary>
         /// Static constructor
@@ -112,6 +113,7 @@ namespace ShipWorks.Data.Connection
 
             if (transactionToUse != null)
             {
+                externalTransaction = transactionToUse;
                 fieldPhysicalTransaction.SetValue(this, transactionToUse);
                 fieldIsTransactionInProgress.SetValue(this, true);
             }
@@ -208,10 +210,10 @@ namespace ShipWorks.Data.Connection
 
                 if (activeConnection == null)
                 {
-                    throw new InvalidOperationException("Coult not find DataAccessAdapterBase._activeConnection.");
+                    throw new InvalidOperationException("Could not find DataAccessAdapterBase._activeConnection.");
                 }
 
-                // Clear it, so it doesnt get disposed by base. OverrideConnection will be used when activeConnection is
+                // Clear it, so it doesn't get disposed by base. OverrideConnection will be used when activeConnection is
                 // null, so we need to clear it, too
                 activeConnection.SetValue(this, null);
                 overrideConnection = null;
@@ -283,11 +285,17 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Transaction is commiting
+        /// Transaction is committing
         /// </summary>
         public override void Commit()
         {
             bool wasLLBLGenTransInProgress = IsTransactionInProgress;
+
+            SqlTransaction transaction = fieldPhysicalTransaction.GetValue(this) as SqlTransaction;
+            if (ReferenceEquals(transaction, externalTransaction))
+            {
+                fieldPhysicalTransaction.SetValue(this, null);
+            }
 
             base.Commit();
 

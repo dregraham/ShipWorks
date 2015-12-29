@@ -172,7 +172,6 @@ namespace ShipWorks.Users
             UpsAccountManager.InitializeForCurrentSession();
             ShippingDefaultsRuleManager.InitializeForCurrentSession();
             ShippingPrintOutputManager.InitializeForCurrentSession();
-            ShippingProviderRuleManager.InitializeForCurrentSession();
             OnTracAccountManager.InitializeForCurrentSession();
             iParcelAccountManager.InitializeForCurrentSession();
 

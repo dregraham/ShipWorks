@@ -1,25 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
 using System.Diagnostics;
+using System.Linq;
 using Interapptive.Shared;
-using ShipWorks.Stores;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Users.Security
 {
     /// <summary>
     /// Encapsulates user permission settings and their modifications.
     /// </summary>
-    public class SecurityContext
+    public class SecurityContext : ISecurityContext
     {
         PermissionSet permissionSet;
         bool isAdmin;
@@ -63,7 +61,7 @@ namespace ShipWorks.Users.Security
             /// <summary>
             /// Operator==
             /// </summary>
-             public static bool operator ==(PermissionIdentifier left, PermissionIdentifier right)
+            public static bool operator ==(PermissionIdentifier left, PermissionIdentifier right)
             {
                 return left.Equals(right);
             }
@@ -121,7 +119,7 @@ namespace ShipWorks.Users.Security
         }
 
         /// <summary>
-        /// Determines if the current user has the specified permission, and if not, throws a PermissionException. If the PermissionType is 
+        /// Determines if the current user has the specified permission, and if not, throws a PermissionException. If the PermissionType is
         /// related to orders, then the ObjectID will be automatically translated to a StoreID, such as an OrderItemID would
         /// be translated to its order's StoreID.
         /// </summary>
@@ -144,7 +142,7 @@ namespace ShipWorks.Users.Security
 
         /// <summary>
         /// Determines if the user has the specified permission for the given object.   This takes into consideration
-        /// permissions that imply other permissions (such as Edit Orders implies Edit Notes).  If the PermissionType is 
+        /// permissions that imply other permissions (such as Edit Orders implies Edit Notes).  If the PermissionType is
         /// related to orders, then the ObjectID will be automatically translated to a StoreID, such as an OrderItemID would
         /// be translated to its order's StoreID.
         /// </summary>
@@ -185,7 +183,7 @@ namespace ShipWorks.Users.Security
 
                 if (scope == PermissionScope.Store)
                 {
-                    // Only need to do the shortcut to avoid translating from child entities up to the StoreID... so we don't need to do 
+                    // Only need to do the shortcut to avoid translating from child entities up to the StoreID... so we don't need to do
                     // it (and can't, or it would recurse) for StoreEntity
                     if (EntityUtility.GetEntityType(objectID.Value) != EntityType.StoreEntity)
                     {
@@ -219,7 +217,7 @@ namespace ShipWorks.Users.Security
             {
                 return hasPermission;
             }
-            
+
             // See if the security depends not on the passed in object - but on the object's that is is related to
             if (PermissionHelper.GetScope(type) == PermissionScope.IndirectRelatedObject)
             {
@@ -235,7 +233,7 @@ namespace ShipWorks.Users.Security
                     scopeID = TranslateStoreScope(objectID);
                 }
 
-                // If its a store scope, but we weren't able to nail down a StoreID (for example, a customer with multiple orders in multiple stores), then 
+                // If its a store scope, but we weren't able to nail down a StoreID (for example, a customer with multiple orders in multiple stores), then
                 // we have to say no.  If they had access to all stores - we'd have already said yes.
                 if (PermissionHelper.GetScope(type) == PermissionScope.Store && scopeID == null)
                 {
