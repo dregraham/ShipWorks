@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Gets the rates from the Exprss1 API.
         /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        public RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> rateResults = CreateWebClient().GetRates(shipment);
             RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, rateResults));
@@ -74,28 +74,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         protected override IUspsWebClient CreateWebClient()
         {
             return new Express1UspsWebClient(accountRepository, new LogEntryFactory(), CertificateInspector());
-        }
-
-        /// <summary>
-        /// Gets the filtered rates based on any excluded services configured for this postal shipment type.
-        /// </summary>
-        protected override List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
-        {
-            List<PostalServiceType> availableServiceTypes =
-                shipmentTypeFactory[ShipmentTypeCode.Express1Usps].GetAvailableServiceTypes()
-                    .OfType<PostalServiceType>()
-                    .ToList();
-
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Usps)
-            {
-                availableServiceTypes.Add((PostalServiceType)shipment.Postal.Service);
-            }
-
-            List<RateResult> rateResults = rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)).ToList();
-
-            rateResults.ForEach(r => r.ShipmentType = ShipmentTypeCode.Express1Usps);
-
-            return rateResults;
         }
     }
 }
