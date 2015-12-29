@@ -22,10 +22,5 @@ namespace ShipWorks.Shipping.Settings
         /// The list of shipment types that have been fully configured for use within ShipWorks
         /// </summary>
         IEnumerable<ShipmentTypeCode> GetConfiguredTypes();
-
-        /// <summary>
-        /// Determine what the initial shipment type for the given order should be, given the shipping settings rules
-        /// </summary>
-        ShipmentType InitialShipmentType(ShipmentEntity shipment);
     }
 }

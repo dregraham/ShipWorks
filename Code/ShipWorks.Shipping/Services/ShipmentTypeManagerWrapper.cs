@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -13,6 +16,21 @@ namespace ShipWorks.Shipping.Services
     {
         private readonly IEnumerable<ShipmentTypeCode> allShipmentTypeCodes;
         private readonly IEnumerable<ShipmentTypeCode> noAccountShipmentTypes;
+        private readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeLookup;
+        private readonly IFilterHelper filterHelper;
+        private readonly IShippingProviderRuleManager shippingProviderRuleManager;
+        private readonly IShippingSettings shippingSettings;
+
+        public ShipmentTypeManagerWrapper(IFilterHelper filterHelper,
+            IShippingProviderRuleManager shippingProviderRuleManager,
+            IShippingSettings shippingSettings,
+            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeLookup)
+        {
+            this.filterHelper = filterHelper;
+            this.shippingProviderRuleManager = shippingProviderRuleManager;
+            this.shippingSettings = shippingSettings;
+            this.shipmentTypeLookup = shipmentTypeLookup;
+        }
 
         /// <summary>
         /// Constructor
@@ -55,5 +73,41 @@ namespace ShipWorks.Shipping.Services
                 return allShipmentTypeCodes.Except(noAccountShipmentTypes);
             }
         }
+
+        /// <summary>
+        /// Determine what the initial shipment type for the given order should be, given the shipping settings rules
+        /// </summary>
+        public ShipmentType InitialShipmentType(ShipmentEntity shipment)
+        {
+            ShipmentTypeCode initialShipmentType = (ShipmentTypeCode) shippingSettings.Fetch().DefaultType;
+
+            // Go through each rule and see if we can find one that is applicable
+            foreach (ShippingProviderRuleEntity rule in shippingProviderRuleManager.GetRules())
+            {
+                long? filterContentID = filterHelper.GetFilterNodeContentID(rule.FilterNodeID);
+                if (filterContentID != null &&
+                    filterHelper.IsObjectInFilterContent(shipment.OrderID, filterContentID.Value))
+                {
+                    initialShipmentType = (ShipmentTypeCode) rule.ShipmentType;
+                }
+            }
+
+            ShipmentType shipmentType = shipmentTypeLookup[initialShipmentType];
+            return shipmentType.IsAllowedFor(shipment) ? shipmentType : shipmentTypeLookup[ShipmentTypeCode.None];
+        }
+
+        /// <summary>
+        /// Get the provider for the specified shipment
+        /// </summary>
+        public ShipmentType Get(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            return Get(shipment.ShipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Get the shipment type based on its code
+        /// </summary>
+        public ShipmentType Get(ShipmentTypeCode shipmentTypeCode) => shipmentTypeLookup[shipmentTypeCode];
     }
 }

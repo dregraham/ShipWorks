@@ -18,17 +18,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Other
         private readonly ICustomsManager customsManager;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public OtherShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager)
+        public OtherShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeFactory, nameof(shipmentTypeFactory));
+            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeManager, nameof(shipmentTypeManager));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
 
             this.shipment = shipment;
             this.customsManager = customsManager;
-            shipmentType = shipmentTypeFactory.Get(shipment) as OtherShipmentType;
+            shipmentType = shipmentTypeManager.Get(shipment) as OtherShipmentType;
         }
 
         /// <summary>

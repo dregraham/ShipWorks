@@ -206,7 +206,6 @@
     <Compile Include="Services\ShipmentTypeProvider.cs" />
     <Compile Include="Services\ShippingManagerWrapper.cs" />
     <Compile Include="ShipmentAddressValidator.cs" />
-    <Compile Include="ShipmentTypeFactory.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">

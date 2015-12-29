@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
     /// </summary>
     public class ShipmentTypeToOriginAddressesConverter : IValueConverter
     {
-        private readonly IShipmentTypeFactory shipmentTypeFactory;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor (should only be used by WPF)
@@ -28,9 +28,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentTypeToOriginAddressesConverter(IShipmentTypeFactory shipmentTypeFactory)
+        public ShipmentTypeToOriginAddressesConverter(IShipmentTypeManager shipmentTypeManager)
         {
-            this.shipmentTypeFactory = shipmentTypeFactory ?? GetShipmentTypeFactory();
+            this.shipmentTypeManager = shipmentTypeManager ?? GetShipmentTypeManager();
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
                 return Enumerable.Empty<KeyValuePair<string, long>>();
             }
 
-            return shipmentTypeFactory.Get((ShipmentTypeCode)value).GetOrigins();
+            return shipmentTypeManager.Get((ShipmentTypeCode)value).GetOrigins();
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
         /// <summary>
         /// Get a shipment type factory
         /// </summary>
-        private IShipmentTypeFactory GetShipmentTypeFactory() =>
-            DesignModeDetector.IsDesignerHosted() ? null : IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IShipmentTypeFactory>>().Value;
+        private IShipmentTypeManager GetShipmentTypeManager() =>
+            DesignModeDetector.IsDesignerHosted() ? null : IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IShipmentTypeManager>>().Value;
     }
 }

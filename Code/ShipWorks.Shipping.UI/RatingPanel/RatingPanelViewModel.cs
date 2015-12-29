@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private readonly IMessenger messenger;
 
         private readonly IShippingManager shippingManager;
-        private readonly IShipmentTypeFactory shipmentTypeFactory;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         private ShipmentEntity selectedShipment;
         private readonly bool consolidatePostalRates;
@@ -54,13 +54,13 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Constructor
         /// </summary>
         /// <param name="messenger"></param>
-        public RatingPanelViewModel(IMessenger messenger, IShippingManager shippingManager, IShipmentTypeFactory shipmentTypeFactory)
+        public RatingPanelViewModel(IMessenger messenger, IShippingManager shippingManager, IShipmentTypeManager shipmentTypeManager)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             this.messenger = messenger;
             this.shippingManager = shippingManager;
-            this.shipmentTypeFactory = shipmentTypeFactory;
+            this.shipmentTypeManager = shipmentTypeManager;
 
             consolidatePostalRates = true;
             ActionLinkVisible = false;
@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 return;
             }
 
-            ShipmentType shipmentType = shipmentTypeFactory.Get(shipment.ShipmentTypeCode);
+            ShipmentType shipmentType = shipmentTypeManager.Get(shipment.ShipmentTypeCode);
 
             if (!shipmentType.SupportsGetRates)
             {
@@ -345,7 +345,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 if (rates == null)
                 {
                     rates = new RateGroup(new List<RateResult>());
-                    ShipmentType exceptionShipmentType = shipmentType ?? shipmentTypeFactory.Get(ShipmentTypeCode.None);
+                    ShipmentType exceptionShipmentType = shipmentType ?? shipmentTypeManager.Get(ShipmentTypeCode.None);
                     rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(exceptionShipmentType, ex));
                 }
 
@@ -392,7 +392,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             }
             else
             {
-                shipmentType = shipmentTypeFactory.Get(shipment.ShipmentTypeCode);
+                shipmentType = shipmentTypeManager.Get(shipment.ShipmentTypeCode);
             }
 
             return shipmentType;

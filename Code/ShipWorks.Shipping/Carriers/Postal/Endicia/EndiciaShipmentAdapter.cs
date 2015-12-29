@@ -17,19 +17,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private readonly ICustomsManager customsManager;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public EndiciaShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager)
+        public EndiciaShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal, nameof(shipment.Postal));
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal.Endicia, nameof(shipment.Postal.Endicia));
-            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeFactory, nameof(shipmentTypeFactory));
+            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeManager, nameof(shipmentTypeManager));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
 
             this.shipment = shipment;
             this.customsManager = customsManager;
-            shipmentType = shipmentTypeFactory.Get(shipment);
+            shipmentType = shipmentTypeManager.Get(shipment);
         }
 
         /// <summary>

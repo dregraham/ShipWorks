@@ -20,18 +20,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly ICustomsManager customsManager;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public UpsShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager)
+        public UpsShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipment.Ups, nameof(shipment.Ups));
-            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeFactory, nameof(shipmentTypeFactory));
+            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeManager, nameof(shipmentTypeManager));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
 
             this.shipment = shipment;
             this.customsManager = customsManager;
-            shipmentType = shipmentTypeFactory.Get(shipment) as UpsShipmentType;
+            shipmentType = shipmentTypeManager.Get(shipment) as UpsShipmentType;
         }
 
         /// <summary>

@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
     public class OtherShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;
-        private readonly Mock<IShipmentTypeFactory> shipmentTypeFactory;
+        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICustomsManager> customsManager;
         private readonly Mock<OtherShipmentType> shipmentTypeMock;
         private readonly ShipmentType shipmentType;
@@ -40,57 +40,57 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
             shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
             shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
 
-            shipmentTypeFactory = new Mock<IShipmentTypeFactory>();
-            shipmentTypeFactory.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
+            shipmentTypeManager = new Mock<IShipmentTypeManager>();
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new OtherShipmentAdapter(null, shipmentTypeFactory.Object, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() => new OtherShipmentAdapter(null, shipmentTypeManager.Object, customsManager.Object));
             Assert.Throws<ArgumentNullException>(() => new OtherShipmentAdapter(shipment, null, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, null));
         }
 
         [Fact]
         public void AccountId_ReturnsNull()
         {
-            var testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Null(testObject.AccountId);
         }
 
         [Fact]
         public void AccountId_DoesNotThrow_WhenValueIsValid()
         {
-            var testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             testObject.AccountId = 6;
         }
 
         [Fact]
         public void AccountId_DoesNotThrow_WhenValueIsNull()
         {
-            var testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             testObject.AccountId = null;
         }
 
         [Fact]
         public void Shipment_IsNotNull()
         {
-            var testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.NotNull(testObject.Shipment);
         }
 
         [Fact]
         public void ShipmentTypeCode_IsOther()
         {
-            var testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(ShipmentTypeCode.Other, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void SupportsAccounts_IsFalse()
         {
-            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             Assert.False(testObject.SupportsAccounts);
         }
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
         [Fact]
         public void SupportsMultiplePackages_IsFalse()
         {
-            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.False(testObject.SupportsMultiplePackages);
         }
 
@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
             shipment.OriginCountryCode = "US";
             shipment.ShipCountryCode = "US";
 
-            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.True(testObject.IsDomestic);
         }
 
@@ -118,14 +118,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
             shipment.OriginCountryCode = "US";
             shipment.ShipCountryCode = "CA";
 
-            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.False(testObject.IsDomestic);
         }
 
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             testObject.UpdateDynamicData();
 
             shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
 
             customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            OtherShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
@@ -151,7 +151,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
         [Fact]
         public void SupportsPackageTypes_IsFalse()
         {
-            ICarrierShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             Assert.False(testObject.SupportsPackageTypes);
         }
@@ -159,14 +159,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
         [Fact]
         public void ShipDate_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
         }
 
         [Fact]
         public void ShipDate_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
@@ -176,14 +176,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
         [Fact]
         public void UsingInsurance_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
         }
 
         [Fact]
         public void UsingInsurance_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new OtherShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             testObject.UsingInsurance = !testObject.UsingInsurance;
 

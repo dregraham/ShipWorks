@@ -17,19 +17,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private readonly ICustomsManager customsManager;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public UspsShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager)
+        public UspsShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal, nameof(shipment.Postal));
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal.Usps, nameof(shipment.Postal.Usps));
-            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeFactory, nameof(shipmentTypeFactory));
+            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeManager, nameof(shipmentTypeManager));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
 
             this.shipment = shipment;
             this.customsManager = customsManager;
-            shipmentType = shipmentTypeFactory.Get(shipment) as UspsShipmentType;
+            shipmentType = shipmentTypeManager.Get(shipment) as UspsShipmentType;
         }
 
         /// <summary>

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Carriers.None
 {
@@ -16,20 +16,20 @@ namespace ShipWorks.Shipping.Carriers.None
         private readonly NoneShipmentType shipmentType;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public NoneShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager)
+        public NoneShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             this.shipment = shipment;
-            shipmentType = shipmentTypeFactory.Get(shipment) as NoneShipmentType;
+            shipmentType = shipmentTypeManager.Get(shipment) as NoneShipmentType;
         }
-        
+
         /// <summary>
         /// Id of the None account associated with this shipment
         /// </summary>
-        [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used", 
+        [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used",
             Justification = "None shipment types don't have accounts")]
         [SuppressMessage("SonarQube", "S108:Nested blocks of code should not be left empty",
             Justification = "None shipment types don't have accounts")]

@@ -194,7 +194,7 @@ namespace ShipWorks.Shipping
             shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             // We have to get the order items to calculate the weight
-            List<EntityBase2> orderItems = lifetimeScope.Resolve<IDataProvider>()
+            IEnumerable<EntityBase2> orderItems = lifetimeScope.Resolve<IDataProvider>()
                 .GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
 
             // Set the initial weights
@@ -228,7 +228,9 @@ namespace ShipWorks.Shipping
             PersonAdapter.Copy(store, "", shipment, "Origin");
             shipment.OriginFirstName = store.StoreName;
 
-            ShipmentType shipmentType = lifetimeScope.Resolve<IShippingSettings>().InitialShipmentType(shipment);
+            IShipmentTypeManager shipmentTypeManager = lifetimeScope.Resolve<IShipmentTypeManager>();
+
+            ShipmentType shipmentType = shipmentTypeManager.InitialShipmentType(shipment);
 
             // Save the record
             using (SqlAdapter adapter = lifetimeScope.Resolve<Func<bool, SqlAdapter>>()(true))
@@ -248,7 +250,8 @@ namespace ShipWorks.Shipping
                 // Go ahead and create customs if needed
                 lifetimeScope.Resolve<ICustomsManager>().LoadCustomsItems(shipment, false);
 
-                ValidatedAddressManager.CopyValidatedAddresses(adapter, order.OrderID, "Ship", shipment.ShipmentID, "Ship");
+                lifetimeScope.Resolve<IValidatedAddressManager>()
+                    .CopyValidatedAddresses(adapter, order.OrderID, "Ship", shipment.ShipmentID, "Ship");
 
                 adapter.Commit();
             }
@@ -266,7 +269,7 @@ namespace ShipWorks.Shipping
             SaveShipment(shipment,
                 lifetimeScope.Resolve<IOrderManager>(),
                 lifetimeScope.Resolve<Func<bool, SqlAdapter>>(),
-                lifetimeScope.Resolve<IShipmentTypeFactory>());
+                shipmentTypeManager);
 
             lock (siblingData)
             {
@@ -392,7 +395,7 @@ namespace ShipWorks.Shipping
                 SaveShipment(shipment,
                     lifetimeScope.Resolve<IOrderManager>(),
                     lifetimeScope.Resolve<Func<bool, SqlAdapter>>(),
-                    lifetimeScope.Resolve<IShipmentTypeFactory>());
+                    lifetimeScope.Resolve<IShipmentTypeManager>());
             }
         }
 
@@ -401,10 +404,10 @@ namespace ShipWorks.Shipping
         /// </summary>
         [NDependIgnoreLongMethod]
         private static void SaveShipment(ShipmentEntity shipment, IOrderManager orderManager,
-            Func<bool, SqlAdapter> createSqlAdapter, IShipmentTypeFactory shipmentTypeFactory)
+            Func<bool, SqlAdapter> createSqlAdapter, IShipmentTypeManager shipmentTypeManager)
         {
             // Ensure the latest ShipSense data is recorded for this shipment before saving
-            SaveShipSenseFieldsToShipment(shipment, orderManager, shipmentTypeFactory);
+            SaveShipSenseFieldsToShipment(shipment, orderManager, shipmentTypeManager);
 
             using (SqlAdapter adapter = createSqlAdapter(true))
             {
@@ -491,14 +494,14 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         private static void SaveShipSenseFieldsToShipment(ShipmentEntity shipment, IOrderManager orderManager,
-            IShipmentTypeFactory shipmentTypeFactory)
+            IShipmentTypeManager shipmentTypeManager)
         {
             if (!shipment.Processed)
             {
                 // Ensure the order details are populated, so we get the correct hash key
                 orderManager.PopulateOrderDetails(shipment);
 
-                IEnumerable<IPackageAdapter> packageAdapters = shipmentTypeFactory.Get(shipment).GetPackageAdapters(shipment);
+                IEnumerable<IPackageAdapter> packageAdapters = shipmentTypeManager.Get(shipment).GetPackageAdapters(shipment);
 
                 // Create a knowledge base entry that represents the current shipment/package and customs configuration
                 KnowledgebaseEntry entry = new KnowledgebaseEntry();

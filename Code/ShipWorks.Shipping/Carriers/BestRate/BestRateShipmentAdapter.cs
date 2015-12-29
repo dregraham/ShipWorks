@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
@@ -19,18 +17,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly ICustomsManager customsManager;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public BestRateShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager)
+        public BestRateShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipment.BestRate, nameof(shipment.BestRate));
-            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeFactory, nameof(shipmentTypeFactory));
+            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeManager, nameof(shipmentTypeManager));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
 
             this.shipment = shipment;
             this.customsManager = customsManager;
-            shipmentType = shipmentTypeFactory.Get(shipment) as BestRateShipmentType;
+            shipmentType = shipmentTypeManager.Get(shipment) as BestRateShipmentType;
         }
 
         /// <summary>
@@ -158,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Service type selected
         /// </summary>
-        public int ServiceType { get; set;} = 0;
+        public int ServiceType { get; set; } = 0;
 
         /// <summary>
         /// List of package adapters for the shipment

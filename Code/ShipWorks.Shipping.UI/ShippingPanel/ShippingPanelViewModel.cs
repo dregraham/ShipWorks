@@ -414,7 +414,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             return false;
 
             //// Only send the ShipmentChangedMessage message if the field that changed is a rating field.
-            //ShipmentType shipmentType = shipmentTypeFactory.Get(ShipmentType);
+            //ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentType);
 
             //// Since we have a generic AddressViewModel whose properties do not match entity feild names,
             //// we need to translate the Ship, Origin, and Street properties to know if the changed field

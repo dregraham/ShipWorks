@@ -1234,7 +1234,6 @@
     <Compile Include="Shipping\IShipmentProcessor.cs" />
     <Compile Include="Shipping\IShipmentServicesBuilder.cs" />
     <Compile Include="Shipping\IShipmentServicesBuilderFactory.cs" />
-    <Compile Include="Shipping\IShipmentTypeFactory.cs" />
     <Compile Include="Shipping\IShipmentTypeManager.cs" />
     <Compile Include="Shipping\IShippingErrorManager.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />

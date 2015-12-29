@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
     public class FedExShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;
-        private readonly Mock<IShipmentTypeFactory> shipmentTypeFactory;
+        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICustomsManager> customsManager;
         private readonly Mock<FedExShipmentType> shipmentTypeMock;
         private readonly ShipmentType shipmentType;
@@ -44,24 +44,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
             shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
 
-            shipmentTypeFactory = new Mock<IShipmentTypeFactory>();
-            shipmentTypeFactory.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
+            shipmentTypeManager = new Mock<IShipmentTypeManager>();
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new FedExShipmentAdapter(null, shipmentTypeFactory.Object, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new FedExShipmentAdapter(new ShipmentEntity(), shipmentTypeFactory.Object, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() => new FedExShipmentAdapter(null, shipmentTypeManager.Object, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() => new FedExShipmentAdapter(new ShipmentEntity(), shipmentTypeManager.Object, customsManager.Object));
             Assert.Throws<ArgumentNullException>(() => new FedExShipmentAdapter(shipment, null, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, null));
         }
 
         [Fact]
         public void AccountId_ReturnsShipmentValue()
         {
             shipment.FedEx.FedExAccountID = 12;
-            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(12, testObject.AccountId);
         }
 
@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         [InlineData(10009238)]
         public void AccountId_StoresSpecifiedValue_WhenValueIsValid(long value)
         {
-            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             testObject.AccountId = value;
             Assert.Equal(value, shipment.FedEx.FedExAccountID);
         }
@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         [Fact]
         public void AccountId_StoresZero_WhenValueIsNull()
         {
-            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             testObject.AccountId = null;
             Assert.Equal(0, shipment.FedEx.FedExAccountID);
         }
@@ -87,21 +87,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         [Fact]
         public void Shipment_IsNotNull()
         {
-            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.NotNull(testObject.Shipment);
         }
 
         [Fact]
         public void ShipmentTypeCode_IsFedEx()
         {
-            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(ShipmentTypeCode.FedEx, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void SupportsAccounts_IsTrue()
         {
-            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             Assert.True(testObject.SupportsAccounts);
         }
@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         [Fact]
         public void SupportsMultiplePackages_IsTrue()
         {
-            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.True(testObject.SupportsMultiplePackages);
         }
 
@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             shipment.OriginCountryCode = "US";
             shipment.ShipCountryCode = "US";
 
-            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.True(testObject.IsDomestic);
         }
 
@@ -129,14 +129,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             shipment.OriginCountryCode = "US";
             shipment.ShipCountryCode = "CA";
 
-            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.False(testObject.IsDomestic);
         }
 
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             testObject.UpdateDynamicData();
 
             shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
@@ -153,7 +153,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 
             customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            FedExShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         [Fact]
         public void SupportsPackageTypes_IsTrue()
         {
-            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             Assert.True(testObject.SupportsPackageTypes);
         }
@@ -170,14 +170,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         [Fact]
         public void ShipDate_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
         }
 
         [Fact]
         public void ShipDate_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
@@ -187,14 +187,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         [Fact]
         public void UsingInsurance_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
         }
 
         [Fact]
         public void UsingInsurance_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             testObject.UsingInsurance = !testObject.UsingInsurance;
 
@@ -204,14 +204,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         [Fact]
         public void ServiceType_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(shipment.FedEx.Service, testObject.ServiceType);
         }
 
         [Fact]
         public void ServiceType_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             shipment.FedEx.Service = (int) FedExServiceType.FedEx2DayAM;
             testObject.ServiceType = (int) FedExServiceType.FedEx2Day;

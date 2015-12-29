@@ -18,14 +18,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory)
+        public AmazonShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
-            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeFactory, nameof(shipmentTypeFactory));
+            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeManager, nameof(shipmentTypeManager));
 
             this.shipment = shipment;
-            shipmentType = shipmentTypeFactory.Get(shipment) as AmazonShipmentType;
+            shipmentType = shipmentTypeManager.Get(shipment) as AmazonShipmentType;
         }
 
         /// <summary>

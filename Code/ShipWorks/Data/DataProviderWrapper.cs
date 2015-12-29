@@ -12,7 +12,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get all entities of the given type that are related to the specified entityID
         /// </summary>
-        public List<EntityBase2> GetRelatedEntities(long orderID, EntityType orderItemEntity) =>
+        public IEnumerable<EntityBase2> GetRelatedEntities(long orderID, EntityType orderItemEntity) =>
             DataProvider.GetRelatedEntities(orderID, orderItemEntity);
     }
 }

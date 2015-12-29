@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager,
             IEditionManager editionManager)
         {
-            // TODO: Refactor constuctor params down to 5 or less
+            // TODO: Refactor Constructor params down to 5 or less
             this.amazonRatesFactory = amazonRatesFactory;
             this.amazonLabelServiceFactory = amazonLabelServiceFactory;
             this.storeManager = storeManager;

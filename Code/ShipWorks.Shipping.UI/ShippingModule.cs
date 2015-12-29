@@ -107,9 +107,8 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ShipmentTypeFactory>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+            builder.RegisterType<ShipmentTypeManagerWrapper>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<ShipmentTypeProvider>();
 

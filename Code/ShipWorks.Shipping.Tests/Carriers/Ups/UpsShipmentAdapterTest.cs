@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
     public class UpsShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;
-        private readonly Mock<IShipmentTypeFactory> shipmentTypeFactory;
+        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICustomsManager> customsManager;
         private readonly Mock<UpsShipmentType> shipmentTypeMock;
         private readonly ShipmentType shipmentType;
@@ -43,30 +43,30 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
             shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
             shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
 
-            shipmentTypeFactory = new Mock<IShipmentTypeFactory>();
-            shipmentTypeFactory.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
+            shipmentTypeManager = new Mock<IShipmentTypeManager>();
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new UpsShipmentAdapter(null, shipmentTypeFactory.Object, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new UpsShipmentAdapter(new ShipmentEntity(), shipmentTypeFactory.Object, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() => new UpsShipmentAdapter(null, shipmentTypeManager.Object, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() => new UpsShipmentAdapter(new ShipmentEntity(), shipmentTypeManager.Object, customsManager.Object));
             Assert.Throws<ArgumentNullException>(() => new UpsShipmentAdapter(shipment, null, customsManager.Object));
-            Assert.Throws<ArgumentNullException>(() => new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, null));
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenPostalShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new UpsShipmentAdapter(new ShipmentEntity(), shipmentTypeFactory.Object, customsManager.Object));
+            Assert.Throws<ArgumentNullException>(() => new UpsShipmentAdapter(new ShipmentEntity(), shipmentTypeManager.Object, customsManager.Object));
         }
 
         [Fact]
         public void AccountId_ReturnsShipmentValue()
         {
             shipment.Ups.UpsAccountID = 12;
-            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(12, testObject.AccountId);
         }
 
@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         [InlineData(10009238)]
         public void AccountId_StoresSpecifiedValue_WhenValueIsValid(long value)
         {
-            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             testObject.AccountId = value;
             Assert.Equal(value, shipment.Ups.UpsAccountID);
         }
@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         [Fact]
         public void AccountId_StoresZero_WhenValueIsNull()
         {
-            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             testObject.AccountId = null;
             Assert.Equal(0, shipment.Ups.UpsAccountID);
         }
@@ -92,21 +92,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         [Fact]
         public void Shipment_IsNotNull()
         {
-            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.NotNull(testObject.Shipment);
         }
 
         [Fact]
         public void ShipmentTypeCode_IsUps()
         {
-            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(ShipmentTypeCode.UpsOnLineTools, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void SupportsAccounts_IsTrue()
         {
-            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             Assert.True(testObject.SupportsAccounts);
         }
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         [Fact]
         public void SupportsMultiplePackages_IsTrue()
         {
-            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.True(testObject.SupportsMultiplePackages);
         }
 
@@ -124,7 +124,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
             shipment.OriginCountryCode = "US";
             shipment.ShipCountryCode = "US";
 
-            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.True(testObject.IsDomestic);
         }
 
@@ -134,14 +134,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
             shipment.OriginCountryCode = "US";
             shipment.ShipCountryCode = "CA";
 
-            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.False(testObject.IsDomestic);
         }
 
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentTypeAndCustomsManager()
         {
-            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             testObject.UpdateDynamicData();
 
             shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
@@ -158,7 +158,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
 
             customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(errors);
 
-            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            UpsShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(1, testObject.UpdateDynamicData().Count);
@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         [Fact]
         public void SupportsPackageTypes_IsTrue()
         {
-            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             Assert.True(testObject.SupportsPackageTypes);
         }
@@ -175,14 +175,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         [Fact]
         public void ShipDate_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
         }
 
         [Fact]
         public void ShipDate_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
@@ -192,14 +192,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         [Fact]
         public void UsingInsurance_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
         }
 
         [Fact]
         public void UsingInsurance_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             testObject.UsingInsurance = !testObject.UsingInsurance;
 
@@ -209,14 +209,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         [Fact]
         public void ServiceType_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             Assert.Equal(shipment.Ups.Service, testObject.ServiceType);
         }
 
         [Fact]
         public void ServiceType_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
+            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
             shipment.Ups.Service = (int)UpsServiceType.UpsGround;
             testObject.ServiceType = (int)UpsServiceType.Ups2DayAir;

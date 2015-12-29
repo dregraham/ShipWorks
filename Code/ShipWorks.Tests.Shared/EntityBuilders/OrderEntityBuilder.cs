@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -39,6 +40,24 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public OrderEntityBuilder WithShipment(Action<ShipmentEntityBuilder> builderConfiguration) =>
             CreateCollectionEntity(builderConfiguration, x => x.Shipments);
+
+        /// <summary>
+        /// Set the shipping address on the order
+        /// </summary>
+        public OrderEntityBuilder WithShipAddress(string address1, string address2, string city, string state, string postalCode, string country)
+        {
+            Set(x => x.ShipPerson = new PersonAdapter
+            {
+                Street1 = address1,
+                Street2 = address2,
+                City = city,
+                StateProvCode = state,
+                PostalCode = postalCode,
+                CountryCode = country
+            });
+
+            return this;
+        }
 
         /// <summary>
         /// Add an item to the order

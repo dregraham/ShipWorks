@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping
         private readonly IShippingManager shippingManager;
         private readonly Func<IShipmentProcessor> createShipmentProcessor;
         private readonly ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
-        private readonly IShipmentTypeFactory shipmentTypeFactory;
+        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ICustomsManager customsManager;
 
         /// <summary>
@@ -109,14 +109,14 @@ namespace ShipWorks.Shipping
         [NDependIgnoreLongMethod]
         public ShippingDlg(OpenShippingDialogMessage message, IShippingManager shippingManager, IShippingErrorManager errorManager,
             IMessenger messenger, ILifetimeScope lifetimeScope, Func<IShipmentProcessor> createShipmentProcessor,
-            ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher, IShipmentTypeFactory shipmentTypeFactory,
+            ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher, IShipmentTypeManager shipmentTypeManager,
             ICustomsManager customsManager)
         {
             InitializeComponent();
 
             ErrorManager = errorManager;
             this.customsManager = customsManager;
-            this.shipmentTypeFactory = shipmentTypeFactory;
+            this.shipmentTypeManager = shipmentTypeManager;
             this.carrierConfigurationShipmentRefresher = carrierConfigurationShipmentRefresher;
             this.messenger = messenger;
             this.createShipmentProcessor = createShipmentProcessor;
@@ -295,7 +295,7 @@ namespace ShipWorks.Shipping
 
             if (selected != null && !enabledTypes.Any(p => p.Value == selected.Value))
             {
-                enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(shipmentTypeFactory.Get(selected.Value).ShipmentTypeName, selected.Value));
+                enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(shipmentTypeManager.Get(selected.Value).ShipmentTypeName, selected.Value));
                 SortShipmentTypes(enabledTypes);
             }
 
@@ -630,7 +630,7 @@ namespace ShipWorks.Shipping
             // and the store address has since changed, we want to update to reflect that.
             foreach (ShipmentEntity shipment in loadedShipmentEntities.Where(x => !x.Processed))
             {
-                shipmentTypeFactory.Get(shipment).UpdateDynamicShipmentData(shipment);
+                shipmentTypeManager.Get(shipment).UpdateDynamicShipmentData(shipment);
             }
 
             // Load the service control with the UI displayed shipments
@@ -1109,7 +1109,7 @@ namespace ShipWorks.Shipping
                     trackingProcessedDate.Text = shipment.ProcessedDate.Value.ToLocalTime().ToString("M/dd/yyy h:mm tt");
                     trackingCost.Text = StringUtility.FormatFriendlyCurrency(shipment.ShipmentCost);
 
-                    ShipmentType shipmentType = shipmentTypeFactory.Get(shipment);
+                    ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
                     List<string> trackingList = shipmentType.GetTrackingNumbers(shipment);
 
                     trackingNumbers.Height = 20 + (trackingList.Count - 1) * 14;
@@ -1473,7 +1473,7 @@ namespace ShipWorks.Shipping
             {
                 if (!shipment.Processed)
                 {
-                    ShipmentType shipmentType = shipmentTypeFactory.Get(shipment);
+                    ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
                     shipmentType.UpdateDynamicShipmentData(shipment);
                     shipmentType.UpdateTotalWeight(shipment);
 
@@ -1601,7 +1601,7 @@ namespace ShipWorks.Shipping
                         canApplyProfile = true;
                     }
 
-                    if (!shipment.Processed && shipmentTypeFactory.Get(shipment).SupportsGetRates)
+                    if (!shipment.Processed && shipmentTypeManager.Get(shipment).SupportsGetRates)
                     {
                         canGetRates = true;
                     }
@@ -1724,7 +1724,7 @@ namespace ShipWorks.Shipping
                 return null;
             }
 
-            return shipmentTypeFactory.Get((ShipmentTypeCode) typeCode);
+            return shipmentTypeManager.Get((ShipmentTypeCode) typeCode);
         }
 
         /// <summary>
@@ -1947,7 +1947,7 @@ namespace ShipWorks.Shipping
         private void OnGetRatesTimerTick(object sender, EventArgs e)
         {
             ShipmentEntity clonedShipment = clonedShipmentEntityForRates;
-            ShipmentType uiShipmentType = shipmentTypeFactory.Get(clonedShipment);
+            ShipmentType uiShipmentType = shipmentTypeManager.Get(clonedShipment);
 
             getRatesTimer.Stop();
 
