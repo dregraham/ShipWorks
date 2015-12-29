@@ -20,14 +20,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public class EndiciaRatingService : PostalRatingService
     {
         private readonly IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
-        private readonly LogEntryFactory logEntryFactory;
+        private readonly ILogEntryFactory logEntryFactory;
         private readonly Func<string, ICertificateInspector> certificateInspectorFactory;
 
         public EndiciaRatingService(
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory, 
             IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
             IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository,
-            LogEntryFactory logEntryFactory,
+            ILogEntryFactory logEntryFactory,
             Func<string, ICertificateInspector> certificateInspectorFactory)
             : base(ratingServiceFactory, shipmentTypeFactory)
         {

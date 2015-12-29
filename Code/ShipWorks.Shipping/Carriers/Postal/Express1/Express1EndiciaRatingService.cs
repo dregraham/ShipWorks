@@ -19,7 +19,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory,
             IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
             IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository,
-            LogEntryFactory logEntryFactory, Func<string, ICertificateInspector> certificateInspectorFactory)
+            ILogEntryFactory logEntryFactory, 
+            Func<string, ICertificateInspector> certificateInspectorFactory)
             : base(ratingServiceFactory, shipmentTypeFactory, accountRepository, logEntryFactory, certificateInspectorFactory)
         {}
 

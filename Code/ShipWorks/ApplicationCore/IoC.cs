@@ -83,10 +83,10 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterAssemblyModules(assemblies);
 
             builder.RegisterType<EditionManagerWrapper>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<LogEntryFactory>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .AsSelf();
+                
+            builder.RegisterType<LogEntryFactory>();
 
             current = builder.Build();
         }

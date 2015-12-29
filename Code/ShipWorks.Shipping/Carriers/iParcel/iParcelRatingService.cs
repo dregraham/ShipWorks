@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelRatingService"/> class.
         /// </summary>
-        public iParcelRatingService(iParcelAccountRepository accountRepository, IiParcelServiceGateway serviceGateway, iParcelShipmentType iParcelShipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository, IOrderManager orderManager)
+        public iParcelRatingService(ICarrierAccountRepository<IParcelAccountEntity> accountRepository, IiParcelServiceGateway serviceGateway, iParcelShipmentType iParcelShipmentType, IExcludedServiceTypeRepository excludedServiceTypeRepository, IOrderManager orderManager)
         {
             this.accountRepository = accountRepository;
             this.serviceGateway = serviceGateway;
@@ -40,22 +40,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
-            IParcelAccountEntity iParcelAccount;
+            IParcelAccountEntity iParcelAccount = accountRepository.GetAccount(shipment.IParcel.IParcelAccountID);
 
-            try
+            if (iParcelAccount == null)
             {
-                iParcelAccount = accountRepository.GetAccount(shipment.IParcel.IParcelAccountID);
+                // Provide a message with additional context
+                throw new ShippingException("An i-parcel account is required to view rates.");
             }
-            catch (iParcelException ex)
-            {
-                if (ex.Message == "No i-parcel account is selected for the shipment.")
-                {
-                    // Provide a message with additional context
-                    throw new iParcelException("An i-parcel account is required to view rates.", ex);
-                }
-                throw;
-            }
-
+            
             // i-parcel requires that we upload item information, so fetch the order and order items
             orderManager.PopulateOrderDetails(shipment);
 

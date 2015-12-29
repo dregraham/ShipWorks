@@ -37,7 +37,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 .AsImplementedInterfaces();
 
             builder.RegisterType<iParcelAccountRepository>()
-                .Keyed<CarrierAccountRepositoryBase<IParcelAccountEntity>>(ShipmentTypeCode.iParcel);
-        }
+                .Keyed<CarrierAccountRepositoryBase<IParcelAccountEntity>>(ShipmentTypeCode.iParcel)
+                .AsImplementedInterfaces();
+        }   
     }
 }

@@ -284,7 +284,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                             else
                             {
                                 // The carrier does not support get rates so we display a message to the user
-                                rateControl.ClearRates($"The provider \"{panelRateGroup.Carrier}\" does not support retrieving rates.", panelRateGroup);
+                                rateControl.ClearRates($"The provider \"{EnumHelper.GetDescription(panelRateGroup.Carrier)}\" does not support retrieving rates.", panelRateGroup);
                             }
                         }
                     }
