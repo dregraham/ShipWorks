@@ -348,7 +348,7 @@ namespace ShipWorks.Data.Administration
             tangoUserControlHost = IoC.UnsafeGlobalLifetimeScope.ResolveNamed<WizardPage>("CustomerLicenseActivationControlHost");
             
             // Replace the user wizard page with the new tango user wizard page
-            Pages[Pages.IndexOf(wizardPageShipWorksAdmin)] = tangoUserControlHost;
+            Pages.Insert(Pages.Count - 2, tangoUserControlHost);
         }
 
         #region Setup or Connect
@@ -2165,83 +2165,6 @@ namespace ShipWorks.Data.Administration
 
         #endregion
 
-        #region ShipWorks Administrator
-
-        /// <summary>
-        /// Stepping into the page to create a ShipWorks admin user
-        /// </summary>
-        private void OnSteppingIntoShipWorksAdmin(object sender, WizardSteppingIntoEventArgs e)
-        {
-            try
-            {
-                using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
-                {
-                    // If its not the correct db version, then the upgrade wizard will take care of
-                    // ensuring admin user.
-                    //
-                    // If any admin users already exist we can skip this.
-                    //
-                    e.Skip = !SqlSchemaUpdater.IsCorrectSchemaVersion() || UserUtility.HasAdminUsers();
-                }
-            }
-            catch (SqlException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Time to create the ShipWorks administrator
-        /// </summary>
-        private void OnStepNextShipWorksAdmin(object sender, WizardStepEventArgs e)
-        {
-            string username = swUsername.Text.Trim();
-
-            // Default to not moving on
-            WizardPage nextPage = e.NextPage;
-            e.NextPage = CurrentPage;
-
-            if (username.Length == 0)
-            {
-                MessageHelper.ShowMessage(this, "Please enter a username.");
-                return;
-            }
-
-            if (!EmailUtility.IsValidEmailAddress(swEmail.Text))
-            {
-                MessageHelper.ShowMessage(this, "Please enter a valid email address.");
-                return;
-            }
-
-            if (swPassword.Text != swPasswordAgain.Text)
-            {
-                MessageHelper.ShowMessage(this, "The passwords you typed do not match.");
-                return;
-            }
-
-            try
-            {
-                using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
-                {
-                    UserUtility.CreateUser(username, swEmail.Text, swPassword.Text, true);
-                    adminUserCreated = true;
-                }
-
-                // Now we can move on
-                e.NextPage = nextPage;
-            }
-            catch (SqlException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
-            }
-            catch (DuplicateNameException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
-            }
-        }
-
-        #endregion
-
         #region Complete
 
         /// <summary>
@@ -2254,26 +2177,6 @@ namespace ShipWorks.Data.Administration
             pendingDatabaseName = "";
 
             sqlSession.SaveAsCurrent();
-
-            // If we created this database, then seamlessly continue this wizard into the add store wizard
-            if (ChooseWisely == ChooseWiselyOption.Create)
-            {
-                AddStoreWizard.ContinueAfterCreateDatabase(this, swUsername.Text.Trim(), swPassword.Text);
-            }
-            else
-            {
-                // We now have a new session
-                if (SqlSchemaUpdater.IsCorrectSchemaVersion())
-                {
-                    UserSession.InitializeForCurrentDatabase();
-                }
-
-                // If we created the admin user, go ahead and log that user in
-                if (adminUserCreated)
-                {
-                    UserSession.Logon(swUsername.Text.Trim(), swPassword.Text, true);
-                }
-            }
         }
 
         /// <summary>

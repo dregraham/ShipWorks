@@ -15,6 +15,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
 using System.IO;
 using Autofac;
+using Autofac.Core;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Email;
@@ -77,13 +78,18 @@ namespace ShipWorks.Data.Administration
 
             sqlInstaller = new SqlServerInstaller();
             sqlInstaller.InitializeForCurrentSqlSession();
-            sqlInstaller.Exited += new EventHandler(OnPrepareAutomaticDatabaseExited);
+            sqlInstaller.Exited += OnPrepareAutomaticDatabaseExited;
+
+            IEnumerable<Parameter> foo = new List<Parameter>
+            {
+                new TypedParameter(typeof(SqlSession), sqlSession)
+            };
 
             // Resolve the user control
-            tangoUserControlHost = IoC.UnsafeGlobalLifetimeScope.ResolveNamed<WizardPage>("CustomerLicenseActivationControlHost");
+            tangoUserControlHost = IoC.UnsafeGlobalLifetimeScope.ResolveNamed<WizardPage>("CustomerLicenseActivationControlHost", foo);
 
             // Replace the user wizard page with the new tango user wizard page
-            Pages[Pages.IndexOf(wizardPageUser)] = tangoUserControlHost;
+            Pages.Insert(Pages.Count - 1, tangoUserControlHost);
         }
 
         /// <summary>
@@ -361,60 +367,6 @@ namespace ShipWorks.Data.Administration
             {
                 throw new InvalidOperationException("We shouldn't be moving next from this page if we didn't create a database - we should have skipped it");
             }
-        }
-
-        /// <summary>
-        /// Stepping next from the create username page
-        /// </summary>
-        private void OnStepNextCreateUsername(object sender, WizardStepEventArgs e)
-        {
-            string username = swUsername.Text.Trim();
-
-            // Default to not moving on
-            e.NextPage = CurrentPage;
-
-            if (username.Length == 0)
-            {
-                MessageHelper.ShowMessage(this, "Please enter a username.");
-                return;
-            }
-
-            if (!EmailUtility.IsValidEmailAddress(swEmail.Text))
-            {
-                MessageHelper.ShowMessage(this, "Please enter a valid email address.");
-                return;
-            }
-
-            if (swPassword.Text != swPasswordAgain.Text)
-            {
-                MessageHelper.ShowMessage(this, "The passwords you typed do not match.");
-                return;
-            }
-
-            Cursor.Current = Cursors.WaitCursor;
-
-            try
-            {
-                using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
-                {
-                    UserUtility.CreateUser(username, swEmail.Text, swPassword.Text, true);
-                }
-            }
-            catch (SqlException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
-            }
-            catch (DuplicateNameException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
-            }
-
-            // Save and commit the database creation
-            createdDatabase = false;
-            sqlSession.SaveAsCurrent();
-
-            // Now we propel them right into our add store wizard
-            AddStoreWizard.ContinueAfterCreateDatabase(this, username, swPassword.Text);
         }
 
         /// <summary>

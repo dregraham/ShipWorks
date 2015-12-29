@@ -1,6 +1,6 @@
 namespace ShipWorks.Stores.Management
 {
-    partial class AddStoreWizard
+    public partial class AddStoreWizard
     {
         /// <summary>
         /// Required designer variable.

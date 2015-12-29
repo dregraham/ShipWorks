@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Windows.Forms;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Connection;
@@ -53,8 +55,10 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Saves the user to the database
         /// </summary>
-        public string Save()
+        public string Save(SqlSession sqlSession)
         {
+            Cursor.Current = Cursors.WaitCursor;
+            
             // Activate the software using the given username/password
             try
             {
@@ -65,6 +69,18 @@ namespace ShipWorks.UI.Controls
                 return ex.Message;
             }
             
+            try
+            {
+                using (new SqlSessionScope(sqlSession))
+                {
+                    UserUtility.CreateUser(Username, Password, Password, true);
+                }
+            }
+            catch (DuplicateNameException ex)
+            {
+                return ex.Message;
+            }
+
             // nothing went wrong so we return an empty string
             return string.Empty;
         }

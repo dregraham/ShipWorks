@@ -98,18 +98,6 @@ namespace ShipWorks.Data.Administration
             this.wizardPageComplete = new ShipWorks.UI.Wizard.WizardPage();
             this.labelSetupComplete = new System.Windows.Forms.Label();
             this.iconSetupComplete = new System.Windows.Forms.PictureBox();
-            this.wizardPageShipWorksAdmin = new ShipWorks.UI.Wizard.WizardPage();
-            this.helpUserEmail = new ShipWorks.UI.Controls.InfoTip();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
-            this.swEmail = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.swPasswordAgain = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.swPassword = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.swUsername = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.wizardPageRestoreDatabase = new ShipWorks.UI.Wizard.WizardPage();
             this.labelCantRestore = new System.Windows.Forms.Label();
             this.groupInfo = new System.Windows.Forms.GroupBox();
@@ -197,8 +185,6 @@ namespace ShipWorks.Data.Administration
             this.panelSqlServerInstallReady.SuspendLayout();
             this.wizardPageComplete.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconSetupComplete)).BeginInit();
-            this.wizardPageShipWorksAdmin.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             this.wizardPageRestoreDatabase.SuspendLayout();
             this.groupInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.warningIcon)).BeginInit();
@@ -235,7 +221,7 @@ namespace ShipWorks.Data.Administration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageShipWorksAdmin);
+            this.mainPanel.Controls.Add(this.wizardPageChooseWisely2012);
             this.mainPanel.Size = new System.Drawing.Size(548, 307);
             // 
             // etchBottom
@@ -1002,128 +988,6 @@ namespace ShipWorks.Data.Administration
             this.iconSetupComplete.TabIndex = 0;
             this.iconSetupComplete.TabStop = false;
             // 
-            // wizardPageShipWorksAdmin
-            // 
-            this.wizardPageShipWorksAdmin.Controls.Add(this.helpUserEmail);
-            this.wizardPageShipWorksAdmin.Controls.Add(this.pictureBox6);
-            this.wizardPageShipWorksAdmin.Controls.Add(this.swEmail);
-            this.wizardPageShipWorksAdmin.Controls.Add(this.label7);
-            this.wizardPageShipWorksAdmin.Controls.Add(this.swPasswordAgain);
-            this.wizardPageShipWorksAdmin.Controls.Add(this.label6);
-            this.wizardPageShipWorksAdmin.Controls.Add(this.swPassword);
-            this.wizardPageShipWorksAdmin.Controls.Add(this.label8);
-            this.wizardPageShipWorksAdmin.Controls.Add(this.swUsername);
-            this.wizardPageShipWorksAdmin.Controls.Add(this.label9);
-            this.wizardPageShipWorksAdmin.Controls.Add(this.label10);
-            this.wizardPageShipWorksAdmin.Description = "Create a user account to log on to ShipWorks.";
-            this.wizardPageShipWorksAdmin.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageShipWorksAdmin.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageShipWorksAdmin.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageShipWorksAdmin.Name = "wizardPageShipWorksAdmin";
-            this.wizardPageShipWorksAdmin.Size = new System.Drawing.Size(548, 307);
-            this.wizardPageShipWorksAdmin.TabIndex = 0;
-            this.wizardPageShipWorksAdmin.Title = "ShipWorks Account";
-            this.wizardPageShipWorksAdmin.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextShipWorksAdmin);
-            this.wizardPageShipWorksAdmin.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoShipWorksAdmin);
-            // 
-            // helpUserEmail
-            // 
-            this.helpUserEmail.Caption = "Your email address will be used to send you a new password if its forgotten.";
-            this.helpUserEmail.Location = new System.Drawing.Point(384, 68);
-            this.helpUserEmail.Name = "helpUserEmail";
-            this.helpUserEmail.Size = new System.Drawing.Size(12, 12);
-            this.helpUserEmail.TabIndex = 184;
-            this.helpUserEmail.Title = "Email Address";
-            // 
-            // pictureBox6
-            // 
-            this.pictureBox6.Image = global::ShipWorks.Properties.Resources.dude31;
-            this.pictureBox6.Location = new System.Drawing.Point(23, 8);
-            this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(32, 32);
-            this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox6.TabIndex = 183;
-            this.pictureBox6.TabStop = false;
-            // 
-            // swEmail
-            // 
-            this.swEmail.Location = new System.Drawing.Point(135, 64);
-            this.fieldLengthProvider.SetMaxLengthSource(this.swEmail, ShipWorks.Data.Utility.EntityFieldLengthSource.UserEmail);
-            this.swEmail.Name = "swEmail";
-            this.swEmail.Size = new System.Drawing.Size(243, 21);
-            this.swEmail.TabIndex = 171;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(53, 67);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(76, 13);
-            this.label7.TabIndex = 178;
-            this.label7.Text = "Email address:";
-            // 
-            // swPasswordAgain
-            // 
-            this.swPasswordAgain.Location = new System.Drawing.Point(135, 118);
-            this.fieldLengthProvider.SetMaxLengthSource(this.swPasswordAgain, ShipWorks.Data.Utility.EntityFieldLengthSource.UserPassword);
-            this.swPasswordAgain.Name = "swPasswordAgain";
-            this.swPasswordAgain.Size = new System.Drawing.Size(243, 21);
-            this.swPasswordAgain.TabIndex = 173;
-            this.swPasswordAgain.UseSystemPasswordChar = true;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(34, 121);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(95, 13);
-            this.label6.TabIndex = 177;
-            this.label6.Text = "Retype password:";
-            // 
-            // swPassword
-            // 
-            this.swPassword.Location = new System.Drawing.Point(135, 91);
-            this.fieldLengthProvider.SetMaxLengthSource(this.swPassword, ShipWorks.Data.Utility.EntityFieldLengthSource.UserPassword);
-            this.swPassword.Name = "swPassword";
-            this.swPassword.Size = new System.Drawing.Size(243, 21);
-            this.swPassword.TabIndex = 172;
-            this.swPassword.UseSystemPasswordChar = true;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(72, 94);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(57, 13);
-            this.label8.TabIndex = 176;
-            this.label8.Text = "Password:";
-            // 
-            // swUsername
-            // 
-            this.swUsername.Location = new System.Drawing.Point(135, 37);
-            this.fieldLengthProvider.SetMaxLengthSource(this.swUsername, ShipWorks.Data.Utility.EntityFieldLengthSource.UserName);
-            this.swUsername.Name = "swUsername";
-            this.swUsername.Size = new System.Drawing.Size(243, 21);
-            this.swUsername.TabIndex = 170;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(70, 40);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(59, 13);
-            this.label9.TabIndex = 175;
-            this.label9.Text = "Username:";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(72, 8);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(172, 13);
-            this.label10.TabIndex = 174;
-            this.label10.Text = "Create your ShipWorks username:";
-            // 
             // wizardPageRestoreDatabase
             // 
             this.wizardPageRestoreDatabase.Controls.Add(this.labelCantRestore);
@@ -1136,7 +1000,7 @@ namespace ShipWorks.Data.Administration
             this.wizardPageRestoreDatabase.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageRestoreDatabase.Location = new System.Drawing.Point(0, 0);
             this.wizardPageRestoreDatabase.Name = "wizardPageRestoreDatabase";
-            this.wizardPageRestoreDatabase.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageRestoreDatabase.Size = new System.Drawing.Size(548, 307);
             this.wizardPageRestoreDatabase.TabIndex = 0;
             this.wizardPageRestoreDatabase.Title = "Restore Backup";
             this.wizardPageRestoreDatabase.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextRestoreBackup);
@@ -1786,7 +1650,6 @@ namespace ShipWorks.Data.Administration
             this.wizardPageDatabaseName,
             this.wizardPageRestoreLogin,
             this.wizardPageRestoreDatabase,
-            this.wizardPageShipWorksAdmin,
             this.wizardPageComplete});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "ShipWorks Setup";
@@ -1833,9 +1696,6 @@ namespace ShipWorks.Data.Administration
             this.wizardPageComplete.ResumeLayout(false);
             this.wizardPageComplete.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconSetupComplete)).EndInit();
-            this.wizardPageShipWorksAdmin.ResumeLayout(false);
-            this.wizardPageShipWorksAdmin.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             this.wizardPageRestoreDatabase.ResumeLayout(false);
             this.wizardPageRestoreDatabase.PerformLayout();
             this.groupInfo.ResumeLayout(false);
@@ -1887,16 +1747,6 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.Label label21;
         private ShipWorks.UI.Wizard.WizardPage wizardPageComplete;
         private System.Windows.Forms.PictureBox iconSetupComplete;
-        private ShipWorks.UI.Wizard.WizardPage wizardPageShipWorksAdmin;
-        private System.Windows.Forms.TextBox swEmail;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox swPasswordAgain;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox swPassword;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox swUsername;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
         private ShipWorks.UI.Wizard.WizardPage wizardPageRestoreDatabase;
         private ShipWorks.UI.Wizard.WizardPage wizardPageRestoreOption;
         private System.Windows.Forms.RadioButton radioRestoreIntoCurrent;
@@ -1920,12 +1770,10 @@ namespace ShipWorks.Data.Administration
         private System.Windows.Forms.PictureBox warningIcon;
         private System.Windows.Forms.Label labelNote2;
         private System.Windows.Forms.Label labelCantRestore;
-        private System.Windows.Forms.PictureBox pictureBox6;
         private ShipWorks.UI.Wizard.WizardPage wizardPagePrerequisitePlaceholder;
         private System.Windows.Forms.Label label24;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private UI.Controls.InfoTip infoTip1;
-        private UI.Controls.InfoTip helpUserEmail;
         private System.Windows.Forms.Panel panelSqlInstanceCurrent;
         private System.Windows.Forms.Panel panelSqlInstanceRunning;
         private System.Windows.Forms.Label labelSqlServerRunning3;

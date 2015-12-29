@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Management
     /// Wizard for adding a new store to ShipWorks
     /// </summary>
     [NDependIgnoreLongTypes]
-    partial class AddStoreWizard : WizardForm
+    public partial class AddStoreWizard : WizardForm
     {
         // State container for use by wizard pages
         Dictionary<string, object> stateBag = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
@@ -121,47 +121,6 @@ namespace ShipWorks.Stores.Management
                 MessageHelper.ShowInformation(owner, "Another user is already setting up ShipWorks.  This can only be done on one computer at a time.");
                 return false;
             }
-        }
-
-        /// <summary>
-        /// Designed to be called from the last step of another wizard where a brand new database and user account was just created, this makes it look to the user
-        /// like the ShipWorks Setup wizard is a seamless continuation of the previous wizard.  The DialogResult of the ShipWorks Setup is used as the DialogResult
-        /// that closes the original wizard.
-        /// </summary>
-        public static void ContinueAfterCreateDatabase(WizardForm originalWizard, string username, string password)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-
-            // Initialize the session
-            UserSession.InitializeForCurrentDatabase();
-
-            bool complete = false;
-
-            // Logon the user - this has failed in the wild (FB 275179), so instead of crashing, we'll ask them to log in again
-            if (UserSession.Logon(username, password, true))
-            {
-                // Initialize the session
-                UserManager.InitializeForCurrentUser();
-                UserSession.InitializeForCurrentSession();
-
-                originalWizard.BeginInvoke(new MethodInvoker(originalWizard.Hide));
-
-                // Run the setup wizard
-                complete = RunWizard(originalWizard);
-
-                // If the wizard didn't complete, then the we can't exit this with the user still looking like they were logged in
-                if (!complete)
-                {
-                    UserSession.Logoff(false);
-                }
-            }
-            else
-            {
-                MessageHelper.ShowWarning(originalWizard.Owner, "There was a problem while logging in. Please try again.");
-            }
-
-            // Counts as a cancel on the original wizard if they didn't complete the setup.
-            originalWizard.DialogResult = complete ? DialogResult.OK : DialogResult.Cancel;
         }
 
         #endregion
