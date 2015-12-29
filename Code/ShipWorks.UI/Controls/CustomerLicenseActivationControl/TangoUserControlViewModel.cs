@@ -3,12 +3,10 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
-using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users;
-using static System.String;
 
 namespace ShipWorks.UI.Controls
 {
@@ -17,7 +15,7 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public class CustomerLicenseActivationViewModel
     {
-        private readonly ITangoWebClient tangoWebClient;
+        private readonly ICustomerLicense customerLicense;
         private readonly PropertyChangedHandler Handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string username;
@@ -26,9 +24,9 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(ITangoWebClient tangoWebClient)
+        public CustomerLicenseActivationViewModel(ICustomerLicense customerLicense)
         {
-            this.tangoWebClient = tangoWebClient;
+            this.customerLicense = customerLicense;
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -55,29 +53,14 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Saves the user to the database
         /// </summary>
-        /// <returns></returns>
         public string Save()
         {
             // Activate the software using the given username/password
             try
             {
-                ActivationResponse response = tangoWebClient.ActivateLicense(Username, Password);
+                customerLicense.Activate(Username, Password);
             }
             catch (Exception ex)
-            {
-                return ex.Message;
-            }
-
-            // Create the username 
-            try
-            {
-                UserUtility.CreateUser(Username, Username, Password, true);
-            }
-            catch (SqlException ex)
-            {
-                return ex.Message;
-            }
-            catch (DuplicateNameException ex)
             {
                 return ex.Message;
             }

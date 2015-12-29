@@ -82,6 +82,12 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<TangoWebClientWrapper>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<CustomerLicense>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<CustomerLicenseWriter>()
+                .AsImplementedInterfaces();
+
             current = builder.Build();
         }
     }
