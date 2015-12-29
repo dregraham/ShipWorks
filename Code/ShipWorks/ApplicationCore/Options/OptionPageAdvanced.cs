@@ -146,17 +146,22 @@ namespace ShipWorks.ApplicationCore.Options
                     // The reset could take a few seconds depending on the size of the database, so 
                     // reset the knowledge base on a separate thread
                     Task resetTask = new Knowledgebase().ResetAsync(UserSession.User, progressItem);
+                    Task reloadTask = null;
+
+                    if (isReloadRequested)
+                    {
+                        // The reset has completed, setup the reload if it was requested
+                        reloadTask = CreateReloadKnowledgebaseTask(progressProvider);
+                    }
+
                     resetTask.ContinueWith((t) =>
                     {
-                        // The reset has completed, now do the reload if it was requested
-                        if (isReloadRequested)
-                        {
-                            ReloadKnowledgebase(progressProvider);
-                        }
+                        reloadTask?.Start();
                     });
 
                     // Start the reset/reload work and show the progress dialog
                     resetTask.Start();
+
                     progressDialog.ShowDialog(this);
                 }
             }
@@ -211,7 +216,7 @@ namespace ShipWorks.ApplicationCore.Options
                 progressDialog.ActionColumnHeaderText = "ShipSense";
                 progressDialog.CloseTextWhenComplete = "Close";
 
-                ReloadKnowledgebase(progressProvider);
+                CreateReloadKnowledgebaseTask(progressProvider).Start();
 
                 // Show the progress dialog
                 progressDialog.ShowDialog(this);
@@ -219,11 +224,14 @@ namespace ShipWorks.ApplicationCore.Options
         }
 
         /// <summary>
-        /// Reloads the ShipSense knowledge base with the latest shipment history. This overloaded
-        /// version allows the reload process to attach a progress item to an existing 
+        /// Creates a task to reload the ShipSense knowledge base with the latest shipment history. 
+        /// This overloaded version allows the reload process to attach a progress item to an existing 
         /// progress provider.
         /// </summary>
-        private void ReloadKnowledgebase(ProgressProvider progressProvider)
+        /// <remarks>
+        /// Task will be added to progressProvider. Still needs to be started.
+        /// </remarks>
+        private Task CreateReloadKnowledgebaseTask(ProgressProvider progressProvider)
         {
             // Record an entry in the audit log that the KB reload was started
             AuditUtility.Audit(AuditActionType.ReloadShipSenseStarted);
@@ -241,8 +249,10 @@ namespace ShipWorks.ApplicationCore.Options
 
             // Start the load asynchronously now that everything should be ready to load
             // We MUST ContinueWith and dispose the loader so that the sql connection
-            // gets disposed.
-            Task.Factory.StartNew(loader.LoadData).ContinueWith(t => loader.Dispose());
+            Task reloadKnowledgebaTask = new Task(loader.LoadData);
+            reloadKnowledgebaTask.ContinueWith(t => loader.Dispose());
+
+            return reloadKnowledgebaTask;
         }
     }
 }

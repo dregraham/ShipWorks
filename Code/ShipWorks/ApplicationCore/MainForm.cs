@@ -259,16 +259,9 @@ namespace ShipWorks
             {
                 return;
             }
-
-            // Make sure that change tracking is enabled for the database and all applicable tables.
-            SqlChangeTracking sqlChangeTracking = new SqlChangeTracking();
-            sqlChangeTracking.Enable();
-
+            
             // Initiate the logon sequence
             InitiateLogon();
-
-            ShipSenseLoader.LoadDataAsync();
-
         }
 
         /// <summary>
@@ -367,7 +360,13 @@ namespace ShipWorks
 
             if (LogonToSqlServer())
             {
+                // Make sure that change tracking is enabled for the database and all applicable tables.
+                SqlChangeTracking sqlChangeTracking = new SqlChangeTracking();
+                sqlChangeTracking.Enable();
+
                 LogonToShipWorks();
+
+                ShipSenseLoader.LoadDataAsync();
             }
             else
             {
