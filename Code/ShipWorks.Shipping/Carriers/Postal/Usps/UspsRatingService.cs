@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     GetRatesInternal(shipment) :
                     GetCounterRates(shipment);
             }
-            catch (UspsApiException ex)
+            catch (UspsException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
