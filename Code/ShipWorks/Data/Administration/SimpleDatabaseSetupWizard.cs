@@ -18,9 +18,11 @@ using Autofac;
 using Autofac.Core;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Email;
 using ShipWorks.Users;
 using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Data.Administration
@@ -46,7 +48,7 @@ namespace ShipWorks.Data.Administration
         ElevatedPreparationType preparationType = ElevatedPreparationType.None;
 
         // The user setup wizard page
-        private WizardPage tangoUserControlHost;
+        private readonly ICustomerLicenseActivation tangoUserControlHost;
 
         /// <summary>
         /// What we need to do from elevation
@@ -80,16 +82,12 @@ namespace ShipWorks.Data.Administration
             sqlInstaller.InitializeForCurrentSqlSession();
             sqlInstaller.Exited += OnPrepareAutomaticDatabaseExited;
 
-            IEnumerable<Parameter> foo = new List<Parameter>
-            {
-                new TypedParameter(typeof(SqlSession), sqlSession)
-            };
-
             // Resolve the user control
-            tangoUserControlHost = IoC.UnsafeGlobalLifetimeScope.ResolveNamed<WizardPage>("CustomerLicenseActivationControlHost", foo);
-
+            tangoUserControlHost = IoC.UnsafeGlobalLifetimeScope.Resolve<ICustomerLicenseActivation>();
+            tangoUserControlHost.StepNext += OnStepNextCreateUsername;
+            
             // Replace the user wizard page with the new tango user wizard page
-            Pages.Insert(Pages.Count - 1, tangoUserControlHost);
+            Pages.Insert(Pages.Count - 1, (WizardPage)tangoUserControlHost);
         }
 
         /// <summary>
@@ -270,6 +268,43 @@ namespace ShipWorks.Data.Administration
 
                 MoveBack();
             }
+        }
+
+        /// <summary>
+        /// Stepping next from the create username page
+        /// </summary>
+        private void OnStepNextCreateUsername(object sender, WizardStepEventArgs e)
+        {
+            UserEntity user = null;
+
+            try
+            {
+                using (new SqlSessionScope(sqlSession))
+                {
+                    user = tangoUserControlHost.Save();
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageHelper.ShowMessage(this, ex.Message);
+            }
+            catch (DuplicateNameException ex)
+            {
+                MessageHelper.ShowMessage(this, ex.Message);
+            }
+
+            if (user == null)
+            {
+                e.NextPage = (WizardPage)tangoUserControlHost;
+                return;
+            }
+
+            // Save and commit the database creation
+            createdDatabase = false;
+            sqlSession.SaveAsCurrent();
+
+            // Now we propel them right into our add store wizard
+            AddStoreWizard.ContinueAfterCreateDatabase(this, tangoUserControlHost.ViewModel.Username, tangoUserControlHost.ViewModel.Password);
         }
 
         /// <summary>

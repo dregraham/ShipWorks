@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Interapptive.Shared.Utility;
+using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
@@ -10,6 +10,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -82,11 +83,19 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<TangoWebClientWrapper>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<UserManagerWrapper>()
+                .AsImplementedInterfaces();
+
             builder.RegisterType<CustomerLicense>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<CustomerLicenseWriter>()
                 .AsImplementedInterfaces();
+
+            builder.Register(c => Program.MainForm)
+                .As<Control>()
+                .As<IWin32Window>()
+                .ExternallyOwned();
 
             current = builder.Build();
         }

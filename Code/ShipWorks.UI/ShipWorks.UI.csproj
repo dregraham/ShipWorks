@@ -87,14 +87,16 @@
     <Compile Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControl.xaml.cs">
       <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CustomerLicenseActivationControl\TangoUserControlViewModel.cs" />
     <Compile Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControlHost.Designer.cs">
       <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IMessageHelper.cs" />
+    <Compile Include="Services\MessageHelperWrapper.cs" />
     <Compile Include="UIModule.cs" />
     <Compile Include="ValueConverters\EnumImageConverter.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />

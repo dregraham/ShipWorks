@@ -595,6 +595,8 @@
     <Compile Include="ApplicationCore\Licensing\CustomerLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicense.cs" />
+    <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivation.cs" />
+    <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationViewModel.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseWriter.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
@@ -8288,6 +8290,7 @@
     </Compile>
     <Compile Include="Users\Audit\AuditReasonType.cs" />
     <Compile Include="Users\ComputerManager.cs" />
+    <Compile Include="Users\IUserManagerWrapper.cs" />
     <Compile Include="Users\Security\AddStorePermissionsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -8339,6 +8342,7 @@
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
     <Compile Include="Users\UserManager.cs" />
+    <Compile Include="Users\UserManagerWrapper.cs" />
     <Compile Include="Users\UserSession.cs" />
     <Compile Include="Users\Logon\UserChangePasswordDlg.cs">
       <SubType>Form</SubType>

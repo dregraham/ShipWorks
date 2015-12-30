@@ -1,6 +1,7 @@
 ﻿using Autofac;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.UI.Controls;
-using ShipWorks.UI.Wizard;
+using ShipWorks.UI.Services;
 
 namespace ShipWorks.UI
 {
@@ -12,10 +13,13 @@ namespace ShipWorks.UI
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<CustomerLicenseActivationControlHost>()
-                .Named<WizardPage>("CustomerLicenseActivationControlHost")
-                .ExternallyOwned();
+                .As<ICustomerLicenseActivation>();
 
-            builder.RegisterType<CustomerLicenseActivationViewModel>();
+            builder.RegisterType<CustomerLicenseActivationViewModel>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<MessageHelperWrapper>()
+                .AsImplementedInterfaces();
         }
     }
 }

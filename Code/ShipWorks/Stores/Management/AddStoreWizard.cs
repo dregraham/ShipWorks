@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Management
     /// Wizard for adding a new store to ShipWorks
     /// </summary>
     [NDependIgnoreLongTypes]
-    public partial class AddStoreWizard : WizardForm
+    partial class AddStoreWizard : WizardForm
     {
         // State container for use by wizard pages
         Dictionary<string, object> stateBag = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
@@ -123,6 +123,47 @@ namespace ShipWorks.Stores.Management
             }
         }
 
+        /// <summary>
+        /// Designed to be called from the last step of another wizard where a brand new database and user account was just created, this makes it look to the user
+        /// like the ShipWorks Setup wizard is a seamless continuation of the previous wizard.  The DialogResult of the ShipWorks Setup is used as the DialogResult
+        /// that closes the original wizard.
+        /// </summary>
+        public static void ContinueAfterCreateDatabase(WizardForm originalWizard, string username, string password)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            // Initialize the session
+            UserSession.InitializeForCurrentDatabase();
+
+            bool complete = false;
+
+            // Logon the user - this has failed in the wild (FB 275179), so instead of crashing, we'll ask them to log in again
+            if (UserSession.Logon(username, password, true))
+            {
+                // Initialize the session
+                UserManager.InitializeForCurrentUser();
+                UserSession.InitializeForCurrentSession();
+
+                originalWizard.BeginInvoke(new MethodInvoker(originalWizard.Hide));
+
+                // Run the setup wizard
+                complete = RunWizard(originalWizard);
+
+                // If the wizard didn't complete, then the we can't exit this with the user still looking like they were logged in
+                if (!complete)
+                {
+                    UserSession.Logoff(false);
+                }
+            }
+            else
+            {
+                MessageHelper.ShowWarning(originalWizard.Owner, "There was a problem while logging in. Please try again.");
+            }
+
+            // Counts as a cancel on the original wizard if they didn't complete the setup.
+            originalWizard.DialogResult = complete ? DialogResult.OK : DialogResult.Cancel;
+        }
+
         #endregion
 
         /// <summary>
@@ -145,7 +186,7 @@ namespace ShipWorks.Stores.Management
             isFreemiumMode = FreemiumFreeEdition.IsActive;
 
             // Customize wizard experience based on edition
-            if (isFreemiumMode) 
+            if (isFreemiumMode)
             {
                 StoreType storeType = StoreTypeManager.GetType(StoreTypeCode.Ebay);
 
@@ -153,7 +194,7 @@ namespace ShipWorks.Stores.Management
                 comboStoreType.Items.Clear();
                 comboStoreType.Items.Add(new ImageComboBoxItem(storeType.StoreTypeName, storeType, EnumHelper.GetImage(storeType.TypeCode)));
                 comboStoreType.SelectedIndex = 0;
-                
+
                 // Setup for the configured single store type
                 SetupForStoreType(storeType);
 
@@ -254,9 +295,9 @@ namespace ShipWorks.Stores.Management
             {
                 if (comboStoreType.SelectedIndex > 0)
                 {
-                    ImageComboBoxItem item = (ImageComboBoxItem) comboStoreType.SelectedItem;
+                    ImageComboBoxItem item = (ImageComboBoxItem)comboStoreType.SelectedItem;
 
-                    return (StoreType) item.Value;
+                    return (StoreType)item.Value;
                 }
 
                 return null;
@@ -300,7 +341,7 @@ namespace ShipWorks.Stores.Management
         private void SetupForStoreType(StoreType storeType)
         {
             // If we are changing store types, clear the existing pages
-            if (store == null || store.TypeCode != (int) storeType.TypeCode)
+            if (store == null || store.TypeCode != (int)storeType.TypeCode)
             {
                 // If there was an old store we need to clean it up
                 if (store != null)
@@ -602,7 +643,7 @@ namespace ShipWorks.Stores.Management
             // See if the existing one is already for this store
             if (store.StoreID == onlineUpdateConfiguredStoreID)
             {
-                onlineUpdateControl = (OnlineUpdateActionControlBase) panelOnlineUpdatePlaceholder.Controls[0];
+                onlineUpdateControl = (OnlineUpdateActionControlBase)panelOnlineUpdatePlaceholder.Controls[0];
             }
             else
             {
@@ -658,8 +699,8 @@ namespace ShipWorks.Stores.Management
                 e.NextPage = CurrentPage;
                 return;
             }
-			
-			if (!SaveSettingsActions())
+
+            if (!SaveSettingsActions())
             {
                 e.NextPage = CurrentPage;
                 return;
@@ -752,7 +793,7 @@ namespace ShipWorks.Stores.Management
                 return true;
             }
 
-            OnlineUpdateActionControlBase control = (OnlineUpdateActionControlBase) panelOnlineUpdatePlaceholder.Controls[0];
+            OnlineUpdateActionControlBase control = (OnlineUpdateActionControlBase)panelOnlineUpdatePlaceholder.Controls[0];
 
             List<ActionTask> tasks;
 
@@ -777,7 +818,7 @@ namespace ShipWorks.Stores.Management
                     action.Name = "Store Update";
                     action.Enabled = true;
 
-                    action.ComputerLimitedType = (int) ComputerLimitedType.TriggeringComputer;
+                    action.ComputerLimitedType = (int)ComputerLimitedType.TriggeringComputer;
                     action.InternalComputerLimitedList = string.Empty;
 
                     action.StoreLimited = true;
@@ -785,7 +826,7 @@ namespace ShipWorks.Stores.Management
 
                     // Setup the trigger.  We know ShipmentProcessedTrigger doesn't save extra state to the DB, so we don't need to call that function.
                     ShipmentProcessedTrigger trigger = new ShipmentProcessedTrigger();
-                    action.TriggerType = (int) trigger.TriggerType;
+                    action.TriggerType = (int)trigger.TriggerType;
                     action.TriggerSettings = trigger.GetXml();
 
                     // Set the summary
@@ -851,7 +892,7 @@ namespace ShipWorks.Stores.Management
                         if (defaultType != null)
                         {
                             ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-                            shippingSettings.DefaultType = (int) defaultType.Value;
+                            shippingSettings.DefaultType = (int)defaultType.Value;
 
                             ShippingSettings.Save(shippingSettings);
                         }
@@ -897,7 +938,7 @@ namespace ShipWorks.Stores.Management
         {
             StatusPresetEntity preset = new StatusPresetEntity();
             preset.StoreID = store.StoreID;
-            preset.StatusTarget = (int) presetTarget;
+            preset.StatusTarget = (int)presetTarget;
             preset.StatusText = "";
             preset.IsDefault = true;
 

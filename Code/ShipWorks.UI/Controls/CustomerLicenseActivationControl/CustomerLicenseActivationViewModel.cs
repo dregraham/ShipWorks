@@ -1,13 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
 using System.Reflection;
-using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Email;
 using ShipWorks.Users;
 
 namespace ShipWorks.UI.Controls
@@ -15,9 +13,11 @@ namespace ShipWorks.UI.Controls
     /// <summary>
     /// View model for the TangoUserControl
     /// </summary>
-    public class CustomerLicenseActivationViewModel
+    public class CustomerLicenseActivationViewModel : ICustomerLicenseActivationViewModel
     {
         private readonly ICustomerLicense customerLicense;
+        private readonly IUserManagerWrapper userManager;
+        private readonly IMessageHelper messageHelper;
         private readonly PropertyChangedHandler Handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string username;
@@ -26,9 +26,11 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(ICustomerLicense customerLicense)
+        public CustomerLicenseActivationViewModel(ICustomerLicense customerLicense, IUserManagerWrapper userManager, IMessageHelper messageHelper)
         {
             this.customerLicense = customerLicense;
+            this.userManager = userManager;
+            this.messageHelper = messageHelper;
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -55,34 +57,44 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Saves the user to the database
         /// </summary>
-        public string Save(SqlSession sqlSession)
+        public UserEntity Save()
         {
-            Cursor.Current = Cursors.WaitCursor;
-            
-            // Activate the software using the given username/password
-            try
+            UserEntity user = null;
+            if (ValidateUser())
             {
+                // Activate the software using the given username/password
                 customerLicense.Activate(Username, Password);
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-            
-            try
-            {
-                using (new SqlSessionScope(sqlSession))
+                
+                try
                 {
-                    UserUtility.CreateUser(Username, Password, Password, true);
+                    user = userManager.CreateUser(Username, Password, true);
+                }
+                catch (Exception ex)
+                {
+                    messageHelper.ShowError(ex.Message);
                 }
             }
-            catch (DuplicateNameException ex)
+
+            return user;
+        }
+
+        private bool ValidateUser()
+        {
+            // Validate the username
+            if (!EmailUtility.IsValidEmailAddress(Username))
             {
-                return ex.Message;
+                messageHelper.ShowError("Please enter a valid username.");
+                return false;
             }
 
-            // nothing went wrong so we return an empty string
-            return string.Empty;
+            // Validate the password
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                messageHelper.ShowError("Please enter a password.");
+                return false;
+            }
+
+            return true;
         }
     }
 }
