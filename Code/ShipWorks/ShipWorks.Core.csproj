@@ -352,6 +352,7 @@
     </Compile>
     <Compile Include="Actions\ActionErrorGridRow.cs" />
     <Compile Include="Actions\ActionException.cs" />
+    <Compile Include="Actions\ActionManagerWrapper.cs" />
     <Compile Include="Actions\ActionPostponement.cs" />
     <Compile Include="Actions\ActionProcessedEvent.cs" />
     <Compile Include="Actions\ActionQueueGateway.cs" />
@@ -366,6 +367,7 @@
     <Compile Include="Actions\ActionStepPostponementActivity.cs" />
     <Compile Include="Actions\ComputerLimitedType.cs" />
     <Compile Include="Actions\ComputerActionPolicy.cs" />
+    <Compile Include="Actions\IActionManager.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
@@ -628,6 +630,7 @@
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
     <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
+    <Compile Include="ApplicationCore\IInitializeForCurrentDatabase.cs" />
     <Compile Include="ApplicationCore\IInitializeForCurrentSession.cs" />
     <Compile Include="ApplicationCore\IoC.cs" />
     <Compile Include="ApplicationCore\IRegisterDockableWindow.cs" />

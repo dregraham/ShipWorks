@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.SqlClient;
-using ShipWorks.Data.Connection;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.SqlServer.Common.Data;
 
 namespace ShipWorks.Data.Utility
@@ -14,6 +12,7 @@ namespace ShipWorks.Data.Utility
     /// </summary>
     public class SqlAppResourceLock : IDisposable
     {
+        ILifetimeScope lifetimeScope;
         SqlConnection con;
         string lockName;
 
@@ -33,11 +32,14 @@ namespace ShipWorks.Data.Utility
         /// </summary>
         private void AcquireLock()
         {
-            con = SqlSession.Current.OpenConnection();
+            // Let the lifetime scope manage disposal of the SQL connection so that we can use a single connection
+            // if necessary
+            lifetimeScope = IoC.BeginLifetimeScope();
+            con = lifetimeScope.Resolve<SqlConnection>();
 
             if (!SqlAppLockUtility.AcquireLock(con, lockName))
             {
-                con.Dispose();
+                lifetimeScope.Dispose();
                 con = null;
 
                 throw new SqlAppResourceLockException(lockName);
@@ -53,9 +55,11 @@ namespace ShipWorks.Data.Utility
             {
                 SqlAppLockUtility.ReleaseLock(con, lockName);
 
-                con.Dispose();
                 con = null;
             }
+
+            lifetimeScope?.Dispose();
+            lifetimeScope = null;
         }
 
         /// <summary>

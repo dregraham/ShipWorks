@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
+using Autofac;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping
 {
@@ -20,7 +22,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsCustomsRequired(ShipmentEntity shipment)
         {
-            // Defer to the shipment type to inspect the shipment to determine whether 
+            // Defer to the shipment type to inspect the shipment to determine whether
             // customs is required based on any carrier-specific logic (i.e. best-rate)
             ShipmentType shipmpentType = ShipmentTypeManager.GetType(shipment);
             return shipmpentType.IsCustomsRequired(shipment);
@@ -61,14 +63,13 @@ namespace ShipWorks.Shipping
                 // If its been processed we don't mess with it
                 if (!shipment.Processed)
                 {
-                    using (SqlAdapter adapter = new SqlAdapter(true))
+                    using (SqlAdapter adapter = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<bool, SqlAdapter>>()(true))
                     {
                         decimal customsValue = 0m;
 
                         // By default create one content item representing each item in the order
                         foreach (OrderItemEntity item in DataProvider.GetRelatedEntities(shipment.OrderID, EntityType.OrderItemEntity))
                         {
-
                             object attributePrice = adapter.GetScalar(OrderItemAttributeFields.UnitPrice, null, AggregateFunction.Sum, OrderItemAttributeFields.OrderItemID == item.OrderItemID);
 
                             decimal priceAndValue = item.UnitPrice + ((attributePrice is DBNull) ? 0M : Convert.ToDecimal(attributePrice));
@@ -103,6 +104,7 @@ namespace ShipWorks.Shipping
                     shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
                 }
             }
+
             // Consider them loaded.  This is an in-memory field
             shipment.CustomsItemsLoaded = true;
         }
@@ -123,7 +125,7 @@ namespace ShipWorks.Shipping
             customsItem.HarmonizedCode = "";
             customsItem.UnitPriceAmount = 0;
             customsItem.NumberOfPieces = 0;
-            
+
             return customsItem;
         }
     }

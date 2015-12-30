@@ -1,19 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Data;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
-using ShipWorks.Shipping.ShipSense;
-using log4net;
-using ShipWorks.Templates.Tokens;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
 namespace ShipWorks.Stores.Content
@@ -30,7 +27,7 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public static ShipmentEntity GetLatestActiveShipment(long orderID)
         {
-            ShipmentEntity shipment = 
+            ShipmentEntity shipment =
                 DataProvider.GetRelatedEntities(orderID, EntityType.ShipmentEntity)
                     .Cast<ShipmentEntity>()
                     .Where(s => s.Processed && !s.Voided)
@@ -339,10 +336,10 @@ namespace ShipWorks.Stores.Content
         {
             if (shipment.Order == null)
             {
-                shipment.Order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+                shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
             }
 
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter adapter = SqlAdapter.Default)
             {
                 adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
 
@@ -369,7 +366,7 @@ namespace ShipWorks.Stores.Content
         /// <param name="order">The order.</param>
         public static void PopulateOrderDetails(OrderEntity order)
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter adapter = SqlAdapter.Default)
             {
                 PopulateOrderDetails(order, adapter);
             }

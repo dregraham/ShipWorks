@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Win32;
 using log4net;
-using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Logging;
@@ -12,10 +11,8 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Startup;
-using ShipWorks.Stores;
 using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
@@ -59,16 +56,18 @@ namespace ShipWorks.Tests.Integration.MSTest
                 DataProvider.InitializeForApplication();
                 AuditProcessor.InitializeForApplication();
 
-                ShippingSettings.InitializeForCurrentDatabase();
                 ShippingProfileManager.InitializeForCurrentSession();
                 ShippingDefaultsRuleManager.InitializeForCurrentSession();
+
+                foreach (IInitializeForCurrentDatabase service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
+                {
+                    service.InitializeForCurrentDatabase(executionMode);
+                }
 
                 foreach (IInitializeForCurrentSession service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
                 {
                     service.InitializeForCurrentSession();
                 }
-
-                StoreManager.InitializeForCurrentSession();
 
                 UserManager.InitializeForCurrentUser();
 
@@ -88,8 +87,6 @@ namespace ShipWorks.Tests.Integration.MSTest
                 LogSession.Initialize();
 
                 TemplateManager.InitializeForCurrentSession();
-
-                ActionManager.InitializeForCurrentSession();
             }
         }
 

@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model;
-using System.ComponentModel;
+using System.Transactions;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Triggers;
+using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Actions.Triggers;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Filters;
-using log4net;
-using System.Transactions;
-using ShipWorks.Data;
-using ShipWorks.Actions.Scheduling;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Actions
 {
@@ -32,7 +28,7 @@ namespace ShipWorks.Actions
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize table syncronizer
+        /// Initialize table synchronizer
         /// </summary>
         public static void InitializeForCurrentSession()
         {
@@ -200,7 +196,7 @@ namespace ShipWorks.Actions
             // Ensure we have them all in memory
             CheckForChangesNeeded();
 
-            foreach (ActionEntity action in Actions.ToList()) 
+            foreach (ActionEntity action in Actions.ToList())
             {
                 if (action.StoreLimitedSingleStoreID == storeID)
                 {

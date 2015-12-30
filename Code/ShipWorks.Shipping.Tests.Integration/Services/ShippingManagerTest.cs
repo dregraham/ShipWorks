@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -25,35 +29,54 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         public ShippingManagerTest(DatabaseFixture db)
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            ContainerInitializer.Initialize(mock.Container);
+
             dbContext = db.CreateDataContext(mock);
 
-            using (SqlAdapter sqlAdapter = dbContext.CreateSqlAdapter())
+            try
             {
-                var store = Create.Entity<GenericModuleStoreEntity>().Save(sqlAdapter);
-                var customer = Create.Entity<CustomerEntity>().Save(sqlAdapter);
+                mock.Override<ISecurityContext>()
+                    .Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
 
-                order = Create.Order(store, customer)
-                    .WithOrderNumber(12345)
-                    .WithShipAddress("1 Memorial Dr.", "Suite 2000", "St. Louis", "MO", "63102", "US")
-                    .Save(sqlAdapter);
+                TestExecutionMode executionMode = new TestExecutionMode();
+
+                foreach (IInitializeForCurrentDatabase service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
+                {
+                    service.InitializeForCurrentDatabase(executionMode);
+                }
+
+                foreach (IInitializeForCurrentSession service in mock.Container.Resolve<IEnumerable<IInitializeForCurrentSession>>())
+                {
+                    service.InitializeForCurrentSession();
+                }
+
+                using (SqlAdapter sqlAdapter = dbContext.CreateSqlAdapter())
+                {
+                    var store = Create.Entity<GenericModuleStoreEntity>().Save(sqlAdapter);
+                    var customer = Create.Entity<CustomerEntity>().Save(sqlAdapter);
+
+                    order = Create.Order(store, customer)
+                        .WithOrderNumber(12345)
+                        .WithShipAddress("1 Memorial Dr.", "Suite 2000", "St. Louis", "MO", "63102", "US")
+                        .Save(sqlAdapter);
+                }
+
+                // Reset the static fields before each test
+                StoreManager.CheckForChanges();
             }
+            catch (Exception)
+            {
+                dbContext?.Dispose();
 
-            mock.Mock<IDateTimeProvider>()
-                .Setup(x => x.Now)
-                .Returns(DateTime.Now);
-
-            mock.Mock<IStoreManager>()
-                .Setup(x => x.GetStore(It.IsAny<long>()))
-                .Returns(new StoreEntity());
-
-            // Reset the static fields before each test
-            ShippingManager.InitializeForCurrentDatabase();
+                throw;
+            }
         }
 
         [Fact]
         public void CreateShipment_ThrowsPermissionException_WhenUserDoesNotHavePermission()
         {
-            mock.Mock<ISecurityContext>()
+            mock.Override<ISecurityContext>()
                 .Setup(x => x.DemandPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID))
                 .Throws<PermissionException>();
 
@@ -63,18 +86,19 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_SetsShipDateToNoonToday()
         {
-            mock.Mock<IDateTimeProvider>()
+            mock.Override<IDateTimeProvider>()
                 .Setup(x => x.Now)
                 .Returns(new DateTime(2015, 12, 28, 15, 30, 12));
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(order, mock.Container);
+
             Assert.Equal(new DateTime(2015, 12, 28, 12, 00, 00), shipment.ShipDate);
         }
 
         [Fact]
         public void CreateShipment_SetsWeightToSumOfItems_WhenOrderHasItems()
         {
-            mock.Mock<IDataProvider>()
+            mock.Override<IDataProvider>()
                 .Setup(x => x.GetRelatedEntities(order.OrderID, Data.Model.EntityType.OrderItemEntity))
                 .Returns(new[] {
                     new OrderItemEntity { Quantity = 2, Weight = 2.5 },
@@ -102,7 +126,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_SetsOriginAddress_ToStoreAddress()
         {
-            mock.Mock<IStoreManager>()
+            mock.Override<IStoreManager>()
                 .Setup(x => x.GetStore(order.StoreID))
                 .Returns(new StoreEntity
                 {
@@ -117,7 +141,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(order, mock.Container);
 
-            Assert.Equal("A Test Store", shipment.OriginFirstName);
+            Assert.Equal("A Test Store", shipment.OriginUnparsedName);
             Assert.Equal("123 Main St.", shipment.OriginStreet1);
             Assert.Equal("Suite 456", shipment.OriginStreet2);
             Assert.Equal("St. Louis", shipment.OriginCity);
@@ -134,7 +158,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             var shipmentType = mock.CreateMock<ShipmentType>();
             shipmentType.Setup(x => x.ShipmentTypeCode).Returns(shipmentTypeCode);
 
-            mock.Mock<IShipmentTypeManager>()
+            mock.Override<IShipmentTypeManager>()
                 .Setup(x => x.InitialShipmentType(It.IsAny<ShipmentEntity>()))
                 .Returns(shipmentType.Object);
 
@@ -146,6 +170,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_DelegatesToValidatedAddressManager_ToCopyValidatedAddresses()
         {
+            mock.Override<IValidatedAddressManager>();
+
             ShipmentEntity shipment = ShippingManager.CreateShipment(order, mock.Container);
 
             mock.Mock<IValidatedAddressManager>()

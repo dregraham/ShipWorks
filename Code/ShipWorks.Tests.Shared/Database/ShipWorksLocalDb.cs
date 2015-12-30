@@ -20,6 +20,10 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         public override string ConnectionString =>
             base.ConnectionString +
-                    ";Connect Timeout=10;Application Name=ShipWorks;Workstation ID=0000100001;Transaction Binding=\"Explicit Unbind\"";
+            ";Connect Timeout=10" +
+            ";Application Name=ShipWorks" +
+            ";Workstation ID=0000100001" +
+            ";Transaction Binding=\"Explicit Unbind\"" +
+            ";MultipleActiveResultSets=true";
     }
 }

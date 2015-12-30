@@ -1,29 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Web.Caching;
-using System.ComponentModel;
-using System.Diagnostics;
-using log4net;
-using System.Web;
-using System.Threading;
-using Interapptive.Shared.Utility;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using Interapptive.Shared.Collections;
-using System.Runtime.Caching;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
 using System.Data;
-using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.Caching;
+using System.Threading;
 using Interapptive.Shared;
-using ShipWorks.Data.Model.EntityClasses;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Data.Caching
 {
@@ -50,7 +40,7 @@ namespace ShipWorks.Data.Caching
         Dictionary<EntityType, EntityTypeChangeNotifier> changeNotifiers;
 
         private readonly ExecutionMode executionMode;
-        
+
         // What we actually store in the cache
         class CacheEntry
         {
@@ -76,7 +66,7 @@ namespace ShipWorks.Data.Caching
         }
 
         /// <summary>
-        /// Dipose of the cache completely
+        /// Dispose of the cache completely
         /// </summary>
         public void Dispose()
         {
@@ -156,7 +146,7 @@ namespace ShipWorks.Data.Caching
                             throw new InvalidOperationException(string.Format("A relation chain was not found from {0} to {1}.", entityType, relateToType));
                         }
 
-                        // We already checked that this entitytype is not the same as the related to type - so we should have at least one relation
+                        // We already checked that this entity type is not the same as the related to type - so we should have at least one relation
                         Debug.Assert(relations.Count > 0);
 
                         // Only cache the results for simple parent->child or child->parent relations.  Otherwise it would be too hard to track when things were
@@ -208,9 +198,11 @@ namespace ShipWorks.Data.Caching
                                 bucket.Relations.AddRange(sort.Relations);
                             }
 
-                            using (SqlAdapter adapter = new SqlAdapter())
+                            using (SqlAdapter adapter = SqlAdapter.Default)
                             {
-                                using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, (sort != null ? sort.SortExpression : null), false))
+                                // Don't close the connection when the reader closes. If the connection should be closed,
+                                // it will be closed when the adapter is disposed.
+                                using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.Default, 0, (sort != null ? sort.SortExpression : null), false))
                                 {
                                     while (reader.Read())
                                     {
@@ -250,7 +242,7 @@ namespace ShipWorks.Data.Caching
                             // And add them to our final result set to be returned
                             resultKeys[0] = relatedKeys;
 
-                            // Cache if necssary
+                            // Cache if necessary
                             if (cacheResults)
                             {
                                 SetCache(needsFetched.Keys.First(), relateToType, relations[0], sort, relatedKeys);
@@ -271,7 +263,7 @@ namespace ShipWorks.Data.Caching
         }
 
         /// <summary>
-        /// Determine which entities in the given idlist needs fetched.  The one's that dont are put in the resultKeys array, indexed based on the original requested
+        /// Determine which entities in the given id list needs fetched.  The one's that don't are put in the resultKeys array, indexed based on the original requested
         /// key order
         /// </summary>
         private Dictionary<long, int> DetermineMissingKeys(List<long> idList, EntityType entityType, EntityType relateToType, SortDefinition sort, long[][] resultKeys)
@@ -281,7 +273,7 @@ namespace ShipWorks.Data.Caching
             // Determine which ones we need
             for (int i = 0; i < idList.Count; i++)
             {
-                // If we havnt already check for and cached this one...
+                // If we haven't already check for and cached this one...
                 if (resultKeys[i] == null)
                 {
                     long key = idList[i];
@@ -331,7 +323,7 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         private long[] CheckCache(long entityID, EntityType relateToType, SortDefinition sort)
         {
-            CacheEntry entry =  (CacheEntry) cache[GetCacheKey(entityID, relateToType)];
+            CacheEntry entry = (CacheEntry) cache[GetCacheKey(entityID, relateToType)];
             if (entry == null)
             {
                 return null;
@@ -385,9 +377,9 @@ namespace ShipWorks.Data.Caching
                 }
             }
 
-            #if DEBUG
-                policy.RemovedCallback = new CacheEntryRemovedCallback(OnCacheItemRemoved);
-            #endif
+#if DEBUG
+            policy.RemovedCallback = new CacheEntryRemovedCallback(OnCacheItemRemoved);
+#endif
 
             string sortDescription = sort != null ? sort.GetDescription() : string.Empty;
 
@@ -436,7 +428,7 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public void ClearRelatedFrom(long key)
         {
-            // The Enumerator implementation of the cache does a thread-safe snapshot of the data, so it's 
+            // The Enumerator implementation of the cache does a thread-safe snapshot of the data, so it's
             // safe to do this loop.
             foreach (var pair in cache)
             {

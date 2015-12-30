@@ -7,7 +7,10 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 
 namespace ShipWorks.Shipping
 {
@@ -56,8 +59,21 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the ShipmentType based on the given type code
         /// </summary>
+        /// <remarks>The three shipment type codes remaining are to satisfy about 70 tests.</remarks>
         public static ShipmentType GetType(ShipmentTypeCode typeCode)
         {
+            switch (typeCode)
+            {
+                case ShipmentTypeCode.UpsOnLineTools:
+                    return new UpsOltShipmentType();
+
+                case ShipmentTypeCode.Endicia:
+                    return new EndiciaShipmentType();
+
+                case ShipmentTypeCode.FedEx:
+                    return new FedExShipmentType();
+            }
+
             if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<ShipmentType>(typeCode))
             {
                 return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<Owned<ShipmentType>>(typeCode).Value;

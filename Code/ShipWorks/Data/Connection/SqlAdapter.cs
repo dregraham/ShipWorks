@@ -6,9 +6,11 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Autofac;
 using Interapptive.Shared.Data;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model;
@@ -22,6 +24,8 @@ namespace ShipWorks.Data.Connection
     /// </summary>
     public sealed class SqlAdapter : DataAccessAdapter
     {
+        private const int ForeignKeyReferentialIntegrityError = 547;
+
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SqlAdapter));
 
@@ -423,7 +427,7 @@ namespace ShipWorks.Data.Connection
         #region Utility
 
         /// <summary>
-        /// Save the given entity, and automatically refetch it back.  Returns true if there were any entities in the graph that were dirty and saved.  Returns
+        /// Save the given entity, and automatically refetch it back. Returns true if there were any entities in the graph that were dirty and saved.  Returns
         /// false if nothing was dirty and thus nothing written to the database.
         /// </summary>
         public bool SaveAndRefetch(IEntity2 entity)
@@ -432,7 +436,7 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Save the given entity, and automatically refetch it back.    Return strue if there were any entities in the graph that were dirty and saved.  Returns
+        /// Save the given entity, and automatically refetch it back. Returns true if there were any entities in the graph that were dirty and saved.  Returns
         /// false if nothing was dirty and thus nothing written to the database.
         /// </summary>
         public bool SaveAndRefetch(IEntity2 entity, bool recurse)
@@ -605,7 +609,7 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Executes the passed in retrieval query and returns the results in thedatatable
+        /// Executes the passed in retrieval query and returns the results in the data table
         /// specified using the passed in data-adapter. It sets the connection object
         /// of the command object of query object passed in to the connection object
         /// of this class.
@@ -646,8 +650,7 @@ namespace ShipWorks.Data.Connection
             {
                 SqlError error = sqlEx.Errors[0];
 
-                // FK RI error number
-                if (error.Number == 547)
+                if (error.Number == ForeignKeyReferentialIntegrityError)
                 {
                     string message = error.Message;
 
@@ -661,11 +664,11 @@ namespace ShipWorks.Data.Connection
 
                         if (message.IndexOf("DELETE statement") != -1)
                         {
-                            message = string.Format("A parent could not be deleted because it still has {0} children.", friendly);
+                            message = $"A parent could not be deleted because it still has {friendly} children.";
                         }
                         else
                         {
-                            message = string.Format("A child could not be saved because its parent {0} has been deleted.", friendly);
+                            message = $"A child could not be saved because its parent {friendly} has been deleted.";
                         }
                     }
 
@@ -702,18 +705,13 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Returns a new default instance of a SqlAdapter
         /// </summary>
-        public static SqlAdapter Default
-        {
-            get
-            {
-                return new SqlAdapter();
-            }
-        }
+        public static SqlAdapter Default => Create(false);
 
         /// <summary>
         /// Create a new SqlAdapter
         /// </summary>
-        public static SqlAdapter Create(bool inTransaction) => new SqlAdapter(inTransaction);
+        public static SqlAdapter Create(bool inTransaction) =>
+            IoC.UnsafeGlobalLifetimeScope.Resolve<Func<bool, SqlAdapter>>()(inTransaction);
 
         #endregion
 

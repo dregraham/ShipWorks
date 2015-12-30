@@ -10,7 +10,6 @@ using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.ExecutionMode;
@@ -35,11 +34,9 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Settings.Printing;
-using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
@@ -94,13 +91,16 @@ namespace ShipWorks.Users
             SystemData.InitializeForCurrentDatabase();
 
             // Reset any cached entity data
-            DataProvider.InitializeForCurrentDatabase(executionMode);
             ShippingManager.InitializeForCurrentDatabase();
 
             // Initialize database scope things
             ConfigurationData.InitializeForCurrentDatabase();
-            ShippingSettings.InitializeForCurrentDatabase();
             DataResourceManager.InitializeForCurrentDatabase();
+
+            foreach (IInitializeForCurrentDatabase service in lifetimeScope.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
+            {
+                service.InitializeForCurrentDatabase(executionMode);
+            }
 
             bool wasLoggedIn = (User != null);
 
@@ -150,9 +150,7 @@ namespace ShipWorks.Users
             GridColumnDefinitionManager.InitializeForCurrentUser();
 
             FilterContentManager.InitializeForCurrentSession();
-            ActionManager.InitializeForCurrentSession();
             FtpAccountManager.InitializeForCurrentSession();
-            StoreManager.InitializeForCurrentSession();
             TemplateManager.InitializeForCurrentSession();
             LabelSheetManager.InitializeForCurrentSession();
             EmailAccountManager.InitializeForCurrentSession();

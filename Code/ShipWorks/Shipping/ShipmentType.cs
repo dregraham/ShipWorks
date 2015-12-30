@@ -2,44 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
+using System.Xml.Linq;
 using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using ShipWorks.Editions;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions;
+using ShipWorks.Filters;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.ShipSense;
-using System.Windows.Forms;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Settings.Defaults;
-using ShipWorks.Filters;
-using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Stores;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Shipping.Tracking;
-using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.ShipSense.Packaging;
-using System.Xml.Linq;
-using Interapptive.Shared;
-using Interapptive.Shared.Business.Geography;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.Defaults;
+using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.Tracking;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping
 {
@@ -212,7 +211,7 @@ namespace ShipWorks.Shipping
         public virtual bool IsAllowedFor(ShipmentEntity shipment)
         {
             // Amazon prime orders can only be shipped via the Amazon carrier
-            // this is restriction is per Amazon. 
+            // this is restriction is per Amazon.
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IOrderManager orderManager = lifetimeScope.Resolve<IOrderManager>();
@@ -220,7 +219,7 @@ namespace ShipWorks.Shipping
 
                 IAmazonOrder order = shipment.Order as IAmazonOrder;
 
-                // If the order is Amazon Prime return false 
+                // If the order is Amazon Prime return false
                 return !order?.IsPrime ?? true;
             }
         }
@@ -425,7 +424,7 @@ namespace ShipWorks.Shipping
         ///// <summary>
         ///// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
         ///// </summary>
-        //public virtual Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository) 
+        //public virtual Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository)
         //    => new Dictionary<int, string>();
 
         ///// <summary>
@@ -512,7 +511,7 @@ namespace ShipWorks.Shipping
         public virtual void ConfigureNewShipment(ShipmentEntity shipment)
         {
             shipment.ActualLabelFormat = null;
-            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
             shipment.BilledType = 0;
             shipment.BilledWeight = 0;
 
@@ -558,7 +557,7 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            BestRateEventTypes eventTypes = (BestRateEventTypes)shipment.BestRateEvents;
+            BestRateEventTypes eventTypes = (BestRateEventTypes) shipment.BestRateEvents;
             BestRateEventTypes latestEvent = eventTypes.GetLatestBestRateEvent();
 
             if (ShipmentTypeCode != ShipmentTypeCode.BestRate && (latestEvent == BestRateEventTypes.RateSelected || latestEvent == BestRateEventTypes.RateAutoSelectedAndProcessed))
@@ -624,7 +623,7 @@ namespace ShipWorks.Shipping
                             // Consider them loaded.  This is an in-memory field
                             shipment.CustomsItemsLoaded = true;
 
-                            decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal)ci.Quantity * ci.UnitValue);
+                            decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal) ci.Quantity * ci.UnitValue);
                             shipment.CustomsValue = customsValue;
                         }
                     }
@@ -638,7 +637,7 @@ namespace ShipWorks.Shipping
                     UpdateTotalWeight(shipment);
 
                     // Update the status of the shipment and record the changes that were applied to the shipment's packages
-                    shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+                    shipment.ShipSenseStatus = (int) ShipSenseStatus.Applied;
                     XElement changeSets = XElement.Parse(shipment.ShipSenseChangeSets);
 
                     KnowledgebaseEntryChangeSetXmlWriter changeSetWriter = new KnowledgebaseEntryChangeSetXmlWriter(knowledgebaseEntry);
@@ -653,7 +652,7 @@ namespace ShipWorks.Shipping
                 // was changed after the shipment type was already created (i.e. going from
                 // a multi-package carrier to a single package carrier when entry is configured
                 // for multiple packages)
-                shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+                shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
             }
         }
 
@@ -703,7 +702,7 @@ namespace ShipWorks.Shipping
                     {
                         profile = new ShippingProfileEntity();
                         profile.Name = string.Format("Defaults - {0}", ShipmentTypeName);
-                        profile.ShipmentType = (int)ShipmentTypeCode;
+                        profile.ShipmentType = (int) ShipmentTypeCode;
                         profile.ShipmentTypePrimary = true;
 
                         // Load the shipmentType specific profile data
@@ -735,30 +734,30 @@ namespace ShipWorks.Shipping
         /// </summary>
         protected virtual void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
-            profile.OriginID = (int)ShipmentOriginSource.Store;
+            profile.OriginID = (int) ShipmentOriginSource.Store;
 
             profile.Insurance = false;
-            profile.InsuranceInitialValueSource = (int)InsuranceInitialValueSource.ItemSubtotal;
+            profile.InsuranceInitialValueSource = (int) InsuranceInitialValueSource.ItemSubtotal;
             profile.InsuranceInitialValueAmount = 0;
 
             profile.ReturnShipment = false;
 
-            profile.RequestedLabelFormat = (int)ThermalLanguage.None;
+            profile.RequestedLabelFormat = (int) ThermalLanguage.None;
         }
 
         /// <summary>
         /// Ensures the ShipDate on an unprocessed shipment is Up-To-Date
         /// </summary>
-        protected virtual void UpdateShipmentShipDate(ShipmentEntity shipment)
+        protected virtual void UpdateShipmentShipDate(ShipmentEntity shipment, DateTime now)
         {
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
 
-            if (!shipment.Processed && shipment.ShipDate.Date < DateTime.Now.Date)
+            if (!shipment.Processed && shipment.ShipDate.Date < now.Date)
             {
-                shipment.ShipDate = DateTime.Now.Date.AddHours(12);
+                shipment.ShipDate = now.Date.AddHours(12);
             }
         }
 
@@ -775,13 +774,13 @@ namespace ShipWorks.Shipping
                 throw ex;
             }
 
-            // ensure the shipdate is up-to-date
-            UpdateShipmentShipDate(shipment);
+            // ensure the ship date is up-to-date
+            UpdateShipmentShipDate(shipment, IoC.UnsafeGlobalLifetimeScope.Resolve<IDateTimeProvider>().Now);
 
             // Ensure the from address is up-to-date
             if (!UpdateOriginAddress(shipment, shipment.OriginOriginID))
             {
-                shipment.OriginOriginID = (long)ShipmentOriginSource.Other;
+                shipment.OriginOriginID = (long) ShipmentOriginSource.Other;
             }
         }
 
@@ -806,19 +805,22 @@ namespace ShipWorks.Shipping
             }
 
             // Copy from the store
-            if (originID == (int)ShipmentOriginSource.Store)
+            if (originID == (int) ShipmentOriginSource.Store)
             {
-                StoreEntity store = StoreManager.GetStore(shipment.Order.StoreID);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    StoreEntity store = lifetimeScope.Resolve<IStoreManager>().GetStore(shipment.Order.StoreID);
 
-                PersonAdapter.Copy(store, "", person);
+                    PersonAdapter.Copy(store, "", person);
 
-                person.ParsedName = PersonName.Parse(store.StoreName);
+                    person.ParsedName = PersonName.Parse(store.StoreName);
+                }
 
                 return true;
             }
 
             // Other - no change.
-            if (originID == (int)ShipmentOriginSource.Other)
+            if (originID == (int) ShipmentOriginSource.Other)
             {
                 return true;
             }
@@ -858,7 +860,7 @@ namespace ShipWorks.Shipping
 
             if (SupportsAccountAsOrigin)
             {
-                origins.Add(new KeyValuePair<string, long>("Account Address", (long)ShipmentOriginSource.Account));
+                origins.Add(new KeyValuePair<string, long>("Account Address", (long) ShipmentOriginSource.Account));
             }
 
             // Add all the shippers
@@ -868,8 +870,8 @@ namespace ShipWorks.Shipping
             }
 
             // Add store and manual always
-            origins.Add(new KeyValuePair<string, long>("Store Address", (long)ShipmentOriginSource.Store));
-            origins.Add(new KeyValuePair<string, long>("Other Address", (long)ShipmentOriginSource.Other));
+            origins.Add(new KeyValuePair<string, long>("Store Address", (long) ShipmentOriginSource.Store));
+            origins.Add(new KeyValuePair<string, long>("Other Address", (long) ShipmentOriginSource.Other));
 
             return origins;
         }
@@ -938,7 +940,7 @@ namespace ShipWorks.Shipping
             ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
 
             ShippingProfileUtility.ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
-            SaveRequestedLabelFormat((ThermalLanguage)shipment.RequestedLabelFormat, shipment);
+            SaveRequestedLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat, shipment);
 
             // Special case for insurance
             for (int i = 0; i < GetParcelCount(shipment); i++)
@@ -955,7 +957,7 @@ namespace ShipWorks.Shipping
                     // Don't apply the value to the subsequent parcels - that would probably end up over-ensuring the whole shipment.
                     if (i == 0)
                     {
-                        InsuranceInitialValueSource source = (InsuranceInitialValueSource)profile.InsuranceInitialValueSource;
+                        InsuranceInitialValueSource source = (InsuranceInitialValueSource) profile.InsuranceInitialValueSource;
                         insuranceChoice.InsuranceValue = InsuranceUtility.GetInsuranceValue(shipment, source, profile.InsuranceInitialValueAmount);
                     }
                 }

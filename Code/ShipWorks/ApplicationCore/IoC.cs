@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
+using Autofac.Core;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.AddressValidation;
@@ -18,6 +19,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -53,7 +55,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
-        public static void Initialize(params Assembly[] assemblies)
+        public static IContainer Initialize(IContainer container, params Assembly[] assemblies)
         {
             var builder = new ContainerBuilder();
 
@@ -122,7 +124,7 @@ namespace ShipWorks.ApplicationCore
                 .ExternallyOwned();
 
             builder.Register(c => UserSession.Security)
-                .AsImplementedInterfaces()
+                .As<ISecurityContext>()
                 .ExternallyOwned();
 
             builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
@@ -138,7 +140,8 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterAssemblyTypes(typeof(IoC).Assembly)
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentSession>() ||
-                    x.IsAssignableTo<ICheckForChangesNeeded>())
+                    x.IsAssignableTo<ICheckForChangesNeeded>() ||
+                    x.IsAssignableTo<IInitializeForCurrentDatabase>())
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -146,7 +149,17 @@ namespace ShipWorks.ApplicationCore
 
             builder.Register((_, parameters) => new SqlAdapter(parameters.TypedAs<bool>()));
 
-            current = builder.Build();
+            builder.Register(_ => SqlSession.Current.OpenConnection())
+                .ExternallyOwned();
+
+            foreach (IComponentRegistration registration in builder.Build().ComponentRegistry.Registrations)
+            {
+                container.ComponentRegistry.Register(registration);
+            }
+
+            current = container;
+
+            return current;
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShipWorks.Shipping
 {
@@ -36,9 +36,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         public void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent) =>
             CustomsManager.LoadCustomsItems(shipment, reloadIfPresent);
-        
+
         /// <summary>
-        /// Ensire customs items are loaded if the address or shipment type has changed
+        /// Ensure customs items are loaded if the address or shipment type has changed
         /// </summary>
         public IDictionary<ShipmentEntity, Exception> EnsureCustomsLoaded(IEnumerable<ShipmentEntity> shipments)
         {

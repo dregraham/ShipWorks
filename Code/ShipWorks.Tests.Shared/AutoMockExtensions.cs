@@ -25,6 +25,18 @@ namespace ShipWorks.Tests.Shared
         public static AutoMock GetLooseThatReturnsMocks() => AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
 
         /// <summary>
+        /// Override the specified type's registration
+        /// </summary>
+        public static Mock<T> Override<T>(this AutoMock autoMock) where T : class
+        {
+            Mock<T> mock = autoMock.CreateMock<T>();
+
+            autoMock.Provide<T>(mock.Object);
+
+            return mock;
+        }
+
+        /// <summary>
         /// Configure a shipment type that will be returned by an instance of IShipmentTypeManager
         /// </summary>
         public static Mock<ShipmentType> WithShipmentTypeFromFactory(this AutoMock mock, Action<Mock<ShipmentType>> shipmentTypeConfiguration) =>

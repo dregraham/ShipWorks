@@ -2,6 +2,8 @@
 using System.Data.SqlClient;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
+using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -47,6 +49,8 @@ namespace ShipWorks.Tests.Shared.Database
                     }
                 }
             }
+
+            DataProvider.InitializeForApplication(new TestExecutionMode());
         }
 
         /// <summary>
@@ -65,6 +69,10 @@ namespace ShipWorks.Tests.Shared.Database
         /// <summary>
         /// Drop the database
         /// </summary>
-        public void Dispose() => db.Dispose();
+        public void Dispose()
+        {
+            currentContext?.Dispose();
+            db.Dispose();
+        }
     }
 }
