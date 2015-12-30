@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 if (ex.Message == "No OnTrac account is selected for the shipment.")
                 {
                     // Provide a message with additional context
-                    throw new OnTracException("An OnTrac account is required to view rates.", ex);
+                    throw new ShippingException("An OnTrac account is required to view rates.", ex);
                 }
 
                 throw new ShippingException(ex.Message);

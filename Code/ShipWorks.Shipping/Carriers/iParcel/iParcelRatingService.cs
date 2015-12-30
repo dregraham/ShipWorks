@@ -48,6 +48,18 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 throw new ShippingException("An i-parcel account is required to view rates.");
             }
             
+            // Check all the packages to ensure that they filled out the 
+            // sku and quantity that is required by iparcel
+            int packageIndex = 0;
+            foreach (IParcelPackageEntity package in shipment.IParcel.Packages)
+            {
+                packageIndex++;
+                if (string.IsNullOrWhiteSpace(package.SkuAndQuantities))
+                {
+                    throw new ShippingException($"Package {packageIndex} cannot have a blank SKU and Quantity. The expected format is '[SKU],[Quantity]'.");
+                }
+            }
+            
             // i-parcel requires that we upload item information, so fetch the order and order items
             orderManager.PopulateOrderDetails(shipment);
 
