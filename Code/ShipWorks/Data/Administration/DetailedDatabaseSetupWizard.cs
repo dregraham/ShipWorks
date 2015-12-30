@@ -2199,19 +2199,18 @@ namespace ShipWorks.Data.Administration
             WizardPage nextPage = e.NextPage;
             e.NextPage = CurrentPage;
 
-            UserEntity user = null;
-
             try
             {
+                UserEntity user = null;
                 using (new SqlSessionScope(sqlSession))
                 {
                     user = tangoUserControlHost.Save();
-                    adminUserCreated = true;
                 }
 
                 if (user != null)
                 {
                     // Now we can move on
+                    adminUserCreated = true;
                     e.NextPage = nextPage;
                 }
             }
