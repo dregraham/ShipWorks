@@ -40,7 +40,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		private AmazonProfileEntity _amazon;
 		private BestRateProfileEntity _bestRate;
 		private FedExProfileEntity _fedEx;
 		private IParcelProfileEntity _iParcel;
@@ -63,8 +62,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			/// <summary>Member name Amazon</summary>
-			public static readonly string Amazon = "Amazon";
 			/// <summary>Member name BestRate</summary>
 			public static readonly string BestRate = "BestRate";
 			/// <summary>Member name FedEx</summary>
@@ -140,11 +137,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				_amazon = (AmazonProfileEntity)info.GetValue("_amazon", typeof(AmazonProfileEntity));
-				if(_amazon!=null)
-				{
-					_amazon.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
 				_bestRate = (BestRateProfileEntity)info.GetValue("_bestRate", typeof(BestRateProfileEntity));
 				if(_bestRate!=null)
 				{
@@ -219,9 +211,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				case "Amazon":
-					this.Amazon = (AmazonProfileEntity)entity;
-					break;
 				case "BestRate":
 					this.BestRate = (BestRateProfileEntity)entity;
 					break;
@@ -267,9 +256,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				case "Amazon":
-					toReturn.Add(ShippingProfileEntity.Relations.AmazonProfileEntityUsingShippingProfileID);
-					break;
 				case "BestRate":
 					toReturn.Add(ShippingProfileEntity.Relations.BestRateProfileEntityUsingShippingProfileID);
 					break;
@@ -319,7 +305,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-
 				default:
 					return base.CheckOneWayRelations(propertyName);
 			}
@@ -335,9 +320,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-				case "Amazon":
-					SetupSyncAmazon(relatedEntity);
-					break;
 				case "BestRate":
 					SetupSyncBestRate(relatedEntity);
 					break;
@@ -375,9 +357,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-				case "Amazon":
-					DesetupSyncAmazon(false, true);
-					break;
 				case "BestRate":
 					DesetupSyncBestRate(false, true);
 					break;
@@ -409,11 +388,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_amazon!=null)
-			{
-				toReturn.Add(_amazon);
-			}
-
 			if(_bestRate!=null)
 			{
 				toReturn.Add(_bestRate);
@@ -473,8 +447,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-
-
 			return toReturn;
 		}
 		
@@ -501,7 +473,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				info.AddValue("_amazon", (!this.MarkedForDeletion?_amazon:null));
 				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
 				info.AddValue("_fedEx", (!this.MarkedForDeletion?_fedEx:null));
 				info.AddValue("_iParcel", (!this.MarkedForDeletion?_iParcel:null));
@@ -545,16 +516,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'AmazonProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoAmazon()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AmazonProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
-			return bucket;
-		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entity of type 'BestRateProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
@@ -695,7 +656,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			toReturn.Add("Amazon", _amazon);
 			toReturn.Add("BestRate", _bestRate);
 			toReturn.Add("FedEx", _fedEx);
 			toReturn.Add("IParcel", _iParcel);
@@ -712,10 +672,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			if(_amazon!=null)
-			{
-				_amazon.ActiveContext = base.ActiveContext;
-			}
 			if(_bestRate!=null)
 			{
 				_bestRate.ActiveContext = base.ActiveContext;
@@ -753,7 +709,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			_amazon = null;
 			_bestRate = null;
 			_fedEx = null;
 			_iParcel = null;
@@ -812,39 +767,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
-
-		/// <summary> Removes the sync logic for member _amazon</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncAmazon(bool signalRelatedEntity, bool resetFKFields)
-		{
-			base.PerformDesetupSyncRelatedEntity( _amazon, new PropertyChangedEventHandler( OnAmazonPropertyChanged ), "Amazon", ShippingProfileEntity.Relations.AmazonProfileEntityUsingShippingProfileID, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
-			_amazon = null;
-		}
-		
-		/// <summary> setups the sync logic for member _amazon</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncAmazon(IEntity2 relatedEntity)
-		{
-			if(_amazon!=relatedEntity)
-			{
-				DesetupSyncAmazon(true, true);
-				_amazon = (AmazonProfileEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _amazon, new PropertyChangedEventHandler( OnAmazonPropertyChanged ), "Amazon", ShippingProfileEntity.Relations.AmazonProfileEntityUsingShippingProfileID, false, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnAmazonPropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
 
 		/// <summary> Removes the sync logic for member _bestRate</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
@@ -1112,18 +1034,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AmazonProfile' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathAmazon
-		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AmazonProfileEntityFactory))),
-					(IEntityRelation)GetRelationsForField("Amazon")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.AmazonProfileEntity, 0, null, null, null, null, "Amazon", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
-			}
-		}
-
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'BestRateProfile' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -1355,49 +1265,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-
-		/// <summary> Gets / sets related entity of type 'AmazonProfileEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
-		public virtual AmazonProfileEntity Amazon
-		{
-			get
-			{
-				return _amazon;
-			}
-			set
-			{
-				if(base.IsDeserializing)
-				{
-					SetupSyncAmazon(value);
-					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
-					{
-						value.SetRelatedEntity(this, "ShippingProfile");
-					}
-				}
-				else
-				{
-					if(value==null)
-					{
-						bool raisePropertyChanged = (_amazon !=null);
-						DesetupSyncAmazon(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Amazon");
-						}
-					}
-					else
-					{
-						if(_amazon!=value)
-						{
-							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "ShippingProfile");
-							SetupSyncAmazon(relatedEntity);
-						}
-					}
-				}
-			}
-		}
 
 		/// <summary> Gets / sets related entity of type 'BestRateProfileEntity' which has to be set using a fetch action earlier. If no related entity
 		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>

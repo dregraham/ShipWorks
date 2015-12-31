@@ -190,8 +190,6 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "LemonStandStoreEntity": return EntityType.LemonStandStoreEntity;
 				case "LemonStandOrderEntity": return EntityType.LemonStandOrderEntity;
 				case "LemonStandOrderItemEntity": return EntityType.LemonStandOrderItemEntity;
-				case "AmazonShipmentEntity": return EntityType.AmazonShipmentEntity;
-				case "AmazonProfileEntity": return EntityType.AmazonProfileEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));
