@@ -18,6 +18,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         readonly Dictionary<string, object> fieldValues = new Dictionary<string, object>();
         bool setDefaultValues = true;
         readonly Func<T> getEntity;
+        bool setValueIfNullable = false;
 
         /// <summary>
         /// Constructor
@@ -105,6 +106,15 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         }
 
         /// <summary>
+        /// Set default values even if the field allows null values
+        /// </summary>
+        public EntityBuilder<T> SetDefaultsOnNullableFields()
+        {
+            setValueIfNullable = true;
+            return this;
+        }
+
+        /// <summary>
         /// Save the built entity to the database
         /// </summary>
         /// <returns></returns>
@@ -145,7 +155,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
                 }
                 else if (setDefaultValues)
                 {
-                    field.SetDefaultValue();
+                    field.SetDefaultValue(setValueIfNullable);
                 }
 
                 field.IsChanged = true;

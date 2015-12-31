@@ -11,12 +11,12 @@ using Xunit;
 namespace ShipWorks.Shipping.Tests.Integration.Services
 {
     [Collection("Database collection")]
-    public class ShippingManagerWrapperTest : IDisposable
+    public class LoadFullShipmentGraphTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly OrderEntity order;
 
-        public ShippingManagerWrapperTest(DatabaseFixture db)
+        public LoadFullShipmentGraphTest(DatabaseFixture db)
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void LoadFullShipmentGraph_LoadsOrder()
+        public void LoadsOrder()
         {
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void LoadFullShipmentGraph_LoadsOrderItems()
+        public void LoadsOrderItems()
         {
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void LoadFullShipmentGraph_LoadsStore()
+        public void LoadsStore()
         {
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 
@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void LoadFullShipmentGraph_DoesNotLoadCustomerForOrder()
+        public void DoesNotLoadCustomerForOrder()
         {
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 
@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void LoadFullShipmentGraph_LoadsShipments()
+        public void LoadsShipments()
         {
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 
@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void LoadFullShipmentGraph_LoadsAllCarrierShipmentData()
+        public void LoadsAllCarrierShipmentData()
         {
             ShipmentEntity shipment = Create.Shipment(order)
                 .AsUps()
@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void LoadFullShipmentGraph_LoadsFedExShipmentAndPackages()
+        public void LoadsFedExShipmentAndPackages()
         {
             ShipmentEntity shipment = Create.Shipment(order)
                 .AsFedEx(fedEx => fedEx.WithPackage().WithPackage())
@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void LoadFullShipmentGraph_LoadsUpsShipmentAndPackages()
+        public void LoadsUpsShipmentAndPackages()
         {
             ShipmentEntity shipment = Create.Shipment(order)
                 .AsUps(Ups => Ups.WithPackage().WithPackage())
@@ -143,7 +143,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void LoadFullShipmentGraph_LoadsIParcelShipmentAndPackages()
+        public void LoadsIParcelShipmentAndPackages()
         {
             ShipmentEntity shipment = null;
 
@@ -163,7 +163,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void LoadFullShipmentGraph_LoadsCustomsItems()
+        public void LoadsCustomsItems()
         {
             ShipmentEntity shipment = Create.Shipment(order)
                 .WithCustomsItem()
@@ -178,7 +178,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void LoadFullShipmentGraph_LoadsInsurance()
+        public void LoadsInsurance()
         {
             long shipmentId = Create.Shipment(order)
                 .WithInsurancePolicy()

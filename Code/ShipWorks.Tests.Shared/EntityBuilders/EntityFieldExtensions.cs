@@ -29,11 +29,23 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Get the default value of an entity field based on type
         /// </summary>
-        public static void SetDefaultValue(this IEntityField2 field)
+        public static void SetDefaultValue(this IEntityField2 field, bool setValueIfNullable)
         {
-            if (defaultValues.ContainsKey(field.DataType))
+            Type type = field.DataType;
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
-                field.CurrentValue = defaultValues[field.DataType];
+                if (!setValueIfNullable)
+                {
+                    return;
+                }
+
+                type = type.GenericTypeArguments[0];
+            }
+
+            if (defaultValues.ContainsKey(type))
+            {
+                field.CurrentValue = defaultValues[type];
             }
         }
     }
