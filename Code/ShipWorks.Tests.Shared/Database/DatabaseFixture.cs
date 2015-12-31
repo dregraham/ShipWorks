@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using Autofac;
@@ -7,7 +6,6 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
 using Moq;
 using Respawn;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
@@ -24,7 +22,13 @@ namespace ShipWorks.Tests.Shared.Database
     /// <summary>
     /// Fixture that will create a database that can be used to test against
     /// </summary>
-    public class DatabaseFixture : IDisposable
+    [SuppressMessage("SonarQube", "S2930: \"IDisposables\" should be disposed",
+        Justification = "We want the database to stick around after the test for debugging purposes")]
+    [SuppressMessage("SonarQube", "S2931: Classes with \"IDisposable\" members should implement \"IDisposable\"",
+        Justification = "We're not disposing this class because some ShipWorks functions run a little after we" +
+        "dispose of the sql session. This would cause the test runner to crash even though all tests" +
+        "ran successfully")]
+    public class DatabaseFixture
     {
         private readonly Checkpoint checkpoint;
         private readonly SqlSessionScope sqlSessionScope;
@@ -33,16 +37,35 @@ namespace ShipWorks.Tests.Shared.Database
         /// <summary>
         /// Constructor
         /// </summary>
-        [SuppressMessage("SonarQube", "S2930: \"IDisposables\" should be disposed",
-            Justification = "We want the database to stick around after the test for debugging purposes")]
         public DatabaseFixture()
         {
+            string databaseName = "ShipWorks";
             executionModeScope = new ExecutionModeScope(new TestExecutionMode());
 
             checkpoint = new Checkpoint();
-            TempLocalDb db = new TempLocalDb("ShipWorks");
+            TempLocalDb db = new TempLocalDb(databaseName);
 
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(db.ConnectionString);
+            sqlSessionScope = CreateSqlSessionScope(db.ConnectionString);
+
+            SqlUtility.EnableClr(db.Open());
+
+            using (SqlCommand command = db.Open().CreateCommand())
+            {
+                command.CommandText = string.Format(enableChangeTrackingScript, databaseName);
+                command.ExecuteNonQuery();
+            }
+
+            ShipWorksDatabaseUtility.CreateSchemaAndData();
+
+            DataProvider.InitializeForApplication(ExecutionModeScope.Current);
+        }
+
+        /// <summary>
+        /// Create the Sql Session scope that will be used for the rest of the test run
+        /// </summary>
+        private static SqlSessionScope CreateSqlSessionScope(string connectionString)
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(connectionString);
 
             SqlSessionConfiguration configuration = new SqlSessionConfiguration
             {
@@ -53,28 +76,7 @@ namespace ShipWorks.Tests.Shared.Database
 
             configuration.Freeze();
 
-            sqlSessionScope = new SqlSessionScope(new SqlSession(configuration));
-
-            //using (SqlConnection conn = db.Open())
-            //{
-            using (new ExistingConnectionScope())
-            {
-                SqlUtility.EnableClr(ExistingConnectionScope.ScopedConnection);
-
-                using (SqlCommand command = ExistingConnectionScope.ScopedConnection.CreateCommand())
-                {
-                    command.CommandText = @"ALTER DATABASE ShipWorks
-  SET CHANGE_TRACKING = ON
-  (CHANGE_RETENTION = 1 DAYS, AUTO_CLEANUP = ON)";
-                    command.ExecuteNonQuery();
-                }
-
-            }
-            //}
-
-            ShipWorksDatabaseUtility.CreateSchemaAndData();
-
-            DataProvider.InitializeForApplication(ExecutionModeScope.Current);
+            return new SqlSessionScope(new SqlSession(configuration));
         }
 
         /// <summary>
@@ -85,14 +87,14 @@ namespace ShipWorks.Tests.Shared.Database
         /// in an exception, the context may not be disposed properly in the test itself.</remarks>
         public DataContext CreateDataContext(AutoMock mock)
         {
-            DataContext context;
-
             using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
             {
                 checkpoint.Reset(SqlSession.Current.OpenConnection());
-                context = SetupFreshData();
             }
 
+            DataContext context = SetupFreshData();
+
+            // Unless the test calls for something different, we're going to ignore security checks
             mock.Override<ISecurityContext>()
                 .Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
 
@@ -112,11 +114,6 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         private DataContext SetupFreshData()
         {
-            using (SqlAdapter adapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
-            {
-                adapter.DeleteEntitiesDirectly(typeof(AuditEntity), new RelationPredicateBucket());
-            }
-
             ShipWorksDatabaseUtility.AddInitialDataAndVersion(SqlSession.Current.OpenConnection());
             ShipWorksDatabaseUtility.AddRequiredData();
 
@@ -131,13 +128,8 @@ namespace ShipWorks.Tests.Shared.Database
             }
         }
 
-        /// <summary>
-        /// Drop the database
-        /// </summary>
-        public void Dispose()
-        {
-            sqlSessionScope.Dispose();
-            executionModeScope.Dispose();
-        }
+        private const string enableChangeTrackingScript = @"ALTER DATABASE {0}
+  SET CHANGE_TRACKING = ON
+  (CHANGE_RETENTION = 1 DAYS, AUTO_CLEANUP = ON)";
     }
 }

@@ -24,18 +24,15 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             db.CreateDataContext(mock);
 
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-            {
-                var store = Create.Entity<GenericModuleStoreEntity>().Save(sqlAdapter);
-                var customer = Create.Entity<CustomerEntity>().Save(sqlAdapter);
+            var store = Create.Entity<GenericModuleStoreEntity>().Save();
+            var customer = Create.Entity<CustomerEntity>().Save();
 
-                order = Create.Order(store, customer).WithOrderNumber(123999)
-                    .WithItem()
-                    .WithItem()
-                    .WithShipment()
-                    .WithShipment()
-                    .Save(sqlAdapter);
-            }
+            order = Create.Order(store, customer).WithOrderNumber(123999)
+                .WithItem()
+                .WithItem()
+                .WithShipment()
+                .WithShipment()
+                .Save();
         }
 
         [Fact]
@@ -91,21 +88,16 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void LoadFullShipmentGraph_LoadsAllCarrierShipmentData()
         {
-            ShipmentEntity shipment = null;
-
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-            {
-                shipment = Create.Shipment(order)
-                    .AsUps()
-                    .AsPostal(x => x.AsUsps().AsEndicia())
-                    .AsIParcel()
-                    .AsOnTrac()
-                    .AsAmazon()
-                    .AsBestRate()
-                    .AsFedEx()
-                    .AsOther()
-                    .Save(sqlAdapter);
-            }
+            ShipmentEntity shipment = Create.Shipment(order)
+                .AsUps()
+                .AsPostal(x => x.AsUsps().AsEndicia())
+                .AsIParcel()
+                .AsOnTrac()
+                .AsAmazon()
+                .AsBestRate()
+                .AsFedEx()
+                .AsOther()
+                .Save();
 
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 
@@ -123,14 +115,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void LoadFullShipmentGraph_LoadsFedExShipmentAndPackages()
         {
-            ShipmentEntity shipment = null;
-
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-            {
-                shipment = Create.Shipment(order)
-                    .AsFedEx(fedEx => fedEx.WithPackage().WithPackage())
-                    .Save(sqlAdapter);
-            }
+            ShipmentEntity shipment = Create.Shipment(order)
+                .AsFedEx(fedEx => fedEx.WithPackage().WithPackage())
+                .Save();
 
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 
@@ -143,14 +130,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void LoadFullShipmentGraph_LoadsUpsShipmentAndPackages()
         {
-            ShipmentEntity shipment = null;
-
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-            {
-                shipment = Create.Shipment(order)
-                    .AsUps(Ups => Ups.WithPackage().WithPackage())
-                    .Save(sqlAdapter);
-            }
+            ShipmentEntity shipment = Create.Shipment(order)
+                .AsUps(Ups => Ups.WithPackage().WithPackage())
+                .Save();
 
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 
@@ -183,15 +165,10 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void LoadFullShipmentGraph_LoadsCustomsItems()
         {
-            ShipmentEntity shipment = null;
-
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-            {
-                shipment = Create.Shipment(order)
-                    .WithCustomsItem()
-                    .WithCustomsItem()
-                    .Save(sqlAdapter);
-            }
+            ShipmentEntity shipment = Create.Shipment(order)
+                .WithCustomsItem()
+                .WithCustomsItem()
+                .Save();
 
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 
@@ -203,16 +180,10 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void LoadFullShipmentGraph_LoadsInsurance()
         {
-            long shipmentId = 0;
-
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-            {
-                var shipment = Create.Shipment(order)
-                    .WithInsurancePolicy()
-                    .Save(sqlAdapter);
-
-                shipmentId = shipment.ShipmentID;
-            }
+            long shipmentId = Create.Shipment(order)
+                .WithInsurancePolicy()
+                .Save()
+                .ShipmentID;
 
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 

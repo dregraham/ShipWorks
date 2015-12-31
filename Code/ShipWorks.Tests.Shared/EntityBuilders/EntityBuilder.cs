@@ -17,6 +17,24 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         readonly List<Action<T>> actions = new List<Action<T>>();
         readonly Dictionary<string, object> fieldValues = new Dictionary<string, object>();
         bool setDefaultValues = true;
+        readonly Func<T> getEntity;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public EntityBuilder()
+        {
+            getEntity = () => new T();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public EntityBuilder(T entity)
+        {
+            getEntity = () => entity;
+            setDefaultValues = false;
+        }
 
         /// <summary>
         /// Perform a generic set action on the entity
@@ -30,7 +48,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Set a field on the entity
         /// </summary>
-        public EntityBuilder<T> SetField<TReturn>(Expression<Func<T, TReturn>> setter, TReturn value)
+        public EntityBuilder<T> Set<TReturn>(Expression<Func<T, TReturn>> setter, TReturn value)
         {
             PropertyInfo propertyInfo = setter.Body is MemberExpression ?
                 (setter.Body as MemberExpression).Member as PropertyInfo :
@@ -63,7 +81,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         public EntityBuilder<T> WithAddress(Expression<Func<T, PersonAdapter>> addressAdapter,
             string address1, string address2, string city, string state, string postalCode, string country)
         {
-            SetField(addressAdapter, new PersonAdapter
+            Set(addressAdapter, new PersonAdapter
             {
                 Street1 = address1,
                 Street2 = address2,
@@ -89,6 +107,18 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Save the built entity to the database
         /// </summary>
+        /// <returns></returns>
+        public virtual T Save()
+        {
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+            {
+                return Save(sqlAdapter);
+            }
+        }
+
+        /// <summary>
+        /// Save the built entity to the database
+        /// </summary>
         public virtual T Save(SqlAdapter adapter)
         {
             T entity = Build();
@@ -105,7 +135,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public virtual T Build()
         {
-            T entity = new T();
+            T entity = getEntity();
 
             foreach (IEntityField2 field in EditableFields(entity))
             {

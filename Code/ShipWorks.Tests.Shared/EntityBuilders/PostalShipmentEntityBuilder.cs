@@ -52,8 +52,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             TBuilder builder = new TBuilder();
             builderConfiguration?.Invoke(builder);
 
-            parentBuilder.SetField(x => x.ShipmentTypeCode, shipmentTypeCode);
-            SetField(shipmentAccessor, builder.Build());
+            parentBuilder.Set(x => x.ShipmentTypeCode, shipmentTypeCode);
+            Set(shipmentAccessor, builder.Build());
 
             return this;
         }

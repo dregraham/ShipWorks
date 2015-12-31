@@ -15,9 +15,17 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Constructor
         /// </summary>
+        public ShipmentEntityBuilder(ShipmentEntity shipment) : base(shipment)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShipmentEntityBuilder()
         {
-            SetField(x => x.ShipSenseChangeSets, new XElement("ChangeSets").ToString());
+            Set(x => x.ShipSenseChangeSets, new XElement("ChangeSets").ToString());
         }
 
         /// <summary>
@@ -25,7 +33,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public ShipmentEntityBuilder(OrderEntity order) : this()
         {
-            SetField(x => x.Order, order);
+            Set(x => x.Order, order);
         }
 
         /// <summary>
@@ -63,8 +71,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             PostalShipmentEntityBuilder builder = new PostalShipmentEntityBuilder(this);
             builderConfiguration?.Invoke(builder);
 
-            SetField(x => x.ShipmentTypeCode, ShipmentTypeCode.PostalWebTools);
-            SetField(x => x.Postal, builder.Build());
+            Set(x => x.ShipmentTypeCode, ShipmentTypeCode.PostalWebTools);
+            Set(x => x.Postal, builder.Build());
 
             return this;
         }
@@ -155,7 +163,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             EntityBuilder<InsurancePolicyEntity> builder = new EntityBuilder<InsurancePolicyEntity>();
             builderConfiguration?.Invoke(builder);
 
-            SetField(x => x.InsurancePolicy, builder.Build());
+            Set(x => x.InsurancePolicy, builder.Build());
 
             return this;
         }
@@ -172,8 +180,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             TBuilder builder = new TBuilder();
             builderConfiguration?.Invoke(builder);
 
-            SetField(x => x.ShipmentTypeCode, shipmentTypeCode);
-            SetField(shipmentAccessor, builder.Build());
+            Set(x => x.ShipmentTypeCode, shipmentTypeCode);
+            Set(shipmentAccessor, builder.Build());
 
             return this;
         }

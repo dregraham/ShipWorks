@@ -11,9 +11,17 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Constructor
         /// </summary>
+        public StoreEntityBuilder(T store) : base(store)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public StoreEntityBuilder()
         {
-            SetField(x => x.SetupComplete, true);
+            Set(x => x.SetupComplete, true);
         }
 
         /// <summary>

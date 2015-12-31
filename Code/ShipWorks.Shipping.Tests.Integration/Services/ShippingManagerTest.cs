@@ -3,7 +3,6 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.AddressValidation;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
@@ -30,20 +29,17 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             db.CreateDataContext(mock);
 
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-            {
-                var store = Create.Store<GenericModuleStoreEntity>()
-                    .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
-                    .SetField(x => x.StoreName, "A Test Store")
-                    .Save(sqlAdapter);
+            var store = Create.Store<GenericModuleStoreEntity>()
+                .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
+                .Set(x => x.StoreName, "A Test Store")
+                .Save();
 
-                var customer = Create.Entity<CustomerEntity>().Save(sqlAdapter);
+            var customer = Create.Entity<CustomerEntity>().Save();
 
-                order = Create.Order(store, customer)
-                    .WithOrderNumber(12345)
-                    .WithShipAddress("1 Memorial Dr.", "Suite 2000", "St. Louis", "MO", "63102", "US")
-                    .Save(sqlAdapter);
-            }
+            order = Create.Order(store, customer)
+                .WithOrderNumber(12345)
+                .WithShipAddress("1 Memorial Dr.", "Suite 2000", "St. Louis", "MO", "63102", "US")
+                .Save();
 
             // Reset the static fields before each test
             StoreManager.CheckForChanges();
@@ -74,14 +70,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_SetsWeightToSumOfItems_WhenOrderHasItems()
         {
-            mock.Override<IDataProvider>()
-                .Setup(x => x.GetRelatedEntities(order.OrderID, Data.Model.EntityType.OrderItemEntity))
-                .Returns(new[] {
-                    new OrderItemEntity { Quantity = 2, Weight = 2.5 },
-                    new OrderItemEntity { Quantity = 1, Weight = 1.25 }
-                });
+            Modify.Order(order)
+                .WithItem(i => i.Set(x => x.Weight, 2.5).Set(x => x.Quantity, 2))
+                .WithItem(i => i.Set(x => x.Weight, 1.25).Set(x => x.Quantity, 1))
+                .Save();
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(order, mock.Container);
+
             Assert.Equal(6.25, shipment.ContentWeight);
             Assert.Equal(6.25, shipment.TotalWeight);
         }
@@ -144,23 +139,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_CreatesCustomsItems_WhenShipmentIsInternational()
         {
-            OrderEntity otherOrder;
+            Modify.Order(order)
+                .WithShipAddress("1 Memorial Dr.", "Suite 2000", "London", string.Empty, "63102", "UK")
+                .WithItem(i => i.Set(x => x.Weight, 2).Set(x => x.Quantity, 1).Set(x => x.Name, "Foo"))
+                .WithItem(i => i.Set(x => x.Weight, 3).Set(x => x.Quantity, 4).Set(x => x.Name, "Bar"))
+                .Save();
 
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-            {
-                otherOrder = Create.Order(order.Store, order.Customer)
-                    .WithOrderNumber(6789)
-                    .WithShipAddress("1 Memorial Dr.", "Suite 2000", "London", string.Empty, "63102", "UK")
-                    .WithItem(i => i.SetField(x => x.Weight, 2)
-                        .SetField(x => x.Quantity, 1)
-                        .SetField(x => x.Name, "Foo"))
-                    .WithItem(i => i.SetField(x => x.Weight, 3)
-                        .SetField(x => x.Quantity, 4)
-                        .SetField(x => x.Name, "Bar"))
-                    .Save(sqlAdapter);
-            }
-
-            ShipmentEntity shipment = ShippingManager.CreateShipment(otherOrder, mock.Container);
+            ShipmentEntity shipment = ShippingManager.CreateShipment(order, mock.Container);
 
             Assert.Equal(2, shipment.CustomsItems.Count);
 
@@ -176,24 +161,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_CreatesCustomsItems_WhenShipmentIsDomestic()
         {
-            OrderEntity otherOrder;
+            Modify.Order(order)
+                .WithItem(i => i.Set(x => x.Weight, 2).Set(x => x.Quantity, 1).Set(x => x.Name, "Foo"))
+                .WithItem(i => i.Set(x => x.Weight, 3).Set(x => x.Quantity, 4).Set(x => x.Name, "Bar"))
+                .Save();
 
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-            {
-                otherOrder = Create.Order(order.Store, order.Customer)
-                    .WithOrderNumber(6789)
-                    .WithShipAddress("1 Memorial Dr.", "Suite 2000", "St. Louis", "MO", "63102", "US")
-                    .WithItem(i => i.SetField(x => x.Weight, 2)
-                        .SetField(x => x.Quantity, 1)
-                        .SetField(x => x.Name, "Foo"))
-                    .WithItem(i => i.SetField(x => x.Weight, 3)
-                        .SetField(x => x.Quantity, 4)
-                        .SetField(x => x.Name, "Bar"))
-                    .Save(sqlAdapter);
-
-            }
-
-            ShipmentEntity shipment = ShippingManager.CreateShipment(otherOrder, mock.Container);
+            ShipmentEntity shipment = ShippingManager.CreateShipment(order, mock.Container);
 
             Assert.Empty(shipment.CustomsItems);
         }

@@ -12,12 +12,20 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
     public class OrderEntityBuilder : EntityBuilder<OrderEntity>
     {
         /// <summary>
+        /// Modify an existing order
+        /// </summary>
+        public OrderEntityBuilder(OrderEntity order) : base(order)
+        {
+
+        }
+
+        /// <summary>
         /// Create a new order entity builder
         /// </summary>
         public OrderEntityBuilder(StoreEntity store, CustomerEntity customer)
         {
-            SetField(x => x.Store, store);
-            SetField(x => x.Customer, customer);
+            Set(x => x.Store, store);
+            Set(x => x.Customer, customer);
         }
 
         /// <summary>
@@ -25,7 +33,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public OrderEntityBuilder WithOrderNumber(long orderNumber)
         {
-            SetField(x => x.OrderNumber, orderNumber);
+            Set(x => x.OrderNumber, orderNumber);
 
             return this;
         }
