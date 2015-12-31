@@ -662,7 +662,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The YahooStoreID property of the Entity YahooStore<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "YahooStore"."YahooStoreID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String YahooStoreID
 		{

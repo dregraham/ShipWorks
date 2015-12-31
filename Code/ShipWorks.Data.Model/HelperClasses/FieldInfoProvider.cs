@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (170 + 0));
+			base.InitClass( (172 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -66,6 +66,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAmazonASINEntityInfos();
 			InitAmazonOrderEntityInfos();
 			InitAmazonOrderItemEntityInfos();
+			InitAmazonProfileEntityInfos();
+			InitAmazonShipmentEntityInfos();
 			InitAmazonStoreEntityInfos();
 			InitAmeriCommerceStoreEntityInfos();
 			InitAuditEntityInfos();
@@ -344,6 +346,38 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonOrderItemEntity", "AmazonOrderItemCode", typeof(System.String), false, false, false, false,  (int)AmazonOrderItemFieldIndex.AmazonOrderItemCode, 64, 0, 0);
 			base.AddElementFieldInfo("AmazonOrderItemEntity", "ASIN", typeof(System.String), false, false, false, false,  (int)AmazonOrderItemFieldIndex.ASIN, 255, 0, 0);
 			base.AddElementFieldInfo("AmazonOrderItemEntity", "ConditionNote", typeof(System.String), false, false, false, false,  (int)AmazonOrderItemFieldIndex.ConditionNote, 255, 0, 0);
+		}
+		/// <summary>Inits AmazonProfileEntity's FieldInfo objects</summary>
+		private void InitAmazonProfileEntityInfos()
+		{
+			base.AddElementFieldInfo("AmazonProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AmazonProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsLength, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsWidth, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsHeight, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsWeight, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsAddWeight, 0, 0, 0);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
+			base.AddElementFieldInfo("AmazonProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.Weight, 0, 0, 38);
+		}
+		/// <summary>Inits AmazonShipmentEntity's FieldInfo objects</summary>
+		private void InitAmazonShipmentEntityInfos()
+		{
+			base.AddElementFieldInfo("AmazonShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)AmazonShipmentFieldIndex.ShipmentID, 0, 0, 19);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "CarrierName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.CarrierName, 50, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceName, 50, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceID", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceID, 50, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceOfferID", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceOfferID, 50, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AmazonShipmentFieldIndex.InsuranceValue, 0, 4, 19);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsLength, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsWidth", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsWidth, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsHeight, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsWeight, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DeliveryExperience", typeof(System.Int32), false, false, false, false,  (int)AmazonShipmentFieldIndex.DeliveryExperience, 0, 0, 10);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AmazonShipmentFieldIndex.DeclaredValue, 0, 4, 19);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "AmazonUniqueShipmentID", typeof(System.String), false, false, false, true,  (int)AmazonShipmentFieldIndex.AmazonUniqueShipmentID, 50, 0, 0);
 		}
 		/// <summary>Inits AmazonStoreEntity's FieldInfo objects</summary>
 		private void InitAmazonStoreEntityInfos()
@@ -1252,7 +1286,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FtpAccountEntity", "SecurityType", typeof(System.Int32), false, false, false, false,  (int)FtpAccountFieldIndex.SecurityType, 0, 0, 10);
 			base.AddElementFieldInfo("FtpAccountEntity", "Passive", typeof(System.Boolean), false, false, false, false,  (int)FtpAccountFieldIndex.Passive, 0, 0, 0);
 			base.AddElementFieldInfo("FtpAccountEntity", "InternalOwnerID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)FtpAccountFieldIndex.InternalOwnerID, 0, 0, 19);
-			base.AddElementFieldInfo("FtpAccountEntity", "ReuseControlConnectionSession", typeof(System.Boolean), false, false, false, false,  (int)FtpAccountFieldIndex.ReuseControlConnectionSession, 0, 0, 0);
+			base.AddElementFieldInfo("FtpAccountEntity", "ReuseControlConnectionSession", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FtpAccountFieldIndex.ReuseControlConnectionSession, 0, 0, 0);
 		}
 		/// <summary>Inits GenericFileStoreEntity's FieldInfo objects</summary>
 		private void InitGenericFileStoreEntityInfos()
@@ -2959,7 +2993,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("YahooOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)YahooOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			base.AddElementFieldInfo("YahooOrderItemEntity", "YahooProductID", typeof(System.String), false, false, false, false,  (int)YahooOrderItemFieldIndex.YahooProductID, 255, 0, 0);
-			base.AddElementFieldInfo("YahooOrderItemEntity", "Url", typeof(System.String), false, false, false, false,  (int)YahooOrderItemFieldIndex.Url, 255, 0, 0);
+			base.AddElementFieldInfo("YahooOrderItemEntity", "Url", typeof(System.String), false, false, false, false,  (int)YahooOrderItemFieldIndex.Url, 100, 0, 0);
 		}
 		/// <summary>Inits YahooProductEntity's FieldInfo objects</summary>
 		private void InitYahooProductEntityInfos()
@@ -2974,7 +3008,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("YahooStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)YahooStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("YahooStoreEntity", "YahooEmailAccountID", typeof(System.Int64), false, true, false, false,  (int)YahooStoreFieldIndex.YahooEmailAccountID, 0, 0, 19);
 			base.AddElementFieldInfo("YahooStoreEntity", "TrackingUpdatePassword", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.TrackingUpdatePassword, 100, 0, 0);
-			base.AddElementFieldInfo("YahooStoreEntity", "YahooStoreID", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.YahooStoreID, 50, 0, 0);
+			base.AddElementFieldInfo("YahooStoreEntity", "YahooStoreID", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.YahooStoreID, 100, 0, 0);
 			base.AddElementFieldInfo("YahooStoreEntity", "AccessToken", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.AccessToken, 200, 0, 0);
 			base.AddElementFieldInfo("YahooStoreEntity", "BackupOrderNumber", typeof(Nullable<System.Int64>), false, false, false, true,  (int)YahooStoreFieldIndex.BackupOrderNumber, 0, 0, 19);
 		}

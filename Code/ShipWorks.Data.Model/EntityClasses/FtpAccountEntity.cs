@@ -615,10 +615,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "FtpAccount"."ReuseControlConnectionSession"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean ReuseControlConnectionSession
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> ReuseControlConnectionSession
 		{
-			get { return (System.Boolean)GetValue((int)FtpAccountFieldIndex.ReuseControlConnectionSession, true); }
+			get { return (Nullable<System.Boolean>)GetValue((int)FtpAccountFieldIndex.ReuseControlConnectionSession, false); }
 			set	{ SetValue((int)FtpAccountFieldIndex.ReuseControlConnectionSession, value); }
 		}
 
