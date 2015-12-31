@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
 using Interapptive.Shared;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Caching;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -32,7 +30,6 @@ namespace ShipWorks.Data.Utility
 
         // Allow overwriting of edited entities
         bool allowOverwriteOfEdited = false;
-        Func<bool, SqlAdapter> createSqlAdapter;
 
         /// <summary>
         /// Constructor.
@@ -40,7 +37,6 @@ namespace ShipWorks.Data.Utility
         public TableSynchronizer()
         {
             primaryKeyField = (EntityField2) collection.EntityFactoryToUse.CreateFields()[0];
-            createSqlAdapter = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<bool, SqlAdapter>>();
         }
 
         /// <summary>
@@ -80,7 +76,7 @@ namespace ShipWorks.Data.Utility
                 changeMonitor = new EntityChangeTrackingMonitor();
                 changeMonitor.Initialize(new List<EntityType> { EntityUtility.GetEntityType(typeof(TEntity)) });
 
-                using (SqlAdapter adapter = createSqlAdapter(false))
+                using (SqlAdapter adapter = SqlAdapter.Create(false))
                 {
                     adapter.FetchEntityCollection(collection, null);
 
@@ -99,7 +95,7 @@ namespace ShipWorks.Data.Utility
                 if (!changeset.IsValid)
                 {
                     // If the changeset is invalid - we have to start over from scratch
-                    using (SqlAdapter adapter = createSqlAdapter(false))
+                    using (SqlAdapter adapter = SqlAdapter.Create(false))
                     {
                         collection.Clear();
 
@@ -126,7 +122,7 @@ namespace ShipWorks.Data.Utility
 
                     // Get all the changed entities and new entities
                     EntityCollection<TEntity> changeCollection = new EntityCollection<TEntity>();
-                    using (SqlAdapter adapter = createSqlAdapter(false))
+                    using (SqlAdapter adapter = SqlAdapter.Create(false))
                     {
                         adapter.FetchEntityCollection(changeCollection, bucket);
                     }

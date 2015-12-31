@@ -27,35 +27,35 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Create the core data required to run ShipWorks at all
         /// </summary>
-        public static void CreateCoreRequiredData(Func<bool, SqlAdapter> createSqlAdapter)
+        public static void CreateCoreRequiredData()
         {
-            using (SqlAdapter adapter = createSqlAdapter(false))
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 ConfigurationData.CreateInstance(adapter);
                 SystemData.CreateInstance(adapter);
                 ShippingSettings.CreateInstance(adapter);
             }
 
-            FilterNodeEntity ordersNode = CreateTopLevelFilter(FilterTarget.Orders, createSqlAdapter);
-            FilterNodeEntity customersNode = CreateTopLevelFilter(FilterTarget.Customers, createSqlAdapter);
+            FilterNodeEntity ordersNode = CreateTopLevelFilter(FilterTarget.Orders);
+            FilterNodeEntity customersNode = CreateTopLevelFilter(FilterTarget.Customers);
 
-            SearchManager.CreateSearchPlaceholder(FilterTarget.Orders, createSqlAdapter);
-            SearchManager.CreateSearchPlaceholder(FilterTarget.Customers, createSqlAdapter);
+            SearchManager.CreateSearchPlaceholder(FilterTarget.Orders);
+            SearchManager.CreateSearchPlaceholder(FilterTarget.Customers);
 
-            CreateBuiltinTemplateFolders(createSqlAdapter);
+            CreateBuiltinTemplateFolders();
         }
 
         /// <summary>
         /// Create the default data for a fresh install.  This is like status presets and example filters
         /// </summary>
-        public static void CreateDefaultFreshInstallData(Func<bool, SqlAdapter> createSqlAdapter)
+        public static void CreateDefaultFreshInstallData()
         {
             // Before we can create the custom filters, we need to get the FilterLayoutContext initialized, since that is what all filters
             // are created through.  We don't need (and can't have, since there are no real users yet) the "My Layout" stuff, so put the SuperUser
             // in scope to prevent that.
             using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
             {
-                CreateStatusPresets(createSqlAdapter);
+                CreateStatusPresets();
 
                 try
                 {
@@ -63,8 +63,8 @@ namespace ShipWorks.Data.Administration
                     // way it was.  And if it doesn't, the layout context gets reloaded anyway.
                     FilterLayoutContext.PushScope();
 
-                    CreateOrderFilters(FilterLayoutContext.Current.FindNode(BuiltinFilter.GetTopLevelKey(FilterTarget.Orders), createSqlAdapter), createSqlAdapter);
-                    CreateCustomerFilters(FilterLayoutContext.Current.FindNode(BuiltinFilter.GetTopLevelKey(FilterTarget.Customers), createSqlAdapter), createSqlAdapter);
+                    CreateOrderFilters(FilterLayoutContext.Current.FindNode(BuiltinFilter.GetTopLevelKey(FilterTarget.Orders)));
+                    CreateCustomerFilters(FilterLayoutContext.Current.FindNode(BuiltinFilter.GetTopLevelKey(FilterTarget.Customers)));
                 }
                 finally
                 {
@@ -76,34 +76,34 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Create the default set of order filters
         /// </summary>
-        private static void CreateOrderFilters(FilterNodeEntity ordersNode, Func<bool, SqlAdapter> createSqlAdapter)
+        private static void CreateOrderFilters(FilterNodeEntity ordersNode)
         {
-            FilterNodeEntity destinationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Destination", FilterTarget.Orders), ordersNode, 0, createSqlAdapter)[0];
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("All U.S.", CreateDefinitionUS()), destinationNode, 0, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Residential", CreateDefinitionResidential(true)), destinationNode, 1, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Commercial", CreateDefinitionResidential(false)), destinationNode, 2, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. PO Box", CreateDefinitionPOBox()), destinationNode, 3, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Territories", CreateDefinitionTerritory()), destinationNode, 4, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Military", CreateDefinitionMilitary()), destinationNode, 5, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("International", CreateDefinitionInternational()), destinationNode, 6, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ambiguous", CreateAddressValidationDefinition(AddressValidationStatusType.HasSuggestions)), destinationNode, 7, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Invalid", CreateAddressValidationDefinition(AddressValidationStatusType.BadAddress)), destinationNode, 8, createSqlAdapter);
+            FilterNodeEntity destinationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Destination", FilterTarget.Orders), ordersNode, 0)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("All U.S.", CreateDefinitionUS()), destinationNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Residential", CreateDefinitionResidential(true)), destinationNode, 1);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Commercial", CreateDefinitionResidential(false)), destinationNode, 2);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. PO Box", CreateDefinitionPOBox()), destinationNode, 3);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Territories", CreateDefinitionTerritory()), destinationNode, 4);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Military", CreateDefinitionMilitary()), destinationNode, 5);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("International", CreateDefinitionInternational()), destinationNode, 6);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ambiguous", CreateAddressValidationDefinition(AddressValidationStatusType.HasSuggestions)), destinationNode, 7);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Invalid", CreateAddressValidationDefinition(AddressValidationStatusType.BadAddress)), destinationNode, 8);
 
-            FilterNodeEntity ageNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Age", FilterTarget.Orders), ordersNode, 1, createSqlAdapter)[0];
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Today", CreateDefinitionTodaysOrders()), ageNode, 0, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 7 days", CreateDefinitionOrdersAge(7)), ageNode, 1, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 30 days", CreateDefinitionOrdersAge(30)), ageNode, 2, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 90 days", CreateDefinitionOrdersAge(90)), ageNode, 3, createSqlAdapter);
+            FilterNodeEntity ageNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Age", FilterTarget.Orders), ordersNode, 1)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Today", CreateDefinitionTodaysOrders()), ageNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 7 days", CreateDefinitionOrdersAge(7)), ageNode, 1);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 30 days", CreateDefinitionOrdersAge(30)), ageNode, 2);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 90 days", CreateDefinitionOrdersAge(90)), ageNode, 3);
         }
 
         /// <summary>
         /// Create the default set of customer filters
         /// </summary>
-        private static void CreateCustomerFilters(FilterNodeEntity customersNode, Func<bool, SqlAdapter> createSqlAdapter)
+        private static void CreateCustomerFilters(FilterNodeEntity customersNode)
         {
-            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Customers), customersNode, 0, createSqlAdapter)[0];
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Spent $100 or more", CreateDefinitionSpent100()), examplesNode, 0, createSqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Returning customer", CreateDefinitionMultipleOrders()), examplesNode, 1, createSqlAdapter);
+            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Customers), customersNode, 0)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Spent $100 or more", CreateDefinitionSpent100()), examplesNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Returning customer", CreateDefinitionMultipleOrders()), examplesNode, 1);
         }
 
         /// <summary>
@@ -385,7 +385,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Create the default status presets
         /// </summary>
-        private static void CreateStatusPresets(Func<bool, SqlAdapter> createSqlAdapter)
+        private static void CreateStatusPresets()
         {
             string[] orderPresets = new string[]
             {
@@ -408,7 +408,7 @@ namespace ShipWorks.Data.Administration
                 "Not Packed"
             };
 
-            using (SqlAdapter adapter = createSqlAdapter(false))
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 foreach (string text in orderPresets)
                 {
@@ -438,9 +438,9 @@ namespace ShipWorks.Data.Administration
         /// Create the never-changing top-level filter for the given target
         /// </summary>
         [NDependIgnoreLongMethod]
-        private static FilterNodeEntity CreateTopLevelFilter(FilterTarget target, Func<bool, SqlAdapter> createSqlAdapter)
+        private static FilterNodeEntity CreateTopLevelFilter(FilterTarget target)
         {
-            using (SqlAdapter adapter = createSqlAdapter(false))
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 // We will be specifying the pk values
                 adapter.IdentityInsert = true;
@@ -506,9 +506,9 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Create the set of builtin template folders
         /// </summary>
-        private static void CreateBuiltinTemplateFolders(Func<bool, SqlAdapter> createSqlAdapter)
+        private static void CreateBuiltinTemplateFolders()
         {
-            using (SqlAdapter adapter = createSqlAdapter(false))
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 // We will be specifying the pk values
                 adapter.IdentityInsert = true;

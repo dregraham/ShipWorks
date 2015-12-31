@@ -6,11 +6,9 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Autofac;
 using Interapptive.Shared.Data;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model;
@@ -63,7 +61,6 @@ namespace ShipWorks.Data.Connection
 
         // Needed to allow SqlAdapter to use an existing SqlTransaction
         private static System.Reflection.FieldInfo fieldPhysicalTransaction;
-        private readonly SqlTransaction externalTransaction;
 
         /// <summary>
         /// Static constructor
@@ -117,7 +114,6 @@ namespace ShipWorks.Data.Connection
 
             if (transactionToUse != null)
             {
-                externalTransaction = transactionToUse;
                 fieldPhysicalTransaction.SetValue(this, transactionToUse);
                 fieldIsTransactionInProgress.SetValue(this, true);
             }
@@ -295,12 +291,6 @@ namespace ShipWorks.Data.Connection
         {
             bool wasLLBLGenTransInProgress = IsTransactionInProgress;
 
-            SqlTransaction transaction = fieldPhysicalTransaction.GetValue(this) as SqlTransaction;
-            if (ReferenceEquals(transaction, externalTransaction))
-            {
-                fieldPhysicalTransaction.SetValue(this, null);
-            }
-
             base.Commit();
 
             if (transactionScope != null)
@@ -368,7 +358,7 @@ namespace ShipWorks.Data.Connection
 
                 fieldIsTransactionInProgress.SetValue(this, false);
 
-                // Since LLBLgen thought we were in a "real" transaction since we set that flag, it didn't autoclose the connection
+                // Since LLBLgen thought we were in a "real" transaction since we set that flag, it didn't auto close the connection
                 if (!KeepConnectionOpen)
                 {
                     CloseConnection();
@@ -710,8 +700,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Create a new SqlAdapter
         /// </summary>
-        public static SqlAdapter Create(bool inTransaction) =>
-            IoC.UnsafeGlobalLifetimeScope.Resolve<Func<bool, SqlAdapter>>()(inTransaction);
+        public static SqlAdapter Create(bool inTransaction) => new SqlAdapter(inTransaction);
 
         #endregion
 

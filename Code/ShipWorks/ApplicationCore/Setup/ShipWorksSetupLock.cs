@@ -1,5 +1,5 @@
 ﻿using System.Data.SqlClient;
-using Autofac;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Utility;
 using ShipWorks.SqlServer.Common.Data;
 
@@ -26,9 +26,9 @@ namespace ShipWorks.ApplicationCore.Setup
         /// </summary>
         public static bool IsLocked()
         {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                return SqlAppLockUtility.IsLocked(lifetimeScope.Resolve<SqlConnection>(), resourceName);
+                return SqlAppLockUtility.IsLocked(con, resourceName);
             }
         }
     }

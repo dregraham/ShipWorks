@@ -18,22 +18,14 @@ namespace ShipWorks.Data.Connection
         /// Constructs a new SqlSessionScope.  The given SqlSession is active until
         /// the SqlSessionScope object is disposed.
         /// </summary>
-        public ExistingConnectionScope() : this(SqlSession.Current.OpenConnection())
-        {
-        }
-
-        /// <summary>
-        /// Constructs a new SqlSessionScope.  The given SqlSession is active until
-        /// the SqlSessionScope object is disposed.
-        /// </summary>
-        public ExistingConnectionScope(SqlConnection existingConnection)
+        public ExistingConnectionScope()
         {
             if (ScopedConnection != null)
             {
                 throw new InvalidOperationException("Only one ExistingConnectionScope can be active at a time.");
             }
 
-            ScopedConnection = existingConnection;
+            ScopedConnection = SqlSession.Current.OpenConnection();
         }
 
         /// <summary>

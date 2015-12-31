@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Transactions;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
@@ -54,14 +55,14 @@ namespace ShipWorks.Actions
             lock (tableSynchronizer)
             {
                 // Do this outside of a transaction.  I added this b\c DeleteStoreActions gets called in DeleteStore, which is a long running transaction.  The Actions of
-                // course would be deleted in a transaction, but there's no need for this query to be in a transaciton.
-                //using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
-                //{
-                if (tableSynchronizer.Synchronize())
+                // course would be deleted in a transaction, but there's no need for this query to be in a transaction.
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
                 {
-                    tableSynchronizer.EntityCollection.Sort((int) ActionFieldIndex.Name, ListSortDirection.Ascending);
+                    if (tableSynchronizer.Synchronize())
+                    {
+                        tableSynchronizer.EntityCollection.Sort((int) ActionFieldIndex.Name, ListSortDirection.Ascending);
+                    }
                 }
-                //}
 
                 needCheckForChanges = false;
             }
@@ -188,7 +189,7 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Delete all actions that are specfic to the given store.  Only actions that are configured to run ONLY for the given store will be deleted.
+        /// Delete all actions that are specific to the given store.  Only actions that are configured to run ONLY for the given store will be deleted.
         /// </summary>
         public static void DeleteStoreActions(long storeID)
         {

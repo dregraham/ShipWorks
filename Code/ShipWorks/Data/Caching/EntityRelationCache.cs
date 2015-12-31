@@ -198,11 +198,11 @@ namespace ShipWorks.Data.Caching
                                 bucket.Relations.AddRange(sort.Relations);
                             }
 
-                            using (SqlAdapter adapter = SqlAdapter.Default)
+                            using (SqlAdapter adapter = SqlAdapter.Create(false))
                             {
                                 // Don't close the connection when the reader closes. If the connection should be closed,
                                 // it will be closed when the adapter is disposed.
-                                using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.Default, 0, (sort != null ? sort.SortExpression : null), false))
+                                using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, (sort != null ? sort.SortExpression : null), false))
                                 {
                                     while (reader.Read())
                                     {

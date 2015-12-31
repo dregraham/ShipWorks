@@ -23,7 +23,6 @@ namespace ShipWorks.Shipping
     {
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IValidatedAddressScope validatedAddressScope;
-        private readonly Func<bool, SqlAdapter> sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
@@ -31,12 +30,10 @@ namespace ShipWorks.Shipping
         /// <param name="shipmentAdapterFactor"></param>
         public ShippingManagerWrapper(
             ICarrierShipmentAdapterFactory shipmentAdapterFactor,
-            IValidatedAddressScope validatedAddressScope,
-            Func<bool, SqlAdapter> sqlAdapterFactory)
+            IValidatedAddressScope validatedAddressScope)
         {
             this.shipmentAdapterFactory = shipmentAdapterFactor;
             this.validatedAddressScope = validatedAddressScope;
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -117,7 +114,7 @@ namespace ShipWorks.Shipping
 
             OrderEntity order = new OrderEntity(orderId);
 
-            using (SqlAdapter sqlAdapter = sqlAdapterFactory(true))
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(true))
             {
                 sqlAdapter.FetchEntity(order, orderPrefetchPath);
             }

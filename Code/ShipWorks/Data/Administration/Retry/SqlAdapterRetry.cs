@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
-using Autofac;
 using log4net;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration.Retry
 {
     /// <summary>
-    /// Helper to retry sql adapter commands if an exception type occurrs.
+    /// Helper to retry sql adapter commands if an exception type occurs.
     /// TException will be compared to any exception and inner exception that is thrown.
     /// If either the exception or inner exception match TException, the command will be retried.
     /// </summary>
-    public class SqlAdapterRetry<TException> : ShipWorks.Data.Administration.Retry.ISqlAdapterRetry where TException : Exception
+    public class SqlAdapterRetry<TException> : ISqlAdapterRetry where TException : Exception
     {
         // Logger - Using the string parameter version so that we don't get the TException.ToString() in the log file
         [SuppressMessage("SonarQube", "S2743:Static fields should not be used in generic types",
@@ -68,7 +66,7 @@ namespace ShipWorks.Data.Administration.Retry
                         {
                             using (new SqlDeadlockPriorityScope(deadlockPriority))
                             {
-                                using (SqlAdapter adapter = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<bool, SqlAdapter>>()(true))
+                                using (SqlAdapter adapter = SqlAdapter.Create(true))
                                 {
                                     adapter.CommandTimeOut = (int) TimeSpan.FromMinutes(10).TotalSeconds;
 

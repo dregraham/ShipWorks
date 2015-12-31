@@ -37,7 +37,7 @@ namespace ShipWorks.Users.Security
         /// <summary>
         /// Create the Super User account.  Used when a database is first created.
         /// </summary>
-        public static void Create(Func<SqlConnection> openSqlConnection, SqlAdapter adapter)
+        public static void Create(SqlAdapter adapter)
         {
             // We don't need to go through UserUtility since we don't need all the extras, like user settings, My Filters, etc.
             UserEntity user = new UserEntity();
@@ -54,7 +54,7 @@ namespace ShipWorks.Users.Security
             adapter.IdentityInsert = false;
 
             // Now we have to make sure and reset our seeding back to normal, since the identity insert will have goofed it up
-            using (SqlConnection con = openSqlConnection())
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
                 // If there are existing users, we use the current MAX - b\c the next seed given is 1000+ what we reseed to.
                 // Which is also why if there are no users, use just use the raw seed (like 2, not 1002, b\c the first seed will then be given as 1002)

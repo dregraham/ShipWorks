@@ -75,10 +75,8 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         private static long GetCurrentSyncVersion()
         {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                SqlConnection con = lifetimeScope.Resolve<SqlConnection>();
-
                 object result = SqlCommandProvider.ExecuteScalar(con, "SELECT CHANGE_TRACKING_CURRENT_VERSION()");
 
                 if (result is DBNull)
@@ -221,10 +219,8 @@ namespace ShipWorks.Data.Caching
             dataSet = new DataSet();
             string lsvParameter = "@lsv";
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                SqlConnection con = lifetimeScope.Resolve<SqlConnection>();
-
                 using (SqlCommand cmd = SqlCommandProvider.Create(con))
                 {
                     cmd.CommandText = syncQuery;

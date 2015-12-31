@@ -121,7 +121,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 {
                     // Create the v3 folder and put it where it belongs in the tree
                     FilterEntity v3Folder = FilterHelper.CreateFilterFolderEntity(folder.Name, (FilterTarget) parentNode.Filter.FilterTarget);
-                    FilterNodeEntity folderNode = FilterLayoutContext.Current.AddFilter(v3Folder, parentNode, nodes.IndexOf(node), SqlAdapter.Create)[0];
+                    FilterNodeEntity folderNode = FilterLayoutContext.Current.AddFilter(v3Folder, parentNode, nodes.IndexOf(node))[0];
 
                     // Now add all it's children
                     CreateFilters(folder.Children, folderNode, progress);
@@ -132,7 +132,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 {
                     // Create the v3 filter and add it where it belongs to the tree
                     FilterEntity v3Filter = FilterHelper.CreateFilterEntity(filter.Name, filter.Definition);
-                    FilterLayoutContext.Current.AddFilter(v3Filter, parentNode, nodes.IndexOf(node), SqlAdapter.Create);
+                    FilterLayoutContext.Current.AddFilter(v3Filter, parentNode, nodes.IndexOf(node));
                 }
             }
         }

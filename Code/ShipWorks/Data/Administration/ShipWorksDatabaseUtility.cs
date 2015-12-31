@@ -99,15 +99,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static void CreateSchemaAndData()
         {
-            CreateSchemaAndData(() => SqlSession.Current.OpenConnection(), inTransaction => new SqlAdapter(inTransaction));
-        }
-
-        /// <summary>
-        /// Creates an initial ShipWorks database schema
-        /// </summary>
-        public static void CreateSchemaAndData(Func<SqlConnection> openSqlConnection, Func<bool, SqlAdapter> createSqlAdapter)
-        {
-            using (SqlConnection con = openSqlConnection())
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
                 // Create the ShipWorks schema
                 sqlLoader["CreateSchema"].Execute(con);
@@ -121,7 +113,7 @@ namespace ShipWorks.Data.Administration
                 AddInitialDataAndVersion(con);
             }
 
-            AddRequiredData(openSqlConnection, createSqlAdapter);
+            AddRequiredData();
         }
 
         /// <summary>
@@ -139,14 +131,14 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Add remaining required data
         /// </summary>
-        public static void AddRequiredData(Func<SqlConnection> openSqlConnection, Func<bool, SqlAdapter> createSqlAdapter)
+        public static void AddRequiredData()
         {
             // Create the ShipWorks "SuperUser"
-            SuperUser.Create(openSqlConnection, createSqlAdapter(false));
+            SuperUser.Create(SqlAdapter.Create(false));
 
             // Create all the data that is needed for a fresh install of shipworks.
-            InitialDataLoader.CreateCoreRequiredData(createSqlAdapter);
-            InitialDataLoader.CreateDefaultFreshInstallData(createSqlAdapter);
+            InitialDataLoader.CreateCoreRequiredData();
+            InitialDataLoader.CreateDefaultFreshInstallData();
         }
 
         /// <summary>

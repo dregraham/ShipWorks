@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -63,7 +62,7 @@ namespace ShipWorks.Stores
             // If there is a match, use this as the store node, else create a new store node
             FilterNodeEntity storeNode = foldersWithMatchingNameAndStoreCondition.Any() ?
                 foldersWithMatchingNameAndStoreCondition.First() :
-                FilterLayoutContext.Current.AddFilter(storeFilterFolder, ordersNode, 0, SqlAdapter.Create)[0];
+                FilterLayoutContext.Current.AddFilter(storeFilterFolder, ordersNode, 0)[0];
 
             // Always create an "All Orders" filter so that the folder count show's the full store orders's count.  Otherwise our users would
             // likely be confused.
@@ -91,7 +90,7 @@ namespace ShipWorks.Stores
             if (!HasChildNodeWithName(folder, filter.Name, false))
             {
                 result.CreatedFilters.Add(filter);
-                FilterLayoutContext.Current.AddFilter(filter, folder, position, SqlAdapter.Create);
+                FilterLayoutContext.Current.AddFilter(filter, folder, position);
             }
             else
             {

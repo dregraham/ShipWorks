@@ -74,9 +74,9 @@ namespace ShipWorks.Filters.Search
         /// Create the single-instance search filter in the database.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void CreateSearchPlaceholder(FilterTarget target, Func<bool, SqlAdapter> createSqlAdapter)
+        public static void CreateSearchPlaceholder(FilterTarget target)
         {
-            using (SqlAdapter adapter = createSqlAdapter(false))
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 // We will be specifying the pk values
                 adapter.IdentityInsert = true;

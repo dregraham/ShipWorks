@@ -233,7 +233,7 @@ namespace ShipWorks.Shipping
             ShipmentType shipmentType = shipmentTypeManager.InitialShipmentType(shipment);
 
             // Save the record
-            using (SqlAdapter adapter = lifetimeScope.Resolve<Func<bool, SqlAdapter>>()(true))
+            using (SqlAdapter adapter = SqlAdapter.Create(true))
             {
                 // Apply the determined shipment type
                 shipment.ShipmentType = (int) shipmentType.ShipmentTypeCode;
@@ -268,7 +268,6 @@ namespace ShipWorks.Shipping
             // this path), and entities were removed, they were still being persisted to the database.
             SaveShipment(shipment,
                 lifetimeScope.Resolve<IOrderManager>(),
-                lifetimeScope.Resolve<Func<bool, SqlAdapter>>(),
                 shipmentTypeManager);
 
             lock (siblingData)
@@ -394,7 +393,6 @@ namespace ShipWorks.Shipping
             {
                 SaveShipment(shipment,
                     lifetimeScope.Resolve<IOrderManager>(),
-                    lifetimeScope.Resolve<Func<bool, SqlAdapter>>(),
                     lifetimeScope.Resolve<IShipmentTypeManager>());
             }
         }
@@ -403,13 +401,12 @@ namespace ShipWorks.Shipping
         /// Save the given shipment.
         /// </summary>
         [NDependIgnoreLongMethod]
-        private static void SaveShipment(ShipmentEntity shipment, IOrderManager orderManager,
-            Func<bool, SqlAdapter> createSqlAdapter, IShipmentTypeManager shipmentTypeManager)
+        private static void SaveShipment(ShipmentEntity shipment, IOrderManager orderManager, IShipmentTypeManager shipmentTypeManager)
         {
             // Ensure the latest ShipSense data is recorded for this shipment before saving
             SaveShipSenseFieldsToShipment(shipment, orderManager, shipmentTypeManager);
 
-            using (SqlAdapter adapter = createSqlAdapter(true))
+            using (SqlAdapter adapter = SqlAdapter.Create(true))
             {
                 bool rootDirty = shipment.IsDirty;
 

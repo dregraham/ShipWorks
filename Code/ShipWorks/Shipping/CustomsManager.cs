@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping
                 // If its been processed we don't mess with it
                 if (!shipment.Processed)
                 {
-                    using (SqlAdapter adapter = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<bool, SqlAdapter>>()(true))
+                    using (SqlAdapter adapter = SqlAdapter.Create(true))
                     {
                         decimal customsValue = 0m;
 

@@ -300,14 +300,7 @@ namespace ShipWorks.Filters
         /// Find the node with the given ID with the layout.  Returns null if not found.  If the nodeID represents a Quick Filter, it will
         /// be returned regardless of whether it is contained in this layout.
         /// </summary>
-        public FilterNodeEntity FindNode(long nodeID) =>
-            FindNode(nodeID, inTransaction => new SqlAdapter(inTransaction));
-
-        /// <summary>
-        /// Find the node with the given ID with the layout.  Returns null if not found.  If the nodeID represents a Quick Filter, it will
-        /// be returned regardless of whether it is contained in this layout.
-        /// </summary>
-        public FilterNodeEntity FindNode(long nodeID, Func<bool, SqlAdapter> createSqlAdapter)
+        public FilterNodeEntity FindNode(long nodeID)
         {
             foreach (FilterNodeEntity node in context.GetAll(typeof(FilterNodeEntity)))
             {
@@ -331,7 +324,7 @@ namespace ShipWorks.Filters
             // For the sake of making this method do what is usually expected, we also go outside of what is actually loaded and try to
             // load local nodes
             // See if we can load it directly if its a quick filter
-            using (SqlAdapter adapter = createSqlAdapter(false))
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 PrefetchPath2 prefetch = new PrefetchPath2(EntityType.FilterNodeEntity);
                 prefetch.Add(FilterNodeEntity.PrefetchPathFilterSequence).SubPath.Add(FilterSequenceEntity.PrefetchPathFilter);
@@ -741,10 +734,9 @@ namespace ShipWorks.Filters
         /// Add the specified filter as a child of the given parent in the given position.  Returns the list of nodes that were created.
         /// Multiple nodes may be created if the parent is linked.
         /// </summary>
-        public List<FilterNodeEntity> AddFilter(FilterEntity filter, FilterNodeEntity parentNode, int position,
-            Func<bool, SqlAdapter> createSqlAdapter)
+        public List<FilterNodeEntity> AddFilter(FilterEntity filter, FilterNodeEntity parentNode, int position)
         {
-            using (SqlAdapter adapter = createSqlAdapter(true))
+            using (SqlAdapter adapter = SqlAdapter.Create(true))
             {
                 List<FilterNodeEntity> result = AddFilter(filter, parentNode, position, adapter);
 

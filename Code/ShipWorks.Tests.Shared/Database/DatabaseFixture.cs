@@ -55,23 +55,24 @@ namespace ShipWorks.Tests.Shared.Database
 
             sqlSessionScope = new SqlSessionScope(new SqlSession(configuration));
 
-            using (SqlConnection conn = db.Open())
+            //using (SqlConnection conn = db.Open())
+            //{
+            using (new ExistingConnectionScope())
             {
-                using (new ExistingConnectionScope(conn))
-                {
-                    SqlUtility.EnableClr(conn);
+                SqlUtility.EnableClr(ExistingConnectionScope.ScopedConnection);
 
-                    using (SqlCommand command = conn.CreateCommand())
-                    {
-                        command.CommandText = @"ALTER DATABASE ShipWorks
+                using (SqlCommand command = ExistingConnectionScope.ScopedConnection.CreateCommand())
+                {
+                    command.CommandText = @"ALTER DATABASE ShipWorks
   SET CHANGE_TRACKING = ON
   (CHANGE_RETENTION = 1 DAYS, AUTO_CLEANUP = ON)";
-                        command.ExecuteNonQuery();
-                    }
-
-                    ShipWorksDatabaseUtility.CreateSchemaAndData(() => db.Open(), inTransaction => new SqlAdapter(db.Open()));
+                    command.ExecuteNonQuery();
                 }
+
             }
+            //}
+
+            ShipWorksDatabaseUtility.CreateSchemaAndData();
 
             DataProvider.InitializeForApplication(ExecutionModeScope.Current);
         }
@@ -93,7 +94,7 @@ namespace ShipWorks.Tests.Shared.Database
             }
 
             mock.Override<ISecurityContext>()
-                    .Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
+                .Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
 
             foreach (IInitializeForCurrentDatabase service in mock.Container.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
             {
@@ -111,25 +112,22 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         private DataContext SetupFreshData()
         {
-            using (new ExistingConnectionScope(SqlSession.Current.OpenConnection()))
+            using (SqlAdapter adapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
             {
-                using (SqlAdapter adapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
-                {
-                    adapter.DeleteEntitiesDirectly(typeof(AuditEntity), new RelationPredicateBucket());
-                }
+                adapter.DeleteEntitiesDirectly(typeof(AuditEntity), new RelationPredicateBucket());
+            }
 
-                ShipWorksDatabaseUtility.AddInitialDataAndVersion(SqlSession.Current.OpenConnection());
-                ShipWorksDatabaseUtility.AddRequiredData(SqlSession.Current.OpenConnection, inTransaction => new SqlAdapter(SqlSession.Current.OpenConnection()));
+            ShipWorksDatabaseUtility.AddInitialDataAndVersion(SqlSession.Current.OpenConnection());
+            ShipWorksDatabaseUtility.AddRequiredData();
 
-                using (SqlAdapter sqlAdapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
-                {
-                    UserEntity user = Create.Entity<UserEntity>().Save(sqlAdapter);
-                    ComputerEntity computer = Create.Entity<ComputerEntity>().Save(sqlAdapter);
+            using (SqlAdapter sqlAdapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
+            {
+                UserEntity user = Create.Entity<UserEntity>().Save(sqlAdapter);
+                ComputerEntity computer = Create.Entity<ComputerEntity>().Save(sqlAdapter);
 
-                    UserSession.Logon(user, computer, true);
+                UserSession.Logon(user, computer, true);
 
-                    return new DataContext(user, computer);
-                }
+                return new DataContext(user, computer);
             }
         }
 

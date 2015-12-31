@@ -71,7 +71,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 // Create all core required data
-                InitialDataLoader.CreateCoreRequiredData(SqlAdapter.Create);
+                InitialDataLoader.CreateCoreRequiredData();
 
                 UserCollection users = UserCollection.Fetch(adapter, UserFields.UserID != SuperUser.UserID);
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                 }
 
                 // Create the SuperUser
-                SuperUser.Create(() => SqlSession.Current.OpenConnection(), adapter);
+                SuperUser.Create(adapter);
 
                 // Get the computer registered
                 ComputerManager.RegisterThisComputer();

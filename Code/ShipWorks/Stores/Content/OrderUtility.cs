@@ -339,7 +339,7 @@ namespace ShipWorks.Stores.Content
                 shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
             }
 
-            using (SqlAdapter adapter = SqlAdapter.Default)
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
 
@@ -366,7 +366,7 @@ namespace ShipWorks.Stores.Content
         /// <param name="order">The order.</param>
         public static void PopulateOrderDetails(OrderEntity order)
         {
-            using (SqlAdapter adapter = SqlAdapter.Default)
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 PopulateOrderDetails(order, adapter);
             }

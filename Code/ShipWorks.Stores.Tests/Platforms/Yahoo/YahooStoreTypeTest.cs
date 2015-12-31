@@ -24,7 +24,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         private readonly List<EnumEntry<YahooApiOrderStatus>> orderStatuses = EnumHelper.GetEnumList<YahooApiOrderStatus>();
         private readonly YahooOrderItemEntity item;
 
-
         public YahooStoreTypeTest()
         {
             yahooApiStore.Setup(x => x.TypeCode).Returns(2);

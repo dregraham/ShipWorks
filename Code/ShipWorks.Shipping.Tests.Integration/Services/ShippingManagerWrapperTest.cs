@@ -2,6 +2,7 @@
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -18,6 +19,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         public ShippingManagerWrapperTest(DatabaseFixture db)
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            ContainerInitializer.Initialize(mock.Container);
+
             db.CreateDataContext(mock);
 
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))

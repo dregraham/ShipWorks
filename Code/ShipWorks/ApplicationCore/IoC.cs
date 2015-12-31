@@ -147,11 +147,6 @@ namespace ShipWorks.ApplicationCore
 
             builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
 
-            builder.Register((_, parameters) => new SqlAdapter(parameters.TypedAs<bool>()));
-
-            builder.Register(_ => SqlSession.Current.OpenConnection())
-                .ExternallyOwned();
-
             foreach (IComponentRegistration registration in builder.Build().ComponentRegistry.Registrations)
             {
                 container.ComponentRegistry.Register(registration);

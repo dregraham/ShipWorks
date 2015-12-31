@@ -181,9 +181,9 @@ namespace ShipWorks.Data
                 bucket = new RelationPredicateBucket(OrderFields.OrderID > lastOrderID);
             }
 
-            using (SqlAdapter adapter = SqlAdapter.Default)
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
-                using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.Default, 0, true))
+                using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
                 {
                     while (reader.Read())
                     {
