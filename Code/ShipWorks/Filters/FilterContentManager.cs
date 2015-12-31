@@ -411,7 +411,7 @@ namespace ShipWorks.Filters
                     }
                     catch (SqlException ex)
                     {
-                        // The constraint exception happens rarely, but we don't want it to crash ShipWorks since we can just 
+                        // The constraint exception happens rarely, but we don't want it to crash ShipWorks since we can just
                         // try to delete the filter counts again later.
                         if (UtilityFunctions.IsConstraintException(ex) || UtilityFunctions.IsDeadlockException(ex))
                         {
@@ -439,7 +439,7 @@ namespace ShipWorks.Filters
                 try
                 {
                     // Make sure we have the most up-to-date date they were updated
-                    SystemData.CheckForChangesNeeded();
+                    new SystemData().CheckForChangesNeeded();
                     dateFiltersLastUpdated = SystemData.Fetch().DateFiltersLastUpdate.Date;
                 }
                 catch (ORMEntityOutOfSyncException ex)

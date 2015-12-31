@@ -416,7 +416,6 @@ namespace ShipWorks.ApplicationCore
 
                 // These just mark that changes need to be checked next time data is requested
                 TemplateManager.CheckForChangesNeeded();
-                SystemData.CheckForChangesNeeded();
                 ConfigurationData.CheckForChangesNeeded();
                 LabelSheetManager.CheckForChangesNeeded();
                 EmailAccountManager.CheckForChangesNeeded();

@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using System.Reflection;
-using ShipWorks.Filters.Content.SqlGeneration;
 using System.Threading;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Data
 {
     /// <summary>
     /// Wraps the global SystemDataEntity object
     /// </summary>
-    public static class SystemData
+    public class SystemData : IInitializeForCurrentDatabase, ICheckForChangesNeeded
     {
         static SystemDataEntity systemData;
         static bool needCheckForChanges = false;
@@ -21,7 +18,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Initialize for the currently logged on user
         /// </summary>
-        public static void InitializeForCurrentDatabase()
+        public void InitializeForCurrentDatabase(ExecutionMode executionMode)
         {
             systemData = new SystemDataEntity(true);
             SqlAdapter.Default.FetchEntity(systemData);
@@ -32,7 +29,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Check the database for the latest SystemData
         /// </summary>
-        public static void CheckForChangesNeeded()
+        public void CheckForChangesNeeded()
         {
             needCheckForChanges = true;
         }
@@ -56,7 +53,7 @@ namespace ShipWorks.Data
         /// </summary>
         public static void Save(SystemDataEntity entity)
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 adapter.SaveAndRefetch(entity);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
@@ -16,6 +17,7 @@ using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
+using SQL.LocalDB.Test;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -24,18 +26,21 @@ namespace ShipWorks.Tests.Shared.Database
     /// </summary>
     public class DatabaseFixture : IDisposable
     {
-        private DataContext currentContext;
-        readonly ShipWorksLocalDb db;
-        readonly Checkpoint checkpoint;
+        private readonly Checkpoint checkpoint;
         private readonly SqlSessionScope sqlSessionScope;
+        private readonly ExecutionModeScope executionModeScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
+        [SuppressMessage("SonarQube", "S2930: \"IDisposables\" should be disposed",
+            Justification = "We want the database to stick around after the test for debugging purposes")]
         public DatabaseFixture()
         {
+            executionModeScope = new ExecutionModeScope(new TestExecutionMode());
+
             checkpoint = new Checkpoint();
-            db = new ShipWorksLocalDb("ShipWorks");
+            TempLocalDb db = new TempLocalDb("ShipWorks");
 
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(db.ConnectionString);
 
@@ -68,7 +73,7 @@ namespace ShipWorks.Tests.Shared.Database
                 }
             }
 
-            DataProvider.InitializeForApplication(new TestExecutionMode());
+            DataProvider.InitializeForApplication(ExecutionModeScope.Current);
         }
 
         /// <summary>
@@ -79,37 +84,32 @@ namespace ShipWorks.Tests.Shared.Database
         /// in an exception, the context may not be disposed properly in the test itself.</remarks>
         public DataContext CreateDataContext(AutoMock mock)
         {
-            currentContext?.Dispose();
+            DataContext context;
 
             using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
             {
                 checkpoint.Reset(SqlSession.Current.OpenConnection());
-                SetupFreshData();
+                context = SetupFreshData();
             }
 
             mock.Override<ISecurityContext>()
                     .Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
 
-            TestExecutionMode executionMode = new TestExecutionMode();
-
             foreach (IInitializeForCurrentDatabase service in mock.Container.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
             {
-                service.InitializeForCurrentDatabase(executionMode);
+                service.InitializeForCurrentDatabase(ExecutionModeScope.Current);
             }
 
-            foreach (IInitializeForCurrentSession service in mock.Container.Resolve<IEnumerable<IInitializeForCurrentSession>>())
-            {
-                service.InitializeForCurrentSession();
-            }
+            // This initializes all the other dependencies
+            UserSession.InitializeForCurrentSession();
 
-            currentContext = new DataContext(() => SqlSession.Current.OpenConnection(), mock);
-            return currentContext;
+            return context;
         }
 
         /// <summary>
         /// Setup fresh data
         /// </summary>
-        private void SetupFreshData()
+        private DataContext SetupFreshData()
         {
             using (new ExistingConnectionScope(SqlSession.Current.OpenConnection()))
             {
@@ -127,6 +127,8 @@ namespace ShipWorks.Tests.Shared.Database
                     ComputerEntity computer = Create.Entity<ComputerEntity>().Save(sqlAdapter);
 
                     UserSession.Logon(user, computer, true);
+
+                    return new DataContext(user, computer);
                 }
             }
         }
@@ -137,8 +139,7 @@ namespace ShipWorks.Tests.Shared.Database
         public void Dispose()
         {
             sqlSessionScope.Dispose();
-            currentContext?.Dispose();
-            //db.Dispose();
+            executionModeScope.Dispose();
         }
     }
 }

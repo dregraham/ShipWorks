@@ -20,7 +20,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
     public class ShippingManagerTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly DataContext dbContext;
         private readonly OrderEntity order;
 
         public ShippingManagerTest(DatabaseFixture db)
@@ -29,34 +28,25 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             ContainerInitializer.Initialize(mock.Container);
 
-            dbContext = db.CreateDataContext(mock);
+            db.CreateDataContext(mock);
 
-            try
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
-                using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-                {
-                    var store = Create.Store<GenericModuleStoreEntity>()
-                        .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
-                        .SetField(x => x.StoreName, "A Test Store")
-                        .Save(sqlAdapter);
+                var store = Create.Store<GenericModuleStoreEntity>()
+                    .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
+                    .SetField(x => x.StoreName, "A Test Store")
+                    .Save(sqlAdapter);
 
-                    var customer = Create.Entity<CustomerEntity>().Save(sqlAdapter);
+                var customer = Create.Entity<CustomerEntity>().Save(sqlAdapter);
 
-                    order = Create.Order(store, customer)
-                        .WithOrderNumber(12345)
-                        .WithShipAddress("1 Memorial Dr.", "Suite 2000", "St. Louis", "MO", "63102", "US")
-                        .Save(sqlAdapter);
-                }
-
-                // Reset the static fields before each test
-                StoreManager.CheckForChanges();
+                order = Create.Order(store, customer)
+                    .WithOrderNumber(12345)
+                    .WithShipAddress("1 Memorial Dr.", "Suite 2000", "St. Louis", "MO", "63102", "US")
+                    .Save(sqlAdapter);
             }
-            catch (Exception)
-            {
-                dbContext?.Dispose();
 
-                throw;
-            }
+            // Reset the static fields before each test
+            StoreManager.CheckForChanges();
         }
 
         [Fact]
@@ -210,7 +200,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
         public void Dispose()
         {
-            dbContext.Dispose();
             mock.Dispose();
         }
     }

@@ -88,8 +88,6 @@ namespace ShipWorks.Users
                 executionMode = Program.ExecutionMode;
             }
 
-            SystemData.InitializeForCurrentDatabase();
-
             // Reset any cached entity data
             ShippingManager.InitializeForCurrentDatabase();
 

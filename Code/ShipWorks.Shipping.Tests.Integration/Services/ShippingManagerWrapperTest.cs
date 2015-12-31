@@ -13,15 +13,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
     public class ShippingManagerWrapperTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly DataContext dbContext;
         private readonly OrderEntity order;
 
         public ShippingManagerWrapperTest(DatabaseFixture db)
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            dbContext = db.CreateDataContext(mock);
+            db.CreateDataContext(mock);
 
-            using (SqlAdapter sqlAdapter = dbContext.CreateSqlAdapter())
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 var store = Create.Entity<GenericModuleStoreEntity>().Save(sqlAdapter);
                 var customer = Create.Entity<CustomerEntity>().Save(sqlAdapter);
@@ -90,7 +89,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         {
             ShipmentEntity shipment = null;
 
-            using (SqlAdapter sqlAdapter = dbContext.CreateSqlAdapter())
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 shipment = Create.Shipment(order)
                     .AsUps()
@@ -122,7 +121,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         {
             ShipmentEntity shipment = null;
 
-            using (SqlAdapter sqlAdapter = dbContext.CreateSqlAdapter())
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 shipment = Create.Shipment(order)
                     .AsFedEx(fedEx => fedEx.WithPackage().WithPackage())
@@ -142,7 +141,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         {
             ShipmentEntity shipment = null;
 
-            using (SqlAdapter sqlAdapter = dbContext.CreateSqlAdapter())
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 shipment = Create.Shipment(order)
                     .AsUps(Ups => Ups.WithPackage().WithPackage())
@@ -162,7 +161,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         {
             ShipmentEntity shipment = null;
 
-            using (SqlAdapter sqlAdapter = dbContext.CreateSqlAdapter())
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 shipment = Create.Shipment(order)
                     .AsIParcel(IParcel => IParcel.WithPackage().WithPackage())
@@ -182,7 +181,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         {
             ShipmentEntity shipment = null;
 
-            using (SqlAdapter sqlAdapter = dbContext.CreateSqlAdapter())
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 shipment = Create.Shipment(order)
                     .WithCustomsItem()
@@ -202,7 +201,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         {
             long shipmentId = 0;
 
-            using (SqlAdapter sqlAdapter = dbContext.CreateSqlAdapter())
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 var shipment = Create.Shipment(order)
                     .WithInsurancePolicy()
@@ -220,7 +219,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
         public void Dispose()
         {
-            dbContext.Dispose();
             mock.Dispose();
         }
     }
