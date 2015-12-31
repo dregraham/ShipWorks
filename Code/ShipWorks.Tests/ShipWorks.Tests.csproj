@@ -545,7 +545,7 @@
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
     <Compile Include="Stores\Shopify\IdentifierTests.cs" />
     <Compile Include="Stores\Volusion\VolusionWebClientTest.cs" />
-    <Compile Include="Stores\Yahoo\YahooOnlineUpdaterTest.cs" />
+    <Compile Include="Stores\Yahoo\YahooEmailOnlineUpdaterTest.cs" />
     <Compile Include="Templates\Processing\XmlTreeGeneration.cs" />
     <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />

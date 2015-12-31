@@ -27,6 +27,7 @@ using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.SearchFit;
 using ShipWorks.Stores.Platforms.Yahoo;
+using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
 
 namespace ShipWorks.ApplicationCore.Options
 {
@@ -69,7 +70,7 @@ namespace ShipWorks.ApplicationCore.Options
             newegg.Checked = !Credentials.UseLiveServerKey;
 
             marketplaceAdvisorMarkProcessed.Checked = MarketplaceAdvisorUtility.MarkProcessedAfterDownload;
-            yahooDeleteMessages.Checked = YahooUtility.DeleteMessagesAfterDownload;
+            yahooDeleteMessages.Checked = YahooEmailUtility.DeleteMessagesAfterDownload;
             buyDotComArchiveOrderFile.Checked = BuyDotComUtility.ArchiveFileAfterDownload;
             searchFitDeleteAfterDownload.Checked = !SearchFitStoreType.LeaveOnServer;
 
@@ -109,7 +110,7 @@ namespace ShipWorks.ApplicationCore.Options
             Credentials.UseLiveServerKey = !newegg.Checked;
 
             MarketplaceAdvisorUtility.MarkProcessedAfterDownload = marketplaceAdvisorMarkProcessed.Checked;
-            YahooUtility.DeleteMessagesAfterDownload = yahooDeleteMessages.Checked;
+            YahooEmailUtility.DeleteMessagesAfterDownload = yahooDeleteMessages.Checked;
             BuyDotComUtility.ArchiveFileAfterDownload = buyDotComArchiveOrderFile.Checked;
             SearchFitStoreType.LeaveOnServer = !searchFitDeleteAfterDownload.Checked;
 

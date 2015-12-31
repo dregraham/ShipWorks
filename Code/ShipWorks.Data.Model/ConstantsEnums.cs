@@ -10766,6 +10766,8 @@ namespace ShipWorks.Data.Model
 		OrderItemID,
 		///<summary>YahooProductID. </summary>
 		YahooProductID,
+		///<summary>Url. </summary>
+		Url,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10860,6 +10862,12 @@ namespace ShipWorks.Data.Model
 		YahooEmailAccountID,
 		///<summary>TrackingUpdatePassword. </summary>
 		TrackingUpdatePassword,
+		///<summary>YahooStoreID. </summary>
+		YahooStoreID,
+		///<summary>AccessToken. </summary>
+		AccessToken,
+		///<summary>BackupOrderNumber. </summary>
+		BackupOrderNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
