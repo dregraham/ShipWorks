@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.AddressValidation;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -36,24 +33,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             try
             {
-                mock.Override<ISecurityContext>()
-                    .Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
-
-                TestExecutionMode executionMode = new TestExecutionMode();
-
-                foreach (IInitializeForCurrentDatabase service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
+                using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
                 {
-                    service.InitializeForCurrentDatabase(executionMode);
-                }
+                    var store = Create.Store<GenericModuleStoreEntity>()
+                        .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
+                        .SetField(x => x.StoreName, "A Test Store")
+                        .Save(sqlAdapter);
 
-                foreach (IInitializeForCurrentSession service in mock.Container.Resolve<IEnumerable<IInitializeForCurrentSession>>())
-                {
-                    service.InitializeForCurrentSession();
-                }
-
-                using (SqlAdapter sqlAdapter = dbContext.CreateSqlAdapter())
-                {
-                    var store = Create.Entity<GenericModuleStoreEntity>().Save(sqlAdapter);
                     var customer = Create.Entity<CustomerEntity>().Save(sqlAdapter);
 
                     order = Create.Order(store, customer)
@@ -126,19 +112,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_SetsOriginAddress_ToStoreAddress()
         {
-            mock.Override<IStoreManager>()
-                .Setup(x => x.GetStore(order.StoreID))
-                .Returns(new StoreEntity
-                {
-                    StoreName = "A Test Store",
-                    Street1 = "123 Main St.",
-                    Street2 = "Suite 456",
-                    City = "St. Louis",
-                    StateProvCode = "MO",
-                    PostalCode = "63123",
-                    CountryCode = "US"
-                });
-
             ShipmentEntity shipment = ShippingManager.CreateShipment(order, mock.Container);
 
             Assert.Equal("A Test Store", shipment.OriginUnparsedName);
@@ -176,6 +149,63 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             mock.Mock<IValidatedAddressManager>()
                 .Verify(x => x.CopyValidatedAddresses(It.IsAny<SqlAdapter>(), order.OrderID, "Ship", shipment.ShipmentID, "Ship"));
+        }
+
+        [Fact]
+        public void CreateShipment_CreatesCustomsItems_WhenShipmentIsInternational()
+        {
+            OrderEntity otherOrder;
+
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+            {
+                otherOrder = Create.Order(order.Store, order.Customer)
+                    .WithOrderNumber(6789)
+                    .WithShipAddress("1 Memorial Dr.", "Suite 2000", "London", string.Empty, "63102", "UK")
+                    .WithItem(i => i.SetField(x => x.Weight, 2)
+                        .SetField(x => x.Quantity, 1)
+                        .SetField(x => x.Name, "Foo"))
+                    .WithItem(i => i.SetField(x => x.Weight, 3)
+                        .SetField(x => x.Quantity, 4)
+                        .SetField(x => x.Name, "Bar"))
+                    .Save(sqlAdapter);
+            }
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(otherOrder, mock.Container);
+
+            Assert.Equal(2, shipment.CustomsItems.Count);
+
+            Assert.Equal(1, shipment.CustomsItems[0].Quantity);
+            Assert.Equal("Foo", shipment.CustomsItems[0].Description);
+            Assert.Equal(2, shipment.CustomsItems[0].Weight);
+
+            Assert.Equal(4, shipment.CustomsItems[1].Quantity);
+            Assert.Equal("Bar", shipment.CustomsItems[1].Description);
+            Assert.Equal(3, shipment.CustomsItems[1].Weight);
+        }
+
+        [Fact]
+        public void CreateShipment_CreatesCustomsItems_WhenShipmentIsDomestic()
+        {
+            OrderEntity otherOrder;
+
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+            {
+                otherOrder = Create.Order(order.Store, order.Customer)
+                    .WithOrderNumber(6789)
+                    .WithShipAddress("1 Memorial Dr.", "Suite 2000", "St. Louis", "MO", "63102", "US")
+                    .WithItem(i => i.SetField(x => x.Weight, 2)
+                        .SetField(x => x.Quantity, 1)
+                        .SetField(x => x.Name, "Foo"))
+                    .WithItem(i => i.SetField(x => x.Weight, 3)
+                        .SetField(x => x.Quantity, 4)
+                        .SetField(x => x.Name, "Bar"))
+                    .Save(sqlAdapter);
+
+            }
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(otherOrder, mock.Container);
+
+            Assert.Empty(shipment.CustomsItems);
         }
 
         public void Dispose()

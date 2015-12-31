@@ -118,13 +118,29 @@ namespace ShipWorks.Data.Administration
                     transaction.Commit();
                 }
 
-                // Add any initial data via script
-                sqlLoader["InitialData"].Execute(con);
-
-                // Update the database to be marked with the correct db version
-                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con);
+                AddInitialDataAndVersion(con);
             }
 
+            AddRequiredData(openSqlConnection, createSqlAdapter);
+        }
+
+        /// <summary>
+        /// Add the initial data and version stored procedure
+        /// </summary>
+        public static void AddInitialDataAndVersion(SqlConnection con)
+        {
+            // Add any initial data via script
+            sqlLoader["InitialData"].Execute(con);
+
+            // Update the database to be marked with the correct db version
+            SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con);
+        }
+
+        /// <summary>
+        /// Add remaining required data
+        /// </summary>
+        public static void AddRequiredData(Func<SqlConnection> openSqlConnection, Func<bool, SqlAdapter> createSqlAdapter)
+        {
             // Create the ShipWorks "SuperUser"
             SuperUser.Create(openSqlConnection, createSqlAdapter(false));
 

@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Transactions;
 using Autofac.Builder;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Connection;
@@ -15,16 +14,14 @@ namespace ShipWorks.Tests.Shared.Database
     public class DataContext : IDisposable
     {
         private readonly SqlConnection connection;
-        private readonly TransactionScope transactionScope;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public DataContext(SqlConnection connection, AutoMock mock)
+        public DataContext(Func<SqlConnection> openConnection, AutoMock mock)
         {
-            this.connection = connection;
+            connection = openConnection();
             connection.StateChange += StateChanged;
-            transactionScope = new TransactionScope();
+
             mock.Provide<Func<bool, SqlAdapter>>(x => CreateSqlAdapter());
             mock.Container.ComponentRegistry.Register(RegistrationBuilder.ForDelegate((c, p) => connection).ExternallyOwned().CreateRegistration());
         }
@@ -48,8 +45,6 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         public void Dispose()
         {
-            connection.StateChange -= StateChanged;
-            transactionScope.Dispose();
             connection.Dispose();
         }
     }

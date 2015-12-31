@@ -62,6 +62,10 @@
       <HintPath>..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Respawn, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Respawn.0.1.0.0\lib\net45\Respawn.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
@@ -125,6 +129,7 @@
     <Compile Include="Database\ShipWorksLocalDb.cs" />
     <Compile Include="EntityBuilders\IParcelShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\ShipmentEntityBuilder.cs" />
+    <Compile Include="EntityBuilders\StoreEntityBuilder.cs" />
     <Compile Include="EntityBuilders\UpsShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\PostalShipmentEntityBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -172,6 +177,10 @@
     <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
+      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+      <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj">
       <Project>{c53624d5-5b3b-48a6-9729-52a573726de9}</Project>

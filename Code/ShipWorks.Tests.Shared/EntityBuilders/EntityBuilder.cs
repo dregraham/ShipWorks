@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 
@@ -52,6 +53,25 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             {
                 actions.Add(x => propertyInfo.SetValue(x, value));
             }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set the shipping address on the order
+        /// </summary>
+        public EntityBuilder<T> WithAddress(Expression<Func<T, PersonAdapter>> addressAdapter,
+            string address1, string address2, string city, string state, string postalCode, string country)
+        {
+            SetField(addressAdapter, new PersonAdapter
+            {
+                Street1 = address1,
+                Street2 = address2,
+                City = city,
+                StateProvCode = state,
+                PostalCode = postalCode,
+                CountryCode = country
+            });
 
             return this;
         }

@@ -24,5 +24,11 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public static ShipmentEntityBuilder Shipment(OrderEntity order) =>
             new ShipmentEntityBuilder(order);
+
+        /// <summary>
+        /// Create a store entity
+        /// </summary>
+        public static StoreEntityBuilder<T> Store<T>() where T : StoreEntity, new() =>
+            new StoreEntityBuilder<T>();
     }
 }

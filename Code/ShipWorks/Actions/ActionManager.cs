@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Transactions;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
@@ -56,13 +55,13 @@ namespace ShipWorks.Actions
             {
                 // Do this outside of a transaction.  I added this b\c DeleteStoreActions gets called in DeleteStore, which is a long running transaction.  The Actions of
                 // course would be deleted in a transaction, but there's no need for this query to be in a transaciton.
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
+                //using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
+                //{
+                if (tableSynchronizer.Synchronize())
                 {
-                    if (tableSynchronizer.Synchronize())
-                    {
-                        tableSynchronizer.EntityCollection.Sort((int) ActionFieldIndex.Name, ListSortDirection.Ascending);
-                    }
+                    tableSynchronizer.EntityCollection.Sort((int) ActionFieldIndex.Name, ListSortDirection.Ascending);
                 }
+                //}
 
                 needCheckForChanges = false;
             }
@@ -211,7 +210,7 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Saves the given ActionEntity.  Does not save the trigger or tasks.  The purpose of using this method is to 
+        /// Saves the given ActionEntity.  Does not save the trigger or tasks.  The purpose of using this method is to
         /// get the proper exception translations.
         /// </summary>
         public static void SaveAction(ActionEntity action, SqlAdapter adapter)

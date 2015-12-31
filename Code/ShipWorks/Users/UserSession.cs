@@ -402,30 +402,50 @@ namespace ShipWorks.Users
         /// </summary>
         private static bool Logon(string username, string password, bool remember, bool audit)
         {
-            loggedInUser = UserUtility.GetShipWorksUser(username, password);
+            loggedInUser = null;
+            UserEntity user = UserUtility.GetShipWorksUser(username, password);
 
-            log.InfoFormat("Login for user '{0}' {1}.", username, loggedInUser == null ? "failed" : "succeeded");
+            log.InfoFormat("Login for user '{0}' {1}.", username, user == null ? "failed" : "succeeded");
 
             // If we got a user, its the one we need.
-            if (loggedInUser != null)
+            if (user != null)
             {
                 // Implements "Remember Me"
                 SaveLastUser(username, password, remember);
 
-                // Load the user's security context
-                securityContext = new SecurityContext(loggedInUser);
-
-                // Audit the logon
-                if (audit)
-                {
-                    AuditUtility.Audit(AuditActionType.Logon);
-                }
+                Logon(loggedInUser, audit);
 
                 return true;
             }
             else
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Log in the specified user with the specified computer
+        /// </summary>
+        public static void Logon(UserEntity user, ComputerEntity computer, bool audit)
+        {
+            thisComputer = computer;
+            Logon(user, audit);
+        }
+
+        /// <summary>
+        /// Log in the specified user
+        /// </summary>
+        public static void Logon(UserEntity user, bool audit)
+        {
+            loggedInUser = user;
+
+            // Load the user's security context
+            securityContext = new SecurityContext(user);
+
+            // Audit the logon
+            if (audit)
+            {
+                AuditUtility.Audit(AuditActionType.Logon);
             }
         }
 
