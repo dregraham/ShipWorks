@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         public DatabaseFixture()
         {
-            string databaseName = "ShipWorks";
+            string databaseName = "ShipWorks_Shipping_Tests_Integration";
             executionModeScope = new ExecutionModeScope(new TestExecutionMode());
 
             checkpoint = new Checkpoint();
