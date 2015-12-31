@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Link to article explaining how to renew an expired access token.
         /// </summary>
-        public string InvalidAccessTokenHelpUrl => "http://support.shipworks.com/solution/articles/4000068682-adding-a-yahoo-store-using-api";
+        public string InvalidAccessTokenHelpUrl => "http://support.shipworks.com/solution/articles/4000069621-renewing-a-yahoo-access-token";
 
         /// <summary>
         /// Create a new default initialized instance of the store type
