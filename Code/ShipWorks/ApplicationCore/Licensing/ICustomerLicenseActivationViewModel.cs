@@ -1,6 +1,8 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.UI.Controls
+
+namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// Interface for the CustomerLicenseActivationViewModel
@@ -8,7 +10,7 @@ namespace ShipWorks.UI.Controls
     public interface ICustomerLicenseActivationViewModel
     {
         /// <summary>
-        /// The Password 
+        /// The Password
         /// </summary>
         string Password { get; set; }
 
@@ -20,6 +22,6 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Called to save the credentials
         /// </summary>
-        UserEntity Save();
+        GenericValidationResult<UserEntity> Save();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
@@ -37,7 +38,7 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Called when clicking next in the setup wizard
         /// </summary>
-        public UserEntity Save()
+        public GenericValidationResult<UserEntity> Save()
         {
             return ViewModel.Save();
         }

@@ -90,7 +90,7 @@ namespace ShipWorks.Data.Administration
         // Determines if the admin user has been created during this session.
         bool adminUserCreated = false;
 
-        // Determines if the db has been succesfully restored 
+        // Determines if the db has been succesfully restored
         bool databaseRestored = false;
 
         // The user that will be used for restoring the db
@@ -2199,28 +2199,22 @@ namespace ShipWorks.Data.Administration
             WizardPage nextPage = e.NextPage;
             e.NextPage = CurrentPage;
 
-            try
-            {
-                UserEntity user = null;
-                using (new SqlSessionScope(sqlSession))
-                {
-                    user = tangoUserControlHost.Save();
-                }
+            GenericValidationResult<UserEntity> result;
 
-                if (user != null)
-                {
-                    // Now we can move on
-                    adminUserCreated = true;
-                    e.NextPage = nextPage;
-                }
-            }
-            catch (SqlException ex)
+            using (new SqlSessionScope(sqlSession))
             {
-                MessageHelper.ShowMessage(this, ex.Message);
+                result = tangoUserControlHost.Save();
             }
-            catch (DuplicateNameException ex)
+
+            if (result.Success)
             {
-                MessageHelper.ShowMessage(this, ex.Message);
+                //Now we can move on
+                adminUserCreated = true;
+                e.NextPage = nextPage;
+            }
+            else
+            {
+                MessageHelper.ShowMessage(this, result.Message);
             }
         }
 
@@ -2271,7 +2265,7 @@ namespace ShipWorks.Data.Administration
             }
         }
 
-        #endregion    
+        #endregion
     }
 }
 

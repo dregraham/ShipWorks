@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Wizard;
@@ -11,7 +12,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Called to save the License Activation
         /// </summary>
         /// <returns></returns>
-        UserEntity Save();
+        GenericValidationResult<UserEntity> Save();
 
         /// <summary>
         /// Event handler when stepping next from the wizard page

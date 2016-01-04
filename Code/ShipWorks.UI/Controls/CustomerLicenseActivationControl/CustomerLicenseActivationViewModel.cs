@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
-using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -18,7 +18,7 @@ namespace ShipWorks.UI.Controls
         private readonly ICustomerLicense customerLicense;
         private readonly IUserManagerWrapper userManager;
         private readonly IMessageHelper messageHelper;
-        private readonly PropertyChangedHandler Handler;
+        private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string username;
         private string password;
@@ -31,7 +31,7 @@ namespace ShipWorks.UI.Controls
             this.customerLicense = customerLicense;
             this.userManager = userManager;
             this.messageHelper = messageHelper;
-            Handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ShipWorks.UI.Controls
         public string Username
         {
             get { return username; }
-            set { Handler.Set(nameof(Username), ref username, value); }
+            set { handler.Set(nameof(Username), ref username, value); }
         }
 
         /// <summary>
@@ -51,50 +51,57 @@ namespace ShipWorks.UI.Controls
         public string Password
         {
             get { return password; }
-            set { Handler.Set(nameof(Password), ref password, value); }
+            set { handler.Set(nameof(Password), ref password, value); }
         }
 
         /// <summary>
         /// Saves the user to the database
         /// </summary>
-        public UserEntity Save()
+        public GenericValidationResult<UserEntity> Save()
         {
-            UserEntity user = null;
-            if (ValidateUser())
+            GenericValidationResult<UserEntity> result = ValidateUser();
+
+            if (result.Success)
             {
                 // Activate the software using the given username/password
                 customerLicense.Activate(Username, Password);
-                
+
                 try
                 {
-                    user = userManager.CreateUser(Username, Password, true);
+                    result.ResultObject = userManager.CreateUser(Username, Password, true);
                 }
                 catch (Exception ex)
                 {
-                    messageHelper.ShowError(ex.Message);
+                    result.Message = ex.Message;
                 }
             }
 
-            return user;
+            return result;
         }
 
-        private bool ValidateUser()
+        private GenericValidationResult<UserEntity> ValidateUser()
         {
+            GenericValidationResult<UserEntity> result = new GenericValidationResult<UserEntity>(null)
+            {
+                Message = string.Empty,
+                Success = true
+            };
+
             // Validate the username
             if (!EmailUtility.IsValidEmailAddress(Username))
             {
-                messageHelper.ShowError("Please enter a valid username.");
-                return false;
+                result.Message = "Please enter a valid username.";
+                result.Success = false;
             }
 
             // Validate the password
             if (string.IsNullOrWhiteSpace(Password))
             {
-                messageHelper.ShowError("Please enter a password.");
-                return false;
+                result.Message = "Please enter a password.";
+                result.Success = false;
             }
 
-            return true;
+            return result;
         }
     }
 }

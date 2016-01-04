@@ -16,6 +16,7 @@ using ShipWorks.Data.Connection;
 using System.IO;
 using Autofac;
 using Autofac.Core;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -85,7 +86,7 @@ namespace ShipWorks.Data.Administration
             // Resolve the user control
             tangoUserControlHost = IoC.UnsafeGlobalLifetimeScope.Resolve<ICustomerLicenseActivation>();
             tangoUserControlHost.StepNext += OnStepNextCreateUsername;
-            
+
             // Replace the user wizard page with the new tango user wizard page
             Pages.Insert(Pages.Count - 1, (WizardPage)tangoUserControlHost);
         }
@@ -275,26 +276,16 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnStepNextCreateUsername(object sender, WizardStepEventArgs e)
         {
-            UserEntity user = null;
+            GenericValidationResult<UserEntity> result;
 
-            try
+            using (new SqlSessionScope(sqlSession))
             {
-                using (new SqlSessionScope(sqlSession))
-                {
-                    user = tangoUserControlHost.Save();
-                }
-            }
-            catch (SqlException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
-            }
-            catch (DuplicateNameException ex)
-            {
-                MessageHelper.ShowMessage(this, ex.Message);
+                result = tangoUserControlHost.Save();
             }
 
-            if (user == null)
+            if (result.ResultObject == null)
             {
+                MessageHelper.ShowMessage(this, result.Message);
                 e.NextPage = (WizardPage)tangoUserControlHost;
                 return;
             }
