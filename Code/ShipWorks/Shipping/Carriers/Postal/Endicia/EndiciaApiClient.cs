@@ -647,7 +647,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             EndiciaAccountEntity account = accountRepository.GetAccount(postal.Endicia.EndiciaAccountID);
             if (account == null)
             {
-                throw new EndiciaException("No Endicia account is selected for the shipment.");
+                throw new EndiciaException($"No {EnumHelper.GetDescription((ShipmentTypeCode)postal.Shipment.ShipmentType)} account is selected for the shipment.");
             }
             else if (account.IsDazzleMigrationPending)
             {
