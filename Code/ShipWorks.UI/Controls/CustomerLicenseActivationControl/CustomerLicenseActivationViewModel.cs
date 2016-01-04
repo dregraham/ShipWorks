@@ -108,6 +108,7 @@ namespace ShipWorks.UI.Controls
             return result;
         }
 
+        [Obfuscation(Exclude = true)]
         public string DecryptedPassword
         {
             get
