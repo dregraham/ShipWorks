@@ -2,7 +2,7 @@
 using System.Reflection;
 using Interapptive.Shared.Utility;
 
-namespace ShipWorks.AddressValidation
+namespace ShipWorks.AddressValidation.Enums
 {
     /// <summary>
     /// Defines the various states of validation for addresses

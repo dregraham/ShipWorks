@@ -25,6 +25,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using System.Collections;
+using ShipWorks.AddressValidation.Enums;
 using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Management

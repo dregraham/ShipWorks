@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Filters;
 using Interapptive.Shared.Utility;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Connection;
 using ShipWorks.Filters.Search;
 using ShipWorks.Shipping.Settings;

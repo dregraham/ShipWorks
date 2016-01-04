@@ -1,13 +1,8 @@
-﻿PRINT N'Altering [dbo].[YahooStore]'
+﻿PRINT N'Update ShipmentChargeCountryCode in UpsProfile for PrimaryProfile where the value is not set.'
 GO
-ALTER TABLE [dbo].[YahooStore] ADD
-[YahooStoreID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT (''),
-[AccessToken] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT (''),
-[BackupOrderNumber] [bigint] NULL
-GO
-
-PRINT N'Altering [dbo].[YahooOrderItem]'
-GO
-ALTER TABLE [dbo].[YahooOrderItem] ADD
-[Url] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT ('')
+UPDATE up
+SET up.ShipmentChargeCountryCode = 'US'
+FROM UpsProfile up
+INNER JOIN ShippingProfile sp ON sp.ShippingProfileID = up.ShippingProfileID
+WHERE sp.ShipmentTypePrimary = 1 AND ISNULL(up.ShipmentChargeCountryCode, '') = ''
 GO

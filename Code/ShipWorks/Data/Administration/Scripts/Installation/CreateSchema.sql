@@ -471,7 +471,8 @@ CREATE TABLE [dbo].[Order]
 [ShipNameParseStatus] [int] NOT NULL,
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
-[ShipSenseRecognitionStatus] int NOT NULL
+[ShipSenseRecognitionStatus] int NOT NULL,
+[ShipAddressType] [int] NOT NULL 
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'

@@ -29,6 +29,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.ApplicationCore;
 using Autofac;
 using System.Linq;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Stores
 {
@@ -150,6 +151,7 @@ namespace ShipWorks.Stores
             newOrder.BillMilitaryAddress = (int)ValidationDetailStatusType.Unknown;
             newOrder.BillAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
             newOrder.BillAddressValidationSuggestionCount = 0;
+            newOrder.ShipAddressType = (int) AddressType.NotChecked;
 
             newOrder.RequestedShipping = string.Empty;
 

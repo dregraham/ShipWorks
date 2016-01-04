@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace ShipWorks.AddressValidation
+namespace ShipWorks.AddressValidation.Enums
 {
     /// <summary>
-    /// Defines states for residential address status
+    /// Defines possible values for AddressValidation fields. 
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ValidationDetailStatusType

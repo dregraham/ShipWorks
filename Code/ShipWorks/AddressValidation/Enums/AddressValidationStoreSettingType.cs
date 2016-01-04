@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
-namespace ShipWorks.AddressValidation
+namespace ShipWorks.AddressValidation.Enums
 {
+    /// <summary>
+    /// Determines how address validation should be performed for a store
+    /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum AddressValidationStoreSettingType
     {
