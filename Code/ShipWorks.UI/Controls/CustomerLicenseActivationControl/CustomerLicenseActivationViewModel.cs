@@ -19,7 +19,6 @@ namespace ShipWorks.UI.Controls
     {
         private readonly ICustomerLicense customerLicense;
         private readonly IUserManagerWrapper userManager;
-        private readonly IMessageHelper messageHelper;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string username;
@@ -28,11 +27,10 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(ICustomerLicense customerLicense, IUserManagerWrapper userManager, IMessageHelper messageHelper)
+        public CustomerLicenseActivationViewModel(ICustomerLicense customerLicense, IUserManagerWrapper userManager)
         {
             this.customerLicense = customerLicense;
             this.userManager = userManager;
-            this.messageHelper = messageHelper;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -59,9 +57,9 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Saves the user to the database
         /// </summary>
-        public GenericValidationResult<UserEntity> Save()
+        public GenericResult<UserEntity> Save()
         {
-            GenericValidationResult<UserEntity> result = ValidateUser();
+            GenericResult<UserEntity> result = ValidateUser();
 
             if (result.Success)
             {
@@ -70,7 +68,7 @@ namespace ShipWorks.UI.Controls
 
                 try
                 {
-                    result.ResultObject = userManager.CreateUser(Username, DecryptedPassword, true);
+                    result.Context = userManager.CreateUser(Username, DecryptedPassword, true);
                 }
                 catch (Exception ex)
                 {
@@ -81,9 +79,13 @@ namespace ShipWorks.UI.Controls
             return result;
         }
 
-        private GenericValidationResult<UserEntity> ValidateUser()
+        /// <summary>
+        /// Validate the username is an email and password is not blank
+        /// </summary>
+        /// <returns></returns>
+        private GenericResult<UserEntity> ValidateUser()
         {
-            GenericValidationResult<UserEntity> result = new GenericValidationResult<UserEntity>(null)
+            GenericResult<UserEntity> result = new GenericResult<UserEntity>(null)
             {
                 Message = string.Empty,
                 Success = true
