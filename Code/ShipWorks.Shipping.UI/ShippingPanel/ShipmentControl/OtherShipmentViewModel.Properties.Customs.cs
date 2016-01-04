@@ -1,27 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 {
     /// <summary>
-    /// View model customs properties for use by ShipmentControl
+    /// View model for use by ShipmentControl
     /// </summary>
-    public partial class ShipmentViewModel
+    public partial class OtherShipmentViewModel
     {
-        private ShipmentCustomsItemEntity selectedCustomsItem;
-        private ObservableCollection<ShipmentCustomsItemEntity> customsItems;
-        private readonly ICustomsManager customsManager;
         private bool customsAllowed;
         private decimal totalCustomsValue;
         private double shipmentContentWeight;
-
+        private ObservableCollection<ShipmentCustomsItemEntity> customsItems;
+        private ShipmentCustomsItemEntity selectedCustomsItem;
+        private readonly ICustomsManager customsManager;
+        
         /// <summary>
         /// The list of customs items
         /// </summary>
@@ -90,7 +87,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             get { return shipmentContentWeight; }
             set
             {
-                handler.Set(nameof(ShipmentContentWeight), ref shipmentContentWeight, value);
+                handler.Set(nameof(ShipmentContentWeight), ref shipmentContentWeight, value, true);
             }
         }
 

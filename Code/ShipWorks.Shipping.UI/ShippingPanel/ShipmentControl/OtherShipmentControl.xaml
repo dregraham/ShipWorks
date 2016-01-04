@@ -53,10 +53,12 @@
                     Margin="4 0 0 0"
                     SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="3" Grid.Column="0"
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,8,0,0"
                    Style="{StaticResource GridLabel}">Weight:</TextBlock>
         <weight:WeightControl Grid.Row="3" Grid.Column="1"
-                              Weight="{Binding TotalWeight}"/>
+                Margin="0,3,0,0"
+				HorizontalAlignment="Left"
+				Weight="{Binding ShipmentContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Grid.Row="4" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Cost:</TextBlock>

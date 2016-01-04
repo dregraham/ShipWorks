@@ -219,6 +219,7 @@
     <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentControl.xaml.cs">
       <DependentUpon>OtherShipmentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentViewModel.Properties.Customs.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentControl.xaml.cs">
       <DependentUpon>ShipmentControl.xaml</DependentUpon>
     </Compile>

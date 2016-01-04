@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Customs Items for the shipment
         /// </summary>
-        EntityCollection<ShipmentCustomsItemEntity> CustomsItems { get; }
+        EntityCollection<ShipmentCustomsItemEntity> CustomsItems { get; set; }
 
         /// <summary>
         /// List of package adapters for the shipment
@@ -92,5 +92,10 @@ namespace ShipWorks.Shipping.Services
         /// Gets specific number of package adapters for the shipment.  
         /// </summary>
         IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages);
+
+        /// <summary>
+        /// Are customs allowed?
+        /// </summary>
+        bool CustomsAllowed { get; }
     }
 }

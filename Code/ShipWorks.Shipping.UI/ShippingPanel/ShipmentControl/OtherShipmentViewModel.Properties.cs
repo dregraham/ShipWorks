@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Reflection;
+using GalaSoft.MvvmLight.Command;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl

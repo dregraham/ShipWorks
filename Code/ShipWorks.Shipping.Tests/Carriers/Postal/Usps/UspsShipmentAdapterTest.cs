@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         {
             shipment.ShipmentTypeCode = ShipmentTypeCode.Express1Usps;
             var testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
-            Assert.Equal(ShipmentTypeCode.Usps, testObject.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Express1Usps, testObject.ShipmentTypeCode);
         }
 
         [Fact]

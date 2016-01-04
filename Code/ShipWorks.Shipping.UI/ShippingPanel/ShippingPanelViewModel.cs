@@ -68,11 +68,19 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.PropertyChangeStream
                 .Select(_ => ShipmentAdapter?.Shipment?.OriginPerson)
                 .Where(x => x != null)
-                .Subscribe(x => Origin.SaveToEntity(x));
+                .Subscribe(x =>
+                {
+                    Origin.SaveToEntity(x);
+                    shipmentViewModel.CustomsAllowed = ShipmentAdapter.CustomsAllowed;
+                });
             Destination.PropertyChangeStream
                 .Select(_ => ShipmentAdapter?.Shipment?.ShipPerson)
                 .Where(x => x != null)
-                .Subscribe(x => Destination.SaveToEntity(x));
+                .Subscribe(x =>
+                {
+                    Destination.SaveToEntity(x);
+                    shipmentViewModel.CustomsAllowed = ShipmentAdapter.CustomsAllowed;
+                });
 
             // Wiring up observables needs objects to not be null, so do this last.
             subscriptions = new CompositeDisposable(registrations.Select(x => x.Register(this)));
@@ -335,14 +343,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
-        /// Updates the services.
+        /// Updates the service types.
         /// </summary>
-        private void UpdateServices() => (ShipmentViewModel as ShipmentViewModel)?.RefreshServiceTypes();
+        private void UpdateServices() => ShipmentViewModel?.RefreshServiceTypes();
 
         /// <summary>
-        /// Updates the packages.
+        /// Updates the package types.
         /// </summary>
-        private void UpdatePackages() => (ShipmentViewModel as ShipmentViewModel)?.RefreshPackageTypes();
+        private void UpdatePackages() => ShipmentViewModel?.RefreshPackageTypes();
 
         /// <summary>
         /// Enables the need to update packages.

@@ -12,6 +12,8 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
@@ -157,8 +159,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             shipmentAdapter.ShipDate = ShipDate;
             shipmentAdapter.UsingInsurance = UsingInsurance;
             shipmentAdapter.ServiceType = ServiceType;
-            
-            shipmentAdapter.UpdateDynamicData();
+
+            if (CustomsAllowed && CustomsItems != null)
+            {
+                shipmentAdapter.CustomsItems = new EntityCollection<ShipmentCustomsItemEntity>(CustomsItems);
+            }
+
+            shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
         }
 
         /// <summary>
@@ -241,7 +248,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void LoadCustoms()
         {
-            CustomsAllowed = !shipmentAdapter.IsDomestic;
+            CustomsAllowed = shipmentAdapter.CustomsAllowed;
 
             if (!CustomsAllowed)
             {
@@ -260,17 +267,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void AddCustomsItem()
         {
-            try
-            {
-                ShipmentCustomsItemEntity shipmentCustomsItemEntity = customsManager.CreateCustomsItem(shipmentAdapter.Shipment);
-                CustomsItems.Add(shipmentCustomsItemEntity);
-                SelectedCustomsItem = shipmentCustomsItemEntity;
-            }
-            catch (Exception ex)
-            {
-                
-                throw ex;
-            }
+            // Pass null as the shipment for now so that we don't have db updates/syncing until we actually want to save.
+            ShipmentCustomsItemEntity shipmentCustomsItemEntity = customsManager.CreateCustomsItem(null);
+            CustomsItems.Add(shipmentCustomsItemEntity);
+            SelectedCustomsItem = shipmentCustomsItemEntity;
         }
 
         /// <summary>
@@ -278,23 +278,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void DeleteCustomsItem()
         {
-            long shipmentCustomsItemID = SelectedCustomsItem.ShipmentCustomsItemID;
-            if (!CustomsItems.Contains(SelectedCustomsItem))
-            {
-                ShipmentCustomsItemEntity shipmentCustomsItem = CustomsItems.FirstOrDefault(sci => sci.ShipmentCustomsItemID == shipmentCustomsItemID);
-
-                if (shipmentCustomsItem != null)
-                {
-                    shipmentAdapter.Shipment.CustomsItems.Remove(shipmentCustomsItem);
-                }
-            }
-            else
-            {
-                shipmentAdapter.Shipment.CustomsItems.Remove(SelectedCustomsItem);
-            }
-
-            CustomsItems = new ObservableCollection<ShipmentCustomsItemEntity>(CustomsItems.Where(ci => ci.ShipmentCustomsItemID != shipmentCustomsItemID));
+            customsItems.Remove(SelectedCustomsItem);
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(CustomsItems)));
             SelectedCustomsItem = CustomsItems.FirstOrDefault();
+
+            double originalShipmentcontentWeight = ShipmentContentWeight;
+            ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
+            RedistributeContentWeight(originalShipmentcontentWeight);
+
+            TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
         }
 
         /// <summary>
@@ -311,21 +303,30 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             if (e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Weight.FieldIndex].Name, StringComparison.OrdinalIgnoreCase) ||
                 e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Quantity.FieldIndex].Name, StringComparison.OrdinalIgnoreCase))
             {
-                shipmentAdapter.Shipment.ContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
-                shipmentAdapter.UpdateDynamicData();
-
-                int selectedPackageAdapterIndex = SelectedPackageAdapter.Index;
-                PackageAdapters = shipmentAdapter.GetPackageAdapters();
-
-                if (PackageAdapters?.Any(pa => pa.Index == selectedPackageAdapterIndex) == true)
-                {
-                    SelectedPackageAdapter = PackageAdapters.First(pa => pa.Index == selectedPackageAdapterIndex);
-                }
-                else
-                {
-                    SelectedPackageAdapter = PackageAdapters.FirstOrDefault();
-                }
+                double originalShipmentcontentWeight = ShipmentContentWeight;
+                ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
+                RedistributeContentWeight(originalShipmentcontentWeight);
             }
+        }
+
+        /// <summary>
+        /// Redistribute the ContentWeight from the shipment to each package in the shipment.  This only does something
+        /// if the ContentWeight is different from the total Content.  Returns true if weight had to be redistributed.
+        /// </summary>
+        public bool RedistributeContentWeight(double originalShipmentcontentWeight)
+        {
+            // If the content weight changed outside of us, redistribute what the new weight among the packages
+            if (originalShipmentcontentWeight != ShipmentContentWeight)
+            {
+                foreach (IPackageAdapter packageAdapter in PackageAdapters)
+                {
+                    packageAdapter.Weight = ShipmentContentWeight/PackageAdapters.Count();
+                }
+
+                return true;
+            }
+
+            return false;
         }
         #endregion Customs
 

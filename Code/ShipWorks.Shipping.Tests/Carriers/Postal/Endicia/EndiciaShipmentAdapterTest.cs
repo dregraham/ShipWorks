@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         {
             shipment.ShipmentTypeCode = ShipmentTypeCode.Express1Endicia;
             var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
-            Assert.Equal(ShipmentTypeCode.Endicia, testObject.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Express1Endicia, testObject.ShipmentTypeCode);
         }
 
         [Fact]

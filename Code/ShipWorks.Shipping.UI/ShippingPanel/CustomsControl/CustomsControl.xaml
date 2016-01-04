@@ -28,7 +28,7 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}}">
+    <Grid Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}, UpdateSourceTrigger=PropertyChanged}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="75" />
             <ColumnDefinition Width="*" />
