@@ -97,6 +97,9 @@ namespace ShipWorks.ApplicationCore
                 .As<IWin32Window>()
                 .ExternallyOwned();
 
+            builder.RegisterType<ConfigurationDataWrapper>()
+                .AsImplementedInterfaces();
+
             current = builder.Build();
         }
     }
