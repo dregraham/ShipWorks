@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
@@ -21,7 +23,7 @@ namespace ShipWorks.UI.Controls
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string username;
-        private string password;
+        private SecureString password;
 
         /// <summary>
         /// Constructor
@@ -48,7 +50,7 @@ namespace ShipWorks.UI.Controls
         /// The password
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Password
+        public SecureString Password
         {
             get { return password; }
             set { handler.Set(nameof(Password), ref password, value); }
@@ -64,11 +66,11 @@ namespace ShipWorks.UI.Controls
             if (result.Success)
             {
                 // Activate the software using the given username/password
-                customerLicense.Activate(Username, Password);
+                customerLicense.Activate(Username, DecryptedPassword);
 
                 try
                 {
-                    result.ResultObject = userManager.CreateUser(Username, Password, true);
+                    result.ResultObject = userManager.CreateUser(Username, DecryptedPassword, true);
                 }
                 catch (Exception ex)
                 {
@@ -95,13 +97,33 @@ namespace ShipWorks.UI.Controls
             }
 
             // Validate the password
-            if (string.IsNullOrWhiteSpace(Password))
+            if (string.IsNullOrWhiteSpace(DecryptedPassword))
             {
                 result.Message = "Please enter a password.";
                 result.Success = false;
             }
 
             return result;
+        }
+
+        public string DecryptedPassword
+        {
+            get
+            {
+                string insecurePassword;
+
+                try
+                {
+                    IntPtr passwordBSTR = Marshal.SecureStringToBSTR(password);
+                    insecurePassword = Marshal.PtrToStringBSTR(passwordBSTR);
+                }
+                catch
+                {
+                    insecurePassword = string.Empty;
+                }
+
+                return insecurePassword;
+            }
         }
     }
 }

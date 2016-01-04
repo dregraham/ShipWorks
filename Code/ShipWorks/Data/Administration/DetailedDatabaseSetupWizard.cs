@@ -2236,7 +2236,7 @@ namespace ShipWorks.Data.Administration
             // If we created this database, then seamlessly continue this wizard into the add store wizard
             if (ChooseWisely == ChooseWiselyOption.Create)
             {
-                AddStoreWizard.ContinueAfterCreateDatabase(this, tangoUserControlHost.ViewModel.Username, tangoUserControlHost.ViewModel.Password);
+                AddStoreWizard.ContinueAfterCreateDatabase(this, tangoUserControlHost.ViewModel.Username, tangoUserControlHost.ViewModel.DecryptedPassword);
             }
             else
             {
@@ -2249,7 +2249,7 @@ namespace ShipWorks.Data.Administration
                 // If we created the admin user, go ahead and log that user in
                 if (adminUserCreated)
                 {
-                    UserSession.Logon(tangoUserControlHost.ViewModel.Username, tangoUserControlHost.ViewModel.Password, true);
+                    UserSession.Logon(tangoUserControlHost.ViewModel.Username, tangoUserControlHost.ViewModel.DecryptedPassword, true);
                 }
             }
         }

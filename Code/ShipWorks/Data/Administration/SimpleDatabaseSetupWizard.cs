@@ -295,7 +295,7 @@ namespace ShipWorks.Data.Administration
             sqlSession.SaveAsCurrent();
 
             // Now we propel them right into our add store wizard
-            AddStoreWizard.ContinueAfterCreateDatabase(this, tangoUserControlHost.ViewModel.Username, tangoUserControlHost.ViewModel.Password);
+            AddStoreWizard.ContinueAfterCreateDatabase(this, tangoUserControlHost.ViewModel.Username, tangoUserControlHost.ViewModel.DecryptedPassword);
         }
 
         /// <summary>

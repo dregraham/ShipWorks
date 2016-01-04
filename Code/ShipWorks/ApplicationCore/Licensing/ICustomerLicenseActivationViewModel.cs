@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Security;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
 
@@ -12,12 +13,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The Password
         /// </summary>
-        string Password { get; set; }
+        SecureString Password { get; set; }
 
         /// <summary>
         /// The Username
         /// </summary>
         string Username { get; set; }
+
+        /// <summary>
+        /// The decrypted password
+        /// </summary>
+       string DecryptedPassword { get; }
 
         /// <summary>
         /// Called to save the credentials
