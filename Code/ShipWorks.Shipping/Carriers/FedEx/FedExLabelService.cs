@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Autofac.Features.Indexed;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -9,14 +11,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public class FedExLabelService : ILabelService
     {
-        private readonly Func<ShipmentEntity, IShippingClerk> shippingClerkFactory;
+        private readonly FedExShippingClerkFactory shippingClerkFactory;
+        private readonly IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExLabelService(Func<ShipmentEntity,IShippingClerk> shippingClerkFactory)
+        public FedExLabelService(FedExShippingClerkFactory shippingClerkFactory, IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository)
         {
             this.shippingClerkFactory = shippingClerkFactory;
+            this.settingsRepository = settingsRepository;
         }
 
         /// <summary>
@@ -24,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void Create(ShipmentEntity shipment)
         {
-            IShippingClerk shippingClerk = shippingClerkFactory(shipment);
+            IShippingClerk shippingClerk = shippingClerkFactory.CreateShippingClerk(shipment, settingsRepository[ShipmentTypeCode.FedEx]);
 
             try
             {
@@ -41,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {
-            IShippingClerk shippingClerk = shippingClerkFactory(shipment);
+            IShippingClerk shippingClerk = shippingClerkFactory.CreateShippingClerk(shipment, settingsRepository[ShipmentTypeCode.FedEx]);
             try
             {
                 shippingClerk.Void(shipment);
