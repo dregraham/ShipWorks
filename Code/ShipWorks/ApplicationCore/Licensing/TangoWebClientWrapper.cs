@@ -71,7 +71,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public ActivationResponse ActivateLicense(string email, string password)
         {
-            return new ActivationResponse();
+            return TangoWebClient.ActivateLicense(email, password);
         }
 
         /// <summary>

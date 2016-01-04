@@ -84,6 +84,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Gets license information for the given email and password
+        /// </summary>
+        public static ActivationResponse ActivateLicense(string email, string password)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            return new ActivationResponse(ProcessXmlRequest(postRequest, "ActivateCustomerLicense"));
+        }
+
+        /// <summary>
         /// Returns an InsureShipAffiliate for the specified store.
         /// If one cannot be found, an InsureShipException is thrown.
         /// </summary>
