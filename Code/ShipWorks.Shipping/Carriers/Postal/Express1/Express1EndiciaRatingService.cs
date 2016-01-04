@@ -29,25 +29,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         protected EndiciaShipmentType GetShipmentType(ShipmentEntity shipment) => 
             (EndiciaShipmentType)shipmentTypeFactory[(ShipmentTypeCode)shipment.ShipmentType];
-
-        /// <summary>
-        /// Gets the filtered rates based on any excluded services configured for this postal shipment type.
-        /// </summary>
-        protected override List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
-        {
-            List<PostalServiceType> availableServiceTypes =
-                GetShipmentType(shipment).GetAvailableServiceTypes().OfType<PostalServiceType>().ToList();
-
-            if (shipment.Postal.Endicia.OriginalEndiciaAccountID == null)
-            {
-                availableServiceTypes.Add((PostalServiceType)shipment.Postal.Service);
-            }
-
-            List<RateResult> rateResults = rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)).ToList();
-
-            rateResults.ForEach(r => r.ShipmentType = ShipmentTypeCode.Express1Endicia);
-
-            return rateResults;
-        }
     }
 }
