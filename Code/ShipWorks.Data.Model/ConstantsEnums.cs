@@ -1851,6 +1851,8 @@ namespace ShipWorks.Data.Model
 		AuditNewOrders,
 		///<summary>AuditDeletedOrders. </summary>
 		AuditDeletedOrders,
+		///<summary>CustomerKey. </summary>
+		CustomerKey,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -3975,7 +3975,8 @@ CREATE TABLE [dbo].[Configuration]
 [CustomerUpdateModifiedBilling] [int] NOT NULL,
 [CustomerUpdateModifiedShipping] [int] NOT NULL,
 [AuditNewOrders] [bit] NOT NULL,
-[AuditDeletedOrders] [bit] NOT NULL
+[AuditDeletedOrders] [bit] NOT NULL,
+[CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
