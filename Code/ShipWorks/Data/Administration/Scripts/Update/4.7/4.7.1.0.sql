@@ -1,13 +1,13 @@
-﻿PRINT N'Altering [dbo].[YahooStore]'
+﻿SET NUMERIC_ROUNDABORT OFF
 GO
-ALTER TABLE [dbo].[YahooStore] ADD
-[YahooStoreID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT (''),
-[AccessToken] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT (''),
-[BackupOrderNumber] [bigint] NULL
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
-
-PRINT N'Altering [dbo].[YahooOrderItem]'
+PRINT N'Altering [dbo].[Order]'
 GO
-ALTER TABLE [dbo].[YahooOrderItem] ADD
-[Url] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT ('')
+ALTER TABLE [dbo].[Order] ADD
+[ShipAddressType] [int] NOT NULL CONSTRAINT [DF_Order_ShipAddressType] DEFAULT ((0))
+GO
+PRINT N'Dropping constraints from [dbo].[Order]'
+GO
+ALTER TABLE [dbo].[Order] DROP CONSTRAINT [DF_Order_ShipAddressType]
 GO
