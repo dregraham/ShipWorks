@@ -550,11 +550,13 @@
     <Compile Include="AddressValidation\AddressSelectedEventArgs.cs" />
     <Compile Include="AddressValidation\AddressSelector.cs" />
     <Compile Include="AddressValidation\AddressValidationException.cs" />
+    <Compile Include="AddressValidation\Enums\AddressType.cs" />
+    <Compile Include="AddressValidation\Enums\AddressValidationStatusType.cs" />
+    <Compile Include="AddressValidation\Enums\AddressValidationStoreSettingType.cs" />
+    <Compile Include="AddressValidation\Enums\ValidationDetailStatusType.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />
     <Compile Include="AddressValidation\AddressValidationResult.cs" />
-    <Compile Include="AddressValidation\AddressValidationStatusType.cs" />
-    <Compile Include="AddressValidation\AddressValidationStoreSettingType.cs" />
     <Compile Include="AddressValidation\AddressValidationWebClientValidateAddressResult.cs" />
     <Compile Include="AddressValidation\ContextAddressValidationDataAccess.cs" />
     <Compile Include="AddressValidation\IAddressValidationDataAccess.cs" />
@@ -572,7 +574,6 @@
     <Compile Include="AddressValidation\ValidatedOrderShipAddress.cs" />
     <Compile Include="AddressValidation\ValidatedShipmentShipAddress.cs" />
     <Compile Include="AddressValidation\ValidatedShipAddressBase.cs" />
-    <Compile Include="AddressValidation\ValidationDetailStatusType.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\ValidatedAddressScope.cs" />
     <Compile Include="AnalysisSuppressions.cs" />
