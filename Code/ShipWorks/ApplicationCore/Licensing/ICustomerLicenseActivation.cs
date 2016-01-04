@@ -12,7 +12,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Called to save the License Activation
         /// </summary>
         /// <returns></returns>
-        GenericValidationResult<UserEntity> Save();
+        GenericResult<UserEntity> Save();
 
         /// <summary>
         /// Event handler when stepping next from the wizard page

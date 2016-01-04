@@ -2199,7 +2199,7 @@ namespace ShipWorks.Data.Administration
             WizardPage nextPage = e.NextPage;
             e.NextPage = CurrentPage;
 
-            GenericValidationResult<UserEntity> result;
+            GenericResult<UserEntity> result;
 
             using (new SqlSessionScope(sqlSession))
             {

@@ -38,7 +38,7 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Called when clicking next in the setup wizard
         /// </summary>
-        public GenericValidationResult<UserEntity> Save()
+        public GenericResult<UserEntity> Save()
         {
             return ViewModel.Save();
         }

@@ -276,14 +276,14 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnStepNextCreateUsername(object sender, WizardStepEventArgs e)
         {
-            GenericValidationResult<UserEntity> result;
+            GenericResult<UserEntity> result;
 
             using (new SqlSessionScope(sqlSession))
             {
                 result = tangoUserControlHost.Save();
             }
 
-            if (result.ResultObject == null)
+            if (result.Success == false)
             {
                 MessageHelper.ShowMessage(this, result.Message);
                 e.NextPage = (WizardPage)tangoUserControlHost;
