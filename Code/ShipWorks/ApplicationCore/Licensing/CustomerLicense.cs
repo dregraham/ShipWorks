@@ -20,7 +20,7 @@
         /// <summary>
         /// Activates the customer license
         /// </summary>
-        public ICustomerLicense Activate(string email, string password)
+        public void Activate(string email, string password)
         {
             // Activate the license via tango using the given username and password
             ActivationResponse activateionResponse = tangoWebClient.ActivateLicense(email, password);
@@ -28,7 +28,6 @@
 
             // Save license data to the data source
             Save();
-            return this;
         }
 
         /// <summary>

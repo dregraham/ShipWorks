@@ -8,7 +8,7 @@
         /// <summary>
         /// Activate a customer license
         /// </summary>
-        ICustomerLicense Activate(string email, string password);
+        void Activate(string email, string password);
 
         /// <summary>
         /// The customer license key
