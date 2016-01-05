@@ -47,7 +47,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.elementHost);
-            this.Description = "Create a user account to log on to ShipWorks.";
+            this.Description = "Log in using your ShipWorks.com account information.";
             this.Name = "TangoUserControlHost";
             this.Size = new System.Drawing.Size(1856, 1034);
             this.Title = "ShipWorks Account";

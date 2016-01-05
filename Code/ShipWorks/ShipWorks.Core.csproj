@@ -11024,7 +11024,7 @@
     <None Include="Resources\text_code_add.png" />
     <None Include="Resources\text_code.png" />
     <None Include="Resources\store_config_32.png" />
-    <None Include="Resources\user_lock_48.png" />
+    <Resource Include="Resources\user_lock_48.png" />
     <Resource Include="Resources\user_lock_32.png" />
     <None Include="Resources\user_deleted_16.png" />
     <None Include="Resources\user_add_16.png" />

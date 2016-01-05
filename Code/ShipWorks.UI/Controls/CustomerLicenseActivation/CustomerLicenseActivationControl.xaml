@@ -13,7 +13,7 @@
              d:DataContext="{d:DesignInstance customerLicenseActivation:CustomerLicenseActivationViewModel}"
              mc:Ignorable="d">
 
-    <Grid Margin="8 8 24 8">
+    <Grid Margin="16 10 24 8">
         <Grid.Resources>
             <Style TargetType="TextBox">
                 <Setter Property="Margin" Value="0 2 0 2" />
@@ -42,33 +42,31 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width=".6*" />
+            <ColumnDefinition Width=".4*" />
         </Grid.ColumnDefinitions>
 
         <Image Grid.Row="0"
                Grid.RowSpan="2"
                Grid.Column="0"
                Margin="0 0 8 0"
-               Source="/Shipworks.Core;component/Resources/user_lock_32.png" />
+               Width="40"
+               Source="/Shipworks.Core;component/Resources/user_lock_48.png" />
 
         <Label Grid.Row="0" Grid.Column="1">Email:</Label>
         <TextBox Grid.Row="0"
                  Grid.Column="2"
-                 Grid.ColumnSpan="3"
                  Text="{Binding Username,
                                 UpdateSourceTrigger=PropertyChanged}" />
 
         <Label Grid.Row="1" Grid.Column="1">Password:</Label>
         <PasswordBox Grid.Row="1"
-                     Grid.Column="2"
-                     Grid.ColumnSpan="3">
+                     Grid.Column="2">
             <i:Interaction.Behaviors>
                 <behaviors:PasswordBoxBindingBehavior Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
             </i:Interaction.Behaviors>
         </PasswordBox>
-
+<!--
         <TextBlock Grid.Row="2" Grid.Column="2">
             <Hyperlink NavigateUri="http://www.shipworks.com" RequestNavigate="HyperlinkOnRequestNavigate">I don't have a ShipWorks account</Hyperlink>
         </TextBlock>
@@ -83,6 +81,7 @@
         <TextBlock Grid.Row="2" Grid.Column="4">
             <Hyperlink NavigateUri="http://www.shipworks.com" RequestNavigate="HyperlinkOnRequestNavigate">Forgot Password</Hyperlink>
         </TextBlock>
+        -->
     </Grid>
 
 </UserControl>
