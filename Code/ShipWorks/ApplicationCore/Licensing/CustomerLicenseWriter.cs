@@ -20,7 +20,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void Write(ICustomerLicense customerLicense)
         {
-            ConfigurationEntity configuration = configurationData.Fetch();
+            ConfigurationEntity configuration = configurationData.GetConfiguration();
 
             configuration.CustomerKey = customerLicense.Key;
 

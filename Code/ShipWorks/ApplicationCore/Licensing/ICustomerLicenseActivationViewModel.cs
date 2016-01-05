@@ -28,6 +28,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Called to save the credentials
         /// </summary>
-        GenericResult<UserEntity> Save();
+        GenericResult<ICustomerLicense> Save();
     }
 }

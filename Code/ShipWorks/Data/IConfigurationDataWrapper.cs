@@ -7,7 +7,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get the current configuration instance
         /// </summary>
-        ConfigurationEntity Fetch();
+        ConfigurationEntity GetConfiguration();
 
         /// <summary>
         /// Save the given entity as the current configuration

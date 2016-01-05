@@ -10,8 +10,17 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get the current configuration instance
         /// </summary>
-        public ConfigurationEntity Fetch()
+        public ConfigurationEntity GetConfiguration()
         {
+            // Fetch the current configuration entity
+            ConfigurationEntity config = ConfigurationData.Fetch();
+
+            // if its null because we are in the database setup wizard
+            if (config == null)
+            {
+                ConfigurationData.InitializeForCurrentDatabase();
+            }
+
             return ConfigurationData.Fetch();
         }
 

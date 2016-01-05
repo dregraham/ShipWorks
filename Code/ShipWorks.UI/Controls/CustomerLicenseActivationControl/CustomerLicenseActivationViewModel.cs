@@ -6,7 +6,6 @@ using System.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email;
 using ShipWorks.Users;
 
@@ -57,39 +56,10 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Saves the user to the database
         /// </summary>
-        public GenericResult<UserEntity> Save()
+        public GenericResult<ICustomerLicense> Save()
         {
-            GenericResult<UserEntity> result = ValidateUser();
-
-            if (result.Success)
-            {
-                // Activate the software using the given username/password
-                customerLicense.Activate(Username, DecryptedPassword);
-
-                try
-                {
-                    result.Context = userManager.CreateUser(Username, DecryptedPassword, true);
-                }
-                catch (Exception ex)
-                {
-                    result.Message = ex.Message;
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Validate the username is an email and password is not blank
-        /// </summary>
-        /// <returns></returns>
-        private GenericResult<UserEntity> ValidateUser()
-        {
-            GenericResult<UserEntity> result = new GenericResult<UserEntity>(null)
-            {
-                Message = string.Empty,
-                Success = true
-            };
+            // Create an empty result
+            GenericResult<ICustomerLicense> result = new GenericResult<ICustomerLicense>(customerLicense) {Success = true};
 
             // Validate the username
             if (!EmailUtility.IsValidEmailAddress(Username))
@@ -103,6 +73,22 @@ namespace ShipWorks.UI.Controls
             {
                 result.Message = "Please enter a password.";
                 result.Success = false;
+            }
+
+            // if the username and password passed our data validation 
+            // call activate and create the user
+            if (result.Success)
+            {
+                try
+                {
+                    // Activate the software using the given username/password
+                    customerLicense.Activate(Username, DecryptedPassword);
+                    userManager.CreateUser(Username, DecryptedPassword, true);
+                }
+                catch (Exception ex)
+                {
+                    result.Message = ex.Message;
+                }
             }
 
             return result;
