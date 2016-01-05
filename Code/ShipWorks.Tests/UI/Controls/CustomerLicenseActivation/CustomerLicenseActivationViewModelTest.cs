@@ -5,7 +5,7 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.UI.Controls;
+using ShipWorks.UI.Controls.CustomerLicenseActivation;
 using ShipWorks.Users;
 using Xunit;
 

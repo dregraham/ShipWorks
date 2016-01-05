@@ -13,41 +13,76 @@
              d:DataContext="{d:DesignInstance customerLicenseActivation:CustomerLicenseActivationViewModel}"
              mc:Ignorable="d">
 
-    <Grid Margin="24 8 24 8">
+    <Grid Margin="8 8 24 8">
         <Grid.Resources>
             <Style TargetType="TextBox">
                 <Setter Property="Margin" Value="0 2 0 2" />
-                <Setter Property="Padding" Value="2 2 2 2" />
+                <Setter Property="Padding" Value="2" />
+                <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
             <Style TargetType="PasswordBox">
                 <Setter Property="Margin" Value="0 2 0 2" />
-                <Setter Property="Padding" Value="2 2 2 2" />
+                <Setter Property="Padding" Value="2" />
+                <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
             <Style TargetType="Label">
-                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0">Username:</Label>
+        <Image Grid.Row="0"
+               Grid.RowSpan="2"
+               Grid.Column="0"
+               Margin="0 0 8 0"
+               Source="/Shipworks.Core;component/Resources/user_lock_32.png" />
+
+        <Label Grid.Row="0" Grid.Column="1">Email:</Label>
         <TextBox Grid.Row="0"
-                 Grid.Column="1"
+                 Grid.Column="2"
+                 Grid.ColumnSpan="3"
                  Text="{Binding Username,
                                 UpdateSourceTrigger=PropertyChanged}" />
 
-        <Label Grid.Row="1" Grid.Column="0">Password:</Label>
-        <PasswordBox Grid.Row="1" Grid.Column="1">
+        <Label Grid.Row="1" Grid.Column="1">Password:</Label>
+        <PasswordBox Grid.Row="1"
+                     Grid.Column="2"
+                     Grid.ColumnSpan="3">
             <i:Interaction.Behaviors>
                 <behaviors:PasswordBoxBindingBehavior Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
             </i:Interaction.Behaviors>
         </PasswordBox>
+
+        <TextBlock Grid.Row="2" Grid.Column="2">
+            <Hyperlink NavigateUri="http://www.shipworks.com" RequestNavigate="HyperlinkOnRequestNavigate">I don't have a ShipWorks account</Hyperlink>
+        </TextBlock>
+
+        <Image Grid.Row="2"
+               Grid.Column="3"
+               Margin="4"
+               HorizontalAlignment="Left"
+               Source="/Shipworks.Core;component/Resources/InfoTip.png"
+               Stretch="None" />
+
+        <TextBlock Grid.Row="2" Grid.Column="4">
+            <Hyperlink NavigateUri="http://www.shipworks.com" RequestNavigate="HyperlinkOnRequestNavigate">Forgot Password</Hyperlink>
+        </TextBlock>
     </Grid>
 
 </UserControl>
