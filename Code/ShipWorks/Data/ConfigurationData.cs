@@ -85,10 +85,12 @@ namespace ShipWorks.Data
             config.CustomerUpdateShipping = true;
 
             config.CustomerUpdateModifiedBilling = (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy;
-            config.CustomerUpdateModifiedShipping = (int)ModifiedOrderCustomerUpdateBehavior.NeverCopy;
+            config.CustomerUpdateModifiedShipping = (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy;
 
             config.AuditNewOrders = false;
             config.AuditDeletedOrders = false;
+
+            config.CustomerKey = string.Empty;
 
             adapter.SaveEntity(config);
         }
