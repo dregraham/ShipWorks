@@ -66,6 +66,7 @@ namespace ShipWorks.UI.Controls
             {
                 result.Message = "Please enter a valid username.";
                 result.Success = false;
+                return result;
             }
 
             // Validate the password
@@ -73,24 +74,23 @@ namespace ShipWorks.UI.Controls
             {
                 result.Message = "Please enter a password.";
                 result.Success = false;
+                return result;
             }
 
             // if the username and password passed our data validation 
             // call activate and create the user
-            if (result.Success)
+            try
             {
-                try
-                {
-                    // Activate the software using the given username/password
-                    customerLicense.Activate(Username, DecryptedPassword);
-                    userManager.CreateUser(Username, DecryptedPassword, true);
-                }
-                catch (Exception ex)
-                {
-                    result.Message = ex.Message;
-                }
+                // Activate the software using the given username/password
+                customerLicense.Activate(Username, DecryptedPassword);
+                userManager.CreateUser(Username, DecryptedPassword, true);
             }
-
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+                result.Success = false;
+            }
+            
             return result;
         }
 
