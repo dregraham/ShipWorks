@@ -14,6 +14,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
     public class CustomerLicenseActivationViewModelTest
     {
         [Theory]
+        [CLSCompliant(false)]
         [InlineData("username", "TestPassword", false)]
         [InlineData("support@shipworks.com", "TestPassword", true)]
         [InlineData("", "TestPassword", false)]
@@ -42,6 +43,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
         }
 
         [Theory]
+        [CLSCompliant(false)]
         [InlineData("support@shipworks.com", "TestPassword", true)]
         [InlineData("support@shipworks.com", "", false)]
         public void Save_Validates_Password(string username, string password, bool isValid)
