@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
         }
 
         [Fact]
-        public void SaveHandels_Exception_WithoutCrashing()
+        public void SaveHandles_Exception_WithoutCrashing()
         {
             using (var mock = AutoMock.GetLoose())
             {
