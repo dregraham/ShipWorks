@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.UI.Controls;
+using ShipWorks.UI.Controls.CustomerLicenseActivation;
 using ShipWorks.UI.Services;
 
 namespace ShipWorks.UI

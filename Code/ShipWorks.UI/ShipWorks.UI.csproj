@@ -85,16 +85,16 @@
     </Compile>
     <Compile Include="Behaviors\PasswordBoxBindingBehavior.cs" />
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
-    <Compile Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControl.xaml.cs">
+    <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml.cs">
       <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControlHost.cs">
+    <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControlHost.Designer.cs">
+    <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.Designer.cs">
       <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationViewModel.cs" />
+    <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IMessageHelper.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
@@ -139,13 +139,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControl.xaml">
+    <Page Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\CustomerLicenseActivationControl\CustomerLicenseActivationControlHost.resx">
+    <EmbeddedResource Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.resx">
       <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

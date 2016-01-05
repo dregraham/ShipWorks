@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.UI.Controls
+﻿namespace ShipWorks.UI.Controls.CustomerLicenseActivation
 {
     partial class CustomerLicenseActivationControlHost
     {
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
-            this.tangoUserControl = new ShipWorks.UI.Controls.CustomerLicenseActivationControl();
+            this.tangoUserControl = new CustomerLicenseActivationControl();
             this.SuspendLayout();
             // 
             // elementHost
@@ -58,6 +58,6 @@
         #endregion
 
         private System.Windows.Forms.Integration.ElementHost elementHost;
-        private ShipWorks.UI.Controls.CustomerLicenseActivationControl tangoUserControl;
+        private CustomerLicenseActivationControl tangoUserControl;
     }
 }

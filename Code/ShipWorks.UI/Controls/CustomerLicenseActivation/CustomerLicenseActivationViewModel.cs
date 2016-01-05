@@ -9,7 +9,7 @@ using ShipWorks.Core.UI;
 using ShipWorks.Email;
 using ShipWorks.Users;
 
-namespace ShipWorks.UI.Controls
+namespace ShipWorks.UI.Controls.CustomerLicenseActivation
 {
     /// <summary>
     /// View model for the TangoUserControl

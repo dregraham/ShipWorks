@@ -1,10 +1,9 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.UI.Controls
+namespace ShipWorks.UI.Controls.CustomerLicenseActivation
 {
     /// <summary>
     /// Winforms element for hosting the WPF CustomerLicenseActivationControl
