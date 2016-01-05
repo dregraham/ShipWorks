@@ -10,6 +10,9 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly IConfigurationDataWrapper configurationData;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public CustomerLicenseWriter(IConfigurationDataWrapper configurationData)
         {
             this.configurationData = configurationData;
