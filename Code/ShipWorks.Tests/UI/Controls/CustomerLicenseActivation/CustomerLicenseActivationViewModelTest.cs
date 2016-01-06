@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 GenericResult<ICustomerLicense> result = testObject.Save();
                 
                 Assert.Equal(isValid, result.Success);
-                Assert.Equal(isValid ? null : "Please enter a valid username.", result.Message);
+                Assert.Equal(isValid ? string.Empty : "Please enter a valid username.", result.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 GenericResult<ICustomerLicense> result = testObject.Save();
 
                 Assert.Equal(isValid, result.Success);
-                Assert.Equal(isValid ? null : "Please enter a password.", result.Message);
+                Assert.Equal(isValid ? string.Empty : "Please enter a password.", result.Message);
             }
         }
 
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 string username = "support@shipworks.com";
                 string password = "TestPassword";
 
-                var testObject = mock.Mock<IUserManagerWrapper>();
+                var testObject = mock.Mock<IUserService>();
 
                 CustomerLicenseActivationViewModel viewModel = mock.Create<CustomerLicenseActivationViewModel>();
                 SecureString securePassword = new SecureString();
@@ -121,7 +121,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 string username = "support@shipworks.com";
                 string password = "TestPassword";
 
-                mock.Mock<IUserManagerWrapper>().Setup(u => u.CreateUser(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).Throws(new Exception("Random Exception"));
+                mock.Mock<IUserService>().Setup(u => u.CreateUser(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).Throws(new Exception("Random Exception"));
 
                 CustomerLicenseActivationViewModel viewModel = mock.Create<CustomerLicenseActivationViewModel>();
                 SecureString securePassword = new SecureString();

@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void ActivationResponse_WithInvalidXml_SetsKeyToEmptyString()
+        public void ActivationResponse_WithMissingKey_SetsKeyToEmptyString()
         {
             XmlDocument responseData = new XmlDocument();
             responseData.LoadXml(@"<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"">
@@ -57,6 +57,28 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             ActivationResponse activationResponse = new ActivationResponse(responseData);
 
             Assert.Equal(string.Empty, activationResponse.Key);
+        }
+
+        [Fact]
+        public void ActivationResponse_SetsKeyToValue_WhenCustomerLicenseKeyNodeIsEmpty()
+        {
+            XmlDocument responseData = new XmlDocument();
+            responseData.LoadXml(@"<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"">
+                                       <s:Body>
+                                          <GetCustomerLicenseInfoResponse xmlns=""http://stamps.com/xml/namespace/2015/09/shipworks/activationv1"">
+                                             <GetCustomerLicenseInfoResult xmlns:a=""http://schemas.datacontract.org/2004/07/Sdc.Server.ShipWorksNet.Protocol.CustomerLicenseInfo"" xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"">
+                                                <a:AssociatedStampsUserName/>
+                                                <a:CustomerLicenseKey></a:CustomerLicenseKey>
+                                                <a:IsLegacyUser>false</a:IsLegacyUser>
+                                                <a:StampsUserName>mh_sw_b__0</a:StampsUserName>
+                                             </GetCustomerLicenseInfoResult>
+                                          </GetCustomerLicenseInfoResponse>
+                                       </s:Body>
+                                    </s:Envelope>");
+
+            ActivationResponse activationResponse = new ActivationResponse(responseData);
+
+            Assert.Equal("", activationResponse.Key);
         }
     }
 }

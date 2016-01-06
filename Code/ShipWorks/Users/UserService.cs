@@ -5,7 +5,7 @@ namespace ShipWorks.Users
     /// <summary>
     /// Wrapper for managing users
     /// </summary>
-    public class UserManagerWrapper : IUserManagerWrapper
+    public class UserService : IUserService
     {
         /// <summary>
         /// Creates a user with the given credentials

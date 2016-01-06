@@ -8,26 +8,25 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class CustomerLicenseWriter : ICustomerLicenseWriter
     {
-        private readonly IConfigurationDataWrapper configurationData;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public CustomerLicenseWriter(IConfigurationDataWrapper configurationData)
-        {
-            this.configurationData = configurationData;
-        }
-
         /// <summary>
         /// Writes the customer license to the database
         /// </summary>
         public void Write(ICustomerLicense customerLicense)
         {
-            ConfigurationEntity configuration = configurationData.GetConfiguration();
+            // Fetch the current configuration entity
+            ConfigurationEntity config = ConfigurationData.Fetch();
 
-            configuration.CustomerKey = customerLicense.Key;
+            // if its null because we are in the database setup wizard
+            if (config == null)
+            {
+                ConfigurationData.InitializeForCurrentDatabase();
 
-            configurationData.Save(configuration);
+                config = ConfigurationData.Fetch();
+            }
+
+            config.CustomerKey = customerLicense.Key;
+
+            ConfigurationData.Save(config);
         }
     }
 }

@@ -198,7 +198,7 @@ namespace ShipWorks.Data.Administration
             tangoUserControlHost.SteppingInto += OnSteppingIntoShipWorksAdmin;
 
             // Replace the user wizard page with the new tango user wizard page
-            Pages.Insert(Pages.Count - 1, (WizardPage)tangoUserControlHost);
+            Pages.Insert(Pages.Count - 1, (WizardPage) tangoUserControlHost);
         }
 
         /// <summary>

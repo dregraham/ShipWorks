@@ -17,7 +17,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
     public class CustomerLicenseActivationViewModel : ICustomerLicenseActivationViewModel
     {
         private readonly ICustomerLicense customerLicense;
-        private readonly IUserManagerWrapper userManager;
+        private readonly IUserService userManager;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string username;
@@ -26,7 +26,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(ICustomerLicense customerLicense, IUserManagerWrapper userManager)
+        public CustomerLicenseActivationViewModel(ICustomerLicense customerLicense, IUserService userManager)
         {
             this.customerLicense = customerLicense;
             this.userManager = userManager;
@@ -54,49 +54,12 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         }
 
         /// <summary>
-        /// Saves the user to the database
-        /// </summary>
-        public GenericResult<ICustomerLicense> Save()
-        {
-            // Create an empty result
-            GenericResult<ICustomerLicense> result = new GenericResult<ICustomerLicense>(customerLicense) {Success = true};
-
-            // Validate the username
-            if (!EmailUtility.IsValidEmailAddress(Username))
-            {
-                result.Message = "Please enter a valid username.";
-                result.Success = false;
-                return result;
-            }
-
-            // Validate the password
-            if (string.IsNullOrWhiteSpace(DecryptedPassword))
-            {
-                result.Message = "Please enter a password.";
-                result.Success = false;
-                return result;
-            }
-
-            // if the username and password passed our data validation 
-            // call activate and create the user
-            try
-            {
-                // Activate the software using the given username/password
-                customerLicense.Activate(Username, DecryptedPassword);
-                userManager.CreateUser(Username, DecryptedPassword, true);
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                result.Success = false;
-            }
-            
-            return result;
-        }
-
-        /// <summary>
         /// The decrypted password
         /// </summary>
+        /// <remarks>
+        /// we have to do this because the PasswordBox control in XAML 
+        /// does not give us access to the plane text password
+        /// </remarks>
         [Obfuscation(Exclude = true)]
         public string DecryptedPassword
         {
@@ -116,6 +79,63 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
 
                 return insecurePassword;
             }
+        }
+
+        /// <summary>
+        /// Saves the user to the database
+        /// </summary>
+        public GenericResult<ICustomerLicense> Save()
+        {
+            // Create an empty result
+            GenericResult<ICustomerLicense> result = ValidateCredentials();
+            
+            // if the username and password passed our data validation 
+            // call activate and create the user
+            if (result.Success)
+            {
+                try
+                {
+                    // Activate the software using the given username/password
+                    customerLicense.Activate(Username, DecryptedPassword);
+                    userManager.CreateUser(Username, DecryptedPassword, true);
+                }
+                catch (Exception ex)
+                {
+                    result.Message = ex.Message;
+                    result.Success = false;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Validates that the credentials
+        /// </summary>
+        private GenericResult<ICustomerLicense> ValidateCredentials()
+        {
+            GenericResult<ICustomerLicense> result = new GenericResult<ICustomerLicense>(customerLicense)
+            {
+                Success = true,
+                Message = string.Empty
+            };
+
+            // Validate the username
+            if (!EmailUtility.IsValidEmailAddress(Username))
+            {
+                result.Message = "Please enter a valid username.";
+                result.Success = false;
+                return result;
+            }
+
+            // Validate the password
+            if (string.IsNullOrWhiteSpace(DecryptedPassword))
+            {
+                result.Message = "Please enter a password.";
+                result.Success = false;
+            }
+
+            return result;
         }
     }
 }

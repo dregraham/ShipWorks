@@ -295,7 +295,7 @@ namespace ShipWorks.Stores.Management
             {
                 if (comboStoreType.SelectedIndex > 0)
                 {
-                    ImageComboBoxItem item = (ImageComboBoxItem)comboStoreType.SelectedItem;
+                    ImageComboBoxItem item = (ImageComboBoxItem) comboStoreType.SelectedItem;
 
                     return (StoreType)item.Value;
                 }
@@ -341,7 +341,7 @@ namespace ShipWorks.Stores.Management
         private void SetupForStoreType(StoreType storeType)
         {
             // If we are changing store types, clear the existing pages
-            if (store == null || store.TypeCode != (int)storeType.TypeCode)
+            if (store == null || store.TypeCode != (int) storeType.TypeCode)
             {
                 // If there was an old store we need to clean it up
                 if (store != null)
@@ -643,7 +643,7 @@ namespace ShipWorks.Stores.Management
             // See if the existing one is already for this store
             if (store.StoreID == onlineUpdateConfiguredStoreID)
             {
-                onlineUpdateControl = (OnlineUpdateActionControlBase)panelOnlineUpdatePlaceholder.Controls[0];
+                onlineUpdateControl = (OnlineUpdateActionControlBase) panelOnlineUpdatePlaceholder.Controls[0];
             }
             else
             {
@@ -793,7 +793,7 @@ namespace ShipWorks.Stores.Management
                 return true;
             }
 
-            OnlineUpdateActionControlBase control = (OnlineUpdateActionControlBase)panelOnlineUpdatePlaceholder.Controls[0];
+            OnlineUpdateActionControlBase control = (OnlineUpdateActionControlBase) panelOnlineUpdatePlaceholder.Controls[0];
 
             List<ActionTask> tasks;
 
@@ -818,7 +818,7 @@ namespace ShipWorks.Stores.Management
                     action.Name = "Store Update";
                     action.Enabled = true;
 
-                    action.ComputerLimitedType = (int)ComputerLimitedType.TriggeringComputer;
+                    action.ComputerLimitedType = (int) ComputerLimitedType.TriggeringComputer;
                     action.InternalComputerLimitedList = string.Empty;
 
                     action.StoreLimited = true;
@@ -826,7 +826,7 @@ namespace ShipWorks.Stores.Management
 
                     // Setup the trigger.  We know ShipmentProcessedTrigger doesn't save extra state to the DB, so we don't need to call that function.
                     ShipmentProcessedTrigger trigger = new ShipmentProcessedTrigger();
-                    action.TriggerType = (int)trigger.TriggerType;
+                    action.TriggerType = (int) trigger.TriggerType;
                     action.TriggerSettings = trigger.GetXml();
 
                     // Set the summary
@@ -892,7 +892,7 @@ namespace ShipWorks.Stores.Management
                         if (defaultType != null)
                         {
                             ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-                            shippingSettings.DefaultType = (int)defaultType.Value;
+                            shippingSettings.DefaultType = (int) defaultType.Value;
 
                             ShippingSettings.Save(shippingSettings);
                         }
@@ -938,7 +938,7 @@ namespace ShipWorks.Stores.Management
         {
             StatusPresetEntity preset = new StatusPresetEntity();
             preset.StoreID = store.StoreID;
-            preset.StatusTarget = (int)presetTarget;
+            preset.StatusTarget = (int) presetTarget;
             preset.StatusText = "";
             preset.IsDefault = true;
 

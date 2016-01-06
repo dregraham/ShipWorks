@@ -83,7 +83,7 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<TangoWebClientWrapper>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<UserManagerWrapper>()
+            builder.RegisterType<UserService>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<CustomerLicense>()
@@ -96,10 +96,7 @@ namespace ShipWorks.ApplicationCore
                 .As<Control>()
                 .As<IWin32Window>()
                 .ExternallyOwned();
-
-            builder.RegisterType<ConfigurationDataWrapper>()
-                .AsImplementedInterfaces();
-
+            
             current = builder.Build();
         }
     }

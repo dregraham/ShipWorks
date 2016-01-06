@@ -286,7 +286,7 @@ namespace ShipWorks.Data.Administration
             if (result.Success == false)
             {
                 MessageHelper.ShowMessage(this, result.Message);
-                e.NextPage = (WizardPage)tangoUserControlHost;
+                e.NextPage = (WizardPage) tangoUserControlHost;
                 return;
             }
 

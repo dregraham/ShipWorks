@@ -713,11 +713,9 @@
     <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
-    <Compile Include="Data\ConfigurationDataWrapper.cs" />
     <Compile Include="Data\Connection\ISqlSession.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
-    <Compile Include="Data\IConfigurationDataWrapper.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
     <Compile Include="Editions\EditionManagerWrapper.cs" />
@@ -8293,7 +8291,7 @@
     </Compile>
     <Compile Include="Users\Audit\AuditReasonType.cs" />
     <Compile Include="Users\ComputerManager.cs" />
-    <Compile Include="Users\IUserManagerWrapper.cs" />
+    <Compile Include="Users\IUserService.cs" />
     <Compile Include="Users\Security\AddStorePermissionsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -8345,7 +8343,7 @@
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
     <Compile Include="Users\UserManager.cs" />
-    <Compile Include="Users\UserManagerWrapper.cs" />
+    <Compile Include="Users\UserService.cs" />
     <Compile Include="Users\UserSession.cs" />
     <Compile Include="Users\Logon\UserChangePasswordDlg.cs">
       <SubType>Form</SubType>
