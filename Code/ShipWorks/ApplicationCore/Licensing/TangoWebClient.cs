@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
@@ -28,7 +28,6 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -86,11 +85,34 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets license information for the given email and password
         /// </summary>
-        public static ActivationResponse ActivateLicense(string email, string password)
+        public static GenericResult<ActivationResponse> ActivateLicense(string email, string password)
         {
+            GenericResult<ActivationResponse> result = new GenericResult<ActivationResponse>(null);
+
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
-            return new ActivationResponse(ProcessXmlRequest(postRequest, "ActivateCustomerLicense"));
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ActivateCustomerLicense");
+
+            // Create an Xpath navigator and add namespaces to it
+            XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
+            xpath.Namespaces.AddNamespace("s", "http://schemas.xmlsoap.org/soap/envelope/");
+
+            // Check to see if the response contains a fult
+            XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
+            
+            // If there is a fault return it
+            if (fault != null)
+            {
+                result.Success = false;
+                result.Message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
+            }
+            else
+            {
+                result.Context = new ActivationResponse(xmlResponse);
+                result.Success = true;
+            }
+            
+            return result;
         }
 
         /// <summary>

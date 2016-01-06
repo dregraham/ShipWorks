@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -43,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Activates ShipWorks using the given user
         /// </summary>
-        ActivationResponse ActivateLicense(string email, string password);
+        GenericResult<ActivationResponse> ActivateLicense(string email, string password);
 
         /// <summary>
         /// Send the user their username using the specified email address

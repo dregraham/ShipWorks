@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.ApplicationCore.Licensing
+﻿using Interapptive.Shared.Utility;
+
+namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// Class to store customer license information
@@ -23,8 +25,15 @@
         public void Activate(string email, string password)
         {
             // Activate the license via tango using the given username and password
-            ActivationResponse activateionResponse = tangoWebClient.ActivateLicense(email, password);
-            Key = activateionResponse.Key;
+            GenericResult<ActivationResponse> activateionResponse = tangoWebClient.ActivateLicense(email, password);
+
+            // Check to see if something went wrong and if so we throw
+            if (!activateionResponse.Success)
+            {
+                throw new ShipWorksLicenseException(activateionResponse.Message);
+            }
+
+            Key = activateionResponse.Context.Key;
 
             // Save license data to the data source
             Save();
