@@ -136,15 +136,6 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// Is Insurance requested?
-        /// </summary>
-        public bool UsingInsurance
-        {
-            get { return shipment.Insurance; }
-            set { shipment.Insurance = value; }
-        }
-
-        /// <summary>
         /// Service type selected
         /// </summary>
         public abstract int ServiceType { get; set; }

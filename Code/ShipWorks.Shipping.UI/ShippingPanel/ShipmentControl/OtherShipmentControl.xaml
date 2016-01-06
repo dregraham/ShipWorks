@@ -75,15 +75,19 @@
                    Style="{StaticResource GridLabel}">Insurance:</TextBlock>
         <Label Grid.Row="6" Grid.Column="1">
             <StackPanel Orientation="Horizontal">
-                <CheckBox></CheckBox>
-                <TextBlock>ShipWorks Insurance</TextBlock>
+                <CheckBox Margin="0 4 0 0"
+					IsChecked="{Binding InsuranceViewModel.InsuranceChoice.Insured, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock  Margin="2 3 0 0"
+                    Text="{Binding InsuranceViewModel.InsuranceTypeLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance Type'}"></TextBlock>
             </StackPanel>
         </Label>
 
         <StackPanel Grid.Row="7" Grid.Column="1"
                     Orientation="Horizontal">
-            <TextBlock>Insured value:</TextBlock>
-            <TextBox Width="80" />
+            <TextBlock Style="{StaticResource GridLabel}" 
+                       Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insured Value:'}"></TextBlock>
+            <TextBox Width="80"  Margin="4 4 0 0"
+                     Text="{Binding InsuranceViewModel.InsuranceChoice.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=c, FallbackValue='50.50'}"/>
         </StackPanel>
 
     </Grid>

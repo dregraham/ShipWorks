@@ -34,9 +34,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Constructor for use by tests and WPF designer
         /// </summary>
-        public OtherShipmentViewModel(ICustomsManager customsManager) : this()
+        public OtherShipmentViewModel(IShippingViewModelFactory shippingViewModelFactory, ICustomsManager customsManager) : this()
         {
             this.customsManager = customsManager;
+
+            insuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
         }
 
         /// <summary>
@@ -49,7 +51,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             ShipDate = shipmentAdapter.ShipDate;
             TotalWeight = shipmentAdapter.TotalWeight;
             ShipmentContentWeight = shipmentAdapter.ContentWeight;
-            UsingInsurance = shipmentAdapter.UsingInsurance;
+
+            IPackageAdapter packageAdapter = shipmentAdapter.GetPackageAdapters().FirstOrDefault();
+            InsuranceViewModel.Load(new []{ packageAdapter }, packageAdapter);
 
             OtherShipmentEntity otherShipment = shipmentAdapter.Shipment.Other;
 
@@ -70,7 +74,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             shipmentAdapter.ShipDate = ShipDate;
             shipmentAdapter.Shipment.TotalWeight = TotalWeight;
-            shipmentAdapter.UsingInsurance = UsingInsurance;
 
             shipmentAdapter.Shipment.ShipmentCost = Cost;
             shipmentAdapter.Shipment.TrackingNumber = TrackingNumber;

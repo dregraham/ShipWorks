@@ -83,7 +83,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             ShipDate = shipmentAdapter.ShipDate;
             TotalWeight = shipmentAdapter.TotalWeight;
-            UsingInsurance = shipmentAdapter.UsingInsurance;
             SupportsPackageTypes = shipmentAdapter.SupportsPackageTypes;
             SupportsMultiplePackages = shipmentAdapter.SupportsMultiplePackages;
             SupportsDimensions = shipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.Other;
@@ -157,7 +156,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public virtual void Save()
         {
             shipmentAdapter.ShipDate = ShipDate;
-            shipmentAdapter.UsingInsurance = UsingInsurance;
             shipmentAdapter.ServiceType = ServiceType;
 
             if (CustomsAllowed && CustomsItems != null)
@@ -316,7 +314,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public bool RedistributeContentWeight(double originalShipmentcontentWeight)
         {
             // If the content weight changed outside of us, redistribute what the new weight among the packages
-            if (originalShipmentcontentWeight != ShipmentContentWeight)
+            if (Math.Abs(originalShipmentcontentWeight - ShipmentContentWeight) > 0.001)
             {
                 foreach (IPackageAdapter packageAdapter in PackageAdapters)
                 {

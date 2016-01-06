@@ -69,11 +69,6 @@ namespace ShipWorks.Shipping.Services
         double ContentWeight { get; set; }
 
         /// <summary>
-        /// Is Insurance requested?
-        /// </summary>
-        bool UsingInsurance { get; set; }
-
-        /// <summary>
         /// Service type selected
         /// </summary>
         int ServiceType { get; set; }

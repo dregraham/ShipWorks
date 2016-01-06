@@ -77,21 +77,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 Assert.Equal(shipmentAdapter.Object.TotalWeight, testObject.TotalWeight);
             }
         }
-
-        [Fact]
-        public void UsingInsurance_MatchesShipmentAdapterValue_Test()
-        {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                CreateDefaultShipmentAdapter(mock, 2);
-
-                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
-                testObject.Load(shipmentAdapter.Object);
-
-                Assert.Equal(shipmentAdapter.Object.UsingInsurance, testObject.UsingInsurance);
-            }
-        }
-
+        
         [Fact]
         public void ServiceType_MatchesShipmentAdapterValue_Test()
         {
@@ -320,7 +306,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 testObject.Load(shipmentAdapter.Object);
 
                 testObject.ShipDate = testObject.ShipDate.AddDays(1);
-                testObject.UsingInsurance = !testObject.UsingInsurance;
                 testObject.ServiceType = testObject.ServiceType++;
 
                 
@@ -329,7 +314,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 testObject.Save();
 
                 shipmentAdapter.VerifySet(sa => sa.ShipDate = testObject.ShipDate, Times.Once());
-                shipmentAdapter.VerifySet(sa => sa.UsingInsurance = testObject.UsingInsurance);
                 shipmentAdapter.VerifySet(sa => sa.ServiceType = testObject.ServiceType);
             }
         }

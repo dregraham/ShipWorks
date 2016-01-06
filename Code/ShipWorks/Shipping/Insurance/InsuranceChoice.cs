@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -66,6 +67,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Indicates if insurance is on or off
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool Insured
         {
             get { return (bool) insuranceFieldEntity.Fields[insuranceFieldPrefix + "Insurance"].CurrentValue; }
@@ -75,6 +77,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// The currently configured InsuranceProvider for this insurance choice
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public InsuranceProvider InsuranceProvider
         {
             get { return (InsuranceProvider) shipment.InsuranceProvider; }
@@ -83,6 +86,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// The insured value of the package, if insured
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public decimal InsuranceValue
         {
             get { return (decimal) valueFieldEntity.Fields[valueFieldPrefix + "InsuranceValue"].CurrentValue; }
@@ -92,6 +96,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// If the package is being insured PennyOne - only applies to FedEx\UPS shipments
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool? InsurancePennyOne
         {
             get

@@ -71,16 +71,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         }
 
         /// <summary>
-        /// Is the shipment using insurance?
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool UsingInsurance
-        {
-            get { return usingInsurance; }
-            set { handler.Set(nameof(UsingInsurance), ref usingInsurance, value); }
-        }
-
-        /// <summary>
         /// Shipment selected service type
         /// </summary>
         [Obfuscation(Exclude = true)]

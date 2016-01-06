@@ -14,14 +14,23 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     {
         private DateTime shipDate;
         private double totalWeight;
-        private bool usingInsurance;
-
         private string carrierName;
         private string service;
         private decimal cost;
         private string trackingNumber;
 
         private ICarrierShipmentAdapter shipmentAdapter;
+        private InsuranceViewModel insuranceViewModel;
+
+        /// <summary>
+        /// The insurance view model to use.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public InsuranceViewModel InsuranceViewModel
+        {
+            get { return insuranceViewModel; }
+            set { handler.Set(nameof(InsuranceViewModel), ref insuranceViewModel, value); }
+        }
 
         /// <summary>
         /// Shipment ship date
@@ -41,16 +50,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             get { return totalWeight; }
             set { handler.Set(nameof(TotalWeight), ref totalWeight, value); }
-        }
-
-        /// <summary>
-        /// Is the shipment using insurance?
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool UsingInsurance
-        {
-            get { return usingInsurance; }
-            set { handler.Set(nameof(UsingInsurance), ref usingInsurance, value); }
         }
 
         /// <summary>
