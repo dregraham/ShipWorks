@@ -18,7 +18,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The Username
         /// </summary>
-        string Username { get; set; }
+        string Email { get; set; }
 
         /// <summary>
         /// The decrypted password

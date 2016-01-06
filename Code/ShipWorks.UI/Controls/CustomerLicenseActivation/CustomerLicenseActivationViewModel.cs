@@ -20,7 +20,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         private readonly IUserService userManager;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
-        private string username;
+        private string email;
         private SecureString password;
 
         /// <summary>
@@ -37,10 +37,10 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// The username
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Username
+        public string Email
         {
-            get { return username; }
-            set { handler.Set(nameof(Username), ref username, value); }
+            get { return email; }
+            set { handler.Set(nameof(Email), ref email, value); }
         }
 
         /// <summary>
@@ -57,10 +57,9 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// The decrypted password
         /// </summary>
         /// <remarks>
-        /// we have to do this because the PasswordBox control in XAML 
-        /// does not give us access to the plane text password
+        /// We have to do this because the PasswordBox control in XAML 
+        /// does not give us access to the plain text password
         /// </remarks>
-        [Obfuscation(Exclude = true)]
         public string DecryptedPassword
         {
             get
@@ -96,8 +95,8 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
                 try
                 {
                     // Activate the software using the given username/password
-                    customerLicense.Activate(Username, DecryptedPassword);
-                    userManager.CreateUser(Username, DecryptedPassword, true);
+                    customerLicense.Activate(Email, DecryptedPassword);
+                    userManager.CreateUser(Email, DecryptedPassword, true);
                 }
                 catch (Exception ex)
                 {
@@ -121,7 +120,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
             };
 
             // Validate the username
-            if (!EmailUtility.IsValidEmailAddress(Username))
+            if (!EmailUtility.IsValidEmailAddress(Email))
             {
                 result.Message = "Please enter a valid username.";
                 result.Success = false;

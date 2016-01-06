@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
             {
                 CustomerLicenseActivationViewModel testObject = mock.Create<CustomerLicenseActivationViewModel>();
 
-                testObject.Username = username;
+                testObject.Email = username;
 
                 SecureString securePassword = new SecureString();
 
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
             {
                 CustomerLicenseActivationViewModel testObject = mock.Create<CustomerLicenseActivationViewModel>();
 
-                testObject.Username = username;
+                testObject.Email = username;
 
                 SecureString securePassword = new SecureString();
 
@@ -81,7 +81,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 SecureString securePassword = new SecureString();
                 password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
 
-                viewModel.Username = username;
+                viewModel.Email = username;
                 viewModel.Password = securePassword;
 
                 viewModel.Save();
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 SecureString securePassword = new SecureString();
                 password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
 
-                viewModel.Username = username;
+                viewModel.Email = username;
                 viewModel.Password = securePassword;
 
                 viewModel.Save();
@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 SecureString securePassword = new SecureString();
                 password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
 
-                viewModel.Username = username;
+                viewModel.Email = username;
                 viewModel.Password = securePassword;
 
                 GenericResult<ICustomerLicense> testObject = viewModel.Save();

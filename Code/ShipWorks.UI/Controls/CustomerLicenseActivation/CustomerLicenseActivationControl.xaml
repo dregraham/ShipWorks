@@ -56,7 +56,7 @@
         <Label Grid.Row="0" Grid.Column="1">Email:</Label>
         <TextBox Grid.Row="0"
                  Grid.Column="2"
-                 Text="{Binding Username,
+                 Text="{Binding Email,
                                 UpdateSourceTrigger=PropertyChanged}" />
 
         <Label Grid.Row="1" Grid.Column="1">Password:</Label>
@@ -66,22 +66,6 @@
                 <behaviors:PasswordBoxBindingBehavior Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
             </i:Interaction.Behaviors>
         </PasswordBox>
-<!--
-        <TextBlock Grid.Row="2" Grid.Column="2">
-            <Hyperlink NavigateUri="http://www.shipworks.com" RequestNavigate="HyperlinkOnRequestNavigate">I don't have a ShipWorks account</Hyperlink>
-        </TextBlock>
-
-        <Image Grid.Row="2"
-               Grid.Column="3"
-               Margin="4"
-               HorizontalAlignment="Left"
-               Source="/Shipworks.Core;component/Resources/InfoTip.png"
-               Stretch="None" />
-
-        <TextBlock Grid.Row="2" Grid.Column="4">
-            <Hyperlink NavigateUri="http://www.shipworks.com" RequestNavigate="HyperlinkOnRequestNavigate">Forgot Password</Hyperlink>
-        </TextBlock>
-        -->
     </Grid>
 
 </UserControl>
