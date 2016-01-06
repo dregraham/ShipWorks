@@ -169,6 +169,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Quartz.dll</HintPath>
@@ -292,6 +294,7 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -299,6 +302,7 @@
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\ActionConcurrencyException.cs" />
@@ -546,11 +550,13 @@
     <Compile Include="AddressValidation\AddressSelectedEventArgs.cs" />
     <Compile Include="AddressValidation\AddressSelector.cs" />
     <Compile Include="AddressValidation\AddressValidationException.cs" />
+    <Compile Include="AddressValidation\Enums\AddressType.cs" />
+    <Compile Include="AddressValidation\Enums\AddressValidationStatusType.cs" />
+    <Compile Include="AddressValidation\Enums\AddressValidationStoreSettingType.cs" />
+    <Compile Include="AddressValidation\Enums\ValidationDetailStatusType.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />
     <Compile Include="AddressValidation\AddressValidationResult.cs" />
-    <Compile Include="AddressValidation\AddressValidationStatusType.cs" />
-    <Compile Include="AddressValidation\AddressValidationStoreSettingType.cs" />
     <Compile Include="AddressValidation\AddressValidationWebClientValidateAddressResult.cs" />
     <Compile Include="AddressValidation\ContextAddressValidationDataAccess.cs" />
     <Compile Include="AddressValidation\IAddressValidationDataAccess.cs" />
@@ -568,7 +574,6 @@
     <Compile Include="AddressValidation\ValidatedOrderShipAddress.cs" />
     <Compile Include="AddressValidation\ValidatedShipmentShipAddress.cs" />
     <Compile Include="AddressValidation\ValidatedShipAddressBase.cs" />
-    <Compile Include="AddressValidation\ValidationDetailStatusType.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\ValidatedAddressScope.cs" />
     <Compile Include="AnalysisSuppressions.cs" />
@@ -1180,6 +1185,7 @@
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
     <Compile Include="Stores\Content\IOrderUtility.cs" />
     <Compile Include="Stores\Content\OrderUtilityWrapper.cs" />
+    <Compile Include="Stores\IStoreTypeManager.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonLatestExpectedDeliveryDateCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonEarliestExpectedDeliveryDateCondition.cs" />
     <Compile Include="Stores\IStoreManager.cs" />
@@ -1216,10 +1222,68 @@
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAddressInfo.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAppliedPromotion.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooBillToInfo.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCartShipmentInfo.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCatalog.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCatalogItem.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCatalogItemList.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartWebClientApiCall.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartWebClientRequestThrottle.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartWebClientRequestThrottledException.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCustomField.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCustomFieldsList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCustomOrderStatus.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooCustomOrderStatusList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooErrorResourceList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooGeneralInfo.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooItem.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooItemList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOption.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrder.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderListQuery.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderStatus.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooOrderTotals.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooPromotions.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooResponse.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooResponseResourceList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooSelectedOptionList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooShipToInfo.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooStatusList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiWebClient.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiDownloader.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartWebClientThrottleWaitCancelException.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiWebClient.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOrderStatus.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooProductWeightCache.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Actions\YahooShipmentUploadTask.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.Designer.cs">
+      <DependentUpon>YahooEmailAccountPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailOnlineUpdateActionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailOnlineUpdateActionControl.Designer.cs">
+      <DependentUpon>YahooEmailOnlineUpdateActionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailOnlineUpdatePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailOnlineUpdatePage.Designer.cs">
+      <DependentUpon>YahooEmailOnlineUpdatePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailProductWeightsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailProductWeightsPage.Designer.cs">
+      <DependentUpon>YahooEmailProductWeightsPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
     <Compile Include="Stores\StoreManagerWrapper.cs" />
@@ -3087,26 +3151,13 @@
       <DependentUpon>VolusionTimeZoneControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\WPeCommerce\WPeCommerceStoreType.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Actions\YahooShipmentUploadTask.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\WizardPages\YahooOnlineUpdatePage.cs">
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\WizardPages\YahooOnlineUpdatePage.Designer.cs">
-      <DependentUpon>YahooOnlineUpdatePage.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailAccountSettingsControl.Designer.cs">
+      <DependentUpon>YahooEmailAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\WizardPages\YahooEmailAccountPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\WizardPages\YahooEmailAccountPage.Designer.cs">
-      <DependentUpon>YahooEmailAccountPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\YahooAccountSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\YahooAccountSettingsControl.Designer.cs">
-      <DependentUpon>YahooAccountSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\YahooOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailOnlineUpdater.cs" />
     <Compile Include="Common\IO\Hardware\Printers\PrinterTypeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -5798,42 +5849,30 @@
     </Compile>
     <Compile Include="Stores\Platforms\WebShopManager\WebShopManagerStoreType.cs" />
     <Compile Include="Stores\Platforms\XCart\XCartStoreType.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\WizardPages\YahooOnlineUpdateActionControl.cs">
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailDownloader.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailAccountControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\WizardPages\YahooOnlineUpdateActionControl.Designer.cs">
-      <DependentUpon>YahooOnlineUpdateActionControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\WizardPages\YahooProductWeightsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\WizardPages\YahooProductWeightsPage.Designer.cs">
-      <DependentUpon>YahooProductWeightsPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\YahooDownloader.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\YahooEmailAccountControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\YahooEmailAccountControl.Designer.cs">
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailAccountControl.Designer.cs">
       <DependentUpon>YahooEmailAccountControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Yahoo\YahooException.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\YahooImportProductsControl.cs">
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailImportProductsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\YahooImportProductsControl.Designer.cs">
-      <DependentUpon>YahooImportProductsControl.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailImportProductsControl.Designer.cs">
+      <DependentUpon>YahooEmailImportProductsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Yahoo\YahooOrderIdentifier.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\YahooProductManager.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailProductManager.cs" />
     <Compile Include="Stores\Platforms\Yahoo\YahooStoreType.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\YahooStoreSettingsControl.cs">
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailStoreSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\YahooStoreSettingsControl.Designer.cs">
-      <DependentUpon>YahooStoreSettingsControl.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailStoreSettingsControl.Designer.cs">
+      <DependentUpon>YahooEmailStoreSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Yahoo\YahooUtility.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailUtility.cs" />
     <Compile Include="Stores\Platforms\ZenCart\ZenCartStoreType.cs" />
     <Compile Include="Stores\Management\StoreConfirmDeleteDlg.cs">
       <SubType>Form</SubType>
@@ -7818,6 +7857,18 @@
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.resx">
+      <DependentUpon>YahooEmailAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailOnlineUpdateActionControl.resx">
+      <DependentUpon>YahooEmailOnlineUpdateActionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailOnlineUpdatePage.resx">
+      <DependentUpon>YahooEmailOnlineUpdatePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailProductWeightsPage.resx">
+      <DependentUpon>YahooEmailProductWeightsPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\ResizingRichTextBox.resx">
       <DependentUpon>ResizingRichTextBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -8025,14 +8076,8 @@
     <EmbeddedResource Include="Stores\Platforms\Volusion\VolusionTimeZoneControl.resx">
       <DependentUpon>VolusionTimeZoneControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Yahoo\WizardPages\YahooEmailAccountPage.resx">
-      <DependentUpon>YahooEmailAccountPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Yahoo\WizardPages\YahooOnlineUpdatePage.resx">
-      <DependentUpon>YahooOnlineUpdatePage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Yahoo\YahooAccountSettingsControl.resx">
-      <DependentUpon>YahooAccountSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailAccountSettingsControl.resx">
+      <DependentUpon>YahooEmailAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\IO\Hardware\Printers\PrinterTypeControl.resx">
       <DependentUpon>PrinterTypeControl.cs</DependentUpon>
@@ -8929,7 +8974,7 @@
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EmailAccounts.sql" />
     <None Include="Resources\sw_cubes_32x32.png" />
     <None Include="Resources\InfoTip.png" />
-    <None Include="Resources\check.png" />
+    <Resource Include="Resources\check.png" />
     <None Include="Resources\information.png" />
     <EmbeddedResource Include="ApplicationCore\Options\OptionPageLogging.resx">
       <DependentUpon>OptionPageLogging.cs</DependentUpon>
@@ -9606,20 +9651,14 @@
     <EmbeddedResource Include="Stores\Platforms\Volusion\WizardPages\VolusionTimeZonePage.resx">
       <DependentUpon>VolusionTimeZonePage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Yahoo\WizardPages\YahooOnlineUpdateActionControl.resx">
-      <DependentUpon>YahooOnlineUpdateActionControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Yahoo\WizardPages\YahooProductWeightsPage.resx">
-      <DependentUpon>YahooProductWeightsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Yahoo\YahooEmailAccountControl.resx">
+    <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailAccountControl.resx">
       <DependentUpon>YahooEmailAccountControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Yahoo\YahooImportProductsControl.resx">
-      <DependentUpon>YahooImportProductsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailImportProductsControl.resx">
+      <DependentUpon>YahooEmailImportProductsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Yahoo\YahooStoreSettingsControl.resx">
-      <DependentUpon>YahooStoreSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Yahoo\EmailIntegration\YahooEmailStoreSettingsControl.resx">
+      <DependentUpon>YahooEmailStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\StoreConfirmDeleteDlg.resx">
       <DependentUpon>StoreConfirmDeleteDlg.cs</DependentUpon>
@@ -9977,7 +10016,7 @@
     <None Include="Resources\bullet_triangle_grey.png" />
     <None Include="Resources\arrow_right_green.png" />
     <None Include="Resources\media_play_green.png" />
-    <None Include="Resources\error.png" />
+    <Resource Include="Resources\error.png" />
     <None Include="Resources\check1.png" />
     <None Include="Resources\error1.png" />
     <None Include="Resources\cancelled.png" />
@@ -10077,7 +10116,7 @@
     <None Include="Resources\Progress\refresh_lightblue.gif" />
     <None Include="Resources\Progress\squares_green.gif" />
     <None Include="Resources\Progress\squares_blue.gif" />
-    <None Include="Resources\Progress\circle_ball_blue.gif" />
+    <Resource Include="Resources\Progress\circle_ball_blue.gif" />
     <None Include="Resources\Progress\kit_blue.gif" />
     <None Include="Resources\Progress\wheel_blue.gif" />
     <None Include="Resources\Progress\wheel_greengray.gif" />
@@ -10449,6 +10488,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.5\4.5.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.6\4.6.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.7\4.7.0.2.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10490,6 +10531,7 @@
     <None Include="Resources\aprilfools-16x16.png" />
     <None Include="Resources\brightpearl.png" />
     <None Include="Resources\amazon_large.jpg" />
+    <None Include="Resources\building.png" />
     <Content Include="Resources\check2.png" />
     <None Include="Resources\colors32.png" />
     <None Include="Resources\component.png" />
@@ -10590,6 +10632,9 @@
     <None Include="Resources\choxi.png" />
     <None Include="Resources\instantestore.png" />
     <None Include="Resources\lemonstand.png" />
+    <None Include="Resources\house.png" />
+    <None Include="Resources\island.jpg" />
+    <None Include="Resources\island.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

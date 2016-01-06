@@ -1,4 +1,7 @@
-﻿using Interapptive.Shared.Business;
+﻿using System.Linq;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
@@ -35,10 +38,11 @@ namespace ShipWorks.AddressValidation
             try
             {
                 UspsAddressValidationResults uspsResult = session.ValidateAddress(personAdapter);
+                validationResult.AddressType = ConvertAddressType(uspsResult);
 
                 if (uspsResult.IsSuccessfulMatch)
                 {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult.IsPoBox, uspsResult.ResidentialIndicator));
+                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
                 }
                 else
                 {
@@ -47,7 +51,7 @@ namespace ShipWorks.AddressValidation
 
                 foreach (Address address in uspsResult.Candidates)
                 {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, uspsResult.IsPoBox, uspsResult.ResidentialIndicator));
+                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, uspsResult));
                 }
             }
             catch (UspsException ex)
@@ -61,7 +65,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Create an AddressValidationResult from a Stamps.com address
         /// </summary>
-        private static AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, bool? isPoBox, ResidentialDeliveryIndicatorType residentialStatus)
+        private static AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult)
         {
             AddressValidationResult addressValidationResult = new AddressValidationResult
             {
@@ -73,14 +77,66 @@ namespace ShipWorks.AddressValidation
                 PostalCode = GetPostalCode(address) ?? string.Empty,
                 CountryCode = address.Country ?? string.Empty,
                 IsValid = isValid,
-                POBox = ConvertPoBox(isPoBox),
-                ResidentialStatus = ConvertResidentialStatus(residentialStatus)
+                POBox = ConvertPoBox(uspsResult.IsPoBox),
+                ResidentialStatus = ConvertResidentialStatus(uspsResult.ResidentialIndicator),
             };
 
             addressValidationResult.ParseStreet1();
             addressValidationResult.ApplyAddressCasing();
-
+            
             return addressValidationResult;
+        }
+
+        /// <summary>
+        /// Analyzes the uspsResult and returns the appropriate AddressType
+        /// </summary>
+        private static AddressType ConvertAddressType(UspsAddressValidationResults uspsResult)
+        {
+            bool isMilitary = uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "Y") ?? false;
+            bool isSecondaryAddressProblem = uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "H" || (x.Value ?? string.Empty) == "S") ?? false;
+            bool isUsTerritory = CountryList.IsUSInternationalTerritory(uspsResult.MatchedAddress?.State ?? string.Empty);
+
+            if (!uspsResult.IsCityStateZipOk)
+            {
+                return AddressType.Invalid;
+            }
+
+            if (isSecondaryAddressProblem)
+            {
+                return AddressType.SecondaryNotFound;
+            }
+
+            if (!uspsResult.IsSuccessfulMatch)
+            {
+                return AddressType.PrimaryNotFound;
+            }
+
+            // successful match!
+
+            if (isMilitary)
+            {
+                return AddressType.Military;
+            }
+
+            if (isUsTerritory)
+            {
+                return AddressType.UsTerritory;
+            }
+
+            if (uspsResult.IsPoBox ?? false)
+            {
+                return AddressType.PoBox;
+            }
+
+            switch (uspsResult.ResidentialIndicator)
+            {
+                case ResidentialDeliveryIndicatorType.Yes:
+                    return AddressType.Residential;
+                case ResidentialDeliveryIndicatorType.No:
+                    return AddressType.Commercial;
+                default:
+                    return AddressType.Valid;
+            }
         }
 
         /// <summary>

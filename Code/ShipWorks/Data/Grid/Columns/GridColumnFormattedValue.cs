@@ -91,5 +91,10 @@ namespace ShipWorks.Data.Grid.Columns
             get { return fontStyle; }
             set { fontStyle = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the tool tip text.
+        /// </summary>
+        public string ToolTipText { get; set; }
     }
 }

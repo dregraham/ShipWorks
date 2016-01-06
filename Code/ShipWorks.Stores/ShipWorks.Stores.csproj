@@ -121,6 +121,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\StoreTypeManagerWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -153,6 +154,7 @@
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

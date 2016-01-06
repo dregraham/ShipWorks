@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.UI;
 using ShipWorks.UI.Controls;
 

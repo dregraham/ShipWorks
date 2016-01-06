@@ -33,6 +33,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.OrderItems;
 using Interapptive.Shared.Net;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.Properties;
 using ShipWorks.ApplicationCore.Dashboard;
@@ -441,7 +442,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityField2 field)
+        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
         {
             return
                 EntityUtility.IsSameField(field, OrderItemFields.Code) ||

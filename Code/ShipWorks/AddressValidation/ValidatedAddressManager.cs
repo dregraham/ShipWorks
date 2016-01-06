@@ -6,6 +6,7 @@ using Interapptive.Shared.Business;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -253,6 +254,7 @@ namespace ShipWorks.AddressValidation
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a country.";
                 currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
+                currentShippingAddress.AddressType = (int) AddressType.WillNotValidate;
 
                 return false;
             }
@@ -262,6 +264,7 @@ namespace ShipWorks.AddressValidation
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
                 currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.WillNotValidate;
+                currentShippingAddress.AddressType = (int)AddressType.WillNotValidate;
 
                 return false;
             }
@@ -270,7 +273,8 @@ namespace ShipWorks.AddressValidation
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a first line.";
                 currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
-
+                currentShippingAddress.AddressType = (int)AddressType.PrimaryNotFound;
+                
                 return false;
             }
 

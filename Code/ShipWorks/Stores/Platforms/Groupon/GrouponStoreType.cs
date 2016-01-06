@@ -239,7 +239,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityField2 field)
+        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
         {
             return EntityUtility.IsSameField(field, OrderItemFields.Name);
         }
