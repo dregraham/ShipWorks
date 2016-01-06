@@ -11,9 +11,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="response"></param>
         public ActivationResponse(XmlDocument response)
         {
+            MethodConditions.EnsureArgumentIsNotNull(response, nameof(response));
 
             XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(response);
             xpath.Namespaces.AddNamespace("s", "http://schemas.xmlsoap.org/soap/envelope/");
@@ -21,7 +21,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             xpath.Namespaces.AddNamespace("i", "http://www.w3.org/2001/XMLSchema-instance");
             xpath.Namespaces.AddNamespace("", "http://stamps.com/xml/namespace/2015/09/shipworks/activationv1");
 
-            Key = XPathUtility.Evaluate(xpath, "//a:CustomerLicenseKey", "");
+            Key = XPathUtility.Evaluate(xpath, "//a:CustomerLicenseKey", string.Empty);
         }
 
         /// <summary>

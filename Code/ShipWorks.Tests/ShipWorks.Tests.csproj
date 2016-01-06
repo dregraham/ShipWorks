@@ -192,6 +192,7 @@
     <Compile Include="ApplicationCore\Crashes\CrashSubmitterTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\ActivationResponseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriterTest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientFactoryTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
