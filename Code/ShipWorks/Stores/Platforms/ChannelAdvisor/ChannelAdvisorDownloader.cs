@@ -422,6 +422,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Imports order items from the CA shopping cart
         /// </summary>
         [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         private void LoadItems(ChannelAdvisorClient client, ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
             foreach (OrderLineItemItemResponse caItem in caOrder.ShoppingCart.LineItemSKUList)

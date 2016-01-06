@@ -356,6 +356,7 @@ namespace ShipWorks.Users.Audit
         /// Determine the audit information for the given catalog which contains only changes related to the Orders change group.
         /// </summary>
         [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         private static void ProcessChangeGroupOrders(AuditEntity audit, Dictionary<EntityType, Dictionary<long, AuditChangeType>> changeCatalog)
         {
             int totalCount = changeCatalog.SelectMany(c => c.Value).Select(p => p.Value).Count();

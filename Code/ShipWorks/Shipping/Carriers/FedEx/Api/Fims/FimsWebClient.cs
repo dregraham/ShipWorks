@@ -9,6 +9,7 @@ using System.Text;
 using System.Web.Services.Protocols;
 using System.Xml;
 using System.Xml.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -207,6 +208,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Process the response by array
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static FimsShipResponse ProcessResponse(byte[] responseBytes)
         {
             if (responseBytes == null)
