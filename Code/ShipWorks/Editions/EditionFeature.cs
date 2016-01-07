@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+﻿using System.Reflection;
 using System.ComponentModel;
 
 namespace ShipWorks.Editions
@@ -108,7 +104,7 @@ namespace ShipWorks.Editions
         /// </summary>
         [Description("Your ShipWorks account is only enabled for using APO, FPO, and P.O. Box postal services.  Please contact Interapptive to enable use of all postal services.")]
         PostalApoFpoPoboxOnly,
-        
+
         /// <summary>
         /// UPS SurePost service type can be restricted
         /// </summary>
@@ -150,12 +146,12 @@ namespace ShipWorks.Editions
         /// </summary>
         [Description("Discount messaging using the selected carrier is disabled.")]
         RateDiscountMessaging,
-        
+
         /// <summary>
-        /// The ability to display a conversion promo/message for a shipping provider can be restricted. 
-        /// This is sort of out of place and pertains only to USPS. This is a result of a problem 
-        /// on the USPS side when USPS customers have multi-user accounts where they don't 
-        /// want to allow these customers to convert through ShipWorks. After USPS has reached 
+        /// The ability to display a conversion promo/message for a shipping provider can be restricted.
+        /// This is sort of out of place and pertains only to USPS. This is a result of a problem
+        /// on the USPS side when USPS customers have multi-user accounts where they don't
+        /// want to allow these customers to convert through ShipWorks. After USPS has reached
         /// out to these customers and converted their accounts, this can be removed.
         /// </summary>
         [Description("Converting an account using the selected carrier is disabled.")]
@@ -166,13 +162,13 @@ namespace ShipWorks.Editions
         /// </summary>
         [Description("Your ShipWorks account does not support using Stamps insurance.")]
         StampsInsurance,
-		
+
         /// <summary>
         /// Controls if DHL is enabled for Stamps users
         /// </summary>
         [Description("Your ShipWorks account does not support shipping with DHL through Stamps.")]
         StampsDhl,
-		
+
         /// <summary>
         /// Stamps Ascendia consolidator
         /// </summary>
@@ -202,5 +198,29 @@ namespace ShipWorks.Editions
         /// </summary>
         [Description("Your ShipWorks account does not support using RR Donnelley as a consolidator through Stamps.")]
         StampsRrDonnelleyConsolidator,
+
+        /// <summary>
+        /// Advanced shipping features restriction
+        /// </summary>
+        [Description("Your ShipWorks account does not support using advanced shipping features")]
+        AdvancedShipping,
+
+        /// <summary>
+        /// CRM features restriction
+        /// </summary>
+        [Description("Your ShipWorks account does not support using CRM features")]
+        Crm,
+
+        /// <summary>
+        /// Custom data source restriction
+        /// </summary>
+        [Description("Your ShipWorks account does not support using custom data sources")]
+        CustomDataSources,
+
+        /// <summary>
+        /// Template customization restriction
+        /// </summary>
+        [Description("Your ShipWorks account does not support template customization")]
+        TemplateCustomization,
     }
 }
