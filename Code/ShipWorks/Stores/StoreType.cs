@@ -565,6 +565,10 @@ namespace ShipWorks.Stores
             return new List<ShipmentFieldIndex>();
         }
 
+        /// <summary>
+        /// Added ShippingAddressEditStateType enum to replace the IsShipmentAddressEditable code.  We needed to display a message in the shipping panel as to why an address is not editable.
+        /// Added EnumDescriptionConverter to display the description of an enum in XAML.
+        /// </summary>
         public virtual ShippingAddressEditStateType ShippingAddressEditableState(ShipmentEntity shipment)
         {
             if (shipment == null)

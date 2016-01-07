@@ -190,23 +190,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         }
 
         [Fact]
-        public void UsingInsurance_ReturnsShipmentValue()
-        {
-            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
-        }
-
-        [Fact]
-        public void UsingInsurance_IsUpdated()
-        {
-            ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
-
-            testObject.UsingInsurance = !testObject.UsingInsurance;
-
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
-        }
-
-        [Fact]
         public void ServiceType_ReturnsShipmentValue()
         {
             ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);

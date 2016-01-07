@@ -79,14 +79,21 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType) =>
-            ShippingManager.GetRates(shipment, shipmentType);
+        public RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
+        {
+            if (!shipment.Processed)
+            {
+                ShippingManager.GetRates(shipment, shipmentType);
+            }
+
+            return new RateGroup(Enumerable.Empty<RateResult>());
+        }
 
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
         public Task<RateGroup> GetRatesAsync(ShipmentEntity shipment, ShipmentType shipmentType, CancellationToken token) =>
-            TaskEx.Run(() => ShippingManager.GetRates(shipment, shipmentType), token);
+            TaskEx.Run(() => GetRates(shipment, shipmentType), token);
 
         /// <summary>
         /// Removes the specified shipment from the cache

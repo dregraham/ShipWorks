@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             this.customsManager = customsManager;
 
-            insuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
+            InsuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private void DeleteCustomsItem()
         {
             customsItems.Remove(SelectedCustomsItem);
-            PropertyChanged(this, new PropertyChangedEventArgs(nameof(CustomsItems)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomsItems)));
             SelectedCustomsItem = CustomsItems.FirstOrDefault();
 
             ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);

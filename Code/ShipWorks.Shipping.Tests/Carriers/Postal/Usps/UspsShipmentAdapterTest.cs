@@ -198,23 +198,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void UsingInsurance_ReturnsShipmentValue()
-        {
-            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
-        }
-
-        [Fact]
-        public void UsingInsurance_IsUpdated()
-        {
-            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);
-
-            testObject.UsingInsurance = !testObject.UsingInsurance;
-
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
-        }
-
-        [Fact]
         public void ServiceType_ReturnsShipmentValue()
         {
             ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeFactory.Object, customsManager.Object);

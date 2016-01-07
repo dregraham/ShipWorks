@@ -114,6 +114,7 @@
     <Compile Include="AutoMockExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestMessenger.cs" />
+    <Compile Include="TestPackageAdapter.cs" />
     <Compile Include="TestSchedulerProvider.cs" />
     <Compile Include="TestStoreType.cs" />
   </ItemGroup>

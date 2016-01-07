@@ -64,6 +64,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Autofac.Integration.Mef.dll</HintPath>
     </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37223, Culture=neutral, PublicKeyToken=0e453835af4ee6ce" />
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\log4net.dll</HintPath>
@@ -157,6 +158,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentChangedPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentDeletedPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipelineTest.cs" />
+    <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentViewModelTest.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentViewModelTest.cs" />
     <Compile Include="ShippingPanel\ShippingPanelAutoMockExtensions.cs" />
     <Compile Include="ShippingPanel\ShippingPanelViewModelTest.cs" />

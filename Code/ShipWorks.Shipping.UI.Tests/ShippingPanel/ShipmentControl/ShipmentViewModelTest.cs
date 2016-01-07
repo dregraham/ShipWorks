@@ -5,7 +5,9 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing.Rating;
@@ -275,6 +277,357 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
+        public void DimensionsProfiles_MatchDimensionsProfilesManagerValues_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+                CreateDimensionsProfilesManager(mock);
+                
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+                
+                testObject.Load(shipmentAdapter.Object);
+
+                IDimensionsManager dimsMgr = mock.Create<IDimensionsManager>();
+
+                Assert.Equal(dimsMgr.Profiles(It.IsAny<IPackageAdapter>()).Count(), testObject.DimensionsProfiles.Count());
+
+                foreach (DimensionsProfileEntity expectedDim in dimsMgr.Profiles(It.IsAny<IPackageAdapter>()))
+                {
+                    DimensionsProfileEntity actualDim = testObject.DimensionsProfiles.First(d => d.DimensionsProfileID == expectedDim.DimensionsProfileID);
+
+                    Assert.NotNull(actualDim);
+                    Assert.Equal(expectedDim.Height, actualDim.Height);
+                    Assert.Equal(expectedDim.Width, actualDim.Width);
+                    Assert.Equal(expectedDim.Length, actualDim.Length);
+                    Assert.Equal(expectedDim.Weight, actualDim.Weight);
+                }
+            }
+        }
+
+        [Fact]
+        public void UpdateSelectedDimensionsProfile_MatchDimensionsProfilesManagerValues_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+                CreateDimensionsProfilesManager(mock);
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.Load(shipmentAdapter.Object);
+
+                IDimensionsManager dimsMgr = mock.Create<IDimensionsManager>();
+
+                Assert.Equal(dimsMgr.Profiles(It.IsAny<IPackageAdapter>()).Count(), testObject.DimensionsProfiles.Count());
+
+                foreach (DimensionsProfileEntity expectedDim in dimsMgr.Profiles(It.IsAny<IPackageAdapter>()))
+                {
+                    DimensionsProfileEntity actualDim = testObject.DimensionsProfiles.First(d => d.DimensionsProfileID == expectedDim.DimensionsProfileID);
+
+                    Assert.NotNull(actualDim);
+                    Assert.Equal(expectedDim.Height, actualDim.Height);
+                    Assert.Equal(expectedDim.Width, actualDim.Width);
+                    Assert.Equal(expectedDim.Length, actualDim.Length);
+                    Assert.Equal(expectedDim.Weight, actualDim.Weight);
+                }
+            }
+        }
+
+        [Fact]
+        public void UpdateSelectedDimensionsProfile_ReturnsDefaultProfile_WhenSelectedDimensionsProfileIDIsNotInDimsManager_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+                CreateDimensionsProfilesManager(mock);
+
+                IDimensionsManager dimsMgr = mock.Create<IDimensionsManager>();
+                DimensionsProfileEntity dimsProfileEntity = dimsMgr.Profiles(It.IsAny<IPackageAdapter>()).First(dp => dp.DimensionsProfileID == 0);
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.Load(shipmentAdapter.Object);
+                IPackageAdapter nonExistentPackageAdapter = new TestPackageAdapter() {DimsProfileID = 999};
+                testObject.SelectedPackageAdapter = nonExistentPackageAdapter;
+
+                Assert.Equal(0, testObject.SelectedPackageAdapter.DimsProfileID);
+            }
+        }
+
+        [Fact]
+        public void ManageDimensionsProfiles_UpdatesDimensionsProfiles_WhenDimensionsProfilesChangedMessageReceived_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger testMessenger = new TestMessenger();
+                mock.Provide<IMessenger>(testMessenger);
+
+                CreateDefaultShipmentAdapter(mock, 2);
+                CreateDimensionsProfilesManager(mock);
+
+                IDimensionsManager dimsMgr = mock.Create<IDimensionsManager>();
+                DimensionsProfileEntity dimsProfileEntity = new DimensionsProfileEntity(10);
+                List<DimensionsProfileEntity> profiles = dimsMgr.Profiles(It.IsAny<IPackageAdapter>()).ToList();
+
+                Mock<IDimensionsManager> mockedDimsMgr = mock.Mock<IDimensionsManager>();
+                mockedDimsMgr.Setup(d => d.Profiles(It.IsAny<IPackageAdapter>())).Returns(profiles);
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+                testObject.Load(shipmentAdapter.Object);
+                profiles.Add(dimsProfileEntity);
+                mockedDimsMgr.Setup(d => d.Profiles(It.IsAny<IPackageAdapter>())).Returns(profiles);
+
+                DimensionsProfilesChangedMessage message = new DimensionsProfilesChangedMessage(this);
+                testMessenger.Send(message);
+                
+                Assert.Equal(profiles.Count, testObject.DimensionsProfiles.Count);
+
+                testMessenger.Dispose();
+            }
+        }
+
+        [Fact]
+        public void ManageDimensionsProfiles_UpdatesDimensionsProfiles_WhenSelectedDimsProfileIsNotDefaultAndDimensionsProfilesChangedMessageReceived_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger testMessenger = new TestMessenger();
+                mock.Provide<IMessenger>(testMessenger);
+
+                CreateDefaultShipmentAdapter(mock, 2);
+                CreateDimensionsProfilesManager(mock);
+
+                IDimensionsManager dimsMgr = mock.Create<IDimensionsManager>();
+                DimensionsProfileEntity dimsProfileEntity = new DimensionsProfileEntity(10);
+                List<DimensionsProfileEntity> profiles = dimsMgr.Profiles(It.IsAny<IPackageAdapter>()).ToList();
+
+                Mock<IDimensionsManager> mockedDimsMgr = mock.Mock<IDimensionsManager>();
+                mockedDimsMgr.Setup(d => d.Profiles(It.IsAny<IPackageAdapter>())).Returns(profiles);
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+                testObject.Load(shipmentAdapter.Object);
+                testObject.SelectedDimensionsProfile = new DimensionsProfileEntity(999);
+
+                profiles.Add(dimsProfileEntity);
+                mockedDimsMgr.Setup(d => d.Profiles(It.IsAny<IPackageAdapter>())).Returns(profiles);
+
+                DimensionsProfilesChangedMessage message = new DimensionsProfilesChangedMessage(this);
+                testMessenger.Send(message);
+
+                Assert.Equal(profiles.Count, testObject.DimensionsProfiles.Count);
+
+                testMessenger.Dispose();
+            }
+        }
+
+        [Fact]
+        public void SelectedDimensionsProfile_UpdatesSelectedPackageAdapter_WhenProfileExists_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+                CreateDimensionsProfilesManager(mock);
+
+                IDimensionsManager dimsMgr = mock.Create<IDimensionsManager>();
+                DimensionsProfileEntity dimsProfileEntity = dimsMgr.Profiles(It.IsAny<IPackageAdapter>()).Skip(1).First();
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.Load(shipmentAdapter.Object);
+                testObject.SelectedDimensionsProfile = dimsProfileEntity;
+
+                Assert.Equal(dimsProfileEntity.DimensionsProfileID, testObject.SelectedPackageAdapter.DimsProfileID);
+                Assert.Equal(dimsProfileEntity.Length, testObject.SelectedPackageAdapter.DimsLength);
+                Assert.Equal(dimsProfileEntity.Width, testObject.SelectedPackageAdapter.DimsWidth);
+                Assert.Equal(dimsProfileEntity.Height, testObject.SelectedPackageAdapter.DimsHeight);
+            }
+        }
+
+        [Fact]
+        public void SupportsDimensions_IsFalse_WhenShipmentTypeIsOther_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+                CreateDimensionsProfilesManager(mock);
+
+                IDimensionsManager dimsMgr = mock.Create<IDimensionsManager>();
+                DimensionsProfileEntity dimsProfileEntity = dimsMgr.Profiles(It.IsAny<IPackageAdapter>()).Skip(1).First();
+
+                shipmentAdapter.Setup(sa => sa.ShipmentTypeCode).Returns(ShipmentTypeCode.Other);
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.Load(shipmentAdapter.Object);
+
+                Assert.False(testObject.SupportsDimensions);
+            }
+        }
+
+        [Fact]
+        public void SupportsDimensions_IsTrue_WhenShipmentTypeIsNotOther_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+                CreateDimensionsProfilesManager(mock);
+
+                IDimensionsManager dimsMgr = mock.Create<IDimensionsManager>();
+                DimensionsProfileEntity dimsProfileEntity = dimsMgr.Profiles(It.IsAny<IPackageAdapter>()).Skip(1).First();
+
+                shipmentAdapter.Setup(sa => sa.ShipmentTypeCode).Returns(ShipmentTypeCode.UpsOnLineTools);
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.Load(shipmentAdapter.Object);
+
+                Assert.True(testObject.SupportsDimensions);
+            }
+        }
+
+        [Fact]
+        public void SelectedCustomsItem_UpdatesWithNewValue_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+
+                ShipmentCustomsItemEntity shipmentCustomsItemEntity = new ShipmentCustomsItemEntity()
+                {
+                    ShipmentCustomsItemID = 3,
+                    ShipmentID = shipmentAdapter.Object.Shipment.ShipmentID,
+                    Weight = 6.6
+                };
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+                
+                testObject.Load(shipmentAdapter.Object);
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
+                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+
+                Assert.Equal(shipmentCustomsItemEntity.ShipmentCustomsItemID, testObject.SelectedCustomsItem.ShipmentCustomsItemID);
+                Assert.Equal(shipmentCustomsItemEntity.ShipmentID, testObject.SelectedCustomsItem.ShipmentID);
+                Assert.Equal(shipmentCustomsItemEntity.Weight, testObject.SelectedCustomsItem.Weight);
+            }
+        }
+
+        [Fact]
+        public void OnSelectedCustomsItemPropertyChanged_UpdatesTotalCustomsValue_WhenUnitValueAndOrQuantityChanges_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+                shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
+
+                ShipmentCustomsItemEntity shipmentCustomsItemEntity = new ShipmentCustomsItemEntity()
+                {
+                    ShipmentCustomsItemID = 3,
+                    ShipmentID = shipmentAdapter.Object.Shipment.ShipmentID,
+                    Weight = 6.6,
+                    UnitValue = 1.5M,
+                    Quantity = 3
+                };
+
+                shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(
+                    new EntityCollection<ShipmentCustomsItemEntity>()
+                    {
+                        shipmentCustomsItemEntity
+                    });
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.Load(shipmentAdapter.Object);
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
+                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+
+                decimal originalTotalValue = testObject.TotalCustomsValue;
+                testObject.SelectedCustomsItem.UnitValue = 100;
+                testObject.SelectedCustomsItem.Quantity = 2.5;
+
+                decimal expectedValue = testObject.SelectedCustomsItem.UnitValue * (decimal)testObject.SelectedCustomsItem.Quantity;
+
+                Assert.Equal(expectedValue, testObject.TotalCustomsValue);
+            }
+        }
+
+        [Fact]
+        public void OnSelectedCustomsItemPropertyChanged_UpdatesShipmentContentWeight_WhenWeightAndOrQuantityChanges_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+                shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
+
+                ShipmentCustomsItemEntity shipmentCustomsItemEntity = new ShipmentCustomsItemEntity()
+                {
+                    ShipmentCustomsItemID = 3,
+                    ShipmentID = shipmentAdapter.Object.Shipment.ShipmentID,
+                    Weight = 6.6,
+                    UnitValue = 1.5M,
+                    Quantity = 3
+                };
+
+                shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(
+                    new EntityCollection<ShipmentCustomsItemEntity>()
+                    {
+                        shipmentCustomsItemEntity
+                    });
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.Load(shipmentAdapter.Object);
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
+                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+
+                testObject.SelectedCustomsItem.Weight = 100;
+                testObject.SelectedCustomsItem.Quantity = 2.5;
+
+                double expectedValue = testObject.SelectedCustomsItem.Weight * testObject.SelectedCustomsItem.Quantity;
+
+                Assert.Equal(expectedValue, testObject.ShipmentContentWeight);
+            }
+        }
+
+        [Fact]
+        public void RedistributeContentWeight_UpdatesPackageAdapterWeights_WhenWeightAndOrQuantityChanges_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+                shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
+
+                ShipmentCustomsItemEntity shipmentCustomsItemEntity = new ShipmentCustomsItemEntity()
+                {
+                    ShipmentCustomsItemID = 3,
+                    ShipmentID = shipmentAdapter.Object.Shipment.ShipmentID,
+                    Weight = 6.6,
+                    UnitValue = 1.5M,
+                    Quantity = 3
+                };
+
+                shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(
+                    new EntityCollection<ShipmentCustomsItemEntity>()
+                    {
+                        shipmentCustomsItemEntity
+                    });
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.Load(shipmentAdapter.Object);
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
+                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+
+                testObject.SelectedCustomsItem.Weight = 100;
+                testObject.SelectedCustomsItem.Quantity = 2.53;
+
+                double expectedValue = testObject.SelectedCustomsItem.Weight * testObject.SelectedCustomsItem.Quantity;
+
+                double actualValue = testObject.PackageAdapters.Sum(pa => pa.Weight);
+
+                Assert.Equal(expectedValue, actualValue);
+            }
+        }
+
+        [Fact]
         public void RefreshPackageTypes_UpdatesPackageTypes_Test()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
@@ -308,7 +661,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 testObject.ShipDate = testObject.ShipDate.AddDays(1);
                 testObject.ServiceType = testObject.ServiceType++;
 
-                
                 testObject.SelectedDimensionsProfile = dimensionsManager.Object.Profiles(testObject.PackageAdapters.First()).FirstOrDefault();
 
                 testObject.Save();
@@ -317,7 +669,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 shipmentAdapter.VerifySet(sa => sa.ServiceType = testObject.ServiceType);
             }
         }
-
 
         [Fact]
         public void SelectedRateChangedMessage_DelegatesTo_HandleSelectedRateChangedMessageAndUpdatesServiceType_Test()
@@ -350,6 +701,142 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             }
         }
 
+        [Fact]
+        public void Save_UpdatesShipmentAdapterCustomsItems_WithViewModelValue_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+
+                shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
+                shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.CustomsAllowed = true;
+                testObject.Load(shipmentAdapter.Object);
+
+                testObject.ShipDate = testObject.ShipDate.AddDays(1);
+                testObject.ServiceType = testObject.ServiceType++;
+                testObject.SelectedDimensionsProfile = dimensionsManager.Object.Profiles(testObject.PackageAdapters.First()).FirstOrDefault();
+
+                testObject.Save();
+
+                shipmentAdapter.VerifySet(sa => sa.ShipDate = testObject.ShipDate, Times.Once());
+                shipmentAdapter.VerifySet(sa => sa.ServiceType = testObject.ServiceType);
+            }
+        }
+
+        [Fact]
+        public void DeleteCustomsItemCommand_CanNotExecute_WhenSelectedCustomsItemIsNull_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+
+                shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
+                shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.CustomsAllowed = true;
+                testObject.Load(shipmentAdapter.Object);
+                testObject.SelectedCustomsItem = null;
+
+                Assert.False(testObject.DeleteCustomsItemCommand.CanExecute(mock));
+            }
+        }
+
+        [Fact]
+        public void DeleteCustomsItemCommand_CanNotExecute_WhenCustomsItemsDoesNotContainSelectedCustomsItem_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+
+                shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
+                shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.CustomsAllowed = true;
+                testObject.Load(shipmentAdapter.Object);
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity(999);
+
+                Assert.False(testObject.DeleteCustomsItemCommand.CanExecute(mock));
+            }
+        }
+
+        [Fact]
+        public void AddCustomsItemCommand_CanExecute_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+
+                shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
+                shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.CustomsAllowed = true;
+                testObject.Load(shipmentAdapter.Object);
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity(999);
+
+                Assert.True(testObject.AddCustomsItemCommand.CanExecute(mock));
+            }
+        }
+
+        [Fact]
+        public void AddCustomsItemCommand_AddsCustomsItem_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+
+                shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
+                shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.CustomsAllowed = true;
+                testObject.Load(shipmentAdapter.Object);
+                testObject.AddCustomsItemCommand.Execute(null);
+
+                Assert.Equal(1, testObject.CustomsItems.Count);
+            }
+        }
+
+        [Fact]
+        public void DeleteCustomsItemCommand_DeletesCustomsItem_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock, 2);
+
+                shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
+                shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(
+                    new EntityCollection<ShipmentCustomsItemEntity>()
+                    {
+                        new ShipmentCustomsItemEntity(0),
+                        new ShipmentCustomsItemEntity(1),
+                        new ShipmentCustomsItemEntity(2)
+                    });
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+                testObject.PropertyChanged += OnPropertyChanged;
+
+                testObject.CustomsAllowed = true;
+                testObject.Load(shipmentAdapter.Object);
+
+                testObject.SelectedCustomsItem = testObject.CustomsItems.Skip(1).First();
+
+                testObject.DeleteCustomsItemCommand.Execute(null);
+
+                Assert.Equal(2, testObject.CustomsItems.Count);
+            }
+        }
+
         private Dictionary<int, string> CreateDefaultShipmentAdapter(AutoMock mock, int numberOfPackages)
         {
             shipmentServicesBuilder = mock.Mock<IShipmentServicesBuilder>();
@@ -364,45 +851,88 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             shipmentPackageTypesBuilderFactory = mock.Mock<IShipmentPackageTypesBuilderFactory>();
             shipmentPackageTypesBuilderFactory.Setup(sbf => sbf.Get(It.IsAny<ShipmentTypeCode>())).Returns(shipmentPackageTypesBuilder.Object);
             
-            CreatePackageAdapters(mock, numberOfPackages);
+            CreatePackageAdapters(numberOfPackages);
 
             shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
             shipmentAdapter.Setup(sa => sa.ShipmentTypeCode).Returns(ShipmentTypeCode.UpsOnLineTools);
             shipmentAdapter.Setup(sa => sa.ServiceType).Returns((int) UpsServiceType.UpsGround);
             shipmentAdapter.Setup(sa => sa.ShipDate).Returns(new DateTime(2015, 1, 1, 1, 1, 1));
             shipmentAdapter.Setup(sa => sa.TotalWeight).Returns(0.5);
-            shipmentAdapter.Setup(sa => sa.UsingInsurance).Returns(false);
+            //shipmentAdapter.Setup(sa => sa.UsingInsurance).Returns(false);
             shipmentAdapter.Setup(sa => sa.SupportsPackageTypes).Returns(true);
             shipmentAdapter.Setup(sa => sa.SupportsAccounts).Returns(true);
             shipmentAdapter.Setup(sa => sa.SupportsMultiplePackages).Returns(true);
             shipmentAdapter.Setup(sa => sa.GetPackageAdapters()).Returns(packageAdapters);
             shipmentAdapter.Setup(sa => sa.GetPackageAdapters(It.IsAny<int>())).Returns((int x) =>
                 {
-                    CreatePackageAdapters(mock, x);
+                    CreatePackageAdapters(x);
                     return packageAdapters;
                 });
+
+            shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(false);
+            shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
 
             return expectedServices;
         }
 
-        private void CreatePackageAdapters(AutoMock mock, int numberOfPackages)
+        private void CreatePackageAdapters(int numberOfPackages)
         {
             packageAdapters.Clear();
 
             for (int i = 1; i <= numberOfPackages; i++)
             {
-                Mock<IPackageAdapter> packageAdapter = mock.Mock<IPackageAdapter>();
-                packageAdapter.Setup(pa => pa.PackagingType).Returns(new PackageTypeBinding() {PackageTypeID = (int) UpsPackagingType.Custom, Name = "Your Pakaging"});
-                packageAdapter.Setup(pa => pa.AdditionalWeight).Returns(0.1*i);
-                packageAdapter.Setup(pa => pa.ApplyAdditionalWeight).Returns(false);
-                packageAdapter.Setup(pa => pa.Index).Returns(1*i);
-                packageAdapter.Setup(pa => pa.DimsHeight).Returns(2*i);
-                packageAdapter.Setup(pa => pa.DimsLength).Returns(2*i);
-                packageAdapter.Setup(pa => pa.DimsWidth).Returns(1*i);
-                packageAdapter.Setup(pa => pa.Weight).Returns(0.5*i);
+                TestPackageAdapter packageAdapter = new TestPackageAdapter();
+                packageAdapter.PackagingType = new PackageTypeBinding() {PackageTypeID = (int) UpsPackagingType.Custom, Name = "Your Pakaging"};
+                packageAdapter.AdditionalWeight = 0.1 * i;
+                packageAdapter.ApplyAdditionalWeight = false;
+                packageAdapter.Index = 1 * i;
+                packageAdapter.DimsHeight = 2 * i;
+                packageAdapter.DimsLength = 2 * i;
+                packageAdapter.DimsWidth = 1 * i;
+                packageAdapter.Weight = 0.5 * i;
 
-                packageAdapters.Add(packageAdapter.Object);
+                packageAdapters.Add(packageAdapter);
             }
         }
+
+        private void CreateDimensionsProfilesManager(AutoMock mock)
+        {
+            List<DimensionsProfileEntity> dims = new List<DimensionsProfileEntity>()
+            {
+                new DimensionsProfileEntity(0)
+                {
+                    Weight = 1.5,
+                    Width = 1,
+                    Length = 4,
+                    Height = 6,
+                    Name = "Select a profile"
+                },
+                new DimensionsProfileEntity(1)
+                {
+                    Weight = 1.5,
+                    Width = 1,
+                    Length = 4,
+                    Height = 6,
+                    Name = "Dims profile 1"
+                },
+                new DimensionsProfileEntity(2)
+                {
+                    Weight = 2.5,
+                    Width = 2.2,
+                    Length = 4.2,
+                    Height = 6.2,
+                    Name = "Dims profile 2"
+                }
+            };
+
+            Mock<IDimensionsManager> dimsMgr = mock.Mock<IDimensionsManager>();
+            dimsMgr.Setup(d => d.Profiles(It.IsAny<IPackageAdapter>())).Returns(dims);
+        }
+
+        private void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            // Only used for testing.
+        }
+
     }
 }

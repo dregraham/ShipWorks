@@ -217,7 +217,11 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public IEnumerable<IPackageAdapter> GetPackageAdapters()
         {
-            UpdateDynamicData();
+            if (!shipment.Processed)
+            {
+                UpdateDynamicData();
+            }
+
             return shipmentType.GetPackageAdapters(shipment);
         }
 

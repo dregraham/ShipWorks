@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             this.shippingViewModelFactory = shippingViewModelFactory;
             this.customsManager = customsManager;
 
-            insuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
+            InsuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
@@ -277,7 +277,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private void DeleteCustomsItem()
         {
             customsItems.Remove(SelectedCustomsItem);
-            PropertyChanged(this, new PropertyChangedEventArgs(nameof(CustomsItems)));
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CustomsItems)));
+
             SelectedCustomsItem = CustomsItems.FirstOrDefault();
 
             double originalShipmentcontentWeight = ShipmentContentWeight;
@@ -309,9 +311,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
         /// <summary>
         /// Redistribute the ContentWeight from the shipment to each package in the shipment.  This only does something
-        /// if the ContentWeight is different from the total Content.  Returns true if weight had to be redistributed.
+        /// if the ContentWeight is different from the total Content.  
         /// </summary>
-        public bool RedistributeContentWeight(double originalShipmentcontentWeight)
+        public void RedistributeContentWeight(double originalShipmentcontentWeight)
         {
             // If the content weight changed outside of us, redistribute what the new weight among the packages
             if (Math.Abs(originalShipmentcontentWeight - ShipmentContentWeight) > 0.001)
@@ -320,11 +322,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 {
                     packageAdapter.Weight = ShipmentContentWeight/PackageAdapters.Count();
                 }
-
-                return true;
             }
-
-            return false;
         }
         #endregion Customs
 

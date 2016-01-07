@@ -23,7 +23,6 @@ namespace ShipWorks.Shipping.Loading
         private readonly IValidator<ShipmentEntity> addressValidator;
         private readonly IStoreManager storeManager;
         private readonly IStoreTypeManager storeTypeManager;
-        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IOrderManager orderManager;
 
         /// <summary>
@@ -31,7 +30,7 @@ namespace ShipWorks.Shipping.Loading
         /// </summary>
         public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper, 
                               IValidator<ShipmentEntity> addressValidator, IStoreManager storeManager, IStoreTypeManager storeTypeManager,
-                              ICarrierShipmentAdapterFactory shipmentAdapterFactory, IOrderManager orderManager)
+                              IOrderManager orderManager)
         {
             this.shippingConfiguration = shippingConfiguration;
             this.shippingManager = shippingManager;
@@ -39,7 +38,6 @@ namespace ShipWorks.Shipping.Loading
             this.addressValidator = addressValidator;
             this.storeManager = storeManager;
             this.storeTypeManager = storeTypeManager;
-            this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.orderManager = orderManager;
         }
 
