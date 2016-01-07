@@ -306,6 +306,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Loads the UI for Return Shipments
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         private void LoadReturnsUI()
         {
             ReturnsControlBase newReturnsControl = null;

@@ -1412,6 +1412,7 @@ namespace ShipWorks
         /// Update the UI that's based on user initiated actions
         /// </summary>
         [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         private void UpdateCustomButtonsActionsUI()
         {
             string ribbonChunkName = "Custom Actions";
@@ -3102,6 +3103,7 @@ namespace ShipWorks
         /// <summary>
         /// Initialize the panels for the current user
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         private void InitializePanels()
         {
             // First go through each panel and wrap it in a Panel control that will allow us to show messages to the user like "No orders are selected.";
