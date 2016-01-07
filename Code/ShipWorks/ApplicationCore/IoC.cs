@@ -92,11 +92,14 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<CustomerLicenseWriter>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<CustomerLicenseReader>()
+                .AsImplementedInterfaces();
+
             builder.Register(c => Program.MainForm)
                 .As<Control>()
                 .As<IWin32Window>()
                 .ExternallyOwned();
-            
+
             current = builder.Build();
         }
     }
