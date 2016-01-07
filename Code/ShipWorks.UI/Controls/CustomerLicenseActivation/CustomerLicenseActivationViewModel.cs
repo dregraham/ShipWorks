@@ -16,7 +16,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
     /// </summary>
     public class CustomerLicenseActivationViewModel : ICustomerLicenseActivationViewModel
     {
-        private readonly ICustomerLicense customerLicense;
+        private readonly ILicense customerLicense;
         private readonly IUserService userManager;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -26,7 +26,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(ICustomerLicense customerLicense, IUserService userManager)
+        public CustomerLicenseActivationViewModel(ILicense customerLicense, IUserService userManager)
         {
             this.customerLicense = customerLicense;
             this.userManager = userManager;
@@ -83,10 +83,10 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Saves the user to the database
         /// </summary>
-        public GenericResult<ICustomerLicense> Save()
+        public GenericResult<ILicense> Save()
         {
             // Create an empty result
-            GenericResult<ICustomerLicense> result = ValidateCredentials();
+            GenericResult<ILicense> result = ValidateCredentials();
             
             // if the username and password passed our data validation 
             // call activate and create the user
@@ -111,9 +111,9 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Validates that the credentials
         /// </summary>
-        private GenericResult<ICustomerLicense> ValidateCredentials()
+        private GenericResult<ILicense> ValidateCredentials()
         {
-            GenericResult<ICustomerLicense> result = new GenericResult<ICustomerLicense>(customerLicense)
+            GenericResult<ILicense> result = new GenericResult<ILicense>(customerLicense)
             {
                 Success = true,
                 Message = string.Empty

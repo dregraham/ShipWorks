@@ -276,7 +276,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnStepNextCreateUsername(object sender, WizardStepEventArgs e)
         {
-            GenericResult<ICustomerLicense> result;
+            GenericResult<ILicense> result;
 
             using (new SqlSessionScope(sqlSession))
             {

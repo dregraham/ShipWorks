@@ -2199,7 +2199,7 @@ namespace ShipWorks.Data.Administration
             WizardPage nextPage = e.NextPage;
             e.NextPage = CurrentPage;
 
-            GenericResult<ICustomerLicense> result;
+            GenericResult<ILicense> result;
 
             using (new SqlSessionScope(sqlSession))
             {

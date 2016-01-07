@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
 
                 testObject.Password = securePassword;
 
-                GenericResult<ICustomerLicense> result = testObject.Save();
+                GenericResult<ILicense> result = testObject.Save();
                 
                 Assert.Equal(isValid, result.Success);
                 Assert.Equal(isValid ? string.Empty : "Please enter a valid username.", result.Message);
@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
 
                 testObject.Password = securePassword;
 
-                GenericResult<ICustomerLicense> result = testObject.Save();
+                GenericResult<ILicense> result = testObject.Save();
 
                 Assert.Equal(isValid, result.Success);
                 Assert.Equal(isValid ? string.Empty : "Please enter a password.", result.Message);
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 string username = "support@shipworks.com";
                 string password = "TestPassword";
 
-                var testObject = mock.Mock<ICustomerLicense>();
+                var testObject = mock.Mock<ILicense>();
 
                 CustomerLicenseActivationViewModel viewModel = mock.Create<CustomerLicenseActivationViewModel>();
                 SecureString securePassword = new SecureString();
@@ -130,7 +130,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 viewModel.Email = username;
                 viewModel.Password = securePassword;
 
-                GenericResult<ICustomerLicense> testObject = viewModel.Save();
+                GenericResult<ILicense> testObject = viewModel.Save();
                 
                 Assert.Equal(false, testObject.Success);
                 Assert.Equal("Random Exception", testObject.Message);

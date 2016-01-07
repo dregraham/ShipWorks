@@ -11,7 +11,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Writes the customer license to the database
         /// </summary>
-        public void Write(ICustomerLicense customerLicense)
+        public void Write(ILicense customerLicense)
         {
             // Fetch the current configuration entity
             ConfigurationEntity config = ConfigurationData.Fetch();

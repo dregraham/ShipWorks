@@ -37,7 +37,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Called when clicking next in the setup wizard
         /// </summary>
-        public GenericResult<ICustomerLicense> Save()
+        public GenericResult<ILicense> Save()
         {
             return ViewModel.Save();
         }
