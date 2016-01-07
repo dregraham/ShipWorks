@@ -510,7 +510,7 @@
     <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOrderItemEntityTest.cs" />
     <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorStoreEntityTest.cs" />
     <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOrderEntityTest.cs" />
-    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorDownloaderTest.cs" />
+    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorHelperTest.cs" />
     <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOnlineUpdaterTest.cs" />
     <Compile Include="Stores\eBay\EbayOnlineUpdaterTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />
