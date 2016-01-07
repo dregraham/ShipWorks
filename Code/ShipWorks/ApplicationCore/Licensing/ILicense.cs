@@ -32,6 +32,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Is the license Disabled
         /// </summary>
-        bool IsDisabled { get; set; }
+        bool IsDisabled { get; }
     }
 }
