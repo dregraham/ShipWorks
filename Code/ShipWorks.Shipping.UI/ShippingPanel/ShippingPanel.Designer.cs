@@ -15,7 +15,7 @@
         {
             if (disposing)
             {
-                subscription.Dispose();
+                //subscription.Dispose();
 
                 if (components != null)
                 {

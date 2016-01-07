@@ -12,8 +12,9 @@ namespace ShipWorks.Tests.Shared
 {
     public class TestPackageAdapter : IPackageAdapter
     {
-        [SuppressMessage("CSharp", "CS0067: ",Justification = "For now, we're fine with fire and forget here")]
+        [SuppressMessage("CSharp", "CS0067: ", Justification = "For now, we're fine with fire and forget here")]
         public event PropertyChangedEventHandler PropertyChanged;
+
         public int Index { get; set; }
         public double Weight { get; set; }
         public double AdditionalWeight { get; set; }
@@ -24,8 +25,14 @@ namespace ShipWorks.Tests.Shared
         public long DimsProfileID { get; set; }
         public PackageTypeBinding PackagingType { get; set; }
         public IInsuranceChoice InsuranceChoice { get; set; }
+
         public string HashCode()
         {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(HashCode)));
+            }
+
             return this.HashCode();
         }
     }

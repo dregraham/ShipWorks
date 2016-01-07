@@ -26,7 +26,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         ShippingPanelControl shippingPanelControl;
         readonly ShippingPanelViewModel viewModel;
         readonly IMessenger messenger;
-        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -56,8 +55,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             shipmentPanelelementHost.Child = shippingPanelControl;
 
             shippingPanelControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
-
-            subscription = messenger.OfType<CreateLabelMessage>().Subscribe(HandleCreateLabelMessage);
         }
 
         /// <summary>
@@ -107,16 +104,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             // There is no store dependent ui
         }
-
-        [SuppressMessage("CSharp", "CS1998: Async method lacks 'await' operators and will run synchronously",
-            Justification = "For now, we're fine with fire and forget here")]
-        [SuppressMessage("SonarLint", "S125: Sections of code should not be \"commented out\"",
-            Justification = "This is commented out until we implement processing")]
-        private async void HandleCreateLabelMessage(CreateLabelMessage message)
-        {
-            //            await viewModel.ProcessShipment();
-        }
-
+        
         /// <summary>
         /// Saves the shipment to the database when the shipping panel loses focus.
         /// </summary>

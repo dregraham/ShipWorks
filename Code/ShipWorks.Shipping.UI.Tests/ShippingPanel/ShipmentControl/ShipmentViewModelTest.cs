@@ -872,6 +872,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             for (int i = 1; i <= numberOfPackages; i++)
             {
                 TestPackageAdapter packageAdapter = new TestPackageAdapter();
+                packageAdapter.PropertyChanged += OnPropertyChanged;
                 packageAdapter.PackagingType = new PackageTypeBinding() {PackageTypeID = (int) UpsPackagingType.Custom, Name = "Your Pakaging"};
                 packageAdapter.AdditionalWeight = 0.1 * i;
                 packageAdapter.ApplyAdditionalWeight = false;
