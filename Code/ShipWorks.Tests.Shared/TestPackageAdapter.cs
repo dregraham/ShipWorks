@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace ShipWorks.Tests.Shared
 {
     public class TestPackageAdapter : IPackageAdapter
     {
+        [SuppressMessage("CSharp", "CS0067: ",Justification = "For now, we're fine with fire and forget here")]
         public event PropertyChangedEventHandler PropertyChanged;
         public int Index { get; set; }
         public double Weight { get; set; }

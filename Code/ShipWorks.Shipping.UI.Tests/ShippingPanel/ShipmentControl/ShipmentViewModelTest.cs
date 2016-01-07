@@ -342,8 +342,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 CreateDefaultShipmentAdapter(mock, 2);
                 CreateDimensionsProfilesManager(mock);
 
-                IDimensionsManager dimsMgr = mock.Create<IDimensionsManager>();
-                DimensionsProfileEntity dimsProfileEntity = dimsMgr.Profiles(It.IsAny<IPackageAdapter>()).First(dp => dp.DimensionsProfileID == 0);
                 ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
 
                 testObject.Load(shipmentAdapter.Object);
@@ -450,9 +448,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 CreateDefaultShipmentAdapter(mock, 2);
                 CreateDimensionsProfilesManager(mock);
 
-                IDimensionsManager dimsMgr = mock.Create<IDimensionsManager>();
-                DimensionsProfileEntity dimsProfileEntity = dimsMgr.Profiles(It.IsAny<IPackageAdapter>()).Skip(1).First();
-
                 shipmentAdapter.Setup(sa => sa.ShipmentTypeCode).Returns(ShipmentTypeCode.Other);
 
                 ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
@@ -470,9 +465,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             {
                 CreateDefaultShipmentAdapter(mock, 2);
                 CreateDimensionsProfilesManager(mock);
-
-                IDimensionsManager dimsMgr = mock.Create<IDimensionsManager>();
-                DimensionsProfileEntity dimsProfileEntity = dimsMgr.Profiles(It.IsAny<IPackageAdapter>()).Skip(1).First();
 
                 shipmentAdapter.Setup(sa => sa.ShipmentTypeCode).Returns(ShipmentTypeCode.UpsOnLineTools);
 
@@ -539,7 +531,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
                 testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
 
-                decimal originalTotalValue = testObject.TotalCustomsValue;
                 testObject.SelectedCustomsItem.UnitValue = 100;
                 testObject.SelectedCustomsItem.Quantity = 2.5;
 
@@ -858,7 +849,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             shipmentAdapter.Setup(sa => sa.ServiceType).Returns((int) UpsServiceType.UpsGround);
             shipmentAdapter.Setup(sa => sa.ShipDate).Returns(new DateTime(2015, 1, 1, 1, 1, 1));
             shipmentAdapter.Setup(sa => sa.TotalWeight).Returns(0.5);
-            //shipmentAdapter.Setup(sa => sa.UsingInsurance).Returns(false);
             shipmentAdapter.Setup(sa => sa.SupportsPackageTypes).Returns(true);
             shipmentAdapter.Setup(sa => sa.SupportsAccounts).Returns(true);
             shipmentAdapter.Setup(sa => sa.SupportsMultiplePackages).Returns(true);

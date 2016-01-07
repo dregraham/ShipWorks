@@ -15,7 +15,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     {
         private DateTime shipDate;
         private double totalWeight;
-        private bool usingInsurance;
         private int serviceType;
         private int numberOfPackages;
         private IEnumerable<IPackageAdapter> packageAdapters;

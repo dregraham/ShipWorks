@@ -204,7 +204,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
                 testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
 
-                decimal originalTotalValue = testObject.TotalCustomsValue;
                 testObject.SelectedCustomsItem.UnitValue = 100;
                 testObject.SelectedCustomsItem.Quantity = 2.5;
 
@@ -433,6 +432,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
         private void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            // Needed for wiring up and getting code coverage
         }
     }
 }
