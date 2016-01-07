@@ -587,6 +587,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Advance the queue to the next step.  If completed, the queue is deleted
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         private void AdvanceQueueToNextStep()
         {
             // Get the step we are on right now
@@ -780,6 +781,7 @@ namespace ShipWorks.Actions
         /// an error determing the input and the instance has been marked and saved as in error.
         /// </summary>
         [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         private static List<long> GetStepInputKeys(ActionQueueStepEntity step, ActionTask actionTask, long? objectID)
         {
             ActionTaskInputSource inputSource = (ActionTaskInputSource) step.InputSource;

@@ -178,6 +178,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create command sets broken up by store type
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         private static Dictionary<StoreTypeCode, OnlineUpdateCommandSet> CreateCommandsByStoreType(IEnumerable<long> selected)
         {
             Dictionary<StoreTypeCode, OnlineUpdateCommandSet> storeTypeCommands = new Dictionary<StoreTypeCode, OnlineUpdateCommandSet>();
@@ -233,6 +234,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Generate the command layout from the list of available commands provided by the store types
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         private List<MenuCommand> BuildCommandLayout(Dictionary<StoreTypeCode, OnlineUpdateCommandSet> storeTypeCommands)
         {
             // This doesnt actually get displayed or returned.  Its just used as a top-level container while building the commands.

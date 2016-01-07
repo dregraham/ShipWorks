@@ -776,6 +776,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Get a list of rates for the FedEx shipment
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             IParcelAccountEntity iParcelAccount = null;

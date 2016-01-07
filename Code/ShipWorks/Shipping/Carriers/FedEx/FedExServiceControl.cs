@@ -154,6 +154,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Load all the shipment details
         /// </summary>
         [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         private void LoadShipmentDetails()
         {
             bool allDomestic = true;
