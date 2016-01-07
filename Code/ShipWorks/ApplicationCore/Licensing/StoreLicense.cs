@@ -15,20 +15,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.store = store;
         }
 
-        public void Activate(string email, string password)
-        {
-            // no need to activate for legacy
-        }
-
-        /// <summary>
-        /// The store license key
-        /// </summary>
-        public string Key
-        {
-            get { return store.License; }
-            set { store.License = value; }
-        }
-
         /// <summary>
         /// Refreshes store license data.
         /// </summary>

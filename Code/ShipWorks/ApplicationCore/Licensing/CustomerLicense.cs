@@ -6,7 +6,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Class to store customer license information
     /// </summary>
-    public class CustomerLicense : ICustomerLicense
+    public class CustomerLicense : ICustomerLicense, ILicense
     {
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
@@ -62,5 +62,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The license key
         /// </summary>
         public string Key { get; set; }
+
+        public void Refresh()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string DisabledReason { get; set; }
+        public bool IsDisabled { get; }
     }
 }
