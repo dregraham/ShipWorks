@@ -89,7 +89,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             GenericResult<ActivationResponse> result = new GenericResult<ActivationResponse>(null);
 
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter {Verb = HttpVerb.Post};
+
+            postRequest.Variables.Add("action","activateShipWorks");
+            postRequest.Variables.Add("email", email);
+            postRequest.Variables.Add("password", password);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ActivateCustomerLicense");
 
