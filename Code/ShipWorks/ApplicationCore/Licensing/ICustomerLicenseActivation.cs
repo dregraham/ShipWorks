@@ -12,7 +12,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Called to save the License Activation
         /// </summary>
         /// <returns></returns>
-        GenericResult<ILicense> Save();
+        GenericResult<ICustomerLicense> Save();
 
         /// <summary>
         /// Event handler when stepping next from the wizard page

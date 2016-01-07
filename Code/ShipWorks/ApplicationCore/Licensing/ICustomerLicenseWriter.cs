@@ -8,6 +8,6 @@
         /// <summary>
         /// Writes the license
         /// </summary>
-        void Write(ILicense customerLicense);
+        void Write(ICustomerLicense customerLicense);
     }
 }

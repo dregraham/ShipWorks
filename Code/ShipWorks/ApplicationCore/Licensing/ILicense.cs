@@ -10,16 +10,6 @@ namespace ShipWorks.ApplicationCore.Licensing
     public interface ILicense
     {
         /// <summary>
-        /// Activate a customer license
-        /// </summary>
-        void Activate(string email, string password);
-
-        /// <summary>
-        /// The customer license key
-        /// </summary>
-        string Key { get; set; }
-
-        /// <summary>
         /// Refresh the License capabilities from Tango
         /// </summary>
         void Refresh();
