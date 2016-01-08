@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="webClient">The web client.</param>
         /// <param name="sqlAdapter">The SQL adapter.</param>
         public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter)
-            : base(store, new LemonStandStoreType(store))
+            : base(store, (LemonStandStoreType) StoreTypeManager.GetType(store))
         {
             client = webClient;
             this.sqlAdapter = sqlAdapter;

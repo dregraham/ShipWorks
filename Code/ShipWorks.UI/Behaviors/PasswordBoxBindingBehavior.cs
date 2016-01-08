@@ -10,6 +10,7 @@ namespace ShipWorks.UI.Behaviors
     /// <summary>
     /// Behavior to allow binding on a Password Box
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class PasswordBoxBindingBehavior : Behavior<PasswordBox>
     {
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register("Password",

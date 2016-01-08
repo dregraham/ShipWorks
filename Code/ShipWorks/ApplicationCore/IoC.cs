@@ -11,6 +11,8 @@ using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
 using ShipWorks.Users;
+using log4net;
+using System;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -100,6 +102,8 @@ namespace ShipWorks.ApplicationCore
                 .As<Control>()
                 .As<IWin32Window>()
                 .ExternallyOwned();
+
+            builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
 
             current = builder.Build();
         }

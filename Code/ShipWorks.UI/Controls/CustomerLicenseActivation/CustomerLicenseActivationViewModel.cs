@@ -122,7 +122,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
             // Validate the username
             if (!EmailUtility.IsValidEmailAddress(Email))
             {
-                result.Message = "Please enter a valid username.";
+                result.Message = "Please enter a valid email for the username.";
                 result.Success = false;
                 return result;
             }

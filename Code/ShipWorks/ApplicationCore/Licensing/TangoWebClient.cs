@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -89,7 +90,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             GenericResult<ActivationResponse> result = new GenericResult<ActivationResponse>(null);
 
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter {Verb = HttpVerb.Post};
+
+            postRequest.Variables.Add("action","activateShipWorks");
+            postRequest.Variables.Add("email", email);
+            postRequest.Variables.Add("password", password);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ActivateCustomerLicense");
 
@@ -104,7 +109,13 @@ namespace ShipWorks.ApplicationCore.Licensing
             if (fault != null)
             {
                 result.Success = false;
-                result.Message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
+
+                string message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
+
+                if(message == "Authentication failed.")
+                {
+                    result.Message = "The username or password entered is not correct.";
+                }
             }
             else
             {
