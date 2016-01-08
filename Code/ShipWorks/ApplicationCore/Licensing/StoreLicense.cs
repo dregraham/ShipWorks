@@ -6,7 +6,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class StoreLicense : ILicense
     {
         private readonly StoreEntity store;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -40,5 +40,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Is the store disabled?
         /// </summary>
         public bool IsDisabled => !string.IsNullOrEmpty(DisabledReason);
+
+        public LicenseCapabilities LicenseCapabilities { get; set; }
     }
 }

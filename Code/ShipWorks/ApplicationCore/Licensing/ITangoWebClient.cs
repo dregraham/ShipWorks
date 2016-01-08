@@ -122,5 +122,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         /// <param name="account">The account.</param>
         void LogUspsAccount(UspsAccountEntity account);
+
+        /// <summary>
+        /// Gets the license capabilities.
+        /// </summary>
+        GenericResult<LicenseCapabilities> GetLicenseCapabilities(ILicense license);
     }
 }

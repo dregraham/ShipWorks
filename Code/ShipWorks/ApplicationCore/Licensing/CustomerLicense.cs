@@ -67,10 +67,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Refresh the License capabilities from Tango
         /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
         public void Refresh()
         {
-            throw new System.NotImplementedException();
+            GenericResult<LicenseCapabilities> result = tangoWebClient.GetLicenseCapabilities(this);
+
+            LicenseCapabilities = result.Context;
+            DisabledReason = result.Message;
         }
 
         /// <summary>
@@ -82,5 +84,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Is the license Disabled
         /// </summary>
         public bool IsDisabled => (DisabledReason != string.Empty);
+
+        public LicenseCapabilities LicenseCapabilities { get; set; }
     }
 }

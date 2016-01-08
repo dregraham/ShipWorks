@@ -1,7 +1,60 @@
-﻿namespace ShipWorks.ApplicationCore.Licensing
+﻿using System;
+using System.Xml;
+using Interapptive.Shared.Utility;
+
+namespace ShipWorks.ApplicationCore.Licensing
 {
     public class LicenseCapabilities
     {
+        public LicenseCapabilities(XmlDocument xmlResponse)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(xmlResponse, nameof(xmlResponse));
+
+            XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
+            xpath.Namespaces.AddNamespace("s", "http://schemas.xmlsoap.org/soap/envelope/");
+            xpath.Namespaces.AddNamespace("a", "http://schemas.datacontract.org/2004/07/Sdc.Server.ShipWorksNet.Protocol.CustomerLicenseInfo");
+            xpath.Namespaces.AddNamespace("i", "http://www.w3.org/2001/XMLSchema-instance");
+            xpath.Namespaces.AddNamespace("", "http://stamps.com/xml/namespace/2015/09/shipworks/activationv1");
+
+            None = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='None']/Value", 0) == 1;
+            ActionLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ActionLimit']/Value", 0) == 1;
+            FilterLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='FilterLimit']/Value", 0) == 1;
+            MyFilters = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='MyFilters']/Value", 0) == 1;
+            SelectionLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='SelectionLimit']/Value", 0) == 1;
+            AddOrderCustomer = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='AddOrderCustomer']/Value", 0) == 1;
+            EndiciaScanForm = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaScanForm']/Value", 0) == 1;
+            EndiciaAccountLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaAccountLimit']/Value", 0) == 1;
+            EndiciaAccountNumber = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaAccountNumber']/Value", 0) == 1;
+            EndiciaDhl = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaDhl']/Value", 0) == 1;
+            EndiciaInsurance = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaInsurance']/Value", 0) == 1;
+            ShipmentType = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ShipmentType']/Value", 0) == 1;
+            SingleStore = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='SingleStore']/Value", 0) == 1;
+            UpsAccountLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsAccountLimit']/Value", 0) == 1;
+            UpsAccountNumbers = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsAccountNumbers']/Value", 0) == 1;
+            PostalApoFpoPoboxOnly = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='PostalApoFpoPoboxOnly']/Value", 0) == 1;
+            UpsSurePost = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='UpsSurePost']/Value", 0) == 1;
+            EndiciaConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaConsolidator']/Value", 0) == 1;
+            EndiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='EndiciaScanBasedReturns']/Value", 0) == 1;
+            ShipmentTypeRegistration = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ShipmentTypeRegistration']/Value", 0) == 1;
+            ProcessShipment = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ProcessShipment']/Value", 0) == 1;
+            PurchasePostage = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='PurchasePostage']/Value", 0) == 1;
+            RateDiscountMessaging = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='RateDiscountMessaging']/Value", 0) == 1;
+            ShippingAccountConversion = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ShippingAccountConversion']/Value", 0) == 1;
+            StampsInsurance = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsInsurance']/Value", 0) == 1;
+            StampsDhl = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsDhl']/Value", 0) == 1;
+            StampsAscendiaConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsAscendiaConsolidator']/Value", 0) == 1;
+            StampsDhlConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsDhlConsolidator']/Value", 0) == 1;
+            StampsGlobegisticsConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsGlobegisticsConsolidator']/Value", 0) == 1;
+            StampsIbcConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsIbcConsolidator']/Value", 0) == 1;
+            StampsRrDonnelleyConsolidator = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='StampsRrDonnelleyConsolidator']/Value", 0) == 1;
+            AdvancedShipping = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='AdvancedShippingFeatures']/Value", string.Empty) == "Yes";
+            Crm = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='Crm']/Value", string.Empty) == "Yes";
+            CustomDataSources = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='CustomDataSources']/Value", string.Empty) == "Yes";
+            TemplateCustomization = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='TemplateCustomization']/Value", string.Empty) == "Yes";
+            NumberOfChannels = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='NumberOfChannels']/Value", 0);
+            NumberOfShipments = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='NumberOfShipments']/Value", 0);
+        }
+
         /// <summary>
         /// No specific feature
         /// </summary>
@@ -180,5 +233,25 @@
         /// Template customization restriction
         /// </summary>
         public bool TemplateCustomization { get; set; }
+
+        /// <summary>
+        /// Number of selling channels the license allows
+        /// </summary>
+        public int NumberOfChannels { get; set; }
+
+        /// <summary>
+        ///Number of shipments the license allows
+        /// </summary>
+        public int NumberOfShipments { get; set; }
+
+        /// <summary>
+        /// Gets or sets the billing end date.
+        /// </summary>
+        public DateTime BillingEndDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is in trial.
+        /// </summary>
+        public bool IsInTrial { get; set; }
     }
 }

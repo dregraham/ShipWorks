@@ -99,7 +99,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Check to see if the response contains a fult
             XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
-            
+
             // If there is a fault return it
             if (fault != null)
             {
@@ -111,7 +111,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 result.Context = new ActivationResponse(xmlResponse);
                 result.Success = true;
             }
-            
+
             return result;
         }
 
@@ -172,7 +172,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Logs the nudge option back to Tango to indicate that the option was selected 
+        /// Logs the nudge option back to Tango to indicate that the option was selected
         /// by the user.
         /// </summary>
         public static void LogNudgeOption(NudgeOption option)
@@ -302,7 +302,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCredentialStore.UpsCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "InsureShip", TangoCredentialStore.InsureShipCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Stamps", TangoCredentialStore.UspsCertificateVerificationDataKeyName, results);
-            
+
             return results;
         }
 
@@ -369,7 +369,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Process the request
             TrialDetail trialDetail = ProcessTrialRequest(postRequest, store);
 
-            // This will happen when the user changes the identifier of the store, and the identifier they 
+            // This will happen when the user changes the identifier of the store, and the identifier they
             // change to is one that is already used by an existing trial.  We update the store to use
             // the license from the trial of the identifier they changed to.
             if (trialDetail.License.Key != store.License)
@@ -436,7 +436,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Log the given insurance claim to Tango.  
+        /// Log the given insurance claim to Tango.
         /// </summary>
         public static void LogSubmitInsuranceClaim(ShipmentEntity shipment)
         {
@@ -582,7 +582,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     tracking = "";
                 }
 
-                List<IInsuranceChoice> insuredPackages = 
+                List<IInsuranceChoice> insuredPackages =
                     Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
                     .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                     .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks && choice.InsuranceValue > 0)
@@ -633,7 +633,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     InsuredWith insuredWith = shipment.InsurancePolicy.CreatedWithApi ? InsuredWith.SuccessfullyInsuredViaApi : InsuredWith.FailedToInsureViaApi;
                     postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(insuredWith));
                 }
-                
+
                 postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
                 postRequest.Variables.Add("carrier", ShippingManager.GetCarrierName(shipmentType.ShipmentTypeCode));
                 postRequest.Variables.Add("service", ShippingManager.GetServiceUsed(shipment));
@@ -679,7 +679,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 {
                     throw new TangoException(errorNode.InnerText);
                 }
-                
+
                 XmlNode shipmentIDNode = xmlResponse.SelectSingleNode("//OnlineShipmentID");
                 if (shipmentIDNode != null)
                 {
@@ -1106,6 +1106,40 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             get { return InterapptiveOnly.Registry.GetValue("TangoTestServer", false); }
             set { InterapptiveOnly.Registry.SetValue("TangoTestServer", value); }
+        }
+
+        /// <summary>
+        /// Gets the license capabilities.
+        /// </summary>
+        /// <param name="license">The license.</param>
+        public static GenericResult<LicenseCapabilities> GetLicenseCapabilities(ILicense license)
+        {
+            GenericResult<LicenseCapabilities> result = new GenericResult<LicenseCapabilities>(null);
+
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ActivateCustomerLicense");
+
+            // Create an Xpath navigator and add namespaces to it
+            XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
+            xpath.Namespaces.AddNamespace("s", "http://schemas.xmlsoap.org/soap/envelope/");
+
+            // Check to see if the response contains a fult
+            XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
+
+            // If there is a fault return it
+            if (fault != null)
+            {
+                result.Success = false;
+                result.Message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
+            }
+            else
+            {
+                result.Context = new LicenseCapabilities(xmlResponse);
+                result.Success = true;
+            }
+
+            return result;
         }
     }
 }

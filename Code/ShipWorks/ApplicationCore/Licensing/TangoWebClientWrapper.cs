@@ -88,7 +88,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public virtual void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
         {
-            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
+            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds
             // depending on the number of stores. May want to look into caching this information, but that could result
             // in stale license data. Since customers aren't buying postage all the time, the additonal overhead to ensure
             // accuracy may not be that big of a deal.
@@ -190,7 +190,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         public virtual IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)
         {
             List<Nudge> nudges = new List<Nudge>();
-            
+
             foreach (StoreEntity store in stores)
             {
                 nudges.AddRange(TangoWebClient.GetNudges(store));
@@ -213,7 +213,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="account">The account.</param>
         public virtual void LogUspsAccount(UspsAccountEntity account)
         {
-            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
+            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds
             // depending on the number of stores. May want to look into caching this information, but that could result
             // in stale license data. Since customers aren't buying postage all the time, the additonal overhead to ensure
             // accuracy may not be that big of a deal.
@@ -229,6 +229,15 @@ namespace ShipWorks.ApplicationCore.Licensing
                                                 account.Username,
                                                 (UspsAccountContractType)account.ContractType);
             }
+        }
+
+        /// <summary>
+        /// Gets the license capabilities.
+        /// </summary>
+        /// <param name="license"></param>
+        GenericResult<LicenseCapabilities> ITangoWebClient.GetLicenseCapabilities(ILicense license)
+        {
+            return TangoWebClient.GetLicenseCapabilities(license);
         }
     }
 }
