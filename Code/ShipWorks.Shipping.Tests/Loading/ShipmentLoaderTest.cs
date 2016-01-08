@@ -173,21 +173,6 @@ namespace ShipWorks.Shipping.Tests.Loading
         }
 
         [Fact]
-        public void EnsureFiltersUpToDate_Performed_Test()
-        {
-            using (var mock = GetDefaultMocks())
-            {
-                testObject = mock.Create<ShipmentLoader>();
-                shippingConfigurator.Setup(s => s.GetAddressValidation(It.IsAny<ShipmentEntity>())).Returns(true);
-                shippingConfigurator.Setup(s => s.AutoCreateShipments).Returns(false);
-
-                testObject.Load(orderEntity.OrderID);
-
-                filterHelper.Verify(s => s.EnsureFiltersUpToDate(It.IsAny<TimeSpan>()), Times.Once);
-            }
-        }
-
-        [Fact]
         public void OrderSelectionLoaded_HasException_WhenInvalidOrderID_Test()
         {
             using (var mock = GetDefaultMocks())

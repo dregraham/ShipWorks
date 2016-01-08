@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.Loading
     {
         private readonly IShippingConfiguration shippingConfiguration;
         private readonly IShippingManager shippingManager;
-        private readonly IFilterHelper filterHelper;
         private readonly IValidator<ShipmentEntity> addressValidator;
         private readonly IStoreManager storeManager;
         private readonly IStoreTypeManager storeTypeManager;
@@ -28,13 +27,11 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IFilterHelper filterHelper, 
-                              IValidator<ShipmentEntity> addressValidator, IStoreManager storeManager, IStoreTypeManager storeTypeManager,
-                              IOrderManager orderManager)
+        public ShipmentLoader(IShippingConfiguration shippingConfiguration, IShippingManager shippingManager, IValidator<ShipmentEntity> addressValidator, 
+                              IStoreManager storeManager, IStoreTypeManager storeTypeManager, IOrderManager orderManager)
         {
             this.shippingConfiguration = shippingConfiguration;
             this.shippingManager = shippingManager;
-            this.filterHelper = filterHelper;
             this.addressValidator = addressValidator;
             this.storeManager = storeManager;
             this.storeTypeManager = storeTypeManager;
@@ -46,8 +43,6 @@ namespace ShipWorks.Shipping.Loading
         /// </summary>
         public OrderSelectionLoaded Load(long orderID)
         {
-            filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
-
             // Execute the work
             try
             {

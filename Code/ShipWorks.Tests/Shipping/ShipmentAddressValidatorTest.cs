@@ -69,6 +69,13 @@ namespace ShipWorks.Tests.Shipping
 
             validatedAddressManager.VerifyAll();
         }
-        
+
+        [Fact]
+        public async void FilterHelper_EnsureFiltersUpToDate_CalledOnce_Test()
+        {
+            await testObject.ValidateAsync(shipmentEntity);
+
+            filterHelper.Verify(fh => fh.EnsureFiltersUpToDate(It.IsAny<TimeSpan>()), Times.Once);
+        }
     }
 }
