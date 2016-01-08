@@ -382,7 +382,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.PayorType = (int)UpsPayorType.Sender;
             profile.Ups.PayorAccount = "";
             profile.Ups.PayorPostalCode = "";
-            profile.Ups.PayorCountryCode = UpsAccountManager.Accounts.Count > 0 ? UpsAccountManager.Accounts[0].CountryCode : "US";
+            profile.Ups.PayorCountryCode = GetDefaultCountry();
 
             profile.Ups.EmailNotifySender = (int)UpsEmailNotificationType.None;
             profile.Ups.EmailNotifyRecipient = (int)UpsEmailNotificationType.None;
@@ -410,10 +410,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.Cn22Number = string.Empty;
 
             profile.Ups.ShipmentChargeAccount = string.Empty;
-            profile.Ups.ShipmentChargeCountryCode = string.Empty;
+            profile.Ups.ShipmentChargeCountryCode = GetDefaultCountry();
             profile.Ups.ShipmentChargePostalCode = string.Empty;
             profile.Ups.ShipmentChargeType = (int)UpsShipmentChargeType.BillReceiver;
         }
+
+        /// <summary>
+        /// If there is an account, set the country code to the first if account. If no account found, us "US"
+        /// </summary>
+        private static string GetDefaultCountry() =>
+                    UpsAccountManager.Accounts.FirstOrDefault()?.CountryCode ?? "US";
 
         /// <summary>
         /// Apply the given shipping profile to the shipment

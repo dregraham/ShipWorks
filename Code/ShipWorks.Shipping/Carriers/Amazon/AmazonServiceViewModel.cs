@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public AmazonServiceViewModel(IObservable<IShipWorksMessage> messenger, AmazonShipmentType amazonShipmentType)
         {
             this.amazonShipmentType = amazonShipmentType;
-            handler = new PropertyChangedHandler(() => PropertyChanged);
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             amazonRatesRetrievedIDisposable = messenger.OfType<AmazonRatesRetrievedMessage>()
                 .ObserveOn(SynchronizationContext.Current)

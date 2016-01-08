@@ -1116,6 +1116,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Get postal rates for the given shipment for all possible mail classes and rates.
         /// </summary>
         [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         public List<RateResult> GetRatesSlow(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             List<RateResult> results = new List<RateResult>();

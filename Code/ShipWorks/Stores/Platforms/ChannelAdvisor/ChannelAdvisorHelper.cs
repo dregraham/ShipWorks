@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// <summary>
     /// Helper/Utility methods for CA
     /// </summary>
-    static class ChannelAdvisorHelper
+    public static class ChannelAdvisorHelper
     {
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorHelper));
@@ -86,6 +86,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     log.Warn(string.Format("An invalid/unknown value ({0}) was encountered for CA shipping status", caShippingStatus));
                     return ChannelAdvisorShippingStatus.Unknown;
             }
+        }
+
+        /// <summary>
+        /// Gets the prime status based on the shippingClass
+        /// </summary>
+        public static ChannelAdvisorIsAmazonPrime GetIsPrime(string shippingClass, string carrier)
+        {
+            if (string.IsNullOrEmpty(shippingClass) || string.IsNullOrEmpty(carrier))
+            {
+                return ChannelAdvisorIsAmazonPrime.Unknown;
+            }
+
+            return shippingClass.IndexOf("Prime", StringComparison.OrdinalIgnoreCase) >= 0 &&
+                   carrier.IndexOf("Amazon", StringComparison.OrdinalIgnoreCase) >= 0 ?
+                ChannelAdvisorIsAmazonPrime.Yes : ChannelAdvisorIsAmazonPrime.No;
         }
     }
 }

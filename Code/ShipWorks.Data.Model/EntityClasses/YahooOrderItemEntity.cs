@@ -474,6 +474,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("YahooProductID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Url", fieldHashtable);
 		}
 		#endregion
 
@@ -556,6 +559,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)YahooOrderItemFieldIndex.YahooProductID, true); }
 			set	{ SetValue((int)YahooOrderItemFieldIndex.YahooProductID, value); }
+		}
+
+		/// <summary> The Url property of the Entity YahooOrderItem<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "YahooOrderItem"."Url"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Url
+		{
+			get { return (System.String)GetValue((int)YahooOrderItemFieldIndex.Url, true); }
+			set	{ SetValue((int)YahooOrderItemFieldIndex.Url, value); }
 		}
 
 

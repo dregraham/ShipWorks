@@ -307,12 +307,14 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<AccountSettingsControlBase>(TypeCode))
+            if (!IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<Func<StoreEntity, AccountSettingsControlBase>>(TypeCode))
             {
-                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<AccountSettingsControlBase>(TypeCode);
+                throw new InvalidOperationException("Invalid store type. " + TypeCode);
             }
 
-            throw new InvalidOperationException("Invalid store type. " + TypeCode);
+            Func<StoreEntity, AccountSettingsControlBase> controlFactory = IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<Func<StoreEntity, AccountSettingsControlBase>>(TypeCode);
+
+            return controlFactory(Store);
         }
 
         /// <summary>
@@ -422,7 +424,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Indicates if the StoreType supports hyperlinking the grid for the given field
         /// </summary>
-        public virtual bool GridHyperlinkSupported(EntityField2 field)
+        public virtual bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
         {
             return false;
         }

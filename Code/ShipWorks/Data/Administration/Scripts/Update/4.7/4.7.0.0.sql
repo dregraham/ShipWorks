@@ -1,13 +1,8 @@
-﻿SET NUMERIC_ROUNDABORT OFF
+﻿PRINT N'Update ShipmentChargeCountryCode in UpsProfile for PrimaryProfile where the value is not set.'
 GO
-SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
-GO
-PRINT N'Altering [dbo].[Order]'
-GO
-ALTER TABLE [dbo].[Order] ADD
-[ShipAddressType] [int] NOT NULL CONSTRAINT [DF_Order_ShipAddressType] DEFAULT ((0))
-GO
-PRINT N'Dropping constraints from [dbo].[Order]'
-GO
-ALTER TABLE [dbo].[Order] DROP CONSTRAINT [DF_Order_ShipAddressType]
+UPDATE up
+SET up.ShipmentChargeCountryCode = 'US'
+FROM UpsProfile up
+INNER JOIN ShippingProfile sp ON sp.ShippingProfileID = up.ShippingProfileID
+WHERE sp.ShipmentTypePrimary = 1 AND ISNULL(up.ShipmentChargeCountryCode, '') = ''
 GO
