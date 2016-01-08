@@ -890,21 +890,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Called to get the latest rates for the shipment
-        /// </summary>
-        public virtual RateGroup GetRates(ShipmentEntity shipment)
-        {
-            if (SupportsGetRates)
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                throw new InvalidOperationException("Should not be called.");
-            }
-        }
-
-        /// <summary>
         /// Apply the specified shipment profile to the given shipment.
         /// </summary>
         public virtual void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
@@ -938,24 +923,11 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public abstract void ProcessShipment(ShipmentEntity shipment);
-
-        /// <summary>
         /// Must be overridden by derived types to provide tracking details for the given shipment.
         /// </summary>
         public virtual TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             throw new ShippingException(string.Format("Tracking is not supported for {0}.", ShipmentTypeName));
-        }
-
-        /// <summary>
-        /// Called to do carrier specific shipment voiding.  Not all carriers required voiding.
-        /// </summary>
-        public virtual void VoidShipment(ShipmentEntity shipment)
-        {
-
         }
 
         /// <summary>
@@ -1024,113 +996,6 @@ namespace ShipWorks.Shipping
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
         public abstract IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment);
-
-        protected RatingFields ratingField = null;
-
-        public virtual RatingFields RatingFields
-        {
-            [NDependIgnoreLongMethod]
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = new RatingFields();
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentType);
-                ratingField.ShipmentFields.Add(ShipmentFields.ContentWeight);
-                ratingField.ShipmentFields.Add(ShipmentFields.TotalWeight);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentCost);
-                ratingField.ShipmentFields.Add(ShipmentFields.CustomsValue);
-
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipDate);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipCompany);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet1);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet2);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet3);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipCity);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStateProvCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipPostalCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipCountryCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialDetermination);
-                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialResult);
-
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginOriginID);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginCompany);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet1);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet2);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet3);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginCity);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStateProvCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginPostalCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginCountryCode);
-
-                ratingField.ShipmentFields.Add(ShipmentFields.ReturnShipment);
-                ratingField.ShipmentFields.Add(ShipmentFields.Insurance);
-                ratingField.ShipmentFields.Add(ShipmentFields.InsuranceProvider);
-
-                return ratingField;
-            }
-        }
-
-        /// <summary>
-        /// Gets the rating hash based on the shipment's configuration.
-        /// </summary>
-        public virtual string GetRatingHash(ShipmentEntity shipment)
-        {
-            return RatingFields.GetRatingHash(shipment);
-        }
-
-        /// <summary>
-        /// This is intended to be used when there is (most likely) a bad configuration
-        /// with the shipment on some level, so an empty rate group with a exception footer
-        /// is cached.
-        /// </summary>
-        /// <param name="shipment">The shipment that generated the given exception.</param>
-        /// <param name="exception">The exception</param>
-        protected RateGroup CacheInvalidRateGroup(ShipmentEntity shipment, Exception exception)
-        {
-            RateGroup rateGroup = new InvalidRateGroup(this, exception);
-
-            RateCache.Instance.Save(GetRatingHash(shipment), rateGroup);
-
-            return rateGroup;
-        }
-
-        /// <summary>
-        /// Gets rates, retrieving them from the cache if possible
-        /// </summary>
-        /// <typeparam name="T">Type of exception that the carrier will throw on an error</typeparam>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        /// <param name="getRatesFunction">Function to retrieve the rates from the carrier if not in the cache</param>
-        /// <returns></returns>
-        protected RateGroup GetCachedRates<T>(ShipmentEntity shipment, Func<ShipmentEntity, RateGroup> getRatesFunction) where T : Exception
-        {
-            string rateHash = GetRatingHash(shipment);
-
-            if (RateCache.Instance.Contains(rateHash))
-            {
-                return RateCache.Instance.GetRateGroup(rateHash);
-            }
-
-            try
-            {
-                RateGroup rateGroup = getRatesFunction(shipment);
-                RateCache.Instance.Save(rateHash, rateGroup);
-
-                return rateGroup;
-            }
-            catch (T ex)
-            {
-                // This is a bad configuration on some level, so cache an empty rate group
-                // before throwing throwing the exceptions
-                RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, ex);
-                InvalidRateGroupShippingException shippingException = new InvalidRateGroupShippingException(invalidRateGroup, ex.Message, ex);
-
-                throw shippingException;
-            }
-        }
 
         /// <summary>
         /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
@@ -1297,27 +1162,6 @@ namespace ShipWorks.Shipping
             PersonAdapter address = new PersonAdapter(entity, fieldPrefix);
             return address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ||
                 (address.CountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && address.StateProvCode.Equals("PR", StringComparison.OrdinalIgnoreCase));
-        }
-
-        /// <summary>
-        /// Check to see if a package dimensions are valid for carriers that require dimensions.
-        /// </summary>
-        /// <returns>True if the dimensions are valid.  False otherwise.</returns>
-        public virtual bool DimensionsAreValid(double length, double width, double height)
-        {
-            if (length <= 0 || width <= 0 || height <= 0)
-            {
-                return false;
-            }
-
-            // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
-            // This is no longer valid due to new dimensional weight requirements.
-            if (length == 1.0 && width == 1.0 && height == 1.0)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         /// <summary>

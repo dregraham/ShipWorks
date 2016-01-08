@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -10,6 +12,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Tests.Integration.MSTest.Fixtures;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
@@ -76,8 +79,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
             shipment.Ups.UpsAccountID = GetAccountId(AccountID);
 
             WorldShipShipmentType upsWorldShipShipmentType = new WorldShipShipmentType();
-            upsWorldShipShipmentType.ProcessShipment(shipment);
 
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILabelService labelService = lifetimeScope.ResolveKeyed<ILabelService>(ShipmentTypeCode.UpsWorldShip);
+
+                WorldShipLabelService worldShipLabelService = labelService as WorldShipLabelService;
+
+                worldShipLabelService.Create(shipment);
+            }
+            
             shipment.ContentWeight = shipment.Ups.Packages.Sum(p => p.DimsWeight);
         }
 

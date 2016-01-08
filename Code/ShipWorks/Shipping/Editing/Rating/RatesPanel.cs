@@ -148,23 +148,8 @@ namespace ShipWorks.Shipping.Editing.Rating
             {
                 if (!shipment.Processed)
                 {
-                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-
-                    if (!shipmentType.SupportsGetRates)
-                    {
-                        RateGroup rateGroupWithNoRatesFooter = new RateGroup(new List<RateResult>());
-
-                        rateGroupWithNoRatesFooter.AddFootnoteFactory(new InformationFootnoteFactory("Select another provider to get rates."));
-
-                        rateControl.ClearRates(string.Format("The provider \"{0}\" does not support retrieving rates.",
-                                                                EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)),
-                                                                rateGroupWithNoRatesFooter);
-                    }
-                    else
-                    {
-                        // We need to fetch the rates from the provider
-                        FetchRates(shipment, ignoreCache);
-                    }
+                    // We need to fetch the rates from the provider
+                    FetchRates(shipment, ignoreCache);
                 }
                 else
                 {
@@ -243,7 +228,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                     }
                     catch (FedExAddressValidationException ex)
                     {
-                        panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(new FedExShipmentType(), ex),
+                        panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(ShipmentTypeCode.FedEx, ex),
                             shipment);
 
                         // Add the shipment ID to the exception data, so we can determine whether
@@ -259,7 +244,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                         if (rates == null)
                         {
                             rates = new RateGroup(new List<RateResult>());
-                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType ?? new NoneShipmentType(), ex));
+                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType?.ShipmentTypeCode ?? ShipmentTypeCode.None, ex));
                         }
 
                         panelRateGroup = new ShipmentRateGroup(rates, shipment);
@@ -289,10 +274,18 @@ namespace ShipWorks.Shipping.Editing.Rating
                         ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
                         if (ratedShipment != null && ratedShipment.ShipmentID == selectedShipmentID)
                         {
-                            // Only update the rate control if the shipment is for the currently selected 
-                            // order to avoid the appearance of lag when a user is quickly clicking around
-                            // the rate grid
-                            LoadRates(panelRateGroup);
+                            if (ShipmentTypeManager.GetType(shipment).SupportsGetRates)
+                            {
+                                // Only update the rate control if the shipment is for the currently selected 
+                                // order to avoid the appearance of lag when a user is quickly clicking around
+                                // the rate grid
+                                LoadRates(panelRateGroup);
+                            }
+                            else
+                            {
+                                // The carrier does not support get rates so we display a message to the user
+                                rateControl.ClearRates($"The provider \"{EnumHelper.GetDescription(panelRateGroup.Carrier)}\" does not support retrieving rates.", panelRateGroup);
+                            }
                         }
                     }
                 };
@@ -309,37 +302,51 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         private ShipmentType PrepareShipmentAndGetShipmentType(ShipmentEntity shipment)
         {
-            ShipmentType shipmentType;
-            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
-
-            // Only change this to best rate for non-USPS postal types
-            if (ConsolidatePostalRates &&
-                PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
-                !PostalUtility.IsPostalSetup() && 
-                shipmentTypeCode != ShipmentTypeCode.Usps &&
-                shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
-                shipmentTypeCode != ShipmentTypeCode.Express1Usps)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}));
+                ShipmentType shipmentType;
+                ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
 
-                shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
-                ShippingManager.EnsureShipmentLoaded(shipment);
+                // Only change this to best rate for non-USPS postal types
+                if (ConsolidatePostalRates &&
+                    PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
+                    !PostalUtility.IsPostalSetup() &&
+                    shipmentTypeCode != ShipmentTypeCode.Usps &&
+                    shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
+                    shipmentTypeCode != ShipmentTypeCode.Express1Usps)
+                {
+                    // Func to create a BestRateShippingBroker factory that takes BestRateConsolidatePostalRates
+                    // and returns a BestRateShippingBrokerFactory with the correct BrokerFilters
+                    Func<BestRateConsolidatePostalRates, IBestRateShippingBrokerFactory> brokerFactoryFactory =
+                        lifetimeScope.Resolve<Func<BestRateConsolidatePostalRates, IBestRateShippingBrokerFactory>>();
 
-                shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
-                shipment.BestRate.DimsLength = shipment.Postal.DimsLength;
-                shipment.BestRate.DimsWidth = shipment.Postal.DimsWidth;
-                shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
-                shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
-                shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
-                shipment.BestRate.ServiceLevel = (int)ServiceLevelType.Anytime;
-                shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
+                    // Resolve the BestRateShipmentType and pass in IBestRateShippingBrokerFactory with 
+                    // BrokerFilters needed to BestRateConsolidatePostalRates
+                    shipmentType =
+                        lifetimeScope.Resolve<BestRateShipmentType>(
+                            new TypedParameter(typeof (IBestRateShippingBrokerFactory),
+                                brokerFactoryFactory(BestRateConsolidatePostalRates.Yes)));
+
+
+                    shipment.ShipmentType = (int) ShipmentTypeCode.BestRate;
+                    ShippingManager.EnsureShipmentLoaded(shipment);
+
+                    shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
+                    shipment.BestRate.DimsLength = shipment.Postal.DimsLength;
+                    shipment.BestRate.DimsWidth = shipment.Postal.DimsWidth;
+                    shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
+                    shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
+                    shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
+                    shipment.BestRate.ServiceLevel = (int) ServiceLevelType.Anytime;
+                    shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
+                }
+                else
+                {
+                    shipmentType = ShipmentTypeManager.GetType(shipment);
+                }
+
+                return shipmentType;
             }
-            else
-            {
-                shipmentType = ShipmentTypeManager.GetType(shipment);
-            }
-
-            return shipmentType;
         }
 
         /// <summary>

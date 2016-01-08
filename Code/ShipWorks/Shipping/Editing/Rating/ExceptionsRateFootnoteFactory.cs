@@ -13,9 +13,9 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionsRateFootnoteFactory"/> class.
         /// </summary>
-        public ExceptionsRateFootnoteFactory(ShipmentType shipmentType, Exception exception)
+        public ExceptionsRateFootnoteFactory(ShipmentTypeCode shipmentTypeCode, Exception exception)
         {
-            ShipmentTypeCode = shipmentType.ShipmentTypeCode;
+            ShipmentTypeCode = shipmentTypeCode;
 
             ratingExceptionType = IsInvalidPackageException(exception) ?
                 RatingExceptionType.InvalidPackageDimensions : 

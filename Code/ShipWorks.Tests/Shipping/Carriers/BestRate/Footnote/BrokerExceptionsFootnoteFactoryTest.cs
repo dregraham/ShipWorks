@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Moq;
 using Xunit;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.OnTrac;
+using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -19,7 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
         [Fact]
         public void Constructor_ThrowsInvalidOperationException_WhenCollectionOfBrokerExceptionsIsEmpty_Test()
         {
-            Assert.Throws<InvalidOperationException>(() => new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), new List<BrokerException>()));
+            Assert.Throws<InvalidOperationException>(() => new BrokerExceptionsRateFootnoteFactory(new OtherShipmentType(), new List<BrokerException>()));
         }
 
         [Fact]
@@ -32,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
                 new BrokerException(new ShippingException("broker exception 3"), BrokerExceptionSeverityLevel.Error, new OnTracShipmentType())
             };
 
-            testObject = new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), brokerExceptions);
+            testObject = new BrokerExceptionsRateFootnoteFactory(new OtherShipmentType(), brokerExceptions);
 
             RateFootnoteControl footnote = testObject.CreateFootnote(null);
 
@@ -49,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
                 new BrokerException(new ShippingException("broker exception 3"), BrokerExceptionSeverityLevel.Error, new OnTracShipmentType())
             };
 
-            testObject = new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), brokerExceptions);
+            testObject = new BrokerExceptionsRateFootnoteFactory(new OtherShipmentType(), brokerExceptions);
 
             BrokerExceptionsRateFootnoteControl footnote = testObject.CreateFootnote(null) as BrokerExceptionsRateFootnoteControl;
 

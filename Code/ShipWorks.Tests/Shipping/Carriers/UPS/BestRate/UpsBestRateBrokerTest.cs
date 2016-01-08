@@ -45,6 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         private Mock<ICarrierAccountRepository<UpsAccountEntity>> genericRepositoryMock;
         private Mock<UpsShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
+        private int timesGetRatesCalled=0;
 
         public UpsBestRateBrokerTest()
         {
@@ -80,17 +81,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
             genericShipmentTypeMock = new Mock<UpsShipmentType>();
-            genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
-                            .Returns((ShipmentEntity s) => rateResults[s.Ups.UpsAccountID])
-                            .Callback<ShipmentEntity>(e => getRatesShipments.Add(EntityUtility.CloneEntity(e)));
+            genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.UpsOnLineTools);
 
-            // Mimic the bare minimum of what the configure method is doing
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
-                                   .Callback<ShipmentEntity>(x => x.Ups.Packages.Add(new UpsPackageEntity()));
+                .Callback<ShipmentEntity>(x =>
+                {
+                    x.Ups = new UpsShipmentEntity();
+                    x.Ups.Packages.Add(new UpsPackageEntity());
+                });
 
             testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object, new UpsSettingsRepository())
             {
-                GetRatesAction = (shipment, type) => genericShipmentTypeMock.Object.GetRates(shipment)
+                GetRatesAction = (shipment, type) =>
+                {
+                    getRatesShipments.Add(EntityUtility.CloneEntity(shipment));
+                    timesGetRatesCalled++;
+                    return rateResults[shipment.Ups.UpsAccountID];
+                }
+
             };
 
             testShipment = new ShipmentEntity {ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity(), OriginCountryCode = "US"};
@@ -145,8 +153,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         {
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            genericShipmentTypeMock.Verify(x => x.GetRates(It.IsAny<ShipmentEntity>()), Times.Exactly(1));
-
+            Assert.Equal(1, timesGetRatesCalled);
+            
             foreach (var shipment in getRatesShipments)
             {
                 Assert.Equal(ShipmentTypeCode.UpsOnLineTools, (ShipmentTypeCode)shipment.ShipmentType);
@@ -277,12 +285,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             ShippingException exception = new ShippingException();
             List<BrokerException> brokerExceptions = new List<BrokerException>();
 
-            genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
-                                   .Returns((ShipmentEntity s) => rateResults[s.Ups.UpsAccountID])
-                                   .Callback((ShipmentEntity s) =>
-                                   {
-                                       if (s.Ups.UpsAccountID == 2) throw exception;
-                                   });
+            testObject.GetRatesAction = (shipment, type) =>
+            {
+                if (shipment.Ups.UpsAccountID == 2) throw exception;
+                return rateResults[shipment.Ups.UpsAccountID];
+            };
 
             testObject.GetBestRates(testShipment, brokerExceptions);
 
@@ -477,8 +484,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             RateResult rate3 = new RateResult("Account 1", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
             
             RateGroup rateGroup = new RateGroup(new [] { rate1, rate2, rate3 });
-            genericShipmentTypeMock.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(rateGroup);
 
+            testObject.GetRatesAction = (shipment, type) => rateGroup;
+            
             // Setup the broker settings to indicate we can use SurePost (and we don't have an exception added for MI)
             Mock<IBestRateBrokerSettings> settings = new Mock<IBestRateBrokerSettings>();
             settings.Setup(s => s.IsMailInnovationsAvailable(It.IsAny<ShipmentType>())).Returns(false);
@@ -503,7 +511,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             RateResult rate3 = new RateResult("Account 1", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
 
             RateGroup rateGroup = new RateGroup(new[] { rate1, rate2, rate3 });
-            genericShipmentTypeMock.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(rateGroup);
+            testObject.GetRatesAction = (shipment, type) => rateGroup;
 
             // Setup the broker settings to indicate we can use SurePost (and we don't have an exception added for MI)
             Mock<IBestRateBrokerSettings> settings = new Mock<IBestRateBrokerSettings>();
@@ -528,7 +536,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             RateResult rate3 = new RateResult("Account 1", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
 
             RateGroup rateGroup = new RateGroup(new[] { rate1, rate2, rate3 });
-            genericShipmentTypeMock.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(rateGroup);
+            testObject.GetRatesAction = (shipment, type) => rateGroup;
 
             // Setup the broker settings to indicate we can use SurePost (and we don't have an exception added for MI)
             Mock<IBestRateBrokerSettings> settings = new Mock<IBestRateBrokerSettings>();
@@ -553,7 +561,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             RateResult rate3 = new RateResult("Account 1", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
 
             RateGroup rateGroup = new RateGroup(new[] { rate1, rate2, rate3 });
-            genericShipmentTypeMock.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(rateGroup);
+            testObject.GetRatesAction = (shipment, type) => rateGroup;
 
             // Setup the broker settings to indicate we cannot use SurePost (and we don't have an exception added for MI)
             Mock<IBestRateBrokerSettings> settings = new Mock<IBestRateBrokerSettings>();
@@ -580,7 +588,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             RateResult rate4 = new RateResult("Account 1", "1", 15, UpsServiceType.UpsSurePost1LbOrGreater) { ServiceLevel = ServiceLevelType.OneDay };
 
             RateGroup rateGroup = new RateGroup(new[] { rate1, rate2, rate3, rate4 });
-            genericShipmentTypeMock.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(rateGroup);
+            testObject.GetRatesAction = (shipment, type) => rateGroup;
 
             // Setup the broker settings to indicate we cannot use SurePost (and we don't have an exception added for MI)
             Mock<IBestRateBrokerSettings> settings = new Mock<IBestRateBrokerSettings>();
