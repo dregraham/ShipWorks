@@ -11,7 +11,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
         private readonly ICustomerLicenseReader licenseReader;
-        static readonly ILog log;
+        private readonly ILog log;
 
         public CustomerLicense(ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter,
             ICustomerLicenseReader licenseReader) :
@@ -63,12 +63,23 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Key { get; set; }
 
+        /// <summary>
+        /// Refresh the License capabilities from Tango
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
         public void Refresh()
         {
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Reason the license is Disabled
+        /// </summary>
         public string DisabledReason { get; set; }
-        public bool IsDisabled { get; }
+
+        /// <summary>
+        /// Is the license Disabled
+        /// </summary>
+        public bool IsDisabled => (DisabledReason != string.Empty);
     }
 }
