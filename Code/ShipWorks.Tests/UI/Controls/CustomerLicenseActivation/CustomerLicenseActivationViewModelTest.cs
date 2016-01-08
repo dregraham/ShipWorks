@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 GenericResult<ICustomerLicense> result = testObject.Save();
                 
                 Assert.Equal(isValid, result.Success);
-                Assert.Equal(isValid ? string.Empty : "Please enter a valid username.", result.Message);
+                Assert.Equal(isValid ? string.Empty : "Please enter a valid email for the username.", result.Message);
             }
         }
 
