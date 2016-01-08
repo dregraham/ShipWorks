@@ -109,7 +109,13 @@ namespace ShipWorks.ApplicationCore.Licensing
             if (fault != null)
             {
                 result.Success = false;
-                result.Message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
+
+                string message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
+
+                if(message == "Authentication failed.")
+                {
+                    result.Message = "The username or password entered is not correct.";
+                }
             }
             else
             {
