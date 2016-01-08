@@ -87,7 +87,8 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<CustomerLicense>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .AsSelf();
 
             builder.RegisterType<CustomerLicenseWriter>()
                 .AsImplementedInterfaces();

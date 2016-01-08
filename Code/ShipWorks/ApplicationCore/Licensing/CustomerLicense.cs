@@ -27,6 +27,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
             this.licenseReader = licenseReader;
+            this.log = log;
         }
 
         /// <summary>

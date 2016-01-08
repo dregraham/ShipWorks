@@ -194,6 +194,7 @@
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
     <Compile Include="ApplicationCore\Licensing\ActivationResponseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseFactoryTest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientFactoryTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializerTest.cs" />
