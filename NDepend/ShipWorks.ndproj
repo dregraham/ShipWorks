@@ -4211,13 +4211,13 @@ from  m in JustMyCode.Methods where
 
 select new { m, m.NbLinesOfCode }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of methods w/ too many parameters exceeded</Name>
-warnif count > 85 from  m in JustMyCode.Methods where
+warnif count > 88 from  m in JustMyCode.Methods where
  m.NbParameters > 5
  orderby m.NbParameters
 
 select new { m, m.NbParameters }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # large types allowed exceeded</Name>
-warnif count > 41 from  t in JustMyCode.Types where
+warnif count > 43 from  t in JustMyCode.Types where
  t.NbLinesOfCode > 500
  orderby t.NbLinesOfCode
 
