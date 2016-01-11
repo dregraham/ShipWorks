@@ -84,49 +84,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Gets license information for the given email and password
-        /// </summary>
-        public static GenericResult<ActivationResponse> ActivateLicense(string email, string password)
-        {
-            GenericResult<ActivationResponse> result = new GenericResult<ActivationResponse>(null);
-
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter {Verb = HttpVerb.Post};
-
-            postRequest.Variables.Add("action","activateShipWorks");
-            postRequest.Variables.Add("email", email);
-            postRequest.Variables.Add("password", password);
-
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ActivateCustomerLicense");
-
-            // Create an Xpath navigator and add namespaces to it
-            XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
-            xpath.Namespaces.AddNamespace("s", "http://schemas.xmlsoap.org/soap/envelope/");
-
-            // Check to see if the response contains a fult
-            XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
-
-            // If there is a fault return it
-            if (fault != null)
-            {
-                result.Success = false;
-
-                string message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
-
-                if(message == "Authentication failed.")
-                {
-                    result.Message = "The username or password entered is not correct.";
-                }
-            }
-            else
-            {
-                result.Context = new ActivationResponse(xmlResponse);
-                result.Success = true;
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Returns an InsureShipAffiliate for the specified store.
         /// If one cannot be found, an InsureShipException is thrown.
         /// </summary>
@@ -1120,14 +1077,46 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Gets the license capabilities.
+        /// Inspects the response xml for error and updates the result object
         /// </summary>
-        /// <param name="license">The license.</param>
-        public static GenericResult<LicenseCapabilities> GetLicenseCapabilities(ILicense license)
+        private static bool RaiseError<T>(XmlDocument xmlResponse, GenericResult<T> result)
         {
-            GenericResult<LicenseCapabilities> result = new GenericResult<LicenseCapabilities>(null);
+            // Create an Xpath navigator and add namespaces to it
+            XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
+            xpath.Namespaces.AddNamespace("s", "http://schemas.xmlsoap.org/soap/envelope/");
 
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+            // Check to see if the response contains a fault
+            XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
+
+            if (fault != null)
+            {
+                result.Success = false;
+
+                string message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
+
+                if (message == "Authentication failed.")
+                {
+                    result.Message = "The username or password entered is not correct.";
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Gets license information for the given email and password
+        /// </summary>
+        public static GenericResult<ActivationResponse> ActivateLicense(string email, string password)
+        {
+            GenericResult<ActivationResponse> result = new GenericResult<ActivationResponse>(null);
+
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter { Verb = HttpVerb.Post };
+
+            postRequest.Variables.Add("action", "activateShipWorks");
+            postRequest.Variables.Add("email", email);
+            postRequest.Variables.Add("password", password);
 
             XmlDocument xmlResponse;
             try
@@ -1140,21 +1129,43 @@ namespace ShipWorks.ApplicationCore.Licensing
                 result.Message = ex.Message;
                 return result;
             }
+            if(!RaiseError(xmlResponse, result))
+            {
+                result.Context = new ActivationResponse(xmlResponse);
+                result.Success = true;
+            }
+            
+            return result;
+        }
 
-            // Create an Xpath navigator and add namespaces to it
-            XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
-            xpath.Namespaces.AddNamespace("s", "http://schemas.xmlsoap.org/soap/envelope/");
+        /// <summary>
+        /// Gets the license capabilities.
+        /// </summary>
+        /// <param name="license">The license.</param>
+        public static GenericResult<LicenseCapabilities> GetLicenseCapabilities(ICustomerLicense license)
+        {
+            GenericResult<LicenseCapabilities> result = new GenericResult<LicenseCapabilities>(null);
 
-            // Check to see if the response contains a fult
-            XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
-            // If there is a fault return it
-            if (fault != null)
+            postRequest.Variables.Add("action", "login");
+            postRequest.Variables.Add("custlicense", license.Key);
+            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+
+            XmlDocument xmlResponse;
+            try
+            {
+                xmlResponse = ProcessXmlRequest(postRequest, "GetLicenseCapabilities");
+            }
+            catch (TangoException ex)
             {
                 result.Success = false;
-                result.Message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
+                result.Message = ex.Message;
+                return result;
             }
-            else
+
+            // If there is a fault return it
+            if (!RaiseError(xmlResponse, result))
             {
                 result.Context = new LicenseCapabilities(xmlResponse);
                 result.Success = true;
