@@ -32,5 +32,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Are customs allowed for this shipment/shipment type?
         /// </summary>
         bool CustomsAllowed { get; set; }
+
+        /// <summary>
+        /// Load customs into the view model
+        /// </summary>
+        void LoadCustoms();
     }
 }

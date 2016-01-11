@@ -96,9 +96,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Load customs
         /// </summary>
-        private void LoadCustoms()
+        public void LoadCustoms()
         {
-            CustomsAllowed = !shipmentAdapter.IsDomestic;
+            CustomsAllowed = shipmentAdapter?.CustomsAllowed == true;
 
             if (!CustomsAllowed)
             {
@@ -117,6 +117,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void AddCustomsItem()
         {
+            if (CustomsItems == null)
+            {
+                LoadCustoms();
+            }
+
             // Pass null as the shipment for now so that we don't have db updates/syncing until we actually want to save.
             ShipmentCustomsItemEntity shipmentCustomsItemEntity = customsManager.CreateCustomsItem(null);
             CustomsItems.Add(shipmentCustomsItemEntity);

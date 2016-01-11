@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 .Subscribe(x =>
                 {
                     Origin.SaveToEntity(x);
-                    shipmentViewModel.CustomsAllowed = ShipmentAdapter.CustomsAllowed;
+                    shipmentViewModel.LoadCustoms();
                 });
             Destination.PropertyChangeStream
                 .Select(_ => ShipmentAdapter?.Shipment?.ShipPerson)
@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 .Subscribe(x =>
                 {
                     Destination.SaveToEntity(x);
-                    shipmentViewModel.CustomsAllowed = ShipmentAdapter.CustomsAllowed;
+                    shipmentViewModel.LoadCustoms();
                 });
 
             // Wiring up observables needs objects to not be null, so do this last.
