@@ -1129,7 +1129,17 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ActivateCustomerLicense");
+            XmlDocument xmlResponse;
+            try
+            {
+                xmlResponse = ProcessXmlRequest(postRequest, "ActivateCustomerLicense");
+            }
+            catch (TangoException ex)
+            {
+                result.Success = false;
+                result.Message = ex.Message;
+                return result;
+            }
 
             // Create an Xpath navigator and add namespaces to it
             XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);

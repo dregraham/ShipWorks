@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.Utility;
 using log4net;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -13,21 +14,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly ICustomerLicenseReader licenseReader;
         private readonly ILog log;
 
-        public CustomerLicense(ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter,
-            ICustomerLicenseReader licenseReader) :
-                this(tangoWebClient, licenseWriter, licenseReader, LogManager.GetLogger(typeof(CustomerLicense)))
-        {
-        }
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicense(ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, ICustomerLicenseReader licenseReader, ILog log)
+        public CustomerLicense(ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, ICustomerLicenseReader licenseReader, Func<Type, ILog> logFactory)
         {
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
             this.licenseReader = licenseReader;
-            this.log = log;
+            log = logFactory(typeof(CustomerLicense));
         }
 
         /// <summary>
