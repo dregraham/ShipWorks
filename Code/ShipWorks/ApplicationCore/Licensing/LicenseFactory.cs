@@ -11,43 +11,45 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class LicenseFactory
     {
-        private readonly CustomerLicense customerLicense;
+        private readonly Func<string, CustomerLicense> customerLicenseFactory;
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
         private readonly bool isLegacy;
+        private readonly string customerKey;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LicenseFactory(ICustomerLicenseReader reader, CustomerLicense customerLicense, Func<StoreEntity, StoreLicense> storeLicenseFactory,  IStoreManager storeManager)
+        public LicenseFactory(ICustomerLicenseReader reader, Func<string, CustomerLicense> customerLicenseFactory, Func<StoreEntity, StoreLicense> storeLicenseFactory,  IStoreManager storeManager)
         {
-            this.customerLicense = customerLicense;
+            this.customerLicenseFactory = customerLicenseFactory;
             this.storeLicenseFactory = storeLicenseFactory;
             this.storeManager = storeManager;
 
-            string customerKey = reader.Read();
-            customerLicense.Key = customerKey;
+            customerKey = reader.Read();
             isLegacy = string.IsNullOrEmpty(customerKey);
         }
 
         /// <summary>
-        /// Returns a store license if legacy else returns the customer license
+        /// Returns the correct ILicense for the store
         /// </summary>
         public ILicense GetLicense(StoreEntity store)
         {
+            // If Legacy, return store license, else return customer license
             return isLegacy ? 
-                (ILicense) storeLicenseFactory(store) : 
-                customerLicense;
+                (ILicense) storeLicenseFactory(store) :
+                 customerLicenseFactory(customerKey); ;
         }
 
         /// <summary>
-        /// Gets all Licenses. If customer license, only 1 is returned, else all stores are returned.
+        /// Gets all Licenses.
         /// </summary>
         public IEnumerable<ILicense> GetLicenses()
         {
-            return isLegacy ? 
-                storeManager.GetEnabledStores().Select(GetLicense) : 
-                Enumerable.Repeat(customerLicense, 1);
+            // If Legacy, return store licenses for each store, else return a single customer license
+            return isLegacy
+                ? storeManager.GetEnabledStores().Select(GetLicense)
+                : new[] {customerLicenseFactory(customerKey)};
         }
     }
 }

@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
     public class LicenseFactoryTest
     {
         [Fact]
-        public void GetLicense_StoreLicenseReturned_WhenLegacy()
+        public void GetLicense_ReturnsStoreLicense_WhenLegacy()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -32,7 +32,24 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void GetLicense_CustomerLicenseReturned_WhenNotLegacy()
+        public void GetLicense_ReturnsStoreLicense_WhenCustomerLicenseReturnsNull()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICustomerLicenseReader>()
+                    .Setup(r => r.Read())
+                    .Returns((string) null);
+
+                LicenseFactory testObject = mock.Create<LicenseFactory>();
+
+                ILicense license = testObject.GetLicense(new StoreEntity());
+
+                Assert.IsType(typeof(StoreLicense), license);
+            }
+        }
+
+        [Fact]
+        public void GetLicense_ReturnsCustomerLicense_WhenNotLegacy()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -66,7 +83,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void GetLicenses_TwoStoreLicensesReturned_WhenLegacyAndTwoStoresEnabled()
+        public void GetLicenses_ReturnsTwoStoreLicenses_WhenLegacyAndTwoStoresEnabled()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -89,7 +106,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void GetLicenses_CustomerLicenseReturned_WhenNotLegacyAndMultipleStores()
+        public void GetLicenses_ReturnsCustomerLicense_WhenNotLegacyAndMultipleStores()
         {
             using (var mock = AutoMock.GetLoose())
             {

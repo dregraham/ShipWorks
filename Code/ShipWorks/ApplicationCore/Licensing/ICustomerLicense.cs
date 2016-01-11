@@ -13,6 +13,6 @@
         /// <summary>
         /// The customer license key
         /// </summary>
-        string Key { get; set; }
+        string Key { get; }
     }
 }

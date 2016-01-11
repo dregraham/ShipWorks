@@ -1,7 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -17,8 +16,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicense(ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, Func<Type, ILog> logFactory)
+        public CustomerLicense(string key, ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, Func<Type, ILog> logFactory)
         {
+            Key = key;
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
             log = logFactory(typeof(CustomerLicense));
@@ -56,7 +56,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The license key
         /// </summary>
-        public string Key { get; set; }
+        public string Key { get; private set; }
 
         /// <summary>
         /// Refresh the License capabilities from Tango
@@ -73,7 +73,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             LicenseCapabilities = result.Context;
             DisabledReason = result.Message;
 
-            if (DisabledReason != string.Empty)
+            if (!result.Success)
             {
                 log.Warn(DisabledReason);
             }
