@@ -6,7 +6,7 @@
     public interface ICustomerLicenseReader
     {
         /// <summary>
-        /// Reads this License
+        /// Reads the customer license key from the database
         /// </summary>
         string Read();
     }

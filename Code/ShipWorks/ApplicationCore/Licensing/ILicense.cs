@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.ApplicationCore.Licensing
+﻿namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// License describes the capabilities of the customer's license.
@@ -24,6 +20,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         bool IsDisabled { get; }
 
-        LicenseCapabilities LicenseCapabilities { get; set; }
+        /// <summary>
+        /// The license key
+        /// </summary>
+        string Key { get; }
     }
 }
