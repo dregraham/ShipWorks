@@ -1,4 +1,6 @@
 ﻿using System.Xml;
+using Autofac;
+using Autofac.Core;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -23,7 +25,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                         Context = null
                     });
 
-                CustomerLicense customerLicense = mock.Create<CustomerLicense>();
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "someKey"));
                 
                 ShipWorksLicenseException ex = Assert.Throws<ShipWorksLicenseException>(() => customerLicense.Activate("some@email.com", "randompassword"));
                 Assert.Equal("something went wrong", ex.Message);
@@ -60,7 +62,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                         Success = true,
                     });
 
-                CustomerLicense customerLicense = mock.Create<CustomerLicense>();
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "someKey"));
                 customerLicense.Activate("some@email.com", "randompassword");
                 
                 tangoWebClient.Verify(w => w.ActivateLicense("some@email.com", "randompassword"), Times.Once);
@@ -97,7 +99,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                         Success = true,
                     });
 
-                CustomerLicense customerLicense = mock.Create<CustomerLicense>();
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "someKey"));
 
                 Mock<ICustomerLicenseWriter> licenseWriter = mock.Mock<ICustomerLicenseWriter>();
                 
@@ -136,7 +138,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                         Context = activationResponse
                     });
 
-                CustomerLicense customerLicense = mock.Create<CustomerLicense>();
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "someKey"));
 
                 customerLicense.Activate("foo@bar.com", "baz");
 

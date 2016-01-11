@@ -17,7 +17,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             this.store = store;
             log = logFactory(GetType());
-            key = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store).Key;
+            key = store.License;
         }
 
         /// <summary>

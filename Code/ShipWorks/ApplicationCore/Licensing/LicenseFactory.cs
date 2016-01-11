@@ -38,7 +38,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // If Legacy, return store license, else return customer license
             return isLegacy ? 
                 (ILicense) storeLicenseFactory(store) :
-                 customerLicenseFactory(customerKey); ;
+                 customerLicenseFactory(customerKey);
         }
 
         /// <summary>

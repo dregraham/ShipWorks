@@ -25,9 +25,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 LicenseFactory testObject = mock.Create<LicenseFactory>();
 
-                ILicense license = testObject.GetLicense(new StoreEntity());
+                ILicense license = testObject.GetLicense(new StoreEntity() {License = "40"});
 
-                Assert.IsType(typeof(StoreLicense), license);
+                Assert.IsType(typeof (StoreLicense), license);
             }
         }
 
@@ -42,9 +42,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 LicenseFactory testObject = mock.Create<LicenseFactory>();
 
-                ILicense license = testObject.GetLicense(new StoreEntity());
+                ILicense license = testObject.GetLicense(new StoreEntity {License = "40"});
 
-                Assert.IsType(typeof(StoreLicense), license);
+                Assert.IsType(typeof (StoreLicense), license);
             }
         }
 
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 ILicense license = testObject.GetLicense(new StoreEntity());
 
-                Assert.IsType(typeof(CustomerLicense), license);
+                Assert.IsType(typeof (CustomerLicense), license);
             }
         }
 
@@ -93,15 +93,15 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 mock.Mock<IStoreManager>()
                     .Setup(m => m.GetEnabledStores())
-                    .Returns(Enumerable.Repeat(new StoreEntity(), 2)); 
+                    .Returns(Enumerable.Repeat(new StoreEntity() {License = "42"}, 2));
 
                 LicenseFactory testObject = mock.Create<LicenseFactory>();
 
                 ILicense[] licenses = testObject.GetLicenses().ToArray();
 
                 Assert.Equal(2, licenses.Count());
-                Assert.IsType(typeof(StoreLicense), licenses[0]);
-                Assert.IsType(typeof(StoreLicense), licenses[1]);
+                Assert.IsType(typeof (StoreLicense), licenses[0]);
+                Assert.IsType(typeof (StoreLicense), licenses[1]);
             }
         }
 
@@ -123,7 +123,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 ILicense[] licenses = testObject.GetLicenses().ToArray();
 
                 Assert.Equal(1, licenses.Count());
-                Assert.IsType(typeof(CustomerLicense), licenses[0]);
+                Assert.IsType(typeof (CustomerLicense), licenses[0]);
             }
         }
     }
