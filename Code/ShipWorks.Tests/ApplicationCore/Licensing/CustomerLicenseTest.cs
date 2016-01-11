@@ -7,6 +7,7 @@ using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using Xunit;
 using log4net;
+using System.Collections.Generic;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
@@ -163,7 +164,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                         Context = licenseResponse
                     });
 
-                CustomerLicense customerLicense = mock.Create<CustomerLicense>();
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
                 customerLicense.Refresh();
 
@@ -189,7 +190,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                         Context = licenseResponse
                     });
 
-                CustomerLicense customerLicense = mock.Create<CustomerLicense>();
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
                 customerLicense.Refresh();
 
@@ -217,7 +218,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                         Context = licenseResponse
                     });
 
-                CustomerLicense customerLicense = mock.Create<CustomerLicense>();
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
                 customerLicense.Refresh();
 
