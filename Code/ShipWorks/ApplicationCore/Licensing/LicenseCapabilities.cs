@@ -4,8 +4,14 @@ using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
+    /// <summary>
+    /// Exposes license capabilities from tango XML.
+    /// </summary>
     public class LicenseCapabilities
     {
+        /// <summary>
+        /// Constructor - Sets capabilities based on the xml response.
+        /// </summary>
         public LicenseCapabilities(XmlDocument xmlResponse)
         {
             MethodConditions.EnsureArgumentIsNotNull(xmlResponse, nameof(xmlResponse));
