@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -11,15 +12,17 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class LicenseFactory
     {
         private readonly CustomerLicense customerLicense;
+        private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
         private readonly bool isLegacy;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LicenseFactory(ICustomerLicenseReader reader, CustomerLicense customerLicense, IStoreManager storeManager)
+        public LicenseFactory(ICustomerLicenseReader reader, CustomerLicense customerLicense, Func<StoreEntity, StoreLicense> storeLicenseFactory,  IStoreManager storeManager)
         {
             this.customerLicense = customerLicense;
+            this.storeLicenseFactory = storeLicenseFactory;
             this.storeManager = storeManager;
 
             string customerKey = reader.Read();
@@ -33,7 +36,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         public ILicense GetLicense(StoreEntity store)
         {
             return isLegacy ? 
-                (ILicense) new StoreLicense(store) : 
+                (ILicense) storeLicenseFactory(store) : 
                 customerLicense;
         }
 

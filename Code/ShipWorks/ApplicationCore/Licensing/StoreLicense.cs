@@ -1,4 +1,5 @@
 ﻿using System;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -6,13 +7,15 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class StoreLicense : ILicense
     {
         private readonly StoreEntity store;
+        private ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StoreLicense(StoreEntity store)
+        public StoreLicense(StoreEntity store, Func<Type, ILog> logFactory)
         {
             this.store = store;
+            log = logFactory(GetType());
         }
 
         /// <summary>
@@ -25,8 +28,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                 LicenseActivationHelper.EnsureActive(store);
                 DisabledReason = string.Empty;
             }
-            catch (ShipWorksLicenseException ex)
+            catch (Exception ex)
+                when (ex.GetType() == typeof (ShipWorksLicenseException) || ex.GetType() == typeof (TangoException))
             {
+                log.Warn(ex.Message, ex);
                 DisabledReason = ex.Message;
             }
         }

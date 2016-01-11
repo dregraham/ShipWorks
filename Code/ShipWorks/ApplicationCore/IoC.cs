@@ -92,11 +92,17 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .AsSelf();
 
+            builder.RegisterType<LicenseFactory>()
+                .AsSelf();
+
             builder.RegisterType<CustomerLicenseWriter>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<CustomerLicenseReader>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<StoreLicense>()
+                .AsSelf();
 
             builder.Register(c => Program.MainForm)
                 .As<Control>()

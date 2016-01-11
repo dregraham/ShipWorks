@@ -724,46 +724,12 @@ namespace ShipWorks
         /// </summary>
         private void LogonToShipWorksAsyncGetLicenseStatus(object state)
         {
-            bool editionChanged = false;
-
             // Update our edition for each store.  Eventually this will also be where we log with tango the sw version being used and maybe other things
-            foreach (StoreEntity store in StoreManager.GetEnabledStores())
-            {
-                try
-                {
-                    ShipWorksLicense license = new ShipWorksLicense(store.License);
-                    if (!license.IsTrial)
-                    {
-                        LicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
+            LicenseFactory licenseFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseFactory>();
+            var licenses = licenseFactory.GetLicenses().ToList();
+            licenses.ForEach(license => license.Refresh());
 
-                        if (accountDetail.ActivationState == LicenseActivationState.Active ||
-                            accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere ||
-                            accountDetail.ActivationState == LicenseActivationState.ActiveNowhere)
-                        {
-                            editionChanged |= EditionManager.UpdateStoreEdition(store, accountDetail.Edition);
-                        }
-                    }
-                    else
-                    {
-                        TrialDetail trialDetail = new TangoWebClientFactory().CreateWebClient().GetTrial(store);
-
-                        editionChanged |= EditionManager.UpdateStoreEdition(store, trialDetail.Edition);
-                    }
-                }
-                catch (ShipWorksLicenseException ex)
-                {
-                    log.Warn(string.Format("Could not check status of license {0}", store.License), ex);
-                }
-                catch (TangoException ex)
-                {
-                    log.Warn(string.Format("Could not check status of license {0}", store.License), ex);
-                }
-            }
-
-            if (editionChanged)
-            {
-                ForceHeartbeat();
-            }
+            ForceHeartbeat();
         }
 
         /// <summary>
