@@ -7,7 +7,8 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class StoreLicense : ILicense
     {
         private readonly StoreEntity store;
-        private ILog log;
+        private readonly ILog log;
+        private readonly string key;
 
         /// <summary>
         /// Constructor
@@ -16,6 +17,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             this.store = store;
             log = logFactory(GetType());
+            key = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store).Key;
         }
 
         /// <summary>
@@ -29,7 +31,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 DisabledReason = string.Empty;
             }
             catch (Exception ex)
-                when (ex.GetType() == typeof (ShipWorksLicenseException) || ex.GetType() == typeof (TangoException))
+                when (ex is ShipWorksLicenseException || ex is TangoException)
             {
                 log.Warn(ex.Message, ex);
                 DisabledReason = ex.Message;
@@ -46,6 +48,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool IsDisabled => !string.IsNullOrEmpty(DisabledReason);
 
-        public LicenseCapabilities LicenseCapabilities { get; set; }
+        /// <summary>
+        /// License key
+        /// </summary>
+        public string Key => key;
     }
 }
