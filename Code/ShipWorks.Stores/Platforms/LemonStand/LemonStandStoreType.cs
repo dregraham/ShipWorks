@@ -32,15 +32,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     public class LemonStandStoreType : StoreType
     {
         // Logger 
-        private readonly ILog log;
+        private readonly ILog log = LogManager.GetLogger(typeof(LemonStandStoreType));
 
         /// <summary>
         ///     Constructor
         /// </summary>
-        public LemonStandStoreType(StoreEntity store, Func<Type, ILog> logFactory)
+        public LemonStandStoreType(StoreEntity store)
             : base(store)
         {
-            log = logFactory(GetType());
         }
 
         /// <summary>

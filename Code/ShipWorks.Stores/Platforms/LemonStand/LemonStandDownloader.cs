@@ -44,6 +44,20 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="store">The store.</param>
         /// <param name="webClient">The web client.</param>
         /// <param name="sqlAdapter">The SQL adapter.</param>
+        /// <param name="storeType">The storetype, used for tests</param>
+        public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter, StoreType storeType)
+            : base(store, storeType)
+        {
+            client = webClient;
+            this.sqlAdapter = sqlAdapter;
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
+        /// </summary>
+        /// <param name="store">The store.</param>
+        /// <param name="webClient">The web client.</param>
+        /// <param name="sqlAdapter">The SQL adapter.</param>
         public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter)
             : base(store, (LemonStandStoreType) StoreTypeManager.GetType(store))
         {
