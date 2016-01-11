@@ -20,6 +20,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Data;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Grid.Columns;
@@ -405,7 +406,7 @@ namespace ShipWorks.Stores.Communication
 
                         // Verify the license
                         progressItem.Detail = "Connecting...";
-                        LicenseActivationHelper.EnsureActive(store);
+                        CheckLicense(store);
 
                         // Do the download.  Operates as the super user.
                         using (AuditBehaviorScope auditScope = new AuditBehaviorScope(
@@ -522,6 +523,21 @@ namespace ShipWorks.Stores.Communication
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Check the store's license.
+        /// </summary>
+        private static void CheckLicense(StoreEntity store)
+        {
+            LicenseFactory licenseFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseFactory>();
+            ILicense license = licenseFactory.GetLicense(store);
+            license.Refresh();
+
+            if (license.IsDisabled)
+            {
+                throw new ShipWorksLicenseException(license.DisabledReason);
             }
         }
 
