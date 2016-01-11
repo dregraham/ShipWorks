@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping
             }
             else
             {
-                // Get the order 
+                // Get the order
                 OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
 
                 if (order == null)
@@ -135,6 +135,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static ShipmentEntity CreateShipment(long orderID)
         {
+
+
             // First let's see if there are any shipments already for the order
             List<ShipmentEntity> shipments = GetShipments(orderID, false);
 
@@ -163,7 +165,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private static ShipmentEntity InternalCreateFirstShipment(long orderID)
         {
-            // Get the order 
+            // Get the order
             OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
 
             if (order == null)
@@ -244,7 +246,7 @@ namespace ShipWorks.Shipping
             shipment.OriginFirstName = store.StoreName;
 
             ShipmentType shipmentType = DetermineInitialShipmentType(shipment);
-            
+
             // Save the record
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -253,7 +255,7 @@ namespace ShipWorks.Shipping
 
                 // Save the shipment
                 adapter.SaveAndRefetch(shipment);
-                
+
                 // Apply the default values to the shipment
                 shipmentType.LoadShipmentData(shipment, false);
                 shipmentType.UpdateDynamicShipmentData(shipment);
@@ -275,8 +277,8 @@ namespace ShipWorks.Shipping
                 shipment.ShipSenseStatus = entry.Matches(shipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
             }
 
-            // Explicitly save the shipment here to delete any entities in the Removed buckets of the 
-            // entity collections; after applying ShipSense (where customs items are first loaded in 
+            // Explicitly save the shipment here to delete any entities in the Removed buckets of the
+            // entity collections; after applying ShipSense (where customs items are first loaded in
             // this path), and entities were removed, they were still being persisted to the database.
             SaveShipment(shipment);
 
@@ -671,7 +673,7 @@ namespace ShipWorks.Shipping
             else if (shipmentTypeCode == ShipmentTypeCode.iParcel)
             {
                 return "i-parcel";
-            } 
+            }
             else if (shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 return "Best Rate";
@@ -696,7 +698,7 @@ namespace ShipWorks.Shipping
 
         /// <summary>
         /// Ensure the carrier-specific data for the shipment exists, like the associated FedEx table row.  Also ensures
-        /// that the custom's data is loaded.  Can throw a SqlForeignKeyException  if the shipment's order has been deleted, 
+        /// that the custom's data is loaded.  Can throw a SqlForeignKeyException  if the shipment's order has been deleted,
         /// or ObjectDeletedException if the shipment itself has been deleted.
         /// </summary>
         public static void EnsureShipmentLoaded(ShipmentEntity shipment)
@@ -753,12 +755,12 @@ namespace ShipWorks.Shipping
             // Ensure data is valid and up-to-date
             shipmentType.UpdateDynamicShipmentData(shipment);
 
-            // We're going to confirm the shipping address with the store as some stores may change 
-            // the shipping address depending on the shipping program being used (such as eBay's 
-            // Global Shipping Program), so we want to get rates for the location the package will be shipped                
+            // We're going to confirm the shipping address with the store as some stores may change
+            // the shipping address depending on the shipping program being used (such as eBay's
+            // Global Shipping Program), so we want to get rates for the location the package will be shipped
 
-            // We want to retain the buyer's address on the original shipment object, so we're going to use 
-            // a cloned shipment to confirm the shipping address with the store. This way the original 
+            // We want to retain the buyer's address on the original shipment object, so we're going to use
+            // a cloned shipment to confirm the shipping address with the store. This way the original
             // shipment is not altered and persisted to the database if the store alters the address
             ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
             OrderHeader orderHeader = DataProvider.GetOrderHeader(clonedShipment.OrderID);
@@ -886,11 +888,11 @@ namespace ShipWorks.Shipping
                             }
                             catch (InsureShipException ex)
                             {
-                                // If there was an error voiding the insurance policy, save the exception so we can rethrow at the 
+                                // If there was an error voiding the insurance policy, save the exception so we can rethrow at the
                                 // very end of the voiding process to ensure that any other code for voiding can run
                                 voidInsuranceException = ex;
                             }
-                            
+
                             log.InfoFormat("Shipment {0}  - Void Shipment Complete", shipment.ShipmentID);
                         }
 
@@ -906,7 +908,7 @@ namespace ShipWorks.Shipping
                     // Rethrow the insurance exception if there was one
                     if (voidInsuranceException != null)
                     {
-                        string message = string.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.\r\n\r\n{1}", 
+                        string message = string.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.\r\n\r\n{1}",
                             new InsureShipSettings().InsureShipPhoneNumber,
                             voidInsuranceException.Message);
 
@@ -985,7 +987,7 @@ namespace ShipWorks.Shipping
                     {
                         throw new ShipmentAlreadyProcessedException("The shipment has already been processed.");
                     }
-                    
+
                     if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ProcessShipment, (ShipmentTypeCode)shipment.ShipmentType).Level == EditionRestrictionLevel.Forbidden)
                     {
                         throw new ShippingException(string.Format("ShipWorks can no longer process {0} shipments. Please try using USPS.", EnumHelper.GetDescription((ShipmentTypeCode)shipment.ShipmentType)));
@@ -997,11 +999,15 @@ namespace ShipWorks.Shipping
                         throw new ShippingException("The store the shipment was in has been deleted.");
                     }
 
+                    // Check the license to see if the user is allowed to process this shipment.
+                    // Will throw ShippingException if they are not.
+                    CheckLicense(storeEntity);
+
                     // Get the ShipmentType instance
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
                     List<ShipmentEntity> shipmentsToTryToProcess = shipmentType.PreProcess(shipment, counterRatesProcessing, selectedRate, lifetimeScope);
 
-                    // A null value returned from the pre-process method means the user has opted to not continue 
+                    // A null value returned from the pre-process method means the user has opted to not continue
                     // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted
                     if (shipmentsToTryToProcess == null)
                     {
@@ -1041,7 +1047,7 @@ namespace ShipWorks.Shipping
 
                         throw new ShippingException(lastException.Message,lastException);
                     }
-                    
+
                     // Log to the knowledge base after everything else has been successful, so an error logging
                     // to the knowledge base does not prevent the shipment from being actually processed.
                     LogToShipSenseKnowledgebase(ShipmentTypeManager.GetType(processedShipment), processedShipment);
@@ -1051,6 +1057,24 @@ namespace ShipWorks.Shipping
             {
                 log.InfoFormat("Could not obtain lock for processing shipment {0}", shipmentID);
                 throw new ShippingException("The shipment was being processed on another computer.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Checks the license before processing a shipment
+        /// </summary>
+        /// <param name="storeEntity">The store entity.</param>
+        private static void CheckLicense(StoreEntity storeEntity)
+        {
+            LicenseFactory licenseFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseFactory>();
+
+            ILicense license = licenseFactory.GetLicense(storeEntity);
+
+            license.Refresh();
+
+            if (license.IsDisabled)
+            {
+                throw new ShippingException(license.DisabledReason);
             }
         }
 
@@ -1068,7 +1092,7 @@ namespace ShipWorks.Shipping
                 // Get the ShipmentType instance
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-                // A null value returned from the pre-process method means the user has opted to not continue 
+                // A null value returned from the pre-process method means the user has opted to not continue
                 // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted
                 if (shipmentType == null)
                 {
@@ -1092,7 +1116,7 @@ namespace ShipWorks.Shipping
                 shipmentType.UpdateDynamicShipmentData(shipment);
 
                 // Apply the blank recipient phone# option.  We apply it right to the entity so that
-                // its transparent to all the shipping carrier processing.  But we reset it back 
+                // its transparent to all the shipping carrier processing.  But we reset it back
                 // after processing, so it doesn't look like that's the phone the customer entered for the shipment.
                 if (shipment.ShipPhone.Trim().Length == 0)
                 {
@@ -1135,13 +1159,13 @@ namespace ShipWorks.Shipping
                     shipment.ReturnShipment = false;
                 }
 
-                // We're going to allow the store to confirm the shipping address for the shipping label, but we want to 
-                // make a note of the original shipping address first, so we can reset the address back after the label 
-                // has been generated. This will result in the customer still being able to see where the package went 
+                // We're going to allow the store to confirm the shipping address for the shipping label, but we want to
+                // make a note of the original shipping address first, so we can reset the address back after the label
+                // has been generated. This will result in the customer still being able to see where the package went
                 // according to the original cart order
                 ShipmentEntity clone = EntityUtility.CloneEntity(shipment);
 
-                // Instantiate the store class to allow it a chance to confirm the shipping address before 
+                // Instantiate the store class to allow it a chance to confirm the shipping address before
                 // the shipping label is created. We don't use the method on the ShippingManager to do this
                 // since we want to track the fields that changed.
                 StoreType storeType = StoreTypeManager.GetType(storeEntity);
@@ -1170,8 +1194,8 @@ namespace ShipWorks.Shipping
                         insureShipPolicy.Insure(shipment);
                         log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
                     }
-                    
-                    // Now that the label is generated, we can reset the shipping fields the store changed back to their 
+
+                    // Now that the label is generated, we can reset the shipping fields the store changed back to their
                     // original values before saving to the database
                     foreach (ShipmentFieldIndex fieldIndex in fieldsToRestore)
                     {
@@ -1211,7 +1235,7 @@ namespace ShipWorks.Shipping
                     shipment.OnlineShipmentID = TangoWebClient.LogShipment(storeEntity, shipment);
 
                     log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
-                    
+
                     using (SqlAdapter adapter = new SqlAdapter())
                     {
                         adapter.SaveAndRefetch(shipment);
@@ -1254,7 +1278,7 @@ namespace ShipWorks.Shipping
                     adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
                 }
 
-                // Apply the data from the package adapters and the customs items to the knowledge base 
+                // Apply the data from the package adapters and the customs items to the knowledge base
                 // entry, so the shipment data will get saved to the knowledge base; the knowledge base
                 // is smart enough to know when to save the customs items associated with an entry.
                 KnowledgebaseEntry entry = new KnowledgebaseEntry();
@@ -1265,7 +1289,7 @@ namespace ShipWorks.Shipping
             }
             catch (Exception ex)
             {
-                // We may want to eat this exception entirely, so the user isn't impacted 
+                // We may want to eat this exception entirely, so the user isn't impacted
                 log.ErrorFormat("An error occurred writing shipment ID {0} to the knowledge base: {1}", shipment.ShipmentID, ex.Message);
                 throw new ShippingException("The shipment was processed successfully, but the data was not logged to ShipSense.", ex);
             }

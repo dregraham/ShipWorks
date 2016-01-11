@@ -80,6 +80,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool IsDisabled => (DisabledReason != string.Empty);
 
+        /// <summary>
+        /// The license capabilities.
+        /// </summary>
         public LicenseCapabilities LicenseCapabilities { get; set; }
     }
 }
