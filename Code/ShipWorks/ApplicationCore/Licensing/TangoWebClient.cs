@@ -1077,8 +1077,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Inspects the response xml for error and updates the result object
+        /// Inspects the response XML for error and updates the result object
         /// </summary>
+        /// <remarks>
+        /// returns true if there is an error otherwise it returns false
+        /// </remarks>
         private static bool RaiseError<T>(XmlDocument xmlResponse, GenericResult<T> result)
         {
             // Create an Xpath navigator and add namespaces to it
@@ -1099,10 +1102,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                     result.Message = "The username or password entered is not correct.";
                 }
 
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -1129,6 +1132,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 result.Message = ex.Message;
                 return result;
             }
+
             if(!RaiseError(xmlResponse, result))
             {
                 result.Context = new ActivationResponse(xmlResponse);
@@ -1163,8 +1167,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 result.Message = ex.Message;
                 return result;
             }
-
-            // If there is a fault return it
+            
             if (!RaiseError(xmlResponse, result))
             {
                 result.Context = new LicenseCapabilities(xmlResponse);
