@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.LemonStand;
 
@@ -23,6 +24,10 @@ namespace ShipWorks.Tests.Stores.LemonStand
         }
 
         public FakeLemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter) : base(store, webClient, sqlAdapter)
+        {
+        }
+
+        public FakeLemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter, StoreType storeType) : base(store, webClient, sqlAdapter, storeType)
         {
         }
 
