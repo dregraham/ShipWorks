@@ -1138,7 +1138,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 result.Context = new ActivationResponse(xmlResponse);
                 result.Success = true;
             }
-            
+
             return result;
         }
 
@@ -1167,7 +1167,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 result.Message = ex.Message;
                 return result;
             }
-            
+
             if (!RaiseError(xmlResponse, result))
             {
                 result.Context = new LicenseCapabilities(xmlResponse);

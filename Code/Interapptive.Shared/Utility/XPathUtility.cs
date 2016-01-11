@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.XPath;
 using log4net;
 
@@ -10,7 +8,7 @@ namespace Interapptive.Shared.Utility
     /// XPath utility functions for simplified xpath evaluation
     /// </summary>
     public static class XPathUtility
-    {        
+    {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(XPathUtility));
 
@@ -164,7 +162,7 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static bool EvaluateXsdBoolean(XPathNavigator xpath, string node, bool defaultValue)
         {
-            string nodeValue = XPathUtility.Evaluate(xpath, node, ""); 
+            string nodeValue = XPathUtility.Evaluate(xpath, node, "");
             bool realValueBool;
 
             if (bool.TryParse(nodeValue, out realValueBool))

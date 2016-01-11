@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
 using ShipWorks.Stores;
 using ShipWorks.ApplicationCore.Licensing.MessageBoxes;
-using ShipWorks.Stores.Platforms;
 using Interapptive.Shared.UI;
 using ShipWorks.Editions;
 
@@ -123,7 +119,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                         "A ShipWorks license has been purchased for this trial.  Please enter " +
                         "your license to continue using ShipWorks.");
                 }
-                
+
                 // Trial expired
                 if (trialDetail.IsExpired)
                 {
@@ -138,8 +134,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 LicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
 
-                if (accountDetail.ActivationState == LicenseActivationState.Active || 
-                    accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere || 
+                if (accountDetail.ActivationState == LicenseActivationState.Active ||
+                    accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere ||
                     accountDetail.ActivationState == LicenseActivationState.ActiveNowhere)
                 {
                     EditionManager.UpdateStoreEdition(store, accountDetail.Edition);
