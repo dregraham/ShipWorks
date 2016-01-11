@@ -117,7 +117,7 @@ namespace Interapptive.Shared.Business.Geography
         /// <summary>
         /// Indicates if the given foreign country code is a US international territory
         /// </summary>
-        private static bool IsUSInternationalTerritory(string countryCode)
+        public static bool IsUSInternationalTerritory(string countryCode)
         {
             return
 

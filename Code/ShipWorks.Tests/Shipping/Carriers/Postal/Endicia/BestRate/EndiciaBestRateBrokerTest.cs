@@ -46,6 +46,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         private Mock<ICarrierAccountRepository<EndiciaAccountEntity>> genericRepositoryMock;
         private Mock<EndiciaShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
+
+        private int timesGetRatesCalled = 0;
         
         public EndiciaBestRateBrokerTest()
         {
@@ -80,9 +82,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
             genericShipmentTypeMock = new Mock<EndiciaShipmentType>();
             genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Endicia);
-            genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
-                            .Returns((ShipmentEntity s) => rateResults[s.Postal.Endicia.EndiciaAccountID])
-                            .Callback<ShipmentEntity>(e => getRatesShipments.Add(EntityUtility.CloneEntity(e)));
 
             // Mimic the bare minimum of what the configure method is doing
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
@@ -90,10 +89,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             testObject = new EndiciaBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
-                GetRatesAction = (shipment, type) => genericShipmentTypeMock.Object.GetRates(shipment)
+                GetRatesAction = (shipment, type) =>
+                {
+                    var rateResult = rateResults[shipment.Postal.Endicia.EndiciaAccountID];
+                    getRatesShipments.Add(EntityUtility.CloneEntity(shipment));
+                    timesGetRatesCalled++;
+                    return rateResult;
+                }
             };
-
-
+            
             testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate, 
                 ContentWeight = 12.1, 
                 BestRate = new BestRateShipmentEntity
@@ -162,8 +166,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         {
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            genericShipmentTypeMock.Verify(x => x.GetRates(It.IsAny<ShipmentEntity>()), Times.Once());
-
+            Assert.Equal(1, timesGetRatesCalled);
+            
             foreach (var shipment in getRatesShipments)
             {
                 Assert.Equal(ShipmentTypeCode.Endicia, (ShipmentTypeCode)shipment.ShipmentType);

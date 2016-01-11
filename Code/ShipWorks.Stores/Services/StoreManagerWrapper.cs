@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
@@ -11,21 +12,21 @@ namespace ShipWorks.Stores.Services
     /// <remarks>This is an instance that wraps the static StoreManager until we can replace that class</remarks>
     public class StoreManagerWrapper : IStoreManager, IInitializeForCurrentSession
     {
-        readonly ISecurityContext securityContext;
+        readonly Func<ISecurityContext> getSecurityContext;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StoreManagerWrapper(ISecurityContext securityContext)
+        public StoreManagerWrapper(Func<ISecurityContext> getSecurityContext)
         {
-            this.securityContext = securityContext;
+            this.getSecurityContext = getSecurityContext;
         }
 
         /// <summary>
         /// Initialize StoreManager
         /// </summary>
         public void InitializeForCurrentSession() =>
-            StoreManager.InitializeForCurrentSession(securityContext);
+            StoreManager.InitializeForCurrentSession(getSecurityContext());
 
         /// <summary>
         /// Get the store from Id

@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment) => 
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment) =>
             new List<IPackageAdapter> { new NullPackageAdapter() };
 
         /// <summary>
@@ -46,14 +46,6 @@ namespace ShipWorks.Shipping.Carriers.None
         public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
             throw new NotSupportedException("GetParcelDetail not supported for none.");
-        }
-
-        /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new ShippingException("No carrier is selected for the shipment.");
         }
 
         /// <summary>

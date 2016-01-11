@@ -1,12 +1,14 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.iParcel;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Moq;
-using Xunit;
 using System.Diagnostics.CodeAnalysis;
+using Autofac.Extras.Moq;
+using Moq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.iParcel
 {
@@ -15,6 +17,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
     public class iParcelShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;
+        private readonly AutoMock mock;
         private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICustomsManager> customsManager;
         private readonly Mock<iParcelShipmentType> shipmentTypeMock;
@@ -22,7 +25,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
 
         public iParcelShipmentAdapterTest()
         {
-            shipmentType = new iParcelShipmentType();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
             shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = ShipmentTypeCode.iParcel,
@@ -32,7 +36,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
                 Insurance = true,
                 IParcel = new IParcelShipmentEntity()
                 {
-                    Service = (int)iParcelServiceType.Immediate
+                    Service = (int) iParcelServiceType.Immediate
                 }
             };
 
@@ -47,6 +51,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
 
             shipmentTypeManager = new Mock<IShipmentTypeManager>();
             shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
+
+            shipmentType = mock.Create<iParcelShipmentType>();
         }
 
         [Fact]
@@ -214,8 +220,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         {
             ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
-            shipment.IParcel.Service = (int)iParcelServiceType.Immediate;
-            testObject.ServiceType = (int)iParcelServiceType.Preferred;
+            shipment.IParcel.Service = (int) iParcelServiceType.Immediate;
+            testObject.ServiceType = (int) iParcelServiceType.Preferred;
 
             Assert.Equal(shipment.IParcel.Service, testObject.ServiceType);
         }

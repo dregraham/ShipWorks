@@ -15,6 +15,7 @@ namespace ShipWorks.Stores.UI
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
+
             builder.RegisterType<StoreTypeManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

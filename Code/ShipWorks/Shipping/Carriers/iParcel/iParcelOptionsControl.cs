@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public void LoadSettings()
         {
-            requestedLabelFormat.LoadDefaultProfile(new iParcelShipmentType());
+            requestedLabelFormat.LoadDefaultProfile(ShipmentTypeManager.GetType(ShipmentTypeCode.iParcel));
         }
 
         /// <summary>

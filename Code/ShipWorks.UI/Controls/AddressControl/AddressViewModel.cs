@@ -9,11 +9,11 @@ using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Core.UI;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.UI.Controls.AddressControl
 {

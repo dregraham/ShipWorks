@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -181,7 +182,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public void ShowAddressOptionMenu(Control owner, AddressAdapter entityAdapter, Point displayPosition, Func<List<ValidatedAddressEntity>> getValidatedAddresses)
         {
-            // If we won't validate, an error occured, or the address isn't valid, let the user know why and don't show the address selection menu
+            // If we won't validate, an error occurred, or the address isn't valid, let the user know why and don't show the address selection menu
             if (entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.WillNotValidate ||
                 entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.BadAddress ||
                 entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.Error)
@@ -227,7 +228,7 @@ namespace ShipWorks.AddressValidation
                 suggestedAddresses.Count == 1 &&
                 StoreManager.GetAllStores().All(store => store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidateAndApply))
             {
-                menuItems.Add(new MenuItem("Always Fix Addresses For All Stores", 
+                menuItems.Add(new MenuItem("Always Fix Addresses For All Stores",
                     async (sender, args) => await AlwaysFixAddressesSelected(owner, suggestedAddresses.First(), entityAdapter)));
             }
 

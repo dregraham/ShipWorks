@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Collections.Generic;
 
 namespace ShipWorks.AddressValidation
 {
@@ -22,10 +23,10 @@ namespace ShipWorks.AddressValidation
         bool CanShowSuggestions(AddressValidationStatusType validationStatus);
 
         /// <summary>
-        /// Can a message be shown fo the given validation status
+        /// Can a message be shown for the given validation status
         /// </summary>
         bool CanShowMessage(AddressValidationStatusType validationStatus);
-        
+
         /// <summary>
         /// Validates an address with no prefix on the specified entity
         /// </summary>

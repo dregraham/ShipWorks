@@ -166,6 +166,8 @@
     <Compile Include="Imaging\EdgeDetection.cs" />
     <Compile Include="InterapptiveOnly.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />
+    <Compile Include="Utility\DetailsAttribute.cs" />
+    <Compile Include="Utility\DoubleExtensions.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
     <Compile Include="Collections\LruCache.cs" />
     <Compile Include="Collections\LruCacheItemRemovedEvent.cs" />

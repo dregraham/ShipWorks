@@ -7,6 +7,7 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
+using ShipWorks.Startup;
 using Xunit;
 
 namespace ShipWorks.Tests.Integration.MSTest.Functional.Services
@@ -18,6 +19,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Functional.Services
 
         public ServiceStatusManagerTest()
         {
+            ContainerInitializer.Initialize();
+
             executionMode = new Mock<ExecutionMode>();
             executionMode.Setup(m => m.IsUISupported).Returns(true);
 

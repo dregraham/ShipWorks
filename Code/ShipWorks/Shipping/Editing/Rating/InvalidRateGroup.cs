@@ -13,14 +13,14 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Create a new instance of an InvalidRateGroup
         /// </summary>
-        /// <param name="shipmentType">Type of shipment associated with the rates</param>
+        /// <param name="shipmentTypeCode">Type of shipment associated with the rates</param>
         /// <param name="exception">Exception that caused the invalid rates</param>
-        public InvalidRateGroup(ShipmentType shipmentType, Exception exception)
+        public InvalidRateGroup(ShipmentTypeCode shipmentTypeCode, Exception exception)
             : base(new List<RateResult>())
         {
             this.exception = exception;
 
-            base.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType, exception));
+            base.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentTypeCode, exception));
         }
 
         /// <summary>

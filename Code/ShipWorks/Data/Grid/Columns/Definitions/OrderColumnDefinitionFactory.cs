@@ -4,6 +4,7 @@ using System.Text;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
@@ -84,6 +85,14 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridColumnDefinition("{0614E4C9-AE87-4f77-A759-5E6D44FDD821}", true,
                         new GridTextDisplayType(), "Requested Shipping", "UPS Ground",
                         OrderFields.RequestedShipping),
+
+                    new GridColumnDefinition("{603A9AF5-94B0-4FCC-8832-CAC54BFCFDFD}", true,
+                        new GridEnumDisplayType<AddressType>(EnumSortMethod.Description),
+                            "S:Type", AddressType.Residential,
+                            OrderFields.ShipAddressType)
+                    {
+                        DefaultWidth = 24
+                    },
 
                     new GridColumnDefinition("{8E9F3D01-98CF-4574-9CF0-9A6A7FE5C86E}", true,
                         new GridCountryDisplayType() { ShowFlag = true, AbbreviationFormat = AbbreviationFormat.Abbreviated }, "S: Country", "US",

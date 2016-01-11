@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Services;
@@ -56,6 +57,27 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<WorldShipShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.UpsWorldShip)
                 .SingleInstance();
+
+            builder.RegisterType<UpsOltLabelService>()
+                .Keyed<ILabelService>(ShipmentTypeCode.UpsOnLineTools);
+
+            builder.RegisterType<WorldShipLabelService>()
+                .Keyed<ILabelService>(ShipmentTypeCode.UpsWorldShip);
+
+            builder.RegisterType<UpsOltShipmentValidator>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.UpsOnLineTools)
+                .Keyed<IRateHashingService>(ShipmentTypeCode.UpsWorldShip);
+
+            builder.RegisterType<UpsApiTransitTimeClient>();
+
+            builder.RegisterType<UpsApiRateClient>();
+
+            builder.RegisterType<UpsRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.UpsOnLineTools)
+                .Keyed<IRatingService>(ShipmentTypeCode.UpsWorldShip);
         }
     }
 }

@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Core.Messaging.Messages.Shipping;
-using Interapptive.Shared.Collections;
-using ShipWorks.Data;
-using System.Threading.Tasks;
-using ShipWorks.Core.Common.Threading;
-using System.Threading;
-using System.Reactive.Linq;
-using System.Reactive.Disposables;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -39,6 +37,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
 
         private readonly IShippingManager shippingManager;
         private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly Func<BestRateConsolidatePostalRates, BestRateShipmentType> bestRateShipmentTypeFactory;
 
         private ShipmentEntity selectedShipment;
         private readonly bool consolidatePostalRates;
@@ -54,13 +53,15 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Constructor
         /// </summary>
         /// <param name="messenger"></param>
-        public RatingPanelViewModel(IMessenger messenger, IShippingManager shippingManager, IShipmentTypeManager shipmentTypeManager)
+        public RatingPanelViewModel(IMessenger messenger, IShippingManager shippingManager,
+            IShipmentTypeManager shipmentTypeManager, Func<BestRateConsolidatePostalRates, BestRateShipmentType> bestRateShipmentTypeFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.shipmentTypeManager = shipmentTypeManager;
+            this.bestRateShipmentTypeFactory = bestRateShipmentTypeFactory;
 
             consolidatePostalRates = true;
             ActionLinkVisible = false;
@@ -335,7 +336,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             }
             catch (FedExAddressValidationException ex)
             {
-                panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(new FedExShipmentType(), ex), shipment);
+                panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(ShipmentTypeCode.FedEx, ex), shipment);
                 ErrorMessage = ex.Message;
             }
             catch (ShippingException ex)
@@ -345,7 +346,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 if (rates == null)
                 {
                     rates = new RateGroup(new List<RateResult>());
-                    ShipmentType exceptionShipmentType = shipmentType ?? shipmentTypeManager.Get(ShipmentTypeCode.None);
+                    ShipmentTypeCode exceptionShipmentType = shipmentType?.ShipmentTypeCode ?? ShipmentTypeCode.None;
                     rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(exceptionShipmentType, ex));
                 }
 
@@ -368,7 +369,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private ShipmentType PrepareShipmentAndGetShipmentType(ShipmentEntity shipment)
         {
             ShipmentType shipmentType;
-            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode)shipment.ShipmentType;
+            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
 
             // Only change this to best rate for non-USPS postal types
             if (consolidatePostalRates &&
@@ -376,9 +377,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 !PostalUtility.IsPostalSetup() &&
                 IsNotUspsOrExpress1(shipmentTypeCode))
             {
-                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter> { new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter() }));
+                shipmentType = bestRateShipmentTypeFactory(BestRateConsolidatePostalRates.Yes);
 
-                shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
+                shipment.ShipmentType = (int) ShipmentTypeCode.BestRate;
                 shippingManager.EnsureShipmentLoaded(shipment);
 
                 shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
@@ -387,7 +388,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
                 shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
                 shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
-                shipment.BestRate.ServiceLevel = (int)ServiceLevelType.Anytime;
+                shipment.BestRate.ServiceLevel = (int) ServiceLevelType.Anytime;
                 shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
             }
             else

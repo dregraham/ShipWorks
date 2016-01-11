@@ -1,10 +1,14 @@
 ﻿using Autofac;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
+    /// <summary>
+    /// Shipping module for the OnTrac carrier
+    /// </summary>
     public class OnTracShippingModule : Module
     {
         /// <summary>
@@ -31,6 +35,18 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             builder.RegisterType<OnTracShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.OnTrac)
                 .SingleInstance();
+
+            builder.RegisterType<OnTracLabelService>()
+                .Keyed<ILabelService>(ShipmentTypeCode.OnTrac);
+
+            builder.RegisterType<OnTracAccountRepository>()
+                .As<ICarrierAccountRepository<OnTracAccountEntity>>();
+
+            builder.RegisterType<OnTracRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.OnTrac);
+
+            builder.RegisterType<OnTracRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.OnTrac);
         }
     }
 }

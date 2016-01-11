@@ -95,9 +95,12 @@ namespace ShipWorks.Users
             ConfigurationData.InitializeForCurrentDatabase();
             DataResourceManager.InitializeForCurrentDatabase();
 
-            foreach (IInitializeForCurrentDatabase service in lifetimeScope.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                service.InitializeForCurrentDatabase(executionMode);
+                foreach (IInitializeForCurrentDatabase service in scope.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
+                {
+                    service.InitializeForCurrentDatabase(executionMode);
+                }
             }
 
             bool wasLoggedIn = (User != null);
@@ -411,7 +414,7 @@ namespace ShipWorks.Users
                 // Implements "Remember Me"
                 SaveLastUser(username, password, remember);
 
-                Logon(loggedInUser, audit);
+                Logon(user, audit);
 
                 return true;
             }

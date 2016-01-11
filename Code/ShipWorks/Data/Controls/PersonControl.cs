@@ -20,6 +20,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
 using System.Threading.Tasks;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Data.Controls
 {
@@ -659,6 +660,7 @@ namespace ShipWorks.Data.Controls
                     if (ValidatedAddressManager.EnsureAddressCanBeValidated(newAddress))
                     {
                         newAddress.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                        newAddress.AddressType = (int) AddressType.NotChecked;
                     }
 
                     newAddress.AddressValidationSuggestionCount = 0;
@@ -1006,6 +1008,7 @@ namespace ShipWorks.Data.Controls
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
             {
                 lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+                lastValidatedAddress.AddressType = (int) AddressType.NotChecked;
             }
 
             validatedAddresses.Clear();

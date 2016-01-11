@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Data.Model.EntityClasses;
 using Moq;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
@@ -17,11 +18,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
         private List<ShipmentEntity> shipments;
         private Mock<IiParcelRepository> repository;
+        private Mock<IOrderManager> orderManager;
 
         public iParcelTokenSuggestionFactoryTest()
         {
             repository = new Mock<IiParcelRepository>();
-            repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
+            
+            orderManager = new Mock<IOrderManager>();
+            orderManager.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
 
             shipments = new List<ShipmentEntity>
             {
@@ -64,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             shipments[0].Order.OrderItems.Add(new OrderItemEntity { Description = "some description", Quantity = 2, Weight = 1.54, UnitPrice = 3.40M, SKU = "12345678" });
             shipments[0].Order.OrderItems.Add(new OrderItemEntity { Description = "another description", Quantity = 1, Weight = 5.54, UnitPrice = 4.90M, SKU = "987654321" });
 
-            testObject = new iParcelTokenSuggestionFactory(shipments, repository.Object);
+            testObject = new iParcelTokenSuggestionFactory(shipments, orderManager.Object);
         }
 
         [Fact]
@@ -100,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             testObject.GetSuggestions(TokenUsage.Generic);
 
-            repository.Verify(r => r.PopulateOrderDetails(shipments[0]), Times.Once());
+            orderManager.Verify(r => r.PopulateOrderDetails(shipments[0]), Times.Once());
         }
 
         [Fact]
@@ -110,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             testObject.GetSuggestions(TokenUsage.Generic);
 
-            repository.Verify(r => r.PopulateOrderDetails(shipments[0]), Times.Never());
+            orderManager.Verify(r => r.PopulateOrderDetails(shipments[0]), Times.Never());
         }
 
         [Fact]
@@ -120,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             testObject.GetSuggestions(TokenUsage.Generic);
 
-            repository.Verify(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()), Times.Never());
+            orderManager.Verify(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()), Times.Never());
         }
 
         [Fact]
@@ -168,7 +172,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         public void GetSuggestions_ThrowsiParcelException_WhenExceptionOccurs_Test()
         {
             // Setup the repository to throw an exception to trigger the exception handling
-            repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>())).Throws(new NullReferenceException());
+            orderManager.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>())).Throws(new NullReferenceException());
 
             Assert.Throws<iParcelException>(() => testObject.GetSuggestions(TokenUsage.Generic));
         }

@@ -126,8 +126,8 @@ namespace ShipWorks.Tests.Integration.MSTest
                     case "benz-pc":
                         instance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
                         break;
-                    case "mirza-pc":
-                        instance = Guid.Parse("{4c5c2b9a-32d3-4314-a4f7-200000000000}");
+                    case "mirza-pc2":
+                        instance = Guid.Parse("{1231F4A9-640C-4E08-A52A-AE3B2C2FB864}");
                         break;
                     case "berger-pc":
                         instance = Guid.Parse("{AABB7285-a889-46af-87b8-69c10cdbAABB}");

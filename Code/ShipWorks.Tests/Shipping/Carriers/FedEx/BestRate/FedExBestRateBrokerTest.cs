@@ -20,10 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
             genericRepositoryMock = new Mock<ICarrierAccountRepository<FedExAccountEntity>>();
             genericShipmentTypeMock = new Mock<FedExShipmentType>();
 
-            testObject = new FedExBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
-            {
-                GetRatesAction = (shipment, type) => genericShipmentTypeMock.Object.GetRates(shipment)
-            };
+            testObject = new FedExBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
         }
 
         [Fact]

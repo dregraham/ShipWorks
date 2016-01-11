@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         private const int MaxCustomsItemDescriptionLength = 60;
 
         private readonly ILog log;
-        private readonly LogEntryFactory logEntryFactory;
+        private readonly ILogEntryFactory logEntryFactory;
         private readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
 
         // Maps USPS usernames to their latest authenticator tokens
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1UspsWebClient" /> class.
         /// </summary>
-        public Express1UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
+        public Express1UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;

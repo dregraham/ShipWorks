@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             get
             {
-                long? accountID = new iParcelShipmentType().GetPrimaryProfile().IParcel.IParcelAccountID;
+                long? accountID = ShipmentTypeManager.GetType(ShipmentTypeCode.iParcel).GetPrimaryProfile().IParcel.IParcelAccountID;
 
                 return GetProfileAccount(ShipmentTypeCode.iParcel, accountID);
             }

@@ -37,11 +37,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         }
 
         /// <summary>
-        /// Gets Rates
+        /// Gets rates for the given ShipmentRequestDetails
         /// </summary>
-        /// <param name="requestDetails"></param>
-        /// <param name="mwsSettings"></param>
-        /// <returns></returns>
         public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.GetEligibleShippingServices;
@@ -59,26 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         }
 
         /// <summary>
-        /// Cancel Shipment
-        /// </summary>
-        public CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, string amazonShipmentId)
-        {
-            AmazonMwsApiCall call = AmazonMwsApiCall.CancelShipment;
-
-            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-
-            // Add the service
-            request.Variables.Add("ShipmentId", amazonShipmentId);
-
-            // Get Response
-            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
-
-            // Deserialize
-            return DeserializeResponse<CancelShipmentResponse>(response.ReadResult());
-        }
-
-        /// <summary>
-        /// Create Shipment
+        /// Create a shipment for the given ShipmentRequestDetails
         /// </summary>
         public CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings, string shippingServiceId)
         {
@@ -102,11 +80,30 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         }
 
         /// <summary>
+        /// Cancel Shipment
+        /// </summary>
+        public CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, string amazonShipmentId)
+        {
+            AmazonMwsApiCall call = AmazonMwsApiCall.CancelShipment;
+
+            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+
+            // Add the service
+            request.Variables.Add("ShipmentId", amazonShipmentId);
+
+            // Get Response
+            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
+
+            // Deserialize
+            return DeserializeResponse<CancelShipmentResponse>(response.ReadResult());
+        }
+
+        /// <summary>
         /// Validate the CreateShipmentResponse to ensure that it contains a label
         /// </summary>
         public CreateShipmentResponse ValidateCreateShipmentResponse(CreateShipmentResponse createShipmentResponse)
         {
-            if (createShipmentResponse?.CreateShipmentResult?.Shipment?.Label?.FileContents == null)
+            if (createShipmentResponse?.CreateShipmentResult?.AmazonShipment?.Label?.FileContents == null)
             {
                 throw new AmazonShippingException("Amazon failed to return a label for the Shipment.");
             }

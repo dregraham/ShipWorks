@@ -1,11 +1,15 @@
 ﻿using Autofac;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.WebTools
 {
+    /// <summary>
+    /// Service registrations for the WebTools shipping carrier
+    /// </summary>
     public class WebToolsShippingModule : Module
     {
         /// <summary>
@@ -32,6 +36,15 @@ namespace ShipWorks.Shipping.Carriers.WebTools
             builder.RegisterType<PostalWebToolsShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.PostalWebTools)
                 .SingleInstance();
+
+            builder.RegisterType<WebToolsLabelService>()
+                .Keyed<ILabelService>(ShipmentTypeCode.PostalWebTools);
+
+            builder.RegisterType<WebToolsRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.PostalWebTools);
+
+            builder.RegisterType<PostalRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.PostalWebTools);
         }
     }
 }

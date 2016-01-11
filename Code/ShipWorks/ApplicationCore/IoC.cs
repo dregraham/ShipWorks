@@ -7,6 +7,7 @@ using Autofac.Core;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
@@ -131,6 +132,10 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<LogEntryFactory>()
+                .AsImplementedInterfaces()
+                .AsSelf();
 
             builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces();

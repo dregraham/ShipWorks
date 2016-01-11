@@ -216,6 +216,10 @@
       <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
       <Name>ShipWorks.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
+      <Project>{A5EB7A6B-1600-4BE2-AED6-3284C4E7987C}</Project>
+      <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
       <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
       <Name>ShipWorks.ThirdPartyApi</Name>

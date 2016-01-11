@@ -49,6 +49,15 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
             builder.RegisterType<NullShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Other)
                 .SingleInstance();
+				
+            builder.RegisterType<OtherLabelService>()
+                .Keyed<ILabelService>(ShipmentTypeCode.Other);
+
+            builder.RegisterType<EmptyRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.Other);
+
+            builder.RegisterType<EmptyRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.Other);
         }
     }
 }

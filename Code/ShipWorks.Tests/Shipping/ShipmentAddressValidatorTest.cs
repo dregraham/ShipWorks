@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Moq;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
-using Xunit;
 using ShipWorks.Shipping;
-using ShipWorks.Users.Security;
-using ShipWorks.Core.Common.Threading;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -69,6 +68,6 @@ namespace ShipWorks.Tests.Shipping
 
             validatedAddressManager.VerifyAll();
         }
-        
+
     }
 }

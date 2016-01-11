@@ -1,9 +1,11 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.BestRate
@@ -11,14 +13,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
     public class BestRateShipmentAdapterTest
     {
         private readonly ShipmentEntity shipment;
+        private readonly AutoMock mock;
         private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICustomsManager> customsManager;
         private readonly Mock<BestRateShipmentType> shipmentTypeMock;
-        private readonly ShipmentType shipmentType;
 
         public BestRateShipmentAdapterTest()
         {
-            shipmentType = new BestRateShipmentType();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
             shipment = new ShipmentEntity()
             {
                 ShipmentTypeCode = ShipmentTypeCode.BestRate,
@@ -29,14 +32,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
                 BestRate = new BestRateShipmentEntity()
             };
 
-            customsManager = new Mock<ICustomsManager>();
-            customsManager.Setup(c => c.EnsureCustomsLoaded(It.IsAny<IEnumerable<ShipmentEntity>>())).Returns(new Dictionary<ShipmentEntity, Exception>());
+            customsManager = mock.CreateMock<ICustomsManager>();
 
-            shipmentTypeMock = new Mock<BestRateShipmentType>(MockBehavior.Strict);
-            shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.UpdateTotalWeight(shipment)).Verifiable();
-            shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => shipmentType.SupportsMultiplePackages);
-            shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => shipmentType.IsDomestic(shipment));
+            shipmentTypeMock = mock.CreateMock<BestRateShipmentType>();
 
             shipmentTypeManager = new Mock<IShipmentTypeManager>();
             shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
@@ -103,6 +101,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         [Fact]
         public void SupportsMultiplePackages_DomesticIsTrue_WhenShipCountryIsUs()
         {
+            shipmentTypeMock.CallBase = true;
+
             shipment.OriginCountryCode = "US";
             shipment.ShipCountryCode = "US";
 

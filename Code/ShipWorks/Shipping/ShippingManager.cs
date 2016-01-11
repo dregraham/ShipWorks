@@ -14,6 +14,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
@@ -626,7 +627,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Get the carrier name for the given shipemnt type
+        /// Get the carrier name for the given shipment type
         /// </summary>
         public static string GetCarrierName(ShipmentTypeCode shipmentTypeCode)
         {
@@ -713,9 +714,16 @@ namespace ShipWorks.Shipping
 
             // Because this is coming from the rate control, and the only thing that causes rate changes from the rate control
             // is the Express1 promo footer, we need to remove the shipment from the cache before we get rates
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-            string cacheHash = shipmentType.GetRatingHash(shipment);
-            RateCache.Instance.Remove(cacheHash);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                if (lifetimeScope.IsRegisteredWithKey<IRateHashingService>((ShipmentTypeCode) shipment.ShipmentType))
+                {
+                    IRateHashingService rateHashingService = lifetimeScope.ResolveKeyed<IRateHashingService>((ShipmentTypeCode) shipment.ShipmentType);
+
+                    string cacheHash = rateHashingService.GetRatingHash(shipment);
+                    RateCache.Instance.Remove(cacheHash);
+                }
+            }
         }
 
         /// <summary>
@@ -755,8 +763,19 @@ namespace ShipWorks.Shipping
             StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
             storeType.OverrideShipmentDetails(clonedShipment);
 
-            // Use the cloned shipment with the potentially adjusted shipping address to get the rates
-            RateGroup rateResults = shipmentType.GetRates(clonedShipment);
+            RateGroup rateResults = null;
+
+            // Get rates from rating service if it is registered, otherwise get rate from the shipment type
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ICachedRatesService cachedRatesService = lifetimeScope.Resolve<ICachedRatesService>();
+
+                IRatingService ratingService =
+                    lifetimeScope.ResolveKeyed<IRatingService>((ShipmentTypeCode) shipment.ShipmentType);
+
+                // Check to see if the rate is cached, if not call the rating service
+                rateResults = cachedRatesService.GetCachedRates<ShippingException>(clonedShipment, ratingService.GetRates);
+            }
 
             // Copy back any best rate events that were set on the clone
             shipment.BestRateEvents |= clonedShipment.BestRateEvents;
@@ -781,10 +800,10 @@ namespace ShipWorks.Shipping
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-            // Marke sure the type is setup - its possible it's not in the case of upgrading from V2
+            // Mark sure the type is setup - its possible it's not in the case of upgrading from V2
             if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
             {
-                throw new ShippingException(String.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
+                throw new ShippingException($"The '{shipmentType.ShipmentTypeName}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.");
             }
 
             TrackingResult result = shipmentType.TrackShipment(shipment);
@@ -828,7 +847,7 @@ namespace ShipWorks.Shipping
                     // Get the ShipmentType instance
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-                    // Marke sure the type is setup - its possible it's not in the case of upgrading from V2
+                    // Mark sure the type is setup - its possible it's not in the case of upgrading from V2
                     if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
                     {
                         throw new ShippingException(String.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
@@ -842,7 +861,16 @@ namespace ShipWorks.Shipping
                     // Transacted
                     using (SqlAdapter adapter = new SqlAdapter(true))
                     {
-                        shipmentType.VoidShipment(shipment);
+                        using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                        {
+                            if (lifetimeScope.IsRegisteredWithKey<ILabelService>((ShipmentTypeCode) shipment.ShipmentType))
+                            {
+                                ILabelService labelService =
+                                    lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
+
+                                labelService.Void(shipment);
+                            }
+                        }
 
                         shipment.Voided = true;
                         shipment.VoidedDate = DateTime.UtcNow;
@@ -868,7 +896,7 @@ namespace ShipWorks.Shipping
                             }
                             catch (InsureShipException ex)
                             {
-                                // If there was an error voiding the insurance policy, save the exception so we can rethrow at the
+                                // If there was an error voiding the insurance policy, save the exception so we can re-throw at the
                                 // very end of the voiding process to ensure that any other code for voiding can run
                                 voidInsuranceException = ex;
                             }
@@ -885,7 +913,7 @@ namespace ShipWorks.Shipping
                     // Void the shipment in tango
                     TangoWebClient.VoidShipment(store, shipment);
 
-                    // Rethrow the insurance exception if there was one
+                    // Re-throw the insurance exception if there was one
                     if (voidInsuranceException != null)
                     {
                         string message = string.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.\r\n\r\n{1}",
@@ -1070,7 +1098,7 @@ namespace ShipWorks.Shipping
                 log.InfoFormat("Shipment {0}  - Ensuring loaded", shipment.ShipmentID);
                 EnsureShipmentLoaded(shipment);
 
-                // Update the dyamic data of the shipment
+                // Update the dynamic data of the shipment
                 shipmentType.UpdateDynamicShipmentData(shipment);
 
                 // Apply the blank recipient phone# option.  We apply it right to the entity so that
@@ -1111,7 +1139,7 @@ namespace ShipWorks.Shipping
                     throw new ShippingException(String.Format("Your edition of ShipWorks does not support shipping with '{0}'.", shipmentType.ShipmentTypeName));
                 }
 
-                // If they had set this shipment to be a return - we want to make sure it's not processed as one if they switched to something that doesnt support it
+                // If they had set this shipment to be a return - we want to make sure it's not processed as one if they switched to something that doesn't support it
                 if (!shipmentType.SupportsReturns)
                 {
                     shipment.ReturnShipment = false;
@@ -1142,7 +1170,15 @@ namespace ShipWorks.Shipping
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
-                    shipmentType.ProcessShipment(shipment);
+
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        ILabelService labelService =
+                            lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
+
+                        labelService.Create(shipment);
+                    }
+
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
 
                     if (IsInsuredByInsureShip(shipmentType, shipment))

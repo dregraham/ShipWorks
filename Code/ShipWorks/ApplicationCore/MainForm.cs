@@ -271,16 +271,9 @@ namespace ShipWorks
             {
                 return;
             }
-
-            // Make sure that change tracking is enabled for the database and all applicable tables.
-            SqlChangeTracking sqlChangeTracking = new SqlChangeTracking();
-            sqlChangeTracking.Enable();
-
+            
             // Initiate the logon sequence
             InitiateLogon();
-
-            ShipSenseLoader.LoadDataAsync();
-
         }
 
         /// <summary>
@@ -383,7 +376,13 @@ namespace ShipWorks
 
             if (LogonToSqlServer())
             {
+                // Make sure that change tracking is enabled for the database and all applicable tables.
+                SqlChangeTracking sqlChangeTracking = new SqlChangeTracking();
+                sqlChangeTracking.Enable();
+
                 LogonToShipWorks();
+
+                ShipSenseLoader.LoadDataAsync();
             }
             else
             {
@@ -1429,6 +1428,7 @@ namespace ShipWorks
         /// Update the UI that's based on user initiated actions
         /// </summary>
         [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         private void UpdateCustomButtonsActionsUI()
         {
             string ribbonChunkName = "Custom Actions";
@@ -3124,6 +3124,7 @@ namespace ShipWorks
         /// <summary>
         /// Initialize the panels for the current user
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         private void InitializePanels()
         {
             // First go through each panel and wrap it in a Panel control that will allow us to show messages to the user like "No orders are selected.";
@@ -3497,7 +3498,7 @@ namespace ShipWorks
 
                 bool anyClosed = false;
 
-                IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, new FedExSettingsRepository());
+                IFedExShippingClerk shippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(null, new FedExSettingsRepository());
 
                 // Process all accounts with configured hub ids
                 foreach (FedExAccountEntity account in FedExAccountManager.Accounts.Where(a => XElement.Parse(a.SmartPostHubList).Descendants("HubID").Any()))

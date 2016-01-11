@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Shipping.Loading;
@@ -141,8 +142,8 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShippingProfileEditorDlg>();
 
             builder.RegisterType<ShippingViewModelFactory>()
-                            .AsImplementedInterfaces()
-                            .SingleInstance();
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             builder.RegisterType<StampsAddressValidationWebClient>()
                 .AsImplementedInterfaces();
@@ -151,8 +152,41 @@ namespace ShipWorks.Shipping.UI
             {
                 return parameters.TypedAs<ShipmentTypeCode>() == ShipmentTypeCode.Other ?
                     (IShipmentViewModel) container.Resolve<OtherShipmentViewModel>() :
-                     container.Resolve<ShipmentViewModel>();
+                    container.Resolve<ShipmentViewModel>();
             });
+
+            builder.RegisterType<ShippingProfileEditorDlg>();
+
+            builder.RegisterType<CachedRatesService>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<RateHashingService>();
+
+            // Return a ICertificateInspector
+            // if no string is passed it will return a
+            // certificate inspector that always returns trusted
+            builder.Register<ICertificateInspector>(
+                (contaner, parameters) =>
+                {
+                    string certVerificationData = parameters.TypedAs<string>();
+
+                    if (string.IsNullOrWhiteSpace(certVerificationData))
+                    {
+                        return new TrustingCertificateInspector();
+                    }
+                    return new CertificateInspector(certVerificationData);
+                });
+
+            builder.Register(
+                (container, parameters) =>
+                    container.ResolveKeyed<IRateHashingService>(parameters.TypedAs<ShipmentTypeCode>()));
+
+            builder.Register(
+                (container, parameters) =>
+                    container.ResolveKeyed<ShipmentType>(parameters.TypedAs<ShipmentTypeCode>()));
+
+            builder.RegisterType<ExcludedServiceTypeRepository>()
+                .AsImplementedInterfaces();
         }
     }
 }

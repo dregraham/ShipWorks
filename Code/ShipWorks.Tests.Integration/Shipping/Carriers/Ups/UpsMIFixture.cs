@@ -1,18 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping;
 using ShipWorks.Tests.Integration.MSTest.Fixtures;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.UPS
 {
     public class UpsMIFixture : ShipWorksFixtureBase
     {
@@ -67,7 +69,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
 
             shipment.Ups.Service = GetServiceType();
         }
-        
+
         protected override void ShipShipment(ShipmentEntity shipment)
         {
             shipment.Ups.Service = (int) GetServiceType();
@@ -76,7 +78,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
             shipment.Ups.UpsAccountID = GetAccountId(AccountID);
 
             WorldShipShipmentType upsWorldShipShipmentType = new WorldShipShipmentType();
-            upsWorldShipShipmentType.ProcessShipment(shipment);
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILabelService labelService = lifetimeScope.ResolveKeyed<ILabelService>(ShipmentTypeCode.UpsWorldShip);
+
+                WorldShipLabelService worldShipLabelService = labelService as WorldShipLabelService;
+
+                worldShipLabelService.Create(shipment);
+            }
 
             shipment.ContentWeight = shipment.Ups.Packages.Sum(p => p.DimsWeight);
         }
@@ -142,7 +152,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
         protected override void SetPackageData(ShipmentEntity shipment)
         {
             if (shipment.Ups == null)
-            { 
+            {
                 shipment.Ups = new UpsShipmentEntity();
             }
 
@@ -158,7 +168,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
                     package = new UpsPackageEntity();
                     shipment.Ups.Packages.Add(package);
                 }
-                
+
                 InitializePackage(package);
 
                 if (!string.IsNullOrWhiteSpace(InsuranceValuePerPackage))
@@ -214,42 +224,42 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
                 switch (serviceType)
                 {
                     case UpsServiceType.UpsMailInnovationsExpedited:
-                        package.PackagingType = (int)UpsPackagingType.BPMFlats;
+                        package.PackagingType = (int) UpsPackagingType.BPMFlats;
 
-                        package.Weight = GetPackageWeight(package.Weight, ups.Service, (UpsPackagingType)package.PackagingType);
+                        package.Weight = GetPackageWeight(package.Weight, ups.Service, (UpsPackagingType) package.PackagingType);
                         break;
                     case UpsServiceType.UpsMailInnovationsPriority:
-                        shipment.Ups.Packages[0].PackagingType = (int)UpsPackagingType.PriorityMail;
+                        shipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.PriorityMail;
 
-                        package.Weight = GetPackageWeight(package.Weight, ups.Service, (UpsPackagingType)package.PackagingType);
+                        package.Weight = GetPackageWeight(package.Weight, ups.Service, (UpsPackagingType) package.PackagingType);
                         break;
                     case UpsServiceType.UpsMailInnovationsFirstClass:
-                        shipment.Ups.Packages[0].PackagingType = (int)UpsPackagingType.FirstClassMail;
+                        shipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.FirstClassMail;
 
-                        package.Weight = GetPackageWeight(package.Weight, ups.Service, (UpsPackagingType)package.PackagingType);
+                        package.Weight = GetPackageWeight(package.Weight, ups.Service, (UpsPackagingType) package.PackagingType);
                         break;
                     case UpsServiceType.UpsMailInnovationsIntEconomy:
-                        shipment.Ups.Packages[0].PackagingType = (int)UpsPackagingType.BPM;
+                        shipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.BPM;
 
-                        package.Weight = GetPackageWeight(package.Weight, ups.Service, (UpsPackagingType)package.PackagingType);
+                        package.Weight = GetPackageWeight(package.Weight, ups.Service, (UpsPackagingType) package.PackagingType);
                         break;
                     case UpsServiceType.UpsMailInnovationsIntPriority:
-                        shipment.Ups.Packages[0].PackagingType = (int)UpsPackagingType.Flats;
+                        shipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.Flats;
 
-                        package.Weight = GetPackageWeight(package.Weight, ups.Service, (UpsPackagingType)package.PackagingType);
+                        package.Weight = GetPackageWeight(package.Weight, ups.Service, (UpsPackagingType) package.PackagingType);
                         break;
                 }
 
                 if (shipment.Ups.Service == (int) UpsServiceType.UpsMailInnovationsFirstClass)
                 {
-                    shipment.Ups.Packages[0].PackagingType = (int)UpsPackagingType.FirstClassMail;
+                    shipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.FirstClassMail;
                 }
 
                 shipment.ContentWeight = package.Weight;
                 shipment.TotalWeight = package.Weight;
 
                 shipment.BilledWeight = shipment.TotalWeight;
-                shipment.BilledType = (int)BilledType.Unknown;
+                shipment.BilledType = (int) BilledType.Unknown;
 
                 if (shipment.ShipCountryCode != "US")
                 {
@@ -276,7 +286,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
 
         private double GetPackageWeight(double currentWeight, int service, UpsPackagingType packageType)
         {
-            UpsServicePackageTypeSetting setting = UpsServicePackageTypeSetting.ServicePackageValidationSettings.FirstOrDefault(x => x.ServiceType == (UpsServiceType)service
+            UpsServicePackageTypeSetting setting = UpsServicePackageTypeSetting.ServicePackageValidationSettings.FirstOrDefault(x => x.ServiceType == (UpsServiceType) service
                                                                                                                                      && x.PackageType == packageType);
 
             currentWeight = WeightUtility.Convert(WeightUnitOfMeasure.Pounds, setting.WeightUnitOfMeasure, currentWeight);
@@ -313,7 +323,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
             package.InsurancePennyOne = false;
             package.DeclaredValue = 0M;
 
-            package.PackagingType = (int)UpsPackagingType.Custom;
+            package.PackagingType = (int) UpsPackagingType.Custom;
         }
     }
 }

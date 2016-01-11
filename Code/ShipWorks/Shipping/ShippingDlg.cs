@@ -453,6 +453,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Update the shipment details section to display the data currently in the selected shipments
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         private Task LoadSelectedShipments(bool resortWhenDone, bool getRatesWhenDone)
         {
             // If we're already in the process of loading shipments, there is no need to process this

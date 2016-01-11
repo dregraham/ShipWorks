@@ -4,6 +4,7 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using Moq;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Tests.Shared;
 using ShipWorks.UI;

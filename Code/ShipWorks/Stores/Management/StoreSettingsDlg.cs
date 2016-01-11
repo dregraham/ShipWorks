@@ -1,33 +1,26 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters;
-using ShipWorks.UI;
-using ShipWorks.Data;
-using ShipWorks.UI.Controls;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Users;
-using ShipWorks.Users.Security;
-using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
-using System.Collections;
-using ShipWorks.Core.Messaging;
+using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
-using Interapptive.Shared;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Management
 {
@@ -154,7 +147,7 @@ namespace ShipWorks.Stores.Management
 
                 licenseTabInitialized = false;
             }
-       }
+        }
 
         /// <summary>
         /// A page is being deselected
@@ -240,7 +233,7 @@ namespace ShipWorks.Stores.Management
             if (storeSettingsControl != null)
             {
                 // Settings control gets location and width of the section title, so that each settings control can simply
-                // set its titles to go all the way accross with anchors.
+                // set its titles to go all the way across with anchors.
                 storeSettingsControl.Location = new Point(sectionTitleManualOrders.Left, manualOrderSettingsControl.Bottom + 8);
                 storeSettingsControl.Width = sectionTitleManualOrders.Width; ;
                 storeSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
@@ -256,7 +249,7 @@ namespace ShipWorks.Stores.Management
             }
 
             panelAddressValidation.Top = panelStoreStatus.Bottom + 8;
-            addressValidationSetting.SelectedValue = (AddressValidationStoreSettingType)store.AddressValidationSetting;
+            addressValidationSetting.SelectedValue = (AddressValidationStoreSettingType) store.AddressValidationSetting;
 
             panelDefaultFilters.Top = panelAddressValidation.Bottom + 8;
 
@@ -307,15 +300,15 @@ namespace ShipWorks.Stores.Management
             }
 
             // Check whether we should reset any pending address validations
-            AddressValidationStoreSettingType currentSetting = (AddressValidationStoreSettingType)store.AddressValidationSetting;
-            AddressValidationStoreSettingType newSetting = (AddressValidationStoreSettingType)addressValidationSetting.SelectedValue;
+            AddressValidationStoreSettingType currentSetting = (AddressValidationStoreSettingType) store.AddressValidationSetting;
+            AddressValidationStoreSettingType newSetting = (AddressValidationStoreSettingType) addressValidationSetting.SelectedValue;
 
             resetPendingValidations = (currentSetting == AddressValidationStoreSettingType.ValidateAndApply ||
                                        currentSetting == AddressValidationStoreSettingType.ValidateAndNotify)
                                       && (newSetting == AddressValidationStoreSettingType.ManualValidationOnly ||
                                           newSetting == AddressValidationStoreSettingType.ValidationDisabled);
-            
-            store.AddressValidationSetting = (int)addressValidationSetting.SelectedValue;
+
+            store.AddressValidationSetting = (int) addressValidationSetting.SelectedValue;
 
             return result;
         }
@@ -514,12 +507,12 @@ namespace ShipWorks.Stores.Management
                     {
                         OrderEntity orderUpdate = new OrderEntity
                         {
-                            ShipAddressValidationStatus = (int)AddressValidationStatusType.NotChecked
+                            ShipAddressValidationStatus = (int) AddressValidationStatusType.NotChecked
                         };
 
                         var pendingOrderBucket = new RelationPredicateBucket();
                         pendingOrderBucket.PredicateExpression.Add(OrderFields.StoreID == store.StoreID);
-                        pendingOrderBucket.PredicateExpression.AddWithAnd(OrderFields.ShipAddressValidationStatus == (int)AddressValidationStatusType.Pending);
+                        pendingOrderBucket.PredicateExpression.AddWithAnd(OrderFields.ShipAddressValidationStatus == (int) AddressValidationStatusType.Pending);
 
                         adapter.UpdateEntitiesDirectly(orderUpdate, pendingOrderBucket);
                     }
@@ -576,11 +569,11 @@ namespace ShipWorks.Stores.Management
                 sb.AppendFormat("The following filters were created in filter folder '{0}.'", result.StoreFolderName)
                     .AppendLine();
 
-                result.CreatedFilters.ForEach(newFilter=>sb.AppendFormat(" - {0}", newFilter.Name).AppendLine());
+                result.CreatedFilters.ForEach(newFilter => sb.AppendFormat(" - {0}", newFilter.Name).AppendLine());
             }
             if (result.CollisionFilters.Any())
             {
-                if (sb.Length>0)
+                if (sb.Length > 0)
                 {
                     sb.AppendLine();
                 }
@@ -590,7 +583,7 @@ namespace ShipWorks.Stores.Management
                     .AppendLine("These filters remained unchanged:");
 
                 result.CollisionFilters
-                    .ForEach(collisionFilter => sb.AppendFormat(" - {0}",collisionFilter.Name).AppendLine());
+                    .ForEach(collisionFilter => sb.AppendFormat(" - {0}", collisionFilter.Name).AppendLine());
             }
 
             MessageHelper.ShowWarning(this, sb.ToString());

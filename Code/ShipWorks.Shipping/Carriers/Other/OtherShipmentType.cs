@@ -128,21 +128,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer() =>
             new OtherShipmentProcessingSynchronizer();
 
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            if (string.IsNullOrWhiteSpace(shipment.Other.Carrier))
-            {
-                throw new ShippingException("No carrier is specified.");
-            }
-
-            if (string.IsNullOrWhiteSpace(shipment.Other.Service))
-            {
-                throw new ShippingException("No service is specified.");
-            }
-        }
-
         /// <summary>
         /// Create the XML input to the XSL engine
         /// </summary>
