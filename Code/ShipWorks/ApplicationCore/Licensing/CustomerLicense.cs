@@ -66,6 +66,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             GenericResult<LicenseCapabilities> result = tangoWebClient.GetLicenseCapabilities(this);
 
+            if (!result.Success)
+            {
+                log.Warn(result.Message);
+            }
+
             LicenseCapabilities = result.Context;
             DisabledReason = result.Message;
         }
