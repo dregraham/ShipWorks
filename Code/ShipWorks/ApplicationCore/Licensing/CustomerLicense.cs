@@ -72,11 +72,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             LicenseCapabilities = result.Context;
             DisabledReason = result.Message;
-
-            if (!result.Success)
-            {
-                log.Warn(DisabledReason);
-            }
         }
 
         /// <summary>
