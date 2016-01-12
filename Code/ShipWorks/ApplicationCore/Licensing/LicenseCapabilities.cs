@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml;
+using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -22,6 +23,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             xpath.Namespaces.AddNamespace("i", "http://www.w3.org/2001/XMLSchema-instance");
             xpath.Namespaces.AddNamespace("", "http://stamps.com/xml/namespace/2015/09/shipworks/activationv1");
 
+            CheckForFault(xpath);
+
             None = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='None']/Value", 0) == 1;
             ActionLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ActionLimit']/Value", 0) == 1;
             FilterLimit = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='FilterLimit']/Value", 0) == 1;
@@ -40,6 +43,23 @@ namespace ShipWorks.ApplicationCore.Licensing
             SetStampsCapabilities(xpath);
             SetEndiciaCapabilities(xpath);
             SetUpsCapabilities(xpath);
+        }
+
+        /// <summary>
+        /// Throw error if fault in XML.
+        /// </summary>
+        private static void CheckForFault(XPathNamespaceNavigator xpath)
+        {
+            // Check to see if the response contains a fault
+            XPathNavigator fault = xpath.SelectSingleNode("//s:Fault/detail");
+
+            if (fault != null)
+            {
+                string message = XPathUtility.Evaluate(fault, "//*[local-name()='Message']", "");
+                throw new ShipWorksLicenseException(string.IsNullOrWhiteSpace(message)
+                    ? "There was an error validating your license"
+                    : message);
+            }
         }
 
         /// <summary>

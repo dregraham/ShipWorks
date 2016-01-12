@@ -63,15 +63,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void Refresh()
         {
-            GenericResult<LicenseCapabilities> result = tangoWebClient.GetLicenseCapabilities(this);
-
-            if (!result.Success)
+            try
             {
-                log.Warn(result.Message);
+                LicenseCapabilities = tangoWebClient.GetLicenseCapabilities(this);
             }
-
-            LicenseCapabilities = result.Context;
-            DisabledReason = result.Message;
+            catch (TangoException ex)
+            {
+                LicenseCapabilities = null; // may want to use a null object pattern here...
+                DisabledReason = ex.Message;
+                log.Warn(ex);
+            }
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -1099,7 +1100,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 if (message == "Authentication failed.")
                 {
-                    result.Message = "The username or password entered is not correct.";
+                    result.Message = "The email or password entered is not correct.";
                 }
 
                 return true;
@@ -1146,9 +1147,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Gets the license capabilities.
         /// </summary>
         /// <param name="license">The license.</param>
-        public static GenericResult<LicenseCapabilities> GetLicenseCapabilities(ICustomerLicense license)
+        public static LicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
         {
-            GenericResult<LicenseCapabilities> result = new GenericResult<LicenseCapabilities>(null);
+            LicenseCapabilities result;
 
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
@@ -1156,25 +1157,16 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("custlicense", license.Key);
             postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
 
-            XmlDocument xmlResponse;
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetLicenseCapabilities");
+
             try
             {
-                xmlResponse = ProcessXmlRequest(postRequest, "GetLicenseCapabilities");
+                return new LicenseCapabilities(xmlResponse);
             }
-            catch (TangoException ex)
+            catch (ShipWorksLicenseException ex)
             {
-                result.Success = false;
-                result.Message = ex.Message;
-                return result;
+                throw new TangoException(ex);
             }
-
-            if (!RaiseError(xmlResponse, result))
-            {
-                result.Context = new LicenseCapabilities(xmlResponse);
-                result.Success = true;
-            }
-
-            return result;
         }
     }
 }

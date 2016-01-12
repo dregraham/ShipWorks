@@ -126,6 +126,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the license capabilities.
         /// </summary>
-        GenericResult<LicenseCapabilities> GetLicenseCapabilities(ICustomerLicense license);
+        LicenseCapabilities GetLicenseCapabilities(ICustomerLicense license);
     }
 }
