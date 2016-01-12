@@ -8359,6 +8359,7 @@
     <Compile Include="Users\Logon\UserChangePasswordDlg.Designer.cs">
       <DependentUpon>UserChangePasswordDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Users\UserSessionWrapper.cs" />
     <Compile Include="Users\UserUtility.cs" />
     <Compile Include="ApplicationCore\SplashScreen.cs">
       <SubType>Form</SubType>
