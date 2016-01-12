@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// <summary>
     /// View model for use by ShipmentControl
     /// </summary>
-    public partial class ShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging
+    public partial class ShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging, IDataErrorInfo
     {
         private readonly IRateSelectionFactory rateSelectionFactory;
         private readonly IDisposable subscriptions;
@@ -255,7 +255,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             CustomsItems = new ObservableCollection<ShipmentCustomsItemEntity>(shipmentAdapter.CustomsItems);
 
-            TotalCustomsValue = shipmentAdapter.Shipment.CustomsValue;
+            TotalCustomsValue = (double)shipmentAdapter.Shipment.CustomsValue;
 
             SelectedCustomsItem = CustomsItems.FirstOrDefault();
         }
@@ -291,7 +291,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
             RedistributeContentWeight(originalShipmentcontentWeight);
 
-            TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
+            TotalCustomsValue = (double)CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             if (e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.UnitValue.FieldIndex].Name, StringComparison.OrdinalIgnoreCase) ||
                 e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Quantity.FieldIndex].Name, StringComparison.OrdinalIgnoreCase))
             {
-                TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
+                TotalCustomsValue = (double)CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
             }
 
             if (e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Weight.FieldIndex].Name, StringComparison.OrdinalIgnoreCase) ||
@@ -330,6 +330,41 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
         }
         #endregion Customs
+
+        #region IDataErrorInfo
+
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                // If the shipment is processed, don't validate anything.
+                if (shipmentAdapter?.Shipment?.Processed == true)
+                {
+                    return string.Empty;
+                }
+
+                return InputValidation<ShipmentViewModel>.Validate(this, columnName);
+            }
+        }
+
+        /// <summary>
+        /// IDataErrorInfo Error implementation
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// List of all validation errors
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> AllErrors()
+        {
+            return InputValidation<ShipmentViewModel>.Validate(this);
+        }
+
+        #endregion
 
         /// <summary>
         /// Dispose resources

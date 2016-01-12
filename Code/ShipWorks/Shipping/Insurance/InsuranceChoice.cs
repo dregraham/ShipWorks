@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Insurance
@@ -10,7 +13,7 @@ namespace ShipWorks.Shipping.Insurance
     /// <summary>
     /// Wraps an entity to provide consist API for accessing insurance information
     /// </summary>
-    public class InsuranceChoice : IInsuranceChoice
+    public class InsuranceChoice : IInsuranceChoice, IDataErrorInfo
     {
         ShipmentEntity shipment;
 
@@ -87,6 +90,7 @@ namespace ShipWorks.Shipping.Insurance
         /// The insured value of the package, if insured
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [DecimalCompare(0, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Insurance value must be greater than or equal to $0.00.")]
         public decimal InsuranceValue
         {
             get { return (decimal) valueFieldEntity.Fields[valueFieldPrefix + "InsuranceValue"].CurrentValue; }
@@ -167,5 +171,34 @@ namespace ShipWorks.Shipping.Insurance
         {
             return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.Usps);
         }
+
+        #region IDataErrorInfo
+
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                return InputValidation<InsuranceChoice>.Validate(this, columnName);
+            }
+        }
+
+        /// <summary>
+        /// IDataErrorInfo Error implementation
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// List of all validation errors
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> AllErrors()
+        {
+            return InputValidation<InsuranceChoice>.Validate(this);
+        }
+
+        #endregion
     }
 }

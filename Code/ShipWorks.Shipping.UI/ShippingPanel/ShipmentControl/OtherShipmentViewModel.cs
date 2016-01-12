@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,7 +15,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// <summary>
     /// View model for use by ShipmentControl
     /// </summary>
-    public partial class OtherShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging
+    public partial class OtherShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging, IDataErrorInfo
     {
         private readonly PropertyChangedHandler handler;
 
@@ -162,7 +163,40 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
         #endregion Customs
 
+        #region IDataErrorInfo
 
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                // If the shipment is processed, don't validate anything.
+                if (shipmentAdapter?.Shipment?.Processed == true)
+                {
+                    return string.Empty;
+                }
+
+                return InputValidation<OtherShipmentViewModel>.Validate(this, columnName);
+            }
+        }
+
+        /// <summary>
+        /// IDataErrorInfo Error implementation
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// List of all validation errors
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> AllErrors()
+        {
+            return InputValidation<OtherShipmentViewModel>.Validate(this);
+        }
+
+        #endregion
 
         /// <summary>
         /// Updates the service types.

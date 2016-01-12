@@ -31,6 +31,7 @@
                 <ResourceDictionary Source="Styles/ShipWorksExpanderStyle.xaml"/>
                 <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <vc:InvertBooleanConverter x:Key="InvertBoolean" />
             <vc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
@@ -94,7 +95,8 @@
                         <TextBlock Text="{Binding RequestedShippingMethod}" />
                     </WrapPanel>
                 </Grid>
-                <StackPanel Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.None}}">
+                <StackPanel IsEnabled="{Binding AllowEditing}" 
+                            Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static shippingshared:ShipmentTypeCode.None}}">
                     <Border>
                         <Expander IsEnabled="True"
                         IsExpanded="{Binding IsOriginExpanded, Source={x:Static styles:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"

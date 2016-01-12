@@ -93,8 +93,11 @@ namespace ShipWorks.Shipping.Services
         /// <returns>Dictionary of shipments and exceptions.</returns>
         public virtual IDictionary<ShipmentEntity, Exception> UpdateDynamicData()
         {
-            shipmentType.UpdateDynamicShipmentData(shipment);
-            shipmentType.UpdateTotalWeight(shipment);
+            if (!shipment.Processed)
+            {
+                shipmentType.UpdateDynamicShipmentData(shipment);
+                shipmentType.UpdateTotalWeight(shipment);
+            }
 
             if (customsManager != null)
             {

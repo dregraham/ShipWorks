@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
@@ -8,6 +9,8 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
+using System.ComponentModel.DataAnnotations;
+using Shared.System.ComponentModel.DataAnnotations;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -54,6 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Gets or sets the length.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Length must be greater than 1.")]
         public double Length
         {
             get { return shipment.Amazon.DimsLength; }
@@ -67,6 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Gets or sets the width.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Width must be greater than 1.")]
         public double Width
         {
             get { return shipment.Amazon.DimsWidth; }
@@ -80,6 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Gets or sets the height.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Height must be greater than 1.")]
         public double Height
         {
             get { return shipment.Amazon.DimsHeight; }
@@ -93,6 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Gets or sets the weight.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [Range(0, 999999, ErrorMessage = @"Please enter a valid weight.")]
         public double Weight
         {
             get { return shipment.ContentWeight; }
@@ -106,6 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Gets or sets the additional weight.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [Range(0, 999999, ErrorMessage = @"Please enter a valid additional weight.")]
         public double AdditionalWeight
         {
             get { return shipment.Amazon.DimsWeight; }
@@ -144,6 +152,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Gets or sets the dims length.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Length must be greater than 1.")]
         public double DimsLength
         {
             get { return shipment.Amazon.DimsLength; }
@@ -157,6 +166,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Gets or sets the dims width.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Width must be greater than 1.")]
         public double DimsWidth
         {
             get { return shipment.Amazon.DimsWidth; }
@@ -170,6 +180,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Gets or sets the dims height.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Height must be greater than 1.")]
         public double DimsHeight
         {
             get { return shipment.Amazon.DimsHeight; }
@@ -216,5 +227,36 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             return stringHash.Hash(rawValue, string.Empty);
         }
+
+        #region IDataErrorInfo
+
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                string errorMessage = InputValidation<AmazonPackageAdapter>.Validate(this, columnName);
+
+                return errorMessage;
+            }
+        }
+
+        /// <summary>
+        /// IDataErrorInfo Error implementation
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// List of all validation errors
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> AllErrors()
+        {
+            return InputValidation<AmazonPackageAdapter>.Validate(this);
+        }
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
@@ -126,5 +127,36 @@ namespace ShipWorks.Shipping.Services
 
             return stringHash.Hash(rawValue, string.Empty);
         }
+
+        #region IDataErrorInfo
+
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                string errorMessage = InputValidation<NullPackageAdapter>.Validate(this, columnName);
+
+                return errorMessage;
+            }
+        }
+
+        /// <summary>
+        /// IDataErrorInfo Error implementation
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// List of all validation errors
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> AllErrors()
+        {
+            return InputValidation<NullPackageAdapter>.Validate(this);
+        }
+
+        #endregion
     }
 }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight.Command;
+using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -19,7 +22,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private ObservableCollection<ShipmentCustomsItemEntity> customsItems;
         private readonly ICustomsManager customsManager;
         private bool customsAllowed;
-        private decimal totalCustomsValue;
+        private double totalCustomsValue;
         private double shipmentContentWeight;
 
         /// <summary>
@@ -46,7 +49,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Sum of customs values?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public decimal TotalCustomsValue
+        [Required(AllowEmptyStrings = false, ErrorMessage = @"Total customs value is required")]
+        [Range(0.0001, 999999999, ErrorMessage = @"Shipment weight must be greater than 0 and less than 999,999,999")]
+        [DoubleCompare(0, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Total customs value must be greater than 0.")]
+        public double TotalCustomsValue
         {
             get { return totalCustomsValue; }
             set
@@ -54,7 +60,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 handler.Set(nameof(TotalCustomsValue), ref totalCustomsValue, value);
 
                 // Finally update the shipment's total customs value.
-                shipmentAdapter.Shipment.CustomsValue = TotalCustomsValue;
+                shipmentAdapter.Shipment.CustomsValue = decimal.Parse(TotalCustomsValue.ToString());
             }
         }
 
@@ -85,6 +91,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// The shipment content weight
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [Range(0.001, 999999, ErrorMessage = @"Shipment weight must be between 0 and 999,999")]
         public double ShipmentContentWeight
         {
             get { return shipmentContentWeight; }

@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     /// <summary>
     /// Main view model for the shipment panel
     /// </summary>
-    public partial class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
+    public partial class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable, IDataErrorInfo
     {
         private readonly PropertyChangedHandler handler;
         private OrderSelectionLoaded orderSelectionLoaded;
@@ -477,6 +477,35 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
             }
         }
+
+        #region IDataErrorInfo
+
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                return InputValidation<ShippingPanelViewModel>.Validate(this, columnName);
+            }
+        }
+
+        /// <summary>
+        /// IDataErrorInfo Error implementation
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// List of all validation errors
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> AllErrors()
+        {
+            return InputValidation<ShippingPanelViewModel>.Validate(this);
+        }
+
+        #endregion
 
         /// <summary>
         /// Dispose resources

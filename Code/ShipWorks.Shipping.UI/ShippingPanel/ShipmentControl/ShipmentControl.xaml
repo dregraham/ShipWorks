@@ -6,6 +6,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI"
              xmlns:converters="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
+             xmlns:valueConverters="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
              xmlns:behaviors="clr-namespace:ShipWorks.Shipping.UI.Behaviors"
              xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -17,6 +18,8 @@
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/EmptyButtonStyle.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/BlinkingRedErrorTemplate.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/DatePickerErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <SolidColorBrush x:Key="brushWatermarkForeground" Color="LightSteelBlue" />
@@ -26,6 +29,7 @@
             <converters:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <converters:StringEmptyWhenEqualToParameterConverter x:Key="StringEmptyWhenEqualToParameter" />
+            <valueConverters:EmptyMoneyConverter x:Key="EmptyMoney" />
 
             <Style TargetType="{x:Type RowDefinition}" x:Key="SupportsDimensionsRowStyle">
                 <Style.Triggers>
@@ -91,7 +95,9 @@
             <DatePicker Grid.Row="1" Grid.Column="1" 
                         Width="125" HorizontalAlignment="Left" 
                         Margin="4 0 0 0" 
-                        SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        Style="{DynamicResource DatePickerErrorTemplate}"
+                        SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                        ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
             <TextBlock Grid.Row="2" Grid.Column="0"
 				Style="{StaticResource GridLabel}">Packages:</TextBlock>
@@ -117,10 +123,11 @@
 				DisplayMemberPath="Name" />
 
             <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource GridLabel}">Weight:</TextBlock>
-            <weight:WeightControl Grid.Row="5" Grid.Column="1"
+            <weight:WeightControl Grid.Row="5" Grid.Column="1" 
 				Margin="0,0,0,0"
 				HorizontalAlignment="Left"
-				Weight="{Binding SelectedPackageAdapter.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				Weight="{Binding SelectedPackageAdapter.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                        ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
             <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource GridLabel}">Dimensions:</TextBlock>
             <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
@@ -169,27 +176,30 @@
                     </Binding>
                 </StackPanel.IsEnabled>
                 <TextBlock Margin="3 1 0 0">L:</TextBlock>
-                <TextBox Width="40" Margin="1 0 5 0" x:Name="dimsLength"
-					Text="{Binding SelectedPackageAdapter.DimsLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                <TextBox Width="40" Margin="1 0 5 0" x:Name="dimsLength" Style="{DynamicResource TextBoxErrorTemplate}"
+					Text="{Binding SelectedPackageAdapter.DimsLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                        ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
                     <i:Interaction.Behaviors>
                         <behaviors:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="" MaxLength="3" />
                     </i:Interaction.Behaviors>
                 </TextBox>
-                <TextBlock Margin="0 1 0 0">W:</TextBlock>
-                <TextBox Width="40" Margin="1 0 5 0"
-					Text="{Binding SelectedPackageAdapter.DimsWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <TextBlock Margin="10 1 0 0">W:</TextBlock>
+                <TextBox Width="40" Margin="1 0 5 0" Style="{DynamicResource TextBoxErrorTemplate}"
+					Text="{Binding SelectedPackageAdapter.DimsWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                        ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
                     <i:Interaction.Behaviors>
                         <behaviors:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="0" MaxLength="3" />
                     </i:Interaction.Behaviors>
                 </TextBox>
-                <TextBlock Margin="0 1 0 0">H:</TextBlock>
-                <TextBox Width="40" Margin="1 0 5 0"
-					Text="{Binding SelectedPackageAdapter.DimsHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                <TextBlock Margin="10 1 0 0">H:</TextBlock>
+                <TextBox Width="40" Margin="1 0 5 0" Style="{DynamicResource TextBoxErrorTemplate}"
+					Text="{Binding SelectedPackageAdapter.DimsHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                        ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
                     <i:Interaction.Behaviors>
                         <behaviors:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="0" MaxLength="3" />
                     </i:Interaction.Behaviors>
                 </TextBox>
-                <TextBlock Margin="0 1 0 0">in.</TextBlock>
+                <TextBlock Margin="10 1 0 0">in.</TextBlock>
             </StackPanel>
 
             <!--
@@ -229,8 +239,10 @@
             <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal">
                 <TextBlock Style="{StaticResource GridLabel}" 
                            Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insured Value:'}"></TextBlock>
-                <TextBox Width="80"  Margin="4 4 0 0"
-                         Text="{Binding InsuranceViewModel.InsuranceChoice.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=c, FallbackValue='50.50'}"/>
+                <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"
+                         Text="{Binding InsuranceViewModel.InsuranceChoice.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat=c, FallbackValue='50.50', 
+                         Converter={StaticResource EmptyMoney},
+                         TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
             </StackPanel>
         </Grid>
     </StackPanel>

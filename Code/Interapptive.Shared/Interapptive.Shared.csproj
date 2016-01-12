@@ -94,6 +94,7 @@
       <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -162,6 +163,15 @@
     <Compile Include="Collections\ObservableExtensions.cs" />
     <Compile Include="Imaging\EdgeDetection.cs" />
     <Compile Include="InterapptiveOnly.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\DoubleCompareAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\DecimalCompareAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\DateCompareAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\ValueCompareOperatorType.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\DateCompareType.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\EmailAddressAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\MaxLengthAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\MinLengthAttribute.cs" />
+    <Compile Include="System.ComponentModel.DataAnnotations\PhoneAttribute.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
     <Compile Include="Collections\LruCache.cs" />
@@ -712,6 +722,7 @@
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

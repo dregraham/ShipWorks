@@ -534,7 +534,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 testObject.SelectedCustomsItem.UnitValue = 100;
                 testObject.SelectedCustomsItem.Quantity = 2.5;
 
-                decimal expectedValue = testObject.SelectedCustomsItem.UnitValue * (decimal)testObject.SelectedCustomsItem.Quantity;
+                double expectedValue = (double)(testObject.SelectedCustomsItem.UnitValue * (decimal)testObject.SelectedCustomsItem.Quantity);
 
                 Assert.Equal(expectedValue, testObject.TotalCustomsValue);
             }
