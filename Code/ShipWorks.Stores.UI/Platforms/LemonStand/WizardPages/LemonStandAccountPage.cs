@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand.WizardPages
         /// <summary>
         /// Initializes a new instance of the <see cref="LemonStandAccountPage"/> class.
         /// </summary>
-        public LemonStandAccountPage() :this(LogManager.GetLogger(typeof(LemonStandAccountPage)))
+        public LemonStandAccountPage() : this(LogManager.GetLogger(typeof(LemonStandAccountPage)))
         {
         }
 
@@ -69,7 +69,8 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand.WizardPages
                 {
                     log.Error("Error validating access token", ex);
 
-                    string message = ex.Message.Equals("The remote server returned an error: (401) Unauthorized.") ? "Invalid access token" : "Invalid store URL";
+                    string message = ex.Message.Equals("The remote server returned an error: (401) Unauthorized.", StringComparison.InvariantCultureIgnoreCase) ?
+                        "Invalid access token" : "Invalid store URL";
                     MessageHelper.ShowError(this, message);
                     e.NextPage = this;
                 }

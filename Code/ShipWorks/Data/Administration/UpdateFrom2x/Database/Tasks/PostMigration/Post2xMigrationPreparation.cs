@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Data.SqlClient;
+using Interapptive.Shared;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Users.Security;
-using ShipWorks.Users;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Stores.Platforms.Ebay;
-using System.Data.SqlClient;
-using Interapptive.Shared.Data;
-using System.Transactions;
-using ShipWorks.Users.Audit;
 using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Platforms.Ebay;
+using ShipWorks.Users;
+using ShipWorks.Users.Audit;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration
 {
@@ -109,7 +106,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                         }
                     }
                 }
-                
+
                 // This step is now complete
                 Post2xMigrationUtility.MarkStepComplete(Post2xMigrationStep.ConfigureInitialData);
 
@@ -120,6 +117,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// <summary>
         /// Update all the EffectiveXXX fields for eBay
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void UpdateEbayEffectiveFields(ProgressItem progress)
         {
             if (Post2xMigrationUtility.IsStepComplete(Post2xMigrationStep.UpdateEbayEffectiveFields))
@@ -312,7 +310,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                                             	FROM MivaOrderItemAttribute m inner join v2m_MivaItemAttribute a
                                             	ON m.OrderItemAttributeID = a.OrderItemAttributeID", batchSize);
                             cmd.ExecuteNonQuery();
-                            
+
                             // commmit the updates and deletes
                             transaction.Commit();
 
@@ -323,7 +321,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                     }
                 }
             }
-            
+
             Post2xMigrationUtility.MarkStepComplete(Post2xMigrationStep.MivaItemAttriteData);
         }
     }

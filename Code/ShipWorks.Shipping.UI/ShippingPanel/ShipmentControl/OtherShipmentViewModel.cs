@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             ShipmentContentWeight = shipmentAdapter.ContentWeight;
 
             IPackageAdapter packageAdapter = shipmentAdapter.GetPackageAdapters().FirstOrDefault();
-            InsuranceViewModel.Load(new []{ packageAdapter }, packageAdapter);
+            InsuranceViewModel.Load(new[] { packageAdapter }, packageAdapter);
 
             OtherShipmentEntity otherShipment = shipmentAdapter.Shipment.Other;
 
@@ -86,12 +86,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             otherShipment.Service = Service;
 
             if (CustomsAllowed && CustomsItems != null)
-            { 
+            {
                 shipmentAdapter.CustomsItems = new EntityCollection<ShipmentCustomsItemEntity>(CustomsItems);
             }
 
             shipmentAdapter.ContentWeight = ShipmentContentWeight;
         }
+
         #region Customs
 
         /// <summary>
@@ -140,7 +141,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
 
-            TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
+            TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
         }
 
         /// <summary>
@@ -151,7 +152,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             if (e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.UnitValue.FieldIndex].Name, StringComparison.OrdinalIgnoreCase) ||
                 e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Quantity.FieldIndex].Name, StringComparison.OrdinalIgnoreCase))
             {
-                TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
+                TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
             }
 
             if (e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Weight.FieldIndex].Name, StringComparison.OrdinalIgnoreCase) ||
@@ -164,7 +165,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         #endregion Customs
 
         #region IDataErrorInfo
-
         /// <summary>
         /// Accessor for property validation
         /// </summary>
@@ -197,29 +197,28 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         }
 
         #endregion
-
-        /// <summary>
-        /// Updates the service types.
-        /// </summary>
-        public void RefreshServiceTypes()
-        {
-            // Nothing to do for Other shipment type.
-        }
-
-        /// <summary>
-        /// Updates the package types.
-        /// </summary>
-        public void RefreshPackageTypes()
-        {
-            // Nothing to do for Other shipment type.
-        }
-
         /// <summary>
         /// Dispose of any held resources
         /// </summary>
         public void Dispose()
         {
             // No resources to dispose
+        }
+
+        /// <summary>
+        /// Updates the services
+        /// </summary>
+        public void RefreshServiceTypes()
+        {
+            // Other shipment type does not support services
+        }
+
+        /// <summary>
+        /// Updates the packages
+        /// </summary>
+        public void RefreshPackageTypes()
+        {
+            // Other shipment type does not support packages
         }
     }
 }

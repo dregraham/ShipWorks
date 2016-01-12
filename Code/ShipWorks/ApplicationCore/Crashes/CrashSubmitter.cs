@@ -399,6 +399,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Get details about the current execution environment
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static string GetEnvironmentInfo()
         {
             StringBuilder sb = new StringBuilder();

@@ -1,30 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using Interapptive.Shared.Net;
-using System.Text.RegularExpressions;
-using ShipWorks.ApplicationCore.Logging;
-using System.Security.Cryptography;
-using System.Net;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using System.IO;
-using ShipWorks.Data.Connection;
-using log4net;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.XPath;
+using Interapptive.Shared;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
     /// <summary>
-    /// WebClient for connecting to ProStores 
+    /// WebClient for connecting to ProStores
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5351: Do not use insecure cryptographic algorithm MD5",
+        Justification = "This is what ProStores currently uses")]
     public static class ProStoresWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ProStoresWebClient));
@@ -156,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             ProcessXteRequest(xmlRequest, "TestConnection");
         }
-       
+
         /// <summary>
         /// Get the number of online orders for the store after the given date
         /// </summary>
@@ -357,9 +359,9 @@ namespace ShipWorks.Stores.Platforms.ProStores
                         <Attribute1Label />
                         <Attribute2Label />";
 
-                if (newerApi)
-                {
-                    selectXml += @"
+            if (newerApi)
+            {
+                selectXml += @"
                         <Attribute3Label />
                         <Attribute4Label />
                         <Attribute5Label />
@@ -367,15 +369,15 @@ namespace ShipWorks.Stores.Platforms.ProStores
                         <Attribute7Label />
                         <Attribute8Label />
                    ";
-                }
+            }
 
-                if (proVersion)
-                {
-                    selectXml += 
-                        "<Cost />";
-                }
+            if (proVersion)
+            {
+                selectXml +=
+                    "<Cost />";
+            }
 
-                selectXml += @"
+            selectXml += @"
                     </Product>";
 
             if (proVersion)
@@ -470,7 +472,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ProStores, restAction);
             logEntry.LogRequest(request);
 
-            return ExecuteRequest(request, logEntry);        
+            return ExecuteRequest(request, logEntry);
         }
 
         /// <summary>
@@ -490,6 +492,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Create an XmlWriter initialized with the header for a request for the given store
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static XmlTextWriter CreateXteRequest(ProStoresStoreEntity store, string requestType)
         {
             StreamWriter writer = new StreamWriter(new MemoryStream(), StringUtility.Iso8859Encoding);
@@ -611,7 +614,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(ProStoresException));
-            }        
+            }
         }
 
         /// <summary>
@@ -778,7 +781,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// </summary>
         private static string GetRestTimestamp()
         {
-            return ((int) ((TimeSpan) (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified))).TotalSeconds).ToString() ;
+            return ((int) ((TimeSpan) (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified))).TotalSeconds).ToString();
         }
 
         /// <summary>

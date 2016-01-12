@@ -16,6 +16,7 @@ using ShipWorks.ApplicationCore;
 using System.Xml;
 using System.Globalization;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
@@ -118,6 +119,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Creates the Amazon Feed Xml for submitting and returns the path it is written to
         /// </summary>
+        [NDependIgnoreLongMethod]
         private string CreateFulfillmentFeed(List<ShipmentEntity> shipments)
         {
             string path = Path.Combine(DataPath.ShipWorksTemp, Guid.NewGuid().ToString()) + ".xml";

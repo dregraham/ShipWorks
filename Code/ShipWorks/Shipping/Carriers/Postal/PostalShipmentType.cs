@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -268,6 +269,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Update the dyamic data of the shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
@@ -390,7 +392,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
-            return String.Format("USPS {0}", EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service));
+            return string.Format("USPS {0}", EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service));
         }
 
         /// <summary>
@@ -532,105 +534,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return broker;
-        }
-
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(PostalShipmentFields.PackagingType);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsHeight);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsLength);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsWidth);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsAddWeight);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsWeight);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.NonMachinable);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.NonRectangular);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.InsuranceValue);
-
-                return ratingField;
-            }
-        }
-
-        /// <summary>
-        /// Builds a RateGroup from a list of express 1 rates
-        /// </summary>
-        /// <param name="rates">List of rates that should be filtered and added to the group</param>
-        /// <param name="express1ShipmentType">Express1 shipment type</param>
-        /// <param name="baseShipmentType">Base type of the shipment</param>
-        /// <returns></returns>
-        protected static RateGroup BuildExpress1RateGroup(IEnumerable<RateResult> rates, ShipmentTypeCode express1ShipmentType, ShipmentTypeCode baseShipmentType)
-        {
-            // Express1 rates - return rates filtered by what is available to the user
-            List<PostalServiceType> availabelServiceTypes =
-                PostalUtility.GetDomesticServices(express1ShipmentType)
-                    .Concat(PostalUtility.GetInternationalServices(express1ShipmentType))
-                    .ToList();
-
-            var validExpress1Rates = rates
-                .Where(e => availabelServiceTypes.Contains(((PostalRateSelection)e.OriginalTag).ServiceType))
-                .ToList();
-
-            validExpress1Rates.ForEach(e => {
-                e.ShipmentType = baseShipmentType;
-                e.ProviderLogo = e.ProviderLogo != null ? EnumHelper.GetImage(express1ShipmentType) : null;
-            });
-
-            return new RateGroup(validExpress1Rates);
-        }
-
-        /// <summary>
-        /// Gets the filtered rates based on any excluded services configured for this postal shipment type.
-        /// </summary>
-        protected virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
-        {
-            List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).Union(new List<PostalServiceType> { (PostalServiceType)shipment.Postal.Service }).ToList();
-            return rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
-        }
-
-        /// <summary>
-        /// Gets counter rates for a postal shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        protected virtual RateGroup GetCounterRates(ShipmentEntity shipment)
-        {
-            try
-            {
-                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
-            }
-            catch (CounterRatesOriginAddressException)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());    
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
-                return errorRates;
-            }
-            
-            RateGroup rates = new RateGroup(new List<RateResult>());
-
-            if (!IsShipmentTypeRestricted)
-            {
-                // Only get counter rates if the shipment type has not been restricted
-                rates = new PostalWebShipmentType().GetRates(shipment);
-                rates.Rates.ForEach(x =>
-                {
-                    if (x.ProviderLogo != null)
-                    {
-                        // Only change existing logos; don't set logos for rates that don't have them
-                        x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType);
-                    }
-                });
-            }
-
-            return rates;
         }
 
         /// <summary>

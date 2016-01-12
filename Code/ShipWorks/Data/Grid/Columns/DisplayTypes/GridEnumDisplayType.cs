@@ -9,6 +9,7 @@ using ShipWorks.Data.Grid.Columns.ValueProviders;
 using ShipWorks.Properties;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Grid.Columns.SortProviders;
+using static System.String;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -120,6 +121,20 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             }
 
             return EnumHelper.GetImage((Enum) value);
+        }
+
+        /// <summary>
+        /// Gets the tool tip.
+        /// </summary>
+        public override string GetToolTip(object value)
+        {
+            if (value == null)
+            {
+                return Empty;
+            }
+
+            var details = EnumHelper.GetDetails((Enum) value);
+            return IsNullOrWhiteSpace(details) ? base.GetToolTip(value) : details;
         }
     }
 }

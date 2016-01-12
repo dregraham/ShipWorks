@@ -14,9 +14,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     public class OnTracShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public OnTracShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager) : base(shipment, shipmentTypeFactory, customsManager)
+        public OnTracShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.OnTrac, nameof(shipment.OnTrac));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));

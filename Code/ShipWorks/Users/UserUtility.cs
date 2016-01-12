@@ -1,37 +1,34 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Security.Cryptography;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using log4net;
-using System.Data.SqlClient;
 using System.Data;
-using ShipWorks.Filters;
-using ShipWorks.Data.Adapter.Custom;
-using Interapptive.Shared;
-using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.UI.Controls;
-using ShipWorks.Shipping;
-using Interapptive.Shared.Utility;
+using System.Data.SqlClient;
 using System.Diagnostics;
-using ShipWorks.Stores;
-using System.ComponentModel;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Grid;
-using ShipWorks.Data.Model;
-using ShipWorks.Users.Security;
-using ShipWorks.Filters.Grid;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
+using System.Text;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Grid;
+using ShipWorks.Stores;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Users
 {
     /// <summary>
     /// Utility class for working with users.
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5351: Do not use insecure cryptographic algorithm MD5",
+        Justification = "This is what ShipWorks currently uses")]
     public static class UserUtility
     {
         // Logger
@@ -229,7 +226,7 @@ namespace ShipWorks.Users
             PrefetchPath2 settingsPrefetch = new PrefetchPath2(EntityType.UserEntity);
             settingsPrefetch.Add(UserEntity.PrefetchPathSettings);
 
-            UserCollection users = UserCollection.Fetch(SqlAdapter.Default, 
+            UserCollection users = UserCollection.Fetch(SqlAdapter.Default,
                 UserFields.Username == username & UserFields.Password == UserUtility.HashPassword(password) & UserFields.IsDeleted == false,
                 settingsPrefetch);
 

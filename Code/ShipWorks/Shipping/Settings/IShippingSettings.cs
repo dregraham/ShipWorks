@@ -1,5 +1,5 @@
-using ShipWorks.Data.Model.EntityClasses;
 using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Settings
         /// Fetch the current shipping settings
         /// </summary>
         ShippingSettingsEntity Fetch();
-		
+
         /// <summary>
         /// The list of shipment types that have been fully configured for use within ShipWorks
         /// </summary>

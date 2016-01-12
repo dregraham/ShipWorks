@@ -30,15 +30,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         RateGroup rateGroup1;
         RateGroup rateGroup2;
 
-        UspsShipmentType uspsShipmentType;
-
         public UspsRateGroupConsolidatorTest()
         {
-            uspsShipmentType = new UspsShipmentType();
 
-            exceptionFootnoteFactory1 = new ExceptionsRateFootnoteFactory(uspsShipmentType, new Exception());
-            exceptionFootnoteFactory2 = new ExceptionsRateFootnoteFactory(uspsShipmentType, new Exception());
+            exceptionFootnoteFactory1 = new ExceptionsRateFootnoteFactory(ShipmentTypeCode.Usps, new Exception());
+            exceptionFootnoteFactory2 = new ExceptionsRateFootnoteFactory(ShipmentTypeCode.Usps, new Exception());
 
+            var uspsShipmentType = new UspsShipmentType();
             uspsRatePromotionFootnote1 = new UspsRatePromotionFootnoteFactory(uspsShipmentType, new ShipmentEntity(), true);
             uspsRatePromotionFootnote2 = new UspsRatePromotionFootnoteFactory(uspsShipmentType, new ShipmentEntity(), true);
             

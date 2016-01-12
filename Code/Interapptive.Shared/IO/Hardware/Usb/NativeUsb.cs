@@ -10,6 +10,7 @@ namespace Interapptive.Shared.Usb
     /// <summary>
     /// Native Win32 methods specifically for dealing with USB devices
     /// </summary>
+    [NDependIgnore]
     public static class NativeUsb
     {
         #region Structures

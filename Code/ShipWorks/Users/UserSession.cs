@@ -6,10 +6,10 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.ExecutionMode;
@@ -34,11 +34,9 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Settings.Printing;
-using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
@@ -69,6 +67,7 @@ namespace ShipWorks.Users
         private static string lastUsername = "";
         private static string lastPassword = "";
         private static bool lastRemember;
+        private static ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// One-time initialization of the session
@@ -89,19 +88,22 @@ namespace ShipWorks.Users
                 executionMode = Program.ExecutionMode;
             }
 
-            SystemData.InitializeForCurrentDatabase();
-
             // Reset any cached entity data
-            DataProvider.InitializeForCurrentDatabase(executionMode);
             ShippingManager.InitializeForCurrentDatabase();
 
             // Initialize database scope things
             ConfigurationData.InitializeForCurrentDatabase();
-            ShippingSettings.InitializeForCurrentDatabase();
             DataResourceManager.InitializeForCurrentDatabase();
 
-            bool wasLoggedIn = (User != null);
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                foreach (IInitializeForCurrentDatabase service in scope.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
+                {
+                    service.InitializeForCurrentDatabase(executionMode);
+                }
+            }
 
+            bool wasLoggedIn = (User != null);
 
             Reset();
 
@@ -140,6 +142,7 @@ namespace ShipWorks.Users
         /// <summary>
         /// Required initialization that must take place after a user logs in to get various resources and managers ready
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void InitializeForCurrentSession()
         {
             ServiceStatusManager.InitializeForCurrentSession();
@@ -148,9 +151,7 @@ namespace ShipWorks.Users
             GridColumnDefinitionManager.InitializeForCurrentUser();
 
             FilterContentManager.InitializeForCurrentSession();
-            ActionManager.InitializeForCurrentSession();
             FtpAccountManager.InitializeForCurrentSession();
-            StoreManager.InitializeForCurrentSession();
             TemplateManager.InitializeForCurrentSession();
             LabelSheetManager.InitializeForCurrentSession();
             EmailAccountManager.InitializeForCurrentSession();
@@ -170,11 +171,13 @@ namespace ShipWorks.Users
             UpsAccountManager.InitializeForCurrentSession();
             ShippingDefaultsRuleManager.InitializeForCurrentSession();
             ShippingPrintOutputManager.InitializeForCurrentSession();
-            ShippingProviderRuleManager.InitializeForCurrentSession();
             OnTracAccountManager.InitializeForCurrentSession();
             iParcelAccountManager.InitializeForCurrentSession();
 
-            foreach (IInitializeForCurrentSession service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
+            lifetimeScope?.Dispose();
+            lifetimeScope = IoC.BeginLifetimeScope();
+
+            foreach (IInitializeForCurrentSession service in lifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
             {
                 service.InitializeForCurrentSession();
             }
@@ -189,6 +192,9 @@ namespace ShipWorks.Users
             loggedInUser = null;
             securityContext = null;
             databaseID = null;
+
+            lifetimeScope?.Dispose();
+            lifetimeScope = null;
         }
 
         /// <summary>
@@ -222,7 +228,7 @@ namespace ShipWorks.Users
         {
             get
             {
-                // The the behavior scope is active, or the SuperUser is actually logged in, use the super user security context
+                // The behavior scope is active, or the SuperUser is actually logged in, use the super user security context
                 if (AuditBehaviorScope.IsSuperUserActive || (User != null && User.UserID == SuperUser.UserID))
                 {
                     return SuperUser.SecurityContext;
@@ -309,7 +315,7 @@ namespace ShipWorks.Users
         }
 
         /// <summary>
-        /// Indiciates if a user is currently logged on to ShipWorks
+        /// Indicates if a user is currently logged on to ShipWorks
         /// </summary>
         public static bool IsLoggedOn
         {
@@ -397,30 +403,50 @@ namespace ShipWorks.Users
         /// </summary>
         private static bool Logon(string username, string password, bool remember, bool audit)
         {
-            loggedInUser = UserUtility.GetShipWorksUser(username, password);
+            loggedInUser = null;
+            UserEntity user = UserUtility.GetShipWorksUser(username, password);
 
-            log.InfoFormat("Login for user '{0}' {1}.", username, loggedInUser == null ? "failed" : "succeeded");
+            log.InfoFormat("Login for user '{0}' {1}.", username, user == null ? "failed" : "succeeded");
 
             // If we got a user, its the one we need.
-            if (loggedInUser != null)
+            if (user != null)
             {
                 // Implements "Remember Me"
                 SaveLastUser(username, password, remember);
 
-                // Load the user's security context
-                securityContext = new SecurityContext(loggedInUser);
-
-                // Audit the logon
-                if (audit)
-                {
-                    AuditUtility.Audit(AuditActionType.Logon);
-                }
+                Logon(user, audit);
 
                 return true;
             }
             else
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Log in the specified user with the specified computer
+        /// </summary>
+        public static void Logon(UserEntity user, ComputerEntity computer, bool audit)
+        {
+            thisComputer = computer;
+            Logon(user, audit);
+        }
+
+        /// <summary>
+        /// Log in the specified user
+        /// </summary>
+        public static void Logon(UserEntity user, bool audit)
+        {
+            loggedInUser = user;
+
+            // Load the user's security context
+            securityContext = new SecurityContext(user);
+
+            // Audit the logon
+            if (audit)
+            {
+                AuditUtility.Audit(AuditActionType.Logon);
             }
         }
 
@@ -518,7 +544,7 @@ namespace ShipWorks.Users
 
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                // The guid isnt enough.  They could restore the database to a different path, essentially copying it.  In which
+                // The guid isn't enough.  They could restore the database to a different path, essentially copying it.  In which
                 // case the guid will be the same, but the path will be different.
                 string targetPhysDb = (string) SqlCommandProvider.ExecuteScalar(con, "select physical_name from sys.database_files where type_desc = 'ROWS'");
 

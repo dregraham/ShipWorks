@@ -15,9 +15,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Other
     public class OtherShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public OtherShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager) : base(shipment, shipmentTypeFactory, customsManager)
+        public OtherShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
         }

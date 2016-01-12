@@ -16,9 +16,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class BestRateShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public BestRateShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager) : base(shipment, shipmentTypeFactory, customsManager)
+        public BestRateShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.BestRate, nameof(shipment.BestRate));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));

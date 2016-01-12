@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model;
-using System.ComponentModel;
+using System.Transactions;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Triggers;
+using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Actions.Triggers;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Filters;
-using log4net;
-using System.Transactions;
-using ShipWorks.Data;
-using ShipWorks.Actions.Scheduling;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Actions
 {
@@ -32,7 +28,7 @@ namespace ShipWorks.Actions
         static bool needCheckForChanges = false;
 
         /// <summary>
-        /// Initialize table syncronizer
+        /// Initialize table synchronizer
         /// </summary>
         public static void InitializeForCurrentSession()
         {
@@ -59,7 +55,7 @@ namespace ShipWorks.Actions
             lock (tableSynchronizer)
             {
                 // Do this outside of a transaction.  I added this b\c DeleteStoreActions gets called in DeleteStore, which is a long running transaction.  The Actions of
-                // course would be deleted in a transaction, but there's no need for this query to be in a transaciton.
+                // course would be deleted in a transaction, but there's no need for this query to be in a transaction.
                 using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
                 {
                     if (tableSynchronizer.Synchronize())
@@ -193,14 +189,14 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Delete all actions that are specfic to the given store.  Only actions that are configured to run ONLY for the given store will be deleted.
+        /// Delete all actions that are specific to the given store.  Only actions that are configured to run ONLY for the given store will be deleted.
         /// </summary>
         public static void DeleteStoreActions(long storeID)
         {
             // Ensure we have them all in memory
             CheckForChangesNeeded();
 
-            foreach (ActionEntity action in Actions.ToList()) 
+            foreach (ActionEntity action in Actions.ToList())
             {
                 if (action.StoreLimitedSingleStoreID == storeID)
                 {
@@ -215,7 +211,7 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Saves the given ActionEntity.  Does not save the trigger or tasks.  The purpose of using this method is to 
+        /// Saves the given ActionEntity.  Does not save the trigger or tasks.  The purpose of using this method is to
         /// get the proper exception translations.
         /// </summary>
         public static void SaveAction(ActionEntity action, SqlAdapter adapter)

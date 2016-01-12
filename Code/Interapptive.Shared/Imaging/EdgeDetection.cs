@@ -16,6 +16,7 @@ namespace Interapptive.Shared.Imaging
         /// Crops a bitmap based on edge detection
         /// Only works with Black and White images
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         public static Bitmap Crop(Stream stream)
         {
             Bitmap image = new Bitmap(stream);

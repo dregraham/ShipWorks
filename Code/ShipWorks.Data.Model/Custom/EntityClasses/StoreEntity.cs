@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Business;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -29,12 +25,12 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
-        /// Special procesing to ensure change tracking for entity hierarchy
+        /// Special processing to ensure change tracking for entity hierarchy
         /// </summary>
         protected override void OnBeforeEntitySave()
         {
             // If this store is not yet setup, then we need to preserve its name as a Guid to prevent a IX_StoreName exception
-            // from occuring before the user has picked\finalized the store name decision.
+            // from occurring before the user has picked\finalized the store name decision.
             if (!SetupComplete)
             {
                 // If the user has selected a name remember it
@@ -61,7 +57,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
-        /// Called after a successfull save has completed
+        /// Called after a successful save has completed
         /// </summary>
         protected override void OnValidateEntityAfterSave()
         {
@@ -72,6 +68,15 @@ namespace ShipWorks.Data.Model.EntityClasses
                 // Restore the name the user wanted
                 StoreName = preSetupCompleteUserName;
             }
+        }
+
+        /// <summary>
+        /// Address as a person adapter
+        /// </summary>
+        public PersonAdapter Address
+        {
+            get { return new PersonAdapter(this, string.Empty); }
+            set { PersonAdapter.Copy(value, Address); }
         }
     }
 }

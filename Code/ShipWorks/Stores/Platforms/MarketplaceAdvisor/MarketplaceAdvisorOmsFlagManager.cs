@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
+using Interapptive.Shared;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
@@ -121,6 +122,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Build the order flags object to be used for downloading orders.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public static OMOrderFlags BuildOMOrderFlags(MarketplaceAdvisorOmsFlagTypes flagsOn, MarketplaceAdvisorOmsFlagTypes flagsOff)
         {
             OMOrderFlags orderFlags = new OMOrderFlags();

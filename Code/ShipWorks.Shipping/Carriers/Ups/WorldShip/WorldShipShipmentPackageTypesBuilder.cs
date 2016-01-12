@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Collections;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.Settings;
 

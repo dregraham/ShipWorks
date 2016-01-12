@@ -1,31 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Divelements.SandGrid;
+using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.AddressValidation;
+using ShipWorks.Core.Common.Threading;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
-using ShipWorks.Filters;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Diagnostics;
-using ShipWorks.Data.Grid;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using ShipWorks.Shipping;
-using ShipWorks.Data.Connection;
+using ShipWorks.Filters;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Properties;
+using ShipWorks.Shipping;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using Interapptive.Shared.UI;
-using System.Runtime.InteropServices;
-using log4net;
-using System.Threading.Tasks;
-using Divelements.SandGrid;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -93,10 +94,10 @@ namespace ShipWorks.Stores.Content.Panels
             }
 
             // Can't add shipments directly to a customer
-            addLink.Visible = 
+            addLink.Visible =
                 (type == EntityType.OrderEntity) &&
-                UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, entityID);            
-            
+                UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, entityID);
+
             return gateway;
         }
 
@@ -230,7 +231,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             if (action == GridLinkAction.Edit)
             {
-                EditShipments( new List<long> { entityID } );
+                EditShipments(new List<long> { entityID }).Forget();
             }
         }
 
@@ -239,7 +240,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         protected override void OnEntityDoubleClicked(long entityID)
         {
-            EditShipments(new long[] { entityID });
+            EditShipments(new long[] { entityID }).Forget();
         }
 
         /// <summary>
@@ -249,7 +250,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             if (entityGrid.Selection.Count > 0)
             {
-                EditShipments(entityGrid.Selection.Keys);
+                EditShipments(entityGrid.Selection.Keys).Forget();
             }
         }
 
@@ -332,7 +333,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Edit the shipment with the given ID
         /// </summary>
-        private async void EditShipments(IEnumerable<long> shipmentKeys)
+        private async Task EditShipments(IEnumerable<long> shipmentKeys)
         {
             if (shipmentKeys.Count() > ShipmentsLoader.MaxAllowedOrders)
             {
@@ -361,7 +362,7 @@ namespace ShipWorks.Stores.Content.Panels
         }
 
         /// <summary>
-        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
+        /// Refresh the existing selected content by re-querying for the relevant keys to ensure an up-to-date related row
         /// list with up-to-date displayed entity content.
         /// </summary>
         public override Task ReloadContent()

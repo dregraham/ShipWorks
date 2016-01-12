@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data;
 using System.Threading;
 using Autofac;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.Insurance;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -157,6 +158,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Create a single instance of the database row for a new shipworks database instance
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void CreateInstance(SqlAdapter adapter)
         {
             ShippingSettingsEntity settings = new ShippingSettingsEntity(true);
@@ -197,7 +199,7 @@ namespace ShipWorks.Shipping.Settings
             settings.Express1EndiciaCustomsCertify = false;
             settings.Express1EndiciaCustomsSigner = "";
             settings.Express1EndiciaThermalDocTab = false;
-            settings.Express1EndiciaThermalDocTabType = (int)ThermalDocTabType.Leading;
+            settings.Express1EndiciaThermalDocTabType = (int) ThermalDocTabType.Leading;
             settings.Express1EndiciaSingleSource = false;
 
             settings.Express1UspsSingleSource = false;

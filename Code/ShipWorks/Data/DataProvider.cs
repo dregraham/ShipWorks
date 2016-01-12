@@ -40,7 +40,7 @@ namespace ShipWorks.Data
         // Provider of headers
         static OrderHeaderProvider orderHeaderProvider;
 
-        // The wrapper that monitors the cache for cahnges
+        // The wrapper that monitors the cache for changes
         static EntityCacheChangeMonitor cacheChangeMonitor;
 
         private static ExecutionMode executionMode;
@@ -63,7 +63,7 @@ namespace ShipWorks.Data
                     EntityType.ServiceStatusEntity
                 };
 
-        // Maintains version information of each entity and when update, insert, and delets are detected for it
+        // Maintains version information of each entity and when update, insert, and deletes are detected for it
         static Dictionary<EntityType, EntityTypeChangeVersion> entityTypeChangeVersions;
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Clears any existing cache entries in preperation for a newly connected database
+        /// Clears any existing cache entries in preparation for a newly connected database
         /// </summary>
         public static void InitializeForCurrentDatabase()
         {
@@ -116,7 +116,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Clears any existing cache entries in preperation for a newly connected database. This
+        /// Clears any existing cache entries in preparation for a newly connected database. This
         /// overloaded version of InitializeForCurrentDatabase is intended to be used for 
         /// integration testing purposes.
         /// </summary>
@@ -301,7 +301,7 @@ namespace ShipWorks.Data
             if (e.Action == EntityPersistedAction.Insert || e.Action == EntityPersistedAction.Delete)
             {
                 // We know some entity of this type (say a shipment) got inserted or deleted.  So we need
-                // to clear the cache of anyone with related shipemnt keys - since there could be more or less
+                // to clear the cache of anyone with related shipment keys - since there could be more or less
                 // of them now.
                 relationCache.ClearRelatedTo(entityType);
             }

@@ -20,6 +20,7 @@ using log4net;
 using Interapptive.Shared.Net;
 using System.Drawing;
 using System.Xml;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -130,6 +131,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Check for any insurance issues in the given list
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         public static void ValidateShipment(ShipmentEntity shipment)
         {
             StoreEntity store = StoreManager.GetStore(shipment.Order.StoreID);
@@ -286,70 +288,23 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Get the shipworks cost for the given shipment with the specified declared value
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void FillInShipWorksCost(InsuranceCost cost, ShipmentEntity shipment, decimal declaredValue)
         {
             decimal adjustedValue = declaredValue;
             decimal rate;
 
-            ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
+            ShipmentTypeCode shipmentType = (ShipmentTypeCode)shipment.ShipmentType;
 
             switch (shipmentType)
             {
                 case ShipmentTypeCode.Amazon:
-
-                    if (string.IsNullOrEmpty(shipment.Amazon?.CarrierName))
-                    {
-                        return;
-                    }
-
-                    cost.AdvertisePennyOne = false;
-                    if (shipment.Amazon.CarrierName == "STAMPS_DOT_COM")
-                    {
-                        rate = GetUspsRate(shipment);
-                    }
-                    else
-                    {
-                        // FedEx or UPS
-                        if (declaredValue > 0 && declaredValue <= 100)
-                        {
-                            cost.AddInfoMessage($"No ShipWorks Insurance coverage will be provided on this shipment\nsince it will be provided by the carrier.");
-                            return;
-                        }
-
-                        adjustedValue = Math.Max(declaredValue - 100, 0);
-                        rate = 0.55m;
-                    }
-                    break;
-
+                    FillInShipWorksCostForAmazon(shipmentType, cost, shipment, declaredValue);
+                    return;
                 case ShipmentTypeCode.UpsWorldShip:
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.FedEx:
                 case ShipmentTypeCode.OnTrac:
-                    {
-                        // We can hardcode to just look at the first parcel in the shipment - all parcels in a shipemnt will have the same pennyone setting
-                        bool pennyOne = ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance.InsurancePennyOne.Value;
-
-                        if (!pennyOne)
-                        {
-                            cost.AdvertisePennyOne = true;
-
-                            string carrierName = ShippingManager.GetCarrierName(shipmentType);
-
-                            cost.AddInfoMessage(string.Format("The first $100 of coverage is provided by {0}. Learn how to add protection\nfor the first $100 in the Shipping Settings for {0}.", carrierName));
-
-                            if (declaredValue > 0 && declaredValue <= 100)
-                            {
-                                cost.AddInfoMessage(string.Format("No ShipWorks Insurance coverage will be provided on this shipment\nsince it will be provided by {0}.", carrierName));
-
-                                return;
-                            }
-
-                            adjustedValue = Math.Max(declaredValue - 100, 0);
-                        }
-
-                        rate = 0.55m;
-                    }
-                    break;
                 case ShipmentTypeCode.iParcel:
                     {
                         // We can hardcode to just look at the first parcel in the shipment - all parcels in a shipemnt will have the same pennyone setting
@@ -373,7 +328,14 @@ namespace ShipWorks.Shipping.Insurance
                             adjustedValue = Math.Max(declaredValue - 100, 0);
                         }
 
-                        rate = 0.75m;
+                        if (shipmentType == ShipmentTypeCode.iParcel)
+                        {
+                            rate = 0.75m;
+                        }
+                        else
+                        {
+                            rate = 0.55m;
+                        }
                     }
                     break;
                 case ShipmentTypeCode.Express1Endicia:
@@ -389,6 +351,57 @@ namespace ShipWorks.Shipping.Insurance
                 default:
                     rate = 0.55m;
                     break;
+            }
+
+            if (adjustedValue <= 0)
+            {
+                cost.ShipWorks = null;
+                cost.AddInfoMessage("No ShipWorks Insurance coverage will be provided on this shipment\nsince it is valued at $0.00.");
+
+                return;
+            }
+
+            // Get increments of $100
+            int quantity = (int)Math.Ceiling(adjustedValue / 100m);
+
+            // Set the shipworks cost
+            cost.ShipWorks = quantity * rate;
+        }
+
+        /// <summary>
+        /// Get the shipworks cost for the given shipment with the specified declared value
+        /// </summary>
+        private static void FillInShipWorksCostForAmazon(ShipmentTypeCode shipmentType, InsuranceCost cost, ShipmentEntity shipment, decimal declaredValue)
+        {
+            if (shipmentType != ShipmentTypeCode.Amazon)
+            {
+                throw new ShippingException("The shipment is not an Amazon shipment.");
+            }
+
+            decimal adjustedValue = declaredValue;
+            decimal rate;
+
+            if (string.IsNullOrEmpty(shipment.Amazon?.CarrierName))
+            {
+                return;
+            }
+
+            cost.AdvertisePennyOne = false;
+            if (shipment.Amazon.CarrierName == "STAMPS_DOT_COM")
+            {
+                rate = GetUspsRate(shipment);
+            }
+            else
+            {
+                // FedEx or UPS
+                if (declaredValue > 0 && declaredValue <= 100)
+                {
+                    cost.AddInfoMessage($"No ShipWorks Insurance coverage will be provided on this shipment\nsince it will be provided by the carrier.");
+                    return;
+                }
+
+                adjustedValue = Math.Max(declaredValue - 100, 0);
+                rate = 0.55m;
             }
 
             if (adjustedValue <= 0)

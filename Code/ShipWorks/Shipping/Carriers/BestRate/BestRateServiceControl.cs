@@ -12,7 +12,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 {
     public partial class BestRateServiceControl : ServiceControlBase
     {
-        private readonly BestRateShipmentType bestRateShipment;
         private RateResult cachedRate;
 
         /// <summary>
@@ -22,9 +21,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             : base (shipmentTypeCode, rateControl)
         {
             InitializeComponent();
-            
-            bestRateShipment = new BestRateShipmentType();
-
             RateControl.ShowAllRates = false;
             RateControl.ActionLinkVisible = true;
 
@@ -205,7 +201,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override void OnConfigureRateClick(object sender, RateSelectedEventArgs e)
         {
-            bestRateShipment.ApplySelectedShipmentRate(LoadedShipments[0], e.Rate);
+            BestRateShipmentType.ApplySelectedShipmentRate(LoadedShipments[0], e.Rate);
 
             // Don't raise event if it was just the 'More...' link:
             BestRateResultTag bestRateResultTag = e.Rate.Tag as BestRateResultTag;

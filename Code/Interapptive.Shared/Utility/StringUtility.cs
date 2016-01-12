@@ -118,6 +118,7 @@ namespace Interapptive.Shared.Utility
         /// Split the given text into as many lines of ideal length of idealLineLength.  If the text is too long to fit in maxLines with lines of length idealLineLength,
         /// then each line will be longer.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static string[] SplitLines(string text, int idealLineLength, int maxLines = Int32.MaxValue)
         {
             if (idealLineLength <= 0)

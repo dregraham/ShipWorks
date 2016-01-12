@@ -1,25 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
-{ 
+{
     /// <summary>
     /// Gets list of service types available for a selected Amazon shipment
     /// </summary>
     public class AmazonShipmentServicesBuilder : IShipmentServicesBuilder
     {
-        private readonly AmazonShipmentType amazonShipmentType;
+        private readonly AmazonRatingService amazonRatingService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonShipmentServicesBuilder"/> class.
         /// </summary>
-        public AmazonShipmentServicesBuilder(AmazonShipmentType amazonShipmentType)
+        public AmazonShipmentServicesBuilder(AmazonRatingService amazonRatingService)
         {
-            this.amazonShipmentType = amazonShipmentType;
+            this.amazonRatingService = amazonRatingService;
         }
 
         /// <summary>
@@ -30,13 +29,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             List<ShipmentEntity> shipmentList = shipments?.ToList() ?? new List<ShipmentEntity>();
             ShipmentEntity shipment = shipmentList.FirstOrDefault(s => s.ShipmentTypeCode == ShipmentTypeCode.Amazon);
 
-            if (shipmentList.Count() > 1 || shipment == null)
+            if (shipmentList.Count > 1 || shipment == null)
             {
                 return new Dictionary<int, string>();
             }
 
-            RateGroup rateGroup = amazonShipmentType.GetRates(shipment);
-            
+            RateGroup rateGroup = amazonRatingService.GetRates(shipment);
+
             int index = 0;
             return rateGroup.Rates.ToDictionary(s => index++, s => s.Description);
         }

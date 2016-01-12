@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
-using ShipWorks.Users.Security;
-using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.Loading
 {
     /// <summary>
-    /// Loads a shipment for an order.  
+    /// Loads a shipment for an order.
     /// </summary>
     public class ShipmentLoader : IShipmentLoader
     {
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Loading
 
                     destinationAddressEditable = storeTypeManager.GetType(order.Store).ShippingAddressEditableState(firstShipment?.Shipment);
                 }
-                
+
                 return new OrderSelectionLoaded(order, shipments, destinationAddressEditable);
             }
             catch (Exception ex)

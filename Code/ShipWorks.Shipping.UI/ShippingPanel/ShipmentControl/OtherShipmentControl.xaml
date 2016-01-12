@@ -5,8 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl"
              xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight"
-             xmlns:props="clr-namespace:ShipWorks.Shipping.UI.AttachedProperties"
-             xmlns:valueConverters="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
+             xmlns:ui="http://schemas.shipworks.com/ui"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:OtherShipmentViewModel}"
              d:DesignHeight="224.36" d:DesignWidth="300">
     <UserControl.Resources>
@@ -19,7 +18,7 @@
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/DatePickerErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <valueConverters:EmptyMoneyConverter x:Key="EmptyMoney" />
+            <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -41,13 +40,13 @@
         <TextBlock Grid.Row="0" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Carrier Name:</TextBlock>
         <TextBox Grid.Row="0" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
-                 props:EntityFieldLength.FieldName="ShipmentOtherCarrier"
+                 ui:EntityFieldLength.FieldName="ShipmentOtherCarrier"
                  Text="{Binding CarrierName, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Service:</TextBlock>
         <TextBox Grid.Row="1" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
-                 props:EntityFieldLength.FieldName="ShipmentOtherService"
+                 ui:EntityFieldLength.FieldName="ShipmentOtherService"
                  Text="{Binding Service, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
         <TextBlock Grid.Row="2" Grid.Column="0"
@@ -72,7 +71,7 @@
         <TextBlock Grid.Row="5" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Tracking #:</TextBlock>
         <TextBox Grid.Row="5" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
-                 props:EntityFieldLength.FieldName="ShipmentTracking"
+                 ui:EntityFieldLength.FieldName="ShipmentTracking"
                  Text="{Binding TrackingNumber, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"  />
 
         <TextBlock Grid.Row="6" Grid.Column="0"

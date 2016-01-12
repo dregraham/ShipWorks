@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.UI.Wizard;
 using System.Net;
+using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using log4net;
@@ -64,6 +65,7 @@ namespace ShipWorks.Stores.Platforms.Miva.WizardPages
         /// <summary>
         /// Attempt to find the module using the information entered by the user.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool FindModule()
         {
             string baseUrl = website.Text;
@@ -217,6 +219,7 @@ namespace ShipWorks.Stores.Platforms.Miva.WizardPages
         /// <summary>
         /// Validate the manually entered module information.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool ValidateModule()
         {
             string url = moduleUrl.Text.Trim();

@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     {
         private readonly AmazonServiceViewModel viewModel;
         private readonly AmazonShipmentType amazonShipmentType;
+        private readonly AmazonRateHashingService rateHashingService;
         private IDisposable propertyChangedSubscriptions;
 
         /// <summary>
@@ -32,11 +33,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         /// <param name="viewModel">The view model for this control.</param>
         /// <param name="amazonShipmentType">AmazonShipmentType</param>
-        public AmazonServiceControl(RateControl rateControl, AmazonServiceViewModel viewModel, AmazonShipmentType amazonShipmentType)
+        /// <param name="rateHashingService"></param>
+        public AmazonServiceControl(RateControl rateControl, AmazonServiceViewModel viewModel, AmazonShipmentType amazonShipmentType, AmazonRateHashingService rateHashingService)
             : base(ShipmentTypeCode.Amazon, rateControl)
         {
             this.viewModel = viewModel;
             this.amazonShipmentType = amazonShipmentType;
+            this.rateHashingService = rateHashingService;
             InitializeComponent();
         }
 
@@ -159,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             return new CompositeDisposable(
                 events.Where(x => x == nameof(viewModel.ServicesAvailable)).Subscribe(OnServicesAvailableChanged),
                 events.Where(x => x == nameof(viewModel.ShippingService)).Subscribe(OnShippingServiceChanged),
-                events.Where(amazonShipmentType.RatingFields.FieldsContainName).Subscribe(OnRatingFieldChanged)
+                events.Where(rateHashingService.RatingFields.FieldsContainName).Subscribe(OnRatingFieldChanged)
             );
         }
 

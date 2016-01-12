@@ -149,6 +149,7 @@ namespace Interapptive.Shared.IO.Text.Csv
         /// <exception cref="T:ArgumentException">
         ///		Cannot read from <paramref name="reader"/>.
         /// </exception>
+        [NDependIgnoreTooManyParams]
         public CachedCsvReader(TextReader reader, bool hasHeaders, char delimiter, char quote, char escape, char comment, bool trimSpaces)
             : this(reader, hasHeaders, delimiter, quote, escape, comment, trimSpaces, DefaultBufferSize)
         {
@@ -174,6 +175,7 @@ namespace Interapptive.Shared.IO.Text.Csv
         /// <exception cref="ArgumentOutOfRangeException">
         ///		<paramref name="bufferSize"/> must be 1 or more.
         /// </exception>
+        [NDependIgnoreTooManyParams]
         public CachedCsvReader(TextReader reader, bool hasHeaders, char delimiter, char quote, char escape, char comment, bool trimSpaces, int bufferSize)
             : base(reader, hasHeaders, delimiter, quote, escape, comment, trimSpaces, bufferSize)
         {

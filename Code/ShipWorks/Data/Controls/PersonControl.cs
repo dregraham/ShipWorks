@@ -16,15 +16,18 @@ using ShipWorks.UI.Controls;
 using ShipWorks.Data.Utility;
 using Interapptive.Shared.Business;
 using System.ComponentModel.DataAnnotations;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
 using System.Threading.Tasks;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Data.Controls
 {
     /// <summary>
     /// Control for editing the details of a person
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class PersonControl : UserControl
     {
         // Controls if it's always editable, or can go into edit-mode.
@@ -350,6 +353,7 @@ namespace ShipWorks.Data.Controls
         /// Validate that RequiredFields have data entered.
         /// IMPORTANT: This should only be used when not in MultiValued mode.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public bool ValidateRequiredFields()
         {
             if (RequiredFields == PersonFields.None)
@@ -656,6 +660,7 @@ namespace ShipWorks.Data.Controls
                     if (ValidatedAddressManager.EnsureAddressCanBeValidated(newAddress))
                     {
                         newAddress.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                        newAddress.AddressType = (int) AddressType.NotChecked;
                     }
 
                     newAddress.AddressValidationSuggestionCount = 0;
@@ -679,6 +684,7 @@ namespace ShipWorks.Data.Controls
         /// <summary>
         /// Populate the person from the values in the UI
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void PopulatePersonFromUI(PersonAdapter person)
         {
             fullName.ReadMultiText(value =>
@@ -1002,6 +1008,7 @@ namespace ShipWorks.Data.Controls
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
             {
                 lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+                lastValidatedAddress.AddressType = (int) AddressType.NotChecked;
             }
 
             validatedAddresses.Clear();

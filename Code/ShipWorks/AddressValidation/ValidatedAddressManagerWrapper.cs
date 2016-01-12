@@ -1,5 +1,6 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.AddressValidation
 {
@@ -11,9 +12,13 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate a single shipment
         /// </summary>
-        public Task ValidateShipmentAsync(ShipmentEntity shipment, AddressValidator validator)
-        {
-            return ValidatedAddressManager.ValidateShipmentAsync(shipment, validator);
-        }
+        public Task ValidateShipmentAsync(ShipmentEntity shipment, AddressValidator validator) =>
+            ValidatedAddressManager.ValidateShipmentAsync(shipment, validator);
+
+        /// <summary>
+        /// Copy all the validated address from one entity to another
+        /// </summary>
+        public void CopyValidatedAddresses(SqlAdapter sqlAdapter, long fromEntityId, string fromPrefix, long toEntityId, string toPrefix) =>
+            ValidatedAddressManager.CopyValidatedAddresses(sqlAdapter, fromEntityId, fromPrefix, toEntityId, toPrefix);
     }
 }

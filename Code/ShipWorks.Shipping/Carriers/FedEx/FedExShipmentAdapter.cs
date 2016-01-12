@@ -18,9 +18,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public class FedExShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public FedExShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager) : base(shipment, shipmentTypeFactory, customsManager)
+        public FedExShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
             MethodConditions.EnsureArgumentIsNotNull(shipment.FedEx, nameof(shipment.FedEx));

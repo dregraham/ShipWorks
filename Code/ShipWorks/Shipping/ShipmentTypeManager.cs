@@ -2,23 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.Postal;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.iParcel;
-using ShipWorks.Shipping.Carriers.OnTrac;
-using ShipWorks.Shipping.Carriers.Postal.WebTools;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using Autofac.Features.OwnedInstances;
 
 namespace ShipWorks.Shipping
 {
@@ -67,6 +59,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the ShipmentType based on the given type code
         /// </summary>
+        /// <remarks>The three shipment type codes remaining are to satisfy about 70 tests.</remarks>
         public static ShipmentType GetType(ShipmentTypeCode typeCode)
         {
             switch (typeCode)
@@ -74,35 +67,11 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.UpsOnLineTools:
                     return new UpsOltShipmentType();
 
-                case ShipmentTypeCode.UpsWorldShip:
-                    return new WorldShipShipmentType();
-
                 case ShipmentTypeCode.Endicia:
                     return new EndiciaShipmentType();
 
                 case ShipmentTypeCode.FedEx:
                     return new FedExShipmentType();
-
-                case ShipmentTypeCode.Express1Endicia:
-                    return new Express1EndiciaShipmentType();
-
-                case ShipmentTypeCode.Express1Usps:
-                    return new Express1UspsShipmentType();
-
-                case ShipmentTypeCode.PostalWebTools:
-                    return new PostalWebShipmentType();
-
-                case ShipmentTypeCode.OnTrac:
-                    return new OnTracShipmentType();
-
-                case ShipmentTypeCode.iParcel:
-                    return new iParcelShipmentType();
-
-                case ShipmentTypeCode.BestRate:
-                    return new BestRateShipmentType();
-
-                case ShipmentTypeCode.Usps:
-                    return new UspsShipmentType();
             }
 
             if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<ShipmentType>(typeCode))

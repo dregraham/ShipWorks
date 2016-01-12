@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Data;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
@@ -27,10 +28,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     /// </summary>
     public class UpsApiRateClient
     {
-        private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private ICarrierAccountRepository<UpsAccountEntity> accountRepository;
         private readonly ILog log;
-        private readonly ICarrierSettingsRepository settingsRepository;
-        private readonly ICertificateInspector certificateInspector;
+        private ICarrierSettingsRepository settingsRepository;
+        private ICertificateInspector certificateInspector;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
@@ -88,7 +89,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 firstExceptionEncountered = e;
             }
             
-
             if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None)
             {
                 UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
@@ -127,6 +127,28 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
+        /// Gets rates for the shipment using counter rates if useCounterRates is true
+        /// </summary>
+        public List<UpsServiceRate> GetRates(ShipmentEntity shipment, bool useCounterRates)
+        {
+            // Create the appropriate settings, certificate inspector
+            if (useCounterRates)
+            {
+                settingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
+                certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
+                accountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
+            }
+            else
+            {
+                settingsRepository = new UpsSettingsRepository();
+                certificateInspector = new TrustingCertificateInspector();
+                accountRepository = new UpsAccountRepository();
+            }
+
+            return GetRates(shipment);
+        }
+
+        /// <summary>
         /// Gets the SurePost rates given shipment and service type.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
@@ -146,6 +168,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Get the rates for the given shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreTooManyParams]
         private List<UpsServiceRate> GetRates(ShipmentEntity shipment, UpsAccountEntity account, XmlTextWriter xmlWriter, UpsRateServiceElementWriter serviceElementWriter,
             UpsPackageWeightElementWriter weightElementWriter, UpsPackageServiceOptionsElementWriter serviceOptionsElementWriter)
         {

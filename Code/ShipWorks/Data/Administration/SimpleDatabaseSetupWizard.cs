@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using System.Diagnostics;
-using ShipWorks.Data.Administration.SqlServerSetup;
 using System.Data.SqlClient;
+using System.IO;
+using System.Windows.Forms;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Connection;
-using System.IO;
 using log4net;
+using ShipWorks.Data.Administration.SqlServerSetup;
+using ShipWorks.Data.Connection;
 using ShipWorks.Email;
-using ShipWorks.Users;
-using ShipWorks.ApplicationCore.Setup;
 using ShipWorks.Stores.Management;
+using ShipWorks.UI.Wizard;
+using ShipWorks.Users;
 
 namespace ShipWorks.Data.Administration
 {

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml;
+using System.Diagnostics;
+using Interapptive.Shared;
 
 namespace ShipWorks.Data.Import.Spreadsheet
 {
@@ -172,6 +174,7 @@ namespace ShipWorks.Data.Import.Spreadsheet
         /// <summary>
         /// Load the map from the given persisted XML data
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void LoadFromXml(string mapXml)
         {
             try

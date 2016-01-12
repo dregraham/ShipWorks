@@ -10,7 +10,10 @@ using ShipWorks.Shipping.Services.Builders;
 
 namespace ShipWorks.Shipping.Carriers.Express1
 {
-    public class ExpressShippingModule : Module
+    /// <summary>
+    /// Module for the Express1 carrier
+    /// </summary>
+    public class Express1ShippingModule : Module
     {
         /// <summary>
         /// Load the module configuration
@@ -56,6 +59,28 @@ namespace ShipWorks.Shipping.Carriers.Express1
             builder.RegisterType<Express1UspsShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Express1Usps)
                 .SingleInstance();
+
+            builder.RegisterType<Express1EndiciaLabelService>()
+                .AsSelf()
+                .Keyed<ILabelService>(ShipmentTypeCode.Express1Endicia);
+
+            builder.RegisterType<Express1UspsLabelService>()
+                .AsSelf()
+                .Keyed<ILabelService>(ShipmentTypeCode.Express1Usps);
+
+            builder.RegisterType<UspsRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.Express1Usps);
+
+            builder.RegisterType<EndiciaRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.Express1Endicia);
+
+            builder.RegisterType<Express1UspsRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.Express1Usps);
+
+            builder.RegisterType<Express1EndiciaRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.Express1Endicia);
+
+            builder.RegisterType<Express1UspsAccountRepository>();
         }
     }
 }

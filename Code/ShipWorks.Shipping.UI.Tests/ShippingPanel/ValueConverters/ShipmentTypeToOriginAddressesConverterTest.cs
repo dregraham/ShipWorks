@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
             {
                 var testObject = mock.Create<ShipmentTypeToOriginAddressesConverter>();
                 testObject.Convert(ShipmentTypeCode.Usps, typeof(object), null, null);
-                mock.Mock<IShipmentTypeFactory>()
+                mock.Mock<IShipmentTypeManager>()
                     .Verify(x => x.Get(ShipmentTypeCode.Usps));
             }
         }

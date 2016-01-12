@@ -11,6 +11,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
@@ -44,7 +45,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .SingleInstance();
 
             builder.RegisterType<AmazonServiceControl>()
-                .UsingConstructor(typeof(RateControl), typeof(AmazonServiceViewModel), typeof(AmazonShipmentType))
                 .Keyed<ServiceControlBase>(ShipmentTypeCode.Amazon)
                 .ExternallyOwned();
 
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .SingleInstance();
 
             builder.RegisterType<AmazonRatingService>()
-                .AsImplementedInterfaces();
+                .Keyed<IRatingService>(ShipmentTypeCode.Amazon);
 
             builder.RegisterType<AmazonMwsWebClientSettingsFactory>()
                 .As<IAmazonMwsWebClientSettingsFactory>();
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .Keyed<ShippingProfileControlBase>(ShipmentTypeCode.Amazon);
 
             builder.RegisterType<AmazonLabelService>()
-                .AsImplementedInterfaces();
+                .Keyed<ILabelService>(ShipmentTypeCode.Amazon);
 
             builder.RegisterType<AmazonShipmentRequestDetailsFactory>()
                 .As<IAmazonShipmentRequestDetailsFactory>();
@@ -110,6 +110,19 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<NullShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Amazon)
                 .SingleInstance();
+				
+            builder.RegisterType<AmazonCreateShipmentRequest>()
+                .Keyed<IAmazonShipmentRequest>(AmazonMwsApiCall.CreateShipment);
+
+            builder.RegisterType<AmazonCancelShipmentRequest>()
+                .Keyed<IAmazonShipmentRequest>(AmazonMwsApiCall.CancelShipment);
+
+            builder.RegisterType<AmazonRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.Amazon)
+                .AsSelf();
+
+            builder.RegisterType<AmazonRateGroupFactory>()
+                .AsImplementedInterfaces();
         }
     }
 }

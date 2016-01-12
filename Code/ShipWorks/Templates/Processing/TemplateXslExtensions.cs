@@ -1,18 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
 using System.CodeDom.Compiler;
-using ShipWorks.ApplicationCore;
-using System.IO;
-using Microsoft.CSharp;
-using System.Security.Cryptography;
-using Interapptive.Shared.UI;
-using System.Text.RegularExpressions;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using System.Xml.XPath;
+using Interapptive.Shared;
+using Interapptive.Shared.Utility;
+using Microsoft.CSharp;
 
 namespace ShipWorks.Templates.Processing
 {
@@ -20,9 +19,9 @@ namespace ShipWorks.Templates.Processing
     /// Class containing functions intended to be called from within XSL
     /// </summary>
     public class TemplateXslExtensions
-    {        
-        // Custom compiler cache 
-        static Dictionary<string, CompilerResults> compilerCache = new Dictionary<string,CompilerResults>();
+    {
+        // Custom compiler cache
+        static Dictionary<string, CompilerResults> compilerCache = new Dictionary<string, CompilerResults>();
 
         /// <summary>
         /// Takes an unformatted dateTime string and formats it as 'm/d/yyyy'
@@ -122,6 +121,7 @@ namespace ShipWorks.Templates.Processing
         /// Run the function with the given code and parameters
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [NDependIgnoreTooManyParams]
         public object Function(string code, object value1, object value2, object value3, object value4, object value5)
         {
             return InternalRunCode(code, new List<object> { value1, value2, value3, value4, value5 });
@@ -130,6 +130,7 @@ namespace ShipWorks.Templates.Processing
         /// <summary>
         /// Run the given code with the specified values as inputs
         /// </summary>
+        [NDependIgnoreLongMethod]
         private object InternalRunCode(string code, List<object> values)
         {
             string hashKey = GetCodeHash(code);
@@ -165,8 +166,8 @@ namespace ShipWorks.Templates.Processing
                 parameters.CompilerOptions = "/optimize";
 
                 // Add the references
-                string[] references = 
-                { 
+                string[] references =
+                {
                     "System.dll",
                     "System.Data.dll",
                     "System.Windows.Forms.dll",
@@ -317,7 +318,7 @@ namespace ShipWorks.Templates.Processing
                 return type;
             }
 
-            Dictionary<string, string> builtin = new Dictionary<string,string>
+            Dictionary<string, string> builtin = new Dictionary<string, string>
                 {
                     {"bool", "Boolean"},
                     {"byte", "Byte"},
@@ -355,6 +356,9 @@ namespace ShipWorks.Templates.Processing
         /// <summary>
         /// Get the hash of the given source code for saving in our dictionary
         /// </summary>
+        [SuppressMessage("CSharp.Analyzers",
+            "CA5351: Do not use insecure cryptographic algorithm MD5",
+            Justification = "This is what ShipWorks currently uses")]
         private string GetCodeHash(string code)
         {
             MD5 md5 = new MD5CryptoServiceProvider();

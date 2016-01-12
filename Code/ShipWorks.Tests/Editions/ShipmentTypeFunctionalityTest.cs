@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Common.Logging.Configuration;
-using Xunit;
 using Microsoft.XmlDiffPatch;
 using ShipWorks.Editions;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Policies;
+using Xunit;
 
 namespace ShipWorks.Tests.Editions
 {
+    [Collection("ShippingPolicy")]
     public class ShipmentTypeFunctionalityTest
     {
         private XmlDocument xml;
@@ -441,10 +440,10 @@ namespace ShipWorks.Tests.Editions
         public void Deserialize_HasNoRestrictions_WhenNoShipmentTypesAreInXml_Test()
         {
             SetupXmlWithNoShipmentTypes();
-            
+
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
 
-            foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof (ShipmentTypeCode)))
+            foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof(ShipmentTypeCode)))
             {
                 IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[typeCode];
                 Assert.Equal(0, restrictions.Count());
@@ -492,7 +491,7 @@ namespace ShipWorks.Tests.Editions
 
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
-            
+
             Assert.Equal(2, restrictions.Distinct().Count());
         }
 
@@ -626,18 +625,18 @@ namespace ShipWorks.Tests.Editions
         {
             List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> storedPolicies = null;
             long storedStoreId = 0;
-            
+
             ShipmentTypeFunctionality.Deserialize(31, XElement.Parse(path.OuterXml), (storeId, policies) =>
             {
                 storedStoreId = storeId;
                 storedPolicies = policies;
-            } );
+            });
 
             Assert.Equal(31, storedStoreId);
-            
-            Assert.Equal(1,storedPolicies.Count);
+
+            Assert.Equal(1, storedPolicies.Count);
             Assert.Equal(ShipmentTypeCode.Usps, storedPolicies.First().Key);
-            Assert.Equal(2,storedPolicies.First().Value.Count());
+            Assert.Equal(2, storedPolicies.First().Value.Count());
             Assert.True(
                 CompareXmlToText(
                     storedPolicies.First().Value.First(),
@@ -652,7 +651,7 @@ namespace ShipWorks.Tests.Editions
 
         private bool CompareXmlToText(XElement xElement, string xmlText)
         {
-               XmlDocument expectedDocument = new XmlDocument();
+            XmlDocument expectedDocument = new XmlDocument();
             expectedDocument.LoadXml(xmlText);
 
             XmlDocument actualDocument = new XmlDocument();

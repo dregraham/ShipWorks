@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Xml.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Data.Administration.Retry;
@@ -246,26 +247,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     order.RequestedShipping = $"{carrier} - {shippingClass}";
                 }
 
-                order.IsPrime = (int)GetIsPrime(shippingClass);
+                order.IsPrime = (int)ChannelAdvisorHelper.GetIsPrime(shippingClass, carrier);
             }
-        }
-
-        /// <summary>
-        /// Gets the prime status based on the shippingClass
-        /// </summary>
-        public static ChannelAdvisorIsAmazonPrime GetIsPrime(string shippingClass)
-        {
-            if (string.IsNullOrEmpty(shippingClass))
-            {
-                return ChannelAdvisorIsAmazonPrime.Unknown;
-            }
-
-            if (shippingClass.IndexOf("Amazon", StringComparison.OrdinalIgnoreCase) >= 0 &&
-                shippingClass.IndexOf("Prime", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                return ChannelAdvisorIsAmazonPrime.Yes;
-            }
-            return ChannelAdvisorIsAmazonPrime.No;
         }
 
         /// <summary>
@@ -311,6 +294,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Import order charges from CA shopping cart
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadCharges(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
             foreach (OrderLineItemInvoice invoice in caOrder.ShoppingCart.LineItemInvoiceList)
@@ -419,6 +403,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Imports order items from the CA shopping cart
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         private void LoadItems(ChannelAdvisorClient client, ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
             foreach (OrderLineItemItemResponse caItem in caOrder.ShoppingCart.LineItemSKUList)
@@ -626,6 +612,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Addresses
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadAddresses(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
             // shipping address

@@ -15,9 +15,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
     public class PostalWebToolsShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public PostalWebToolsShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager) : base(shipment, shipmentTypeFactory, customsManager)
+        public PostalWebToolsShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal, nameof(shipment.Postal));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));

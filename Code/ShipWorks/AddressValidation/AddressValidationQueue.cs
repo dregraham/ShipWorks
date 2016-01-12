@@ -15,6 +15,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.Stores;
 using log4net;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.AddressValidation
 {

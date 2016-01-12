@@ -18,6 +18,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using Interapptive.Shared;
 using ShipWorks.Templates;
 
 namespace ShipWorks.Data
@@ -50,6 +51,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Static constructor
         /// </summary>
+        [NDependIgnoreLongMethod]
         static EntityUtility()
         {
             entitySeedValues[EntityType.ComputerEntity] = 1;
@@ -330,6 +332,7 @@ namespace ShipWorks.Data
         /// Find a chain of relations that goes from the given entity to the given entity. Returns null if no such chain is found.
         /// Many to Many relationships are never considered.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static RelationCollection FindRelationChain(EntityType fromEntityType, EntityType toEntityType, bool allowOneToMany)
         {
             // Try it bottom-to-top with the given entities
@@ -464,6 +467,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Find a chain of relations that goes from the given entity to the given entity. Returns null if no such chain is found.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static RelationCollection FindRelationChain(EntityType fromEntityType, EntityType toEntityType, List<EntityType> visitedEntityTypes)
         {
             // If this is the type we are looking for, we are done.  Just return an empty relation collection (since no relation is needed to get from an
@@ -668,6 +672,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get an image of the given entity of the given size
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         public static Image GetEntityImage(EntityType entityType, int size)
         {
             if (size != 16 && size != 32)

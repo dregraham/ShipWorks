@@ -31,6 +31,7 @@ using System.Diagnostics;
 using System.Threading;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Data;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Editions;
 
 namespace ShipWorks.Filters

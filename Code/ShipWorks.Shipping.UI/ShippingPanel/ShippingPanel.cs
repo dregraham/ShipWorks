@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
@@ -12,7 +10,6 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
-using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel

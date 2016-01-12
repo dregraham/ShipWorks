@@ -7,6 +7,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -20,20 +21,42 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     /// <summary>
     /// API for getting time in transit for a shipment
     /// </summary>
-    public static class UpsApiTransitTimeClient
+    public class UpsApiTransitTimeClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(UpsApiTransitTimeClient));
 
         /// <summary>
-        /// Static constructor
+        /// Get transit times for the given shipment
+        /// Uses counter rates if sepecified 
         /// </summary>
-        static UpsApiTransitTimeClient()
-        { }
+        public IEnumerable<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, bool useCounterRates)
+        {
+            ICarrierSettingsRepository settingsRepository = null;
+            ICertificateInspector certificateInspector = null;
+            ICarrierAccountRepository<UpsAccountEntity> accountRepository = null;
+
+            // Create the appropriate settings, certificate inspector
+            if (useCounterRates)
+            {
+                settingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
+                certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
+                accountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
+            }
+            else
+            {
+                
+                settingsRepository = new UpsSettingsRepository();
+                certificateInspector = new TrustingCertificateInspector();
+                accountRepository = new UpsAccountRepository();
+            }
+
+            return GetTransitTimes(shipment, accountRepository, settingsRepository, certificateInspector);
+        }
 
         /// <summary>
         /// Get transit times for the given shipment
         /// </summary>
-        public static List<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+        public IEnumerable<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
         {
             List<UpsTransitTime> upsTransitTimes = new List<UpsTransitTime>();
 
@@ -66,6 +89,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Prepares the transit request.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static XmlTextWriter PrepareTransitRequest(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
         {
             // Create the client for connecting to the UPS server

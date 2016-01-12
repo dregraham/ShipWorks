@@ -12,6 +12,7 @@ namespace Interapptive.Shared.Win32
     /// <summary>
     /// Contains Win32 Interop wrappers
     /// </summary>
+    [NDependIgnore]
     public static class NativeMethods
     {
         #region Methods

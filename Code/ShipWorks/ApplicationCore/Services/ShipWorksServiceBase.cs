@@ -24,6 +24,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ThreadTimer = System.Threading.Timer;
 using Interapptive.Shared.UI;
 using System.IO;
+using Interapptive.Shared;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 
 namespace ShipWorks.ApplicationCore.Services
@@ -196,6 +197,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// <summary>
         /// Check SQL Session for changes.  Updates 'lastConfiguration' and 'lastConfigurationSuccess', and returns true if the session has changed.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool CheckSqlSession()
         {
             // Reloading the SQL Session and any other changes that may cause have to be within a connection scope, so we don't try to do it while other things are updating,

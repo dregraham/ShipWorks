@@ -18,6 +18,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Email;
 using ShipWorks.Users.Security;
 using System.Diagnostics;
+using Interapptive.Shared;
 
 namespace ShipWorks.Templates.Emailing
 {
@@ -219,6 +220,7 @@ namespace ShipWorks.Templates.Emailing
         /// <summary>
         /// Do the actual work of the email generation. Returns false if canceled, true otherwise.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool EmailWorker()
         {
             // Need the progress item

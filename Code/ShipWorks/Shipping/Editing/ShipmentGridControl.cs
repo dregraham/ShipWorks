@@ -34,6 +34,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Shipping.CoreExtensions.Grid;
 using ShipWorks.ApplicationCore;
 using System.Threading;
+using Interapptive.Shared;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -41,6 +42,7 @@ namespace ShipWorks.Shipping.Editing
     /// The control to select shipments for the main shipping grid
     /// </summary>
     [ToolboxItem(false)]
+    [NDependIgnoreLongTypes]
     public partial class ShipmentGridControl : UserControl
     {
         // Maps a shipment to its row
@@ -78,6 +80,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         public ShipmentGridControl()
         {
             InitializeComponent();

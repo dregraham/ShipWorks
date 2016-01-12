@@ -19,12 +19,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         void Save();
 
         /// <summary>
-        /// Refreshes the service types.
         /// </summary>
         void RefreshServiceTypes();
 
         /// <summary>
-        /// Refreshes the package types.
         /// </summary>
         void RefreshPackageTypes();
 

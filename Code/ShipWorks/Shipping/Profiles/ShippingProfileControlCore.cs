@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.UI.Controls;
 using ShipWorks.Shipping.Editing;
@@ -66,6 +67,7 @@ namespace ShipWorks.Shipping.Profiles
             if (checkBox.Checked)
             {
                 ReadFieldValue(entity, field, dataControl);
+                OnStateCheckChanged(checkBox, EventArgs.Empty);
             }
         }
 
@@ -132,6 +134,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Read the value of the specified field of the specified entity to the given control
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ReadFieldValue(EntityBase2 entity, EntityField2 field, Control control)
         {
             MoneyTextBox moneyBox = control as MoneyTextBox;
@@ -231,6 +234,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Clear the value from the given control to appear disabled
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void UpdateState(Control control, bool active)
         {
             control.Enabled = active;
@@ -324,6 +328,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Set the field value to the value which is in the given control
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void SetFieldValue(EntityBase2 entity, EntityField2 field, Control control)
         {
             object value = null;

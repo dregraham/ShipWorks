@@ -1,16 +1,16 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Autofac.Extras.Moq;
+using Autofac.Features.Indexed;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
-using System;
-using System.Collections.Generic;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 using Xunit;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             CreateShipmentResult = new CreateShipmentResult()
             {
-                Shipment = new Shipment()
+                AmazonShipment = new AmazonShipment()
                 {
                     TrackingId = "123",
                     ShipmentId = "456",
@@ -71,31 +71,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Assert.Throws<ArgumentNullException>(() => testObject.Create(null));
         }
 
-        [Fact]
-        public void Create_PopulatesOrder_WhenShipmentIsSet()
-        {
-            MockRequestDetailsFactory();
-
-            var shipment = new ShipmentEntity
-            {
-                Order = new AmazonOrderEntity(),
-                Amazon = new AmazonShipmentEntity() { ShippingServiceID = "something", CarrierName = "STAMPS_DOT_COM" }
-            };
-
-            mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
-                .Returns(defaultResponse);
-
-            var testObject = mock.Create<AmazonLabelService>();
-            testObject.Create(shipment);
-
-            mock.Mock<IOrderManager>()
-                .Verify(x => x.PopulateOrderDetails(shipment));
-        }
 
         [Fact]
         public void Create_CallsIsAllowed_OnEnforcers()
         {
+            Mock<IAmazonShipmentRequest> amazonShipmentRequest = mock.Mock<IAmazonShipmentRequest>();
+
+            Mock<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>> repo = mock.MockRepository.Create<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>>();
+
+
+            repo.Setup(x => x[AmazonMwsApiCall.CreateShipment])
+                .Returns(amazonShipmentRequest.Object);
+
+            mock.Provide<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>>(repo.Object);
+
             MockRequestDetailsFactory();
 
             var enforcer1 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
@@ -108,9 +97,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             labelEnforcers.AddRange(new[] { enforcer1.Object, enforcer2.Object });
 
-            mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
-                .Returns(defaultResponse);
+            mock.Mock<IAmazonShipmentRequest>()
+                .Setup(x => x.Submit(It.IsAny<ShipmentEntity>()))
+                .Returns(defaultResponse.CreateShipmentResult.AmazonShipment);
 
             var testObject = mock.Create<AmazonLabelService>();
             testObject.Create(defaultShipment);
@@ -149,7 +138,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
                 .Returns(defaultResponse);
-
             var testObject = mock.Create<AmazonLabelService>();
             Assert.Throws<AmazonShippingException>(() => testObject.Create(defaultShipment));
 
@@ -157,135 +145,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void Create_ThrowsShippingException_WithNonAmazonOrder()
+        public void Void_Calls_IAmazonShipmentRequest()
         {
-            var testObject = mock.Create<AmazonLabelService>();
+            Mock<IAmazonShipmentRequest> amazonShipmentRequest = mock.Mock<IAmazonShipmentRequest>();
 
-            Assert.Throws<ShippingException>(() => testObject.Create(new ShipmentEntity
-            {
-                Order = new OrderEntity(),
-                Amazon = new AmazonShipmentEntity()
-                {
-                    ShippingServiceID = "UPS_GROUND"
-                }
-            }));
-        }
+            Mock<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>> repo = mock.MockRepository.Create<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>>();
 
-        [Fact]
-        public void Create_SendsCreatedCredentialsToWebService_WhenShipmentIsSet()
-        {
-            MockRequestDetailsFactory();
+            repo.Setup(x => x[AmazonMwsApiCall.CancelShipment])
+                .Returns(amazonShipmentRequest.Object);
 
-            var shipment = new ShipmentEntity
-            {
-                Amazon = new AmazonShipmentEntity() { CarrierName = "STAMPS_DOT_COM" },
-                Order = new AmazonOrderEntity()
-            };
+            mock.Provide<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>>(repo.Object);
 
-            var settings = mock.Create<IAmazonMwsWebClientSettings>();
+            AmazonLabelService testObject = mock.Create<AmazonLabelService>();
 
-            mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
-                .Returns(defaultResponse);
+            ShipmentEntity shipment = new ShipmentEntity();
 
-            mock.Mock<IAmazonMwsWebClientSettingsFactory>()
-                .Setup(x => x.Create(shipment.Amazon))
-                .Returns(settings);
+            testObject.Void(shipment);
 
-            var testObject = mock.Create<AmazonLabelService>();
-            testObject.Create(shipment);
-
-            mock.Mock<IAmazonShippingWebClient>()
-                .Verify(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), settings, It.IsAny<string>()));
-        }
-
-        [Fact]
-        public void Create_SendsShipmentsToVerifyShipmentOnEnforcer_AfterProcessing()
-        {
-            MockRequestDetailsFactory();
-
-            var shipment = new ShipmentEntity
-            {
-                Amazon = new AmazonShipmentEntity() { CarrierName = "STAMPS_DOT_COM" },
-                Order = new AmazonOrderEntity()
-            };
-
-            var enforcer1 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
-            var enforcer2 = mock.MockRepository.Create<IAmazonLabelEnforcer>();
-
-            enforcer1.Setup(x => x.CheckRestriction(It.IsAny<ShipmentEntity>()))
-                .Returns(EnforcementResult.Success);
-            enforcer1.Setup(x => x.VerifyShipment(shipment))
-                .Verifiable();
-            enforcer2.Setup(x => x.CheckRestriction(It.IsAny<ShipmentEntity>()))
-                .Returns(EnforcementResult.Success);
-            enforcer2.Setup(x => x.VerifyShipment(shipment))
-                .Verifiable();
-
-            labelEnforcers.AddRange(new[] { enforcer1.Object, enforcer2.Object });
-
-            mock.Mock<IAmazonShippingWebClient>()
-                .Setup(x => x.CreateShipment(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>(), It.IsAny<string>()))
-                .Returns(defaultResponse);
-
-            var testObject = mock.Create<AmazonLabelService>();
-            testObject.Create(shipment);
-
-            enforcer1.VerifyAll();
-            enforcer2.VerifyAll();
-        }
-
-        [Fact]
-        public void Create_ThrowsShippingException_WithInvalidShippingServiceID()
-        {
-            var testObject = mock.Create<AmazonLabelService>();
-
-            Assert.Throws<ShippingException>(() => testObject.Create(new ShipmentEntity
-            {
-                Order = new OrderEntity(),
-                Amazon = new AmazonShipmentEntity()
-                {
-                    ShippingServiceID = "-1"
-                }
-            }));
-        }
-
-        [Fact]
-        public void Void_ThrowsError_WhenAmazonUniqueShipmentIDIsNull()
-        {
-            var testObject = mock.Create<AmazonLabelService>();
-
-            var shippingException = Assert.Throws<AmazonShippingException>(() => testObject.Void(new ShipmentEntity
-            {
-                Order = new OrderEntity(),
-                Amazon = new AmazonShipmentEntity()
-            }));
-
-            Assert.Contains("AmazonUniqueShipmentID", shippingException.Message, StringComparison.OrdinalIgnoreCase);
-        }
-
-        [Fact]
-        public void Void_CallsCancelShipment_ShenAmazonUniqueShipmentIDIsNotNull()
-        {
-            var testObject = mock.Create<AmazonLabelService>();
-
-            var AmazonUniqueShipmentID = "42";
-
-            mock.Mock<IAmazonShippingWebClient>()
-                .Setup(webClient => webClient.CancelShipment(It.IsAny<IAmazonMwsWebClientSettings>(), "42"))
-                .Verifiable();
-
-            testObject.Void(new ShipmentEntity
-            {
-                Order = new OrderEntity(),
-                Amazon = new AmazonShipmentEntity()
-                {
-                    AmazonUniqueShipmentID = AmazonUniqueShipmentID,
-                    CarrierName = "STAMPS_DOT_COM"
-                }
-            });
-
-            mock.VerifyAll = true;
+            amazonShipmentRequest.Verify(x => x.Submit(shipment));
         }
 
         public void MockRequestDetailsFactory()

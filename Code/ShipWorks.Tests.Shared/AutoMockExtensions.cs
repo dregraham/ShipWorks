@@ -25,24 +25,36 @@ namespace ShipWorks.Tests.Shared
         public static AutoMock GetLooseThatReturnsMocks() => AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
 
         /// <summary>
-        /// Configure a shipment type that will be returned by an instance of IShipmentTypeFactory
+        /// Override the specified type's registration
+        /// </summary>
+        public static Mock<T> Override<T>(this AutoMock autoMock) where T : class
+        {
+            Mock<T> mock = autoMock.CreateMock<T>();
+
+            autoMock.Provide<T>(mock.Object);
+
+            return mock;
+        }
+
+        /// <summary>
+        /// Configure a shipment type that will be returned by an instance of IShipmentTypeManager
         /// </summary>
         public static Mock<ShipmentType> WithShipmentTypeFromFactory(this AutoMock mock, Action<Mock<ShipmentType>> shipmentTypeConfiguration) =>
             WithShipmentTypeFromFactory<ShipmentType>(mock, shipmentTypeConfiguration);
 
         /// <summary>
-        /// Configure a shipment type that will be returned by an instance of IShipmentTypeFactory
+        /// Configure a shipment type that will be returned by an instance of IShipmentTypeManager
         /// </summary>
         public static Mock<T> WithShipmentTypeFromFactory<T>(this AutoMock mock, Action<Mock<T>> shipmentTypeConfiguration) where T : ShipmentType
         {
             var shipmentTypeMock = mock.MockRepository.Create<T>();
             shipmentTypeConfiguration(shipmentTypeMock);
 
-            mock.Mock<IShipmentTypeFactory>()
+            mock.Mock<IShipmentTypeManager>()
                 .Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
                 .Returns(shipmentTypeMock.Object);
 
-            mock.Mock<IShipmentTypeFactory>()
+            mock.Mock<IShipmentTypeManager>()
                 .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
                 .Returns(shipmentTypeMock.Object);
 

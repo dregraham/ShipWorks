@@ -20,6 +20,7 @@ namespace Interapptive.Shared.Utility
         class EnumMetadata
         {
             public DescriptionAttribute DescriptionAttribute { get; set; }
+            public DetailsAttribute DetailsAttribute { get; set; }
             public Image Image { get; set; }
             public bool Deprecated { get; set; }
             public bool Hidden { get; set; }
@@ -160,7 +161,28 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static string GetDescription(Enum value)
         {
-            return GetEnumMetadata(value).DescriptionAttribute.Description;
+            DescriptionAttribute description = GetEnumMetadata(value).DescriptionAttribute;
+
+            if (description == null)
+            {
+                throw new NullReferenceException($"No description attribute set for {value}");
+            }
+
+            return description.Description;
+        }
+
+        /// <summary>
+        /// Gets the details of the given enumerated value
+        /// </summary>
+        public static string GetDetails(Enum value)
+        {
+            // The grid blindly grabs details for all enum fields. If we where to throw here,
+            // we would either have to catch the error or have a second property that checks to see
+            // if the details exists. Seeing that the first requires an error to control program flow
+            // and the second would require using reflection twice (once to check existence and once to
+            // get the value) I felt it best to return an empty string if there is no details attribute.
+
+            return GetEnumMetadata(value).DetailsAttribute?.Details ?? string.Empty;
         }
 
         /// <summary>
@@ -198,6 +220,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Get the metadata for the given enum value
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static EnumMetadata GetEnumMetadata(Enum value)
         {
             Type enumType = value.GetType();
@@ -224,14 +247,9 @@ namespace Interapptive.Shared.Utility
                 {
                     EnumMetadata metadata = new EnumMetadata();
 
-                    DescriptionAttribute attribute = (DescriptionAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute));
-                    if (attribute == null)
-                    {
-                        throw new InvalidOperationException("Cannot use GetDescription on enum without DescriptionAttribute.");
-                    }
-
-                    metadata.DescriptionAttribute = attribute;
-
+                    metadata.DescriptionAttribute = (DescriptionAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute));
+                    metadata.DetailsAttribute = (DetailsAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(DetailsAttribute));
+                    
                     ImageResourceAttribute imageAttribute = (ImageResourceAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(ImageResourceAttribute));
                     if (imageAttribute != null)
                     {

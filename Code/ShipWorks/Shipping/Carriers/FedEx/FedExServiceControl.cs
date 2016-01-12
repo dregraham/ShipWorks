@@ -3,27 +3,29 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Controls;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.UI.Controls;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.UI;
-using ShipWorks.Data.Controls;
-using ShipWorks.ApplicationCore;
-using Autofac;
-using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     /// <summary>
     /// The Service tab control for FedEx
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FedExServiceControl : ServiceControlBase
     {
         bool updatingPayorChoices = false;
@@ -34,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         public FedExServiceControl(RateControl rateControl)
-            : base (ShipmentTypeCode.FedEx, rateControl)
+            : base(ShipmentTypeCode.FedEx, rateControl)
         {
             InitializeComponent();
         }
@@ -154,6 +156,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Load all the shipment details
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         private void LoadShipmentDetails()
         {
             bool anyDomestic = false;
@@ -162,18 +166,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             FedExServiceType? serviceType = null;
             bool allServicesSame = true;
             bool anyGround = false;
-            
+
             bool anyCodEnabled = false;
 
             bool anySaturday = false;
-            
+
             // Determine if all shipments will have the same destination service types
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 // Need to check with the store  to see if anything about the shipment was overridden in case
                 // it may have affected the shipping services available (i.e. the eBay GSP program)
                 ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
-                if (ShipmentTypeManager.GetType(shipment).IsDomestic(overriddenShipment)) 
+                if (ShipmentTypeManager.GetType(shipment).IsDomestic(overriddenShipment))
                 {
                     anyDomestic = true;
                 }
@@ -221,7 +225,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 service.DataSource = lifetimeScope.ResolveKeyed<IShipmentServicesBuilder>(ShipmentTypeCode.FedEx)
                     .BuildServiceTypeDictionary(LoadedShipments)
-                    .Select(entry => new KeyValuePair<FedExServiceType, string>((FedExServiceType)entry.Key, entry.Value)).ToList();
+                    .Select(entry => new KeyValuePair<FedExServiceType, string>((FedExServiceType) entry.Key, entry.Value)).ToList();
             }
 
             UpdatePackagingChoices(allServicesSame ? serviceType.Value : (FedExServiceType?) null);
@@ -229,7 +233,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Make it visible if any of them have saturday dates
             saturdayDelivery.Visible = anySaturday;
-            
+
             // Show freight if there are all freight
             freightInsidePickup.Visible = anyDomestic;
             freightInsideDelivery.Visible = anyDomestic;
@@ -238,14 +242,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Enable the COD editing ui if any shipments have COD enabled
             EnableCodUI(anyCodEnabled);
-            
+
             // Load the COD values and update the COD Tax UI
             codOrigin.LoadShipments(LoadedShipments, s => new PersonAdapter(s.FedEx, "Cod"));
             EnableCodTaxId(anyCodEnabled && codOrigin.SelectedOrigin == ShipmentOriginSource.Other);
 
             // Only show non-standard for a ground (home or not)
             nonStandardPackaging.Visible = anyGround;
-            
+
             using (MultiValueScope scope = new MultiValueScope())
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
@@ -302,7 +306,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 fedExHoldAtLocationControl.LoadFromShipment(LoadedShipments);
                 fimsOptionsControl.LoadFromShipment(LoadedShipments);
             }
-            
+
             OnChangeService(this, EventArgs.Empty);
 
             // Rehook events
@@ -321,17 +325,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             bool senderException = (fedex.EmailNotifySender & (int) FedExEmailNotificationType.Exception) != 0;
             bool senderDelivery = (fedex.EmailNotifySender & (int) FedExEmailNotificationType.Deliver) != 0;
 
-            bool recipientShip =      (fedex.EmailNotifyRecipient & (int) FedExEmailNotificationType.Ship) != 0;
+            bool recipientShip = (fedex.EmailNotifyRecipient & (int) FedExEmailNotificationType.Ship) != 0;
             bool recipientException = (fedex.EmailNotifyRecipient & (int) FedExEmailNotificationType.Exception) != 0;
-            bool recipientDelivery =  (fedex.EmailNotifyRecipient & (int) FedExEmailNotificationType.Deliver) != 0;
+            bool recipientDelivery = (fedex.EmailNotifyRecipient & (int) FedExEmailNotificationType.Deliver) != 0;
 
             bool otherShip = (fedex.EmailNotifyOther & (int) FedExEmailNotificationType.Ship) != 0;
             bool otherException = (fedex.EmailNotifyOther & (int) FedExEmailNotificationType.Exception) != 0;
             bool otherDelivery = (fedex.EmailNotifyOther & (int) FedExEmailNotificationType.Deliver) != 0;
 
-            bool brokerShip =      (fedex.EmailNotifyBroker & (int)FedExEmailNotificationType.Ship) != 0;
-            bool brokerException = (fedex.EmailNotifyBroker & (int)FedExEmailNotificationType.Exception) != 0;
-            bool brokerDelivery =  (fedex.EmailNotifyBroker & (int)FedExEmailNotificationType.Deliver) != 0;
+            bool brokerShip = (fedex.EmailNotifyBroker & (int) FedExEmailNotificationType.Ship) != 0;
+            bool brokerException = (fedex.EmailNotifyBroker & (int) FedExEmailNotificationType.Exception) != 0;
+            bool brokerDelivery = (fedex.EmailNotifyBroker & (int) FedExEmailNotificationType.Deliver) != 0;
 
             emailNotifySenderShip.ApplyMultiCheck(senderShip);
             emailNotifySenderException.ApplyMultiCheck(senderException);
@@ -414,7 +418,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
             else
             {
-                FedExServiceType serviceType = (FedExServiceType)service.SelectedValue;
+                FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
                 sectionShipment.ExtraText = EnumHelper.GetDescription(serviceType);
             }
         }
@@ -454,6 +458,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
@@ -657,7 +663,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (!service.MultiValued && service.SelectedValue != null)
             {
-                FedExServiceType serviceType = (FedExServiceType)service.SelectedValue;
+                FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
                 {
                     if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.FedEx)
@@ -665,7 +671,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                         return false;
                     }
 
-                    return ((FedExRateSelection)r.OriginalTag).ServiceType == serviceType;
+                    return ((FedExRateSelection) r.OriginalTag).ServiceType == serviceType;
                 });
 
                 RateControl.SelectRate(matchingRate);
@@ -683,7 +689,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
-            
+
             IEnumerable<FedExPackagingType> applicablePackageTypes;
 
             // If all the services are the same, then load up the valid packaging values
@@ -720,7 +726,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             int oldIndex = payorTransport.SelectedIndex;
-            
+
             EnumHelper.BindComboBox<FedExPayorType>(payorTransport, t => anyGround || t != FedExPayorType.Collect);
 
             payorTransport.SelectedIndex = (oldIndex < payorTransport.Items.Count) ? oldIndex : 0;
@@ -832,7 +838,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             EnableCodTaxId(codEnabled.Checked && codOrigin.SelectedOrigin == ShipmentOriginSource.Other);
         }
-        
+
         /// <summary>
         /// The size of the package control is changing
         /// </summary>
@@ -864,19 +870,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 service.SelectedIndex = oldIndex;
             }
         }
-        
+
         /// <summary>
         /// Changing the payor transport account
         /// </summary>
         private void OnChangePayorTransport(object sender, EventArgs e)
         {
-            panelTransportAccount.Visible = payorTransport.MultiValued || 
-                (payorTransport.SelectedValue != null &&  (FedExPayorType) payorTransport.SelectedValue != FedExPayorType.Sender);
+            panelTransportAccount.Visible = payorTransport.MultiValued ||
+                (payorTransport.SelectedValue != null && (FedExPayorType) payorTransport.SelectedValue != FedExPayorType.Sender);
 
             if (payorTransport.SelectedValue != null && (FedExPayorType) payorTransport.SelectedValue == FedExPayorType.Recipient)
             {
-                // Default the payor name to that of the recipient if one is not already present. We don't want to 
-                // change the value in case the user has previously indicated the payor name. 
+                // Default the payor name to that of the recipient if one is not already present. We don't want to
+                // change the value in case the user has previously indicated the payor name.
                 if (string.IsNullOrEmpty(payorTransportName.Text))
                 {
                     List<Control> personControls = sectionRecipient.Controls.Find("personControl", true).ToList();
@@ -890,7 +896,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     }
                 }
             }
-            
+
             UpdateBillingSectionDisplay();
         }
 
@@ -899,7 +905,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void OnChangePayorDuties(object sender, EventArgs e)
         {
-            bool showAccount = payorDuties.MultiValued || 
+            bool showAccount = payorDuties.MultiValued ||
                 (payorDuties.SelectedValue != null && (FedExPayorType) payorDuties.SelectedValue != FedExPayorType.Sender);
 
             labelDutiesAccount.Visible = showAccount;
@@ -1063,11 +1069,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Date Certain Home Delivery®\n" +
                 "FedEx Evening Home Delivery®\n" +
                 "FedEx Appointment Home Delivery®\n" +
-                "FedEx SmartPost®\n" + 
-                "FedEx SmartPost Parcel Select Lightweight\n" + 
-                "FedEx SmartPost® Bound Printed Matter\n" + 
+                "FedEx SmartPost®\n" +
+                "FedEx SmartPost Parcel Select Lightweight\n" +
+                "FedEx SmartPost® Bound Printed Matter\n" +
                 "FedEx SmartPost® Media\n" +
-                "FedEx SmartPost Parcel Select\n" + 
+                "FedEx SmartPost Parcel Select\n" +
                 "FedEx ShipAlert®\n" +
                 "FedEx Priority Alert Plus™\n\n" +
 

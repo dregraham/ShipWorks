@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 
@@ -23,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        public OtherServiceControl(RateControl rateControl) 
+        public OtherServiceControl(RateControl rateControl)
             : base(ShipmentTypeCode.Other, rateControl)
         {
             InitializeComponent();
@@ -55,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Other
 
                     shipDate.ApplyMultiDate(shipment.ShipDate);
                     weight.ApplyMultiWeight(shipment.ContentWeight);
-                    cost.ApplyMultiText(shipment.ShipmentCost.ToString());
+                    cost.ApplyMultiText(shipment.ShipmentCost.ToString(CultureInfo.InvariantCulture));
                     tracking.ApplyMultiText(shipment.TrackingNumber);
                 }
             }

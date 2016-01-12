@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Services.Protocols;
+using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using RestSharp.Validation;
@@ -132,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         private static void ValidateShipment(ShipmentEntity shipmentEntity)
         {
-            if (shipmentEntity.FedEx.Service == (int) FedExServiceType.SmartPost && shipmentEntity.FedEx.Packages.Count > 1)
+            if (shipmentEntity.FedEx.Service == (int)FedExServiceType.SmartPost && shipmentEntity.FedEx.Packages.Count > 1)
             {
                 throw new FedExException("SmartPost only allows 1 package per shipment.");
             }
@@ -146,10 +147,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// This method removes invalid properties on the shipment for the service type.
         /// </summary>
         /// <param name="shipmentEntity"></param>
+        [NDependIgnoreComplexMethodAttribute]
         private static void CleanShipmentForShipmentServiceType(ShipmentEntity shipmentEntity)
         {
             FedExShipmentEntity fedExShipmentEntity = shipmentEntity.FedEx;
-            FedExServiceType serviceType = (FedExServiceType) fedExShipmentEntity.Service;
+            FedExServiceType serviceType = (FedExServiceType)fedExShipmentEntity.Service;
 
             switch (serviceType)
             {
@@ -216,6 +218,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// valid for SmartPost
         /// </summary>
         /// <param name="fedExShipmentEntity"></param>
+        [NDependIgnoreLongMethod]
         private static void CleanAndValidateShipmentForSmartPost(FedExShipmentEntity fedExShipmentEntity)
         {
             if (fedExShipmentEntity.Shipment.Insurance && fedExShipmentEntity.Shipment.InsuranceProvider == (int)Insurance.InsuranceProvider.Carrier)
@@ -283,7 +286,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 fedExPackageEntity.DangerousGoodsOfferor = string.Empty;
                 fedExPackageEntity.DangerousGoodsPackagingCount = 0;
                 fedExPackageEntity.DangerousGoodsType = 0;
-                fedExPackageEntity.HazardousMaterialClass= string.Empty;
+                fedExPackageEntity.HazardousMaterialClass = string.Empty;
                 fedExPackageEntity.HazardousMaterialNumber = string.Empty;
                 fedExPackageEntity.HazardousMaterialPackingGroup = 0;
                 fedExPackageEntity.HazardousMaterialProperName = string.Empty;
@@ -316,7 +319,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 // Make sure the shipment has a valid account associated with it
                 ValidateFedExAccount(shipmentEntity);
-                FedExAccountEntity account = (FedExAccountEntity) settingsRepository.GetAccount(shipmentEntity);
+                FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipmentEntity);
 
                 PerformVersionCapture(shipmentEntity);
 
@@ -443,7 +446,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             }
             catch (Exception ex)
             {
-				throw (HandleException(ex));
+                throw (HandleException(ex));
             }
         }
 
@@ -462,11 +465,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // This is made up of two requests: perform the package movement and the next to perform the version capture 
                 // based on the location ID received in the package movement request
-                foreach (FedExAccountEntity account in settingsRepository.GetAccounts().Where(a => !((FedExAccountEntity) a).Is2xMigrationPending))
+                foreach (FedExAccountEntity account in settingsRepository.GetAccounts().Where(a => !((FedExAccountEntity)a).Is2xMigrationPending))
                 {
                     CarrierRequest packageMovementRequest = requestFactory.CreatePackageMovementRequest(shipmentEntity, account);
                     FedExPackageMovementResponse packageMovementResponse = packageMovementRequest.Submit() as FedExPackageMovementResponse;
-                    
+
                     if (packageMovementResponse == null)
                     {
                         throw new FedExException("An unexpected response type was received from the package movement request; expected type: FedExPackageMovementResponse.");
@@ -480,7 +483,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 }
 
                 // Make a note that version capture has been performed, so we don't do it again
-                hasDoneVersionCapture = true;                
+                hasDoneVersionCapture = true;
             }
         }
 
@@ -492,9 +495,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipment);
 
             FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(settingsRepository);
-            FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest) fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
+            FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest)fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
 
-            FedExGlobalShipAddressResponse carrierResponse = (FedExGlobalShipAddressResponse) searchLocationsRequest.Submit();
+            FedExGlobalShipAddressResponse carrierResponse = (FedExGlobalShipAddressResponse)searchLocationsRequest.Submit();
 
             carrierResponse.Process();
 
@@ -515,7 +518,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 log.Error(string.Format("Shipment ID {0} does not have a FedEx account selected. Select a valid FedEx account that is available in ShipWorks.", shipmentEntity.ShipmentID));
                 throw new FedExException("No FedEx account is selected for the shipment.");
             }
-            
+
             if (account.Is2xMigrationPending)
             {
                 log.Error(string.Format("Attempt to use a FedEx account migrated from ShipWorks 2 that has not been configured for ShipWorks 3. The FedEx account (account number {0}) needs to be configured for ShipWorks3.", account.AccountNumber));
@@ -567,9 +570,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // Ensure that the version capture has been performed
                 PerformVersionCapture(shipment);
-                
+
                 List<RateResult> overallResults = new List<RateResult>();
-                
+
                 // Retrieve the rates from FedEx
                 overallResults.AddRange(GetBasicRates(shipment));
                 overallResults.AddRange(GetSmartPostRates(shipment));
@@ -594,7 +597,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
             List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).GetAvailableServiceTypes(excludedServiceTypeRepository)
-                .Select(s => (FedExServiceType)s).Union(new List<FedExServiceType> {(FedExServiceType)shipment.FedEx.Service}).ToList();
+                .Select(s => (FedExServiceType)s).Union(new List<FedExServiceType> { (FedExServiceType)shipment.FedEx.Service }).ToList();
 
             return rates.Where(r => r.Tag is FedExRateSelection && availableServices.Contains(((FedExRateSelection)r.Tag).ServiceType)).ToList();
         }
@@ -642,7 +645,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 if (FedExUtility.IsSmartPostEnabled(shipment))
                 {
                     // Create a request that will retrieve smart post rates by supplying a smart post manipulator
-                    CarrierRequest smartPostRequest = requestFactory.CreateRateRequest(shipment, new List<ICarrierRequestManipulator> {new FedExRateSmartPostManipulator()});
+                    CarrierRequest smartPostRequest = requestFactory.CreateRateRequest(shipment, new List<ICarrierRequestManipulator> { new FedExRateSmartPostManipulator() });
                     ICarrierResponse smartPostResponse = smartPostRequest.Submit();
                     smartPostResponse.Process();
 
@@ -747,39 +750,39 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 else if (rateDetail.TransitTimeSpecified)
                 {
                     transitDays = GetTransitDays(rateDetail.TransitTime);
-                    
+
                     if (serviceType == FedExServiceType.GroundHomeDelivery)
                     {
                         deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Sunday, DayOfWeek.Monday);
                     }
                     else
                     {
-                        deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);    
+                        deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
                     }
                 }
 
                 // Cost
                 RatedShipmentDetail ratedShipmentDetail = GetRateReplyDetail(rateDetail);
 
-                    decimal cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetCharge.Amount;
-                    if (shipment.AdjustedOriginCountryCode().ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
-                    {
-                        cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Amount;
-                    }
-
-                    // Add the shipworks rate object
-                    results.Add(new RateResult(
-                        EnumHelper.GetDescription(serviceType),
-                        transitDays == 0 ? string.Empty : transitDays.ToString(),
-                        cost,
-                        new FedExRateSelection(serviceType))
-                    {
-                        ExpectedDeliveryDate = deliveryDate,
-                        ServiceLevel = GetServiceLevel(serviceType, transitDays),
-                        ShipmentType = ShipmentTypeCode.FedEx,
-                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.FedEx)
-                    });
+                decimal cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetCharge.Amount;
+                if (shipment.AdjustedOriginCountryCode().ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
+                {
+                    cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Amount;
                 }
+
+                // Add the shipworks rate object
+                results.Add(new RateResult(
+                    EnumHelper.GetDescription(serviceType),
+                    transitDays == 0 ? string.Empty : transitDays.ToString(),
+                    cost,
+                    new FedExRateSelection(serviceType))
+                {
+                    ExpectedDeliveryDate = deliveryDate,
+                    ServiceLevel = GetServiceLevel(serviceType, transitDays),
+                    ShipmentType = ShipmentTypeCode.FedEx,
+                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.FedEx)
+                });
+            }
 
 
             return results;
@@ -803,7 +806,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             // Not sure if this is required. I suspect there to always be an actual rate and a corresponding ratedShipmentDetail. This
             // is here if I get confirmation for this from FedEx.
             RatedShipmentDetail ratedShipmentDetail = rateDetail.RatedShipmentDetails.FirstOrDefault(IsPreferredRequestedRateType) ??
-                                                        rateDetail.RatedShipmentDetails.FirstOrDefault(IsSecondaryRequestedRateType)??
+                                                        rateDetail.RatedShipmentDetails.FirstOrDefault(IsSecondaryRequestedRateType) ??
                                                       rateDetail.RatedShipmentDetails[0];
             return ratedShipmentDetail;
         }
@@ -839,6 +842,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="transitDays">The transit days.</param>
+        [NDependIgnoreComplexMethodAttribute]
         private static ServiceLevelType GetServiceLevel(FedExServiceType serviceType, int transitDays)
         {
             switch (serviceType)
@@ -879,6 +883,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get the integer number of days for the given fedex transit time value
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         private static int GetTransitDays(TransitTimeType transitTime)
         {
             switch (transitTime)
@@ -911,45 +916,46 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get our own FedExServiceType value for the given rate detail
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail, ShipmentEntity shipment)
         {
             switch (rateDetail.ServiceType)
             {
                 case ServiceType.PRIORITY_OVERNIGHT:
-                {
-                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRatePriorityOvernight : FedExServiceType.PriorityOvernight;
-                }
-
-                case ServiceType.STANDARD_OVERNIGHT:
-                {
-                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateStandardOvernight : FedExServiceType.StandardOvernight;
-                }
-
-                case ServiceType.FIRST_OVERNIGHT:
-                {
-                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateFirstOvernight : FedExServiceType.FirstOvernight;
-                }
-
-                case ServiceType.FEDEX_2_DAY:
-                {
-                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRate2Day : FedExServiceType.FedEx2Day;
-                }
-
-                case ServiceType.FEDEX_2_DAY_AM:
-                {
-                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRate2DayAM : FedExServiceType.FedEx2DayAM;
-                }
-
-                case ServiceType.FEDEX_EXPRESS_SAVER:
-                {
-                    // In canada fedex express saver is called FedEx Economy
-                    if (shipment.OriginCountryCode == "CA")
                     {
-                        return FedExServiceType.FedExEconomyCanada;
+                        return IsOneRateResult(rateDetail) ? FedExServiceType.OneRatePriorityOvernight : FedExServiceType.PriorityOvernight;
                     }
 
-                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateExpressSaver : FedExServiceType.FedExExpressSaver;
-                }
+                case ServiceType.STANDARD_OVERNIGHT:
+                    {
+                        return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateStandardOvernight : FedExServiceType.StandardOvernight;
+                    }
+
+                case ServiceType.FIRST_OVERNIGHT:
+                    {
+                        return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateFirstOvernight : FedExServiceType.FirstOvernight;
+                    }
+
+                case ServiceType.FEDEX_2_DAY:
+                    {
+                        return IsOneRateResult(rateDetail) ? FedExServiceType.OneRate2Day : FedExServiceType.FedEx2Day;
+                    }
+
+                case ServiceType.FEDEX_2_DAY_AM:
+                    {
+                        return IsOneRateResult(rateDetail) ? FedExServiceType.OneRate2DayAM : FedExServiceType.FedEx2DayAM;
+                    }
+
+                case ServiceType.FEDEX_EXPRESS_SAVER:
+                    {
+                        // In canada fedex express saver is called FedEx Economy
+                        if (shipment.OriginCountryCode == "CA")
+                        {
+                            return FedExServiceType.FedExEconomyCanada;
+                        }
+
+                        return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateExpressSaver : FedExServiceType.FedExExpressSaver;
+                    }
 
                 case ServiceType.INTERNATIONAL_PRIORITY: return FedExServiceType.InternationalPriority;
                 case ServiceType.INTERNATIONAL_ECONOMY: return FedExServiceType.InternationalEconomy;
@@ -960,12 +966,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 case ServiceType.FEDEX_GROUND:
                     return ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) ? FedExServiceType.FedExGround : FedExServiceType.FedExInternationalGround;
-                
+
                 case ServiceType.GROUND_HOME_DELIVERY: return FedExServiceType.GroundHomeDelivery;
                 case ServiceType.INTERNATIONAL_PRIORITY_FREIGHT: return FedExServiceType.InternationalPriorityFreight;
                 case ServiceType.INTERNATIONAL_ECONOMY_FREIGHT: return FedExServiceType.InternationalEconomyFreight;
                 case ServiceType.SMART_POST: return FedExServiceType.SmartPost;
-                
+
                 case ServiceType.EUROPE_FIRST_INTERNATIONAL_PRIORITY: return FedExServiceType.FedExEuropeFirstInternationalPriority;
                 case ServiceType.FEDEX_FIRST_FREIGHT: return FedExServiceType.FirstFreight;
             }
@@ -1019,7 +1025,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // There was an exception communicating with the API - the request went through and a response
                 // was received, but the response most likely had an error result.
                 log.Error(carrierException.Message);
-                
+
                 string errorMessage = string.Format("An error occurred while communicating with FedEx. {0}", carrierException.Message);
 
                 if (!errorMessage.EndsWith("."))
@@ -1035,7 +1041,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 if (errorMessage.Contains("RETURN_SHIPMENT is not allowed") &&
                     shipment != null &&
-                    FedExUtility.OneRateServiceTypes.Contains((FedExServiceType) shipment.FedEx.Service))
+                    FedExUtility.OneRateServiceTypes.Contains((FedExServiceType)shipment.FedEx.Service))
                 {
                     errorMessage = "Return Label not offered via FedEx One Rate service";
                 }
@@ -1077,7 +1083,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 throw (HandleException(ex));
             }
-		}
+        }
 
         /// <summary>
         /// Gets the major version of the Ship WebService
@@ -1100,14 +1106,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             string exceptionMessage = string.Empty;
             int packageIndex = 1;
 
-            if (shipment.FedEx.PackagingType == (int) FedExPackagingType.Custom)
+            if (shipment.FedEx.PackagingType == (int)FedExPackagingType.Custom)
             {
                 foreach (FedExPackageEntity fedexPackage in shipment.FedEx.Packages)
                 {
-                    FedExShipmentType fedExShipmentType = new FedExShipmentType();
-                    if (!fedExShipmentType.DimensionsAreValid(fedexPackage.DimsLength, fedexPackage.DimsWidth, fedexPackage.DimsHeight))
+                    if (!DimensionsAreValid(fedexPackage))
                     {
-                        exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, System.Environment.NewLine);
+                        exceptionMessage +=
+                            $"Package {packageIndex} has invalid dimensions.{System.Environment.NewLine}";
                     }
 
                     packageIndex++;
@@ -1119,6 +1125,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     throw new InvalidPackageDimensionsException(exceptionMessage);
                 }
             }
+        }
+
+        /// <summary>
+        /// Check to see if a package dimensions are valid for carriers that require dimensions.
+        /// </summary>
+        /// <returns>True if the dimensions are valid.  False otherwise.</returns>
+        private static bool DimensionsAreValid(FedExPackageEntity package)
+        {
+            if (package.DimsLength <= 0 || package.DimsWidth <= 0 || package.DimsHeight <= 0)
+            {
+                return false;
+            }
+
+            // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
+            // This is no longer valid due to new dimensional weight requirements.
+            return !(package.DimsLength.IsEquivalentTo(1) &&
+                     package.DimsWidth.IsEquivalentTo(1) &&
+                     package.DimsHeight.IsEquivalentTo(1));
         }
     }
 }

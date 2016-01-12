@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 
 namespace ShipWorks.Editions
 {
@@ -49,6 +50,7 @@ namespace ShipWorks.Editions
         /// 
         /// virtual for unit tests
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         public virtual EditionRestrictionIssue CheckRestriction(EditionFeature feature, object data)
         {
             switch (feature)

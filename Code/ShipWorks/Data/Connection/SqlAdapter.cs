@@ -1,24 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Data;
-using ShipWorks.Data.Adapter;
-using log4net;
-using System.Data.SqlClient;
-using ShipWorks.Data.Model.FactoryClasses;
-using System.Data.Common;
-using System.Windows.Forms;
-using SD.LLBLGen.Pro.DQE.SqlServer;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model;
 using System.ComponentModel;
-using ShipWorks.Data.Adapter.Custom;
-using System.Text.RegularExpressions;
-using System.Linq;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Diagnostics;
-using ShipWorks.SqlServer.General;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Interapptive.Shared.Data;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Adapter;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.SqlServer.General;
 
 namespace ShipWorks.Data.Connection
 {
@@ -27,6 +22,8 @@ namespace ShipWorks.Data.Connection
     /// </summary>
     public sealed class SqlAdapter : DataAccessAdapter
     {
+        private const int ForeignKeyReferentialIntegrityError = 547;
+
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SqlAdapter));
 
@@ -36,7 +33,7 @@ namespace ShipWorks.Data.Connection
         // Indicates if we should be logging all InfoMessage events from the underlying connection
         bool logInfoMessages = false;
 
-        // Indiciates if the SET IDENTITY INSERT should be set before inserts, allowing pk values to be explicitly set
+        // Indicates if the SET IDENTITY INSERT should be set before inserts, allowing pk values to be explicitly set
         bool identityInsert = false;
 
         // Lets us track if any entity is saved in a recursive save operation
@@ -48,7 +45,7 @@ namespace ShipWorks.Data.Connection
         // The active TransactionScope, of the adapter was instructed to be required to be in a transaction
         System.Transactions.TransactionScope transactionScope;
 
-        // LLBLgen starts a new "regular" transaction when recursive saving\deleting\updating.  The problem is then if there is an error, it does a direct call to "Rollback", 
+        // LLBLgen starts a new "regular" transaction when recursive saving\deleting\updating.  The problem is then if there is an error, it does a direct call to "Rollback",
         // even though it should really wait and see what the wrapping transaction scope vote ends up doing.  This way LLBLgen sees that there is already
         // a regular transaction and doesn't do that.  Doing "StartTransaction" when InSystemTransaction is true is basically just setting the internal
         // isTransactionInProgress flag to true.
@@ -93,7 +90,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public SqlAdapter() : this(false)
         {
-            
+
         }
 
         /// <summary>
@@ -118,7 +115,7 @@ namespace ShipWorks.Data.Connection
             if (transactionToUse != null)
             {
                 fieldPhysicalTransaction.SetValue(this, transactionToUse);
-                fieldIsTransactionInProgress.SetValue(this, true);   
+                fieldIsTransactionInProgress.SetValue(this, true);
             }
 
             InitializeCommon();
@@ -173,7 +170,7 @@ namespace ShipWorks.Data.Connection
                 }
 
                 return new System.Transactions.TransactionScope(
-                    System.Transactions.TransactionScopeOption.Required, 
+                    System.Transactions.TransactionScopeOption.Required,
                     new System.Transactions.TransactionOptions { IsolationLevel = isolation, Timeout = SqlCommandProvider.DefaultTimeout });
             }
 
@@ -213,10 +210,10 @@ namespace ShipWorks.Data.Connection
 
                 if (activeConnection == null)
                 {
-                    throw new InvalidOperationException("Coult not find DataAccessAdapterBase._activeConnection.");
+                    throw new InvalidOperationException("Could not find DataAccessAdapterBase._activeConnection.");
                 }
 
-                // Clear it, so it doesnt get disposed by base. OverrideConnection will be used when activeConnection is
+                // Clear it, so it doesn't get disposed by base. OverrideConnection will be used when activeConnection is
                 // null, so we need to clear it, too
                 activeConnection.SetValue(this, null);
                 overrideConnection = null;
@@ -231,7 +228,7 @@ namespace ShipWorks.Data.Connection
 
                 if (overrideConnection.State != ConnectionState.Open)
                 {
-                    throw new InvalidOperationException("The OverrideConnection was not kept open through disposal.");   
+                    throw new InvalidOperationException("The OverrideConnection was not kept open through disposal.");
                 }
             }
 
@@ -278,7 +275,7 @@ namespace ShipWorks.Data.Connection
             {
                 con = (SqlConnection) base.CreateNewPhysicalConnection(connectionString);
             }
-            
+
             if (logInfoMessages)
             {
                 con.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
@@ -288,7 +285,7 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Transaction is commiting
+        /// Transaction is committing
         /// </summary>
         public override void Commit()
         {
@@ -361,7 +358,7 @@ namespace ShipWorks.Data.Connection
 
                 fieldIsTransactionInProgress.SetValue(this, false);
 
-                // Since LLBLgen thought we were in a "real" transaction since we set that flag, it didn't autoclose the connection
+                // Since LLBLgen thought we were in a "real" transaction since we set that flag, it didn't auto close the connection
                 if (!KeepConnectionOpen)
                 {
                     CloseConnection();
@@ -370,7 +367,7 @@ namespace ShipWorks.Data.Connection
         }
 
         #endregion
-        
+
         #region InfoMessages
 
         /// <summary>
@@ -388,7 +385,7 @@ namespace ShipWorks.Data.Connection
                 {
                     return;
                 }
-              
+
                 SqlConnection con = (SqlConnection) GetActiveConnection();
 
                 if (value)
@@ -420,7 +417,7 @@ namespace ShipWorks.Data.Connection
         #region Utility
 
         /// <summary>
-        /// Save the given entity, and automatically refetch it back.  Returns true if there were any entities in the graph that were dirty and saved.  Returns
+        /// Save the given entity, and automatically refetch it back. Returns true if there were any entities in the graph that were dirty and saved.  Returns
         /// false if nothing was dirty and thus nothing written to the database.
         /// </summary>
         public bool SaveAndRefetch(IEntity2 entity)
@@ -429,7 +426,7 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Save the given entity, and automatically refetch it back.    Return strue if there were any entities in the graph that were dirty and saved.  Returns
+        /// Save the given entity, and automatically refetch it back. Returns true if there were any entities in the graph that were dirty and saved.  Returns
         /// false if nothing was dirty and thus nothing written to the database.
         /// </summary>
         public bool SaveAndRefetch(IEntity2 entity, bool recurse)
@@ -502,7 +499,7 @@ namespace ShipWorks.Data.Connection
 
             try
             {
-                 return base.DeleteEntity(entityToDelete, deleteRestriction);
+                return base.DeleteEntity(entityToDelete, deleteRestriction);
             }
             finally
             {
@@ -518,16 +515,16 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override int DeleteEntityCollection(IEntityCollection2 collectionToDelete)
         {
-             StartFakePyhsicalTransationIfNeeded();
+            StartFakePyhsicalTransationIfNeeded();
 
-             try
-             {
-                 return base.DeleteEntityCollection(collectionToDelete);
-             }
-             finally
-             {
-                 CloseFakePhysicalTransactionIfNeeded();
-             }
+            try
+            {
+                return base.DeleteEntityCollection(collectionToDelete);
+            }
+            finally
+            {
+                CloseFakePhysicalTransactionIfNeeded();
+            }
         }
 
         /// <summary>
@@ -557,16 +554,16 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override int SaveEntityCollection(IEntityCollection2 collectionToSave, bool refetchSavedEntitiesAfterSave, bool recurse)
         {
-             StartFakePyhsicalTransationIfNeeded();
+            StartFakePyhsicalTransationIfNeeded();
 
-             try
-             {
-                 return base.SaveEntityCollection(collectionToSave, refetchSavedEntitiesAfterSave, recurse);
-             }
-             finally
-             {
-                 CloseFakePhysicalTransactionIfNeeded();
-             }
+            try
+            {
+                return base.SaveEntityCollection(collectionToSave, refetchSavedEntitiesAfterSave, recurse);
+            }
+            finally
+            {
+                CloseFakePhysicalTransactionIfNeeded();
+            }
         }
 
         /// <summary>
@@ -602,14 +599,14 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Executes the passed in retrieval query and returns the results in thedatatable
+        /// Executes the passed in retrieval query and returns the results in the data table
         /// specified using the passed in data-adapter. It sets the connection object
         /// of the command object of query object passed in to the connection object
         /// of this class.
         /// </summary>
         public override bool ExecuteMultiRowDataTableRetrievalQuery(IRetrievalQuery queryToExecute, DbDataAdapter dataAdapterToUse, DataTable tableToFill, IFieldPersistenceInfo[] fieldsPersistenceInfo)
         {
-            // The base implementation does not close the connection in a finally, so it's possible the connection could be left open, and the next call would 
+            // The base implementation does not close the connection in a finally, so it's possible the connection could be left open, and the next call would
             // either potentially promote to DTC, or something else bad.
             try
             {
@@ -643,8 +640,7 @@ namespace ShipWorks.Data.Connection
             {
                 SqlError error = sqlEx.Errors[0];
 
-                // FK RI error number
-                if (error.Number == 547)
+                if (error.Number == ForeignKeyReferentialIntegrityError)
                 {
                     string message = error.Message;
 
@@ -658,11 +654,11 @@ namespace ShipWorks.Data.Connection
 
                         if (message.IndexOf("DELETE statement") != -1)
                         {
-                            message = string.Format("A parent could not be deleted because it still has {0} children.", friendly);
+                            message = $"A parent could not be deleted because it still has {friendly} children.";
                         }
                         else
                         {
-                            message = string.Format("A child could not be saved because its parent {0} has been deleted.", friendly);
+                            message = $"A child could not be saved because its parent {friendly} has been deleted.";
                         }
                     }
 
@@ -699,13 +695,12 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Returns a new default instance of a SqlAdapter
         /// </summary>
-        public static SqlAdapter Default
-        {
-            get
-            {
-                return new SqlAdapter();
-            }
-        }
+        public static SqlAdapter Default => Create(false);
+
+        /// <summary>
+        /// Create a new SqlAdapter
+        /// </summary>
+        public static SqlAdapter Create(bool inTransaction) => new SqlAdapter(inTransaction);
 
         #endregion
 
@@ -806,19 +801,19 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         private IEntityFieldCore CloneWithReadOnlyOff(IEntityFieldCore field)
         {
- 	        IEntityFieldCore clone = new EntityField2(
-                new FieldInfo(
-                    field.Name,
-                    field.ContainingObjectName,
-                    field.DataType,
-                    field.IsPrimaryKey,
-                    field.IsForeignKey,
-                    false,
-                    field.IsNullable,
-                    field.FieldIndex,
-                    field.MaxLength,
-                    field.Scale,
-                    field.Precision));
+            IEntityFieldCore clone = new EntityField2(
+               new FieldInfo(
+                   field.Name,
+                   field.ContainingObjectName,
+                   field.DataType,
+                   field.IsPrimaryKey,
+                   field.IsForeignKey,
+                   false,
+                   field.IsNullable,
+                   field.FieldIndex,
+                   field.MaxLength,
+                   field.Scale,
+                   field.Precision));
 
             clone.AggregateFunctionToApply = field.AggregateFunctionToApply;
             clone.Alias = field.Alias;

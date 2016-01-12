@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ShipWorks.Filters
 {
@@ -13,9 +10,19 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Ensure filters are up to date
         /// </summary>
-        public bool EnsureFiltersUpToDate(TimeSpan timeout)
-        {
-            return FilterHelper.EnsureFiltersUpToDate(timeout);
-        }
+        public bool EnsureFiltersUpToDate(TimeSpan timeout) =>
+            FilterHelper.EnsureFiltersUpToDate(timeout);
+
+        /// <summary>
+        /// Get the FilterNodeContentID for the given node
+        /// </summary>
+        public long? GetFilterNodeContentID(long filterNodeID) =>
+            FilterHelper.GetFilterNodeContentID(filterNodeID);
+
+        /// <summary>
+        /// Indicates if the given object is in the filter contents of the specified filter content id
+        /// </summary>
+        public bool IsObjectInFilterContent(long orderID, long value) =>
+            FilterHelper.IsObjectInFilterContent(orderID, value);
     }
 }

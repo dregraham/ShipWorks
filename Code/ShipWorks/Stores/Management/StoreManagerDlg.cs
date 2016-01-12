@@ -1,30 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Linq;
-using System.Windows.Forms;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using Divelements.SandGrid;
-using Interapptive.Shared.Utility;
-using ShipWorks.UI;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Properties;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Users;
-using ShipWorks.Users.Security;
-using ShipWorks.Common.Threading;
 using System.Threading;
-using ShipWorks.Data.Connection;
-using ShipWorks.Users.Audit;
-using ShipWorks.Data.Model.FactoryClasses;
+using System.Windows.Forms;
+using Divelements.SandGrid;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Users;
+using ShipWorks.Users.Audit;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Management
 {
@@ -278,7 +272,7 @@ namespace ShipWorks.Stores.Management
                     progressProvider.ProgressItems.Add(workProgress);
                     workProgress.Starting();
 
-                    // Proress Dialog
+                    // Progress Dialog
                     ProgressDlg progressDlg = new ProgressDlg(progressProvider);
                     progressDlg.Title = "Delete";
                     progressDlg.Description = "ShipWorks is deleting the store.";
@@ -298,7 +292,7 @@ namespace ShipWorks.Stores.Management
                     // Check to see if we are already downloading, and if so let the user know they can wait or cancel out of deleting.
                     // We can't wrap the whole dialog below in the ConnectionSensitiveScope because we can't start a background process
                     // inside ConnectionSensitiveScope.
-                    // Since we'er inside the dialog, the user could wait a while before clicking, allowing a download to start before 
+                    // Since we're inside the dialog, the user could wait a while before clicking, allowing a download to start before
                     // getting to this code, so it's checked right before queuing the delete thread.
                     using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("delete a store", this))
                     {
@@ -319,7 +313,7 @@ namespace ShipWorks.Stores.Management
                         ExceptionMonitor.WrapWorkItem(AsyncMonitorDeletionProgress, "deleting"),
                         backgroundState);
 
-                    // Show the progrss window only after a certain amount of time goes by
+                    // Show the progress window only after a certain amount of time goes by
                     delayer.ShowAfter(this, TimeSpan.FromSeconds(.25));
                 }
             }
@@ -371,7 +365,7 @@ namespace ShipWorks.Stores.Management
             // We don't audit anything for deleting a store
             using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditState.Disabled))
             {
-                DeletionService.DeleteStore(state.Store);
+                DeletionService.DeleteStore(state.Store, UserSession.Security);
             }
 
             state.ProgressProvider.ProgressItems[0].Completed();

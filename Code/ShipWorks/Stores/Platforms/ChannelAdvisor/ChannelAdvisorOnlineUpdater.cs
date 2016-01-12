@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Data.Connection;
 using log4net;
@@ -162,6 +163,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Gets the CA shipment Class code
         /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public static string GetShipmentClassCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
         {
             if (!shipment.Processed)

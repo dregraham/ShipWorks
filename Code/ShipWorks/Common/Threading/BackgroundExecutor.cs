@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using System.Threading;
+using System.Windows.Forms;
+using Interapptive.Shared;
 
 namespace ShipWorks.Common.Threading
 {
@@ -63,7 +64,7 @@ namespace ShipWorks.Common.Threading
         /// Create a new instance of the background updater
         /// </summary>
         public BackgroundExecutor(Control owner, string progressTitle, string progressDescription, string progressDetail)
-            : this (owner, progressTitle, progressDescription, progressDetail, true)
+            : this(owner, progressTitle, progressDescription, progressDetail, true)
         { }
 
         /// <summary>
@@ -103,7 +104,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Execute the operation asynchrously using the given entity key collection
+        /// Execute the operation asynchronously using the given entity key collection
         /// </summary>
         public void ExecuteAsync(BackgroundExecutorCallback<T> worker, IEnumerable<T> items)
         {
@@ -111,7 +112,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Execute the operation asynchrously using the given item collection
+        /// Execute the operation asynchronously using the given item collection
         /// </summary>
         public void ExecuteAsync(BackgroundExecutorCallback<T> worker, IEnumerable<T> items, object userState)
         {
@@ -119,7 +120,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Execute the operation asynchrously using the given entity key collection
+        /// Execute the operation asynchronously using the given entity key collection
         /// </summary>
         public void ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker)
         {
@@ -127,7 +128,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Execute the operation asynchrously using the given item collection
+        /// Execute the operation asynchronously using the given item collection
         /// </summary>
         public void ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker, object userState)
         {
@@ -135,7 +136,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Execute the operation asynchrously using the given item collection
+        /// Execute the operation asynchronously using the given item collection
         /// </summary>
         private void ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker, IEnumerable<T> items, object userState)
         {
@@ -148,7 +149,7 @@ namespace ShipWorks.Common.Threading
             {
                 if (initializer == null)
                 {
-                    throw new ArgumentException("Must specify items when there is no intializer.", "items");
+                    throw new ArgumentException("Must specify items when there is no initializer.", "items");
                 }
             }
             else
@@ -184,19 +185,19 @@ namespace ShipWorks.Common.Threading
             // Queue the work.  We copy the items to a new list so changes to the original IEnumerable don't affect us.
             ThreadPool.QueueUserWorkItem(
                 ExceptionMonitor.WrapWorkItem(InternalExecute, "working"),
-                new OperationState<T> 
-                { 
-                    Items = items != null ? items.ToList() : null, 
-                    UserState = userState, 
+                new OperationState<T>
+                {
+                    Items = items != null ? items.ToList() : null,
+                    UserState = userState,
                     ProgressProvider = progressProvider,
                     Initializer = initializer,
                     InitializerProgress = initializerProgress,
-                    Worker = worker, 
-                    WorkProgress = workProgress, 
-                    DisplayDelayer = delayer 
+                    Worker = worker,
+                    WorkProgress = workProgress,
+                    DisplayDelayer = delayer
                 });
 
-            // Show the progress window only after a certain amount of time goes by 
+            // Show the progress window only after a certain amount of time goes by
             // if configured to do so
             double delaySeconds = delayProgressDialog ? .25 : 0;
             delayer.ShowAfter(owner, TimeSpan.FromSeconds(delaySeconds));
@@ -205,6 +206,7 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// Executes on the background thread
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void InternalExecute(object state)
         {
             OperationState<T> operationState = (OperationState<T>) state;
@@ -245,7 +247,7 @@ namespace ShipWorks.Common.Threading
             // Could be null if the initializer was canceled
             if (itemsToProcess != null)
             {
-                // For progrses updating
+                // For progress updating
                 ProgressItem workProgress = operationState.WorkProgress;
 
                 int count = 0;
@@ -322,7 +324,7 @@ namespace ShipWorks.Common.Threading
             Control toInvokeOn = owner;
             if (toInvokeOn.IsDisposed)
             {
-                // fallback to the main form to invoke the callback
+                // Fall back to the main form to invoke the callback
                 toInvokeOn = Program.MainForm;
             }
 

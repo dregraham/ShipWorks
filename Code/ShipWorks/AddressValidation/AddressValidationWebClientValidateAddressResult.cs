@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.AddressValidation
 {
@@ -8,7 +9,7 @@ namespace ShipWorks.AddressValidation
     public class AddressValidationWebClientValidateAddressResult
     {
         /// <summary>
-        /// Constructro
+        /// Constructor
         /// </summary>
         public AddressValidationWebClientValidateAddressResult()
         {
@@ -25,5 +26,10 @@ namespace ShipWorks.AddressValidation
         /// Gets or sets the address validation error.
         /// </summary>
         public string AddressValidationError { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the address.
+        /// </summary>
+        public AddressType AddressType { get; set; }
     }
 }

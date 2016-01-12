@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using Xunit;
 using Moq;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.AddressValidation
