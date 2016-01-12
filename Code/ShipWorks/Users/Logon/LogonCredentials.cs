@@ -3,7 +3,7 @@
     /// <summary>
     /// Credentials used for logon
     /// </summary>
-    public class Credentials
+    public class LogonCredentials
     {
         /// <summary>
         /// The username to logon

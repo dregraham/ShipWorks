@@ -8298,7 +8298,8 @@
     <Compile Include="Users\Audit\AuditReasonType.cs" />
     <Compile Include="Users\ComputerManager.cs" />
     <Compile Include="Users\IUserService.cs" />
-    <Compile Include="Users\Logon\Credentials.cs" />
+    <Compile Include="Users\IUserSessionWrapper.cs" />
+    <Compile Include="Users\Logon\LogonCredentials.cs" />
     <Compile Include="Users\Security\AddStorePermissionsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
