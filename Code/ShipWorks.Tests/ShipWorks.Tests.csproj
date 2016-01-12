@@ -558,6 +558,7 @@
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinderTest.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinderTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
+    <Compile Include="Users\UserServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />

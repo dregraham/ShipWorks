@@ -234,7 +234,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 customerLicense.Refresh();
 
-                Assert.Equal(customerLicense.IsDisabled, customerLicense.AllowsLogOn());
+                Assert.Equal(!customerLicense.IsDisabled, customerLicense.AllowsLogOn());
             }
         }
     }

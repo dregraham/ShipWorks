@@ -65,7 +65,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             Refresh();
 
-            return IsDisabled;
+            return !IsDisabled;
         }
 
         /// <summary>
