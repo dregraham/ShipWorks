@@ -21,6 +21,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// The reason the store is disabled.
+        /// </summary>
+        public string DisabledReason { get; set; }
+
+        /// <summary>
+        /// Is the store disabled?
+        /// </summary>
+        public bool IsDisabled => !string.IsNullOrEmpty(DisabledReason);
+
+        /// <summary>
+        /// License key
+        /// </summary>
+        public string Key => key;
+
+        /// <summary>
         /// Refreshes store license data.
         /// </summary>
         public void Refresh()
@@ -37,20 +52,5 @@ namespace ShipWorks.ApplicationCore.Licensing
                 DisabledReason = ex.Message;
             }
         }
-
-        /// <summary>
-        /// The reason the store is disabled.
-        /// </summary>
-        public string DisabledReason { get; set; }
-
-        /// <summary>
-        /// Is the store disabled?
-        /// </summary>
-        public bool IsDisabled => !string.IsNullOrEmpty(DisabledReason);
-
-        /// <summary>
-        /// License key
-        /// </summary>
-        public string Key => key;
     }
 }

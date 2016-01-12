@@ -25,6 +25,26 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// The license key
+        /// </summary>
+        public string Key { get; private set; }
+
+        /// <summary>
+        /// Reason the license is Disabled
+        /// </summary>
+        public string DisabledReason { get; set; }
+
+        /// <summary>
+        /// Is the license Disabled
+        /// </summary>
+        public bool IsDisabled => (DisabledReason != string.Empty);
+
+        /// <summary>
+        /// The license capabilities.
+        /// </summary>
+        public LicenseCapabilities LicenseCapabilities { get; set; }
+
+        /// <summary>
         /// Activates the customer license
         /// </summary>
         public void Activate(string email, string password)
@@ -54,11 +74,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// The license key
-        /// </summary>
-        public string Key { get; private set; }
-
-        /// <summary>
         /// Refresh the License capabilities from Tango
         /// </summary>
         public void Refresh()
@@ -74,20 +89,5 @@ namespace ShipWorks.ApplicationCore.Licensing
                 log.Warn(ex);
             }
         }
-
-        /// <summary>
-        /// Reason the license is Disabled
-        /// </summary>
-        public string DisabledReason { get; set; }
-
-        /// <summary>
-        /// Is the license Disabled
-        /// </summary>
-        public bool IsDisabled => (DisabledReason != string.Empty);
-
-        /// <summary>
-        /// The license capabilities.
-        /// </summary>
-        public LicenseCapabilities LicenseCapabilities { get; set; }
     }
 }

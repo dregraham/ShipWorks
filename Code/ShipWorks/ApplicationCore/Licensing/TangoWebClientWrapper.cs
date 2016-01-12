@@ -231,7 +231,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
         }
 
-        LicenseCapabilities ITangoWebClient.GetLicenseCapabilities(ICustomerLicense license)
+        /// <summary>
+        /// Gets the license capabilities.
+        /// </summary>
+        public LicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
         {
             return TangoWebClient.GetLicenseCapabilities(license);
         }
