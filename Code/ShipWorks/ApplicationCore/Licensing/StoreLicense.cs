@@ -52,5 +52,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// License key
         /// </summary>
         public string Key => key;
+
+        /// <summary>
+        /// Store Licenses always allow logon.
+        /// </summary>
+        public bool AllowsLogOn() => true;
     }
 }

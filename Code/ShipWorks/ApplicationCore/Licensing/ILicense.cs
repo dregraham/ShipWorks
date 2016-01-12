@@ -24,5 +24,10 @@
         /// The license key
         /// </summary>
         string Key { get; }
+
+        /// <summary>
+        /// Returns true if the user is able to logon
+        /// </summary>
+        bool AllowsLogOn();
     }
 }

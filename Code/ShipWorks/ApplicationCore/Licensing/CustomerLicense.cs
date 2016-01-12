@@ -59,6 +59,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string Key { get; private set; }
 
         /// <summary>
+        /// Returns True if customer is allowed to logon.
+        /// </summary>
+        public bool AllowsLogOn()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Refresh the License capabilities from Tango
         /// </summary>
         public void Refresh()
