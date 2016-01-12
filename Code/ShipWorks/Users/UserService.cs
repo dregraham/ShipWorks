@@ -2,7 +2,9 @@
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Logon;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Users
 {
@@ -11,10 +13,10 @@ namespace ShipWorks.Users
     /// </summary>
     public class UserService : IUserService
     {
-        IUserSessionWrapper userSession;
+        IUserSession userSession;
         ILicenseFactory licenseFactory; 
 
-        public UserService(IUserSessionWrapper userSession, ILicenseFactory licenseFactory)
+        public UserService(IUserSession userSession, ILicenseFactory licenseFactory)
         {
             this.userSession = userSession;
             this.licenseFactory = licenseFactory;
@@ -27,83 +29,52 @@ namespace ShipWorks.Users
         {
             return UserUtility.CreateUser(username, username, password, isAdmin);
         }
+        
+        /// <summary>
+        /// Logs the user in using their saved credentials
+        /// </summary>
+        public EnumResult<UserServiceLogonResultType> Logon()
+        {
+            Func<bool> loginWithOutCredentials = () => userSession.LogonLastUser();
+            return Logon(loginWithOutCredentials);
+        }
 
         /// <summary>
         /// Logs the user in
         /// </summary>
-        public GenericResult<LogonCredentials> Logon(LogonCredentials credentials)
-         {
-            GenericResult<LogonCredentials> result = new GenericResult<LogonCredentials>(credentials) { Success = true };
-            
-            // Check to see if each license allows logon
-            CheckLicenseAllowsLogOn(result);
-
-            if (!result.Success)
-            {
-                return result;
-            }
-
-            // All of the licenses allow logon, go ahead and do the logon
-            if (userSession.Logon(credentials))
-            {
-                return result;
-            }
-
-            // if we got this far we must not be able to log on
-            result.Success = false;
-            result.Message = "Incorrect username or password.";
-            return result;
-        }
-
-        /// <summary>
-        /// Logs the user in using their saved credentials
-        /// </summary>
-        public GenericResult<LogonCredentials> Logon()
+        public EnumResult<UserServiceLogonResultType> Logon(LogonCredentials credentials)
         {
-            GenericResult<LogonCredentials> result = new GenericResult<LogonCredentials>(null) { Success = true};
-
-            // Check to see if each license allows logon
-            CheckLicenseAllowsLogOn(result);
-
-            if(!result.Success)
-            {
-                return result;
-            }
-
-            // All of the licenses allow logon, go ahead and do the logon
-            if (userSession.LogonLastUser())
-            {
-                return result;
-            }
-
-            // if we got this far we must not be able to log on
-            result.Success = false;
-            result.Message = "Incorrect username or password.";
-            return result;
+            Func<bool> loginWithCredentials = () => userSession.Logon(credentials);
+            return Logon(loginWithCredentials);
         }
 
         /// <summary>
-        /// Checks to see if each license allows logon, if not it updates the result
+        /// Check license, if ok, try to login to shipworks.
         /// </summary>
-        /// <param name="result"></param>
-        private void CheckLicenseAllowsLogOn(GenericResult<LogonCredentials> result)
+        private EnumResult<UserServiceLogonResultType> Logon(Func<bool> loginAction)
         {
             IEnumerable<ILicense> licenses = licenseFactory.GetLicenses();
+            ILicense disallowedLicense = licenses.FirstOrDefault(l => !l.AllowsLogOn());
 
-            // check to see if each license allows logon
-            foreach (ILicense license in licenses)
+            if (disallowedLicense != null)
             {
-                if (!license.AllowsLogOn())
+                return new EnumResult<UserServiceLogonResultType>(UserServiceLogonResultType.TangoAccountDisabled)
                 {
-                    result.Success = false;
-                    result.Message = license.DisabledReason;
-
-                    // Return here if there are multiple licenses
-                    // and one fails we want to return the failure 
-                    return;
-                }
+                    Message = disallowedLicense.DisabledReason
+                };
             }
-        }
 
+            bool loggedOnToShipWorks = loginAction();
+
+            if (loggedOnToShipWorks)
+            {
+                return new EnumResult<UserServiceLogonResultType>(UserServiceLogonResultType.Success);
+            }
+
+            return new EnumResult<UserServiceLogonResultType>(UserServiceLogonResultType.InvalidCredentials)
+            {
+                Message = "Incorrect username or password."
+            };
+        }
     }
 }

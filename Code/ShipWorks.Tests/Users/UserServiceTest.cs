@@ -36,16 +36,15 @@ namespace ShipWorks.Tests.Users
 
                 UserService userService = mock.Create<UserService>();
 
-                GenericResult<LogonCredentials> testobject = userService.Logon(credentials);
+                EnumResult<UserServiceLogonResultType> testobject = userService.Logon(credentials);
 
                 licenseFactory.Verify(f => f.GetLicenses(), Times.Once);
-                Assert.Equal(false, testobject.Success);
                 Assert.Equal("Some Disabled Reason", testobject.Message);
             }
         }
 
         [Fact]
-        public void LogOnWithCredentials_Calls_UserSessionLogOnLastUser()
+        public void LogOnWithCredentials_Calls_UserSessionLogOnWithCredentials()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -60,16 +59,16 @@ namespace ShipWorks.Tests.Users
                 licenseFactory.Setup(lf => lf.GetLicenses())
                     .Returns(licenses);
 
-                Mock<IUserSessionWrapper> userSessionWrapper = mock.Mock<IUserSessionWrapper>();
+                Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.Logon(It.IsAny<LogonCredentials>()))
                     .Returns(true);
 
                 UserService userService = mock.Create<UserService>();
 
-                GenericResult<LogonCredentials> testobject = userService.Logon(credentials);
+                EnumResult<UserServiceLogonResultType> testobject = userService.Logon(credentials);
 
                 userSessionWrapper.Verify(u => u.Logon(credentials), Times.Once);
-                Assert.Equal(true, testobject.Success);
+                Assert.Equal(UserServiceLogonResultType.Success, testobject.Value);
             }
         }
         [Fact]
@@ -88,16 +87,16 @@ namespace ShipWorks.Tests.Users
                 licenseFactory.Setup(lf => lf.GetLicenses())
                     .Returns(licenses);
 
-                Mock<IUserSessionWrapper> userSessionWrapper = mock.Mock<IUserSessionWrapper>();
+                Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.Logon(It.IsAny<LogonCredentials>()))
                     .Returns(false);
 
                 UserService userService = mock.Create<UserService>();
 
-                GenericResult<LogonCredentials> testobject = userService.Logon(credentials);
+                EnumResult<UserServiceLogonResultType> testobject = userService.Logon(credentials);
 
                 userSessionWrapper.Verify(u => u.Logon(credentials), Times.Once);
-                Assert.Equal(false, testobject.Success);
+                Assert.Equal(UserServiceLogonResultType.InvalidCredentials, testobject.Value);
                 Assert.Equal("Incorrect username or password.", testobject.Message);
             }
         }
@@ -125,10 +124,10 @@ namespace ShipWorks.Tests.Users
 
                 UserService userService = mock.Create<UserService>();
 
-                GenericResult<LogonCredentials> testobject = userService.Logon();
+                EnumResult<UserServiceLogonResultType> testobject = userService.Logon();
 
                 licenseFactory.Verify(f => f.GetLicenses(), Times.Once);
-                Assert.Equal(false, testobject.Success);
+                Assert.Equal(UserServiceLogonResultType.TangoAccountDisabled, testobject.Value);
                 Assert.Equal("Some Disabled Reason", testobject.Message);
             }
         }
@@ -147,16 +146,16 @@ namespace ShipWorks.Tests.Users
                 licenseFactory.Setup(lf => lf.GetLicenses())
                     .Returns(licenses);
 
-                Mock<IUserSessionWrapper> userSessionWrapper = mock.Mock<IUserSessionWrapper>();
+                Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.LogonLastUser())
                     .Returns(true);
 
                 UserService userService = mock.Create<UserService>();
 
-                GenericResult<LogonCredentials> testobject = userService.Logon();
+                EnumResult<UserServiceLogonResultType> testobject = userService.Logon();
 
                 userSessionWrapper.Verify(u => u.LogonLastUser(), Times.Once);
-                Assert.Equal(true, testobject.Success);
+                Assert.Equal(UserServiceLogonResultType.Success, testobject.Value);
             }
         }
         [Fact]
@@ -173,16 +172,16 @@ namespace ShipWorks.Tests.Users
                 licenseFactory.Setup(lf => lf.GetLicenses())
                     .Returns(licenses);
 
-                Mock<IUserSessionWrapper> userSessionWrapper = mock.Mock<IUserSessionWrapper>();
+                Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.LogonLastUser())
                     .Returns(false);
 
                 UserService userService = mock.Create<UserService>();
 
-                GenericResult<LogonCredentials> testobject = userService.Logon();
+                EnumResult<UserServiceLogonResultType> testobject = userService.Logon();
 
                 userSessionWrapper.Verify(u => u.LogonLastUser(), Times.Once);
-                Assert.Equal(false, testobject.Success);
+                Assert.Equal(UserServiceLogonResultType.InvalidCredentials, testobject.Value);
                 Assert.Equal("Incorrect username or password.", testobject.Message);
             }
         }
