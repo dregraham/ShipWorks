@@ -1149,8 +1149,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="license">The license.</param>
         public static LicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
         {
-            LicenseCapabilities result;
-
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             postRequest.Variables.Add("action", "login");
