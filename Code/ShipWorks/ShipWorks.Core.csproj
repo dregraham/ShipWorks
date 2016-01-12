@@ -602,6 +602,7 @@
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseReader.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseWriter.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicense.cs" />
+    <Compile Include="ApplicationCore\Licensing\ILicenseFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilities.cs" />
@@ -8298,7 +8299,7 @@
     <Compile Include="Users\Audit\AuditReasonType.cs" />
     <Compile Include="Users\ComputerManager.cs" />
     <Compile Include="Users\IUserService.cs" />
-    <Compile Include="Users\IUserSessionWrapper.cs" />
+    <Compile Include="Users\IUserSession.cs" />
     <Compile Include="Users\Logon\LogonCredentials.cs" />
     <Compile Include="Users\Security\AddStorePermissionsDlg.cs">
       <SubType>Form</SubType>
@@ -8352,6 +8353,7 @@
     <Compile Include="Users\Security\SuperUser.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserService.cs" />
+    <Compile Include="Users\UserServiceLogonResultType.cs" />
     <Compile Include="Users\UserSession.cs" />
     <Compile Include="Users\Logon\UserChangePasswordDlg.cs">
       <SubType>Form</SubType>

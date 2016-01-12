@@ -17,11 +17,11 @@ namespace ShipWorks.Users
         /// <summary>
         /// Logs the user in
         /// </summary>
-        GenericResult<LogonCredentials> Logon(LogonCredentials credentials);
+        EnumResult<UserServiceLogonResultType> Logon(LogonCredentials credentials);
 
         /// <summary>
         /// Logs the user in using their saved credentials
         /// </summary>
-        GenericResult<LogonCredentials> Logon();
+        EnumResult<UserServiceLogonResultType> Logon();
     }
 }

@@ -5,7 +5,7 @@ namespace ShipWorks.Users
     /// <summary>
     /// Wrapper for the Static User session class
     /// </summary>
-    public class UserSessionWrapper : IUserSessionWrapper
+    public class UserSessionWrapper : IUserSession
     {
         /// <summary>
         /// Logs the user in with the given credentials 

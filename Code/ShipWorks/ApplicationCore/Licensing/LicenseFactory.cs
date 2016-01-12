@@ -9,7 +9,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Factory to create a License
     /// </summary>
-    public class LicenseFactory
+    public class LicenseFactory : ILicenseFactory
     {
         private readonly Func<string, CustomerLicense> customerLicenseFactory;
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
