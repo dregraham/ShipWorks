@@ -63,7 +63,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public bool AllowsLogOn()
         {
-            throw new NotImplementedException();
+            Refresh();
+
+            return IsDisabled;
         }
 
         /// <summary>
