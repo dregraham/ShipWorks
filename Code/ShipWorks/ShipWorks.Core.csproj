@@ -907,6 +907,7 @@
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
+    <Compile Include="Shipping\IShipmentFactory.cs" />
     <Compile Include="Shipping\Services\CarrierShipmentAdapterBase.cs" />
     <Compile Include="Shipping\IShippingOriginManager.cs" />
     <Compile Include="Shipping\Services\PackageTypeBinding.cs" />
@@ -1279,7 +1280,7 @@
     <Compile Include="Shipping\ShipmentProcessor.cs" />
     <Compile Include="Shipping\ShippingAddressEditStateType.cs" />
     <Compile Include="Stores\Content\IOrderUtility.cs" />
-    <Compile Include="Stores\Content\OrderUtilityWrapper.cs" />
+    <Compile Include="Stores\Content\OrderManager.cs" />
     <Compile Include="Stores\IStoreTypeManager.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonLatestExpectedDeliveryDateCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonEarliestExpectedDeliveryDateCondition.cs" />

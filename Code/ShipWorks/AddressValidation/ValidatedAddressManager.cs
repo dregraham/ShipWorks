@@ -264,7 +264,7 @@ namespace ShipWorks.AddressValidation
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
                 currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.WillNotValidate;
-                currentShippingAddress.AddressType = (int)AddressType.WillNotValidate;
+                currentShippingAddress.AddressType = (int) AddressType.WillNotValidate;
 
                 return false;
             }
@@ -273,8 +273,8 @@ namespace ShipWorks.AddressValidation
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a first line.";
                 currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.BadAddress;
-                currentShippingAddress.AddressType = (int)AddressType.PrimaryNotFound;
-                
+                currentShippingAddress.AddressType = (int) AddressType.PrimaryNotFound;
+
                 return false;
             }
 
@@ -284,7 +284,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate a single shipment
         /// </summary>
-        public static Task ValidateShipmentAsync(ShipmentEntity shipment, AddressValidator validator)
+        public static Task ValidateShipmentAsync(ShipmentEntity shipment, IAddressValidator validator)
         {
             // 3 retries is an arbitrary decision, but it should cover the case where we get a concurrency exception
             // validating the order and then the shipment, since the background process validates each at different times
@@ -298,7 +298,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="validator">Address validator to use</param>
         /// <param name="retryCount">How many times should validation be retried</param>
         [NDependIgnoreLongMethod]
-        private static async Task ValidateShipmentAsync(ShipmentEntity shipment, AddressValidator validator, int retryCount)
+        private static async Task ValidateShipmentAsync(ShipmentEntity shipment, IAddressValidator validator, int retryCount)
         {
             AddressAdapter shipmentAdapter = new AddressAdapter(shipment, "Ship");
 
@@ -335,7 +335,7 @@ namespace ShipWorks.AddressValidation
                     AddressAdapter originalShippingAddress = new AddressAdapter();
                     orderAdapter.CopyTo(originalShippingAddress);
 
-                    await validator.ValidateAsync(order, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    await validator.ValidateAsync(order.ShipPerson.ConvertTo<AddressAdapter>(), canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
                         using (new SqlDeadlockPriorityScope(-4))
@@ -363,7 +363,8 @@ namespace ShipWorks.AddressValidation
                 else if (!shipment.Processed)
                 {
                     // Since the addresses don't match, just validate the shipment
-                    await validator.ValidateAsync(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    await validator.ValidateAsync(shipment.ShipPerson.ConvertTo<AddressAdapter>(),
+                        canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
                         using (new SqlDeadlockPriorityScope(-4))
@@ -442,7 +443,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Attempt to retry validation if necessary
         /// </summary>
-        private static async Task RetryValidation(ShipmentEntity shipment, OrderEntity order, AddressValidator validator, int retryCount)
+        private static async Task RetryValidation(ShipmentEntity shipment, OrderEntity order, IAddressValidator validator, int retryCount)
         {
             if (retryCount == 0)
             {
@@ -457,7 +458,7 @@ namespace ShipWorks.AddressValidation
 
                 if (order != null)
                 {
-                    // Remove the order from the caceh so that when we retry the validation, we force a reload
+                    // Remove the order from the cache so that when we retry the validation, we force a reload
                     DataProvider.RemoveEntity(order.OrderID);
                 }
             }

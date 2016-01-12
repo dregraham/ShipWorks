@@ -200,6 +200,7 @@
     <Compile Include="Rating\IRateSelectionFactory.cs" />
     <Compile Include="Rating\RateSelection.cs" />
     <Compile Include="Rating\RateSelectionFactory.cs" />
+    <Compile Include="Services\ShipmentFactory.cs" />
     <Compile Include="Services\ShipmentLoaderService.cs" />
     <Compile Include="Services\ShipmentProcessorService.cs" />
     <Compile Include="Services\ShipmentTypeManagerWrapper.cs" />

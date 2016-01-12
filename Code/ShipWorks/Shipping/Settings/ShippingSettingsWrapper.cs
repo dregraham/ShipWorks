@@ -15,6 +15,11 @@ namespace ShipWorks.Shipping.Settings
     public class ShippingSettingsWrapper : IShippingSettings, IInitializeForCurrentDatabase, ICheckForChangesNeeded
     {
         /// <summary>
+        /// Should shipments be auto created
+        /// </summary>
+        public bool AutoCreateShipments => Fetch().AutoCreateShipments;
+
+        /// <summary>
         /// The list of shipment types that have been fully configured for use within ShipWorks
         /// </summary>
         public IEnumerable<ShipmentTypeCode> GetConfiguredTypes()

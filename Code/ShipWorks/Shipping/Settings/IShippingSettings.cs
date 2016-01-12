@@ -9,6 +9,11 @@ namespace ShipWorks.Shipping.Settings
     public interface IShippingSettings
     {
         /// <summary>
+        /// Should shipments be auto created
+        /// </summary>
+        bool AutoCreateShipments { get; }
+
+        /// <summary>
         /// Marks the given ShipmentTypeCode as completely configured
         /// </summary>
         void MarkAsConfigured(ShipmentTypeCode shipmentTypeCode);

@@ -810,7 +810,7 @@ namespace ShipWorks.Shipping
                 return false;
             }
 
-            return loadedShipmentEntities.All(s => storeType.ShippingAddressEditableState(s) == ShippingAddressEditStateType.Editable);
+            return loadedShipmentEntities.All(s => storeType.ShippingAddressEditableState(order, s) == ShippingAddressEditStateType.Editable);
         }
 
         /// <summary>

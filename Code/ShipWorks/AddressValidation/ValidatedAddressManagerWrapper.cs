@@ -9,11 +9,21 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class ValidatedAddressManagerWrapper : IValidatedAddressManager
     {
+        private readonly IAddressValidator addressValidator;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ValidatedAddressManagerWrapper(IAddressValidator addressValidator)
+        {
+            this.addressValidator = addressValidator;
+        }
+
         /// <summary>
         /// Validate a single shipment
         /// </summary>
-        public Task ValidateShipmentAsync(ShipmentEntity shipment, AddressValidator validator) =>
-            ValidatedAddressManager.ValidateShipmentAsync(shipment, validator);
+        public Task ValidateShipmentAsync(ShipmentEntity shipment) =>
+            ValidatedAddressManager.ValidateShipmentAsync(shipment, addressValidator);
 
         /// <summary>
         /// Copy all the validated address from one entity to another

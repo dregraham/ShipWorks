@@ -1,5 +1,4 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.Configuration
 {
@@ -9,18 +8,23 @@ namespace ShipWorks.Shipping.Configuration
     public interface IShippingConfiguration
     {
         /// <summary>
-        /// Wraps a call to determine if a user has permission on an entity
+        /// Gets whether a new shipment should be auto-created for an order
         /// </summary>
-        bool UserHasPermission(PermissionType permissionType, long entityID);
+        bool ShouldAutoCreateShipment(OrderEntity order);
 
-        /// <summary>
-        /// Determines address validation for a shipment
-        /// </summary>
-        bool GetAddressValidation(ShipmentEntity shipment);
+        ///// <summary>
+        ///// Wraps a call to determine if a user has permission on an entity
+        ///// </summary>
+        //bool UserHasPermission(PermissionType permissionType, long entityID);
 
-        /// <summary>
-        /// Wraps ShippingSettings.AutoCreateShipments
-        /// </summary>
-        bool AutoCreateShipments { get; }
+        ///// <summary>
+        ///// Determines address validation for a shipment
+        ///// </summary>
+        //bool GetAddressValidation(ShipmentEntity shipment);
+
+        ///// <summary>
+        ///// Wraps ShippingSettings.AutoCreateShipments
+        ///// </summary>
+        //bool AutoCreateShipments { get; }
     }
 }

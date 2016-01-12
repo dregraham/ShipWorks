@@ -12,7 +12,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate a single shipment
         /// </summary>
-        Task ValidateShipmentAsync(ShipmentEntity shipment, AddressValidator validator);
+        Task ValidateShipmentAsync(ShipmentEntity shipment);
 
         /// <summary>
         /// Copy all the validated address from one entity to another
