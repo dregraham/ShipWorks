@@ -111,6 +111,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
 
+            builder.RegisterType<UserSessionWrapper>()
+                .AsImplementedInterfaces();
+
             current = builder.Build();
         }
     }

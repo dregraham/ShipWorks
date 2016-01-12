@@ -2,13 +2,23 @@
 
 namespace ShipWorks.Users
 {
+    /// <summary>
+    /// Wrapper for the Static User session class
+    /// </summary>
     public class UserSessionWrapper : IUserSessionWrapper
     {
+        /// <summary>
+        /// Logs the user in with the given credentials 
+        /// </summary>
         public bool Logon(LogonCredentials credentials)
         {
             return UserSession.Logon(credentials.Username, credentials.Password, credentials.Remember);
         }
 
+        /// <summary>
+        /// Logs in using the last logged in user
+        /// </summary>
+        /// <returns></returns>
         public bool LogonLastUser()
         {
             return UserSession.LogonLastUser();
