@@ -203,5 +203,39 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 log.Verify(l => l.Warn(It.IsAny<TangoException>()), Times.Once);
             }
         }
+
+        [Fact]
+        public void AllowsLogon_CallsTangoWebClient_GetLicenseCapabilities()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var webClient = mock.Mock<ITangoWebClient>();
+                webClient.Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Throws(new TangoException("Disabled for some reason"));
+
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                customerLicense.AllowsLogOn();
+
+                webClient.Verify(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void AllowsLogon_ChecksIsDisabled()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var webClient = mock.Mock<ITangoWebClient>();
+                webClient.Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Throws(new TangoException("Disabled for some reason"));
+
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                customerLicense.Refresh();
+
+                Assert.Equal(customerLicense.IsDisabled, customerLicense.AllowsLogOn());
+            }
+        }
     }
 }
