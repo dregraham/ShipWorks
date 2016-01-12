@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
 using System;
-using ShipWorks.Shipping.Editing.Rating;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping
         /// Gets the overridden store shipment.
         /// </summary>
         ShipmentEntity GetOverriddenStoreShipment(ShipmentEntity shipment);
-		
+
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping
         /// it was voided is logged to tango.
         /// </summary>
         void VoidShipment(long shipmentID);
-		
+
         /// <summary>
         /// Indicates if the shipment type of the given type code has gone through the full setup wizard \ configuration
         /// </summary>

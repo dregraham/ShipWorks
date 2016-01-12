@@ -45,6 +45,15 @@ namespace ShipWorks.Shipping.UI.Carriers.None
             builder.RegisterType<NullShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.None)
                 .SingleInstance();
+				
+            builder.RegisterType<NoneLabelService>()
+                .Keyed<ILabelService>(ShipmentTypeCode.None);
+
+            builder.RegisterType<EmptyRatingService>()
+                .Keyed<IRatingService>(ShipmentTypeCode.None);
+
+            builder.RegisterType<EmptyRateHashingService>()
+                .Keyed<IRateHashingService>(ShipmentTypeCode.None);
         }
     }
 }

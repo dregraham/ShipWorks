@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             service.DisplayMember = "Key";
             service.ValueMember = "Value";
 
-            iParcelShipmentType shipmentType = new iParcelShipmentType();
+            iParcelShipmentType shipmentType = (iParcelShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode.iParcel);
             List<iParcelServiceType> availableServiceTypes = shipmentType.GetAvailableServiceTypes().Select(s => (iParcelServiceType) s).ToList();
 
             // Always include the service that the shipments are currently configured with

@@ -66,6 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             return escapedValue;
         }
 
+
         /// <summary>
         /// Replace a pattern in a string
         /// </summary>

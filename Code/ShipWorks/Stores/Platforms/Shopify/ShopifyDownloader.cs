@@ -263,8 +263,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 order.OrderDate = jsonOrder.GetValue<DateTime>("created_at", DateTime.MinValue).ToUniversalTime();
 
                 //Get the customer
-                int onlineCustomerID = jsonOrder.GetValue<int>("customer.id", -1);
-                order.OnlineCustomerID = (onlineCustomerID == -1) ? (int?)null : onlineCustomerID;
+                long onlineCustomerID = jsonOrder.GetValue<long>("customer.id", -1);
+                order.OnlineCustomerID = (onlineCustomerID == -1) ? (long?)null : onlineCustomerID;
 
                 //Requested shipping
                 if (requestedShippingField == ShopifyRequestedShippingField.Code)

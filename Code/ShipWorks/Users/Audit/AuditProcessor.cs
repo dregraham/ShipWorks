@@ -14,6 +14,7 @@ using log4net;
 using ShipWorks.Data.Model;
 using ShipWorks.Data;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.SqlServer.Common.Data;
 
 namespace ShipWorks.Users.Audit
@@ -69,6 +70,8 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// Process audits in a background thread
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static void AsyncProcessAudits()
         {
             log.Info("Starting AsyncProcessAudits at " + DateTime.Now);
@@ -237,6 +240,7 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// Condense all changes that go with the same object into one change
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void CondenseChangesForSameObject(AuditChangeCollection changes)
         {
             var groups = changes.GroupBy(c => c.ObjectID).Where(g => g.Count() > 1).ToList();
@@ -351,6 +355,8 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// Determine the audit information for the given catalog which contains only changes related to the Orders change group.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         private static void ProcessChangeGroupOrders(AuditEntity audit, Dictionary<EntityType, Dictionary<long, AuditChangeType>> changeCatalog)
         {
             int totalCount = changeCatalog.SelectMany(c => c.Value).Select(p => p.Value).Count();

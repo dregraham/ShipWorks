@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Communication;
-using System.Xml.Linq;
-using ShipWorks.Actions.Triggers;
-using ShipWorks.Users;
-using ShipWorks.Shipping;
-using log4net;
 using System.Globalization;
-using Interapptive.Shared.UI;
-using ShipWorks.Stores;
-using System.Diagnostics;
+using System.Linq;
+using log4net;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Users;
 
 namespace ShipWorks.Actions
 {
@@ -160,7 +155,7 @@ namespace ShipWorks.Actions
         {
             ActionManager.CheckForChangesNeeded();
             ActionEntity actionEntity = ActionManager.GetAction(actionID);
-            
+
             if (actionEntity == null || !actionEntity.Enabled)
             {
                 // Possible race condition where the action could have been deleted
@@ -169,7 +164,7 @@ namespace ShipWorks.Actions
             }
 
             // Only dispatch scheduled actions
-            if ((ActionTriggerType)actionEntity.TriggerType == ActionTriggerType.Scheduled)
+            if ((ActionTriggerType) actionEntity.TriggerType == ActionTriggerType.Scheduled)
             {
                 // Scheduled actions should not be running in any sql adapter context, so create one now
                 using (SqlAdapter adapter = new SqlAdapter(false))
@@ -256,12 +251,12 @@ namespace ShipWorks.Actions
 
             ActionQueueEntity entity = new ActionQueueEntity();
             entity.ActionID = action.ActionID;
-            entity.ActionQueueType = action.TriggerType == (int)ActionTriggerType.Scheduled ? (int)ActionQueueType.Scheduled : (int)ActionQueueType.UserInterface;
+            entity.ActionQueueType = action.TriggerType == (int) ActionTriggerType.Scheduled ? (int) ActionQueueType.Scheduled : (int) ActionQueueType.UserInterface;
             entity.ActionName = action.Name;
             entity.ActionVersion = action.RowVersion;
             entity.ObjectID = objectID;
             entity.TriggerComputerID = UserSession.Computer.ComputerID;
-            
+
             if (action.ComputerLimitedType == (int) ComputerLimitedType.TriggeringComputer)
             {
                 // It's limited to only running on this computer, so use this computer ID as

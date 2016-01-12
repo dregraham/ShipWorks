@@ -1,36 +1,24 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Shipping.Policies;
-using ShipWorks.UI;
-using System.Threading;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Adapter.Custom;
-using log4net;
-using System.Diagnostics;
-using ShipWorks.Data.Connection;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Model;
-using System.Linq;
 using System.Data;
-using System.Windows.Forms;
-using ShipWorks.Templates.Printing;
-using ShipWorks.Users;
-using ShipWorks.Users.Security;
-using ShipWorks.Stores.Content;
-using ShipWorks.Data.Administration;
-using System.Data.SqlClient;
-using ShipWorks.Stores;
+using Interapptive.Shared;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Policies;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
+using ShipWorks.Templates.Printing;
+using ShipWorks.Users;
 using ShipWorks.Users.Audit;
-using ShipWorks.SqlServer.Data.Auditing;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Data
 {
@@ -90,14 +78,14 @@ namespace ShipWorks.Data
         /// <summary>
         /// Permanently delete the selected store from ShipWorks
         /// </summary>
-        public static void DeleteStore(StoreEntity store)
+        public static void DeleteStore(StoreEntity store, ISecurityContext securityContext)
         {
             if (store == null)
             {
                 throw new ArgumentNullException("store");
             }
 
-            UserSession.Security.DemandPermission(PermissionType.ManageStores, store.StoreID);
+            securityContext.DemandPermission(PermissionType.ManageStores, store.StoreID);
 
             deletingStore = true;
 
@@ -165,6 +153,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Delete the given store 
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void DeleteStore(StoreEntity store, SqlAdapter adapter)
         {
             // At first I was just doing the following:

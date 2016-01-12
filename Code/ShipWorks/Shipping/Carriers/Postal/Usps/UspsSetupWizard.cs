@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Core.Messaging;
@@ -29,6 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Setup wizard for processing shipments with USPS
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class UspsSetupWizard : ShipmentTypeSetupWizardForm
     {
         private readonly UspsRegistration uspsRegistration;

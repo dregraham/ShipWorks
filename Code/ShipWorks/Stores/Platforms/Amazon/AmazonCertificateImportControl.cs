@@ -12,6 +12,7 @@ using System.IO;
 using ShipWorks.UI;
 using Interapptive.Shared.UI;
 using System.Security.Cryptography;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -58,6 +59,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Perform a load of the certificates
         /// </summary>
+        [NDependIgnoreLongMethod]
         public bool ValidateCredentials()
         {
             if (accessKey.Text.Trim().Length == 0)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
@@ -108,6 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Update the services available based on the destination of the selected shipments
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadShipmentDetails()
         {
             List<PostalConfirmationType> availableConfirmations = EnumHelper.GetEnumList<PostalConfirmationType>().Select(e => e.Value).ToList();

@@ -33,6 +33,8 @@ using ShipWorks.Data.Caching;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Users.Audit;
 using System.Reflection;
+using Interapptive.Shared;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -493,6 +495,8 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         protected virtual void SaveDownloadedOrder(OrderEntity order)
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -705,7 +709,8 @@ namespace ShipWorks.Stores.Communication
             address.ResidentialStatus = (int)ValidationDetailStatusType.Unknown;
             address.AddressValidationSuggestionCount = 0;
             address.AddressValidationError = string.Empty;
-
+            address.AddressType = (int) AddressType.NotChecked;
+            
             ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
 
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))
@@ -725,6 +730,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Update's the customer's address from an order, if it's necessary
         /// </summary>
+        [NDependIgnoreTooManyParams]
         private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior, OrderEntity order, CustomerEntity existingCustomer, AddressAdapter originalAddress, string prefix)
         {
             if (!shouldUpdate || IsAddressEmpty(order, prefix))

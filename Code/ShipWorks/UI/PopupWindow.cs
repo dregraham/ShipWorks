@@ -168,6 +168,8 @@ namespace ShipWorks.UI
         /// <summary>
         /// Show the window at the specified location
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public DialogResult ShowPopup(Form owner, Point location)
         {
             if (owner == null)

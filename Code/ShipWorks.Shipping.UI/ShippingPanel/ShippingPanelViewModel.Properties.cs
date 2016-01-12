@@ -1,9 +1,8 @@
 ﻿using System.Reflection;
 using System.Windows.Input;
 using ShipWorks.Shipping.Loading;
-using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
-using ShipWorks.Shipping.UI.ShippingPanel.CustomsControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
+using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -22,11 +21,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private bool supportsAccounts;
         private string domesticInternationalText;
         private IShipmentViewModel shipmentViewModel;
-
-        /// <summary>
-        /// Command to create a label
-        /// </summary>
-        public ICommand CreateLabelCommand { get; }
 
         /// <summary>
         /// Command to open the shipping dialog

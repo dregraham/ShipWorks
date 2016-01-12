@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -79,6 +80,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <summary>
         /// Gets the service type description.
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         private static string GetServiceTypeDescription(RateResult rateResult)
         {
             BestRateResultTag bestRateResultTag = (BestRateResultTag)rateResult.Tag;

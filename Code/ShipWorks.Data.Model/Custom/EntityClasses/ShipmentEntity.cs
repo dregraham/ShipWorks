@@ -5,7 +5,7 @@ using ShipWorks.Shipping;
 namespace ShipWorks.Data.Model.EntityClasses
 {
     /// <summary>
-    /// Partial class extention of the LLBLGen ShipmentEntity
+    /// Partial class extension of the LLBLGen ShipmentEntity
     /// </summary>
     public partial class ShipmentEntity
     {
@@ -19,8 +19,8 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         public ShipmentTypeCode ShipmentTypeCode
         {
-            get { return (ShipmentTypeCode)ShipmentType; }
-            set { ShipmentType = (int)value; }
+            get { return (ShipmentTypeCode) ShipmentType; }
+            set { ShipmentType = (int) value; }
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
         /// <summary>
         /// Indicates if the shipment is known to have been deleted from the database.  This flag is used instead of using Entity.Fields.State = EntityState.Deleted
-        /// because when that is set LLBLgen throws an exception if you try to do anyting with the entity - which due to threading we may still be showing and dealing
+        /// because when that is set LLBLgen throws an exception if you try to do anything with the entity - which due to threading we may still be showing and dealing
         /// with data from it shortly after its deleted.
         /// </summary>
         public bool DeletedFromDatabase { get; set; }

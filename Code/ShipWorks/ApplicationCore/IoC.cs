@@ -3,21 +3,24 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
+using Autofac.Core;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
 using ShipWorks.Filters;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -53,9 +56,12 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
-        public static void Initialize(params Assembly[] assemblies)
+        public static IContainer Initialize(IContainer container, params Assembly[] assemblies)
         {
             var builder = new ContainerBuilder();
+
+            builder.RegisterType<DataProviderWrapper>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<ShippingSettingsWrapper>()
                 .AsImplementedInterfaces()
@@ -79,7 +85,7 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
-                .SingleInstance();
+                .ExternallyOwned();
 
             builder.RegisterType<FilterHelperWrapper>()
                 .AsImplementedInterfaces()
@@ -92,9 +98,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<StampsAddressValidationWebClient>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-
-            builder.RegisterType<ShippingManagerWrapper>()
-                .AsImplementedInterfaces();
 
             builder.RegisterType<ValidatedAddressScope>()
                 .AsImplementedInterfaces()
@@ -117,14 +120,22 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<SchedulerProvider>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
-
-            builder.Register(context => Messenger.Current)
+            builder.RegisterInstance(SqlDateTimeProvider.Current)
                 .AsImplementedInterfaces()
-                .SingleInstance();
+                .ExternallyOwned();
+
+            builder.Register(c => UserSession.Security)
+                .As<ISecurityContext>()
+                .ExternallyOwned();
+
+            builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
 
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<LogEntryFactory>()
+                .AsImplementedInterfaces()
+                .AsSelf();
 
             builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces();
@@ -132,9 +143,23 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<WeightConverter>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterAssemblyTypes(typeof(IoC).Assembly)
+                .Where(x => x.IsAssignableTo<IInitializeForCurrentSession>() ||
+                    x.IsAssignableTo<ICheckForChangesNeeded>() ||
+                    x.IsAssignableTo<IInitializeForCurrentDatabase>())
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
 
-            current = builder.Build();
+            foreach (IComponentRegistration registration in builder.Build().ComponentRegistry.Registrations)
+            {
+                container.ComponentRegistry.Register(registration);
+            }
+
+            current = container;
+
+            return current;
         }
     }
 }

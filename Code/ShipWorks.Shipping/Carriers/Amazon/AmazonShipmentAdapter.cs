@@ -16,7 +16,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory) : base(shipment, shipmentTypeFactory, null)
+        public AmazonShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager) :
+            base(shipment, shipmentTypeManager, null)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
         }
@@ -42,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>

@@ -11,9 +11,9 @@ using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.UI.ShippingPanel;
-using ShipWorks.Shipping.UI.ShippingPanel.AddressControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.Tests.Shared;
+using ShipWorks.UI.Controls.AddressControl;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.ShippingPanel

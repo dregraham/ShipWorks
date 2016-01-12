@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Services.Protocols;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
@@ -103,6 +104,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Generates the register request.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static RegisterRequest GenerateRegisterRequest(UpsAccountEntity upsAccount, UpsOltInvoiceAuthorizationData invoiceAuth, string userId, string password)
         {
             RegisterRequest request = new RegisterRequest();

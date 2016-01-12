@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -9,7 +11,6 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using Xunit;
-using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.Tests.Services
 {
@@ -56,14 +57,14 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
-        public async void MessageCorrect_WhenOrderHasOneShipment_ReturnsThatShipment_Test()
+        public async Task MessageCorrect_WhenOrderHasOneShipment_ReturnsThatShipment_Test()
         {
             OrderSelectionLoaded handlededOrderSelectionLoaded = new OrderSelectionLoaded();
 
             messenger.OfType<OrderSelectionChangedMessage>()
                 .Subscribe((OrderSelectionChangedMessage orderSelectionChangedMessage) => handlededOrderSelectionLoaded = orderSelectionChangedMessage.LoadedOrderSelection.FirstOrDefault());
 
-            await testObject.LoadAndNotify(new List<long> { orderEntity.OrderID } );
+            await testObject.LoadAndNotify(new List<long> { orderEntity.OrderID });
 
             Assert.Equal(shipmentEntity.ShipmentID, handlededOrderSelectionLoaded.ShipmentAdapters.FirstOrDefault().Shipment.ShipmentID);
             Assert.Equal(1, handlededOrderSelectionLoaded.ShipmentAdapters.Count());
@@ -71,7 +72,7 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
-        public async void MessageCorrect_WhenOrderHasMoreThanOneShipment_ReturnsFirstShipment_Test()
+        public async Task MessageCorrect_WhenOrderHasMoreThanOneShipment_ReturnsFirstShipment_Test()
         {
             ShipmentEntity secondShipmentEntity = new ShipmentEntity(2031);
             orderSelectionLoaded = new OrderSelectionLoaded(orderEntity, new List<ICarrierShipmentAdapter>()

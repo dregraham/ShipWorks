@@ -27,9 +27,9 @@ namespace ShipWorks.Shipping
             this.addressValidationWebClient = addressValidationWebClient;
             this.filterHelper = filterHelper;
         }
-        
+
         /// <summary>
-        /// Validate the shipment asychronously.
+        /// Validate the shipment asynchronously.
         /// </summary>
         public Task ValidateAsync(ShipmentEntity shipment)
         {
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping
             // Validate Shipment
             return ValidateShipmentsAsync(shipment);
         }
-        
+
         /// <summary>
         /// Validate all the shipments on a background thread
         /// </summary>
@@ -56,7 +56,8 @@ namespace ShipWorks.Shipping
 
             AddressValidator addressValidator = new AddressValidator(addressValidationWebClient);
 
-            await validatedAddressManager.ValidateShipmentAsync(shipment, addressValidator);
+            await validatedAddressManager.ValidateShipmentAsync(shipment, addressValidator)
+                .ConfigureAwait(false);
         }
     }
 }

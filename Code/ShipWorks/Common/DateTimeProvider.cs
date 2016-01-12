@@ -1,6 +1,5 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Common
 {
@@ -23,10 +22,5 @@ namespace ShipWorks.Common
         /// Gets the current date, with time set to 00:00:00
         /// </summary>
         public DateTime Today => DateTime.Today;
-
-        /// <summary>
-        /// Gets or sets the current SQL server date time.
-        /// </summary>
-        public DateTime CurrentSqlServerDateTime => SqlSession.Current.GetLocalDate();
     }
 }

@@ -1,56 +1,37 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.AddressValidation;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.Licensing;
 using Interapptive.Shared;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.UI;
 using Interapptive.Shared.Net;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Templates.Emailing;
-using ShipWorks.Email;
-using ShipWorks.Email.Accounts;
-using ShipWorks.Users;
-using ShipWorks.Users.Security;
-using ShipWorks.Common.Threading;
-using System.Threading;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Utility;
+using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Nudges;
-using ShipWorks.Filters;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions.Orders;
-using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
-using ShipWorks.Shipping.Settings;
+using ShipWorks.Filters;
 using ShipWorks.Shipping;
-using ShipWorks.Editions.Brown;
-using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
-using ShipWorks.Stores.Communication;
+using ShipWorks.UI.Wizard;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Management
 {
     /// <summary>
     /// Wizard for adding a new store to ShipWorks
     /// </summary>
+    [NDependIgnoreLongTypes]
     partial class AddStoreWizard : WizardForm
     {
         // State container for use by wizard pages
@@ -185,7 +166,7 @@ namespace ShipWorks.Stores.Management
             isFreemiumMode = FreemiumFreeEdition.IsActive;
 
             // Customize wizard experience based on edition
-            if (isFreemiumMode) 
+            if (isFreemiumMode)
             {
                 StoreType storeType = StoreTypeManager.GetType(StoreTypeCode.Ebay);
 
@@ -193,7 +174,7 @@ namespace ShipWorks.Stores.Management
                 comboStoreType.Items.Clear();
                 comboStoreType.Items.Add(new ImageComboBoxItem(storeType.StoreTypeName, storeType, EnumHelper.GetImage(storeType.TypeCode)));
                 comboStoreType.SelectedIndex = 0;
-                
+
                 // Setup for the configured single store type
                 SetupForStoreType(storeType);
 
@@ -345,7 +326,7 @@ namespace ShipWorks.Stores.Management
                 // If there was an old store we need to clean it up
                 if (store != null)
                 {
-                    DeletionService.DeleteStore(store);
+                    DeletionService.DeleteStore(store, UserSession.Security);
                     store = null;
                 }
 
@@ -698,8 +679,8 @@ namespace ShipWorks.Stores.Management
                 e.NextPage = CurrentPage;
                 return;
             }
-			
-			if (!SaveSettingsActions())
+
+            if (!SaveSettingsActions())
             {
                 e.NextPage = CurrentPage;
                 return;
@@ -954,7 +935,7 @@ namespace ShipWorks.Stores.Management
             {
                 if (store != null)
                 {
-                    DeletionService.DeleteStore(store);
+                    DeletionService.DeleteStore(store, UserSession.Security);
                     store = null;
                 }
             }

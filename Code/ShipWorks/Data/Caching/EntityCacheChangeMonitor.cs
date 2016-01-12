@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using ThreadTimer = System.Threading.Timer;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.FactoryClasses;
+using System.Threading;
+using Interapptive.Shared;
+using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Diagnostics;
-using System.Threading;
 using ShipWorks.Users;
-using ShipWorks.Common.Threading;
-using ShipWorks.ApplicationCore.Interaction;
-using System.Timers;
-using ShipWorks.ApplicationCore.ExecutionMode;
+using ThreadTimer = System.Threading.Timer;
 
 namespace ShipWorks.Data.Caching
 {
@@ -97,7 +93,7 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public void Dispose()
         {
-            Debug.Assert(!Program.ExecutionMode.IsUISupported || !Program.MainForm.InvokeRequired);
+            Debug.Assert(!executionMode.IsUISupported || !Program.MainForm.InvokeRequired);
 
             lock (disposedLock)
             {
@@ -132,7 +128,7 @@ namespace ShipWorks.Data.Caching
                     operationToken);
             }
         }
-        
+
         /// <summary>
         /// Kickoff the next timer interval, as long as we haven't been disposed
         /// </summary>
@@ -178,6 +174,7 @@ namespace ShipWorks.Data.Caching
         /// <summary>
         /// Called on background thread to monitor for changes to data
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void AsyncMonitorChanges(object state)
         {
             ApplicationBusyToken busyToken = (ApplicationBusyToken) state;

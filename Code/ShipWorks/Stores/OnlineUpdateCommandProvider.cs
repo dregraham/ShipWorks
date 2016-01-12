@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using ShipWorks.Data.Utility;
 using System.Windows.Forms;
 using System.ComponentModel;
+using Interapptive.Shared;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -69,6 +70,8 @@ namespace ShipWorks.Stores
         /// Execute the command.  Returns true if all headers were processed by the command, or false if some could not be processed because they did not
         /// match the store type supported by the command.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public void ExecuteCommandAsync(MenuCommand command, Control owner, IEnumerable<long> selectedKeys, MenuCommandCompleteEventHandler callback)
         {
             OnlineUpdateCommandSet commandSet = FindCommandSet(command);
@@ -175,6 +178,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create command sets broken up by store type
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         private static Dictionary<StoreTypeCode, OnlineUpdateCommandSet> CreateCommandsByStoreType(IEnumerable<long> selected)
         {
             Dictionary<StoreTypeCode, OnlineUpdateCommandSet> storeTypeCommands = new Dictionary<StoreTypeCode, OnlineUpdateCommandSet>();
@@ -230,6 +234,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Generate the command layout from the list of available commands provided by the store types
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         private List<MenuCommand> BuildCommandLayout(Dictionary<StoreTypeCode, OnlineUpdateCommandSet> storeTypeCommands)
         {
             // This doesnt actually get displayed or returned.  Its just used as a top-level container while building the commands.

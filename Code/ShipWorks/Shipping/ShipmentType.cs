@@ -2,43 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
+using System.Xml.Linq;
 using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using ShipWorks.Editions;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions;
+using ShipWorks.Filters;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.ShipSense;
-using System.Windows.Forms;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Settings.Defaults;
-using ShipWorks.Filters;
-using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Stores;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Shipping.Tracking;
-using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.ShipSense.Packaging;
-using System.Xml.Linq;
-using Interapptive.Shared.Business.Geography;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.Defaults;
+using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.Tracking;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping
 {
@@ -211,7 +211,7 @@ namespace ShipWorks.Shipping
         public virtual bool IsAllowedFor(ShipmentEntity shipment)
         {
             // Amazon prime orders can only be shipped via the Amazon carrier
-            // this is restriction is per Amazon. 
+            // this is restriction is per Amazon.
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IOrderManager orderManager = lifetimeScope.Resolve<IOrderManager>();
@@ -219,7 +219,7 @@ namespace ShipWorks.Shipping
 
                 IAmazonOrder order = shipment.Order as IAmazonOrder;
 
-                // If the order is Amazon Prime return false 
+                // If the order is Amazon Prime return false
                 return !order?.IsPrime ?? true;
             }
         }
@@ -424,7 +424,7 @@ namespace ShipWorks.Shipping
         ///// <summary>
         ///// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
         ///// </summary>
-        //public virtual Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository) 
+        //public virtual Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository)
         //    => new Dictionary<int, string>();
 
         ///// <summary>
@@ -511,7 +511,7 @@ namespace ShipWorks.Shipping
         public virtual void ConfigureNewShipment(ShipmentEntity shipment)
         {
             shipment.ActualLabelFormat = null;
-            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
             shipment.BilledType = 0;
             shipment.BilledWeight = 0;
 
@@ -542,6 +542,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Attempts to apply ShipSense values to the given shipment.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ApplyShipSense(ShipmentEntity shipment)
         {
             if (!ShouldApplyShipSense)
@@ -556,7 +557,7 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            BestRateEventTypes eventTypes = (BestRateEventTypes)shipment.BestRateEvents;
+            BestRateEventTypes eventTypes = (BestRateEventTypes) shipment.BestRateEvents;
             BestRateEventTypes latestEvent = eventTypes.GetLatestBestRateEvent();
 
             if (ShipmentTypeCode != ShipmentTypeCode.BestRate && (latestEvent == BestRateEventTypes.RateSelected || latestEvent == BestRateEventTypes.RateAutoSelectedAndProcessed))
@@ -622,7 +623,7 @@ namespace ShipWorks.Shipping
                             // Consider them loaded.  This is an in-memory field
                             shipment.CustomsItemsLoaded = true;
 
-                            decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal)ci.Quantity * ci.UnitValue);
+                            decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal) ci.Quantity * ci.UnitValue);
                             shipment.CustomsValue = customsValue;
                         }
                     }
@@ -636,7 +637,7 @@ namespace ShipWorks.Shipping
                     UpdateTotalWeight(shipment);
 
                     // Update the status of the shipment and record the changes that were applied to the shipment's packages
-                    shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+                    shipment.ShipSenseStatus = (int) ShipSenseStatus.Applied;
                     XElement changeSets = XElement.Parse(shipment.ShipSenseChangeSets);
 
                     KnowledgebaseEntryChangeSetXmlWriter changeSetWriter = new KnowledgebaseEntryChangeSetXmlWriter(knowledgebaseEntry);
@@ -651,7 +652,7 @@ namespace ShipWorks.Shipping
                 // was changed after the shipment type was already created (i.e. going from
                 // a multi-package carrier to a single package carrier when entry is configured
                 // for multiple packages)
-                shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+                shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
             }
         }
 
@@ -701,7 +702,7 @@ namespace ShipWorks.Shipping
                     {
                         profile = new ShippingProfileEntity();
                         profile.Name = string.Format("Defaults - {0}", ShipmentTypeName);
-                        profile.ShipmentType = (int)ShipmentTypeCode;
+                        profile.ShipmentType = (int) ShipmentTypeCode;
                         profile.ShipmentTypePrimary = true;
 
                         // Load the shipmentType specific profile data
@@ -733,30 +734,30 @@ namespace ShipWorks.Shipping
         /// </summary>
         protected virtual void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
-            profile.OriginID = (int)ShipmentOriginSource.Store;
+            profile.OriginID = (int) ShipmentOriginSource.Store;
 
             profile.Insurance = false;
-            profile.InsuranceInitialValueSource = (int)InsuranceInitialValueSource.ItemSubtotal;
+            profile.InsuranceInitialValueSource = (int) InsuranceInitialValueSource.ItemSubtotal;
             profile.InsuranceInitialValueAmount = 0;
 
             profile.ReturnShipment = false;
 
-            profile.RequestedLabelFormat = (int)ThermalLanguage.None;
+            profile.RequestedLabelFormat = (int) ThermalLanguage.None;
         }
 
         /// <summary>
         /// Ensures the ShipDate on an unprocessed shipment is Up-To-Date
         /// </summary>
-        protected virtual void UpdateShipmentShipDate(ShipmentEntity shipment)
+        protected virtual void UpdateShipmentShipDate(ShipmentEntity shipment, DateTime now)
         {
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
 
-            if (!shipment.Processed && shipment.ShipDate.Date < DateTime.Now.Date)
+            if (!shipment.Processed && shipment.ShipDate.Date < now.Date)
             {
-                shipment.ShipDate = DateTime.Now.Date.AddHours(12);
+                shipment.ShipDate = now.Date.AddHours(12);
             }
         }
 
@@ -773,13 +774,13 @@ namespace ShipWorks.Shipping
                 throw ex;
             }
 
-            // ensure the shipdate is up-to-date
-            UpdateShipmentShipDate(shipment);
+            // ensure the ship date is up-to-date
+            UpdateShipmentShipDate(shipment, IoC.UnsafeGlobalLifetimeScope.Resolve<IDateTimeProvider>().Now);
 
             // Ensure the from address is up-to-date
             if (!UpdateOriginAddress(shipment, shipment.OriginOriginID))
             {
-                shipment.OriginOriginID = (long)ShipmentOriginSource.Other;
+                shipment.OriginOriginID = (long) ShipmentOriginSource.Other;
             }
         }
 
@@ -804,19 +805,22 @@ namespace ShipWorks.Shipping
             }
 
             // Copy from the store
-            if (originID == (int)ShipmentOriginSource.Store)
+            if (originID == (int) ShipmentOriginSource.Store)
             {
-                StoreEntity store = StoreManager.GetStore(shipment.Order.StoreID);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    StoreEntity store = lifetimeScope.Resolve<IStoreManager>().GetStore(shipment.Order.StoreID);
 
-                PersonAdapter.Copy(store, "", person);
+                    PersonAdapter.Copy(store, "", person);
 
-                person.ParsedName = PersonName.Parse(store.StoreName);
+                    person.ParsedName = PersonName.Parse(store.StoreName);
+                }
 
                 return true;
             }
 
             // Other - no change.
-            if (originID == (int)ShipmentOriginSource.Other)
+            if (originID == (int) ShipmentOriginSource.Other)
             {
                 return true;
             }
@@ -856,7 +860,7 @@ namespace ShipWorks.Shipping
 
             if (SupportsAccountAsOrigin)
             {
-                origins.Add(new KeyValuePair<string, long>("Account Address", (long)ShipmentOriginSource.Account));
+                origins.Add(new KeyValuePair<string, long>("Account Address", (long) ShipmentOriginSource.Account));
             }
 
             // Add all the shippers
@@ -866,8 +870,8 @@ namespace ShipWorks.Shipping
             }
 
             // Add store and manual always
-            origins.Add(new KeyValuePair<string, long>("Store Address", (long)ShipmentOriginSource.Store));
-            origins.Add(new KeyValuePair<string, long>("Other Address", (long)ShipmentOriginSource.Other));
+            origins.Add(new KeyValuePair<string, long>("Store Address", (long) ShipmentOriginSource.Store));
+            origins.Add(new KeyValuePair<string, long>("Other Address", (long) ShipmentOriginSource.Other));
 
             return origins;
         }
@@ -913,21 +917,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Called to get the latest rates for the shipment
-        /// </summary>
-        public virtual RateGroup GetRates(ShipmentEntity shipment)
-        {
-            if (SupportsGetRates)
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                throw new InvalidOperationException("Should not be called.");
-            }
-        }
-
-        /// <summary>
         /// Apply the specified shipment profile to the given shipment.
         /// </summary>
         public virtual void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
@@ -936,7 +925,7 @@ namespace ShipWorks.Shipping
             ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
 
             ShippingProfileUtility.ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
-            SaveRequestedLabelFormat((ThermalLanguage)shipment.RequestedLabelFormat, shipment);
+            SaveRequestedLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat, shipment);
 
             // Special case for insurance
             for (int i = 0; i < GetParcelCount(shipment); i++)
@@ -953,7 +942,7 @@ namespace ShipWorks.Shipping
                     // Don't apply the value to the subsequent parcels - that would probably end up over-ensuring the whole shipment.
                     if (i == 0)
                     {
-                        InsuranceInitialValueSource source = (InsuranceInitialValueSource)profile.InsuranceInitialValueSource;
+                        InsuranceInitialValueSource source = (InsuranceInitialValueSource) profile.InsuranceInitialValueSource;
                         insuranceChoice.InsuranceValue = InsuranceUtility.GetInsuranceValue(shipment, source, profile.InsuranceInitialValueAmount);
                     }
                 }
@@ -961,24 +950,11 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public abstract void ProcessShipment(ShipmentEntity shipment);
-
-        /// <summary>
         /// Must be overridden by derived types to provide tracking details for the given shipment.
         /// </summary>
         public virtual TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             throw new ShippingException(string.Format("Tracking is not supported for {0}.", ShipmentTypeName));
-        }
-
-        /// <summary>
-        /// Called to do carrier specific shipment voiding.  Not all carriers required voiding.
-        /// </summary>
-        public virtual void VoidShipment(ShipmentEntity shipment)
-        {
-
         }
 
         /// <summary>
@@ -1047,111 +1023,6 @@ namespace ShipWorks.Shipping
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
         public abstract IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment);
-
-        protected RatingFields ratingField = null;
-        public virtual RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = new RatingFields();
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentType);
-                ratingField.ShipmentFields.Add(ShipmentFields.ContentWeight);
-                ratingField.ShipmentFields.Add(ShipmentFields.TotalWeight);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentCost);
-                ratingField.ShipmentFields.Add(ShipmentFields.CustomsValue);
-
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipDate);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipCompany);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet1);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet2);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet3);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipCity);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipStateProvCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipPostalCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.ShipCountryCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialDetermination);
-                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialResult);
-
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginOriginID);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginCompany);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet1);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet2);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet3);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginCity);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginStateProvCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginPostalCode);
-                ratingField.ShipmentFields.Add(ShipmentFields.OriginCountryCode);
-
-                ratingField.ShipmentFields.Add(ShipmentFields.ReturnShipment);
-                ratingField.ShipmentFields.Add(ShipmentFields.Insurance);
-                ratingField.ShipmentFields.Add(ShipmentFields.InsuranceProvider);
-
-                return ratingField;
-            }
-        }
-
-        /// <summary>
-        /// Gets the rating hash based on the shipment's configuration.
-        /// </summary>
-        public virtual string GetRatingHash(ShipmentEntity shipment)
-        {
-            return RatingFields.GetRatingHash(shipment);
-        }
-
-        /// <summary>
-        /// This is intended to be used when there is (most likely) a bad configuration
-        /// with the shipment on some level, so an empty rate group with a exception footer
-        /// is cached.
-        /// </summary>
-        /// <param name="shipment">The shipment that generated the given exception.</param>
-        /// <param name="exception">The exception</param>
-        protected RateGroup CacheInvalidRateGroup(ShipmentEntity shipment, Exception exception)
-        {
-            RateGroup rateGroup = new InvalidRateGroup(this, exception);
-
-            RateCache.Instance.Save(GetRatingHash(shipment), rateGroup);
-
-            return rateGroup;
-        }
-
-        /// <summary>
-        /// Gets rates, retrieving them from the cache if possible
-        /// </summary>
-        /// <typeparam name="T">Type of exception that the carrier will throw on an error</typeparam>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        /// <param name="getRatesFunction">Function to retrieve the rates from the carrier if not in the cache</param>
-        /// <returns></returns>
-        protected RateGroup GetCachedRates<T>(ShipmentEntity shipment, Func<ShipmentEntity, RateGroup> getRatesFunction) where T : Exception
-        {
-            string rateHash = GetRatingHash(shipment);
-
-            if (RateCache.Instance.Contains(rateHash))
-            {
-                return RateCache.Instance.GetRateGroup(rateHash);
-            }
-
-            try
-            {
-                RateGroup rateGroup = getRatesFunction(shipment);
-                RateCache.Instance.Save(rateHash, rateGroup);
-
-                return rateGroup;
-            }
-            catch (T ex)
-            {
-                // This is a bad configuration on some level, so cache an empty rate group
-                // before throwing throwing the exceptions
-                RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, ex);
-                InvalidRateGroupShippingException shippingException = new InvalidRateGroupShippingException(invalidRateGroup, ex.Message, ex);
-
-                throw shippingException;
-            }
-        }
 
         /// <summary>
         /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
@@ -1228,6 +1099,7 @@ namespace ShipWorks.Shipping
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address.
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         protected virtual bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
             bool requiresCustoms = !IsDomestic(shipment);
@@ -1317,27 +1189,6 @@ namespace ShipWorks.Shipping
             PersonAdapter address = new PersonAdapter(entity, fieldPrefix);
             return address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ||
                 (address.CountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && address.StateProvCode.Equals("PR", StringComparison.OrdinalIgnoreCase));
-        }
-
-        /// <summary>
-        /// Check to see if a package dimensions are valid for carriers that require dimensions.
-        /// </summary>
-        /// <returns>True if the dimensions are valid.  False otherwise.</returns>
-        public virtual bool DimensionsAreValid(double length, double width, double height)
-        {
-            if (length <= 0 || width <= 0 || height <= 0)
-            {
-                return false;
-            }
-
-            // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
-            // This is no longer valid due to new dimensional weight requirements.
-            if (length == 1.0 && width == 1.0 && height == 1.0)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         /// <summary>

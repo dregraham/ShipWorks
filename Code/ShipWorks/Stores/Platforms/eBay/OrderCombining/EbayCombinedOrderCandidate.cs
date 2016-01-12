@@ -6,6 +6,7 @@ using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Threading;
+using Interapptive.Shared;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -133,6 +134,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// </summary>
         public decimal ShippingCost
         {
+            [NDependIgnoreComplexMethodAttribute]
             get
             {
                 if (shippingOverridden)
@@ -226,6 +228,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// <summary>
         /// Performs the order combining on those selected contained orders
         /// </summary>
+        [NDependIgnoreLongMethod]
         public bool Combine()
         {
             List<EbayCombinedOrderComponent> toCombine = components.Where(c => c.Included).ToList();
@@ -327,6 +330,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// Creates a new order with the order items of the provided orders.  If this new order
         /// is an actual combined order on eBay (not just local) ebayOrderID will be non-null
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool CombineLocalOrders(SqlAdapter adapter, List<EbayCombinedOrderComponent> toCombine, long? ebayOrderID)
         {
             // Do nothing

@@ -48,21 +48,6 @@ namespace Interapptive.Shared.Business.Geography
             return CountryList.GetCountryName(name);
         }
 
-        /// <summary>
-        /// Indicates if the given foreign country code is a US international territory
-        /// </summary>
-        public static bool IsUSInternationalTerritory(IAddressAdapter address)
-        {
-            return CountryList.IsUSInternationalTerritory(address);
-        }
-
-        /// <summary>
-        /// Indicates if the given foreign country code is a specific US international territory
-        /// </summary>
-        public static bool IsUSInternationalTerritory(IAddressAdapter address, string territory)
-        {
-            return CountryList.IsUSInternationalTerritory(address, territory);
-        }
 
         /// <summary>
         /// Get the icon image of the country flag. Null if one is not present for the country.
@@ -188,6 +173,7 @@ namespace Interapptive.Shared.Business.Geography
         /// <summary>
         /// Load the state list
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void LoadStates()
         {
             states.Add("Alabama", "AL");

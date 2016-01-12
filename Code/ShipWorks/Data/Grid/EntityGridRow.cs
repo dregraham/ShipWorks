@@ -10,6 +10,7 @@ using Divelements.SandGrid.Rendering;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Properties;
 
@@ -52,6 +53,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Draw the foreground of the row.  This is where the detail view processing takes place.
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override void DrawRowForeground(RenderingContext context, Rectangle bounds, GridColumn[] columns, TextFormattingInformation[] textFormats)
         {
             if (Grid == null)
@@ -176,6 +178,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Draw the content of a cell for the specified column.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         protected override void DrawVirtualCell(RenderingContext context, GridColumn baseColumn, object value, Font font, Image image, Rectangle bounds, bool selected, TextFormattingInformation textFormat, Color foreColor)
         {
             Checked = selected;
@@ -237,6 +240,7 @@ namespace ShipWorks.Data.Grid
                 font.Dispose();
             }
         }
+
 
         /// <summary>
         /// Get the formatted value to use for display of the given column in this row.  
@@ -349,6 +353,19 @@ namespace ShipWorks.Data.Grid
         }
 
         /// <summary>
+        /// Gets the tooltip text.
+        /// </summary>
+        protected override string GetTooltipText(Point position)
+        {
+            EntityGridColumn column = HitTestColumn(position);
+            string toolTip = column?.GetTooltipText(this);
+
+            return !string.IsNullOrEmpty(toolTip) ?
+                toolTip :
+                base.GetTooltipText(position);
+        }
+
+        /// <summary>
         /// Moving the mouse over the grid row
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
@@ -363,7 +380,7 @@ namespace ShipWorks.Data.Grid
             }
             else
             {
-                column = HitTestColumn(e);
+                column = HitTestColumn(new Point(e.X, e.Y));
             }
 
             // The column under the mouse changed
@@ -390,7 +407,7 @@ namespace ShipWorks.Data.Grid
         protected override void OnMouseDown(MouseEventArgs e)
         {
             // See what column its in
-            EntityGridColumn column = HitTestColumn(e);
+            EntityGridColumn column = HitTestColumn(new Point(e.X, e.Y));
             if (column != null)
             {
                 // We should have already captured this in the mouse move
@@ -419,7 +436,7 @@ namespace ShipWorks.Data.Grid
             }
             else
             {
-                column = HitTestColumn(e);
+                column = HitTestColumn(new Point(e.X, e.Y));
             }
 
             if (column != null)
@@ -452,13 +469,13 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Determine what column the mouse event falls in for this row.  Or null if it doesn't.
         /// </summary>
-        private EntityGridColumn HitTestColumn(MouseEventArgs e)
+        private EntityGridColumn HitTestColumn(Point point)
         {
             if (Grid != null)
             {
                 foreach (EntityGridColumn column in Grid.Columns.OfType<EntityGridColumn>())
                 {
-                    if (e.X > column.Bounds.Left && e.X < column.Bounds.Right)
+                    if (point.X > column.Bounds.Left && point.X < column.Bounds.Right)
                     {
                         return column;
                     }

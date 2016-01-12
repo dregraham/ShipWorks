@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Linq;
 using Interapptive.Shared.Collections;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 
@@ -39,9 +39,9 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         /// The shipments
         /// </summary>
         public IEnumerable<ICarrierShipmentAdapter> ShipmentAdapters { get; }
-        
+
         /// <summary>
-        /// Any exception that may have occured during loading.
+        /// Any exception that may have occurred during loading.
         /// </summary>
         public Exception Exception { get; }
 

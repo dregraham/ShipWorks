@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Threading.Tasks;
 
@@ -86,6 +88,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="addressAdapter">Address that should be validated</param>
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
+        [NDependIgnoreLongMethod]
         public async Task ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
             // We don't want to validate already validated addresses because we'll lose the original address
@@ -116,12 +119,12 @@ namespace ShipWorks.AddressValidation
                 // Set the validation status based on the settings of the store
                 if (canAdjustAddress)
                 {
-                    SetValidationStatus(validationResult.AddressValidationResults, addressAdapter);
+                    SetValidationStatus(validationResult, addressAdapter);
                     UpdateAddressIfAdjusted(addressAdapter, validationResult.AddressValidationResults);
                 }
                 else
                 {
-                    SetValidationStatusForNotify(validationResult.AddressValidationResults, addressAdapter);
+                    SetValidationStatusForNotify(validationResult, addressAdapter);
 
                     AddressValidationResult validatedAddress = validationResult.AddressValidationResults.FirstOrDefault(x => x.IsValid);
                     if (validatedAddress != null)
@@ -149,6 +152,7 @@ namespace ShipWorks.AddressValidation
                 log.Warn("Error communicating with Address Validation Server.", ex);
                 addressAdapter.AddressValidationError = string.Format("Error communicating with Address Validation Server.\r\n{0}", ex.Message);
                 addressAdapter.AddressValidationStatus = (int)AddressValidationStatusType.Error;
+                addressAdapter.AddressType = (int) AddressType.Error;
                 saveAction(null, new List<ValidatedAddressEntity>());
             }
         }
@@ -194,11 +198,15 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Set the validation status on the entity when we should only notify instead of update
         /// </summary>
-        private static void SetValidationStatusForNotify(List<AddressValidationResult> suggestedAddresses, AddressAdapter adapter)
+        private static void SetValidationStatusForNotify(AddressValidationWebClientValidateAddressResult validationResult, AddressAdapter adapter)
         {
+            List<AddressValidationResult> suggestedAddresses = validationResult.AddressValidationResults;
+
+            adapter.AddressType = (int)validationResult.AddressType;
+
             if (!suggestedAddresses.Any())
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;    
             }
             else if (suggestedAddresses.Count == 1 && suggestedAddresses[0].IsValid && suggestedAddresses[0].IsEqualTo(adapter))
             {
@@ -213,8 +221,12 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Set the validation status on the entity
         /// </summary>
-        private static void SetValidationStatus(List<AddressValidationResult> suggestedAddresses, AddressAdapter adapter)
+        private static void SetValidationStatus(AddressValidationWebClientValidateAddressResult validationResult, AddressAdapter adapter)
         {
+            List<AddressValidationResult> suggestedAddresses = validationResult.AddressValidationResults;
+
+            adapter.AddressType = (int)validationResult.AddressType;
+            
             if (!suggestedAddresses.Any())
             {
                 adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;

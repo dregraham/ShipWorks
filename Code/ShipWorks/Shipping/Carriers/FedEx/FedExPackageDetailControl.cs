@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
+using Interapptive.Shared;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -39,6 +40,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Load the shipments into the packaging control
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void LoadShipments(List<ShipmentEntity> shipments, bool enableEditing)
         {
             loading = true;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model;
@@ -82,6 +83,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Saves selected values to the store
         /// </summary>
+        [NDependIgnoreLongMethod]
         public bool SaveToEntity(MivaStoreEntity store)
         {
             if (store == null)

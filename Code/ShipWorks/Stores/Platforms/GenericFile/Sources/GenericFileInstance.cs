@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.IO;
-using Interapptive.Shared.Utility;
+using log4net;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Sources
 {
     /// <summary>
-    /// Base representation of a GenericFile that can be used by downloaders 
+    /// Base representation of a GenericFile that can be used by downloaders
     /// </summary>
     public abstract class GenericFileInstance
     {
+        ILog log = LogManager.GetLogger(typeof(GenericFileInstance));
+
         /// <summary>
         /// The name of the file, as it makes sense for the originating source.
         /// </summary>
@@ -52,7 +51,12 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources
             using (Stream stream = OpenStream())
             {
                 byte[] bytes = new byte[stream.Length];
-                stream.Read(bytes, 0, (int) stream.Length);
+
+                int bytesRead = stream.Read(bytes, 0, (int) stream.Length);
+                if (bytesRead != stream.Length)
+                {
+                    log.Warn($"Bytes read ({bytesRead}) is less than the reported length ({stream.Length})");
+                }
 
                 return bytes;
             }

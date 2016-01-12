@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Services
 {
@@ -7,8 +10,24 @@ namespace ShipWorks.Stores.Services
     /// Algorithms and functions for working with stores.
     /// </summary>
     /// <remarks>This is an instance that wraps the static StoreManager until we can replace that class</remarks>
-    public class StoreManagerWrapper : IStoreManager
+    public class StoreManagerWrapper : IStoreManager, IInitializeForCurrentSession
     {
+        readonly Func<ISecurityContext> getSecurityContext;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public StoreManagerWrapper(Func<ISecurityContext> getSecurityContext)
+        {
+            this.getSecurityContext = getSecurityContext;
+        }
+
+        /// <summary>
+        /// Initialize StoreManager
+        /// </summary>
+        public void InitializeForCurrentSession() =>
+            StoreManager.InitializeForCurrentSession(getSecurityContext());
+
         /// <summary>
         /// Get the store from Id
         /// </summary>
@@ -22,7 +41,7 @@ namespace ShipWorks.Stores.Services
         /// <summary>
         /// Get the store for the shipment
         /// </summary>
-        public StoreEntity GetRelatedStore(ShipmentEntity shipment) => 
+        public StoreEntity GetRelatedStore(ShipmentEntity shipment) =>
             StoreManager.GetRelatedStore(shipment.ShipmentID);
 
         /// <summary>

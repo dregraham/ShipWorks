@@ -21,16 +21,16 @@ namespace ShipWorks.Shipping.Services
         private EntityCollection<ShipmentCustomsItemEntity> customsItems;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        protected CarrierShipmentAdapterBase(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager)
+        protected CarrierShipmentAdapterBase(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeFactory, nameof(shipmentTypeFactory));
+            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeManager, nameof(shipmentTypeManager));
 
             this.shipment = shipment;
             this.customsManager = customsManager;
-            shipmentType = shipmentTypeFactory.Get(shipment);
+            shipmentType = shipmentTypeManager.Get(shipment);
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// Gets specific number of package adapters for the shipment.  
+        /// Gets specific number of package adapters for the shipment.
         /// </summary>
         public abstract IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages);
 

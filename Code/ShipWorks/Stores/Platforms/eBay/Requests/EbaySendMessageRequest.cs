@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
@@ -14,6 +15,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
     {
         AddMemberMessageAAQToPartnerRequestType request;
 
+        [NDependIgnoreTooManyParams]
         public EbaySendMessageRequest(EbayToken token, long itemID, string buyerID, QuestionTypeCodeType messageType, string subject, string message, bool copySender)
             : base(token, "AddMemberMessageAAQToPartner")
         {

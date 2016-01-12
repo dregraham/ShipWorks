@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Connection;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.FileTransfer
 {
@@ -47,6 +47,8 @@ namespace ShipWorks.FileTransfer
             securityMethod.SelectedIndex = ftpAccount.SecurityType;
             previousSecurityType = security;
 
+            reuseControlConnectionSession.Checked = ftpAccount.ReuseControlConnectionSession;
+
             transferMethod.SelectedIndex = ftpAccount.Passive ? 1 : 0;
             transferMethod.Enabled = security != FtpSecurityType.Sftp;
         }
@@ -57,7 +59,9 @@ namespace ShipWorks.FileTransfer
         private void OnChangeSecureConnection(object sender, EventArgs e)
         {
             FtpSecurityType security = (FtpSecurityType) securityMethod.SelectedIndex;
+
             transferMethod.Enabled = security != FtpSecurityType.Sftp;
+            reuseControlConnectionSession.Enabled = security == FtpSecurityType.Explicit;
 
             if (port.Text == FtpUtility.GetDefaultPort(previousSecurityType).ToString(CultureInfo.InvariantCulture))
             {
@@ -100,6 +104,12 @@ namespace ShipWorks.FileTransfer
             account.SecurityType = securityMethod.SelectedIndex;
 
             account.Passive = transferMethod.SelectedIndex == 1;
+
+            // Only save if TLS Explicit has been selected
+            if ((FtpSecurityType) securityMethod.SelectedIndex == FtpSecurityType.Explicit)
+            {
+                account.ReuseControlConnectionSession = reuseControlConnectionSession.Checked;
+            }
 
             return true;
         }

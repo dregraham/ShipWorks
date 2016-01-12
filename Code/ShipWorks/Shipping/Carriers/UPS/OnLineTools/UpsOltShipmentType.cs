@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -16,7 +11,6 @@ using System.Drawing.Imaging;
 using ShipWorks.Data;
 using System.Drawing;
 using ShipWorks.Data.Model;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
@@ -29,29 +23,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode
-        {
-            get { return ShipmentTypeCode.UpsOnLineTools; }
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.UpsOnLineTools;
 
         /// <summary>
         /// Returns are supported for Online Tools
         /// </summary>
-        public override bool SupportsReturns
-        {
-            get
-            {
-                return true;
-            }
-        }
-        
+        public override bool SupportsReturns => true;
+
         /// <summary>
         /// Supports getting counter rates.
         /// </summary>
-        public override bool SupportsCounterRates
-        {
-            get { return true; }
-        }
+        public override bool SupportsCounterRates => true;
 
         /// <summary>
         /// Create the settings control for UPS
@@ -81,44 +63,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public override Editing.ReturnsControlBase CreateReturnsControl()
         {
             return new UpsOltReturnsControl();
-        }
-
-        /// <summary>
-        /// Process the UPS shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            try
-            {
-                // Call the base class for setting default values as needed based on the service/package type of the shipment
-                base.ProcessShipment(shipment);
-
-                UpsOltShipmentValidator upsOltShipmentValidator = new UpsOltShipmentValidator();
-
-                upsOltShipmentValidator.ValidateShipment(shipment);
-
-                UpsServicePackageTypeSetting.Validate(shipment);
-                UpsApiShipClient.ProcessShipment(shipment);
-            }
-            catch (UpsApiException ex)
-            {
-                string message = ex.Message;
-
-                // find the "XML document is well formed but not valid" error
-                if (ex.ErrorCode == "10002" && shipment.ReturnShipment && !String.IsNullOrEmpty(ex.ErrorLocation))
-                {
-                    if (String.Compare(ex.ErrorLocation, "ShipmentConfirmRequest/Shipment/Package/Description", StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        message = "The return shipment's Contents is required.";
-                    }
-                }
-
-                throw new ShippingException(message, ex);
-            }
-            catch (CarrierException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
         }
 
         /// <summary>

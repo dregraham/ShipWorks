@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// <summary>
     /// i-parce Profile Control
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class iParcelProfileControl : ShippingProfileControlBase
     {
         /// <summary>

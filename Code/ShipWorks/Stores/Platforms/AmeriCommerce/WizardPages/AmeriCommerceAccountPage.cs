@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
@@ -30,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
         /// <summary>
         /// Moving to the next wizard page
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
             AmeriCommerceStoreEntity store = GetStore<AmeriCommerceStoreEntity>();

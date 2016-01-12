@@ -1,38 +1,32 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.FactoryClasses;
-using System.Data;
-using ShipWorks.Data;
-using System.Data.SqlClient;
-using ShipWorks.Data.Adapter.Custom;
-using log4net;
-using ShipWorks.Data.Adapter;
-using ShipWorks.Filters.Management;
 using System.ComponentModel;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions.Special;
-using System.Diagnostics;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Filters.Content.SqlGeneration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using Interapptive.Shared;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.SqlGeneration;
+using ShipWorks.Filters.Management;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Data;
-using ShipWorks.Editions;
 
 namespace ShipWorks.Filters
 {
     /// <summary>
     /// Provides functionality for effeciently loading filter layouts
     /// </summary>
+    [NDependIgnoreLongTypes]
     public class FilterLayoutContext
     {
         // Logger
@@ -146,7 +140,7 @@ namespace ShipWorks.Filters
             ExistingConnectionScope.ExecuteWithAdapter(sqlAdapter => sqlAdapter.FetchTypedList(resultFields, result, null));
 
             // Load all the layouts
-            foreach (long layoutID in result.Rows.Cast<DataRow>().Select(r => (long)r[0]))
+            foreach (long layoutID in result.Rows.Cast<DataRow>().Select(r => (long) r[0]))
             {
                 LoadLayout(layoutID);
             }
@@ -263,7 +257,7 @@ namespace ShipWorks.Filters
                 cmd.CommandText = "SELECT dbo.GetFilterNodeLevels(@FilterLayoutID)";
                 cmd.Parameters.AddWithValue("@FilterLayoutID", layoutID);
 
-                return (int)SqlCommandProvider.ExecuteScalar(cmd);
+                return (int) SqlCommandProvider.ExecuteScalar(cmd);
             });
         }
 
@@ -327,10 +321,10 @@ namespace ShipWorks.Filters
                 return null;
             }
 
-            // For the sake of making this method do what is usually expected, we also go outside of what is actually loaded and try to 
+            // For the sake of making this method do what is usually expected, we also go outside of what is actually loaded and try to
             // load local nodes
             // See if we can load it directly if its a quick filter
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 PrefetchPath2 prefetch = new PrefetchPath2(EntityType.FilterNodeEntity);
                 prefetch.Add(FilterNodeEntity.PrefetchPathFilterSequence).SubPath.Add(FilterSequenceEntity.PrefetchPathFilter);
@@ -483,7 +477,7 @@ namespace ShipWorks.Filters
         {
             try
             {
-                bool filterDefinitionChanged = filter.Fields[(int)FilterFieldIndex.Definition].IsChanged || filter.Fields[(int)FilterFieldIndex.State].IsChanged;
+                bool filterDefinitionChanged = filter.Fields[(int) FilterFieldIndex.Definition].IsChanged || filter.Fields[(int) FilterFieldIndex.State].IsChanged;
 
                 // Fetch list of nodes befor refetching.
                 List<FilterNodeEntity> nodesToUpdate = GetNodesAffectedByDefinition(filter);
@@ -498,7 +492,7 @@ namespace ShipWorks.Filters
 
                 // Grab the nodes again after refetch.
                 nodesToUpdate = GetNodesAffectedByDefinition(filter);
-                
+
                 // Go through each node that needs its sql updated
                 foreach (FilterNodeEntity node in nodesToUpdate)
                 {
@@ -569,10 +563,10 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Regenerates the filter sql for all filters in the database.  This is used by the database updater anytime there is a schema change.  
-        /// 
+        /// Regenerates the filter sql for all filters in the database.  This is used by the database updater anytime there is a schema change.
+        ///
         /// If there are outstanding "Search" filters they will be regnerated but not calculated.  This is b\c when regenerating the will be marked as needing initial counts,
-        /// but the search engine and not the filter update engine is supposed to be responsible for search filter initial counts.  So in that case, the search results will just 
+        /// but the search engine and not the filter update engine is supposed to be responsible for search filter initial counts.  So in that case, the search results will just
         /// always be spinning until the user canceled or updated the search.  That said, given we only use this during upgrade, that shouldn't even really be possible.
         /// </summary>
         public void RegenerateAllFilters(SqlAdapter adapter)
@@ -594,11 +588,11 @@ namespace ShipWorks.Filters
 
             // We have to make sure and do "Quick Filters" and "Search" too, which will not be already in our context.  See the comments on the function summary
             // for information about the Search filters
-            FilterNodeCollection localNodes = FilterNodeCollection.Fetch(adapter, 
-                
+            FilterNodeCollection localNodes = FilterNodeCollection.Fetch(adapter,
+
                 // Quick filters
-                FilterNodeFields.Purpose == (int) FilterNodePurpose.Quick | 
-                
+                FilterNodeFields.Purpose == (int) FilterNodePurpose.Quick |
+
                 // Or search filters that are real (not the placeholders)
                 (FilterNodeFields.Purpose == (int) FilterNodePurpose.Search & FilterNodeFields.FilterNodeID > 0), prefetch);
 
@@ -728,7 +722,7 @@ namespace ShipWorks.Filters
                 {
                     childNodes.AddRange(GetChildFilterNodes(childNode));
                 }
-                
+
                 // Then add the folder itself
                 childNodes.Add(childNode);
             }
@@ -742,7 +736,7 @@ namespace ShipWorks.Filters
         /// </summary>
         public List<FilterNodeEntity> AddFilter(FilterEntity filter, FilterNodeEntity parentNode, int position)
         {
-            using (SqlAdapter adapter = new SqlAdapter(true))
+            using (SqlAdapter adapter = SqlAdapter.Create(true))
             {
                 List<FilterNodeEntity> result = AddFilter(filter, parentNode, position, adapter);
 
@@ -766,7 +760,7 @@ namespace ShipWorks.Filters
             // each link its parent has.  But Move will take care of that.
             FilterNodeEntity filterNode = new FilterNodeEntity();
             filterNode.FilterSequence = sequence;
-            filterNode.Filter.State = (int)FilterState.Enabled;
+            filterNode.Filter.State = (int) FilterState.Enabled;
 
             // Since we don't exist anywhere yet, this doesnt actually add a link, its the first one
             return AddNodeToParent(filterNode, parentNode, position, adapter);
@@ -810,9 +804,10 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Adds the given node as a child of the specified parent.  If move is true, then the node is moved to the target location.  Any soft-links from the 
+        /// Adds the given node as a child of the specified parent.  If move is true, then the node is moved to the target location.  Any soft-links from the
         /// original location are deleted.  If move is false, a copy is made, and all original nodes are left as they were.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private List<FilterNodeEntity> SetNodeToParent(FilterNodeEntity filterNode, FilterNodeEntity parentNode, int position, bool move, SqlAdapter adapter)
         {
             FilterEntity filter = filterNode.Filter;
@@ -904,7 +899,7 @@ namespace ShipWorks.Filters
                         FilterNodeEntity nodeToInsert = new FilterNodeEntity();
                         nodeToInsert.FilterSequence = sequenceToInsert;
                         nodeToInsert.Created = DateTime.UtcNow;
-                        nodeToInsert.Purpose = (int)FilterNodePurpose.Standard;
+                        nodeToInsert.Purpose = (int) FilterNodePurpose.Standard;
 
                         childNode = nodeToInsert;
                     }
@@ -1072,6 +1067,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Delete the specified link using the given adapter
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void DeleteLink(FilterSequenceEntity sequence, SqlAdapter adapter)
         {
             FilterEntity filter = sequence.Filter;
@@ -1259,7 +1255,7 @@ namespace ShipWorks.Filters
                 adapter.Commit();
             }
         }
-        
+
         /// <summary>
         /// Move the node up, using teh specified adapter
         /// </summary>
@@ -1352,7 +1348,7 @@ namespace ShipWorks.Filters
 
                 // Rethrow, if the translate didnt
                 throw;
-            }    
+            }
         }
 
         /// <summary>
@@ -1504,7 +1500,7 @@ namespace ShipWorks.Filters
                 linkedNode.ParentNode = linkedParentNode;
                 linkedNode.FilterSequence = node.FilterSequence;
                 linkedNode.Created = DateTime.UtcNow;
-                linkedNode.Purpose = (int)FilterNodePurpose.Standard;
+                linkedNode.Purpose = (int) FilterNodePurpose.Standard;
 
                 CreateSoftLinks(node.ChildNodes, linkedNode, adapter);
 

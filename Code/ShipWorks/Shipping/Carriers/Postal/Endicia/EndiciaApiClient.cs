@@ -32,6 +32,7 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -42,10 +43,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Wraps access to the Endicia API
     /// </summary>
+    [NDependIgnoreLongTypes]
     public class EndiciaApiClient
     {
         private readonly ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
-        private readonly LogEntryFactory logEntryFactory;
+        private readonly ILogEntryFactory logEntryFactory;
         private readonly ICertificateInspector certificateInspector;
         readonly ILog log = LogManager.GetLogger(typeof(EndiciaApiClient));
 
@@ -70,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="accountRepository">The account repository.</param>
         /// <param name="logEntryFactory">The log entry factory.</param>
         /// <param name="certificateInspector">The certificate inspector.</param>
-        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
+        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
@@ -203,6 +205,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Process the given shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public void ProcessShipment(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             PostalShipmentEntity postal = shipment.Postal;
@@ -643,7 +647,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             EndiciaAccountEntity account = accountRepository.GetAccount(postal.Endicia.EndiciaAccountID);
             if (account == null)
             {
-                throw new EndiciaException("No Endicia account is selected for the shipment.");
+                throw new EndiciaException($"No {EnumHelper.GetDescription((ShipmentTypeCode)postal.Shipment.ShipmentType)} account is selected for the shipment.");
             }
             else if (account.IsDazzleMigrationPending)
             {
@@ -818,6 +822,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get postal rates for the given shipment for all possible mail classes and rates.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public List<RateResult> GetRatesFast(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             PostalShipmentEntity postal = shipment.Postal;
@@ -1109,6 +1115,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get postal rates for the given shipment for all possible mail classes and rates.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         public List<RateResult> GetRatesSlow(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             List<RateResult> results = new List<RateResult>();
@@ -1282,6 +1290,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the postal rate for the given shipment, service, and confirmation selection.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private RateResult GetRate(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType, PostalConfirmationType confirmation)
         {
             PostalShipmentEntity postal = shipment.Postal;

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
-using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {
@@ -30,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
             ShippingManager.EnsureShipmentLoaded(shipment);
-            return new List<IPackageAdapter> {new OtherPackageAdapter(shipment)};
+            return new List<IPackageAdapter> { new OtherPackageAdapter(shipment) };
         }
 
         /// <summary>
@@ -46,11 +45,11 @@ namespace ShipWorks.Shipping.Carriers.Other
             ShipmentTypeDataService.LoadProfileData(profile, "Other", typeof(OtherProfileEntity), refreshIfPresent);
 
         /// <summary>
-        /// ShipWorks typically auto-updates the ShipDate on unprocessed shipments to be Today at 
+        /// ShipWorks typically auto-updates the ShipDate on unprocessed shipments to be Today at
         /// the earliest.  But the use-case for Other shipments is a bit different, where people
         /// manually enter shipment details, often occurring in the past.
         /// </summary>
-        protected override void UpdateShipmentShipDate(ShipmentEntity shipment)
+        protected override void UpdateShipmentShipDate(ShipmentEntity shipment, DateTime now)
         {
             // nothing
         }
@@ -127,22 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
         protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer() =>
-			new OtherShipmentProcessingSynchronizer();
-
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            if (string.IsNullOrWhiteSpace(shipment.Other.Carrier))
-            {
-                throw new ShippingException("No carrier is specified.");
-            }
-
-            if (string.IsNullOrWhiteSpace(shipment.Other.Service))
-            {
-                throw new ShippingException("No service is specified.");
-            }
-        }
+            new OtherShipmentProcessingSynchronizer();
 
         /// <summary>
         /// Create the XML input to the XSL engine

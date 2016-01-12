@@ -101,7 +101,8 @@ namespace ShipWorks.UI.Controls.Html.Behaviors
         #endregion
 
         #region IHTMLPainter
-        
+
+        [NDependIgnoreTooManyParams]
         public void Draw(
             int leftBounds, 
             int topBounds, 

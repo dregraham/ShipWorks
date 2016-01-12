@@ -16,6 +16,7 @@ using ShipWorks.Common.Threading;
 using System.Diagnostics;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Collections;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -88,6 +89,7 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
         /// <summary>
         /// Perform the deletion
         /// </summary>
+        [NDependIgnoreLongMethod]
         void BackgroundPerformDelete(object sender, DoWorkEventArgs e)
         {
             Stopwatch timer = new Stopwatch();

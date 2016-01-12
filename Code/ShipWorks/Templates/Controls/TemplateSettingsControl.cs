@@ -24,12 +24,14 @@ using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
 using Divelements.SandGrid;
+using Interapptive.Shared;
 
 namespace ShipWorks.Templates.Controls
 {
     /// <summary>
     /// UserControl for editing template settings
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class TemplateSettingsControl : UserControl
     {
         TemplateEntity template;
@@ -362,6 +364,7 @@ namespace ShipWorks.Templates.Controls
         /// <summary>
         /// Load the UI based on the current number of stores
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadEmailSettingsMultiStores()
         {
             // Save the previous selection (if any)
@@ -558,6 +561,7 @@ namespace ShipWorks.Templates.Controls
         /// <summary>
         /// Update the UI that is dependant on template type
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void UpdateTemplateTypeUI()
         {
             TemplateType type = (TemplateType) template.Type;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Services.Protocols;
 using System.Xml;
 using System.Xml.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -52,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         private const int MaxCustomsItemDescriptionLength = 60;
 
         private readonly ILog log;
-        private readonly LogEntryFactory logEntryFactory;
+        private readonly ILogEntryFactory logEntryFactory;
         private readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
 
         // Maps USPS usernames to their latest authenticator tokens
@@ -79,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1UspsWebClient" /> class.
         /// </summary>
-        public Express1UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
+        public Express1UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
@@ -274,6 +275,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Get the rates for the given shipment based on its settings
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public List<RateResult> GetRates(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
@@ -622,6 +625,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// The internal ProcessShipment implementation intended to be wrapped by the auth wrapper
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
             Guid uspsGuid;

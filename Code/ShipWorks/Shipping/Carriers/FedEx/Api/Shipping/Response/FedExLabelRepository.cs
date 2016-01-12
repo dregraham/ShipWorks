@@ -1,8 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Pdf;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
@@ -40,6 +40,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         /// </summary>
         /// <param name="reply">ProcessShipmentReply from FedEx</param>
         /// <param name="shipment">Shipment whose entity information we sent to FedEx </param>
+        [NDependIgnoreLongMethod]
         private void SavePackageLabels(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
         {
             string certificationId = GetCertificationId(reply);
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                     // Save the primary label image
                     if (packageReply.Label != null)
                     {
-                        SaveLabel("LabelImage", packageReply.Label, package.FedExPackageID, certificationId);                        
+                        SaveLabel("LabelImage", packageReply.Label, package.FedExPackageID, certificationId);
                     }
 
                     // Package level COD
@@ -123,11 +124,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
             if (reply.CompletedShipmentDetail.AssociatedShipments != null)
             {
                 using (SqlAdapter adapter = new SqlAdapter())
+                {
                     foreach (AssociatedShipmentDetail associatedShipment in reply.CompletedShipmentDetail.AssociatedShipments
                                                                                  .Where(a => a.Label != null && a.Label.Type == ReturnedShippingDocumentType.COD_RETURN_LABEL))
                     {
                         SaveLabel("COD", associatedShipment.Label, shipment.ShipmentID, GetCertificationId(reply));
                     }
+                }
             }
         }
 

@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using System.Linq;
 using System.Data.SqlClient;
+using Interapptive.Shared;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Filters.Management
@@ -51,6 +52,7 @@ namespace ShipWorks.Filters.Management
         /// <summary>
         /// Initialization
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;

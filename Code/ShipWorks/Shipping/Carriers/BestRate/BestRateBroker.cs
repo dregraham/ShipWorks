@@ -232,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             return Task<RateGroup>.Factory.StartNew(() =>
             {
-                using (BestRateScope context = new BestRateScope())
+                using (new BestRateScope())
                 {
                     return GetRatesForAccount(shipment, a, brokerExceptions);
                 }

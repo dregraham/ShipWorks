@@ -47,9 +47,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnAmazonRatesRetrieved(AmazonRatesRetrievedMessage amazonRatesRetrievedMessage)
         {
-            RateGroup rateGroup = amazonRatesRetrievedMessage.RateGroup;
-
-            List<AmazonRateTag> services = rateGroup.Rates.Select(r => (AmazonRateTag)r.Tag).ToList();
+            List<AmazonRateTag> services = new List<AmazonRateTag>(); 
+            foreach (RateResult rate in amazonRatesRetrievedMessage.RateGroup.Rates)
+            {
+                services.Add((AmazonRateTag)rate.Tag);
+            }
 
             if (!services.Any())
             {

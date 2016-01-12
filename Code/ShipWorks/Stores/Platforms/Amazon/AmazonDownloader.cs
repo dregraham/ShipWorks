@@ -13,6 +13,7 @@ using log4net;
 using Interapptive.Shared.Utility;
 using System.Xml.XPath;
 using System.Xml;
+using Interapptive.Shared;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -39,6 +40,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Start the download from Amazon.com
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override void Download()
         {
             try
@@ -319,6 +321,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Load address data
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadAddresses(AmazonOrderEntity order, XPathNavigator xpath)
         {
             List<string> addressLines = new List<string>();

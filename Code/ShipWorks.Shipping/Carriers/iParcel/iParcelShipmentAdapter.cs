@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Constructor
         /// </summary>
-        public iParcelShipmentAdapter(ShipmentEntity shipment, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager) : base(shipment, shipmentTypeFactory, customsManager)
+        public iParcelShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.IParcel, nameof(shipment.IParcel));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));

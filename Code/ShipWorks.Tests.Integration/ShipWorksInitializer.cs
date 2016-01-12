@@ -1,22 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Win32;
-using ShipWorks.Actions;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
-using ShipWorks.Stores;
+using ShipWorks.Startup;
 using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
-using log4net;
-using ShipWorks.ApplicationCore.ExecutionMode;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Startup;
 
 namespace ShipWorks.Tests.Integration.MSTest
 {
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         /// Initializes a new instance of the <see cref="ShipWorksInitializer"/> class.
         /// </summary>
         public ShipWorksInitializer()
-            : this (null, null)
+            : this(null, null)
         { }
 
         /// <summary>
@@ -44,11 +43,11 @@ namespace ShipWorks.Tests.Integration.MSTest
         {
             Guid swInstance = GetShipWorksInstance();
 
-            if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)
+            if (ShipWorksSession.ComputerID == Guid.Empty)
             {
                 ContainerInitializer.Initialize();
 
-                ApplicationCore.ShipWorksSession.Initialize(swInstance);
+                ShipWorksSession.Initialize(swInstance);
                 SqlSession.Initialize();
 
                 Console.WriteLine(SqlSession.Current.Configuration.DatabaseName);
@@ -57,12 +56,18 @@ namespace ShipWorks.Tests.Integration.MSTest
                 DataProvider.InitializeForApplication();
                 AuditProcessor.InitializeForApplication();
 
-                ShippingSettings.InitializeForCurrentDatabase();
                 ShippingProfileManager.InitializeForCurrentSession();
                 ShippingDefaultsRuleManager.InitializeForCurrentSession();
-                ShippingProviderRuleManager.InitializeForCurrentSession();
 
-                StoreManager.InitializeForCurrentSession();
+                foreach (IInitializeForCurrentDatabase service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
+                {
+                    service.InitializeForCurrentDatabase(executionMode);
+                }
+
+                foreach (IInitializeForCurrentSession service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
+                {
+                    service.InitializeForCurrentSession();
+                }
 
                 UserManager.InitializeForCurrentUser();
 
@@ -77,14 +82,11 @@ namespace ShipWorks.Tests.Integration.MSTest
                 {
                     throw new Exception("A 'shipworks' account with password 'shipworks' needs to be created.");
                 }
-                ;
 
                 ShippingManager.InitializeForCurrentDatabase();
                 LogSession.Initialize();
 
                 TemplateManager.InitializeForCurrentSession();
-
-                ActionManager.InitializeForCurrentSession();
             }
         }
 
@@ -124,8 +126,11 @@ namespace ShipWorks.Tests.Integration.MSTest
                     case "benz-pc":
                         instance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
                         break;
-                    case "mirza-pc":
-                        instance = Guid.Parse("{4c5c2b9a-32d3-4314-a4f7-200000000000}");
+                    case "mirza-pc2":
+                        instance = Guid.Parse("{1231F4A9-640C-4E08-A52A-AE3B2C2FB864}");
+                        break;
+                    case "berger-pc":
+                        instance = Guid.Parse("{AABB7285-a889-46af-87b8-69c10cdbAABB}");
                         break;
                     default:
                         throw new ApplicationException("Enter your machine and ShipWorks instance GUID in the ShipWorksInitializer");

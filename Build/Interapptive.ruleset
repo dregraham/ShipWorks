@@ -195,5 +195,8 @@
     <Rule Id="S2345" Action="Info" />
     <Rule Id="S2346" Action="Info" />
     <Rule Id="S2344" Action="Info" />
+    <Rule Id="S3220" Action="None" />
+    <Rule Id="S1449" Action="Info" />
+    <Rule Id="S3216" Action="Info" />
   </Rules>
 </RuleSet>

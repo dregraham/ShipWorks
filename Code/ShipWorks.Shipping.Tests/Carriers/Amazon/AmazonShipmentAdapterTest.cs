@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
     public class AmazonShipmentAdapterTest
     {
         readonly ShipmentEntity shipment;
-        private readonly Mock<IShipmentTypeFactory> shipmentTypeFactory;
+        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<AmazonShipmentType> shipmentTypeMock;
 
         public AmazonShipmentAdapterTest()
@@ -37,22 +37,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => false);
             shipmentTypeMock.Setup(b => b.IsDomestic(It.IsAny<ShipmentEntity>())).Returns(() => false);
 
-            shipmentTypeFactory = new Mock<IShipmentTypeFactory>();
-            shipmentTypeFactory.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
+            shipmentTypeManager = new Mock<IShipmentTypeManager>();
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentTypeMock.Object);
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(null, shipmentTypeFactory.Object));
-            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(new ShipmentEntity(), shipmentTypeFactory.Object));
+            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(null, shipmentTypeManager.Object));
+            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(new ShipmentEntity(), shipmentTypeManager.Object));
             Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(shipment, null));
         }
 
         [Fact]
         public void AccountId_ReturnsShipmentValue()
         {
-            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
             Assert.Null(testObject.AccountId);
         }
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData(10009238)]
         public void AccountId_StoresSpecifiedValue_WhenValueIsValid(long value)
         {
-            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
             testObject.AccountId = value;
             Assert.Equal(null, testObject.AccountId);
         }
@@ -70,21 +70,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Shipment_IsNotNull()
         {
-            var testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            var testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
             Assert.NotNull(testObject.Shipment);
         }
 
         [Fact]
         public void ShipmentTypeCode_IsAmazon()
         {
-            var testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            var testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
             Assert.Equal(ShipmentTypeCode.Amazon, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void SupportsAccounts_IsFalse()
         {
-            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
 
             Assert.False(testObject.SupportsAccounts);
         }
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void SupportsMultiplePackages_IsFalse()
         {
-            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
             Assert.False(testObject.SupportsMultiplePackages);
         }
 
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             shipment.OriginCountryCode = "US";
             shipment.ShipCountryCode = "US";
 
-            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
             Assert.False(testObject.IsDomestic);
         }
 
@@ -112,14 +112,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             shipment.OriginCountryCode = "US";
             shipment.ShipCountryCode = "CA";
 
-            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
             Assert.False(testObject.IsDomestic);
         }
 
         [Fact]
         public void UpdateDynamicData_DelegatesToShipmentType()
         {
-            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
             testObject.UpdateDynamicData();
 
             shipmentTypeMock.Verify(b => b.UpdateDynamicShipmentData(It.IsAny<ShipmentEntity>()), Times.Once);
@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
             errors.Add(shipment, new Exception("test"));
 
-            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            AmazonShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
 
             Assert.NotNull(testObject.UpdateDynamicData());
             Assert.Equal(0, testObject.UpdateDynamicData().Count);
@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void SupportsPackageTypes_IsFalse()
         {
-            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
 
             Assert.False(testObject.SupportsPackageTypes);
         }
@@ -149,14 +149,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void ShipDate_ReturnsShipmentValue()
         {
-            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
         }
 
         [Fact]
         public void ShipDate_IsUpdated()
         {
-            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeFactory.Object);
+            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
 
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
