@@ -16,7 +16,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
     /// </summary>
     public class CustomerLicenseActivationViewModel : ICustomerLicenseActivationViewModel
     {
-        private readonly CustomerLicense customerLicense;
+        private readonly ICustomerLicense customerLicense;
         private readonly IUserService userManager;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -26,9 +26,9 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(CustomerLicense customerLicense, IUserService userManager)
+        public CustomerLicenseActivationViewModel(Func<string,ICustomerLicense> customerLicenseFactory, IUserService userManager)
         {
-            this.customerLicense = customerLicense;
+            this.customerLicense = customerLicenseFactory(string.Empty);
             this.userManager = userManager;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
