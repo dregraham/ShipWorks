@@ -11,6 +11,8 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using Autofac;
 
 namespace ShipWorks.Users.Logon
 {
@@ -73,13 +75,17 @@ namespace ShipWorks.Users.Logon
                 name = (string) userlist.SelectedItem;
             }
 
-            if (UserSession.Logon(name, password.Text, automaticLogon.Checked))
+            IUserService userService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUserService>();
+
+            EnumResult<UserServiceLogonResultType> logonResult = userService.Logon(new LogonCredentials { Username = name, Password = password.Text, Remember = automaticLogon.Checked });
+
+            if (logonResult.Value == UserServiceLogonResultType.Success)
             {
                 DialogResult = DialogResult.OK;
             }
             else
             {
-                MessageHelper.ShowMessage(this, "Incorrect username or password.");
+                MessageHelper.ShowMessage(this, logonResult.Message);
             }
         }
 

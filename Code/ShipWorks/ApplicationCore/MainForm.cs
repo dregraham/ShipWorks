@@ -541,7 +541,17 @@ namespace ShipWorks
             // May already be logged on
             if (!UserSession.IsLoggedOn)
             {
-                if (!UserSession.LogonLastUser())
+                IUserService userService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUserService>();
+
+                EnumResult<UserServiceLogonResultType> logonResult = userService.Logon();
+
+                if(logonResult.Value == UserServiceLogonResultType.TangoAccountDisabled)
+                {
+                    MessageHelper.ShowError(this, logonResult.Message);
+                    return;
+                }
+
+                if(logonResult.Value == UserServiceLogonResultType.InvalidCredentials)
                 {
                     using (LogonDlg dlg = new LogonDlg())
                     {

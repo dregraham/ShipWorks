@@ -93,6 +93,7 @@ namespace ShipWorks.ApplicationCore
                 .AsSelf();
 
             builder.RegisterType<LicenseFactory>()
+                .AsImplementedInterfaces()
                 .AsSelf();
 
             builder.RegisterType<CustomerLicenseWriter>()

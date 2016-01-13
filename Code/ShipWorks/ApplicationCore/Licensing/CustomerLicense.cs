@@ -16,6 +16,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
+        public CustomerLicense(ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, Func<Type, ILog> logFactory)
+            :this(string.Empty, tangoWebClient, licenseWriter, logFactory)
+        {
+            this.tangoWebClient = tangoWebClient;
+            this.licenseWriter = licenseWriter;
+            log = logFactory(typeof(CustomerLicense));
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public CustomerLicense(string key, ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, Func<Type, ILog> logFactory)
         {
             Key = key;

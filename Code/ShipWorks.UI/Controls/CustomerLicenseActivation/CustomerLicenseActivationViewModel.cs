@@ -16,7 +16,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
     /// </summary>
     public class CustomerLicenseActivationViewModel : ICustomerLicenseActivationViewModel
     {
-        private readonly ICustomerLicense customerLicense;
+        private readonly CustomerLicense customerLicense;
         private readonly IUserService userManager;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -26,7 +26,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(ICustomerLicense customerLicense, IUserService userManager)
+        public CustomerLicenseActivationViewModel(CustomerLicense customerLicense, IUserService userManager)
         {
             this.customerLicense = customerLicense;
             this.userManager = userManager;
@@ -94,7 +94,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
             {
                 try
                 {
-                    // Activate the software using the given username/password
+                    // Activate the software using an empty license with the given username/password
                     customerLicense.Activate(Email, DecryptedPassword);
                     userManager.CreateUser(Email, DecryptedPassword, true);
                 }
