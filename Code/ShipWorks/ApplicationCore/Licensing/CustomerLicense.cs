@@ -85,16 +85,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Returns True if customer is allowed to logon.
-        /// </summary>
-        public bool AllowsLogOn()
-        {
-            Refresh();
-
-            return !IsDisabled;
-        }
-
-        /// <summary>
         /// Refresh the License capabilities from Tango
         /// </summary>
         public void Refresh()

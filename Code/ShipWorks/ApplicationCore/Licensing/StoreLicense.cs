@@ -51,10 +51,5 @@ namespace ShipWorks.ApplicationCore.Licensing
                 DisabledReason = ex.Message;
             }
         }
-
-        /// <summary>
-        /// Store Licenses always allow logon.
-        /// </summary>
-        public bool AllowsLogOn() => true;
     }
 }

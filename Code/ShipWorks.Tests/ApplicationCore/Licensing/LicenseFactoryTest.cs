@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Setup(r => r.Read())
                     .Returns(string.Empty);
 
-                LicenseFactory testObject = mock.Create<LicenseFactory>();
+                LicenseService testObject = mock.Create<LicenseService>();
 
                 ILicense license = testObject.GetLicense(new StoreEntity() {License = "40"});
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Setup(r => r.Read())
                     .Returns((string) null);
 
-                LicenseFactory testObject = mock.Create<LicenseFactory>();
+                LicenseService testObject = mock.Create<LicenseService>();
 
                 ILicense license = testObject.GetLicense(new StoreEntity {License = "40"});
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Setup(r => r.Read())
                     .Returns("42");
 
-                LicenseFactory testObject = mock.Create<LicenseFactory>();
+                LicenseService testObject = mock.Create<LicenseService>();
 
                 ILicense license = testObject.GetLicense(new StoreEntity());
 
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Setup(r => r.Read())
                     .Returns("42");
 
-                LicenseFactory testObject = mock.Create<LicenseFactory>();
+                LicenseService testObject = mock.Create<LicenseService>();
 
                 ILicense license = testObject.GetLicense(new StoreEntity());
 
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Setup(m => m.GetEnabledStores())
                     .Returns(Enumerable.Repeat(new StoreEntity() {License = "42"}, 2));
 
-                LicenseFactory testObject = mock.Create<LicenseFactory>();
+                LicenseService testObject = mock.Create<LicenseService>();
 
                 ILicense[] licenses = testObject.GetLicenses().ToArray();
 
@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Setup(m => m.GetEnabledStores())
                     .Returns(Enumerable.Repeat(new StoreEntity(), 2));
 
-                LicenseFactory testObject = mock.Create<LicenseFactory>();
+                LicenseService testObject = mock.Create<LicenseService>();
 
                 ILicense[] licenses = testObject.GetLicenses().ToArray();
 

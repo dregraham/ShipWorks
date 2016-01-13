@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Users
                 List<ILicense> licenses = new List<ILicense>();
                 licenses.Add(customerLicense.Object);
 
-                Mock<ILicenseFactory> licenseFactory = mock.Mock<ILicenseFactory>();
+                Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
 
                 licenseFactory.Setup(lf => lf.GetLicenses())
                     .Returns(licenses);
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Users
                     .Returns(true);
                 List<ILicense> licenses = new List<ILicense>();
                 licenses.Add(customerLicense.Object);
-                Mock<ILicenseFactory> licenseFactory = mock.Mock<ILicenseFactory>();
+                Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
                 licenseFactory.Setup(lf => lf.GetLicenses())
                     .Returns(licenses);
 
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Users
                     .Returns(true);
                 List<ILicense> licenses = new List<ILicense>();
                 licenses.Add(customerLicense.Object);
-                Mock<ILicenseFactory> licenseFactory = mock.Mock<ILicenseFactory>();
+                Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
                 licenseFactory.Setup(lf => lf.GetLicenses())
                     .Returns(licenses);
 
@@ -117,7 +117,7 @@ namespace ShipWorks.Tests.Users
                 List<ILicense> licenses = new List<ILicense>();
                 licenses.Add(customerLicense.Object);
 
-                Mock<ILicenseFactory> licenseFactory = mock.Mock<ILicenseFactory>();
+                Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
 
                 licenseFactory.Setup(lf => lf.GetLicenses())
                     .Returns(licenses);
@@ -142,7 +142,7 @@ namespace ShipWorks.Tests.Users
                     .Returns(true);
                 List<ILicense> licenses = new List<ILicense>();
                 licenses.Add(customerLicense.Object);
-                Mock<ILicenseFactory> licenseFactory = mock.Mock<ILicenseFactory>();
+                Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
                 licenseFactory.Setup(lf => lf.GetLicenses())
                     .Returns(licenses);
 
@@ -168,7 +168,7 @@ namespace ShipWorks.Tests.Users
                     .Returns(true);
                 List<ILicense> licenses = new List<ILicense>();
                 licenses.Add(customerLicense.Object);
-                Mock<ILicenseFactory> licenseFactory = mock.Mock<ILicenseFactory>();
+                Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
                 licenseFactory.Setup(lf => lf.GetLicenses())
                     .Returns(licenses);
 

@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// Factory to create a License
     /// </summary>
-    public class LicenseFactory : ILicenseFactory
+    public class LicenseService : ILicenseService
     {
         private readonly Func<string, CustomerLicense> customerLicenseFactory;
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
@@ -20,7 +22,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
-        public LicenseFactory(ICustomerLicenseReader reader, Func<string, CustomerLicense> customerLicenseFactory, Func<StoreEntity, StoreLicense> storeLicenseFactory,  IStoreManager storeManager)
+        public LicenseService(ICustomerLicenseReader reader, Func<string, CustomerLicense> customerLicenseFactory, Func<StoreEntity, StoreLicense> storeLicenseFactory,  IStoreManager storeManager)
         {
             this.customerLicenseFactory = customerLicenseFactory;
             this.storeLicenseFactory = storeLicenseFactory;
@@ -50,6 +52,30 @@ namespace ShipWorks.ApplicationCore.Licensing
             return isLegacy
                 ? storeManager.GetEnabledStores().Select(GetLicense)
                 : new[] {customerLicenseFactory(customerKey)};
+        }
+
+        /// <summary>
+        /// Can the customer Logon?
+        /// </summary>
+        public EnumResult<AllowsLogOn> AllowsLogOn()
+        {
+            if (isLegacy)
+            {
+                return new EnumResult<AllowsLogOn>(Licensing.AllowsLogOn.Yes);
+            }
+
+            CustomerLicense customerLicense = customerLicenseFactory(customerKey);
+            customerLicense.Refresh();
+
+            if (customerLicense.IsDisabled)
+            {
+                return new EnumResult<AllowsLogOn>(Licensing.AllowsLogOn.No)
+                {
+                    Message = customerLicense.DisabledReason
+                };
+            }
+
+            return new EnumResult<AllowsLogOn>(Licensing.AllowsLogOn.Yes);
         }
     }
 }

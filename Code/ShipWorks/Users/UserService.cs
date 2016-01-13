@@ -14,12 +14,12 @@ namespace ShipWorks.Users
     public class UserService : IUserService
     {
         IUserSession userSession;
-        ILicenseFactory licenseFactory; 
+        ILicenseService licenseService; 
 
-        public UserService(IUserSession userSession, ILicenseFactory licenseFactory)
+        public UserService(IUserSession userSession, ILicenseService licenseService)
         {
             this.userSession = userSession;
-            this.licenseFactory = licenseFactory;
+            this.licenseService = licenseService;
         }
 
         /// <summary>
@@ -53,14 +53,13 @@ namespace ShipWorks.Users
         /// </summary>
         private EnumResult<UserServiceLogonResultType> Logon(Func<bool> loginAction)
         {
-            IEnumerable<ILicense> licenses = licenseFactory.GetLicenses();
-            ILicense disallowedLicense = licenses.FirstOrDefault(l => !l.AllowsLogOn());
-
-            if (disallowedLicense != null)
+            EnumResult<AllowsLogOn> allowsLogOn = licenseService.AllowsLogOn();
+            
+            if (allowsLogOn.Value == AllowsLogOn.No)
             {
                 return new EnumResult<UserServiceLogonResultType>(UserServiceLogonResultType.TangoAccountDisabled)
                 {
-                    Message = disallowedLicense.DisabledReason
+                    Message = allowsLogOn.Message
                 };
             }
 
