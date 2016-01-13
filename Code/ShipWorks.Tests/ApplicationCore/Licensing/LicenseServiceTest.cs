@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -12,7 +14,7 @@ using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
-    public class LicenseFactoryTest
+    public class LicenseServiceTest
     {
         [Fact]
         public void GetLicense_ReturnsStoreLicense_WhenLegacy()
@@ -61,7 +63,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 ILicense license = testObject.GetLicense(new StoreEntity());
 
-                Assert.IsType(typeof (CustomerLicense), license);
+                Assert.True(license is ICustomerLicense);
             }
         }
 
@@ -74,11 +76,21 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Setup(r => r.Read())
                     .Returns("42");
 
-                LicenseService testObject = mock.Create<LicenseService>();
+                Func<string, ICustomerLicense> customerLicenseFactory = s =>
+                {
+                    Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
+                    customerLicense
+                        .Setup(l => l.Key)
+                        .Returns("42");
+
+                    return customerLicense.Object;
+                };
+
+                LicenseService testObject = mock.Create<LicenseService>(new NamedParameter("customerLicenseFactory", customerLicenseFactory));
 
                 ILicense license = testObject.GetLicense(new StoreEntity());
 
-                Assert.Equal("42", ((CustomerLicense) license).Key);
+                Assert.Equal("42", license.Key);
             }
         }
 
@@ -123,7 +135,69 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 ILicense[] licenses = testObject.GetLicenses().ToArray();
 
                 Assert.Equal(1, licenses.Count());
-                Assert.IsType(typeof (CustomerLicense), licenses[0]);
+                Assert.True(licenses[0] is ICustomerLicense);
+            }
+        }
+
+        [Fact]
+        public void AllowsLogOn_ReturnsYes_WhenIsLegacy()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                // null customer key makes it legacy
+                mock.Mock<ICustomerLicenseReader>()
+                    .Setup(r => r.Read())
+                    .Returns((string) null);
+
+                LicenseService testObject = mock.Create<LicenseService>();
+
+                EnumResult<AllowsLogOn> allowsLogOn = testObject.AllowsLogOn();
+
+                Assert.Equal(AllowsLogOn.Yes, allowsLogOn.Value);
+            }
+        }
+
+        [Fact]
+        public void AllowsLogOn_ReturnsYes_WhenCustomerLicenseNotDisabled()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                // null customer key makes it legacy
+                mock.Mock<ICustomerLicenseReader>()
+                    .Setup(r => r.Read())
+                    .Returns("42");
+
+                mock.Mock<ICustomerLicense>(new NamedParameter("key", "someKey"))
+                    .Setup(l => l.IsDisabled)
+                    .Returns(false);
+
+                LicenseService testObject = mock.Create<LicenseService>();
+
+                EnumResult<AllowsLogOn> allowsLogOn = testObject.AllowsLogOn();
+
+                Assert.Equal(AllowsLogOn.Yes, allowsLogOn.Value);
+            }
+        }
+
+        [Fact]
+        public void AllowsLogOn_ReturnsNo_WhenCustomerLicenseDisabled()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                // null customer key makes it legacy
+                mock.Mock<ICustomerLicenseReader>()
+                    .Setup(r => r.Read())
+                    .Returns("42");
+
+                mock.Mock<ICustomerLicense>(new NamedParameter("key", "someKey"))
+                    .Setup(l => l.IsDisabled)
+                    .Returns(true);
+
+                LicenseService testObject = mock.Create<LicenseService>();
+
+                EnumResult<AllowsLogOn> allowsLogOn = testObject.AllowsLogOn();
+
+                Assert.Equal(AllowsLogOn.No, allowsLogOn.Value);
             }
         }
     }

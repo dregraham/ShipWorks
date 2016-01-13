@@ -4,7 +4,6 @@ using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Users;
 using ShipWorks.Users.Logon;
-using System.Collections.Generic;
 using Xunit;
 
 namespace ShipWorks.Tests.Users
@@ -18,27 +17,15 @@ namespace ShipWorks.Tests.Users
             {
                 LogonCredentials credentials = new LogonCredentials("foo", "bar", false);
 
-                Mock<ILicense> customerLicense = mock.Mock<ILicense>();
-
-                customerLicense.Setup(l => l.AllowsLogOn())
-                    .Returns(false);
-
-                customerLicense.Setup(l => l.DisabledReason)
-                    .Returns("Some Disabled Reason");
-
-                List<ILicense> licenses = new List<ILicense>();
-                licenses.Add(customerLicense.Object);
-
-                Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
-
-                licenseFactory.Setup(lf => lf.GetLicenses())
-                    .Returns(licenses);
+                Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
+                licenseService.Setup(s => s.AllowsLogOn())
+                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.No) {Message = "Some Disabled Reason"});
 
                 UserService userService = mock.Create<UserService>();
 
                 EnumResult<UserServiceLogonResultType> testobject = userService.Logon(credentials);
 
-                licenseFactory.Verify(f => f.GetLicenses(), Times.Once);
+                licenseService.Verify(f => f.AllowsLogOn(), Times.Once);
                 Assert.Equal("Some Disabled Reason", testobject.Message);
             }
         }
@@ -50,14 +37,9 @@ namespace ShipWorks.Tests.Users
             {
                 LogonCredentials credentials = new LogonCredentials("foo", "bar", false);
 
-                Mock<ILicense> customerLicense = mock.Mock<ILicense>();
-                customerLicense.Setup(l => l.AllowsLogOn())
-                    .Returns(true);
-                List<ILicense> licenses = new List<ILicense>();
-                licenses.Add(customerLicense.Object);
                 Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
-                licenseFactory.Setup(lf => lf.GetLicenses())
-                    .Returns(licenses);
+                licenseFactory.Setup(lf => lf.AllowsLogOn())
+                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.Yes));
 
                 Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.Logon(It.IsAny<LogonCredentials>()))
@@ -71,6 +53,7 @@ namespace ShipWorks.Tests.Users
                 Assert.Equal(UserServiceLogonResultType.Success, testobject.Value);
             }
         }
+
         [Fact]
         public void LogOnWithCredentials_Returns_IncorrectUsernameMessage_WhenLogonFails()
         {
@@ -78,14 +61,9 @@ namespace ShipWorks.Tests.Users
             {
                 LogonCredentials credentials = new LogonCredentials("foo", "bar", false);
 
-                Mock<ILicense> customerLicense = mock.Mock<ILicense>();
-                customerLicense.Setup(l => l.AllowsLogOn())
-                    .Returns(true);
-                List<ILicense> licenses = new List<ILicense>();
-                licenses.Add(customerLicense.Object);
                 Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
-                licenseFactory.Setup(lf => lf.GetLicenses())
-                    .Returns(licenses);
+                licenseFactory.Setup(lf => lf.AllowsLogOn())
+                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.Yes));
 
                 Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.Logon(It.IsAny<LogonCredentials>()))
@@ -106,27 +84,16 @@ namespace ShipWorks.Tests.Users
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<ILicense> customerLicense = mock.Mock<ILicense>();
-
-                customerLicense.Setup(l => l.AllowsLogOn())
-                    .Returns(false);
-
-                customerLicense.Setup(l => l.DisabledReason)
-                    .Returns("Some Disabled Reason");
-
-                List<ILicense> licenses = new List<ILicense>();
-                licenses.Add(customerLicense.Object);
-
                 Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
 
-                licenseFactory.Setup(lf => lf.GetLicenses())
-                    .Returns(licenses);
+                licenseFactory.Setup(lf => lf.AllowsLogOn())
+                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.No) {Message = "Some Disabled Reason"});
 
                 UserService userService = mock.Create<UserService>();
 
                 EnumResult<UserServiceLogonResultType> testobject = userService.Logon();
 
-                licenseFactory.Verify(f => f.GetLicenses(), Times.Once);
+                licenseFactory.Verify(f => f.AllowsLogOn(), Times.Once);
                 Assert.Equal(UserServiceLogonResultType.TangoAccountDisabled, testobject.Value);
                 Assert.Equal("Some Disabled Reason", testobject.Message);
             }
@@ -137,14 +104,10 @@ namespace ShipWorks.Tests.Users
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<ILicense> customerLicense = mock.Mock<ILicense>();
-                customerLicense.Setup(l => l.AllowsLogOn())
-                    .Returns(true);
-                List<ILicense> licenses = new List<ILicense>();
-                licenses.Add(customerLicense.Object);
                 Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
-                licenseFactory.Setup(lf => lf.GetLicenses())
-                    .Returns(licenses);
+                licenseFactory.Setup(lf => lf.AllowsLogOn())
+                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.Yes));
+
 
                 Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.LogonLastUser())
@@ -158,19 +121,15 @@ namespace ShipWorks.Tests.Users
                 Assert.Equal(UserServiceLogonResultType.Success, testobject.Value);
             }
         }
+
         [Fact]
         public void LogOn_Returns_IncorrectUsernameMessage_WhenLogonFails()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<ILicense> customerLicense = mock.Mock<ILicense>();
-                customerLicense.Setup(l => l.AllowsLogOn())
-                    .Returns(true);
-                List<ILicense> licenses = new List<ILicense>();
-                licenses.Add(customerLicense.Object);
                 Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
-                licenseFactory.Setup(lf => lf.GetLicenses())
-                    .Returns(licenses);
+                licenseFactory.Setup(lf => lf.AllowsLogOn())
+                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.Yes));
 
                 Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.LogonLastUser())

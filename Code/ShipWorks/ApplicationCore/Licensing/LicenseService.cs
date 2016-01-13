@@ -13,7 +13,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class LicenseService : ILicenseService
     {
-        private readonly Func<string, CustomerLicense> customerLicenseFactory;
+        private readonly Func<string, ICustomerLicense> customerLicenseFactory;
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
         private readonly bool isLegacy;
@@ -22,7 +22,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
-        public LicenseService(ICustomerLicenseReader reader, Func<string, CustomerLicense> customerLicenseFactory, Func<StoreEntity, StoreLicense> storeLicenseFactory,  IStoreManager storeManager)
+        public LicenseService(ICustomerLicenseReader reader, Func<string, ICustomerLicense> customerLicenseFactory, Func<StoreEntity, StoreLicense> storeLicenseFactory,  IStoreManager storeManager)
         {
             this.customerLicenseFactory = customerLicenseFactory;
             this.storeLicenseFactory = storeLicenseFactory;
@@ -49,9 +49,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         public IEnumerable<ILicense> GetLicenses()
         {
             // If Legacy, return store licenses for each store, else return a single customer license
-            return isLegacy
-                ? storeManager.GetEnabledStores().Select(GetLicense)
-                : new[] {customerLicenseFactory(customerKey)};
+            return isLegacy ?
+                storeManager.GetEnabledStores().Select(GetLicense) : 
+                new[] {customerLicenseFactory(customerKey)};
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 return new EnumResult<AllowsLogOn>(Licensing.AllowsLogOn.Yes);
             }
 
-            CustomerLicense customerLicense = customerLicenseFactory(customerKey);
+            ILicense customerLicense = customerLicenseFactory(customerKey);
             customerLicense.Refresh();
 
             if (customerLicense.IsDisabled)
