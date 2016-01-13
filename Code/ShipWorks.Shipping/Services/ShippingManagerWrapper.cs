@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping
                 ShippingManager.CreateShipment(order);
             }
 
-            return LoadFullShipmentGraph(orderID)
+            return order
                 .Shipments
                 .Select(shipmentAdapterFactory.Get);
         }

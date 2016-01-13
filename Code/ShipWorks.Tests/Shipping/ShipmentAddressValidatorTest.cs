@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping
             shipmentEntity = new ShipmentEntity(1031);
             shipmentEntity.Order = orderEntity;
 
-            validatedAddressManager.Setup(s => s.ValidateShipmentAsync(It.IsAny<ShipmentEntity>(), It.IsAny<AddressValidator>()))
+            validatedAddressManager.Setup(s => s.ValidateShipmentAsync(It.IsAny<ShipmentEntity>()))
                 .Returns(TaskUtility.CompletedTask)
                 .Verifiable();
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping
             var tcs = new TaskCompletionSource<bool>();
             tcs.SetResult(true);
 
-            testObject = new ShipmentAddressValidator(validatedAddressManager.Object, addressValidationWebClient.Object, filterHelper.Object);
+            testObject = new ShipmentAddressValidator(validatedAddressManager.Object, filterHelper.Object);
         }
 
         [Fact]

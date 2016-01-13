@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="yes" ?>
+<ShipWorks>
+  <ModuleVersion>2.4.3</ModuleVersion>
+  <Store>
+    <Name>Interapptive Test Store</Name>
+    <Owner>Eric Johnson</Owner>
+    <Email>eric.johnson@interapptive.com</Email>
+    <State>FL</State>
+    <Country>US</Country>
+    <Website>http://osc.interapptive.local</Website>
+  </Store>
+</ShipWorks>

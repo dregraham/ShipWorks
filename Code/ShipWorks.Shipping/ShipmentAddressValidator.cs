@@ -15,16 +15,14 @@ namespace ShipWorks.Shipping
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentAddressValidator));
 
         private readonly IValidatedAddressManager validatedAddressManager;
-        private readonly IAddressValidationWebClient addressValidationWebClient;
         private readonly IFilterHelper filterHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentAddressValidator(IValidatedAddressManager validatedAddressManager, IAddressValidationWebClient addressValidationWebClient, IFilterHelper filterHelper)
+        public ShipmentAddressValidator(IValidatedAddressManager validatedAddressManager, IFilterHelper filterHelper)
         {
             this.validatedAddressManager = validatedAddressManager;
-            this.addressValidationWebClient = addressValidationWebClient;
             this.filterHelper = filterHelper;
         }
 
@@ -54,9 +52,7 @@ namespace ShipWorks.Shipping
 
             filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
 
-            AddressValidator addressValidator = new AddressValidator(addressValidationWebClient);
-
-            await validatedAddressManager.ValidateShipmentAsync(shipment, addressValidator)
+            await validatedAddressManager.ValidateShipmentAsync(shipment)
                 .ConfigureAwait(false);
         }
     }

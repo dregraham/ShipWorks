@@ -565,7 +565,7 @@ namespace ShipWorks.Stores
         /// Added ShippingAddressEditStateType enum to replace the IsShipmentAddressEditable code.  We needed to display a message in the shipping panel as to why an address is not editable.
         /// Added EnumDescriptionConverter to display the description of an enum in XAML.
         /// </summary>
-        public virtual ShippingAddressEditStateType ShippingAddressEditableState(ShipmentEntity shipment)
+        public virtual ShippingAddressEditStateType ShippingAddressEditableState(OrderEntity order, ShipmentEntity shipment)
         {
             if (shipment == null)
             {
@@ -577,7 +577,7 @@ namespace ShipWorks.Stores
                 return ShippingAddressEditStateType.Processed;
             }
 
-            if (!UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, shipment.OrderID))
+            if (!UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID))
             {
                 return ShippingAddressEditStateType.PermissionDenied;
             }

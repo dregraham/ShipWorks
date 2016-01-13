@@ -151,6 +151,7 @@
   <ItemGroup>
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ShipmentLoaderTest.cs" />
     <Compile Include="Services\ShippingManagerTest.cs" />
     <Compile Include="Services\ShippingManagerWrapper\ChangeShipmentTypeTest.cs" />
     <Compile Include="Services\ShippingManagerWrapper\LoadFullShipmentGraphTest.cs" />

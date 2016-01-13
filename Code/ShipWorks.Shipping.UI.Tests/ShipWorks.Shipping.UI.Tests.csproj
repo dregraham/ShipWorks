@@ -158,6 +158,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipelineTest.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\OtherShipmentViewModelTest.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\ShipmentViewModelTest.cs" />
+    <Compile Include="ShippingPanel\ShippingConfigurationTest.cs" />
     <Compile Include="ShippingPanel\ShippingPanelAutoMockExtensions.cs" />
     <Compile Include="ShippingPanel\ShippingPanelViewModelTest.cs" />
     <Compile Include="ShippingPanel\ValueConverters\OriginAddressListConverterTest.cs" />
