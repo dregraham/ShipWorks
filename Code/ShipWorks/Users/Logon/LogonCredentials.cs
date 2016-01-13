@@ -6,6 +6,16 @@
     public class LogonCredentials
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public LogonCredentials(string username, string password, bool remember)
+        {
+            Username = username;
+            Password = password;
+            Remember = remember;
+        }
+
+        /// <summary>
         /// The username to logon
         /// </summary>
         public string Username { get; set; }

@@ -77,7 +77,7 @@ namespace ShipWorks.Users.Logon
 
             IUserService userService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUserService>();
 
-            EnumResult<UserServiceLogonResultType> logonResult = userService.Logon(new LogonCredentials { Username = name, Password = password.Text, Remember = automaticLogon.Checked });
+            EnumResult<UserServiceLogonResultType> logonResult = userService.Logon(new LogonCredentials(name, password.Text, automaticLogon.Checked));
 
             if (logonResult.Value == UserServiceLogonResultType.Success)
             {
