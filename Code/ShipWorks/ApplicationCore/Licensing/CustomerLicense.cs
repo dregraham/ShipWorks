@@ -48,7 +48,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Is the license Disabled
         /// </summary>
-        public bool IsDisabled => (DisabledReason != string.Empty);
+        public bool IsDisabled => (!string.IsNullOrEmpty(DisabledReason));
 
         /// <summary>
         /// The license capabilities.
