@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private const string DefaultTokenXsl = "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>";
 
         private readonly List<ShipmentEntity> shipments;
-        private readonly IiParcelRepository repository;
+        private readonly IOrderManager orderManager;
 
         private readonly TokenSuggestion defaultSkuQuantitySuggestion;
 
@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Initializes a new instance of the <see cref="iParcelTokenSuggestionFactory" /> class.
         /// </summary>
         public iParcelTokenSuggestionFactory()
-            : this(new iParcelDatabaseRepository())
+            : this(new OrderManager())
         { }
 
         /// <summary>
@@ -31,14 +31,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         /// <param name="shipments">The shipments.</param>
         public iParcelTokenSuggestionFactory(List<ShipmentEntity> shipments)
-            : this(shipments, new iParcelDatabaseRepository())
+            : this(shipments, new OrderManager())
         { }
         
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelTokenSuggestionFactory" /> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
-        public iParcelTokenSuggestionFactory(IiParcelRepository repository)
+        public iParcelTokenSuggestionFactory(OrderManager repository)
             : this(new List<ShipmentEntity>(), repository)
         { }
 
@@ -46,11 +46,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Initializes a new instance of the <see cref="iParcelTokenSuggestionFactory" /> class.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
-        /// <param name="repository">The repository.</param>
-        public iParcelTokenSuggestionFactory(List<ShipmentEntity> shipments, IiParcelRepository repository)
+        /// <param name="orderManager">The repository.</param>
+        public iParcelTokenSuggestionFactory(List<ShipmentEntity> shipments, IOrderManager orderManager)
         {
             this.shipments = shipments;
-            this.repository = repository;
+            this.orderManager = orderManager;
 
             defaultSkuQuantitySuggestion = new TokenSuggestion(DefaultTokenXsl, "All item SKUs and Quantities in a delimited list");
         }
@@ -75,11 +75,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     // is available to us in order to build out a list of suggestions for each order item to let the user 
                     // to quickly pick from a list in the case where they're not shipping everything in one package
                     ShipmentEntity shipment = shipments.First();
-                    repository.PopulateOrderDetails(shipment);
-                    
+                    orderManager.PopulateOrderDetails(shipment);
+
                     foreach (OrderItemEntity orderItem in shipment.Order.OrderItems)
                     {
-                        TokenSuggestion itemSuggestion = new TokenSuggestion(string.Format("{0}, {1} ", orderItem.SKU, orderItem.Quantity), string.Format("All {0} items", orderItem.Name));
+                        TokenSuggestion itemSuggestion = new TokenSuggestion($"{orderItem.SKU}, {orderItem.Quantity} ", $"All {orderItem.Name} items");
                         suggestions.Add(itemSuggestion);
                     }
                 }
@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
             catch (Exception exception)
             {
-                string message = string.Format("An error occurred while populating the list of i-parcel token suggestions. {0}", exception.Message);
+                string message = $"An error occurred while populating the list of i-parcel token suggestions. {exception.Message}";
                 throw new iParcelException(message);
             }
         }

@@ -18,11 +18,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
     public class CreateShipmentResult
     {
         [XmlElement(ElementName = "Shipment")]
-        public Shipment Shipment { get; set; }
+        public AmazonShipment AmazonShipment { get; set; }
     }
     
     [XmlRoot(ElementName = "Shipment")]
-    public class Shipment
+    public class AmazonShipment
     {
         [XmlElement(ElementName = "ShipmentId")]
         public string ShipmentId { get; set; }

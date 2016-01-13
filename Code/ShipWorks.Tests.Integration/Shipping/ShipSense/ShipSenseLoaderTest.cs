@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Population;
+using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Templates;
 using ShipWorks.Users;
@@ -38,6 +39,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
 
             if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)
             {
+
+                ContainerInitializer.Initialize();
 
                 ApplicationCore.ShipWorksSession.Initialize(swInstance);
                 SqlSession.Initialize();

@@ -187,22 +187,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            if (shipment.Other.Carrier.Trim().Length == 0)
-            {
-                throw new ShippingException("No carrier is specified.");
-            }
-
-            if (shipment.Other.Service.Trim().Length == 0)
-            {
-                throw new ShippingException("No service is specified.");
-            }
-        }
-
-        /// <summary>
         /// Create the XML input to the XSL engine
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)

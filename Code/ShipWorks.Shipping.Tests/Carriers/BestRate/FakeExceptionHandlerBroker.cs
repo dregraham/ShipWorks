@@ -6,7 +6,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 
-namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
+namespace ShipWorks.Shipping.Tests.Carriers.BestRate
 {
     /// <summary>
     /// A fake broker for the purpose of testing the best rate shipment type where the only thing it does 

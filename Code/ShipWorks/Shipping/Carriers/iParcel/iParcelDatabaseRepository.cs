@@ -31,17 +31,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelDatabaseRepository" /> class.
         /// </summary>
-        public iParcelDatabaseRepository()
-            : this(LogManager.GetLogger(typeof(iParcelDatabaseRepository)))
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="iParcelDatabaseRepository" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public iParcelDatabaseRepository(ILog logger)
+        public iParcelDatabaseRepository(Func<Type, ILog> logFactory)
         {
-            log = logger;
+            log = logFactory(GetType());
         }
 
 
@@ -218,23 +210,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             return account;
-        }
-
-        /// <summary>
-        /// Populates the order details (order entity and order items) for the given shipment.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        public void PopulateOrderDetails(ShipmentEntity shipment)
-        {
-            if (shipment.Order == null)
-            {
-                shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
-            }
-
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
-            }
         }
     }
 }

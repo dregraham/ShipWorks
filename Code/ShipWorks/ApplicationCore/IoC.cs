@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Settings;
@@ -6,13 +7,13 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using System.Reflection;
 using Interapptive.Shared.Messaging;
+using log4net;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
 using ShipWorks.Users;
-using log4net;
-using System;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -77,10 +78,18 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterInstance(Messenger.Current)
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterAssemblyModules(assemblies);
 
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
+                
+            builder.RegisterType<LogEntryFactory>()
+                .AsImplementedInterfaces()
+                .AsSelf();
 
             builder.RegisterType<TangoWebClientWrapper>()
                 .AsImplementedInterfaces();

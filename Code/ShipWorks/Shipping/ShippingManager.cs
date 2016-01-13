@@ -44,6 +44,7 @@ using ShipWorks.Stores.Content;
 using Autofac;
 using ShipWorks.AddressValidation.Enums;
 using Interapptive.Shared;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Shipping
 {
@@ -714,9 +715,16 @@ namespace ShipWorks.Shipping
 
             // Because this is coming from the rate control, and the only thing that causes rate changes from the rate control
             // is the Express1 promo footer, we need to remove the shipment from the cache before we get rates
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-            string cacheHash = shipmentType.GetRatingHash(shipment);
-            RateCache.Instance.Remove(cacheHash);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                if (lifetimeScope.IsRegisteredWithKey<IRateHashingService>((ShipmentTypeCode)shipment.ShipmentType))
+                {
+                    IRateHashingService rateHashingService = lifetimeScope.ResolveKeyed<IRateHashingService>((ShipmentTypeCode)shipment.ShipmentType);
+
+                    string cacheHash = rateHashingService.GetRatingHash(shipment);
+                    RateCache.Instance.Remove(cacheHash);
+                }
+            }
         }
 
         /// <summary>
@@ -756,8 +764,19 @@ namespace ShipWorks.Shipping
             StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
             storeType.OverrideShipmentDetails(clonedShipment);
 
-            // Use the cloned shipment with the potentially adjusted shipping address to get the rates
-            RateGroup rateResults = shipmentType.GetRates(clonedShipment);
+            RateGroup rateResults = null;
+
+            // Get rates from rating service if it is registered, otherwise get rate from the shipmenttype
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ICachedRatesService cachedRatesService = lifetimeScope.Resolve<ICachedRatesService>();
+
+                IRatingService ratingService =
+                    lifetimeScope.ResolveKeyed<IRatingService>((ShipmentTypeCode)shipment.ShipmentType);
+
+                // Check to see if the rate is cached, if not call the rating service
+                rateResults = cachedRatesService.GetCachedRates<ShippingException>(clonedShipment, ratingService.GetRates);
+            }
 
             // Copy back any best rate events that were set on the clone
             shipment.BestRateEvents |= clonedShipment.BestRateEvents;
@@ -843,7 +862,16 @@ namespace ShipWorks.Shipping
                     // Transacted
                     using (SqlAdapter adapter = new SqlAdapter(true))
                     {
-                        shipmentType.VoidShipment(shipment);
+                        using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                        {
+                            if (lifetimeScope.IsRegisteredWithKey<ILabelService>((ShipmentTypeCode)shipment.ShipmentType))
+                            {
+                                ILabelService labelService =
+                                    lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode)shipment.ShipmentType);
+
+                                labelService.Void(shipment);
+                            }
+                        }
 
                         shipment.Voided = true;
                         shipment.VoidedDate = DateTime.UtcNow;
@@ -1165,7 +1193,15 @@ namespace ShipWorks.Shipping
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
-                    shipmentType.ProcessShipment(shipment);
+                    
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        ILabelService labelService =
+                            lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
+
+                        labelService.Create(shipment);
+                    }
+
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
 
                     if (IsInsuredByInsureShip(shipmentType, shipment))
