@@ -31,17 +31,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelDatabaseRepository" /> class.
         /// </summary>
-        public iParcelDatabaseRepository()
-            : this(LogManager.GetLogger(typeof(iParcelDatabaseRepository)))
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="iParcelDatabaseRepository" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public iParcelDatabaseRepository(ILog logger)
+        public iParcelDatabaseRepository(Func<Type, ILog> logFactory)
         {
-            log = logger;
+            log = logFactory(GetType());
         }
 
 
