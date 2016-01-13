@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Users
         {
             using (var mock = AutoMock.GetLoose())
             {
-                LogonCredentials credentials = new LogonCredentials() { Username = "foo", Password = "bar", Remember = false };
+                LogonCredentials credentials = new LogonCredentials("foo", "bar", false);
 
                 Mock<ILicense> customerLicense = mock.Mock<ILicense>();
 
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Users
         {
             using (var mock = AutoMock.GetLoose())
             {
-                LogonCredentials credentials = new LogonCredentials() { Username = "foo", Password = "bar", Remember = false };
+                LogonCredentials credentials = new LogonCredentials("foo", "bar", false);
 
                 Mock<ILicense> customerLicense = mock.Mock<ILicense>();
                 customerLicense.Setup(l => l.AllowsLogOn())
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Users
         {
             using (var mock = AutoMock.GetLoose())
             {
-                LogonCredentials credentials = new LogonCredentials() { Username = "foo", Password = "bar", Remember = false };
+                LogonCredentials credentials = new LogonCredentials("foo", "bar", false);
 
                 Mock<ILicense> customerLicense = mock.Mock<ILicense>();
                 customerLicense.Setup(l => l.AllowsLogOn())
