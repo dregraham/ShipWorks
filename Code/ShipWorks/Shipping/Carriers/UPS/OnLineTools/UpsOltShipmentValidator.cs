@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
@@ -11,7 +7,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
     /// <summary>
     /// Validates OLT shipment.
     /// </summary>
-    public class UpsOltShipmentValidator
+    public class UpsOltShipmentValidator : IUpsOltShipmentValidator
     {
         /// <summary>
         /// Validates the shipment.

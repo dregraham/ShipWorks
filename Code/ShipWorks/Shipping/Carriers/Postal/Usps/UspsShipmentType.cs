@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
-using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -41,15 +39,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public class UspsShipmentType : PostalShipmentType
     {
-        private const int MinNumberOfDaysBeforeShowingUspsPromo = 14;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsShipmentType"/> class.
         /// </summary>
         public UspsShipmentType()
         {
-            ShouldRetrieveExpress1Rates = true;
-
             // Use the "live" versions by default
             AccountRepository = new UspsAccountRepository();
             LogEntryFactory = new LogEntryFactory();
@@ -63,10 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
-        public override bool HasAccounts
-        {
-            get { return AccountRepository.Accounts.Any(); }
-        }
+        public override bool HasAccounts => AccountRepository.Accounts.Any();
 
         /// <summary>
         /// Gets or sets the log entry factory.
@@ -77,55 +68,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Indicates if the shipment service type supports return shipments
         /// </summary>
-        public override bool SupportsReturns
-        {
-            get { return true; }
-        }
+        public override bool SupportsReturns => true;
 
         /// <summary>
         /// Gets the type of the reseller.
         /// </summary>
-        public virtual UspsResellerType ResellerType
-        {
-            get { return UspsResellerType.None; }
-        }
+        public virtual UspsResellerType ResellerType => UspsResellerType.None;
 
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode
-        {
-            get { return ShipmentTypeCode.Usps; }
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.Usps;
 
         /// <summary>
         /// USPS supports getting postal service rates
         /// </summary>
-        public override bool SupportsGetRates
-        {
-            get { return true; }
-        }
+        public override bool SupportsGetRates => true;
 
         /// <summary>
         /// Supports getting counter rates.
         /// </summary>
-        public override bool SupportsCounterRates
-        {
-            get { return true; }
-        }
+        public override bool SupportsCounterRates => true;
 
         /// <summary>
         /// Indicates if the shipment type supports accounts as the origin
         /// </summary>
-        public override bool SupportsAccountAsOrigin
-        {
-            get { return true; }
-        }
-
-        /// <summary>
-        /// Should Express1 rates be checked when getting Endicia rates?
-        /// </summary>
-        public bool ShouldRetrieveExpress1Rates { get; set; }        
+        public override bool SupportsAccountAsOrigin => true;
 
         /// <summary>
         /// Creates the web client to use to contact the underlying carrier API.
@@ -226,148 +194,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Get postal rates for the given shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-            // Take this opportunity to try to update contract type of the account
-            UspsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
-            UpdateContractType(account);
-
-            // Get counter rates if we don't have any Endicia accounts, letting the Postal shipment type take care of caching
-            // since it should be using a different cache key
-            return AccountRepository.Accounts.Any() ?
-                GetRatesInternal(shipment) :
-                GetCounterRates(shipment);
-        }
-
-        /// <summary>
-        /// Get postal rates for the given shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        protected virtual RateGroup GetRatesInternal(ShipmentEntity shipment)
-        {
-            // Start getting Express1 rates if necessary so that they should hopefully be ready when we need them
-            Task<RateGroup> express1RateTask = GetExpress1RatesIfNecessary(shipment);
-
-            RateGroup rateGroup = shipment.Postal.Usps.RateShop ?
-                GetRatesForAllAccounts(shipment) :
-                GetCachedRates<UspsException>(shipment, GetRatesForSpecifiedAccount);
-
-            return new UspsExpress1RateConsolidator().Consolidate(rateGroup, express1RateTask);
-        }
-
-        /// <summary>
-        /// Get rates for the account specified in the shipment
-        /// </summary>
-        private RateGroup GetRatesForSpecifiedAccount(ShipmentEntity shipment)
-        {
-            List<RateResult> uspsRates = CreateWebClient().GetRates(shipment);
-            uspsRates.ForEach(r => r.ShipmentType = ShipmentTypeCode);
-            
-            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, uspsRates));
-            AddUspsRatePromotionFootnote(shipment, rateGroup);
-
-            return rateGroup;
-        }
-
-        /// <summary>
-        /// Get rates for all available accounts
-        /// </summary>
-        private RateGroup GetRatesForAllAccounts(ShipmentEntity shipment)
-        {
-            List<UspsAccountEntity> uspsAccounts = AccountRepository.Accounts.ToList();
-
-            // We are creating a new shipment type here so we can call get rates and not call Express1 Rates.
-            // We thought of just turning off ShouldRetrieveExpress1Rates, but worried that might cause unexpected behavior
-            // in a multi-threaded situation.
-            UspsShipmentType uspsShipmentTypeWithNoExpress1 = new UspsShipmentType() { ShouldRetrieveExpress1Rates = false };
-
-            try
-            {
-                List<Task<RateGroup>> tasks = uspsAccounts.Select(accountToCopy => CreateShipmentCopy(accountToCopy, shipment))
-                    .Select(shipmentWithAccount => Task.Factory.StartNew(() => uspsShipmentTypeWithNoExpress1.GetRates(shipmentWithAccount)))
-                    .ToList();
-
-                foreach (Task<RateGroup> task in tasks)
-                {
-                    task.Wait();
-                }
-
-                return new UspsRateGroupConsolidator().Consolidate(tasks.Select(task=>task.Result).ToList());
-            }
-            catch (AggregateException ex)
-            {
-                // Try to rethrow the first api exception we got
-                UspsApiException apiException = ex.InnerExceptions.OfType<UspsApiException>().FirstOrDefault();
-                if (apiException != null)
-                {
-                    throw apiException;
-                }
-
-                // If there are no api exceptions, just rethrow the first exception
-                Exception exception = ex.InnerExceptions.FirstOrDefault();
-                if (exception != null)
-                {
-                    throw exception;
-                }
-
-                // If there were no exceptions in the aggregate exception, just rethrow it
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Start getting Express1 rates if necessary
-        /// </summary>
-        private Task<RateGroup> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
-        {
-            UspsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType);
-
-            return ShouldRetrieveExpress1Rates && express1AutoRouteAccount != null && !shipment.Postal.NoPostage ? 
-                BeginRetrievingExpress1Rates(shipment, express1AutoRouteAccount) : 
-                CreateEmptyExpress1RatesTask();
-        }
-
-        /// <summary>
-        /// Create a task that will return an empty list of rates
-        /// </summary>
-        private static Task<RateGroup> CreateEmptyExpress1RatesTask()
-        {
-            // Create a dummy task that will return an empty result
-            TaskCompletionSource<RateGroup> completionSource = new TaskCompletionSource<RateGroup>();
-            completionSource.SetResult(new RateGroup(new List<RateResult>()));
-            return completionSource.Task;
-        }
-
-        /// <summary>
-        /// Start retrieving Express1 rates
-        /// </summary>
-        private static Task<RateGroup> BeginRetrievingExpress1Rates(ShipmentEntity shipment, UspsAccountEntity express1AutoRouteAccount)
-        {
-            // Start getting rates from Express1
-            ShipmentEntity express1Shipment = CreateShipmentCopy(express1AutoRouteAccount, shipment);
-
-            return Task.Factory.StartNew(() =>
-            {
-                RateGroup rateGroup = new Express1UspsShipmentType().GetRates(express1Shipment);
-                foreach (RateResult rate in rateGroup.Rates)
-                {
-                    PostalRateSelection tag = rate.Tag as PostalRateSelection;
-                    if (tag != null)
-                    {
-                        rate.Tag = new UspsPostalRateSelection(tag.ServiceType, tag.ConfirmationType, express1AutoRouteAccount);
-                    }
-                }
-                return rateGroup;
-            });
-        }
-
-        /// <summary>
         /// Get the Express1 account that should be used for auto routing, or null if we should not auto route
         /// </summary>
-        private static UspsAccountEntity GetExpress1AutoRouteAccount(PostalPackagingType packagingType)
+        public static UspsAccountEntity GetExpress1AutoRouteAccount(PostalPackagingType packagingType)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Usps).IsShipmentTypeRestricted;
@@ -378,71 +207,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Conditionally adds the usps rate promotion footnote based on the contract type of the account associated with the shipment
-        /// and whether the shipping account conversion feature is restricted.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <param name="rateGroup">The rate group.</param>
-        protected void AddUspsRatePromotionFootnote(ShipmentEntity shipment, RateGroup rateGroup)
-        {
-            UspsAccountContractType contractType = (UspsAccountContractType)AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID).ContractType;
-            UspsAccountEntity uspsAccount = AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
-
-            // We may not want to show the conversion promotion for multi-user USPS accounts due 
-            // to a limitation on USPS' side. (Tango will send these to ShipWorks via data contained
-            // in ShipmentTypeFunctionality
-            bool accountConversionRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode).Level == EditionRestrictionLevel.Forbidden;
-            TimeSpan accountCreatedTimespan = DateTime.UtcNow - uspsAccount.CreatedDate;
-
-            if (contractType == UspsAccountContractType.Commercial &&
-                (InterapptiveOnly.MagicKeysDown || accountCreatedTimespan.TotalDays >= MinNumberOfDaysBeforeShowingUspsPromo) &&
-                !accountConversionRestricted)
-            {
-                // Show the promotional footer for discounted rates 
-                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
-            }
-        }
-
-        /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
         protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new UspsShipmentProcessingSynchronizer(AccountRepository);
         }
-
-        /// <summary>
-        /// Process the shipment. Overridden here, so overhead of Express1 can be removed.
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            ValidateShipment(shipment);
-
-            try
-            {
-                if (ShouldRateShop(shipment) || ShouldTestExpress1Rates(shipment))
-                {
-                    ProcessShipmentWithRates(shipment);
-                }
-                else
-                {
-                    CreateWebClient().ProcessShipment(shipment);
-                }
-            }
-            catch (UspsException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
-            catch (AddressValidationException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
-        }
         
         /// <summary>
         /// Should we rate shop before processing
         /// </summary>
-        private bool ShouldRateShop(ShipmentEntity shipment)
+        public bool ShouldRateShop(ShipmentEntity shipment)
         {
             return shipment.Postal.Usps.RateShop && 
                 AccountRepository.Accounts.Count() > 1;
@@ -452,67 +227,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Get the Express1 account that should be used for auto routing.
         /// Returns null if auto routing should not be used.
         /// </summary>
-        private static bool ShouldTestExpress1Rates(ShipmentEntity shipment)
+        public bool ShouldTestExpress1Rates(ShipmentEntity shipment)
         {
             return Express1Utilities.IsPostageSavingService((PostalServiceType)shipment.Postal.Service) &&
                 GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType) != null;
         }
-
-        /// <summary>
-        /// Process the shipment using the account with the cheapest rate for the requested service
-        /// </summary>
-        private void ProcessShipmentWithRates(ShipmentEntity shipment)
-        {
-            IUspsWebClient client = CreateWebClient();
-            IEnumerable<UspsAccountEntity> accounts = GetRates(shipment).Rates
-                    .OrderBy(x => x.Amount)
-                    .Select(x => x.OriginalTag as UspsPostalRateSelection)
-                    .Where(x => x.IsRateFor(shipment))
-                    .Select(x => x.Accounts)
-                    .FirstOrDefault();
-
-            if (accounts == null)
-            {
-                throw new UspsException("Could not get rates for the specified service type");
-            }
-
-            foreach (UspsAccountEntity account in accounts.ToList())
-            {
-                try
-                {
-                    if (account.UspsReseller == (int)UspsResellerType.Express1)
-                    {
-                        shipment.ShipmentType = (int)ShipmentTypeCode.Express1Usps;
-
-                        ShipmentType express1ShipmentType = ShipmentTypeManager.GetType(shipment);
-                        shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
-                        UseAccountForShipment(account, shipment);
-                        
-                        express1ShipmentType.UpdateDynamicShipmentData(shipment);
-                        express1ShipmentType.ProcessShipment(shipment);
-                    }
-                    else
-                    {
-                        UseAccountForShipment(account, shipment);
-                        client.ProcessShipment(shipment);
-                    }
-
-                    break;
-                }
-                catch (UspsInsufficientFundsException)
-                {
-                    if (ReferenceEquals(account, accounts.Last()))
-                    {
-                        throw;
-                    }
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Validate the shipment before processing or rating
         /// </summary>
-        protected static void ValidateShipment(ShipmentEntity shipment)
+        public void ValidateShipment(ShipmentEntity shipment)
         {
             if (shipment.TotalWeight == 0)
             {
@@ -525,21 +249,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRequired)
             {
                 throw new ShippingException("A confirmation option cannot be used with Express mail.");
-            }
-        }
-
-        /// <summary>
-        /// Void the shipment
-        /// </summary>
-        public override void VoidShipment(ShipmentEntity shipment)
-        {
-            try
-            {
-                CreateWebClient().VoidShipment(shipment);
-            }
-            catch (UspsException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
             }
         }
 
@@ -632,28 +341,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // sign up for the account. We can use the UspsCounterRateAccountRepository 
             // here because the underlying accounts being used are the same.
             return new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCredentialStore.Instance));
-        }
-
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(UspsShipmentFields.UspsAccountID);
-                ratingField.ShipmentFields.Add(UspsShipmentFields.OriginalUspsAccountID);
-                ratingField.ShipmentFields.Add(UspsShipmentFields.RateShop);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.NoPostage);
-
-                return ratingField;
-            }
         }
 
         /// <summary>
@@ -768,23 +455,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Create a copy of the shipment, using the specified account
-        /// </summary>
-        private static ShipmentEntity CreateShipmentCopy(UspsAccountEntity account, ShipmentEntity shipment)
-        {
-            ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
-
-            UseAccountForShipment(account, clonedShipment);
-
-            clonedShipment.Postal.Usps.RateShop = false;
-
-            return clonedShipment;
-        }
-
-        /// <summary>
         /// Update the shipment to use the specified account
         /// </summary>
-        private static void UseAccountForShipment(UspsAccountEntity account, ShipmentEntity shipment)
+        public void UseAccountForShipment(UspsAccountEntity account, ShipmentEntity shipment)
         {
             shipment.Postal.Usps.UspsAccountID = account.UspsAccountID;
 
@@ -847,42 +520,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (shipment.Postal != null && shipment.Postal.Usps != null)
             {
                 shipment.Postal.Usps.RequestedLabelFormat = (int)requestedLabelFormat;
-            }
-        }
-
-        /// <summary>
-        /// Gets counter rates for a postal shipment
-        /// </summary>
-        protected override RateGroup GetCounterRates(ShipmentEntity shipment)
-        {
-            // We're going to be temporarily swapping these out to get counter rates, so 
-            // make a note of the original values
-            ICarrierAccountRepository<UspsAccountEntity> originalAccountRepository = AccountRepository;
-            ICertificateInspector originalCertificateInspector = CertificateInspector;
-
-            try
-            {
-                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
-
-                AccountRepository = new UspsCounterRateAccountRepository(TangoCredentialStore.Instance);
-                CertificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData);
-
-                // Fetch the rates now that we're setup to use counter rates
-                return GetCachedRates<UspsException>(shipment, GetRates);
-
-            }
-            catch (CounterRatesOriginAddressException)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
-
-                return errorRates;
-            }
-            finally
-            {
-                // Set everything back to normal
-                AccountRepository = originalAccountRepository;
-                CertificateInspector = originalCertificateInspector;
             }
         }
 

@@ -8,13 +8,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public override IEnumerable<FedExAccountEntity> Accounts
-        {
-            get
-            {
-                return FedExAccountManager.Accounts;
-            }
-        }
+        public override IEnumerable<FedExAccountEntity> Accounts => FedExAccountManager.Accounts;
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.

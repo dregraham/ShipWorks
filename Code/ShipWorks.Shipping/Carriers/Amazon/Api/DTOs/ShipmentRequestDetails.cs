@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
 {

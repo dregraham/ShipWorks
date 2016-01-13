@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             catch (Exception ex)
             {
-                uspsRateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(new Express1UspsShipmentType(), ex.GetBaseException()));
+                uspsRateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(ShipmentTypeCode.Express1Usps, ex.GetBaseException()));
             }
 
             return uspsRateGroup;

@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -25,115 +21,44 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode
-        {
-            get { return ShipmentTypeCode.PostalWebTools; }
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.PostalWebTools;
 
         /// <summary>
         /// Create the wizard used to do the initial setup
         /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            return new PostalWebSetupWizard();
-        }
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard() => new PostalWebSetupWizard();
 
         /// <summary>
         /// Create the UserControl used to handle USPS WebTools shipments
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
-        {
-            return new PostalWebServiceControl(rateControl);
-        }
+        protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl) => new PostalWebServiceControl(rateControl);
 
         /// <summary>
         /// Create the settings control for defaults & settings
         /// </summary>
-        protected override SettingsControlBase CreateSettingsControl()
-        {
-            return new PostalWebSettingsControl();
-        }
+        protected override SettingsControlBase CreateSettingsControl() => new PostalWebSettingsControl();
 
         /// <summary>
         /// Create the control used to edit the profile settings
         /// </summary>
-        protected override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new PostalProfileControlBase();
-        }
+        protected override ShippingProfileControlBase CreateProfileControl() => new PostalProfileControlBase();
 
         /// <summary>
         /// USPS supports getting postal service rates
         /// </summary>
-        public override bool SupportsGetRates
-        {
-            get { return true; }
-        }
+        public override bool SupportsGetRates => true;
 
         /// <summary>
         /// Supports getting counter rates.
         /// </summary>
-        public override bool SupportsCounterRates
-        {
-            get { return true; }
-        }
-
-        /// <summary>
-        /// Get the rates for the given shipment.
-        /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-            return GetCachedRates<ShippingException>(shipment, GetRatesFromApi);
-        }
-
-        /// <summary>
-        /// Get the rates from the postal api
-        /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
-        {
-            List<RateResult> rates = PostalWebClientRates.GetRates(shipment, new LogEntryFactory());
-            return new RateGroup(FilterRatesByExcludedServices(shipment, rates));
-        }
+        public override bool SupportsCounterRates => true;
 
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            return new WebToolsShipmentProcessingSynchronizer();
-        }
-
-        /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            if (shipment.ShipPerson.IsDomesticCountry() && shipment.Postal.Confirmation == (int) PostalConfirmationType.None)
-            {
-                PostalPackagingType packaging = (PostalPackagingType) shipment.Postal.PackagingType;
-
-                if ((shipment.Postal.Service != (int) PostalServiceType.ExpressMail) &&
-                    !(shipment.Postal.Service == (int) PostalServiceType.FirstClass && (packaging== PostalPackagingType.Envelope || packaging == PostalPackagingType.LargeEnvelope)) )
-                {
-                    throw new ShippingException(string.Format(
-                        "A confirmation option must be selected when shipping {0}.", 
-                        EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service)));
-                }
-            }
-
-            if (shipment.Postal.Service == (int) PostalServiceType.ExpressMail &&
-                shipment.Postal.Confirmation != (int)PostalConfirmationType.None &&
-                shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRestricted &&
-                shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRequired)
-            {
-                throw new ShippingException("A confirmation option cannot be used with Express mail.");
-            }
-
-            // Process the shipment
-            PostalWebClientShipping.ProcessShipment(shipment.Postal);
-        }
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer() => new WebToolsShipmentProcessingSynchronizer();
 
         /// <summary>
         /// Generate the carrier specific template xml
@@ -143,13 +68,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
 
             // Add the labels content
-            container.AddElement("Labels", 
-                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png), 
+            container.AddElement("Labels",
+                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
 
             // Lazily evaluate the full path to the primary label
             Lazy<string> primaryLabelPath = new Lazy<string>(() => labels.Value.Single(l => l.Category == TemplateLabelCategory.Primary).Resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(ImageFormat.Png)));
-            
+
             // Legacy stuff.  Have to check that there are labels, since 2x upgraded shipments won't have them
             ElementOutline outline = container.AddElement("USPS", ElementOutline.If(() => shipment().Processed));
             outline.AddAttributeLegacy2x();
@@ -157,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             outline.AddElement("LabelOnlyRot90", () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, primaryLabelPath.Value), ElementOutline.If(() => labels.Value.Count > 0));
             outline.AddElement("LabelOnlyRot270", () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate270FlipNone, primaryLabelPath.Value), ElementOutline.If(() => labels.Value.Count > 0));
         }
-        
+
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>

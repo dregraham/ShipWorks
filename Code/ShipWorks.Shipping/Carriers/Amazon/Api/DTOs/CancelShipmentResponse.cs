@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
     public class CancelShipmentResult
     {
         [XmlElement(ElementName = "Shipment")]
-        public Shipment Shipment { get; set; }
+        public AmazonShipment AmazonShipment { get; set; }
     }
 
 }

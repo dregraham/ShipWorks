@@ -1,18 +1,13 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
-using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Stores;
@@ -22,7 +17,6 @@ using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 using System.Diagnostics;
-using Interapptive.Shared;
 using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -32,31 +26,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentType : ShipmentType
     {
-        private readonly Func<IAmazonRatingService> amazonRatesFactory;
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
         private readonly IEditionManager editionManager;
-        private readonly IDateTimeProvider dateTimeProvider;
-        private readonly Func<IAmazonLabelService> amazonLabelServiceFactory;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        public AmazonShipmentType(IDateTimeProvider dateTimeProvider,
-            Func<IAmazonRatingService> amazonRatesFactory, Func<IAmazonLabelService> amazonLabelServiceFactory,
-            IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager,
-            IEditionManager editionManager)
+        public AmazonShipmentType(IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, IEditionManager editionManager)
         {
-            // TODO: Refactor constuctor params down to 5 or less
-            this.amazonRatesFactory = amazonRatesFactory;
-            this.amazonLabelServiceFactory = amazonLabelServiceFactory;
             this.storeManager = storeManager;
             this.orderManager = orderManager;
             this.shippingManager = shippingManager;
             this.editionManager = editionManager;
-            this.dateTimeProvider = dateTimeProvider;
         }
 
         /// <summary>
@@ -74,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ShippingManager.EnsureShipmentLoaded(shipment);
             }
 
-            return new[] {new AmazonPackageAdapter(shipment)};
+            return new[] { new AmazonPackageAdapter(shipment) };
         }
 
         /// <summary>
@@ -109,19 +92,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 TotalWeight = shipment.TotalWeight
             };
         }
-
-        /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment) =>
-            amazonLabelServiceFactory().Create(shipment);
-
-        /// <summary>
-        /// Void the shipment
-        /// </summary>
-        public override void VoidShipment(ShipmentEntity shipment) =>
-            amazonLabelServiceFactory().Void(shipment);
-
+          
         /// <summary>
         /// Create the XML input to the XSL engine
         /// </summary>
@@ -149,10 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             List<TemplateLabelData> labelData = new List<TemplateLabelData>();
 
@@ -160,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             List<DataResourceReference> resources =
                 DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID);
 
-            if (resources.Count > 0)
+            if (resources.Any())
             {
                 // Add our standard label output
                 DataResourceReference labelResource = resources.Single(i => i.Label == "LabelPrimary");
@@ -195,52 +163,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Gets the rates.
-        /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-            RateGroup rateGroup = GetCachedRates<AmazonShippingException>(shipment, GetRatesFromApi);
-
-            Messenger.Current.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
-
-            return rateGroup;
-        }
-
-        /// <summary>
-        /// Gets rates from the Amazon API
-        /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment) =>
-            amazonRatesFactory().GetRates(shipment);
-
-        /// <summary>
         /// Amazon supports rates
         /// </summary>
         public override bool SupportsGetRates => true;
-
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DeclaredValue);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DeliveryExperience);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsAddWeight);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsHeight);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsLength);
-                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsWeight);
-
-                return ratingField;
-            }
-        }
 
         /// <summary>
         /// Checks whether this shipment type is allowed for the given shipment
@@ -263,9 +188,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
         /// <summary>
         /// Gets a value indicating whether this instance is shipment type restricted.
-        /// 
-        /// Overridden to use dependency
         /// </summary>
+        /// <remarks>
+        /// Overridden to use dependency
+        /// </remarks>
         public override bool IsShipmentTypeRestricted
         {
             get
