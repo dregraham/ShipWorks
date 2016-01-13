@@ -8,7 +8,6 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly StoreEntity store;
         private readonly ILog log;
-        private readonly string key;
 
         /// <summary>
         /// Constructor
@@ -17,7 +16,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             this.store = store;
             log = logFactory(GetType());
-            key = store.License;
+            Key = store.License;
         }
 
         /// <summary>
@@ -33,7 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// License key
         /// </summary>
-        public string Key => key;
+        public string Key { get; }
 
         /// <summary>
         /// Refreshes store license data.
