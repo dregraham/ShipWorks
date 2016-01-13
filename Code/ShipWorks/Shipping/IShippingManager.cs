@@ -25,12 +25,6 @@ namespace ShipWorks.Shipping
         void UpdateLabelFormatOfUnprocessedShipments(ShipmentTypeCode shipmentTypeCode);
 
         /// <summary>
-        /// Get the list of shipments that correspond to the given order key.  If no shipment exists for the order,
-        /// one will be created if autoCreate is true.  An OrderEntity will be attached to each shipment.
-        /// </summary>
-        IEnumerable<ICarrierShipmentAdapter> GetShipments(long orderID, bool createIfNone);
-
-        /// <summary>
         /// Save the shipments to the database
         /// </summary>
         IDictionary<ShipmentEntity, Exception> SaveShipmentToDatabase(ShipmentEntity shipment, bool forceSave);

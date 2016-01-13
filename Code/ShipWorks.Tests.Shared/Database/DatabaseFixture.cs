@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using Autofac;
@@ -85,14 +86,18 @@ namespace ShipWorks.Tests.Shared.Database
         /// <remarks>When this context is disposed, everything created inside it is rolled back.  Further,
         /// calling this method again will dispose the previous context.  This is because when a test results
         /// in an exception, the context may not be disposed properly in the test itself.</remarks>
-        public DataContext CreateDataContext(AutoMock mock)
+        public DataContext CreateDataContext(Action<IContainer> initializeContainer)
         {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            initializeContainer(mock.Container);
+
             using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
             {
                 checkpoint.Reset(SqlSession.Current.OpenConnection());
             }
 
-            DataContext context = SetupFreshData();
+            var context = SetupFreshData();
 
             // Unless the test calls for something different, we're going to ignore security checks
             mock.Override<ISecurityContext>()
@@ -106,13 +111,13 @@ namespace ShipWorks.Tests.Shared.Database
             // This initializes all the other dependencies
             UserSession.InitializeForCurrentSession();
 
-            return context;
+            return new DataContext(mock, context.Item1, context.Item2);
         }
 
         /// <summary>
         /// Setup fresh data
         /// </summary>
-        private DataContext SetupFreshData()
+        private Tuple<UserEntity, ComputerEntity> SetupFreshData()
         {
             ShipWorksDatabaseUtility.AddInitialDataAndVersion(SqlSession.Current.OpenConnection());
             ShipWorksDatabaseUtility.AddRequiredData();
@@ -124,7 +129,7 @@ namespace ShipWorks.Tests.Shared.Database
 
                 UserSession.Logon(user, computer, true);
 
-                return new DataContext(user, computer);
+                return Tuple.Create(user, computer);
             }
         }
 

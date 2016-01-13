@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Services
         public ShipmentTypeManagerWrapper(IFilterHelper filterHelper,
             IShippingProviderRuleManager shippingProviderRuleManager,
             IShippingSettings shippingSettings,
-            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeLookup)
+            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeLookup) : this()
         {
             this.filterHelper = filterHelper;
             this.shippingProviderRuleManager = shippingProviderRuleManager;
@@ -84,12 +84,17 @@ namespace ShipWorks.Shipping.Services
             // Go through each rule and see if we can find one that is applicable
             foreach (ShippingProviderRuleEntity rule in shippingProviderRuleManager.GetRules())
             {
-                long? filterContentID = filterHelper.GetFilterNodeContentID(rule.FilterNodeID);
-                if (filterContentID != null &&
-                    filterHelper.IsObjectInFilterContent(shipment.OrderID, filterContentID.Value))
+                if (filterHelper.IsObjectInFilterContent(shipment.OrderID, rule))
                 {
                     initialShipmentType = (ShipmentTypeCode) rule.ShipmentType;
                 }
+
+                //long? filterContentID = filterHelper.GetFilterNodeContentID(rule.FilterNodeID);
+                //if (filterContentID != null &&
+                //    filterHelper.IsObjectInFilterContent(shipment.OrderID, filterContentID.Value))
+                //{
+                //    initialShipmentType = (ShipmentTypeCode) rule.ShipmentType;
+                //}
             }
 
             ShipmentType shipmentType = shipmentTypeLookup[initialShipmentType];

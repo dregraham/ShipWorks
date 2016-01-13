@@ -25,6 +25,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public ShipmentEntityBuilder()
         {
+            Set(x => x.ShipmentTypeCode, ShipmentTypeCode.None);
             Set(x => x.ShipSenseChangeSets, new XElement("ChangeSets").ToString());
         }
 

@@ -136,7 +136,16 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             entity.Fields.IsDirty = true;
             entity.IsDirty = true;
 
-            adapter.SaveAndRefetch(entity);
+            // We can't refetch if the entity doesn't have a PK
+            if (entity.Fields.OfType<IEntityField2>().Any(x => x.IsPrimaryKey))
+            {
+                adapter.SaveAndRefetch(entity);
+            }
+            else
+            {
+                adapter.SaveEntity(entity);
+            }
+
             return entity;
         }
 

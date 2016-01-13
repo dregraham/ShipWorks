@@ -1,11 +1,9 @@
 ﻿using System;
-using Autofac.Extras.Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
-using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -15,21 +13,14 @@ namespace ShipWorks.Tests.Stores.Content
     [Collection("Database collection")]
     public class OrderManagerTest : IDisposable
     {
-        private readonly AutoMock mock;
-        private readonly OrderEntity order;
+        private readonly DataContext context;
 
         public OrderManagerTest(DatabaseFixture db)
         {
-            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
 
-            ContainerInitializer.Initialize(mock.Container);
-
-            db.CreateDataContext(mock);
-
-            var store = Create.Entity<GenericModuleStoreEntity>().Save();
-            var customer = Create.Entity<CustomerEntity>().Save();
-
-            order = Create.Order(store, customer).WithOrderNumber(123999)
+            Modify.Order(context.Order)
+                .WithOrderNumber(123999)
                 .WithItem()
                 .WithItem()
                 .WithShipment()
@@ -40,9 +31,9 @@ namespace ShipWorks.Tests.Stores.Content
         [Fact]
         public void Load_ThrowsArgumentNullException_WhenPrefetchPathIsNull()
         {
-            var testObject = mock.Create<OrderManager>();
+            var testObject = context.Mock.Create<OrderManager>();
 
-            Assert.Throws<ArgumentNullException>(() => testObject.LoadOrder(order.OrderID, null));
+            Assert.Throws<ArgumentNullException>(() => testObject.LoadOrder(context.Order.OrderID, null));
         }
 
         [Fact]
@@ -51,8 +42,8 @@ namespace ShipWorks.Tests.Stores.Content
             IPrefetchPath2 prefetchPath = new PrefetchPath2(EntityType.OrderEntity);
             prefetchPath.Add(OrderEntity.PrefetchPathOrderItems);
 
-            var testObject = mock.Create<OrderManager>();
-            var loadedOrder = testObject.LoadOrder(order.OrderID, prefetchPath);
+            var testObject = context.Mock.Create<OrderManager>();
+            var loadedOrder = testObject.LoadOrder(context.Order.OrderID, prefetchPath);
 
             Assert.Equal(2, loadedOrder.OrderItems.Count);
         }
@@ -62,15 +53,12 @@ namespace ShipWorks.Tests.Stores.Content
         {
             IPrefetchPath2 prefetchPath = new PrefetchPath2(EntityType.OrderEntity);
 
-            var testObject = mock.Create<OrderManager>();
-            var loadedOrder = testObject.LoadOrder(order.OrderID, prefetchPath);
+            var testObject = context.Mock.Create<OrderManager>();
+            var loadedOrder = testObject.LoadOrder(context.Order.OrderID, prefetchPath);
 
             Assert.Equal(0, loadedOrder.OrderItems.Count);
         }
 
-        public void Dispose()
-        {
-            mock.Dispose();
-        }
+        public void Dispose() => context.Dispose();
     }
 }

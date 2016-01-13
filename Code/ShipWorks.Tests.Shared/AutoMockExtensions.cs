@@ -1,4 +1,5 @@
 ﻿using System;
+using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -107,6 +108,21 @@ namespace ShipWorks.Tests.Shared
             var mockedObject = mock.MockRepository.Create<T>();
             configure?.Invoke(mockedObject);
             return mockedObject;
+        }
+
+        /// <summary>
+        /// Add or override an Autofac registration
+        /// </summary>
+        public static void AddRegistration(this AutoMock mock, Action<ContainerBuilder> buildRegistration)
+        {
+            ContainerBuilder builder = new ContainerBuilder();
+
+            buildRegistration(builder);
+
+            foreach (var registration in builder.Build().ComponentRegistry.Registrations)
+            {
+                mock.Container.ComponentRegistry.Register(registration);
+            }
         }
     }
 }

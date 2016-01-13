@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Tests.Shared.EntityBuilders
 {
@@ -29,5 +30,18 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public StoreEntityBuilder<T> WithAddress(string address1, string address2, string city, string state, string postalCode, string country) =>
             WithAddress(x => x.Address, address1, address2, city, state, postalCode, country) as StoreEntityBuilder<T>;
+
+        /// <summary>
+        /// Save the entity
+        /// </summary>
+        public override T Save()
+        {
+            T value = base.Save();
+
+            // Make sure the new store is seen by the store manager
+            StoreManager.CheckForChanges();
+
+            return value;
+        }
     }
 }
