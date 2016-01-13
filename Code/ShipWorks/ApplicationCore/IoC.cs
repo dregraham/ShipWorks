@@ -14,8 +14,6 @@ using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
 using ShipWorks.Users;
-using log4net;
-using System;
 
 namespace ShipWorks.ApplicationCore
 {
