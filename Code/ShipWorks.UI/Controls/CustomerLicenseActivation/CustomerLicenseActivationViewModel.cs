@@ -81,6 +81,15 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         }
 
         /// <summary>
+        /// The password reset link
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string PasswordResetLink
+        {
+            get { return "https://www.interapptive.com/account/forgotpassword.php"; }
+        }
+
+        /// <summary>
         /// Saves the user to the database
         /// </summary>
         public GenericResult<ICustomerLicense> Save()
