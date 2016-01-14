@@ -559,17 +559,26 @@ namespace ShipWorks.Stores.Platforms.Amazon
                                 // use the endpoint associated with the country entered when the store was setup.
                                 if (!string.IsNullOrWhiteSpace(amazonStore.AmazonApiRegion))
                                 {
+                                    string domain;
+
                                     switch (amazonStore.AmazonApiRegion)
                                     {
                                         case "US":
-                                            return "amazon.com";
+                                            domain = "amazon.com";
+                                            break;
                                         case "CA":
-                                            return "amazon.ca";
+                                            domain= "amazon.ca";
+                                            break;
                                         case "MX":
-                                            return "amazon.com.mx";
+                                            domain = "amazon.com.mx";
+                                            break;
                                         default:
-                                            return "amazon.co.uk";
+                                            domain = "amazon.co.uk";
+                                            break;
                                     }
+
+                                    amazonStore.DomainName = domain;
+                                    StoreManager.SaveStore(amazonStore);
                                 }
                             }
                         }
