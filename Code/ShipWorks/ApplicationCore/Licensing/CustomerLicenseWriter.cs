@@ -14,28 +14,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void Write(ICustomerLicense customerLicense)
         {
-            ConfigurationEntity config = null;
+            // Initialize Configuration data as it does not exist 
+            // when we need to write the key to the database
+            ConfigurationData.InitializeForCurrentDatabase();
 
-            // Fetch the current configuration entity
-            // this will crash if this is a brand new database
-            try
-            {
-                config = ConfigurationData.Fetch();
-            } catch (NullReferenceException)
-            {
-
-            }
-            
-            // if its null because we are in the database setup wizard
-            if (config == null)
-            {
-                ConfigurationData.InitializeForCurrentDatabase();
-
-                config = ConfigurationData.Fetch();
-            }
-
+            ConfigurationEntity config = ConfigurationData.Fetch();
             config.CustomerKey = customerLicense.Key;
 
+            // Save the key to the ConfiguartionEntity 
             ConfigurationData.Save(config);
         }
     }
