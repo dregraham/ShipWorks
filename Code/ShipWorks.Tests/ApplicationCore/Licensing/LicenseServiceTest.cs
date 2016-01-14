@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
@@ -16,6 +13,31 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
     public class LicenseServiceTest
     {
+        [Fact]
+        public void AllowsLogOn_CallsLicenseRefresh()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICustomerLicenseReader>()
+                    .Setup(r => r.Read())
+                    .Returns("foo");
+
+                Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
+
+                // Mock up the CustomerLicense constructor parameter Func<string, ICustomerLicense>
+                Mock<Func<string, ICustomerLicense>> repo = mock.MockRepository.Create<Func<string, ICustomerLicense>>();
+                repo.Setup(x => x(It.IsAny<string>()))
+                    .Returns(customerLicense.Object);
+                mock.Provide(repo.Object);
+                
+                LicenseService testObject = mock.Create<LicenseService>();
+
+                testObject.AllowsLogOn();
+
+                customerLicense.Verify(l => l.Refresh(), Times.Once);
+            }
+        }
+
         [Fact]
         public void GetLicense_ReturnsStoreLicense_WhenLegacy()
         {
@@ -140,7 +162,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void AllowsLogOn_ReturnsYes_WhenIsLegacy()
+        public void AllowsLogOn_ReturnsYes_WhenCustomerIsOnLegacyPricing()
         {
             using (var mock = AutoMock.GetLoose())
             {

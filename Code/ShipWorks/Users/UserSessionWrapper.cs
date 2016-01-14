@@ -3,7 +3,7 @@
 namespace ShipWorks.Users
 {
     /// <summary>
-    /// Wrapper for the Static User session class
+    /// Wrapper for the static UserSession class
     /// </summary>
     public class UserSessionWrapper : IUserSession
     {

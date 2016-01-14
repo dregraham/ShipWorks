@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Users
+﻿namespace ShipWorks.Users
 {
     /// <summary>
     /// The result of logging in using the UserService.
-    /// 
-    /// Represents success or the reason why the login failed.
     /// </summary>
+    /// <remarks>
+    /// Represents success or the reason why the login failed.
+    /// </remarks>
     public enum UserServiceLogonResultType
     {
+        // The credentials are invalid
         InvalidCredentials,
         
+        // The tango account is disabled
         TangoAccountDisabled,
 
+        // Logon was a success
         Success
     }
 }

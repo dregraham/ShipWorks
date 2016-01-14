@@ -9,7 +9,7 @@ using ShipWorks.Users;
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
-    /// Factory to create a License
+    /// Service for license related tasks 
     /// </summary>
     public class LicenseService : ILicenseService
     {
@@ -59,12 +59,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EnumResult<AllowsLogOn> AllowsLogOn()
         {
+            // Legacy users are always allowed to log on, only new pricing restricts logon
             if (isLegacy)
             {
                 return new EnumResult<AllowsLogOn>(Licensing.AllowsLogOn.Yes);
             }
-
+            
             ILicense customerLicense = customerLicenseFactory(customerKey);
+
+            // Customer licenses that are disabled cannot logon, refresh the 
+            //license info with tango before checking if the license is disabled
             customerLicense.Refresh();
 
             if (customerLicense.IsDisabled)
