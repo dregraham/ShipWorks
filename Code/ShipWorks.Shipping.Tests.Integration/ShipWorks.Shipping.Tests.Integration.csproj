@@ -154,6 +154,7 @@
     <Compile Include="Services\ShipmentLoaderTest.cs" />
     <Compile Include="Services\ShippingManagerTest.cs" />
     <Compile Include="Services\ShippingManagerWrapperTest.cs" />
+    <Compile Include="Services\ShippingProfileManagerWrapperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

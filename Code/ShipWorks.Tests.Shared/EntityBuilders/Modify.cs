@@ -23,6 +23,12 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Create a shipment
         /// </summary>
+        public static ProfileEntityBuilder Profile(ShippingProfileEntity profile) =>
+            new ProfileEntityBuilder(profile);
+
+        /// <summary>
+        /// Create a shipment
+        /// </summary>
         public static ShipmentEntityBuilder Shipment(ShipmentEntity shipment) =>
             new ShipmentEntityBuilder(shipment);
 

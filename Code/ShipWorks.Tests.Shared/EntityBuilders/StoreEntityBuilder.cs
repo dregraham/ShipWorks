@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Tests.Shared.EntityBuilders
@@ -34,9 +35,9 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Save the entity
         /// </summary>
-        public override T Save()
+        public override T Save(SqlAdapter adapter)
         {
-            T value = base.Save();
+            T value = base.Save(adapter);
 
             // Make sure the new store is seen by the store manager
             StoreManager.CheckForChanges();

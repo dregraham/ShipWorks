@@ -30,8 +30,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             get
             {
-                long? accountID = new OnTracShipmentType().GetPrimaryProfile().OnTrac.OnTracAccountID;
-
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.OnTrac).OnTrac.OnTracAccountID;
                 return GetProfileAccount(ShipmentTypeCode.OnTrac, accountID);
             }
         }

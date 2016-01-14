@@ -9,7 +9,10 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Startup;
@@ -208,6 +211,21 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
+        public void CreateShipment_DelegatesToConfigureNewShipment_OnShipmentType()
+        {
+            var shipmentType = mock.CreateMock<FedExShipmentType>();
+            shipmentType.CallBase = true;
+
+            mock.Override<IShipmentTypeManager>()
+                .Setup(x => x.InitialShipmentType(It.IsAny<ShipmentEntity>()))
+                .Returns(shipmentType.Object);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            shipmentType.Verify(x => x.ConfigureNewShipment(shipment));
+        }
+
+        [Fact]
         public void CreateShipment_SavesShipmentToDatabase()
         {
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
@@ -220,6 +238,53 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 Assert.Equal(EntityState.Fetched, loadedShipment.Fields.State);
             }
         }
+
+        #region "Carrier specific tests"
+
+        [Fact]
+        public void CreateShipment_LoadsFedExData_WhenShipmentTypeIsFedEx()
+        {
+            SetDefaultShipmentType(ShipmentTypeCode.FedEx);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.NotNull(shipment.FedEx);
+            Assert.Equal(1, shipment.FedEx.Packages.Count);
+        }
+
+        [Fact]
+        public void CreateShipment_AppliesDefaultFedExProfile_WhenShipmentTypeIsFedEx()
+        {
+            var profile = Create.Entity<ShippingProfileEntity>()
+                .Set(x => x.ShipmentTypeCode, ShipmentTypeCode.FedEx)
+                .Set(x => x.ShipmentTypePrimary, true)
+                .Save();
+
+            Create.Entity<FedExProfileEntity>()
+                .Set(x => x.ShippingProfile, profile)
+                .Set(x => x.DropoffType, (int) FedExDropoffType.RegularPickup)
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.FedEx);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.NotNull(shipment.FedEx);
+
+            Assert.Equal((int) FedExDropoffType.RegularPickup, shipment.FedEx.DropoffType);
+        }
+
+        /// <summary>
+        /// Set the default shipment type in the shipping settings
+        /// </summary>
+        private static void SetDefaultShipmentType(ShipmentTypeCode defaultType)
+        {
+            var settings = ShippingSettings.Fetch();
+            settings.DefaultShipmentTypeCode = defaultType;
+            ShippingSettings.Save(settings);
+        }
+
+        #endregion
 
         public void Dispose() => context.Dispose();
     }

@@ -22,7 +22,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Filters;
-using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
@@ -143,8 +142,8 @@ namespace ShipWorks.Shipping
 
         /// <summary>
         /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed
-        /// in ShipWorks, then once its processed in WorldShip its completed.  Opted instead of hardcoding WorldShip if statements
-        /// to use this instead so its easier to track down all the usgages by doing Find References on this property.
+        /// in ShipWorks, then once its processed in WorldShip its completed.  Opted instead of hard coding WorldShip if statements
+        /// to use this instead so its easier to track down all the usages by doing Find References on this property.
         /// </summary>
         public virtual bool ProcessingCompletesExternally
         {
@@ -323,7 +322,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Creates the UserControl taht is used to edit customs options
+        /// Creates the UserControl that is used to edit customs options
         /// </summary>
         public virtual CustomsControlBase CreateCustomsControl()
         {
@@ -515,8 +514,13 @@ namespace ShipWorks.Shipping
             shipment.BilledType = 0;
             shipment.BilledWeight = 0;
 
-            // First apply the base profile
-            ApplyProfile(shipment, GetPrimaryProfile());
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
+
+                // First apply the base profile
+                ApplyProfile(shipment, shippingProfileManager.GetOrCreatePrimaryProfile(this));
+            }
 
             // Now apply ShipSense
             ApplyShipSense(shipment);
@@ -685,54 +689,54 @@ namespace ShipWorks.Shipping
             return false;
         }
 
-        /// <summary>
-        /// Create a profile with the default settings for the shipment type
-        /// </summary>
-        public ShippingProfileEntity GetPrimaryProfile()
-        {
-            ShippingProfileEntity profile = GetDefaultProfile();
+        ///// <summary>
+        ///// Create a profile with the default settings for the shipment type
+        ///// </summary>
+        //public ShippingProfileEntity GetPrimaryProfile()
+        //{
+        //    ShippingProfileEntity profile = GetDefaultProfile();
 
-            if (profile == null)
-            {
-                lock (syncLock)
-                {
-                    profile = GetDefaultProfile();
+        //    if (profile == null)
+        //    {
+        //        lock (syncLock)
+        //        {
+        //            profile = GetDefaultProfile();
 
-                    if (profile == null)
-                    {
-                        profile = new ShippingProfileEntity();
-                        profile.Name = string.Format("Defaults - {0}", ShipmentTypeName);
-                        profile.ShipmentType = (int) ShipmentTypeCode;
-                        profile.ShipmentTypePrimary = true;
+        //            if (profile == null)
+        //            {
+        //                profile = new ShippingProfileEntity();
+        //                profile.Name = string.Format("Defaults - {0}", ShipmentTypeName);
+        //                profile.ShipmentType = (int) ShipmentTypeCode;
+        //                profile.ShipmentTypePrimary = true;
 
-                        // Load the shipmentType specific profile data
-                        LoadProfileData(profile, true);
+        //                // Load the shipmentType specific profile data
+        //                LoadProfileData(profile, true);
 
-                        // Configure it as a primary profile
-                        ConfigurePrimaryProfile(profile);
+        //                // Configure it as a primary profile
+        //                ConfigurePrimaryProfile(profile);
 
-                        // Save the profile
-                        ShippingProfileManager.SaveProfile(profile);
-                    }
-                }
-            }
+        //                // Save the profile
+        //                ShippingProfileManager.SaveProfile(profile);
+        //            }
+        //        }
+        //    }
 
-            return profile;
-        }
+        //    return profile;
+        //}
 
-        /// <summary>
-        /// Gets the default profile if it exists
-        /// </summary>
-        /// <returns></returns>
-        private ShippingProfileEntity GetDefaultProfile()
-        {
-            return ShippingProfileManager.GetDefaultProfile(ShipmentTypeCode);
-        }
+        ///// <summary>
+        ///// Gets the default profile if it exists
+        ///// </summary>
+        ///// <returns></returns>
+        //private ShippingProfileEntity GetDefaultProfile()
+        //{
+        //    return ShippingProfileManager.GetDefaultProfile(ShipmentTypeCode);
+        //}
 
         /// <summary>
         /// Allows bases classes to apply the default settings to the given profile
         /// </summary>
-        protected virtual void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public virtual void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             profile.OriginID = (int) ShipmentOriginSource.Store;
 
@@ -899,12 +903,12 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Get detailed information about the parcel in a generic way that can be used accross shipment types
+        /// Get detailed information about the parcel in a generic way that can be used across shipment types
         /// </summary>
         public abstract ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex);
 
         /// <summary>
-        /// Get the tracking numbers for the shipment.  This can incluce extra text, such as "Package 1: (track#)"
+        /// Get the tracking numbers for the shipment.  This can include extra text, such as "Package 1: (track#)"
         /// </summary>
         public virtual List<string> GetTrackingNumbers(ShipmentEntity shipment)
         {

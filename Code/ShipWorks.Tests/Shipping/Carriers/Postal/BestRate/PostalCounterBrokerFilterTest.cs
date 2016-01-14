@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
 {
@@ -21,7 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
         {
             var testBroker1 = new UspsCounterRatesBroker(new Mock<ICarrierAccountRepository<UspsAccountEntity>>().Object);
             var testBroker2 = new UspsCounterRatesBroker(new Mock<ICarrierAccountRepository<UspsAccountEntity>>().Object);
-            var brokers = new List<IBestRateShippingBroker> {testBroker1, testBroker2};
+            var brokers = new List<IBestRateShippingBroker> { testBroker1, testBroker2 };
 
             var testObject = new PostalCounterBrokerFilter();
             var results = testObject.Filter(brokers);
@@ -33,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
         public void Filter_WithNoPostalBrokers_ReturnsCopyOfOriginalList_Test()
         {
             var testBroker1 = new UpsBestRateBroker();
-            var testBroker2 = new FedExBestRateBroker();
+            var testBroker2 = new Mock<IBestRateShippingBroker>().Object;
             var brokers = new List<IBestRateShippingBroker> { testBroker1, testBroker2 };
 
             var testObject = new PostalCounterBrokerFilter();

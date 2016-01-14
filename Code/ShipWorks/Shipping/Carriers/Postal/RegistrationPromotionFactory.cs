@@ -22,8 +22,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Initializes a new instance of the <see cref="RegistrationPromotionFactory"/> class.
         /// </summary>
-        public RegistrationPromotionFactory() : 
-            this(new UspsAccountRepository(), new Express1UspsAccountRepository(), 
+        public RegistrationPromotionFactory() :
+            this(new UspsAccountRepository(), new Express1UspsAccountRepository(),
                 new EndiciaAccountRepository(), new Express1EndiciaAccountRepository())
         {
         }
@@ -61,8 +61,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             if (endiciaAccountsExist)
             {
-                return AnyUspsResellerAccountsExist() ? 
-                    (IRegistrationPromotion) new EndiciaCbpRegistrationPromotion() : 
+                return AnyUspsResellerAccountsExist() ?
+                    (IRegistrationPromotion) new EndiciaCbpRegistrationPromotion() :
                     new EndiciaIntuishipRegistrationPromotion();
             }
 
@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <returns></returns>
         private bool AnyUspsResellerAccountsExist()
         {
-            return uspsAccountRepository.Accounts.Any(x => x.ContractType == (int)UspsAccountContractType.Reseller);
+            return uspsAccountRepository.Accounts.Any(x => x.ContractType == (int) UspsAccountContractType.Reseller);
         }
     }
 }
