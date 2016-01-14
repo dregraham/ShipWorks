@@ -126,7 +126,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.ApplicationCore.Interaction.StartupAction".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Licensing.Decoding.LicenseKeyPatternType".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Licensing.LicenseActivationState".ToUpperInvariant(),
-                "ShipWorks.ApplicationCore.Licensing.AllowsLogOn".ToUpperInvariant(),
+                "ShipWorks.ApplicationCore.Licensing.LogOnRestrictionLevel".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Logging.ApiLogCategory".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Logging.ApiLogEncryption".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Logging.LogActionType".ToUpperInvariant(),

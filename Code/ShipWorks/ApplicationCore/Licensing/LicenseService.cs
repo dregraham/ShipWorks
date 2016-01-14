@@ -4,7 +4,6 @@ using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
-using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -38,7 +37,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         public ILicense GetLicense(StoreEntity store)
         {
             // If Legacy, return store license, else return customer license
-            return isLegacy ? 
+            return isLegacy ?
                 (ILicense) storeLicenseFactory(store) :
                  customerLicenseFactory(customerKey);
         }
@@ -50,19 +49,19 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             // If Legacy, return store licenses for each store, else return a single customer license
             return isLegacy ?
-                storeManager.GetEnabledStores().Select(GetLicense) : 
+                storeManager.GetEnabledStores().Select(GetLicense) :
                 new[] {customerLicenseFactory(customerKey)};
         }
 
         /// <summary>
         /// Can the customer Logon?
         /// </summary>
-        public EnumResult<AllowsLogOn> AllowsLogOn()
+        public EnumResult<LogOnRestrictionLevel> AllowsLogOn()
         {
             // Legacy users are always allowed to log on, only new pricing restricts logon
             if (isLegacy)
             {
-                return new EnumResult<AllowsLogOn>(Licensing.AllowsLogOn.Yes);
+                return new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None);
             }
             
             ILicense customerLicense = customerLicenseFactory(customerKey);
@@ -71,15 +70,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             //license info with tango before checking if the license is disabled
             customerLicense.Refresh();
 
-            if (customerLicense.IsDisabled)
-            {
-                return new EnumResult<AllowsLogOn>(Licensing.AllowsLogOn.No)
-                {
-                    Message = customerLicense.DisabledReason
-                };
-            }
-
-            return new EnumResult<AllowsLogOn>(Licensing.AllowsLogOn.Yes);
+            return customerLicense.IsDisabled ?
+                new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.Forbidden, customerLicense.DisabledReason) :
+                new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None);
         }
     }
 }

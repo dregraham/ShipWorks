@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Users
 
                 Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
                 licenseService.Setup(s => s.AllowsLogOn())
-                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.No) {Message = "Some Disabled Reason"});
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.Forbidden, "Some Disabled Reason"));
 
                 UserService userService = mock.Create<UserService>();
 
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Users
 
                 Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
                 licenseFactory.Setup(lf => lf.AllowsLogOn())
-                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.Yes));
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None));
 
                 Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.Logon(It.IsAny<LogonCredentials>()))
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Users
 
                 Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
                 licenseFactory.Setup(lf => lf.AllowsLogOn())
-                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.Yes));
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None));
 
                 Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.Logon(It.IsAny<LogonCredentials>()))
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Users
                 Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
 
                 licenseFactory.Setup(lf => lf.AllowsLogOn())
-                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.No) {Message = "Some Disabled Reason"});
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.Forbidden, "Some Disabled Reason"));
 
                 UserService userService = mock.Create<UserService>();
 
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Users
             {
                 Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
                 licenseFactory.Setup(lf => lf.AllowsLogOn())
-                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.Yes));
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None));
 
 
                 Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
@@ -129,7 +129,7 @@ namespace ShipWorks.Tests.Users
             {
                 Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
                 licenseFactory.Setup(lf => lf.AllowsLogOn())
-                    .Returns(new EnumResult<AllowsLogOn>(AllowsLogOn.Yes));
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None));
 
                 Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.LogonLastUser())

@@ -17,7 +17,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Can the customer Logon?
         /// </summary>
-        EnumResult<AllowsLogOn> AllowsLogOn();
+        EnumResult<LogOnRestrictionLevel> AllowsLogOn();
 
     }
 }

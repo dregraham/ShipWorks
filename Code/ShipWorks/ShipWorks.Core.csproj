@@ -607,7 +607,7 @@
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilities.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseService.cs" />
-    <Compile Include="ApplicationCore\Licensing\AllowsLogOn.cs" />
+    <Compile Include="ApplicationCore\Licensing\LogOnRestrictionLevel.cs" />
     <Compile Include="ApplicationCore\Licensing\StoreLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientWrapper.cs" />

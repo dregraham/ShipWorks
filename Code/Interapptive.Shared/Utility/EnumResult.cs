@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Interapptive.Shared.Utility
 {
@@ -13,11 +10,19 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Constructor
         /// </summary>
-        public EnumResult(TEnum value)
+        public EnumResult(TEnum value, string message)
         {
-            if (!typeof(TEnum).IsEnum) throw new NotSupportedException("EnumResult Generic Type must be of type Enum.");
+            if (!typeof (TEnum).IsEnum)
+            {
+                throw new NotSupportedException("EnumResult Generic Type must be of type Enum.");
+            }
 
             Value = value;
+            Message = message;
+        }
+
+        public EnumResult(TEnum value) : this(value, string.Empty)
+        {
         }
 
         /// <summary>
@@ -28,6 +33,6 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Message accompanying the value.
         /// </summary>
-        public string Message { get; set; }
+        public string Message { get; }
     }
 }

@@ -3,8 +3,6 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Logon;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShipWorks.Users
 {
@@ -13,9 +11,14 @@ namespace ShipWorks.Users
     /// </summary>
     public class UserService : IUserService
     {
-        IUserSession userSession;
-        ILicenseService licenseService; 
+        readonly IUserSession userSession;
+        readonly ILicenseService licenseService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserService"/> class.
+        /// </summary>
+        /// <param name="userSession">The user session.</param>
+        /// <param name="licenseService">The license service.</param>
         public UserService(IUserSession userSession, ILicenseService licenseService)
         {
             this.userSession = userSession;
@@ -29,7 +32,7 @@ namespace ShipWorks.Users
         {
             return UserUtility.CreateUser(username, username, password, isAdmin);
         }
-        
+
         /// <summary>
         /// Logs the user in using their saved credentials
         /// </summary>
@@ -49,31 +52,27 @@ namespace ShipWorks.Users
         }
 
         /// <summary>
-        /// Check license, if ok, try to login to shipworks.
+        /// Check license, if ok, try to login to ShipWorks.
         /// </summary>
         private EnumResult<UserServiceLogonResultType> Logon(Func<bool> loginAction)
         {
-            EnumResult<AllowsLogOn> allowsLogOn = licenseService.AllowsLogOn();
-            
-            if (allowsLogOn.Value == AllowsLogOn.No)
+            EnumResult<LogOnRestrictionLevel> allowsLogOn = licenseService.AllowsLogOn();
+
+            // If Tango says the account is not allowed to logon, get the reason why
+            if (allowsLogOn.Value == LogOnRestrictionLevel.Forbidden)
             {
-                return new EnumResult<UserServiceLogonResultType>(UserServiceLogonResultType.TangoAccountDisabled)
-                {
-                    Message = allowsLogOn.Message
-                };
+                return new EnumResult<UserServiceLogonResultType>(UserServiceLogonResultType.TangoAccountDisabled,
+                    allowsLogOn.Message);
             }
 
             bool loggedOnToShipWorks = loginAction();
 
-            if (loggedOnToShipWorks)
-            {
-                return new EnumResult<UserServiceLogonResultType>(UserServiceLogonResultType.Success);
-            }
-
-            return new EnumResult<UserServiceLogonResultType>(UserServiceLogonResultType.InvalidCredentials)
-            {
-                Message = "Incorrect username or password."
-            };
+            // At this point Tango says the user is allowed to logon to ShipWorks, but we still need
+            // to check for valid credentials.
+            return loggedOnToShipWorks ?
+                new EnumResult<UserServiceLogonResultType>(UserServiceLogonResultType.Success) :
+                new EnumResult<UserServiceLogonResultType>(UserServiceLogonResultType.InvalidCredentials,
+                   "Incorrect username or password.");
         }
     }
 }

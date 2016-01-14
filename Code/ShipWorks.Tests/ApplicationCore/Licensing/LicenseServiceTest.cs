@@ -200,9 +200,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 LicenseService testObject = mock.Create<LicenseService>();
 
-                EnumResult<AllowsLogOn> allowsLogOn = testObject.AllowsLogOn();
+                EnumResult<LogOnRestrictionLevel> allowsLogOn = testObject.AllowsLogOn();
 
-                Assert.Equal(AllowsLogOn.Yes, allowsLogOn.Value);
+                Assert.Equal(LogOnRestrictionLevel.None, allowsLogOn.Value);
             }
         }
 
@@ -222,9 +222,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 LicenseService testObject = mock.Create<LicenseService>();
 
-                EnumResult<AllowsLogOn> allowsLogOn = testObject.AllowsLogOn();
+                EnumResult<LogOnRestrictionLevel> allowsLogOn = testObject.AllowsLogOn();
 
-                Assert.Equal(AllowsLogOn.Yes, allowsLogOn.Value);
+                Assert.Equal(LogOnRestrictionLevel.None, allowsLogOn.Value);
             }
         }
 
@@ -244,9 +244,9 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 LicenseService testObject = mock.Create<LicenseService>();
 
-                EnumResult<AllowsLogOn> allowsLogOn = testObject.AllowsLogOn();
+                EnumResult<LogOnRestrictionLevel> allowsLogOn = testObject.AllowsLogOn();
 
-                Assert.Equal(AllowsLogOn.No, allowsLogOn.Value);
+                Assert.Equal(LogOnRestrictionLevel.Forbidden, allowsLogOn.Value);
             }
         }
     }
