@@ -5,7 +5,12 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Other;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
@@ -78,7 +83,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         #region "Carrier specific tests"
-
         [Fact]
         public void GetOrCreatePrimaryProfile_SavesObjectTree_WhenTypeIsFedEx()
         {
@@ -94,9 +98,124 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
                 adapter.FetchEntity(loadedProfile, prefetchPath);
 
-                Assert.Equal(EntityState.Fetched, loadedProfile.Fields.State);
                 Assert.NotNull(loadedProfile.FedEx);
                 Assert.Empty(loadedProfile.FedEx.Packages);
+            }
+        }
+
+        [Fact]
+        public void GetOrCreatePrimaryProfile_SavesObjectTree_WhenTypeIsUps()
+        {
+            var profile = testObject.GetOrCreatePrimaryProfile(context.Mock.Create<UpsOltShipmentType>());
+
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            {
+                var prefetchPath = new PrefetchPath2(EntityType.ShippingProfileEntity);
+                var profilePatch = prefetchPath.Add(ShippingProfileEntity.PrefetchPathUps);
+                profilePatch.SubPath.Add(UpsProfileEntity.PrefetchPathPackages);
+
+                var loadedProfile = new ShippingProfileEntity(profile.ShippingProfileID);
+
+                adapter.FetchEntity(loadedProfile, prefetchPath);
+
+                Assert.NotNull(loadedProfile.Ups);
+                Assert.Empty(loadedProfile.Ups.Packages);
+            }
+        }
+
+        [Fact]
+        public void GetOrCreatePrimaryProfile_SavesObjectTree_WhenTypeIsiParcel()
+        {
+            var profile = testObject.GetOrCreatePrimaryProfile(context.Mock.Create<iParcelShipmentType>());
+
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            {
+                var prefetchPath = new PrefetchPath2(EntityType.ShippingProfileEntity);
+                var profilePatch = prefetchPath.Add(ShippingProfileEntity.PrefetchPathIParcel);
+                profilePatch.SubPath.Add(IParcelProfileEntity.PrefetchPathPackages);
+
+                var loadedProfile = new ShippingProfileEntity(profile.ShippingProfileID);
+
+                adapter.FetchEntity(loadedProfile, prefetchPath);
+
+                Assert.NotNull(loadedProfile.IParcel);
+                Assert.Empty(loadedProfile.IParcel.Packages);
+            }
+        }
+
+        [Fact]
+        public void GetOrCreatePrimaryProfile_SavesObjectTree_WhenTypeIsUsps()
+        {
+            var profile = testObject.GetOrCreatePrimaryProfile(context.Mock.Create<UspsShipmentType>());
+
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            {
+                var prefetchPath = new PrefetchPath2(EntityType.ShippingProfileEntity);
+                var profilePatch = prefetchPath.Add(ShippingProfileEntity.PrefetchPathPostal);
+                profilePatch.SubPath.Add(PostalProfileEntity.PrefetchPathUsps);
+
+                var loadedProfile = new ShippingProfileEntity(profile.ShippingProfileID);
+
+                adapter.FetchEntity(loadedProfile, prefetchPath);
+
+                Assert.NotNull(loadedProfile.Postal);
+                Assert.NotNull(loadedProfile.Postal.Usps);
+            }
+        }
+
+        [Fact]
+        public void GetOrCreatePrimaryProfile_SavesObjectTree_WhenTypeIsEndicia()
+        {
+            var profile = testObject.GetOrCreatePrimaryProfile(context.Mock.Create<EndiciaShipmentType>());
+
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            {
+                var prefetchPath = new PrefetchPath2(EntityType.ShippingProfileEntity);
+                var profilePatch = prefetchPath.Add(ShippingProfileEntity.PrefetchPathPostal);
+                profilePatch.SubPath.Add(PostalProfileEntity.PrefetchPathEndicia);
+
+                var loadedProfile = new ShippingProfileEntity(profile.ShippingProfileID);
+
+                adapter.FetchEntity(loadedProfile, prefetchPath);
+
+                Assert.NotNull(loadedProfile.Postal);
+                Assert.NotNull(loadedProfile.Postal.Endicia);
+            }
+        }
+
+        [Fact]
+        public void GetOrCreatePrimaryProfile_SavesObjectTree_WhenTypeOnTrac()
+        {
+            var profile = testObject.GetOrCreatePrimaryProfile(context.Mock.Create<OnTracShipmentType>());
+
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            {
+                var prefetchPath = new PrefetchPath2(EntityType.ShippingProfileEntity);
+                prefetchPath.Add(ShippingProfileEntity.PrefetchPathOnTrac);
+
+                var loadedProfile = new ShippingProfileEntity(profile.ShippingProfileID);
+
+                adapter.FetchEntity(loadedProfile, prefetchPath);
+
+                Assert.NotNull(loadedProfile.OnTrac);
+            }
+        }
+
+        [Fact]
+        public void GetOrCreatePrimaryProfile_SavesObjectTree_WhenTypeOther()
+        {
+            var profile = testObject.GetOrCreatePrimaryProfile(context.Mock.Create<OtherShipmentType>());
+
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            {
+                var prefetchPath = new PrefetchPath2(EntityType.ShippingProfileEntity);
+                prefetchPath.Add(ShippingProfileEntity.PrefetchPathOther);
+
+                var loadedProfile = new ShippingProfileEntity(profile.ShippingProfileID);
+
+                adapter.FetchEntity(loadedProfile, prefetchPath);
+
+                Assert.NotNull(loadedProfile.Other);
             }
         }
         #endregion

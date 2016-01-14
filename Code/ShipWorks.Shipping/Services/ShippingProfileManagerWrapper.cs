@@ -23,30 +23,32 @@ namespace ShipWorks.Shipping.Profiles
         public ShippingProfileEntity GetOrCreatePrimaryProfile(ShipmentType shipmentType)
         {
             ShippingProfileEntity profile = GetDefaultProfile(shipmentType.ShipmentTypeCode);
-
-            if (profile == null)
+            if (profile != null)
             {
-                lock (syncLock)
+                return profile;
+            }
+
+            lock (syncLock)
+            {
+                profile = GetDefaultProfile(shipmentType.ShipmentTypeCode);
+                if (profile != null)
                 {
-                    profile = GetDefaultProfile(shipmentType.ShipmentTypeCode);
-
-                    if (profile == null)
-                    {
-                        profile = new ShippingProfileEntity();
-                        profile.Name = string.Format("Defaults - {0}", shipmentType.ShipmentTypeName);
-                        profile.ShipmentTypeCode = shipmentType.ShipmentTypeCode;
-                        profile.ShipmentTypePrimary = true;
-
-                        // Load the shipmentType specific profile data
-                        shipmentType.LoadProfileData(profile, true);
-
-                        // Configure it as a primary profile
-                        shipmentType.ConfigurePrimaryProfile(profile);
-
-                        // Save the profile
-                        ShippingProfileManager.SaveProfile(profile);
-                    }
+                    return profile;
                 }
+
+                profile = new ShippingProfileEntity();
+                profile.Name = string.Format("Defaults - {0}", shipmentType.ShipmentTypeName);
+                profile.ShipmentTypeCode = shipmentType.ShipmentTypeCode;
+                profile.ShipmentTypePrimary = true;
+
+                // Load the shipmentType specific profile data
+                shipmentType.LoadProfileData(profile, true);
+
+                // Configure it as a primary profile
+                shipmentType.ConfigurePrimaryProfile(profile);
+
+                // Save the profile
+                ShippingProfileManager.SaveProfile(profile);
             }
 
             return profile;
