@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 repo.Setup(x => x(It.IsAny<string>()))
                     .Returns(customerLicense.Object);
                 mock.Provide(repo.Object);
-                
+
                 LicenseService testObject = mock.Create<LicenseService>();
 
                 testObject.AllowsLogOn();
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 mock.Provide(repo.Object);
 
                 LicenseService testObject = mock.Create<LicenseService>();
-                
+
                 Exception ex = Assert.Throws<Exception>(() => testObject.AllowsLogOn());
                 Assert.Equal("something went wrong", ex.Message);
             }
@@ -189,7 +189,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void AllowsLogOn_ReturnsYes_WhenCustomerIsOnLegacyPricing()
+        public void AllowsLogOn_ReturnsNone_WhenCustomerIsOnLegacyPricing()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -207,7 +207,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void AllowsLogOn_ReturnsYes_WhenCustomerLicenseNotDisabled()
+        public void AllowsLogOn_ReturnsNone_WhenCustomerLicenseNotDisabled()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -229,7 +229,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void AllowsLogOn_ReturnsNo_WhenCustomerLicenseDisabled()
+        public void AllowsLogOn_ReturnsForbidden_WhenCustomerLicenseDisabled()
         {
             using (var mock = AutoMock.GetLoose())
             {
