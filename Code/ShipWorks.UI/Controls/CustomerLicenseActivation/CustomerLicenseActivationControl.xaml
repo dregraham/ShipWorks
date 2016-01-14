@@ -67,7 +67,7 @@
             </i:Interaction.Behaviors>
         </PasswordBox>
         <TextBlock Grid.Row="2" Grid.Column="2">
-            <Hyperlink NavigateUri="https://www.interapptive.com/account/forgotpassword.php">Forgot Password</Hyperlink>
+            <Hyperlink NavigateUri="https://www.interapptive.com/account/forgotpassword.php" RequestNavigate="Hyperlink_OnRequestNavigate">Forgot Password</Hyperlink>
         </TextBlock>
     </Grid>
 

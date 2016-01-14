@@ -26,9 +26,9 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(ICustomerLicense customerLicense, IUserService userManager)
+        public CustomerLicenseActivationViewModel(Func<string, ICustomerLicense> customerLicenseFactory, IUserService userManager)
         {
-            this.customerLicense = customerLicense;
+            this.customerLicense = customerLicenseFactory(string.Empty);
             this.userManager = userManager;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
