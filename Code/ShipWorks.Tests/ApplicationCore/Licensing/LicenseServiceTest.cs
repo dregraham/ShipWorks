@@ -39,6 +39,33 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
+        public void AllowsLogOn_Throws_WhenLicenseRefreshThrows()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICustomerLicenseReader>()
+                    .Setup(r => r.Read())
+                    .Returns("foo");
+
+                Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
+                customerLicense.Setup(l => l.Refresh())
+                    .Throws(new Exception("something went wrong"));
+
+
+                // Mock up the CustomerLicense constructor parameter Func<string, ICustomerLicense>
+                Mock<Func<string, ICustomerLicense>> repo = mock.MockRepository.Create<Func<string, ICustomerLicense>>();
+                repo.Setup(x => x(It.IsAny<string>()))
+                    .Returns(customerLicense.Object);
+                mock.Provide(repo.Object);
+
+                LicenseService testObject = mock.Create<LicenseService>();
+                
+                Exception ex = Assert.Throws<Exception>(() => testObject.AllowsLogOn());
+                Assert.Equal("something went wrong", ex.Message);
+            }
+        }
+
+        [Fact]
         public void GetLicense_ReturnsStoreLicense_WhenLegacy()
         {
             using (var mock = AutoMock.GetLoose())
