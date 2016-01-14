@@ -42,8 +42,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width=".6*" />
-            <ColumnDefinition Width=".4*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Image Grid.Row="0"
@@ -66,6 +66,9 @@
                 <behaviors:PasswordBoxBindingBehavior Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
             </i:Interaction.Behaviors>
         </PasswordBox>
+        <TextBlock Grid.Row="2" Grid.Column="2">
+            <Hyperlink NavigateUri="https://www.interapptive.com/account/forgotpassword.php">Forgot Password</Hyperlink>
+        </TextBlock>
     </Grid>
 
 </UserControl>
