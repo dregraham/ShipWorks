@@ -1,7 +1,7 @@
 ﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion
 {
     /// <summary>
-    /// Need to use Express1 instead of IntuiShip when converting accounts
+    /// Promo needed to convert or create an Express1 account
     /// </summary>
     public class Express1RegistrationPromotion : IRegistrationPromotion
     {

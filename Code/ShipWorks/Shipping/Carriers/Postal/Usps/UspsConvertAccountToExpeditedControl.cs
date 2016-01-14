@@ -11,7 +11,7 @@ using ShipWorks.Shipping.Editing.Rating;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// A UserControl that allows a customer to convert an existing USPS account to an Intuiship
+    /// A UserControl that allows a customer to convert an existing USPS account to an Express1
     /// USPS account via the Stamps.com API.
     /// </summary>
     public partial class UspsConvertAccountToExpeditedControl : UserControl
@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // Need to convert the account to get discounted rates via the expedited contract/plan
                 log.InfoFormat("Converting USPS account ({0}) to get discounted postage.", accountToConvert.Username);
 
-                // ShipWorks3 must be used when converting an account, so always use the Intuiship promotion when converting an account.
+                // ShipWorks667 must be used when converting an account, so always use the Express1 promotion when converting an account.
                 IRegistrationPromotion promotion = new Express1RegistrationPromotion();
                 new UspsWebClient((UspsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode());
             }
