@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Users
         }
 
         [Fact]
-        public void LogOnWithCredentials_MessageIsDisabledReason_WhenLicenseServiceReturnsAllowsLogOnNo()
+        public void LogOnWithCredentials_MessageIsDisabledReason_WhenLicenseServiceReturnsForbidden()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -142,7 +142,7 @@ namespace ShipWorks.Tests.Users
 
 
         [Fact]
-        public void LogOn_DelegatesToLicenseServiceAllowsLogOn_ForAllLicenses()
+        public void LogOn_DelegatesToLicenseServiceAllowsLogOn()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -159,7 +159,7 @@ namespace ShipWorks.Tests.Users
         }
 
         [Fact]
-        public void LogOn_ReturnsAccountDisabled_WhenLicenseServiceAllowsLogOnReturnsNo()
+        public void LogOn_ReturnsAccountDisabled_WhenLicenseServiceReturnsForbidden()
         {
             using (var mock = AutoMock.GetLoose())
             {
