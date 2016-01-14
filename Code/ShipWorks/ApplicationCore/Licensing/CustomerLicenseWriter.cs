@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using System;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -13,9 +14,18 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void Write(ICustomerLicense customerLicense)
         {
-            // Fetch the current configuration entity
-            ConfigurationEntity config = ConfigurationData.Fetch();
+            ConfigurationEntity config = null;
 
+            // Fetch the current configuration entity
+            // this will crash if this is a brand new database
+            try
+            {
+                config = ConfigurationData.Fetch();
+            } catch (NullReferenceException)
+            {
+
+            }
+            
             // if its null because we are in the database setup wizard
             if (config == null)
             {
