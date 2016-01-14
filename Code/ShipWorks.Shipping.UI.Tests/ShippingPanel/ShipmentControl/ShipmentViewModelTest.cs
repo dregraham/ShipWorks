@@ -486,6 +486,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 ShipmentCustomsItemEntity shipmentCustomsItemEntity = new ShipmentCustomsItemEntity()
                 {
                     ShipmentCustomsItemID = 3,
+                    Shipment = shipmentAdapter.Object.Shipment,
                     ShipmentID = shipmentAdapter.Object.Shipment.ShipmentID,
                     Weight = 6.6
                 };
@@ -493,11 +494,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
                 
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
-                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity());
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
 
                 Assert.Equal(shipmentCustomsItemEntity.ShipmentCustomsItemID, testObject.SelectedCustomsItem.ShipmentCustomsItemID);
-                Assert.Equal(shipmentCustomsItemEntity.ShipmentID, testObject.SelectedCustomsItem.ShipmentID);
                 Assert.Equal(shipmentCustomsItemEntity.Weight, testObject.SelectedCustomsItem.Weight);
             }
         }
@@ -528,13 +528,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
 
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
-                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity());
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
 
                 testObject.SelectedCustomsItem.UnitValue = 100;
                 testObject.SelectedCustomsItem.Quantity = 2.5;
 
-                double expectedValue = (double)(testObject.SelectedCustomsItem.UnitValue * (decimal)testObject.SelectedCustomsItem.Quantity);
+                decimal expectedValue = (testObject.SelectedCustomsItem.UnitValue * (decimal)testObject.SelectedCustomsItem.Quantity);
 
                 Assert.Equal(expectedValue, testObject.TotalCustomsValue);
             }
@@ -566,8 +566,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
 
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
-                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity());
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
 
                 testObject.SelectedCustomsItem.Weight = 100;
                 testObject.SelectedCustomsItem.Quantity = 2.5;
@@ -604,8 +604,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
 
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
-                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity());
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
 
                 testObject.SelectedCustomsItem.Weight = 100;
                 testObject.SelectedCustomsItem.Quantity = 2.53;
@@ -752,7 +752,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
                 testObject.CustomsAllowed = true;
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity(999);
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity(999));
 
                 Assert.False(testObject.DeleteCustomsItemCommand.CanExecute(mock));
             }
@@ -772,7 +772,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
                 testObject.CustomsAllowed = true;
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity(999);
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity(999));
 
                 Assert.True(testObject.AddCustomsItemCommand.CanExecute(mock));
             }

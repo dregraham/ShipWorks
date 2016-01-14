@@ -177,8 +177,8 @@
                                             <TextBlock Foreground="Gray">
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="{}{0}, {1} ">
-                                                        <Binding Path="Destination.FullName" />
-                                                        <Binding Path="DomesticInternationalText" />
+                                                        <Binding Path="Destination.FullName" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                                                        <Binding Path="DomesticInternationalText" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>

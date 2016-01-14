@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Linq;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Threading;
 using ShipWorks.Shipping.Services;
 using ShipWorks.UI.Controls.AddressControl;
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             this.schedulerProvider = schedulerProvider;
         }
-
+        
         /// <summary>
         /// Register the pipeline on the view model
         /// </summary>
@@ -41,13 +41,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(domesticAffectingProperties.Contains)
                 .Select(_ => viewModel.ShipmentAdapter)
                 .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
-                .Subscribe(shipmentAdapter => SetDomesticInternationalText(viewModel, shipmentAdapter));
+                .Subscribe(shipmentAdapter => Update(viewModel, shipmentAdapter));
         }
 
         /// <summary>
-        /// Set the domestic international text
+        /// Update the person adapters and set DomesticInternationalText appropriately 
         /// </summary>
-        public void SetDomesticInternationalText(ShippingPanelViewModel viewModel, ICarrierShipmentAdapter shipmentAdapter)
+        private void Update(ShippingPanelViewModel viewModel, ICarrierShipmentAdapter shipmentAdapter)
         {
             if (!ReferenceEquals(viewModel.ShipmentAdapter, shipmentAdapter))
             {
@@ -55,7 +55,27 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 return;
             }
 
+            if (shipmentAdapter?.Shipment?.OriginPerson != null)
+            {
+                UpdatePersonalAdapterValues(shipmentAdapter.Shipment.OriginPerson, viewModel.Origin);
+            }
+
+            if (shipmentAdapter?.Shipment?.ShipPerson != null)
+            {
+                UpdatePersonalAdapterValues(shipmentAdapter.Shipment.ShipPerson, viewModel.Destination);
+            }
+
             viewModel.DomesticInternationalText = viewModel.IsDomestic ? "Domestic" : "International";
+        }
+
+        /// <summary>
+        /// Update a person adapter based on the address view model
+        /// </summary>
+        private void UpdatePersonalAdapterValues(PersonAdapter shipmentPersonalAdapter, AddressViewModel addressViewModel)
+        {
+            shipmentPersonalAdapter.StateProvCode = addressViewModel.StateProvCode;
+            shipmentPersonalAdapter.PostalCode = addressViewModel.PostalCode;
+            shipmentPersonalAdapter.CountryCode = addressViewModel.CountryCode;
         }
     }
 }

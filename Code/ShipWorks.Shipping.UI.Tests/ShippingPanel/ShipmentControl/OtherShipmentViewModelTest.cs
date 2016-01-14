@@ -142,8 +142,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 shipmentAdapter.Setup(sa => sa.IsDomestic).Returns(true);
 
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
-                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity());
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
 
                 Assert.Null(testObject.CustomsItems);
             }
@@ -166,11 +166,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 OtherShipmentViewModel testObject = mock.Create<OtherShipmentViewModel>();
                 
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
-                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity());
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
 
                 Assert.Equal(shipmentCustomsItemEntity.ShipmentCustomsItemID, testObject.SelectedCustomsItem.ShipmentCustomsItemID);
-                Assert.Equal(shipmentCustomsItemEntity.ShipmentID, testObject.SelectedCustomsItem.ShipmentID);
                 Assert.Equal(shipmentCustomsItemEntity.Weight, testObject.SelectedCustomsItem.Weight);
             }
         }
@@ -201,8 +200,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 OtherShipmentViewModel testObject = mock.Create<OtherShipmentViewModel>();
 
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
-                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity());
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
 
                 testObject.SelectedCustomsItem.UnitValue = 100;
                 testObject.SelectedCustomsItem.Quantity = 2.5;
@@ -239,8 +238,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 OtherShipmentViewModel testObject = mock.Create<OtherShipmentViewModel>();
 
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity();
-                testObject.SelectedCustomsItem = shipmentCustomsItemEntity;
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity());
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
 
                 testObject.SelectedCustomsItem.Weight = 100;
                 testObject.SelectedCustomsItem.Quantity = 2.5;
@@ -285,7 +284,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
                 testObject.CustomsAllowed = true;
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity(999);
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity(999));
 
                 Assert.False(testObject.DeleteCustomsItemCommand.CanExecute(mock));
             }
@@ -305,7 +304,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
                 testObject.CustomsAllowed = true;
                 testObject.Load(shipmentAdapter.Object);
-                testObject.SelectedCustomsItem = new ShipmentCustomsItemEntity(999);
+                testObject.SelectedCustomsItem = new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity(999));
 
                 Assert.True(testObject.AddCustomsItemCommand.CanExecute(mock));
             }

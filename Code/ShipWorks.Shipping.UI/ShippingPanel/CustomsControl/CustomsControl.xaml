@@ -20,6 +20,8 @@
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/EmptyButtonStyle.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
+            <ui:EmptyDoubleConverter x:Key="EmptyDouble" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <Style x:Key="GroupSectionHeader" TargetType="{x:Type TextBlock}" >
                 <Setter Property="FontWeight" Value="Bold"></Setter>
@@ -72,7 +74,7 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="200"
-                            DisplayMemberBinding="{Binding Description, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}">Description</GridViewColumn>
+                            DisplayMemberBinding="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}">Description</GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -109,7 +111,12 @@
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Style="{DynamicResource GridLabel}" >Quantity:</TextBlock>
                 <TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="75" Margin="4 2"  MaxLength="5"
-                         Text="{Binding SelectedCustomsItem.Quantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
+                         Style="{DynamicResource TextBoxErrorTemplate}"
+                         Text="{Binding SelectedCustomsItem.Quantity, 
+                         Converter={StaticResource EmptyDouble}, 
+                         ConverterParameter=1,
+                         Mode=TwoWay, UpdateSourceTrigger=LostFocus, 
+                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
                     <i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior RegularExpression="^?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="" MaxLength="6" />
                     </i:Interaction.Behaviors>
@@ -117,16 +124,20 @@
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource GridLabel}" >Description:</TextBlock>
                 <TextBox Grid.Row="1" Grid.Column="1" Margin="4 2" MaxLength="150"
-                         Text="{Binding SelectedCustomsItem.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                         Style="{DynamicResource TextBoxErrorTemplate}"
+                         Text="{Binding SelectedCustomsItem.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"></TextBox>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource GridLabel}" VerticalAlignment="Center" >Weight:</TextBlock>
                 <weight:WeightControl Grid.Row="2" Grid.Column="1" Margin="0 2 0 0"
-                              Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus, 
+                        Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus, 
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
                 <TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource GridLabel}" >Value:</TextBlock>
                 <TextBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Width="75" Margin="4 2"  MaxLength="12"
-                         Text="{Binding SelectedCustomsItem.UnitValue, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
+                         Style="{DynamicResource TextBoxErrorTemplate}"
+                         Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, StringFormat=C, Mode=TwoWay, UpdateSourceTrigger=LostFocus, 
+                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
                     <i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior RegularExpression="^[+]?\$? ?((\d{1,3}(,\d{3})+)|\d*)\.?(\d+)?$" EmptyValue="" MaxLength="15" />
                     </i:Interaction.Behaviors>
@@ -134,7 +145,9 @@
 
                 <TextBlock Grid.Row="4" Grid.Column="0" Style="{DynamicResource GridLabel}" >Harmonized Code:</TextBlock>
                 <TextBox Grid.Row="4" Grid.Column="1" Margin="4 2" HorizontalAlignment="Left" Width="75" MaxLength="14"
-                         Text="{Binding SelectedCustomsItem.HarmonizedCode, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
+                         Style="{DynamicResource TextBoxErrorTemplate}"
+                         Text="{Binding SelectedCustomsItem.HarmonizedCode, Mode=TwoWay, UpdateSourceTrigger=LostFocus, 
+                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"></TextBox>
 
                 <TextBlock Grid.Row="5" Grid.Column="0" Style="{DynamicResource GridLabel}" >Country of Origin:</TextBlock>
                 <ComboBox Grid.Row="5" Grid.Column="1"

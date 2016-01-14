@@ -72,7 +72,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 .Where(x => x != null)
                 .Subscribe(x =>
                 {
-                    Origin.SaveToEntity(x);
+                    ShipmentAdapter.Shipment.OriginPerson.StateProvCode = Origin.StateProvCode;
+                    ShipmentAdapter.Shipment.OriginPerson.PostalCode = Origin.PostalCode;
+                    ShipmentAdapter.Shipment.OriginPerson.CountryCode = Origin.CountryCode;
                     shipmentViewModel.LoadCustoms();
                 });
             Destination.PropertyChangeStream
@@ -80,7 +82,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 .Where(x => x != null)
                 .Subscribe(x =>
                 {
-                    Destination.SaveToEntity(x);
+                    ShipmentAdapter.Shipment.ShipPerson.StateProvCode = Destination.StateProvCode;
+                    ShipmentAdapter.Shipment.ShipPerson.PostalCode = Destination.PostalCode;
+                    ShipmentAdapter.Shipment.ShipPerson.CountryCode = Destination.CountryCode;
                     shipmentViewModel.LoadCustoms();
                 });
 
@@ -185,6 +189,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             Save();
+
             IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter.Shipment, false);
             DisplayError(errors);
         }
@@ -277,8 +282,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             DestinationAddressEditableState = orderSelectionLoaded.DestinationAddressEditable;
 
             Origin.SetAddressFromOrigin(OriginAddressType, ShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
-
-            DomesticInternationalText = "Domestic";
 
             SupportsMultiplePackages = ShipmentAdapter.SupportsMultiplePackages;
 

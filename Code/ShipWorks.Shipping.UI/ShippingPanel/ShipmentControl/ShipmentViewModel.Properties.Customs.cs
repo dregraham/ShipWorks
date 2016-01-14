@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.Command;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 {
@@ -18,18 +19,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// </summary>
     public partial class ShipmentViewModel
     {
-        private ShipmentCustomsItemEntity selectedCustomsItem;
-        private ObservableCollection<ShipmentCustomsItemEntity> customsItems;
+        private IShipmentCustomsItemAdapter selectedCustomsItem;
+        private ObservableCollection<IShipmentCustomsItemAdapter> customsItems;
         private readonly ICustomsManager customsManager;
         private bool customsAllowed;
-        private double totalCustomsValue;
+        private decimal totalCustomsValue;
         private double shipmentContentWeight;
 
         /// <summary>
         /// The list of customs items
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<ShipmentCustomsItemEntity> CustomsItems
+        public ObservableCollection<IShipmentCustomsItemAdapter> CustomsItems
         {
             get { return customsItems; }
             private set { handler.Set(nameof(CustomsItems), ref customsItems, value, true); }
@@ -49,10 +50,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Sum of customs values?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        [Required(AllowEmptyStrings = false, ErrorMessage = @"Total customs value is required")]
-        [Range(0.0001, 999999999, ErrorMessage = @"Shipment weight must be greater than 0 and less than 999,999,999")]
-        [DoubleCompare(0, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Total customs value must be greater than 0.")]
-        public double TotalCustomsValue
+        [Required(AllowEmptyStrings = false, ErrorMessage = @"Total customs value is required.")]
+        [Range(0.0001, 999999999, ErrorMessage = @"Please enter a valid customs value.")]
+        [DecimalCompare(0, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Total customs value must be greater than or equal $0.00.")]
+        public decimal TotalCustomsValue
         {
             get { return totalCustomsValue; }
             set
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 handler.Set(nameof(TotalCustomsValue), ref totalCustomsValue, value);
 
                 // Finally update the shipment's total customs value.
-                shipmentAdapter.Shipment.CustomsValue = decimal.Parse(TotalCustomsValue.ToString());
+                shipmentAdapter.Shipment.CustomsValue = TotalCustomsValue;
             }
         }
 
@@ -68,7 +69,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// The selected customs item
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShipmentCustomsItemEntity SelectedCustomsItem
+        public IShipmentCustomsItemAdapter SelectedCustomsItem
         {
             get { return selectedCustomsItem; }
             set
@@ -91,13 +92,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// The shipment content weight
         /// </summary>
         [Obfuscation(Exclude = true)]
-        [Range(0.001, 999999, ErrorMessage = @"Shipment weight must be between 0 and 999,999")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = @"Weight value is required.")]
+        [Range(0.0001, 999999999, ErrorMessage = @"Please enter a valid weight.")]
+        [DoubleCompare(0, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Weight must be greater than or equal $0.00.")]
         public double ShipmentContentWeight
         {
             get { return shipmentContentWeight; }
             set
             {
-                handler.Set(nameof(ShipmentContentWeight), ref shipmentContentWeight, value);
+                handler.Set(nameof(ShipmentContentWeight), ref shipmentContentWeight, value, true);
             }
         }
 
