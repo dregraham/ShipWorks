@@ -18,16 +18,16 @@
         /// <summary>
         /// The username to logon
         /// </summary>
-        public string Username { get; set; }
+        public string Username { get; }
 
         /// <summary>
         /// The password to logon with
         /// </summary>
-        public string Password { get; set; }
+        public string Password { get; }
 
         /// <summary>
         /// Whether or not to remember the username and password for auto logon
         /// </summary>
-        public bool Remember { get; set; }
+        public bool Remember { get; }
     }
 }

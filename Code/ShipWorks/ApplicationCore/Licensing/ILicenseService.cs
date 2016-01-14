@@ -4,12 +4,12 @@ using Interapptive.Shared.Utility;
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
-    /// Interface for license factory
+    /// Interface for license service
     /// </summary>
     public interface ILicenseService
     {
         /// <summary>
-        /// Gets all licenses for shipworks
+        /// Gets all licenses for ShipWorks
         /// </summary>
         /// <returns></returns>
         IEnumerable<ILicense> GetLicenses();
@@ -18,6 +18,5 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Can the customer Logon?
         /// </summary>
         EnumResult<LogOnRestrictionLevel> AllowsLogOn();
-
     }
 }

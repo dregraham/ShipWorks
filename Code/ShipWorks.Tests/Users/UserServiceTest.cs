@@ -11,7 +11,26 @@ namespace ShipWorks.Tests.Users
     public class UserServiceTest
     {
         [Fact]
-        public void LogOnWithCredentials_Checks_AllowsLogOn_ForAllLicenses()
+        public void LogOnWithCredentials_AllowLogonIsCalledOnce()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                LogonCredentials credentials = new LogonCredentials("foo", "bar", false);
+
+                Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
+                licenseService.Setup(s => s.AllowsLogOn())
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.Forbidden, "Some Disabled Reason"));
+
+                UserService userService = mock.Create<UserService>();
+
+                userService.Logon(credentials);
+
+                licenseService.Verify(f => f.AllowsLogOn(), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void LogOnWithCredentials_MessageIsDisabledReason_WhenLicenseServiceReturnsAllowsLogOnNo()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -25,13 +44,12 @@ namespace ShipWorks.Tests.Users
 
                 EnumResult<UserServiceLogonResultType> testobject = userService.Logon(credentials);
 
-                licenseService.Verify(f => f.AllowsLogOn(), Times.Once);
                 Assert.Equal("Some Disabled Reason", testobject.Message);
             }
         }
 
         [Fact]
-        public void LogOnWithCredentials_Calls_UserSessionLogOnWithCredentials()
+        public void LogOnWithCredentials_DelegatesToUserSession()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -47,67 +65,161 @@ namespace ShipWorks.Tests.Users
 
                 UserService userService = mock.Create<UserService>();
 
-                EnumResult<UserServiceLogonResultType> testobject = userService.Logon(credentials);
+                userService.Logon(credentials);
 
                 userSessionWrapper.Verify(u => u.Logon(credentials), Times.Once);
-                Assert.Equal(UserServiceLogonResultType.Success, testobject.Value);
             }
         }
 
         [Fact]
-        public void LogOnWithCredentials_Returns_IncorrectUsernameMessage_WhenLogonFails()
+        public void LogOnWithCredentials_SetsValueToTrue_WhenAllowsLogonAndCredentialsAreValidated()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 LogonCredentials credentials = new LogonCredentials("foo", "bar", false);
 
-                Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
-                licenseFactory.Setup(lf => lf.AllowsLogOn())
+                mock.Mock<ILicenseService>()
+                    .Setup(lf => lf.AllowsLogOn())
                     .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None));
 
-                Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
-                userSessionWrapper.Setup(u => u.Logon(It.IsAny<LogonCredentials>()))
+                mock.Mock<IUserSession>()
+                    .Setup(u => u.Logon(It.IsAny<LogonCredentials>()))
+                    .Returns(true);
+
+                UserService userService = mock.Create<UserService>();
+
+                EnumResult<UserServiceLogonResultType> testobject = userService.Logon(credentials);
+
+                Assert.Equal(UserServiceLogonResultType.Success, testobject.Value);
+            }
+        }
+
+        [Fact]
+        public void LogOnWithCredentials_ReturnsInvalidCredentialsValue_WhenLogonFails()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                LogonCredentials credentials = new LogonCredentials("foo", "bar", false);
+
+                mock.Mock<ILicenseService>()
+                    .Setup(lf => lf.AllowsLogOn())
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None));
+
+                mock.Mock<IUserSession>()
+                    .Setup(u => u.Logon(It.IsAny<LogonCredentials>()))
                     .Returns(false);
 
                 UserService userService = mock.Create<UserService>();
 
                 EnumResult<UserServiceLogonResultType> testobject = userService.Logon(credentials);
 
-                userSessionWrapper.Verify(u => u.Logon(credentials), Times.Once);
                 Assert.Equal(UserServiceLogonResultType.InvalidCredentials, testobject.Value);
-                Assert.Equal("Incorrect username or password.", testobject.Message);
             }
         }
 
         [Fact]
-        public void LogOn_Checks_AllowsLogOn_ForAllLicenses()
+        public void LogOnWithCredentials_ReturnsInvalidCredentialsMessage_WhenLogonFails()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
+                LogonCredentials credentials = new LogonCredentials("foo", "bar", false);
 
-                licenseFactory.Setup(lf => lf.AllowsLogOn())
+                mock.Mock<ILicenseService>()
+                    .Setup(lf => lf.AllowsLogOn())
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None));
+
+                mock.Mock<IUserSession>()
+                    .Setup(u => u.Logon(It.IsAny<LogonCredentials>()))
+                    .Returns(false);
+
+                UserService userService = mock.Create<UserService>();
+
+                EnumResult<UserServiceLogonResultType> testobject = userService.Logon(credentials);
+
+                Assert.Equal("Incorrect username or password.", testobject.Message);
+            }
+        }
+
+
+        [Fact]
+        public void LogOn_DelegatesToLicenseServiceAllowsLogOn_ForAllLicenses()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
+                licenseService.Setup(lf => lf.AllowsLogOn())
                     .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.Forbidden, "Some Disabled Reason"));
 
-                UserService userService = mock.Create<UserService>();
+                UserService testObject = mock.Create<UserService>();
 
-                EnumResult<UserServiceLogonResultType> testobject = userService.Logon();
+                testObject.Logon();
 
-                licenseFactory.Verify(f => f.AllowsLogOn(), Times.Once);
-                Assert.Equal(UserServiceLogonResultType.TangoAccountDisabled, testobject.Value);
-                Assert.Equal("Some Disabled Reason", testobject.Message);
+                licenseService.Verify(f => f.AllowsLogOn(), Times.Once);
             }
         }
 
         [Fact]
-        public void LogOn_Calls_UserSessionLogOnLastUser()
+        public void LogOn_ReturnsAccountDisabled_WhenLicenseServiceAllowsLogOnReturnsNo()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
+                licenseService.Setup(lf => lf.AllowsLogOn())
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.Forbidden, "Some Disabled Reason" ));
+
+                UserService testObject = mock.Create<UserService>();
+
+                EnumResult<UserServiceLogonResultType> logonResult = testObject.Logon();
+
+                Assert.Equal(UserServiceLogonResultType.TangoAccountDisabled, logonResult.Value);
+            }
+        }
+
+        [Fact]
+        public void LogOn_ReturnsCorrectMessage_WhenLicenseServiceAllowsLogOnReturnsForbiddenAndMessage()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
+                licenseService.Setup(lf => lf.AllowsLogOn())
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.Forbidden, "Some Disabled Reason" ));
+
+                UserService testObject = mock.Create<UserService>();
+
+                EnumResult<UserServiceLogonResultType> logonResult = testObject.Logon();
+
+                Assert.Equal("Some Disabled Reason", logonResult.Message);
+            }
+        }
+
+        [Fact]
+        public void LogOn_DelegatesToUserSession()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
                 licenseFactory.Setup(lf => lf.AllowsLogOn())
                     .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None));
+                
+                Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
+                userSessionWrapper.Setup(u => u.LogonLastUser())
+                    .Returns(true);
 
+                UserService userService = mock.Create<UserService>();
+                userService.Logon();
+
+                userSessionWrapper.Verify(u => u.LogonLastUser(), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void LogOn_ReturnsSuccess_WhenAllowsLogonAndUserSessionReturnsTrue()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
+                licenseFactory.Setup(lf => lf.AllowsLogOn())
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None));
 
                 Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
                 userSessionWrapper.Setup(u => u.LogonLastUser())
@@ -117,13 +229,34 @@ namespace ShipWorks.Tests.Users
 
                 EnumResult<UserServiceLogonResultType> testobject = userService.Logon();
 
-                userSessionWrapper.Verify(u => u.LogonLastUser(), Times.Once);
                 Assert.Equal(UserServiceLogonResultType.Success, testobject.Value);
             }
         }
 
         [Fact]
-        public void LogOn_Returns_IncorrectUsernameMessage_WhenLogonFails()
+        public void LogOn_ReturnsIncorrectUsernameMessage_WhenLogonFails()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseService> licenseFactory = mock.Mock<ILicenseService>();
+                licenseFactory.Setup(lf => lf.AllowsLogOn())
+                    .Returns(new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None));
+
+                Mock<IUserSession> userSessionWrapper = mock.Mock<IUserSession>();
+                userSessionWrapper.Setup(u => u.LogonLastUser())
+                    .Returns(false);
+
+                UserService userService = mock.Create<UserService>();
+
+                EnumResult<UserServiceLogonResultType> testobject = userService.Logon();
+
+                userSessionWrapper.Verify(u => u.LogonLastUser(), Times.Once);
+                Assert.Equal("Incorrect username or password.", testobject.Message);
+            }
+        }
+
+        [Fact]
+        public void LogOn_ReturnsInvalidCredentialsValue_WhenLogonFails()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -141,7 +274,6 @@ namespace ShipWorks.Tests.Users
 
                 userSessionWrapper.Verify(u => u.LogonLastUser(), Times.Once);
                 Assert.Equal(UserServiceLogonResultType.InvalidCredentials, testobject.Value);
-                Assert.Equal("Incorrect username or password.", testobject.Message);
             }
         }
     }
