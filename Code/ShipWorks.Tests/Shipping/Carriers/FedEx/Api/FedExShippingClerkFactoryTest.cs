@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Interapptive.Shared.Net;
 using log4net;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -10,6 +9,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
@@ -42,14 +42,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             settingsRepository.Setup(r => r.UseTestServer).Returns(false);
 
             // Return a FedEx account that has been migrated
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity() {MeterNumber =  "123"});
+            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity() { MeterNumber = "123" });
 
             certificateInspector = new Mock<ICertificateInspector>();
             certificateInspector.Setup(i => i.Inspect(It.IsAny<ICertificateRequest>())).Returns(CertificateSecurityLevel.Trusted);
 
             certificateRequest = new Mock<ICertificateRequest>();
             certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Trusted);
-
 
             requestFactory = new Mock<IFedExRequestFactory>();
             requestFactory.Setup(f => f.CreateCertificateRequest(It.IsAny<ICertificateInspector>())).Returns(certificateRequest.Object);
@@ -64,7 +63,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void FedExShippingClerkReturned_WhenNullShipmentRequested_Test()
         {
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, settingsRepository.Object);
+            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null,
+                settingsRepository.Object, CreateMockFedExRepository, CreateMockFimsRepository, CreateFedExRequestFactory);
 
             Assert.True(shippingClerk is FedExShippingClerk);
         }
@@ -74,14 +74,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             settingsRepository.Setup(s => s.UseTestServer).Returns(true);
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFims;
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object);
+            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity,
+                settingsRepository.Object, CreateMockFedExRepository, CreateMockFimsRepository, CreateFedExRequestFactory);
 
             Assert.True(shippingClerk is FimsShippingClerk);
 
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExFims;
-            shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object);
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFims;
+            shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object,
+                CreateMockFedExRepository, CreateMockFimsRepository, CreateFedExRequestFactory);
 
             Assert.True(shippingClerk is FimsShippingClerk);
         }
+
+        private static IFimsLabelRepository CreateMockFimsRepository() =>
+            new Mock<IFimsLabelRepository>().Object;
+
+        private static ILabelRepository CreateMockFedExRepository() =>
+            new Mock<ILabelRepository>().Object;
+
+        private static IFedExRequestFactory CreateFedExRequestFactory() =>
+            new Mock<IFedExRequestFactory>().Object;
     }
 }
