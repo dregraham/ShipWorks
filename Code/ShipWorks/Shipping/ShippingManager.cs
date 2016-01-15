@@ -237,7 +237,7 @@ namespace ShipWorks.Shipping
             using (SqlAdapter adapter = SqlAdapter.Create(true))
             {
                 // Apply the determined shipment type
-                shipment.ShipmentType = (int) shipmentType.ShipmentTypeCode;
+                shipment.ShipmentTypeCode = shipmentType.ShipmentTypeCode;
 
                 // Save the shipment
                 adapter.SaveAndRefetch(shipment);

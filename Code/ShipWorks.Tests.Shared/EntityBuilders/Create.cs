@@ -20,6 +20,12 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             new OrderEntityBuilder(store, customer);
 
         /// <summary>
+        /// Create a profile
+        /// </summary>
+        public static ProfileEntityBuilder Profile() =>
+            new ProfileEntityBuilder();
+
+        /// <summary>
         /// Create a shipment
         /// </summary>
         public static ShipmentEntityBuilder Shipment(OrderEntity order) =>

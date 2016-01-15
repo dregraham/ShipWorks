@@ -6,8 +6,6 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Startup;
-using ShipWorks.Stores;
-using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -15,31 +13,22 @@ using Xunit;
 namespace ShipWorks.Shipping.Tests.Integration.Services
 {
     [Collection("Database collection")]
-    public class ChangeShipmentTypeTest : IDisposable
+    public class ShippingManagerWrapperTest : IDisposable
     {
         private readonly AutoMock mock;
+        private readonly DataContext context;
         private readonly ShipmentEntity shipment;
 
-        public ChangeShipmentTypeTest(DatabaseFixture db)
+        public ShippingManagerWrapperTest(DatabaseFixture db)
         {
-            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
+            mock = context.Mock;
 
-            ContainerInitializer.Initialize(mock.Container);
-
-            db.CreateDataContext(mock);
-
-            var store = Create.Entity<GenericModuleStoreEntity>().Save();
-            var customer = Create.Entity<CustomerEntity>().Save();
-            var order = Create.Order(store, customer).Save();
-
-            shipment = Create.Shipment(order).AsOther().Save();
-
-            // Reset the static fields before each test
-            StoreManager.CheckForChanges();
+            shipment = Create.Shipment(context.Order).Save();
         }
 
         [Fact]
-        public void CreatesPostalAndUspsEntities_WhenChangedToUsps()
+        public void ChangeShipmentType_CreatesPostalAndUspsEntities_WhenChangedToUsps()
         {
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 
@@ -60,8 +49,10 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void DoesNotDeleteOtherEntity_WhenChangedToUsps()
+        public void ChangeShipmentType_DoesNotDeleteOtherEntity_WhenChangedToUsps()
         {
+            Modify.Shipment(shipment).AsOther().Save();
+
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
 
             wrapper.ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
@@ -79,7 +70,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void AppliesDefaultProfile_WhenChangedToNewShipmentType()
+        public void ChangeShipmentType_AppliesDefaultProfile_WhenChangedToNewShipmentType()
         {
             OnTracProfileEntity onTracProfile = Create.Entity<OnTracProfileEntity>()
                 .SetDefaultsOnNullableFields()
@@ -112,7 +103,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void DoesNotApplyDefaultProfile_WhenChangedToExistingShipmentType()
+        public void ChangeShipmentType_DoesNotApplyDefaultProfile_WhenChangedToExistingShipmentType()
         {
             Modify.Shipment(shipment).AsOnTrac().Set(x => x.ShipmentTypeCode, ShipmentTypeCode.Other).Save();
 

@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping
                         // Configure the newly created shipment
                         shipmentType.ConfigureNewShipment(shipment);
 
-                        // Save the new entity.  Remove the reference to the parent first that it doesnt save recursively up to the shipment, only down to child packages
+                        // Save the new entity.  Remove the reference to the parent first that it doesn't save recursively up to the shipment, only down to child packages
                         property.SetValue(parent, null, null);
                         adapter.SaveAndRefetch(childEntity);
                         property.SetValue(parent, childEntity, null);
@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Load an existing profile data into the parent entity, or create if it doesnt exist.  If its already loaded and present
+        /// Load an existing profile data into the parent entity, or create if it doesn't exist.  If its already loaded and present
         /// it can be optionally refreshed.
         /// </summary>
         public static void LoadProfileData(EntityBase2 parent, string childProperty, Type profileType, bool refreshIfPresent)
@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping
                 // Apply the reference
                 property.SetValue(parent, childEntity, null);
 
-                // If it doesnt exist, then we have to create to save it as new
+                // If it doesn't exist, then we have to create to save it as new
                 if (childEntity.Fields.State != EntityState.Fetched)
                 {
                     // Reset the object to new and apply
@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Load insurance data into the parent entity, or create if it doesnt exist.  If its already loaded and present
+        /// Load insurance data into the parent entity, or create if it doesn't exist.  If its already loaded and present
         /// it can be optionally refreshed.
         /// </summary>
         public static void LoadInsuranceData(ShipmentEntity shipment)

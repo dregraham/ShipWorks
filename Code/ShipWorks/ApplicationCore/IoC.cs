@@ -15,7 +15,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 using ShipWorks.UI.Controls;
@@ -105,10 +104,6 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<AddressSelector>()
                 .AsImplementedInterfaces();
-
-            builder.RegisterType<ShippingProfileManagerWrapper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
 
             builder.RegisterType<ShipBillAddressEditorDlg>();
 

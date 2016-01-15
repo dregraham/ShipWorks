@@ -65,11 +65,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         // Cleansed address map so we don't do common addresses over and over again
         static Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
 
-        // Express1 API service connection info 
+        // Express1 API service connection info
         static Express1UspsConnectionDetails express1UspsConnectionDetails = new Express1UspsConnectionDetails();
 
         private readonly ICertificateInspector certificateInspector;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1UspsWebClient"/> class.
         /// </summary>
@@ -490,13 +490,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             return address;
         }
-        
+
         /// <summary>
         /// Creates the scan form.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
         /// <param name="uspsAccountEntity">The USPS account entity.</param>
-        /// <returns>An XDocument having a ScanForm node as the root which contains a TransactionId and Url nodes to 
+        /// <returns>An XDocument having a ScanForm node as the root which contains a TransactionId and Url nodes to
         /// identify results from USPS</returns>
         public XDocument CreateScanForm(IEnumerable<UspsShipmentEntity> shipments, UspsAccountEntity uspsAccountEntity)
         {
@@ -516,7 +516,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         /// <param name="shipments">The shipments.</param>
         /// <param name="uspsAccountEntity">The USPS account entity.</param>
-        /// <returns>An XDocument having a ScanForm node as the root which contains a TransactionId and Url nodes to 
+        /// <returns>An XDocument having a ScanForm node as the root which contains a TransactionId and Url nodes to
         /// identify results from USPS</returns>
         private XDocument CreateScanFormInternal(IEnumerable<UspsShipmentEntity> shipments, UspsAccountEntity uspsAccountEntity)
         {
@@ -647,8 +647,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             ThermalLanguage? thermalType;
 
-            // Determine what thermal type, if any to use.  
-            // If USPS, use it's setting.  
+            // Determine what thermal type, if any to use.
+            // If USPS, use it's setting.
             // Otherwise, use the USPS settings if it is a USPS shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps)
             {
@@ -672,8 +672,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 rate.PrintLayout = "Normal4X6CN22";
             }
 
-            // Each request needs to get a new requestID.  If USPS sees a duplicate, it thinks its the same request.  
-            // So if you had an error (like weight was too much) and then changed the weight and resubmitted, it would still 
+            // Each request needs to get a new requestID.  If USPS sees a duplicate, it thinks its the same request.
+            // So if you had an error (like weight was too much) and then changed the weight and resubmitted, it would still
             // be in error if you used the same ID again.
             shipment.Postal.Usps.IntegratorTransactionID = Guid.NewGuid();
             string integratorGuid = shipment.Postal.Usps.IntegratorTransactionID.ToString();
@@ -705,7 +705,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         isSampleOnly ? CreateIndiciumModeV1.Sample : CreateIndiciumModeV1.Normal,
                         ImageType.Png,
                         0, // cost code ID
-                        false, // do not hide the facing identification mark (FIM) 
+                        false, // do not hide the facing identification mark (FIM)
                         out tracking,
                         out uspsGuid,
                         out labelUrl,
@@ -739,15 +739,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         null, false, // horizontal offset
                         null, false, // vertical offset
                         null, false, // print density
-                        null, false, // print memo 
+                        null, false, // print memo
                         false, true, // print instructions
                         false, // request postage hash
                         NonDeliveryOption.Return, // return to sender
                         null, // redirectTo
-                        null, // OriginalPostageHash 
+                        null, // OriginalPostageHash
                         true, true, // returnImageData
                         null,
-                        PaperSizeV1.Default, 
+                        PaperSizeV1.Default,
                         null,
                         out uspsGuid,
                         out labelUrl,
@@ -827,7 +827,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 labels.ForEach(l => l.Dispose());
             }
         }
-        
+
         /// <summary>
         /// Creates a scan form address (which is entirely different that the address object the rest of the API uses).
         /// </summary>
@@ -959,7 +959,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             RateV14 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = ConvertServiceType(UspsUtility.GetApiServiceType(serviceType));
             rate.PrintLayout = "Normal4x6";
-            
+
             PostalShipmentType shipmentType = (PostalShipmentType)ShipmentTypeManager.GetType(shipment);
 
             List<AddOnV6> addOns = GetAddons(shipmentType, shipment);
@@ -1253,7 +1253,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                     throw new ArgumentOutOfRangeException("serviceType");
             }
         }
-        
+
         /// <summary>
         /// Gets the v36 version of the CodewordType
         /// </summary>

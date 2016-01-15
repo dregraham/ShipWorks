@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Filters
 {
@@ -13,13 +14,8 @@ namespace ShipWorks.Filters
         bool EnsureFiltersUpToDate(TimeSpan timeout);
 
         /// <summary>
-        /// Get the FilterNodeContentID for the given node
-        /// </summary>
-        long? GetFilterNodeContentID(long filterNodeID);
-
-        /// <summary>
         /// Indicates if the given object is in the filter contents of the specified filter content id
         /// </summary>
-        bool IsObjectInFilterContent(long orderID, long value);
+        bool IsObjectInFilterContent(long orderID, ShippingProviderRuleEntity rule);
     }
 }

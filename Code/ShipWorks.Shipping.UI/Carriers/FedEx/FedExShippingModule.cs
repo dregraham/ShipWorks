@@ -63,6 +63,9 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
             builder.RegisterType<FedExAccountRepository>();
 
             builder.RegisterType<FedExShippingClerkFactory>();
+
+            builder.RegisterType<FedExShipmentProcessingSynchronizer>()
+                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.FedEx);
         }
     }
 }

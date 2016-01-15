@@ -103,6 +103,10 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShipmentProcessorService>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<ShippingProfileManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterType<ShipmentServicesBuilderFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

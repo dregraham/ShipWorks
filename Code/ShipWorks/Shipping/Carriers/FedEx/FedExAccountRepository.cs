@@ -25,11 +25,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// if there is not an account associated with the default profile.
         /// </summary>
         /// <exception cref="ShippingException">An account that no longer exists is associated with the default FedEx profile.</exception>
-        public override FedExAccountEntity DefaultProfileAccount 
+        public override FedExAccountEntity DefaultProfileAccount
         {
             get
             {
-                long? accountID = new FedExShipmentType().GetPrimaryProfile().FedEx.FedExAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.FedEx).FedEx.FedExAccountID;
                 return GetProfileAccount(ShipmentTypeCode.FedEx, accountID);
             }
         }
