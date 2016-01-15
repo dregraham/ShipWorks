@@ -15,6 +15,7 @@ using Xunit;
 namespace ShipWorks.Core.Tests.Integration.Shipping
 {
     [Collection("Database collection")]
+    [Trait("Category", "ContinuousIntegration")]
     public class CustomsManagerTest : IDisposable
     {
         private readonly DataContext context;
@@ -38,7 +39,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
 
             context.Mock.AddRegistration(x =>
                 x.RegisterInstance(shipmentType.Object).Keyed<ShipmentType>(ShipmentTypeCode.Other));
-            
+
             CustomsManager.LoadCustomsItems(shipment, false);
 
             shipmentType.Verify(x => x.IsCustomsRequired(shipment));

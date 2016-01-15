@@ -11,6 +11,7 @@ using Xunit;
 namespace ShipWorks.Tests.Stores.Content
 {
     [Collection("Database collection")]
+    [Trait("Category", "ContinuousIntegration")]
     public class OrderManagerTest : IDisposable
     {
         private readonly DataContext context;
