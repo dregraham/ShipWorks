@@ -20,7 +20,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         public override T Save(SqlAdapter adapter)
         {
             T entity = base.Save(adapter);
-            IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<ICarrierAccountRepository<T>>>().Value.CheckForChangesNeeded();
+            ICarrierAccountRepository<T> repository = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<ICarrierAccountRepository<T>>>().Value;
+            repository.CheckForChangesNeeded();
             return entity;
         }
     }

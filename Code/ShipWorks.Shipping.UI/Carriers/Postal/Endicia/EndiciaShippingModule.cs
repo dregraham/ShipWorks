@@ -26,11 +26,6 @@ namespace ShipWorks.Shipping.Carriers.Endicia
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Endicia)
                 .SingleInstance();
 
-            builder.RegisterType<EndiciaAccountRepository>()
-                .As<ICarrierAccountRepository<EndiciaAccountEntity>>()
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Endicia)
-                .SingleInstance();
-
             builder.RegisterType<EndiciaShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Endicia)
                 .ExternallyOwned();
@@ -43,7 +38,10 @@ namespace ShipWorks.Shipping.Carriers.Endicia
                 .Keyed<ILabelService>(ShipmentTypeCode.Endicia);
 
             builder.RegisterType<EndiciaAccountRepository>()
-                .Keyed<ICarrierAccountRepository<EndiciaAccountEntity>>(ShipmentTypeCode.Endicia);
+                .As<ICarrierAccountRepository<EndiciaAccountEntity>>()
+                .Keyed<ICarrierAccountRepository<EndiciaAccountEntity>>(ShipmentTypeCode.Endicia)
+                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Endicia)
+                .SingleInstance();
 
             builder.RegisterType<Express1EndiciaAccountRepository>()
                 .Keyed<ICarrierAccountRepository<EndiciaAccountEntity>>(ShipmentTypeCode.Express1Endicia);

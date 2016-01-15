@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Startup;
@@ -289,30 +290,15 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_AppliesProfilesInOrder_ForFedExShipment()
         {
-            var profile = Create.Profile()
-                .AsFedEx(p => p.Set(x => x.DropoffType, (int) FedExDropoffType.DropBox))
-                .AsFedEx(p => p.Set(x => x.SmartPostConfirmation, true))
-                .Save();
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.FedEx,
+                x => x.AsFedEx(p =>
+                {
+                    p.Set(s => s.DropoffType, (int) FedExDropoffType.DropBox);
+                    p.Set(s => s.SmartPostConfirmation, true);
+                }));
 
-            var node = CreateFilterNode(context.Order.OrderID);
-
-            Create.Entity<ShippingDefaultsRuleEntity>()
-                .Set(x => x.ShippingProfileID, profile.ShippingProfileID)
-                .Set(x => x.ShipmentType, (int) ShipmentTypeCode.Usps)
-                .Set(x => x.FilterNodeID, node.FilterNodeID)
-                .Save();
-
-            var profile2 = Create.Profile()
-                .AsFedEx(p => p.Set(x => x.DropoffType, (int) FedExDropoffType.RegularPickup))
-                .Save();
-
-            var node2 = CreateFilterNode(context.Order.OrderID);
-
-            Create.Entity<ShippingDefaultsRuleEntity>()
-                .Set(x => x.ShippingProfileID, profile2.ShippingProfileID)
-                .Set(x => x.ShipmentType, (int) ShipmentTypeCode.Usps)
-                .Set(x => x.FilterNodeID, node2.FilterNodeID)
-                .Save();
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.FedEx,
+                x => x.AsFedEx(p => p.Set(s => s.DropoffType, (int) FedExDropoffType.RegularPickup)));
 
             SetDefaultShipmentType(ShipmentTypeCode.FedEx);
 
@@ -325,18 +311,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForFedExShipment()
         {
-            var profile = Create.Profile()
-                .AsOther()
-                .Set(x => x.ReturnShipment, true)
-                .Save();
-
-            var node = CreateFilterNode(context.Order.OrderID);
-
-            Create.Entity<ShippingDefaultsRuleEntity>()
-                .Set(x => x.ShippingProfileID, profile.ShippingProfileID)
-                .Set(x => x.ShipmentType, (int) ShipmentTypeCode.Other)
-                .Set(x => x.FilterNodeID, node.FilterNodeID)
-                .Save();
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+                x => x.AsOther().Set(p => p.ReturnShipment, true));
 
             SetDefaultShipmentType(ShipmentTypeCode.FedEx);
 
@@ -347,29 +323,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
 
 
-
-        private static FilterNodeEntity CreateFilterNode(long objectID)
-        {
-            var filter = Create.Entity<FilterEntity>()
-                .Save();
-
-            var sequence = Create.Entity<FilterSequenceEntity>()
-                .Set(x => x.Filter, filter)
-                .Save();
-
-            var content = Create.Entity<FilterNodeContentEntity>()
-                .Save();
-
-            Create.Entity<FilterNodeContentDetailEntity>()
-                .Set(x => x.FilterNodeContentID, content.FilterNodeContentID)
-                .Set(x => x.ObjectID, objectID)
-                .Save();
-
-            return Create.Entity<FilterNodeEntity>()
-                .Set(x => x.FilterSequence, sequence)
-                .Set(x => x.FilterNodeContent, content)
-                .Save();
-        }
 
 
         #endregion
@@ -416,6 +369,40 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Assert.Equal(account.AccountId, shipment.Ups.UpsAccountID);
         }
+
+        [Fact]
+        public void CreateShipment_AppliesProfilesInOrder_ForUpsShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.UpsOnLineTools,
+                x => x.AsUps(p =>
+                {
+                    p.Set(s => s.CostCenter, "Bar");
+                    p.Set(s => s.CarbonNeutral, true);
+                }));
+
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.UpsOnLineTools,
+                x => x.AsUps(p => p.Set(s => s.CostCenter, "Foo")));
+
+            SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal("Foo", shipment.Ups.CostCenter);
+            Assert.True(shipment.Ups.CarbonNeutral);
+        }
+
+        [Fact]
+        public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForUpsShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+                x => x.AsOther().Set(p => p.ReturnShipment, true));
+
+            SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.False(shipment.ReturnShipment);
+        }
         #endregion
 
         #region "iParcel"
@@ -459,6 +446,40 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
             Assert.Equal(account.AccountId, shipment.IParcel.IParcelAccountID);
+        }
+
+        [Fact]
+        public void CreateShipment_AppliesProfilesInOrder_ForiParcelShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.iParcel,
+                x => x.AsIParcel(p =>
+                {
+                    p.Set(s => s.Service, (int) iParcelServiceType.Saver);
+                    p.Set(s => s.IsDeliveryDutyPaid, true);
+                }));
+
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.iParcel,
+                x => x.AsIParcel(p => p.Set(s => s.Service, (int) iParcelServiceType.SaverDeferred)));
+
+            SetDefaultShipmentType(ShipmentTypeCode.iParcel);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal((int) iParcelServiceType.SaverDeferred, shipment.IParcel.Service);
+            Assert.True(shipment.IParcel.IsDeliveryDutyPaid);
+        }
+
+        [Fact]
+        public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForiParcelShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+                x => x.AsOther().Set(p => p.ReturnShipment, true));
+
+            SetDefaultShipmentType(ShipmentTypeCode.iParcel);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.False(shipment.ReturnShipment);
         }
         #endregion
 
@@ -509,6 +530,40 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Assert.Equal(account.AccountId, shipment.Postal.Usps.UspsAccountID);
         }
+
+        [Fact]
+        public void CreateShipment_AppliesProfilesInOrder_ForUspsShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Usps,
+                x => x.AsPostal(o => o.AsUsps(p =>
+                {
+                    p.Set(s => s.RateShop, false);
+                    p.Set(s => s.HidePostage, true);
+                })));
+
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Usps,
+                x => x.AsPostal(o => o.AsUsps(p => p.Set(s => s.RateShop, true))));
+
+            SetDefaultShipmentType(ShipmentTypeCode.Usps);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.True(shipment.Postal.Usps.RateShop);
+            Assert.True(shipment.Postal.Usps.HidePostage);
+        }
+
+        [Fact]
+        public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForUspsShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+                x => x.AsOther().Set(p => p.ReturnShipment, true));
+
+            SetDefaultShipmentType(ShipmentTypeCode.Usps);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.False(shipment.ReturnShipment);
+        }
         #endregion
 
         #region "Endicia"
@@ -546,7 +601,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_ResetsAccountData_WhenEndiciaAccountDoesNotExist()
         {
-            var account = Create.CarrierAccount<EndiciaAccountEntity>().Save();
+            var account = Create.CarrierAccount<EndiciaAccountEntity>()
+                .Set(x => x.AccountNumber, "abc123").Save();
 
             Create.Profile().AsPrimary()
                 .AsPostal(p => p.AsEndicia(u => u.Set(x => x.EndiciaAccountID, account.EndiciaAccountID + 2000)))
@@ -557,6 +613,40 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
             Assert.Equal(account.AccountId, shipment.Postal.Endicia.EndiciaAccountID);
+        }
+
+        [Fact]
+        public void CreateShipment_AppliesProfilesInOrder_ForEndiciaShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Endicia,
+                x => x.AsPostal(o => o.AsEndicia(p =>
+                {
+                    p.Set(s => s.ScanBasedReturn, false);
+                    p.Set(s => s.StealthPostage, true);
+                })));
+
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Endicia,
+                x => x.AsPostal(o => o.AsEndicia(p => p.Set(s => s.ScanBasedReturn, true))));
+
+            SetDefaultShipmentType(ShipmentTypeCode.Endicia);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.True(shipment.Postal.Endicia.ScanBasedReturn);
+            Assert.True(shipment.Postal.Endicia.StealthPostage);
+        }
+
+        [Fact]
+        public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForEndiciaShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+                x => x.AsOther().Set(p => p.ReturnShipment, true));
+
+            SetDefaultShipmentType(ShipmentTypeCode.Endicia);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.False(shipment.ReturnShipment);
         }
         #endregion
 
@@ -601,6 +691,40 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Assert.Equal(account.AccountId, shipment.OnTrac.OnTracAccountID);
         }
+
+        [Fact]
+        public void CreateShipment_AppliesProfilesInOrder_ForOnTracShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.OnTrac,
+                x => x.AsOnTrac(p =>
+                {
+                    p.Set(s => s.Service, (int) OnTracServiceType.Sunrise);
+                    p.Set(s => s.DimsAddWeight, true);
+                }));
+
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.OnTrac,
+                x => x.AsOnTrac(p => p.Set(s => s.Service, (int) OnTracServiceType.SunriseGold)));
+
+            SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal((int) OnTracServiceType.SunriseGold, shipment.OnTrac.Service);
+            Assert.True(shipment.OnTrac.DimsAddWeight);
+        }
+
+        [Fact]
+        public void CreateShipment_DoesNotApplyProfileForOnTracTYpe_ForOnTracShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+                x => x.AsOther().Set(p => p.ReturnShipment, true));
+
+            SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.False(shipment.ReturnShipment);
+        }
         #endregion
 
         #region "Other"
@@ -628,6 +752,40 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Assert.Equal("Foo", shipment.Other.Service);
         }
+
+        [Fact]
+        public void CreateShipment_AppliesProfilesInOrder_ForOtherShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+                x => x.AsOther(p =>
+                {
+                    p.Set(s => s.Service, "Bar");
+                    p.Set(s => s.Carrier, "Baz");
+                }));
+
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+                x => x.AsOther(p => p.Set(s => s.Service, "Foo")));
+
+            SetDefaultShipmentType(ShipmentTypeCode.Other);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal("Foo", shipment.Other.Service);
+            Assert.Equal("Baz", shipment.Other.Carrier);
+        }
+
+        [Fact]
+        public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForOtherShipment()
+        {
+            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.OnTrac,
+                x => x.AsOnTrac().Set(p => p.ReturnShipment, true));
+
+            SetDefaultShipmentType(ShipmentTypeCode.Other);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.False(shipment.ReturnShipment);
+        }
         #endregion
 
         #endregion
@@ -640,6 +798,54 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             var settings = ShippingSettings.Fetch();
             settings.DefaultShipmentTypeCode = defaultType;
             ShippingSettings.Save(settings);
+        }
+
+        /// <summary>
+        /// Create a filter node
+        /// </summary>
+        private static FilterNodeEntity CreateFilterNode(long objectID)
+        {
+            var filter = Create.Entity<FilterEntity>()
+                .Save();
+
+            var sequence = Create.Entity<FilterSequenceEntity>()
+                .Set(x => x.Filter, filter)
+                .Save();
+
+            var content = Create.Entity<FilterNodeContentEntity>()
+                .Save();
+
+            Create.Entity<FilterNodeContentDetailEntity>()
+                .Set(x => x.FilterNodeContentID, content.FilterNodeContentID)
+                .Set(x => x.ObjectID, objectID)
+                .Save();
+
+            return Create.Entity<FilterNodeEntity>()
+                .Set(x => x.FilterSequence, sequence)
+                .Set(x => x.FilterNodeContent, content)
+                .Save();
+        }
+
+        /// <summary>
+        /// Create a profile that will be associated with a rule
+        /// </summary>
+        private static void CreateProfileRule(long objectId, ShipmentTypeCode shipmentType,
+            Func<ProfileEntityBuilder, EntityBuilder<ShippingProfileEntity>> configureProfile)
+        {
+            var profile = configureProfile(Create.Profile())
+                //.Set(x => x.Name, Path.GetRandomFileName())
+                //.DoNotSetDefaults()
+                .Save();
+
+            var node = CreateFilterNode(objectId);
+
+            Create.Entity<ShippingDefaultsRuleEntity>()
+                .Set(x => x.ShippingProfileID, profile.ShippingProfileID)
+                .Set(x => x.ShipmentTypeCode, shipmentType)
+                .Set(x => x.FilterNodeID, node.FilterNodeID)
+                .Save();
+
+            ShippingDefaultsRuleManager.CheckForChangesNeeded();
         }
 
         public void Dispose() => context.Dispose();
