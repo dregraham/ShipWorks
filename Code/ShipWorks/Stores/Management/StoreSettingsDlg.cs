@@ -155,15 +155,8 @@ namespace ShipWorks.Stores.Management
 
             ILicense license = licenseService.GetLicense(storeEntity);
 
-            // If legacy, dont do anything. We still want the license tab.
-            if (license.IsLegacy)
-            {
-                return;
-            }
-
-            // If not legacy, we still want support to have the option of displaying
-            // the license tab. So check for secret sauce before removing it.
-            if (!InterapptiveOnly.MagicKeysDown)
+            // If legacy customer or magic keys down, display license
+            if (!license.IsLegacy && !InterapptiveOnly.MagicKeysDown)
             {
                 optionControl.Controls.Remove(optionPageLicense);
             }
