@@ -1,38 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using Moq;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ExecutionMode;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
+using ShipWorks.Startup;
+using ShipWorks.Tests.Shared.Database;
 using Xunit;
 
 namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
 {
-    public class RebuildTableIndexTest
+    [Collection("Database collection")]
+    [Trait("Category", "ContinuousIntegration")]
+    public class RebuildTableIndexTest : IDisposable
     {
-        private readonly Mock<ExecutionMode> executionMode;
-        private Mock<IProgressReporter> progressReporter;
+        private readonly DataContext context;
 
-        public RebuildTableIndexTest()
+        public RebuildTableIndexTest(DatabaseFixture db)
         {
-            executionMode = new Mock<ExecutionMode>();
-            executionMode.Setup(m => m.IsUISupported).Returns(true);
-
-            progressReporter = new Mock<IProgressReporter>();
-
-            var initializer = new ShipWorksInitializer(executionMode.Object, null);
-
-            if (ShipWorksSession.ComputerID == Guid.Empty)
-            {
-                CreateTestTable();
-            }
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
+            CreateTestTable();
         }
 
         [Fact]
         [Trait("Category", "SqlServer.Maintenance")]
-        [Trait("Category", "ContinuousIntegration")]
         public void RebuildTableIndex_RebuildAllIndexes_Succeeds_Test()
         {
             // This assumes it is being run against the "seeded" database (see SeedDatabase.sql script
@@ -108,30 +97,32 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
             return tablesAndIndexes;
         }
 
+        public void Dispose() => context.Dispose();
+
         // Script to create the test table, add indexes for testing.
         private const string CreateTestTableCommandText = @"
             IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TestRebuildingIndexes]') AND type in (N'U'))
-	            DROP TABLE [dbo].[TestRebuildingIndexes]
+                DROP TABLE [dbo].[TestRebuildingIndexes]
 
             CREATE TABLE [dbo].[TestRebuildingIndexes](
-	            [TestRebuildingIndexesID] [bigint] IDENTITY(1,1) NOT NULL,
-	            [SmallNvarchar] nvarchar(500) NOT NULL,
-	            [LargeNvarchar] nvarchar(500) NOT NULL,
+                [TestRebuildingIndexesID] [bigint] IDENTITY(1,1) NOT NULL,
+                [SmallNvarchar] nvarchar(500) NOT NULL,
+                [LargeNvarchar] nvarchar(500) NOT NULL,
              CONSTRAINT [PK_TestRebuildingIndexes] PRIMARY KEY CLUSTERED
             (
-	            [TestRebuildingIndexesID] ASC
+                [TestRebuildingIndexesID] ASC
             )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
             ) ON [PRIMARY]
 
 
             CREATE NONCLUSTERED INDEX [IX_TestRebuildingIndexes_SmallNvarchar] ON [dbo].[TestRebuildingIndexes]
             (
-	            [SmallNvarchar] ASC
+                [SmallNvarchar] ASC
             )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 
             CREATE NONCLUSTERED INDEX [IX_TestRebuildingIndexes_LargeNvarchar] ON [dbo].[TestRebuildingIndexes]
             (
-	            [LargeNvarchar] ASC
+                [LargeNvarchar] ASC
             )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 
             DECLARE @RowCount INT
@@ -146,14 +137,14 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
 
             WHILE @RowCount < 1000
             BEGIN
-	            SET @RowString = CAST(@RowCount AS VARCHAR(10))
-	            SELECT @Random = ROUND(((@Upper - @Lower -1) * RAND() + @Lower), 0)
-	            SET @InsertDate = DATEADD(dd, @Random, GETDATE())
+                SET @RowString = CAST(@RowCount AS VARCHAR(10))
+                SELECT @Random = ROUND(((@Upper - @Lower -1) * RAND() + @Lower), 0)
+                SET @InsertDate = DATEADD(dd, @Random, GETDATE())
 
-	            INSERT INTO [TestRebuildingIndexes] ([SmallNvarchar], [LargeNvarchar])
-	            VALUES (REPLICATE('0', 10 - DATALENGTH(@RowString)) + @RowString , @InsertDate )
+                INSERT INTO [TestRebuildingIndexes] ([SmallNvarchar], [LargeNvarchar])
+                VALUES (REPLICATE('0', 10 - DATALENGTH(@RowString)) + @RowString , @InsertDate )
 
-	            SET @RowCount = @RowCount + 1
+                SET @RowCount = @RowCount + 1
             END
 
             update [TestRebuildingIndexes] set SmallNvarchar = cast(TestRebuildingIndexesID as nvarchar(50)) + SmallNvarchar
