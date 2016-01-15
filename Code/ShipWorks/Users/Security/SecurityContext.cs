@@ -28,7 +28,7 @@ namespace ShipWorks.Users.Security
         #region class PermissionIdentifier
 
         /// <summary>
-        /// Used internall for the caching lookup
+        /// Used internal for the caching lookup
         /// </summary>
         class PermissionIdentifier
         {
@@ -162,7 +162,7 @@ namespace ShipWorks.Users.Security
                 throw new ArgumentException("Cannot pass a null entity to a non-global permission.");
             }
 
-            // First see if the permission depends on the actual entity that was passed, and translate as necesary
+            // First see if the permission depends on the actual entity that was passed, and translate as necessary
             if (scope == PermissionScope.IndirectEntityType)
             {
                 type = PermissionHelper.GetIndirectEntityActualPermission(type, EntityUtility.GetEntityType(objectID.Value));
@@ -178,7 +178,7 @@ namespace ShipWorks.Users.Security
             // For store permissions we have an early-out if they can do the permission for all stores or no stores
             if (scope != PermissionScope.Global)
             {
-                // "Some" is the default for "dont early out"
+                // "Some" is the default for "don't early out"
                 StorePermissionCoverage coverage = StorePermissionCoverage.Some;
 
                 if (scope == PermissionScope.Store)
@@ -218,7 +218,7 @@ namespace ShipWorks.Users.Security
                 return hasPermission;
             }
 
-            // See if the security depends not on the passed in object - but on the object's that is is related to
+            // See if the security depends not on the passed in object - but on the object's that it is related to
             if (PermissionHelper.GetScope(type) == PermissionScope.IndirectRelatedObject)
             {
                 hasPermission = HasIndirectRelatedObjectPermission(type, objectID.Value);
@@ -412,7 +412,7 @@ namespace ShipWorks.Users.Security
         {
             if (PermissionHelper.GetScope(type) != PermissionScope.IndirectRelatedObject)
             {
-                throw new InvalidOperationException("Only intended to be calld for related object scoped permissions.");
+                throw new InvalidOperationException("Only intended to be called for related object scoped permissions.");
             }
 
             switch (type)
@@ -465,7 +465,7 @@ namespace ShipWorks.Users.Security
         {
             if (PermissionHelper.GetScope(permissionType) != PermissionScope.Store)
             {
-                throw new InvalidOperationException("Only intended to be calld for Store scoped permissions.");
+                throw new InvalidOperationException("Only intended to be called for Store scoped permissions.");
             }
 
             lock (storePermissionCountCache)

@@ -24,13 +24,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaLabelService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, Express1EndiciaLabelService express1EndiciaLabelService, EndiciaRatingService endiciaRatingService)
+        public EndiciaLabelService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeManager, Express1EndiciaLabelService express1EndiciaLabelService, EndiciaRatingService endiciaRatingService)
         {
             this.express1EndiciaLabelService = express1EndiciaLabelService;
             this.endiciaRatingService = endiciaRatingService;
 
-            express1EndiciaShipmentType = shipmentTypeFactory[ShipmentTypeCode.Express1Endicia] as Express1EndiciaShipmentType;
-            endiciaShipmentType = shipmentTypeFactory[ShipmentTypeCode.Endicia] as EndiciaShipmentType;
+            express1EndiciaShipmentType = shipmentTypeManager[ShipmentTypeCode.Express1Endicia] as Express1EndiciaShipmentType;
+            endiciaShipmentType = shipmentTypeManager[ShipmentTypeCode.Endicia] as EndiciaShipmentType;
 
             MethodConditions.EnsureArgumentIsNotNull(express1EndiciaShipmentType, nameof(express1EndiciaShipmentType));
             MethodConditions.EnsureArgumentIsNotNull(endiciaShipmentType, nameof(endiciaShipmentType));
@@ -72,16 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     // Check Express1 amount
                     RateResult express1Rate = GetExpress1Rate(shipment, express1Account);
 
-                    // Now set useExpress1 to true only if the express 1 rate is less than the endicia amount
-                    if (endiciaRate != null && express1Rate != null)
-                    {
-                        useExpress1 = express1Rate.Amount <= endiciaRate.Amount;
-                    }
-                    else
-                    {
-                        // If we can't figure it out for sure, don't use it
-                        useExpress1 = false;
-                    }
+                    useExpress1 = express1Rate?.Amount <= endiciaRate?.Amount;
                 }
                 catch (EndiciaApiException apiException)
                 {

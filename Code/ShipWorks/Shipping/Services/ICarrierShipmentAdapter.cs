@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Services
@@ -68,14 +69,14 @@ namespace ShipWorks.Shipping.Services
         double ContentWeight { get; set; }
 
         /// <summary>
-        /// Is Insurance requested?
-        /// </summary>
-        bool UsingInsurance { get; set; }
-
-        /// <summary>
         /// Service type selected
         /// </summary>
         int ServiceType { get; set; }
+
+        /// <summary>
+        /// Customs Items for the shipment
+        /// </summary>
+        EntityCollection<ShipmentCustomsItemEntity> CustomsItems { get; set; }
 
         /// <summary>
         /// List of package adapters for the shipment
@@ -86,5 +87,10 @@ namespace ShipWorks.Shipping.Services
         /// Gets specific number of package adapters for the shipment.  
         /// </summary>
         IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages);
+
+        /// <summary>
+        /// Are customs allowed?
+        /// </summary>
+        bool CustomsAllowed { get; }
     }
 }

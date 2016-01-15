@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 );
 
             shipmentLoader = new Mock<IShipmentLoader>();
-            shipmentLoader.Setup(s => s.Load(orderEntity.OrderID)).Returns(orderSelectionLoaded);
+            shipmentLoader.Setup(s => s.Load(orderEntity.OrderID)).ReturnsAsync(orderSelectionLoaded);
 
             messenger = new Messenger();
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 },
                 ShippingAddressEditStateType.Editable);
 
-            shipmentLoader.Setup(s => s.Load(It.IsAny<long>())).Returns(orderSelectionLoaded);
+            shipmentLoader.Setup(s => s.Load(It.IsAny<long>())).ReturnsAsync(orderSelectionLoaded);
 
             await testObject.LoadAndNotify(new List<long> { orderEntity.OrderID });
 

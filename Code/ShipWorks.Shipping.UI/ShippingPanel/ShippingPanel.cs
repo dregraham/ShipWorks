@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             // There is no store dependent ui
         }
-
+        
         /// <summary>
         /// Saves the shipment to the database when the shipping panel loses focus.
         /// </summary>

@@ -49,25 +49,6 @@ namespace ShipWorks.Shipping
         public void UpdateLabelFormatOfUnprocessedShipments(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.UpdateLabelFormatOfUnprocessedShipments(shipmentTypeCode);
 
-
-        /// <summary>
-        /// Get the list of shipments that correspond to the given order key.  If no shipment exists for the order,
-        /// one will be created if autoCreate is true.  An OrderEntity will be attached to each shipment.
-        /// </summary>
-        public IEnumerable<ICarrierShipmentAdapter> GetShipments(long orderID, bool createIfNone)
-        {
-            OrderEntity order = LoadFullShipmentGraph(orderID);
-
-            if (!order.Shipments.Any() && createIfNone)
-            {
-                ShippingManager.CreateShipment(order);
-            }
-
-            return LoadFullShipmentGraph(orderID)
-                .Shipments
-                .Select(shipmentAdapterFactory.Get);
-        }
-
         /// <summary>
         /// Ensure the specified shipment is fully loaded
         /// </summary>
@@ -75,51 +56,6 @@ namespace ShipWorks.Shipping
         {
             ShippingManager.EnsureShipmentLoaded(shipment);
             return shipment;
-        }
-
-        /// <summary>
-        /// Ensure the specified shipment is fully loaded
-        /// </summary>
-        public OrderEntity LoadFullShipmentGraph(long orderId)
-        {
-            IPrefetchPath2 orderPrefetchPath = new PrefetchPath2(EntityType.OrderEntity);
-            orderPrefetchPath.Add(OrderEntity.PrefetchPathStore);
-            orderPrefetchPath.Add(OrderEntity.PrefetchPathOrderItems);
-            IPrefetchPathElement2 shipmentsPath = orderPrefetchPath.Add(OrderEntity.PrefetchPathShipments);
-
-            IPrefetchPathElement2 upsShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathUps);
-            upsShipmentPath.SubPath.Add(UpsShipmentEntity.PrefetchPathPackages);
-
-            IPrefetchPathElement2 postalShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathPostal);
-            postalShipmentPath.SubPath.Add(PostalShipmentEntity.PrefetchPathUsps);
-            postalShipmentPath.SubPath.Add(PostalShipmentEntity.PrefetchPathEndicia);
-
-            IPrefetchPathElement2 iParcelShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathIParcel);
-            iParcelShipmentPath.SubPath.Add(IParcelShipmentEntity.PrefetchPathPackages);
-
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathOnTrac);
-
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathAmazon);
-
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathBestRate);
-
-            IPrefetchPathElement2 fedexShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathFedEx);
-            fedexShipmentPath.SubPath.Add(FedExShipmentEntity.PrefetchPathPackages);
-
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathOther);
-
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathInsurancePolicy);
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathCustomsItems);
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathValidatedAddress);
-
-            OrderEntity order = new OrderEntity(orderId);
-
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(true))
-            {
-                sqlAdapter.FetchEntity(order, orderPrefetchPath);
-            }
-
-            return order;
         }
 
         /// <summary>
@@ -135,14 +71,21 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType) =>
-            ShippingManager.GetRates(shipment, shipmentType);
+        public RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
+        {
+            if (!shipment.Processed)
+            {
+                ShippingManager.GetRates(shipment, shipmentType);
+            }
+
+            return new RateGroup(Enumerable.Empty<RateResult>());
+        }
 
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
         public Task<RateGroup> GetRatesAsync(ShipmentEntity shipment, ShipmentType shipmentType, CancellationToken token) =>
-            TaskEx.Run(() => ShippingManager.GetRates(shipment, shipmentType), token);
+            TaskEx.Run(() => GetRates(shipment, shipmentType), token);
 
         /// <summary>
         /// Removes the specified shipment from the cache

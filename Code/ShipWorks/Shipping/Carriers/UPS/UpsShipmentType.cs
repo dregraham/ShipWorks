@@ -385,7 +385,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Get the default profile for the shipment type
         /// </summary>
         [NDependIgnoreLongMethod]
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
 

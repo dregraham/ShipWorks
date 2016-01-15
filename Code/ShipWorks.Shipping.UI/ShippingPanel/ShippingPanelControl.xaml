@@ -9,6 +9,7 @@
              xmlns:vc="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ValueConverters"
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:sw="http://schemas.shipworks.com/sw"
+             xmlns:customsControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.CustomsControl"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:ShippingPanelViewModel}"
              d:DesignHeight="1550" d:DesignWidth="350"
              SnapsToDevicePixels="True"
@@ -21,8 +22,8 @@
                 <ResourceDictionary Source="Styles/ShipWorksExpanderStyle.xaml"/>
                 <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
             <ui:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
@@ -85,7 +86,8 @@
                         <TextBlock Text="{Binding RequestedShippingMethod}" />
                     </WrapPanel>
                 </Grid>
-                <StackPanel Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
+                <StackPanel IsEnabled="{Binding AllowEditing}" 
+                            Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
                     <Border>
                         <Expander
                         IsExpanded="{Binding IsOriginExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
@@ -175,8 +177,8 @@
                                             <TextBlock Foreground="Gray">
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="{}{0}, {1} ">
-                                                        <Binding Path="Destination.FullName" />
-                                                        <Binding Path="DomesticInternationalText" />
+                                                        <Binding Path="Destination.FullName" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                                                        <Binding Path="DomesticInternationalText" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>
@@ -229,8 +231,17 @@
                             </StackPanel>
                         </Expander>
                     </Border>
+                    <Border
+                        DataContext="{Binding ShipmentViewModel}"
+                        Visibility="{Binding CustomsAllowed, Converter={StaticResource BooleanToVisibility}}">
+                        <Expander IsEnabled="True" Header="Customs"
+                                  IsExpanded="{Binding IsCustomsExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
+                                  Style="{StaticResource ExpanderStyle}">
+                            <customsControl:CustomsControl />
+                        </Expander>
+                    </Border>
                     <Grid Margin="{StaticResource SectionMargin}">
-                        <Button Command="{Binding ProcessShipmentCommand}">Create Label</Button>
+                        <Button Command="{Binding CreateLabelCommand}">Create Label</Button>
                     </Grid>
                 </StackPanel>
 

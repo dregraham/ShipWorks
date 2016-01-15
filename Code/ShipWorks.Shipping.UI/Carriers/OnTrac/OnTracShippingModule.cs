@@ -47,6 +47,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             builder.RegisterType<OnTracRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.OnTrac);
+
+            builder.RegisterType<OnTracShipmentProcessingSynchronizer>()
+                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.OnTrac);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
@@ -28,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             EndiciaAccountEntity endiciaAccountEntity = EndiciaAccountManager.GetAccount(accountID);
 
-			// Return null if found account is not Express1
+            // Return null if found account is not Express1
             return (endiciaAccountEntity != null && endiciaAccountEntity.EndiciaReseller == (int) EndiciaReseller.Express1) ? endiciaAccountEntity : null;
         }
 
@@ -41,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             get
             {
-                long? accountID = new Express1EndiciaShipmentType().GetPrimaryProfile().Postal.Endicia.EndiciaAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.Express1Endicia).Postal.Endicia.EndiciaAccountID;
                 return GetProfileAccount(ShipmentTypeCode.Express1Endicia, accountID);
             }
         }

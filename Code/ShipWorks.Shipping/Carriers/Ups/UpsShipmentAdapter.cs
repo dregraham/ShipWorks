@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Insurance;
@@ -13,180 +16,70 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// Adapter for Ups specific shipment information
     /// </summary>
-    public class UpsShipmentAdapter : ICarrierShipmentAdapter
+    public class UpsShipmentAdapter : CarrierShipmentAdapterBase
     {
-        private readonly ShipmentEntity shipment;
-        private readonly UpsShipmentType shipmentType;
-        private readonly ICustomsManager customsManager;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
+        public UpsShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipment.Ups, nameof(shipment.Ups));
-            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeManager, nameof(shipmentTypeManager));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
-
-            this.shipment = shipment;
-            this.customsManager = customsManager;
-            shipmentType = shipmentTypeManager.Get(shipment) as UpsShipmentType;
         }
 
         /// <summary>
         /// Id of the Ups account associated with this shipment
         /// </summary>
-        public long? AccountId
+        public override long? AccountId
         {
-            get { return shipment.Ups.UpsAccountID; }
-            set { shipment.Ups.UpsAccountID = value.GetValueOrDefault(); }
-        }
-
-        /// <summary>
-        /// The shipment associated with this adapter
-        /// </summary>
-        public ShipmentEntity Shipment
-        {
-            get
-            {
-                return shipment;
-            }
-        }
-
-        /// <summary>
-        /// The shipment type code of this shipment adapter
-        /// </summary>
-        public ShipmentTypeCode ShipmentTypeCode
-        {
-            get
-            {
-                return shipment.ShipmentTypeCode;
-            }
+            get { return Shipment.Ups.UpsAccountID; }
+            set { Shipment.Ups.UpsAccountID = value.GetValueOrDefault(); }
         }
 
         /// <summary>
         /// Does this shipment type support accounts?
         /// </summary>
-        public bool SupportsAccounts
+        public override bool SupportsAccounts
         {
             get
             {
                 return true;
             }
         }
-
-        /// <summary>
-        /// Does this shipment type support multiple packages?
-        /// </summary>
-        public bool SupportsMultiplePackages
-        {
-            get
-            {
-                return shipmentType.SupportsMultiplePackages;
-            }
-        }
-
-        /// <summary>
-        /// Is this shipment a domestic shipment?
-        /// </summary>
-        public bool IsDomestic
-        {
-            get
-            {
-                return shipmentType.IsDomestic(shipment);
-            }
-        }
-
-        /// <summary>
-        /// Updates shipment dynamic data, total weight, etc
-        /// </summary>
-        /// <returns>Dictionary of shipments and exceptions.</returns>
-        public IDictionary<ShipmentEntity, Exception> UpdateDynamicData()
-        {
-            shipmentType.UpdateDynamicShipmentData(shipment);
-            shipmentType.UpdateTotalWeight(shipment);
-
-            return customsManager.EnsureCustomsLoaded(new[] { shipment });
-        }
-
+        
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>
-        public bool SupportsPackageTypes => true;
-
-        /// <summary>
-        /// DateTime of the shipment
-        /// </summary>
-        public DateTime ShipDate
-        {
-            get { return shipment.ShipDate; }
-            set { shipment.ShipDate = value; }
-        }
-
-        /// <summary>
-        /// Total weight of the shipment
-        /// </summary>
-        public double TotalWeight
-        {
-            get { return shipment.TotalWeight; }
-        }
-
-        /// <summary>
-        /// Content weight of the shipment
-        /// </summary>
-        public double ContentWeight
-        {
-            get { return shipment.ContentWeight; }
-            set { shipment.ContentWeight = value; }
-        }
-
-        /// <summary>
-        /// Is Insurance requested?
-        /// </summary>
-        public bool UsingInsurance
-        {
-            get { return shipment.Insurance; }
-            set { shipment.Insurance = value; }
-        }
-
+        public override bool SupportsPackageTypes => true;
+        
         /// <summary>
         /// Service type selected
         /// </summary>
-        public int ServiceType
+        public override int ServiceType
         {
-            get { return shipment.Ups.Service; }
-            set { shipment.Ups.Service = value; }
+            get { return Shipment.Ups.Service; }
+            set { Shipment.Ups.Service = value; }
         }
 
         /// <summary>
         /// List of package adapters for the shipment
         /// </summary>
-        public IEnumerable<IPackageAdapter> GetPackageAdapters()
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
         {
-            UpdateDynamicData();
-            return shipmentType.GetPackageAdapters(shipment);
-        }
-
-        /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            UpsShipmentEntity ups = shipment.Ups;
+            UpsShipmentEntity carrierShipment = Shipment.Ups;
 
             // Need more
-            while (ups.Packages.Count < numberOfPackages)
+            while (carrierShipment.Packages.Count < numberOfPackages)
             {
                 UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
-                ups.Packages.Add(package);
+                carrierShipment.Packages.Add(package);
             }
 
             // Need less
-            while (ups.Packages.Count > numberOfPackages)
+            while (carrierShipment.Packages.Count > numberOfPackages)
             {
-                UpsPackageEntity package = ups.Packages[ups.Packages.Count - 1];
-                ups.Packages.Remove(package);
+                UpsPackageEntity package = carrierShipment.Packages[carrierShipment.Packages.Count - 1];
+                carrierShipment.Packages.Remove(package);
             }
 
             return GetPackageAdapters();

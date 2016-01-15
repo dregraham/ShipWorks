@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Stores;
-using ShipWorks.Users.Security;
 
 namespace ShipWorks.Tests.Shared
 {
@@ -73,26 +69,6 @@ namespace ShipWorks.Tests.Shared
         }
 
         /// <summary>
-        /// Configure an IShippingConfiguration
-        /// </summary>
-        public static Mock<IShippingConfiguration> WithShippingConfiguration(this AutoMock mock) =>
-            mock.WithShippingConfiguration(true, true, true);
-
-        /// <summary>
-        /// Configure an IShippingConfiguration
-        /// </summary>
-        public static Mock<IShippingConfiguration> WithShippingConfiguration(this AutoMock mock, bool autoCreateShipments,
-            bool userHasPermission, bool getAddressValidation)
-        {
-            Mock<IShippingConfiguration> mockObject = mock.Mock<IShippingConfiguration>();
-            mockObject.Setup(s => s.AutoCreateShipments).Returns(autoCreateShipments);
-            mockObject.Setup(s => s.UserHasPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(userHasPermission);
-            mockObject.Setup(s => s.GetAddressValidation(It.IsAny<ShipmentEntity>())).Returns(getAddressValidation);
-
-            return mockObject;
-        }
-
-        /// <summary>
         /// Configure an IFilterHelper
         /// </summary>
         public static Mock<IFilterHelper> WithFilterHelper(this AutoMock mock, bool result)
@@ -101,80 +77,6 @@ namespace ShipWorks.Tests.Shared
             mockObject.Setup(s => s.EnsureFiltersUpToDate(It.IsAny<TimeSpan>())).Returns(result);
 
             return mockObject;
-        }
-
-        /// <summary>
-        /// Configure an IValidator<ShipmentEntity>
-        /// </summary>
-        public static Mock<IValidator<ShipmentEntity>> WithAddressValidator(this AutoMock mock, bool result)
-        {
-            Mock<IValidator<ShipmentEntity>> mockObject = mock.Mock<IValidator<ShipmentEntity>>();
-            mockObject.Setup(av => av.ValidateAsync(It.IsAny<ShipmentEntity>())).Returns(Task.FromResult(result));
-
-            return mockObject;
-        }
-
-        /// <summary>
-        /// Configure an TestStoreType
-        /// </summary>
-        public static Mock<TestStoreType> WithTestStoreType(this AutoMock mock)
-        {
-            Mock<TestStoreType> storeTypeMock = mock.MockRepository.Create<TestStoreType>();
-            storeTypeMock.Setup(s => s.ShippingAddressEditableState(It.IsAny<ShipmentEntity>())).Returns(ShippingAddressEditStateType.Editable);
-
-            return storeTypeMock;
-        }
-
-        /// <summary>
-        /// Configure an IStoreTypeManager
-        /// </summary>
-        public static Mock<IStoreTypeManager> WithStoreTypeManager(this AutoMock mock, StoreType storeType)
-        {
-            Mock<IStoreTypeManager> mockObject = mock.Mock<IStoreTypeManager>();
-
-            mockObject.Setup(s => s.GetType(It.IsAny<StoreTypeCode>())).Returns(storeType);
-            mockObject.Setup(s => s.GetType(It.IsAny<StoreEntity>())).Returns(storeType);
-
-            return mockObject;
-        }
-
-        /// <summary>
-        /// Configure an IShippingManager
-        /// </summary>
-        public static Mock<IShippingManager> WithShippingManager(this AutoMock mock, long orderID,
-            IEnumerable<ICarrierShipmentAdapter> createIfNoneShipments, IEnumerable<ICarrierShipmentAdapter> dontCreateIfNoneShipments)
-        {
-            Mock<IShippingManager> mockObject = mock.Mock<IShippingManager>();
-
-            mockObject.Setup(s => s.GetShipments(orderID, true)).Returns(createIfNoneShipments);
-            mockObject.Setup(s => s.GetShipments(orderID, false)).Returns(dontCreateIfNoneShipments);
-            mockObject.Setup(s => s.GetShipments(0, It.IsAny<bool>())).Throws<Exception>();
-
-            return mockObject;
-        }
-
-        /// <summary>
-        /// Configure an ICarrierShipmentAdapterFactory
-        /// </summary>
-        public static Mock<ICarrierShipmentAdapterFactory> WithCarrierShipmentAdapterFactory(this AutoMock mock, ICarrierShipmentAdapter shipmentAdapter)
-        {
-            Mock<ICarrierShipmentAdapterFactory> mockObject = mock.Mock<ICarrierShipmentAdapterFactory>();
-
-            mockObject.Setup(s => s.Get(It.IsAny<ShipmentEntity>())).Returns(shipmentAdapter);
-
-            return mockObject;
-        }
-
-        /// <summary>
-        /// Configure an ICarrierShipmentAdapter
-        /// </summary>
-        public static Mock<ICarrierShipmentAdapter> WithCarrierShipmentAdapter(this AutoMock mock, ShipmentEntity shipment, bool isDomestic)
-        {
-            return mock.CreateMock<ICarrierShipmentAdapter>(x =>
-            {
-                x.Setup(s => s.Shipment).Returns(shipment);
-                x.Setup(s => s.IsDomestic).Returns(isDomestic);
-            });
         }
 
         /// <summary>
@@ -193,18 +95,6 @@ namespace ShipWorks.Tests.Shared
         }
 
         /// <summary>
-        /// Configure an IStoreManager
-        /// </summary>
-        public static Mock<IStoreManager> WithStoreManager(this AutoMock mock, StoreEntity store)
-        {
-            Mock<IStoreManager> mockObject = mock.Mock<IStoreManager>();
-
-            mockObject.Setup(s => s.GetStore(It.IsAny<long>())).Returns(store);
-
-            return mockObject;
-        }
-
-        /// <summary>
         /// Create a mock from the repository
         /// </summary>
         public static Mock<T> CreateMock<T>(this AutoMock mock) where T : class =>
@@ -218,6 +108,21 @@ namespace ShipWorks.Tests.Shared
             var mockedObject = mock.MockRepository.Create<T>();
             configure?.Invoke(mockedObject);
             return mockedObject;
+        }
+
+        /// <summary>
+        /// Add or override an Autofac registration
+        /// </summary>
+        public static void AddRegistration(this AutoMock mock, Action<ContainerBuilder> buildRegistration)
+        {
+            ContainerBuilder builder = new ContainerBuilder();
+
+            buildRegistration(builder);
+
+            foreach (var registration in builder.Build().ComponentRegistry.Registrations)
+            {
+                mock.Container.ComponentRegistry.Register(registration);
+            }
         }
     }
 }

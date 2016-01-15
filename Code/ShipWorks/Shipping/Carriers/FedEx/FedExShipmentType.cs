@@ -7,7 +7,6 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
-using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -19,7 +18,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -520,7 +518,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Get the default profile for the shipment type
         /// </summary>
         [NDependIgnoreLongMethod]
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
 
@@ -1000,8 +998,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-                // Check with the SettingsRepository here rather than FedExAccountManager, so getting 
-                    // We need to swap out the SettingsRepository and certificate inspector 
+        // Check with the SettingsRepository here rather than FedExAccountManager, so getting
+        // We need to swap out the SettingsRepository and certificate inspector
         /// Provide FedEx tracking results for the given shipment
         /// </summary>
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
@@ -1032,7 +1030,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new FedExShipmentProcessingSynchronizer();
-                // Okay to "new up" the shipping clerk here, as this class is the root consumer 
+            // Okay to "new up" the shipping clerk here, as this class is the root consumer
         }
 
         /// <summary>

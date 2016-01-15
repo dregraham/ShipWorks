@@ -19,13 +19,21 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         void Save();
 
         /// <summary>
-        /// Refresh service types
         /// </summary>
         void RefreshServiceTypes();
 
         /// <summary>
-        /// Refresh package types
         /// </summary>
         void RefreshPackageTypes();
+
+        /// <summary>
+        /// Are customs allowed for this shipment/shipment type?
+        /// </summary>
+        bool CustomsAllowed { get; set; }
+
+        /// <summary>
+        /// Load customs into the view model
+        /// </summary>
+        void LoadCustoms();
     }
 }

@@ -154,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Allows bases classes to apply the default settings to the given profile
         /// </summary>
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             log.Warn("ConfigurePrimaryProfile called for BestRateShipmentType.");
             Debug.Assert(false, "ConfigurePrimaryProfile maybe shouldn't be called for BestRateShipmentType.");
@@ -251,7 +251,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShippingManager.EnsureShipmentLoaded(shipment);
             IEnumerable<RateGroup> rateGroups = GetRatesForPreProcessing(shipment);
 
-            // We want all the rates here, so we can pass them back to the coutner rate processing if needed
+            // We want all the rates here, so we can pass them back to the counter rate processing if needed
             RateGroup filteredRates = brokerRatingService.CompileBestRates(shipment, rateGroups);
             if (!filteredRates.Rates.Any())
             {
@@ -479,7 +479,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             bestRateResultTag.RateSelectionDelegate(shipment);
 
-            // Reset the event types after the the selected shipment has been applied to
+            // Reset the event types after the selected shipment has been applied to
             // avoid losing them during the transition to the targeted shipment type
             shipment.BestRateEvents = (byte) originalEventTypes;
         }

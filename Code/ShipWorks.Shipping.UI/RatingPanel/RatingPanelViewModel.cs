@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
 
         private readonly IShippingManager shippingManager;
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly Func<BestRateConsolidatePostalRates, BestRateShipmentType> bestRateShipmentTypeFactory;
+        private readonly Func<BestRateConsolidatePostalRates, BestRateShipmentType> bestRateShipmentTypeManager;
 
         private ShipmentEntity selectedShipment;
         private readonly bool consolidatePostalRates;
@@ -54,14 +54,14 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         /// <param name="messenger"></param>
         public RatingPanelViewModel(IMessenger messenger, IShippingManager shippingManager,
-            IShipmentTypeManager shipmentTypeManager, Func<BestRateConsolidatePostalRates, BestRateShipmentType> bestRateShipmentTypeFactory)
+            IShipmentTypeManager shipmentTypeManager, Func<BestRateConsolidatePostalRates, BestRateShipmentType> bestRateShipmentTypeManager)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.shipmentTypeManager = shipmentTypeManager;
-            this.bestRateShipmentTypeFactory = bestRateShipmentTypeFactory;
+            this.bestRateShipmentTypeManager = bestRateShipmentTypeManager;
 
             consolidatePostalRates = true;
             ActionLinkVisible = false;
@@ -377,7 +377,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 !PostalUtility.IsPostalSetup() &&
                 IsNotUspsOrExpress1(shipmentTypeCode))
             {
-                shipmentType = bestRateShipmentTypeFactory(BestRateConsolidatePostalRates.Yes);
+                shipmentType = bestRateShipmentTypeManager(BestRateConsolidatePostalRates.Yes);
 
                 shipment.ShipmentType = (int) ShipmentTypeCode.BestRate;
                 shippingManager.EnsureShipmentLoaded(shipment);

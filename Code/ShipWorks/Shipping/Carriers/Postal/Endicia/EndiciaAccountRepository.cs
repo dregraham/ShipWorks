@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             EndiciaAccountEntity endiciaAccountEntity = EndiciaAccountManager.GetAccount(accountID);
 
-			// return null if found account is not Endicia
+            // return null if found account is not Endicia
             return endiciaAccountEntity != null && endiciaAccountEntity.EndiciaReseller == (int) EndiciaReseller.None ? endiciaAccountEntity : null;
         }
 
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             get
             {
-                long? accountID = new EndiciaShipmentType().GetPrimaryProfile().Postal.Endicia.EndiciaAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.Endicia).Postal.Endicia.EndiciaAccountID;
                 return GetProfileAccount(ShipmentTypeCode.Endicia, accountID);
             }
         }

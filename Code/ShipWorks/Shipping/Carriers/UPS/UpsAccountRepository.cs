@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -36,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             get
             {
-                long? accountID = new UpsOltShipmentType().GetPrimaryProfile().Ups.UpsAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.UpsOnLineTools).Ups.UpsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.UpsOnLineTools, accountID);
             }
         }

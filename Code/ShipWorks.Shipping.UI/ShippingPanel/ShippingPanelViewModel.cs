@@ -15,6 +15,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.UI.ShippingPanel.CustomsControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
 using ShipWorks.UI;
 
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     /// <summary>
     /// Main view model for the shipment panel
     /// </summary>
-    public partial class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
+    public partial class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable, IDataErrorInfo
     {
         private readonly PropertyChangedHandler handler;
         private OrderSelectionLoaded orderSelectionLoaded;
@@ -69,11 +70,23 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin.PropertyChangeStream
                 .Select(_ => ShipmentAdapter?.Shipment?.OriginPerson)
                 .Where(x => x != null)
-                .Subscribe(x => Origin.SaveToEntity(x));
+                .Subscribe(x =>
+                {
+                    ShipmentAdapter.Shipment.OriginPerson.StateProvCode = Origin.StateProvCode;
+                    ShipmentAdapter.Shipment.OriginPerson.PostalCode = Origin.PostalCode;
+                    ShipmentAdapter.Shipment.OriginPerson.CountryCode = Origin.CountryCode;
+                    shipmentViewModel.LoadCustoms();
+                });
             Destination.PropertyChangeStream
                 .Select(_ => ShipmentAdapter?.Shipment?.ShipPerson)
                 .Where(x => x != null)
-                .Subscribe(x => Destination.SaveToEntity(x));
+                .Subscribe(x =>
+                {
+                    ShipmentAdapter.Shipment.ShipPerson.StateProvCode = Destination.StateProvCode;
+                    ShipmentAdapter.Shipment.ShipPerson.PostalCode = Destination.PostalCode;
+                    ShipmentAdapter.Shipment.ShipPerson.CountryCode = Destination.CountryCode;
+                    shipmentViewModel.LoadCustoms();
+                });
 
             // Wiring up observables needs objects to not be null, so do this last.
             subscriptions = new CompositeDisposable(registrations.Select(x => x.Register(this)));
@@ -176,6 +189,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             Save();
+
             IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter.Shipment, false);
             DisplayError(errors);
         }
@@ -269,8 +283,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             Origin.SetAddressFromOrigin(OriginAddressType, ShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
 
-            DomesticInternationalText = "Domestic";
-
             SupportsMultiplePackages = ShipmentAdapter.SupportsMultiplePackages;
 
             ShipmentViewModel.Load(ShipmentAdapter);
@@ -343,12 +355,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
-        /// Updates the services.
+        /// Updates the service types.
         /// </summary>
         private void UpdateServices() => ShipmentViewModel?.RefreshServiceTypes();
 
         /// <summary>
-        /// Updates the packages.
+        /// Updates the package types.
         /// </summary>
         private void UpdatePackages() => ShipmentViewModel?.RefreshPackageTypes();
 
@@ -477,6 +489,35 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
             }
         }
+
+        #region IDataErrorInfo
+
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                return InputValidation<ShippingPanelViewModel>.Validate(this, columnName);
+            }
+        }
+
+        /// <summary>
+        /// IDataErrorInfo Error implementation
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// List of all validation errors
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> AllErrors()
+        {
+            return InputValidation<ShippingPanelViewModel>.Validate(this);
+        }
+
+        #endregion
 
         /// <summary>
         /// Dispose resources

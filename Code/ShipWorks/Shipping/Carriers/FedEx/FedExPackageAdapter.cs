@@ -1,7 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
+using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -68,6 +71,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Gets or sets the weight.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [Range(0, 999999, ErrorMessage = @"Please enter a valid weight.")]
         public double Weight
         {
             get
@@ -94,6 +98,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Gets or sets the additional weight.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [Range(0, 999999, ErrorMessage = @"Please enter a valid additional weight.")]
         public double AdditionalWeight
         {
             get { return packageEntity.DimsWeight; }
@@ -143,6 +148,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Gets or sets the dims length.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Length must be greater than 1.")]
         public double DimsLength
         {
             get { return packageEntity.DimsLength; }
@@ -156,6 +162,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Gets or sets the dims width.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Width must be greater than 1.")]
         public double DimsWidth
         {
             get { return packageEntity.DimsWidth; }
@@ -169,6 +176,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Gets or sets the dims height.
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Height must be greater than 1.")]
         public double DimsHeight
         {
             get { return packageEntity.DimsHeight; }
@@ -215,5 +223,36 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             return stringHash.Hash(rawValue, string.Empty);
         }
+
+        #region IDataErrorInfo
+
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                string errorMessage = InputValidation<FedExPackageAdapter>.Validate(this, columnName);
+
+                return errorMessage;
+            }
+        }
+
+        /// <summary>
+        /// IDataErrorInfo Error implementation
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// List of all validation errors
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> AllErrors()
+        {
+            return InputValidation<FedExPackageAdapter>.Validate(this);
+        }
+
+        #endregion
     }
 }

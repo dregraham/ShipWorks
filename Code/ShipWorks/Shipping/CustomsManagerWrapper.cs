@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping
         public IDictionary<ShipmentEntity, Exception> EnsureCustomsLoaded(IEnumerable<ShipmentEntity> shipments)
         {
             // We also need to save changes to any whose state\country has changed, since that affects customs items requirements
-            List<ShipmentEntity> destinationChangeNeedsSaved = shipments.Where(s => fields.Select(x => s.Fields[x.FieldIndex].IsChanged).Any()).ToList();
+            List<ShipmentEntity> destinationChangeNeedsSaved = shipments.Where(s => fields.Any(x => s.Fields[x.FieldIndex].IsChanged)).ToList();
 
             // We need to show the user if anything went wrong while doing that
             IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentsToDatabase(destinationChangeNeedsSaved, false);
@@ -82,6 +82,14 @@ namespace ShipWorks.Shipping
             }
 
             return errors;
+        }
+
+        /// <summary>
+        /// Create a new ShipmentCustomsItemEntity for the given shipment, filled in with defaults
+        /// </summary>
+        public ShipmentCustomsItemEntity CreateCustomsItem(ShipmentEntity shipment)
+        {
+            return CustomsManager.CreateCustomsItem(shipment);
         }
     }
 }

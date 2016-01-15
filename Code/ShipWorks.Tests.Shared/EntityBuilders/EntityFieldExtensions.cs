@@ -15,6 +15,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
                 { typeof(byte[]), new byte[0] },
                 { typeof(byte), default(byte) },
                 { typeof(char), default(char) },
+                { typeof(short), default(short) },
                 { typeof(int), default(int) },
                 { typeof(long), default(long) },
                 { typeof(float), default(float) },

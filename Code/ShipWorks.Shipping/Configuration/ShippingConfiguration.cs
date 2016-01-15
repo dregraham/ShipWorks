@@ -1,7 +1,7 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Configuration;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
@@ -11,32 +11,24 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     /// </summary>
     public class ShippingConfiguration : IShippingConfiguration
     {
+        private readonly IShippingSettings shippingSettings;
+        private readonly ISecurityContext securityContext;
+
         /// <summary>
-        /// Wraps a call to determine if a user has permission on an entity
+        /// Constructor
         /// </summary>
-        public bool UserHasPermission(PermissionType permissionType, long orderID)
+        public ShippingConfiguration(ISecurityContext securityContext, IShippingSettings shippingSettings)
         {
-            return UserSession.Security.HasPermission(permissionType, orderID);
+            this.securityContext = securityContext;
+            this.shippingSettings = shippingSettings;
         }
 
         /// <summary>
-        /// Determines address validation for a shipment
+        /// Gets whether a new shipment should be auto-created for an order
         /// </summary>
-        public bool GetAddressValidation(ShipmentEntity shipment)
-        {
-            // TODO: Implement this
-            return true;
-        }
-
-        /// <summary>
-        /// Wraps ShippingSettings.AutoCreateShipments
-        /// </summary>
-        public bool AutoCreateShipments
-        {
-            get
-            {
-                return ShippingSettings.Fetch().AutoCreateShipments;
-            }
-        }
+        public bool ShouldAutoCreateShipment(OrderEntity order) =>
+            !order.Shipments.Any() &&
+                shippingSettings.AutoCreateShipments &&
+                securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID);
     }
 }

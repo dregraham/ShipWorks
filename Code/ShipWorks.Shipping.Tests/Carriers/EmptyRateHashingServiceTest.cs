@@ -6,8 +6,8 @@ namespace ShipWorks.Shipping.Tests.Carriers
 {
     public class EmptyRateHashingServiceTest
     {
-        private EmptyRateHashingService emptyRatingHashingService;
-        private ShipmentEntity shipment;
+        private readonly EmptyRateHashingService emptyRatingHashingService;
+        private readonly ShipmentEntity shipment;
 
         public EmptyRateHashingServiceTest()
         {

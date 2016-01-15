@@ -42,12 +42,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 string message = ex.Message;
 
                 // find the "XML document is well formed but not valid" error
-                if (ex.ErrorCode == "10002" && shipment.ReturnShipment && !string.IsNullOrEmpty(ex.ErrorLocation))
+                if (ex.ErrorCode == "10002" &&
+                    shipment.ReturnShipment &&
+                    !string.IsNullOrEmpty(ex.ErrorLocation) &&
+                    string.Equals(ex.ErrorLocation, "ShipmentConfirmRequest/Shipment/Package/Description", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (string.Compare(ex.ErrorLocation, "ShipmentConfirmRequest/Shipment/Package/Description", StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        message = "The return shipment's Contents is required.";
-                    }
+                    message = "The return shipment's Contents is required.";
                 }
 
                 throw new ShippingException(message, ex);

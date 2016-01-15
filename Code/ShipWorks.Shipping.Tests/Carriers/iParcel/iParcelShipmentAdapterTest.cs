@@ -192,23 +192,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         }
 
         [Fact]
-        public void UsingInsurance_ReturnsShipmentValue()
-        {
-            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
-        }
-
-        [Fact]
-        public void UsingInsurance_IsUpdated()
-        {
-            ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-
-            testObject.UsingInsurance = !testObject.UsingInsurance;
-
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
-        }
-
-        [Fact]
         public void ServiceType_ReturnsShipmentValue()
         {
             ICarrierShipmentAdapter testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);

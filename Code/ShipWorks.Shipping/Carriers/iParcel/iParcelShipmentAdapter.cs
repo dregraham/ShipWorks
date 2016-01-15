@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -12,167 +13,57 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// </summary>
     [SuppressMessage("SonarLint", "S101:Class names should comply with a naming convention",
         Justification = "Class is names to match iParcel's naming convention")]
-    public class iParcelShipmentAdapter : ICarrierShipmentAdapter
+    public class iParcelShipmentAdapter : CarrierShipmentAdapterBase
     {
-        private readonly ShipmentEntity shipment;
-        private readonly iParcelShipmentType shipmentType;
-        private readonly ICustomsManager customsManager;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public iParcelShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
+        public iParcelShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipment.IParcel, nameof(shipment.IParcel));
-            MethodConditions.EnsureArgumentIsNotNull(shipmentTypeManager, nameof(shipmentTypeManager));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
-
-            this.shipment = shipment;
-            this.customsManager = customsManager;
-            shipmentType = shipmentTypeManager.Get(shipment) as iParcelShipmentType;
         }
 
         /// <summary>
         /// Id of the account associated with this shipment
         /// </summary>
-        public long? AccountId
+        public override long? AccountId
         {
-            get { return shipment.IParcel.IParcelAccountID; }
-            set { shipment.IParcel.IParcelAccountID = value.GetValueOrDefault(); }
+            get { return Shipment.IParcel.IParcelAccountID; }
+            set { Shipment.IParcel.IParcelAccountID = value.GetValueOrDefault(); }
         }
-
-        /// <summary>
-        /// The shipment associated with this adapter
-        /// </summary>
-        public ShipmentEntity Shipment
-        {
-            get
-            {
-                return shipment;
-            }
-        }
-
-        /// <summary>
-        /// The shipment type code of this shipment adapter
-        /// </summary>
-        public ShipmentTypeCode ShipmentTypeCode
-        {
-            get
-            {
-                return ShipmentTypeCode.iParcel;
-            }
-        }
-
+        
         /// <summary>
         /// Does this shipment type support accounts?
         /// </summary>
-        public bool SupportsAccounts
+        public override bool SupportsAccounts
         {
             get
             {
                 return true;
             }
         }
-
-        /// <summary>
-        /// Does this shipment type support multiple packages?
-        /// </summary>
-        public bool SupportsMultiplePackages
-        {
-            get
-            {
-                return shipmentType.SupportsMultiplePackages;
-            }
-        }
-
-        /// <summary>
-        /// Is this shipment a domestic shipment?
-        /// </summary>
-        public bool IsDomestic
-        {
-            get
-            {
-                return shipmentType.IsDomestic(shipment);
-            }
-        }
-
-        /// <summary>
-        /// Updates shipment dynamic data, total weight, etc
-        /// </summary>
-        /// <returns>Dictionary of shipments and exceptions.</returns>
-        public IDictionary<ShipmentEntity, Exception> UpdateDynamicData()
-        {
-            shipmentType.UpdateDynamicShipmentData(shipment);
-            shipmentType.UpdateTotalWeight(shipment);
-
-            return customsManager.EnsureCustomsLoaded(new[] { shipment });
-        }
-
+        
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>
-        public bool SupportsPackageTypes => false;
-
-        /// <summary>
-        /// DateTime of the shipment
-        /// </summary>
-        public DateTime ShipDate
-        {
-            get { return shipment.ShipDate; }
-            set { shipment.ShipDate = value; }
-        }
-
-        /// <summary>
-        /// Total weight of the shipment
-        /// </summary>
-        public double TotalWeight
-        {
-            get { return shipment.TotalWeight; }
-        }
-
-        /// <summary>
-        /// Content weight of the shipment
-        /// </summary>
-        public double ContentWeight
-        {
-            get { return shipment.ContentWeight; }
-            set { shipment.ContentWeight = value; }
-        }
-
-        /// <summary>
-        /// Is Insurance requested?
-        /// </summary>
-        public bool UsingInsurance
-        {
-            get { return shipment.Insurance; }
-            set { shipment.Insurance = value; }
-        }
+        public override bool SupportsPackageTypes => false;
 
         /// <summary>
         /// Service type selected
         /// </summary>
-        public int ServiceType
+        public override int ServiceType
         {
-            get { return shipment.IParcel.Service; }
-            set { shipment.IParcel.Service = value; }
+            get { return Shipment.IParcel.Service; }
+            set { Shipment.IParcel.Service = value; }
         }
-
+        
         /// <summary>
         /// List of package adapters for the shipment
         /// </summary>
-        public IEnumerable<IPackageAdapter> GetPackageAdapters()
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
         {
-            UpdateDynamicData();
-            return shipmentType.GetPackageAdapters(shipment);
-        }
-
-        /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            IParcelShipmentEntity iParcel = shipment.IParcel;
+            IParcelShipmentEntity iParcel = Shipment.IParcel;
 
             // Need more
             while (iParcel.Packages.Count < numberOfPackages)

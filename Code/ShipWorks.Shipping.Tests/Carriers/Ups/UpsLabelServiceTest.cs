@@ -12,8 +12,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
     public class UpsLabelServiceTest
     {
         readonly AutoMock mock;
-        private ShipmentEntity shipment;
-        private UpsLabelService testObject;
+        private readonly ShipmentEntity shipment;
+        private readonly UpsLabelService testObject;
 
         public UpsLabelServiceTest()
         {

@@ -162,22 +162,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
         }
-
-        [Fact]
-        public void UsingInsurance_ReturnsShipmentValue()
-        {
-            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
-        }
-
-        [Fact]
-        public void UsingInsurance_IsUpdated()
-        {
-            ICarrierShipmentAdapter testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
-
-            testObject.UsingInsurance = !testObject.UsingInsurance;
-
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
-        }
     }
 }

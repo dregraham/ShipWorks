@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Return a new InsuranceViewModel
         /// </summary>
         /// <returns></returns>
-        public InsuranceViewModel GetSInsuranceViewModel()
+        public InsuranceViewModel GetInsuranceViewModel()
         {
             return insuranceViewModelFactory();
         }

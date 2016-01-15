@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -12,14 +11,10 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
-using ShipWorks.Shipping.Carriers.OnTrac.Net.Rates;
-using ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Track;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -27,11 +22,8 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -178,7 +170,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
-            return EnumHelper.GetDescription((OnTracServiceType)shipment.OnTrac.Service);
+            return EnumHelper.GetDescription((OnTracServiceType) shipment.OnTrac.Service);
         }
 
         /// <summary>
@@ -260,12 +252,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             onTracShipment.CodType = 0;
             onTracShipment.CodAmount = 0;
 
-            onTracShipment.PackagingType = (int)OnTracPackagingType.Package;
+            onTracShipment.PackagingType = (int) OnTracPackagingType.Package;
 
             onTracShipment.InsurancePennyOne = false;
             onTracShipment.InsuranceValue = 0;
 
-            shipment.OnTrac.RequestedLabelFormat = (int)ThermalLanguage.None;
+            shipment.OnTrac.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -273,7 +265,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
             profile.OriginID = (int) ShipmentOriginSource.Account;
@@ -296,8 +288,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             onTrac.DimsWeight = 0;
             onTrac.DimsAddWeight = true;
 
-            onTrac.PackagingType = (int)OnTracPackagingType.Package;
-            onTrac.ResidentialDetermination = (int)ResidentialDeterminationType.FromAddressValidation;
+            onTrac.PackagingType = (int) OnTracPackagingType.Package;
+            onTrac.ResidentialDetermination = (int) ResidentialDeterminationType.FromAddressValidation;
 
             onTrac.Reference1 = string.Empty;
             onTrac.Reference2 = string.Empty;
@@ -480,7 +472,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             else
             {
                 // shipment not processed
-                if (originID == (int)ShipmentOriginSource.Account && shipment.OnTrac != null)
+                if (originID == (int) ShipmentOriginSource.Account && shipment.OnTrac != null)
                 {
                     OnTracAccountEntity account = OnTracAccountManager.GetAccount(shipment.OnTrac.OnTracAccountID)
                         ?? OnTracAccountManager.Accounts.FirstOrDefault();
@@ -542,7 +534,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             if (shipment.OnTrac != null)
             {
-                shipment.OnTrac.RequestedLabelFormat = (int)requestedLabelFormat;
+                shipment.OnTrac.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
 

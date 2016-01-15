@@ -11,5 +11,10 @@ namespace ShipWorks.Shipping.Profiles
         /// Get the default profile for the given shipment type
         /// </summary>
         ShippingProfileEntity GetDefaultProfile(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Gets or creates a profile with the default settings for the shipment type
+        /// </summary>
+        ShippingProfileEntity GetOrCreatePrimaryProfile(ShipmentType shipmentType);
     }
 }

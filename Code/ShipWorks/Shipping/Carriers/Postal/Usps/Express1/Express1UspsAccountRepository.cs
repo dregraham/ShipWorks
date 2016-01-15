@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// Gets the Express1 Usps account with the specified id
         /// </summary>
         /// <param name="accountID">Id of the account to retrieve</param>
-        public override UspsAccountEntity GetAccount(long accountID) => 
+        public override UspsAccountEntity GetAccount(long accountID) =>
             Accounts.ToList().FirstOrDefault(a => a.UspsAccountID == accountID);
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         {
             get
             {
-                long? accountID = new Express1UspsShipmentType().GetPrimaryProfile().Postal.Usps.UspsAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.Express1Usps).Postal.Usps.UspsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.Express1Usps, accountID);
             }
         }
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// Saves the specified account.
         /// </summary>
         /// <param name="account">The account.</param>
-        public override void Save(UspsAccountEntity account) => 
+        public override void Save(UspsAccountEntity account) =>
             UspsAccountManager.SaveAccount(account);
     }
 }

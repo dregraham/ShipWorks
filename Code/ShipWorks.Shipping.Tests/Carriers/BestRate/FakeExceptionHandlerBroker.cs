@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Tests.Carriers.BestRate
 {
     /// <summary>
-    /// A fake broker for the purpose of testing the best rate shipment type where the only thing it does 
+    /// A fake broker for the purpose of testing the best rate shipment type where the only thing it does
     /// is call the exception handler provided to the best rates method for the broker exception(s) provided
     /// in the constructor.
     /// </summary>
@@ -22,7 +20,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         /// </summary>
         /// <param name="brokerExceptionToThrow">The broker exception to throw.</param>
         public FakeExceptionHandlerBroker(BrokerException brokerExceptionToThrow)
-            : this (new List<BrokerException> { brokerExceptionToThrow })
+            : this(new List<BrokerException> { brokerExceptionToThrow })
         { }
 
         /// <summary>
@@ -33,7 +31,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         {
             this.brokerExceptionsToThrow = new List<BrokerException>(brokerExceptionsToThrow);
         }
-        
+
         /// <summary>
         /// Gets a value indicating whether there any accounts available to a broker.
         /// </summary>
@@ -44,7 +42,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         {
             get { return true; }
         }
-        
+
         /// <summary>
         /// Gets the rates for each of the accounts of a specific shipping provider based
         /// on the configuration of the best rate shipment data.
@@ -85,14 +83,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         {
             return false;
         }
-        
+
         /// <summary>
         /// Configures the broker using the given settings.
         /// </summary>
         /// <param name="brokerSettings">The broker settings.</param>
         public void Configure(IBestRateBrokerSettings brokerSettings)
-        { }
-
+        {
+            // There is no configuration necessary
+        }
 
         /// <summary>
         /// Gets a value indicating whether [is counter rate].

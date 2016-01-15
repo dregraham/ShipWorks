@@ -27,7 +27,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private const string userName = "shipworks3";
         private const string password = "Z59$sBXsTcYk";
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsServiceGateway" /> class.
         /// </summary>

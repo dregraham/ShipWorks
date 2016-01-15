@@ -25,6 +25,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public ShipmentEntityBuilder()
         {
+            Set(x => x.ShipmentTypeCode, ShipmentTypeCode.None);
             Set(x => x.ShipSenseChangeSets, new XElement("ChangeSets").ToString());
         }
 
@@ -68,10 +69,11 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public ShipmentEntityBuilder AsPostal(Action<PostalShipmentEntityBuilder> builderConfiguration)
         {
+            Set(x => x.ShipmentTypeCode, ShipmentTypeCode.PostalWebTools);
+
             PostalShipmentEntityBuilder builder = new PostalShipmentEntityBuilder(this);
             builderConfiguration?.Invoke(builder);
 
-            Set(x => x.ShipmentTypeCode, ShipmentTypeCode.PostalWebTools);
             Set(x => x.Postal, builder.Build());
 
             return this;

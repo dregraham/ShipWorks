@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         {
             shipment.ShipmentTypeCode = ShipmentTypeCode.Express1Endicia;
             var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.Equal(ShipmentTypeCode.Endicia, testObject.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Express1Endicia, testObject.ShipmentTypeCode);
         }
 
         [Fact]
@@ -203,23 +203,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
-        }
-
-        [Fact]
-        public void UsingInsurance_ReturnsShipmentValue()
-        {
-            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
-        }
-
-        [Fact]
-        public void UsingInsurance_IsUpdated()
-        {
-            ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-
-            testObject.UsingInsurance = !testObject.UsingInsurance;
-
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
         }
 
         [Fact]

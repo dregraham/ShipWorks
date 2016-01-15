@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         {
             shipment.ShipmentTypeCode = ShipmentTypeCode.Express1Usps;
             var testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.Equal(ShipmentTypeCode.Usps, testObject.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Express1Usps, testObject.ShipmentTypeCode);
         }
 
         [Fact]
@@ -195,23 +195,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
-        }
-
-        [Fact]
-        public void UsingInsurance_ReturnsShipmentValue()
-        {
-            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
-        }
-
-        [Fact]
-        public void UsingInsurance_IsUpdated()
-        {
-            ICarrierShipmentAdapter testObject = new UspsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
-
-            testObject.UsingInsurance = !testObject.UsingInsurance;
-
-            Assert.Equal(shipment.Insurance, testObject.UsingInsurance);
         }
 
         [Fact]

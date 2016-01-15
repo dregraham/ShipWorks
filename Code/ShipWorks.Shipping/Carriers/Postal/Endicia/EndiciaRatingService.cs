@@ -25,11 +25,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
         public EndiciaRatingService(
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory,
-            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
+            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeManager,
             IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository,
             ILogEntryFactory logEntryFactory,
             Func<string, ICertificateInspector> certificateInspectorFactory)
-            : base(ratingServiceFactory, shipmentTypeFactory)
+            : base(ratingServiceFactory, shipmentTypeManager)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             express1Rates = GetExpress1Rates(shipment, express1Rates, settings);
 
-            EndiciaShipmentType endiciaShipmentType = shipmentTypeFactory[(ShipmentTypeCode) shipment.ShipmentType] as EndiciaShipmentType;
+            EndiciaShipmentType endiciaShipmentType = shipmentTypeManager[(ShipmentTypeCode) shipment.ShipmentType] as EndiciaShipmentType;
 
             if (endiciaShipmentType == null)
             {
@@ -206,25 +206,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private List<RateResult> GetExpress1Rates(ShipmentEntity shipment, List<RateResult> express1Rates, ShippingSettingsEntity settings)
         {
             // See if this shipment should really go through Express1
-            if (UseExpressOne(shipment, settings))
+            if (!UseExpressOne(shipment, settings))
             {
-                // We don't have any Endicia accounts, so let the user know they need an account.
-                if (!GetAccountRepository((ShipmentTypeCode) shipment.ShipmentType).Accounts.Any())
-                {
-                    throw new EndiciaException($"An account is required to view {EnumHelper.GetDescription(ShipmentTypeCode.Endicia)} rates.");
-                }
-
-                EndiciaAccountEntity express1Account = EndiciaAccountManager.GetAccount(settings.EndiciaAutomaticExpress1Account);
-
-                if (express1Account == null)
-                {
-                    throw new EndiciaException("The Express1 account to automatically use when processing with Endicia has not been selected.");
-                }
-
-                express1Rates = GetExpress1Rates(shipment, express1Account, null);
+                return express1Rates;
             }
 
-            return express1Rates;
+            // We don't have any Endicia accounts, so let the user know they need an account.
+            if (!GetAccountRepository((ShipmentTypeCode) shipment.ShipmentType).Accounts.Any())
+            {
+                throw new EndiciaException($"An account is required to view {EnumHelper.GetDescription(ShipmentTypeCode.Endicia)} rates.");
+            }
+
+            EndiciaAccountEntity express1Account = EndiciaAccountManager.GetAccount(settings.EndiciaAutomaticExpress1Account);
+
+            if (express1Account == null)
+            {
+                throw new EndiciaException("The Express1 account to automatically use when processing with Endicia has not been selected.");
+            }
+
+            return GetExpress1Rates(shipment, express1Account, null);
         }
 
         /// <summary>
@@ -240,11 +240,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             try
             {
                 // Currently this actually recurses into this same method
-                express1Rates = GetRates(shipment).Rates.ToList();
+                return GetRates(shipment).Rates.ToList();
             }
             catch (ShippingException)
             {
                 // Eat the exception; we don't want to stop someone from using Endicia if Express1 can't get rates
+                return express1Rates;
             }
             finally
             {
@@ -252,7 +253,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 shipment.Postal.Endicia.EndiciaAccountID = shipment.Postal.Endicia.OriginalEndiciaAccountID.Value;
                 shipment.Postal.Endicia.OriginalEndiciaAccountID = null;
             }
-            return express1Rates;
         }
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private bool UseExpressOne(ShipmentEntity shipment, ShippingSettingsEntity settings)
         {
             return shipment.ShipmentType == (int) ShipmentTypeCode.Endicia
-                   && !shipmentTypeFactory[ShipmentTypeCode.Endicia].IsRateDiscountMessagingRestricted
+                   && !shipmentTypeManager[ShipmentTypeCode.Endicia].IsRateDiscountMessagingRestricted
                    && Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType)
                    && settings.EndiciaAutomaticExpress1;
         }

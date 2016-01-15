@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Utility;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using log4net;
-using Interapptive.Shared.UI;
 using Autofac;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.Settings.Defaults
 {
@@ -28,7 +20,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// A profile has been edited in some way
         /// </summary>
         public event EventHandler ProfileEdited;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -71,7 +63,12 @@ namespace ShipWorks.Shipping.Settings.Defaults
             labelPrimaryProfileInfo.Text = string.Format(labelPrimaryProfileInfo.Text, shipmentType.ShipmentTypeName);
             linkCommonProfile.Left = labelPrimaryProfileInfo.Right;
 
-            linkCommonProfile.Text = shipmentType.GetPrimaryProfile().Name;
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
+
+                linkCommonProfile.Text = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType).Name;
+            }
 
             LoadRules();
 
@@ -115,8 +112,10 @@ namespace ShipWorks.Shipping.Settings.Defaults
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
+
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(ShippingProfileEntity), shipmentType.GetPrimaryProfile())
+                    new TypedParameter(typeof(ShippingProfileEntity), shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType))
                 );
                 profileEditor.ShowDialog(this);
             }
@@ -204,7 +203,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// </summary>
         void OnMoveUpRule(object sender, EventArgs e)
         {
-            ShippingDefaultsRuleControl ruleControl = (ShippingDefaultsRuleControl)sender;
+            ShippingDefaultsRuleControl ruleControl = (ShippingDefaultsRuleControl) sender;
             int index = panelSettingsArea.Controls.IndexOf(ruleControl);
 
             if (index < panelSettingsArea.Controls.Count - 1)

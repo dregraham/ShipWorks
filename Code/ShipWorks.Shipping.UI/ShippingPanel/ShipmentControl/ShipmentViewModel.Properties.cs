@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
@@ -15,7 +17,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     {
         private DateTime shipDate;
         private double totalWeight;
-        private bool usingInsurance;
         private int serviceType;
         private int numberOfPackages;
         private IEnumerable<IPackageAdapter> packageAdapters;
@@ -54,6 +55,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Shipment ship date
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [Required(ErrorMessage = @"Ship date is required")]
+        [DateCompare(DateCompareType.Today, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Ship date must be today or in the future.")]
         public DateTime ShipDate
         {
             get { return shipDate; }
@@ -68,16 +71,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             get { return totalWeight; }
             set { handler.Set(nameof(TotalWeight), ref totalWeight, value); }
-        }
-
-        /// <summary>
-        /// Is the shipment using insurance?
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool UsingInsurance
-        {
-            get { return usingInsurance; }
-            set { handler.Set(nameof(UsingInsurance), ref usingInsurance, value); }
         }
 
         /// <summary>
@@ -191,7 +184,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             {
                 handler.Set(nameof(SelectedDimensionsProfile), ref selectedDimensionsProfile, value, true);
 
-                if (SelectedDimensionsProfile != null)
+                if (SelectedDimensionsProfile != null && SelectedPackageAdapter != null)
                 {
                     if (SelectedDimensionsProfile.DimensionsProfileID == 0)
                     {

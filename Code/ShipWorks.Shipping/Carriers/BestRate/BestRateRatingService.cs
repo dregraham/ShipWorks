@@ -15,16 +15,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class BestRateRatingService : IRatingService, IBestRateBrokerRatingService
     {
-        private readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
+        private readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeManager;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
         private readonly IRateGroupFilterFactory filterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BestRateRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory, IBestRateShippingBrokerFactory brokerFactory, IRateGroupFilterFactory filterFactory)
+        public BestRateRatingService(IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeManager, IBestRateShippingBrokerFactory brokerFactory, IRateGroupFilterFactory filterFactory)
         {
-            this.shipmentTypeFactory = shipmentTypeFactory;
+            this.shipmentTypeManager = shipmentTypeManager;
             this.brokerFactory = brokerFactory;
             this.filterFactory = filterFactory;
         }
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 if (distinctExceptions.Any())
                 {
-                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.BestRate], distinctExceptions));
+                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(shipmentTypeManager[ShipmentTypeCode.BestRate], distinctExceptions));
                 }
 
                 return rateGroup;

@@ -93,6 +93,7 @@
       <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -200,11 +201,13 @@
     <Compile Include="Rating\IRateSelectionFactory.cs" />
     <Compile Include="Rating\RateSelection.cs" />
     <Compile Include="Rating\RateSelectionFactory.cs" />
+    <Compile Include="Services\ShipmentFactory.cs" />
     <Compile Include="Services\ShipmentLoaderService.cs" />
     <Compile Include="Services\ShipmentProcessorService.cs" />
     <Compile Include="Services\ShipmentTypeManagerWrapper.cs" />
     <Compile Include="Services\ShipmentTypeProvider.cs" />
     <Compile Include="Services\ShippingManagerWrapper.cs" />
+    <Compile Include="Services\ShippingProfileManagerWrapper.cs" />
     <Compile Include="ShipmentAddressValidator.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />

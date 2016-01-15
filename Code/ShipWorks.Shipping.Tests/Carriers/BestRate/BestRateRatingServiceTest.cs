@@ -17,23 +17,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
 
         public BestRateRatingServiceTest()
         {
-            //Mock<IAmazonShipmentRequest> amazonShipmentRequest = mock.Mock<IAmazonShipmentRequest>();
-
-            //Mock<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>> repo = mock.MockRepository.Create<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>>();
-
-            //repo.Setup(x => x[AmazonMwsApiCall.CancelShipment])
-            //    .Returns(amazonShipmentRequest.Object);
-
-            //mock.Provide<IIndex<AmazonMwsApiCall, IAmazonShipmentRequest>>(repo.Object);
-
-            //AmazonLabelService testObject = mock.Create<AmazonLabelService>();
-
-            //ShipmentEntity shipment = new ShipmentEntity();
-
-            //testObject.Void(shipment);
-
-            //amazonShipmentRequest.Verify(x => x.Submit(shipment));
-
             mock = AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
         }
 
@@ -41,22 +24,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         public void GetRates_AddsRatesComparedEventToShipment_Test()
         {
             BestRateRatingService testObject = mock.Create<BestRateRatingService>();
-            ShipmentEntity shipment = new ShipmentEntity {BestRateEvents = 0};
+            ShipmentEntity shipment = new ShipmentEntity { BestRateEvents = 0 };
 
             testObject.GetRates(shipment);
 
-            Assert.Equal((int)BestRateEventTypes.RatesCompared, shipment.BestRateEvents);
+            Assert.Equal((int) BestRateEventTypes.RatesCompared, shipment.BestRateEvents);
         }
 
         [Fact]
         public void GetRates_DoesNotRemoveOtherBestRateEvents_Test()
         {
             BestRateRatingService testObject = mock.Create<BestRateRatingService>();
-            ShipmentEntity shipment = new ShipmentEntity { BestRateEvents = (int)BestRateEventTypes.RateSelected };
-            
+            ShipmentEntity shipment = new ShipmentEntity { BestRateEvents = (int) BestRateEventTypes.RateSelected };
+
             testObject.GetRates(shipment);
 
-            Assert.Equal(BestRateEventTypes.RateSelected, (BestRateEventTypes)shipment.BestRateEvents & BestRateEventTypes.RateSelected);
+            Assert.Equal(BestRateEventTypes.RateSelected, (BestRateEventTypes) shipment.BestRateEvents & BestRateEventTypes.RateSelected);
         }
 
         [Fact]
@@ -111,7 +94,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
 
             RateGroup rateGroup = testObject.GetRates(shipment);
 
-            Assert.Equal(0, rateGroup.Rates.Count());
+            Assert.Equal(0, rateGroup.Rates.Count);
         }
 
         [Fact]
@@ -160,10 +143,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
             // We want the factory to return our fake broker for this test
             mock.Mock<IBestRateShippingBrokerFactory>()
                 .Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>()))
-                .Returns(new List<IBestRateShippingBroker> {fakeBroker});
-            
+                .Returns(new List<IBestRateShippingBroker> { fakeBroker });
+
             ShipmentEntity shipment = new ShipmentEntity();
-            
+
             // Create a mock of the repository so that the IIndex in the best rate rating service works
             Mock<IIndex<ShipmentTypeCode, ShipmentType>> repo = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ShipmentType>>();
             repo.Setup(x => x[ShipmentTypeCode.BestRate])
@@ -175,7 +158,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
 
             // Create the footnote control and extract the exceptions
             RateFootnoteControl footnote = rateGroup.FootnoteFactories.First().CreateFootnote(null);
-            List<BrokerException> exceptionsInFootnoteControl = ((BrokerExceptionsRateFootnoteControl)footnote).BrokerExceptions.ToList();
+            List<BrokerException> exceptionsInFootnoteControl = ((BrokerExceptionsRateFootnoteControl) footnote).BrokerExceptions.ToList();
 
             Assert.Equal(BrokerExceptionSeverityLevel.Error, exceptionsInFootnoteControl[0].SeverityLevel);
             Assert.Equal(BrokerExceptionSeverityLevel.Warning, exceptionsInFootnoteControl[1].SeverityLevel);

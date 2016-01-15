@@ -27,28 +27,25 @@ namespace ShipWorks.Shipping.Services
         {
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
-            
+
             messenger.OfType<OrderSelectionChangingMessage>()
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .Throttle(TimeSpan.FromMilliseconds(100))
-                .Subscribe(x => LoadAndNotify(x.OrderIdList));
+                .Subscribe(async x => await LoadAndNotify(x.OrderIdList).ConfigureAwait(false));
         }
 
         /// <summary>
         /// Loads the order and sends a message that it has been loaded.
         /// </summary>
-        public Task LoadAndNotify(IEnumerable<long> entityIDs)
+        public async Task LoadAndNotify(IEnumerable<long> entityIDs)
         {
-            return TaskEx.Run(() =>
-            {
-                long entityID = entityIDs?.FirstOrDefault() ?? 0;
+            long entityID = entityIDs?.FirstOrDefault() ?? 0;
 
-                OrderSelectionLoaded orderSelectionLoaded = shipmentLoader.Load(entityID);
+            OrderSelectionLoaded orderSelectionLoaded = await shipmentLoader.Load(entityID);
 
-                OrderSelectionChangedMessage orderSelectionChangedMessage = new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded> {orderSelectionLoaded});
+            OrderSelectionChangedMessage orderSelectionChangedMessage = new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded> { orderSelectionLoaded });
 
-                messenger.Send(orderSelectionChangedMessage);
-            });
+            messenger.Send(orderSelectionChangedMessage);
         }
 
         /// <summary>

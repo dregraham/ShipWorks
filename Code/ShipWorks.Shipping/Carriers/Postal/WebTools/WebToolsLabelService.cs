@@ -18,7 +18,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 PostalPackagingType packaging = (PostalPackagingType) shipment.Postal.PackagingType;
 
                 if ((shipment.Postal.Service != (int) PostalServiceType.ExpressMail) &&
-                    !(shipment.Postal.Service == (int) PostalServiceType.FirstClass && (packaging == PostalPackagingType.Envelope || packaging == PostalPackagingType.LargeEnvelope)))
+                    !(shipment.Postal.Service == (int) PostalServiceType.FirstClass &&
+                    (packaging == PostalPackagingType.Envelope || packaging == PostalPackagingType.LargeEnvelope)))
                 {
                     throw new ShippingException(
                         $"A confirmation option must be selected when shipping {EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service)}.");
@@ -26,9 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             }
 
             if (shipment.Postal.Service == (int) PostalServiceType.ExpressMail &&
-                shipment.Postal.Confirmation != (int) PostalConfirmationType.None &&
-                shipment.Postal.Confirmation != (int) PostalConfirmationType.AdultSignatureRestricted &&
-                shipment.Postal.Confirmation != (int) PostalConfirmationType.AdultSignatureRequired)
+                CanUseExpressMail((PostalConfirmationType) shipment.Postal.Confirmation))
             {
                 throw new ShippingException("A confirmation option cannot be used with Express mail.");
             }
@@ -43,6 +42,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         public void Void(ShipmentEntity shipment)
         {
             // We can't void a web tools label
+        }
+
+        /// <summary>
+        /// Check whether the confirmation type is valid for Express Mail
+        /// </summary>
+        private static bool CanUseExpressMail(PostalConfirmationType confirmation)
+        {
+            return confirmation != PostalConfirmationType.None &&
+                confirmation != PostalConfirmationType.AdultSignatureRestricted &&
+                confirmation != PostalConfirmationType.AdultSignatureRequired;
         }
     }
 }

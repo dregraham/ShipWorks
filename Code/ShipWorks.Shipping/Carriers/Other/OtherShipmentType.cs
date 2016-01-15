@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
 
@@ -94,6 +94,11 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
+            if (shipment.Processed)
+            {
+                return;
+            }
+
             base.UpdateDynamicShipmentData(shipment);
 
             // Other only has the option to use ShipWorks Insurance

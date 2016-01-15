@@ -521,55 +521,56 @@
     <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackageChangeSetXmlWriterTest.cs" />
     <Compile Include="Shipping\ShipSense\ShipSenseSynchronizerTest.cs" />
     <Compile Include="SqlServer\FilterTests.cs" />
-    <Compile Include="Stores\Amazon\AmazonMwsResponseHandlerTest.cs" />
-    <Compile Include="Stores\Amazon\AmazonMwsWebClientSettingsTest.cs" />
-    <Compile Include="Stores\Amazon\AmazonOrderItemEntityTest.cs" />
-    <Compile Include="Stores\Amazon\AmazonStoreEntityTest.cs" />
-    <Compile Include="Stores\Amazon\AmazonOrderEntityTest.cs" />
-    <Compile Include="Stores\Amazon\EnsClientTest.cs" />
-    <Compile Include="Stores\Amazon\MwsClientTests.cs" />
-    <Compile Include="Stores\BigCommerce\BigCommerceProductImageCacheTest.cs" />
-    <Compile Include="Stores\BrightPearl\BrightPearlUtilityTest.cs" />
-    <Compile Include="Stores\BuyDotcom\BuyDotComOnlineUpdaterTest.cs" />
-    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOrderItemEntityTest.cs" />
-    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorStoreEntityTest.cs" />
-    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOrderEntityTest.cs" />
-    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorHelperTest.cs" />
-    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOnlineUpdaterTest.cs" />
-    <Compile Include="Stores\eBay\EbayOnlineUpdaterTest.cs" />
-    <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />
-    <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\EligibilityRuleTest.cs" />
-    <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRuleTest.cs" />
-    <Compile Include="Stores\Etsy\EtsyOnlineUpdaterTest.cs" />
-    <Compile Include="Stores\GenericStore\IdentifierTests.cs" />
-    <Compile Include="Stores\GenericStore\SchemaValidationTests.cs" />
-    <Compile Include="Stores\Newegg\CancellationRequestTest.cs" />
-    <Compile Include="Stores\Newegg\CheckCredentialsRequestTest.cs" />
-    <Compile Include="Stores\Newegg\CheckCredentialsResponseSerializerTest.cs" />
-    <Compile Include="Stores\Newegg\DownloadOrdersRequestTest.cs" />
-    <Compile Include="Stores\Newegg\DownloadResponseSerializerTest.cs" />
-    <Compile Include="Stores\Newegg\ErrorResponseSerializerTest.cs" />
-    <Compile Include="Stores\Newegg\LiveRequestFactoryTest.cs" />
-    <Compile Include="Stores\Newegg\Mocked\Failure\MockCredentialCheckRequest.cs" />
-    <Compile Include="Stores\Newegg\Mocked\Failure\MockRequestFactory.cs" />
-    <Compile Include="Stores\Newegg\Mocked\MockedNeweggRequest.cs" />
-    <Compile Include="Stores\Newegg\Mocked\NonLoggingNeweggRequest.cs" />
-    <Compile Include="Stores\Newegg\Mocked\Success\MockCredentialCheckRequest.cs" />
-    <Compile Include="Stores\Newegg\Mocked\Success\MockReportStatusRequest.cs" />
-    <Compile Include="Stores\Newegg\Mocked\Success\MockRequestFactory.cs" />
-    <Compile Include="Stores\Newegg\Mocked\Success\MockShippingRequest.cs" />
-    <Compile Include="Stores\Newegg\NeweggAccountSettingsValidatorTest.cs" />
-    <Compile Include="Stores\Newegg\NeweggWebClientTest.cs" />
-    <Compile Include="Stores\Newegg\PageCalculatorTest.cs" />
-    <Compile Include="Stores\Newegg\RemoveItemRequestTest.cs" />
-    <Compile Include="Stores\Newegg\ShippingRequestTest.cs" />
-    <Compile Include="Stores\Newegg\ShippingResponseSerializerTest.cs" />
-    <Compile Include="Stores\NoMoreRack\IdentifierTests.cs" />
+    <Compile Include="Stores\Platforms\Amazon\AmazonMwsResponseHandlerTest.cs" />
+    <Compile Include="Stores\Platforms\Amazon\AmazonMwsWebClientSettingsTest.cs" />
+    <Compile Include="Stores\Platforms\Amazon\AmazonOrderItemEntityTest.cs" />
+    <Compile Include="Stores\Platforms\Amazon\AmazonStoreEntityTest.cs" />
+    <Compile Include="Stores\Platforms\Amazon\AmazonOrderEntityTest.cs" />
+    <Compile Include="Stores\Platforms\Amazon\EnsClientTest.cs" />
+    <Compile Include="Stores\Platforms\Amazon\MwsClientTests.cs" />
+    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceProductImageCacheTest.cs" />
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlUtilityTest.cs" />
+    <Compile Include="Stores\Platforms\BuyDotcom\BuyDotComOnlineUpdaterTest.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorOrderItemEntityTest.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorStoreEntityTest.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorOrderEntityTest.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorHelperTest.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdaterTest.cs" />
+    <Compile Include="Stores\Content\Panels\MapPanelTest.cs" />
+    <Compile Include="Stores\Platforms\eBay\EbayOnlineUpdaterTest.cs" />
+    <Compile Include="Stores\Platforms\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />
+    <Compile Include="Stores\Platforms\eBay\Shipping\GlobalShippingProgram\Rules\EligibilityRuleTest.cs" />
+    <Compile Include="Stores\Platforms\eBay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRuleTest.cs" />
+    <Compile Include="Stores\Platforms\Etsy\EtsyOnlineUpdaterTest.cs" />
+    <Compile Include="Stores\Platforms\GenericStore\IdentifierTests.cs" />
+    <Compile Include="Stores\Platforms\GenericStore\SchemaValidationTests.cs" />
+    <Compile Include="Stores\Platforms\Newegg\CancellationRequestTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\CheckCredentialsRequestTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\CheckCredentialsResponseSerializerTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\DownloadOrdersRequestTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\DownloadResponseSerializerTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\ErrorResponseSerializerTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\LiveRequestFactoryTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\Mocked\Failure\MockCredentialCheckRequest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\Mocked\Failure\MockRequestFactory.cs" />
+    <Compile Include="Stores\Platforms\Newegg\Mocked\MockedNeweggRequest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\Mocked\NonLoggingNeweggRequest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\Mocked\Success\MockCredentialCheckRequest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\Mocked\Success\MockReportStatusRequest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\Mocked\Success\MockRequestFactory.cs" />
+    <Compile Include="Stores\Platforms\Newegg\Mocked\Success\MockShippingRequest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\NeweggAccountSettingsValidatorTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\NeweggWebClientTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\PageCalculatorTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\RemoveItemRequestTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\ShippingRequestTest.cs" />
+    <Compile Include="Stores\Platforms\Newegg\ShippingResponseSerializerTest.cs" />
+    <Compile Include="Stores\Platforms\NoMoreRack\IdentifierTests.cs" />
     <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
-    <Compile Include="Stores\Shopify\IdentifierTests.cs" />
-    <Compile Include="Stores\Volusion\VolusionWebClientTest.cs" />
-    <Compile Include="Stores\Yahoo\YahooEmailOnlineUpdaterTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\IdentifierTests.cs" />
+    <Compile Include="Stores\Platforms\Volusion\VolusionWebClientTest.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\YahooEmailOnlineUpdaterTest.cs" />
     <Compile Include="Templates\Processing\XmlTreeGeneration.cs" />
     <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
@@ -582,35 +583,35 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\ClickCartProOrder.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\Error.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetCount.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetOrdersWithData.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetOrdersWithoutData.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetStatusCodes.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetStore.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GenericError.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetCount.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetOrdersWithData.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetOrdersWithoutData.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetStatusCodes.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetStore.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetCount_fail.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetCount_pass.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetOrdersNone_pass.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetOrders_fail.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetStatusCodes_fail.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetStatusCodes_pass.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\GetStore_pass.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\ModuleVersion2_fail.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\ModuleVersion_fail.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\UpdateStatusFail_fail.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\UpdateStatusFail_pass.xml" />
-    <EmbeddedResource Include="Stores\GenericStore\SampleXML\UpdateStatusSuccess_pass.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Input\ClickCartProOrder.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Input\Error.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetCount.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetOrdersWithData.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetOrdersWithoutData.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetStatusCodes.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Input\GetStore.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Output\GenericError.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetCount.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetOrdersWithData.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetOrdersWithoutData.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetStatusCodes.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\LegacyTransforms\OSC Derivatives\Output\GetStore.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\GetCount_fail.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\GetCount_pass.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\GetOrdersNone_pass.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\GetOrders_fail.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\GetStatusCodes_fail.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\GetStatusCodes_pass.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\GetStore_pass.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\ModuleVersion2_fail.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\ModuleVersion_fail.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\UpdateStatusFail_fail.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\UpdateStatusFail_pass.xml" />
+    <EmbeddedResource Include="Stores\Platforms\GenericStore\SampleXML\UpdateStatusSuccess_pass.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Stores\Amazon\TestCerts\cert-QKORKMU6UWH23ZR63Q3ET4F5XFZKN4SU.pem" />
-    <EmbeddedResource Include="Stores\Amazon\TestCerts\pk-QKORKMU6UWH23ZR63Q3ET4F5XFZKN4SU.pem" />
+    <EmbeddedResource Include="Stores\Platforms\Amazon\TestCerts\cert-QKORKMU6UWH23ZR63Q3ET4F5XFZKN4SU.pem" />
+    <EmbeddedResource Include="Stores\Platforms\Amazon\TestCerts\pk-QKORKMU6UWH23ZR63Q3ET4F5XFZKN4SU.pem" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -651,23 +652,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Stores\Newegg\Artifacts\DownloadedOrders.xml">
+    <EmbeddedResource Include="Stores\Platforms\Newegg\Artifacts\DownloadedOrders.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Stores\Newegg\Artifacts\ShippingResult.xml">
+    <EmbeddedResource Include="Stores\Platforms\Newegg\Artifacts\ShippingResult.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Stores\Newegg\Artifacts\FortyTwoOrderDownload.xml">
+    <EmbeddedResource Include="Stores\Platforms\Newegg\Artifacts\FortyTwoOrderDownload.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Newegg\Artifacts\MockedTwoHundredOrderDownload.xml">
+    <EmbeddedResource Include="Stores\Platforms\Newegg\Artifacts\MockedTwoHundredOrderDownload.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Newegg\Artifacts\ZeroOrderDownload.xml">
+    <EmbeddedResource Include="Stores\Platforms\Newegg\Artifacts\ZeroOrderDownload.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
@@ -678,17 +679,17 @@
     <Content Include="Shipping\Carriers\Postal\Endicia\BestRate\Endicia_GetBestRates_DoesNotIncludeTypes.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadedWithEmptyInvoice.xml">
+    <EmbeddedResource Include="Stores\Platforms\Newegg\Artifacts\OrderDownloadedWithEmptyInvoice.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadWithInvalidHyphen.xml">
+    <EmbeddedResource Include="Stores\Platforms\Newegg\Artifacts\OrderDownloadWithInvalidHyphen.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadWithUnicodeCharacter.xml">
+    <EmbeddedResource Include="Stores\Platforms\Newegg\Artifacts\OrderDownloadWithUnicodeCharacter.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

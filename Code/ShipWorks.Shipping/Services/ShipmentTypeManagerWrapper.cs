@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Services
         public ShipmentTypeManagerWrapper(IFilterHelper filterHelper,
             IShippingProviderRuleManager shippingProviderRuleManager,
             IShippingSettings shippingSettings,
-            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeLookup)
+            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeLookup) : this()
         {
             this.filterHelper = filterHelper;
             this.shippingProviderRuleManager = shippingProviderRuleManager;
@@ -66,31 +66,16 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Returns a list of ShipmentTypeCodes that support accounts.
         /// </summary>
-        public IEnumerable<ShipmentTypeCode> ShipmentTypesSupportingAccounts
-        {
-            get
-            {
-                return allShipmentTypeCodes.Except(noAccountShipmentTypes);
-            }
-        }
+        public IEnumerable<ShipmentTypeCode> ShipmentTypesSupportingAccounts =>
+            allShipmentTypeCodes.Except(noAccountShipmentTypes);
 
         /// <summary>
         /// Determine what the initial shipment type for the given order should be, given the shipping settings rules
         /// </summary>
         public ShipmentType InitialShipmentType(ShipmentEntity shipment)
         {
-            ShipmentTypeCode initialShipmentType = (ShipmentTypeCode) shippingSettings.Fetch().DefaultType;
-
-            // Go through each rule and see if we can find one that is applicable
-            foreach (ShippingProviderRuleEntity rule in shippingProviderRuleManager.GetRules())
-            {
-                long? filterContentID = filterHelper.GetFilterNodeContentID(rule.FilterNodeID);
-                if (filterContentID != null &&
-                    filterHelper.IsObjectInFilterContent(shipment.OrderID, filterContentID.Value))
-                {
-                    initialShipmentType = (ShipmentTypeCode) rule.ShipmentType;
-                }
-            }
+            ShipmentTypeCode initialShipmentType = GetLastApplicableRule(shipment)?.ShipmentTypeCode ??
+                shippingSettings.Fetch().DefaultShipmentTypeCode;
 
             ShipmentType shipmentType = shipmentTypeLookup[initialShipmentType];
             return shipmentType.IsAllowedFor(shipment) ? shipmentType : shipmentTypeLookup[ShipmentTypeCode.None];
@@ -109,5 +94,12 @@ namespace ShipWorks.Shipping.Services
         /// Get the shipment type based on its code
         /// </summary>
         public ShipmentType Get(ShipmentTypeCode shipmentTypeCode) => shipmentTypeLookup[shipmentTypeCode];
+
+        /// <summary>
+        /// Get the last rule that is applicable for the given shipment
+        /// </summary>
+        private ShippingProviderRuleEntity GetLastApplicableRule(ShipmentEntity shipment) =>
+            shippingProviderRuleManager.GetRules()
+                .LastOrDefault(x => filterHelper.IsObjectInFilterContent(shipment.OrderID, x));
     }
 }

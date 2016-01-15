@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
@@ -44,9 +45,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public UspsRatingService(IDateTimeProvider dateTimeProvider,
             ICachedRatesService cachedRatesService,
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory,
-            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
+            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeManager,
             ICarrierAccountRepository<UspsAccountEntity> accountRepository)
-            : base(ratingServiceFactory, shipmentTypeFactory)
+            : base(ratingServiceFactory, shipmentTypeManager)
         {
             this.dateTimeProvider = dateTimeProvider;
             this.cachedRatesService = cachedRatesService;
@@ -104,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(Enumerable.Empty<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.Usps]));
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentTypeManager[ShipmentTypeCode.Usps]));
 
                 return errorRates;
             }
@@ -273,7 +274,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 !accountConversionRestricted)
             {
                 // Show the promotional footer for discounted rates
-                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(shipmentTypeFactory[ShipmentTypeCode.Usps], shipment, false));
+                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(shipmentTypeManager[ShipmentTypeCode.Usps], shipment, false));
             }
         }
 
@@ -362,6 +363,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Returns the correct certificate inspector
         /// </summary>
+        [SuppressMessage("SonarQube", "S3215: \"interface\" instances should not be cast to concrete types",
+            Justification = "The cast is to detect whether we need to verify the SSL certificate")]
         protected ICertificateInspector CertificateInspector()
         {
             UspsCounterRateAccountRepository counterRateRepo = accountRepository as UspsCounterRateAccountRepository;

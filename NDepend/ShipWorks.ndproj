@@ -4225,7 +4225,7 @@ from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.S
 
 select new { m, m.NbLinesOfCode }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of methods w/ too many parameters exceeded</Name>
-warnif count > 0 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+warnif count > 88 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
  m.NbParameters > 5  &&
   !(m.HasAttribute("Interapptive.Shared.NDependIgnoreTooManyParamsAttribute") ||
     m.ParentType.HasAttribute("Interapptive.Shared.NDependIgnoreAttribute"))
@@ -4234,7 +4234,7 @@ warnif count > 0 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Cont
 
 select new { m, m.NbParameters }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # large types allowed exceeded</Name>
-warnif count > 0 from  t in JustMyCode.Types where !t.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+warnif count > 43 from  t in JustMyCode.Types where !t.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
  t.NbLinesOfCode > 500 &&
   !t.HasAttribute("Interapptive.Shared.NDependIgnoreLongTypesAttribute")
  orderby t.NbLinesOfCode

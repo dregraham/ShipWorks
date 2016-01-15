@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Collections;
@@ -217,6 +218,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions,
         /// a ShippingException is thrown informing the user.
         /// </summary>
+        [SuppressMessage("SonarQube", "S1643: Strings should not be concatenated using \" + \" in a loop",
+            Justification = "Since most customers will have less than 5 packages, the overhead of a string builder isn't worth it")]
         private void ValidatePackageDimensions(ShipmentEntity shipment)
         {
             string exceptionMessage = string.Empty;
