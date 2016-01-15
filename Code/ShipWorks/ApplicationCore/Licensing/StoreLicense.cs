@@ -35,6 +35,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string Key { get; }
 
         /// <summary>
+        /// Is the license legacy
+        /// </summary>
+        public bool IsLegacy => true;
+
+        /// <summary>
         /// Refreshes store license data.
         /// </summary>
         public void Refresh()

@@ -24,5 +24,10 @@
         /// The license key
         /// </summary>
         string Key { get; }
+
+        /// <summary>
+        /// Is the license legacy
+        /// </summary>
+        bool IsLegacy { get; }
     }
 }
