@@ -6,7 +6,6 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Settings;
@@ -34,9 +33,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
         {
             return CreateShippingClerk(shipment, settingsRepository, certificateInspector,
-                () => new FedExLabelRepository(),
-                () => new FimsLabelRepository(),
-                () => new FedExRequestFactory(settingsRepository));
+                new FedExLabelRepositoryFactory(), () => new FedExRequestFactory(settingsRepository));
         }
 
         /// <summary>
@@ -47,13 +44,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         public static IFedExShippingClerk CreateShippingClerk(ShipmentEntity shipment,
             ICarrierSettingsRepository settingsRepository,
             ICertificateInspector certificateInspector,
-            Func<ILabelRepository> createFedExLabelRepository,
-            Func<IFimsLabelRepository> createFimsLabelRepository,
+            IFedExLabelRepositoryFactory labelRepositoryFactory,
             Func<IFedExRequestFactory> createRequestFactory)
         {
             return IsFimsShipment(shipment) ?
-                CreateFimsShippingClerk(settingsRepository, createFimsLabelRepository) :
-                CreateFedExShippingClerk(settingsRepository, certificateInspector, createFedExLabelRepository, createRequestFactory);
+                CreateFimsShippingClerk(settingsRepository, labelRepositoryFactory.CreateFims) :
+                CreateFedExShippingClerk(settingsRepository, certificateInspector,
+                    labelRepositoryFactory.CreateFedEx, createRequestFactory);
         }
 
         /// <summary>

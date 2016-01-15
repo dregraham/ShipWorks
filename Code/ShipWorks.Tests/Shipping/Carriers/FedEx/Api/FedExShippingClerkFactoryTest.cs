@@ -64,8 +64,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void FedExShippingClerkReturned_WhenNullShipmentRequested_Test()
         {
             IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null,
-                settingsRepository.Object, null, CreateMockFedExRepository,
-                CreateMockFimsRepository, CreateFedExRequestFactory);
+                settingsRepository.Object, null, LabelRepositoryFactory, CreateFedExRequestFactory);
 
             Assert.True(shippingClerk is FedExShippingClerk);
         }
@@ -76,23 +75,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             settingsRepository.Setup(s => s.UseTestServer).Returns(true);
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFims;
             IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity,
-                settingsRepository.Object, null, CreateMockFedExRepository, CreateMockFimsRepository,
-                CreateFedExRequestFactory);
+                settingsRepository.Object, null, LabelRepositoryFactory, CreateFedExRequestFactory);
 
             Assert.True(shippingClerk is FimsShippingClerk);
 
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFims;
             shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object,
-                null, CreateMockFedExRepository, CreateMockFimsRepository, CreateFedExRequestFactory);
+                null, LabelRepositoryFactory, CreateFedExRequestFactory);
 
             Assert.True(shippingClerk is FimsShippingClerk);
         }
 
-        private static IFimsLabelRepository CreateMockFimsRepository() =>
-            new Mock<IFimsLabelRepository>().Object;
-
-        private static ILabelRepository CreateMockFedExRepository() =>
-            new Mock<ILabelRepository>().Object;
+        private static IFedExLabelRepositoryFactory LabelRepositoryFactory =>
+            new Mock<IFedExLabelRepositoryFactory>().Object;
 
         private static IFedExRequestFactory CreateFedExRequestFactory() =>
             new Mock<IFedExRequestFactory>().Object;
