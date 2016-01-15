@@ -524,22 +524,15 @@ namespace ShipWorks.Shipping
                 // Now apply ShipSense
                 ApplyShipSense(shipment);
 
-                //IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
+                IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
 
                 // Go through each additional profile and apply it as well
                 foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
                 {
                     ShippingProfileEntity profile = ShippingProfileManager.GetProfile(rule.ShippingProfileID);
-                    if (profile != null)
+                    if (profile != null && filterHelper.IsObjectInFilterContent(shipment.OrderID, rule))
                     {
-                        long? filterContentID = FilterHelper.GetFilterNodeContentID(rule.FilterNodeID);
-                        if (filterContentID != null)
-                        {
-                            if (FilterHelper.IsObjectInFilterContent(shipment.OrderID, filterContentID.Value))
-                            {
-                                ApplyProfile(shipment, profile);
-                            }
-                        }
+                        ApplyProfile(shipment, profile);
                     }
                 }
             }
