@@ -856,6 +856,7 @@
       <DependentUpon>DisableLinkedFilterDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Filters\Management\FilterNodeReferenceRepository.cs" />
+    <Compile Include="InputValidation.cs" />
     <Compile Include="Messaging\IMessenger.cs" />
     <Compile Include="Messaging\IShipWorksMessage.cs" />
     <Compile Include="Messaging\Messages\CarrierConfiguredMessage.cs" />
@@ -910,7 +911,9 @@
     <Compile Include="Shipping\IShipmentFactory.cs" />
     <Compile Include="Shipping\Services\CarrierShipmentAdapterBase.cs" />
     <Compile Include="Shipping\IShippingOriginManager.cs" />
+    <Compile Include="Shipping\Services\IShipmentCustomsItemAdapter.cs" />
     <Compile Include="Shipping\Services\PackageTypeBinding.cs" />
+    <Compile Include="Shipping\Services\ShipmentCustomsItemAdapter.cs" />
     <Compile Include="Shipping\Settings\IShippingProviderRuleManager.cs" />
     <Compile Include="Shipping\IRatingService.cs" />
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
@@ -11092,7 +11095,7 @@
     <None Include="Resources\user1_lock1.png" />
     <None Include="Resources\user1_lock.png" />
     <None Include="Resources\sw_cubes_big.png" />
-    <None Include="Resources\warning.png" />
+    <Resource Include="Resources\warning.png" />
     <None Include="Stores\Platforms\Magento\shipworks3.php" />
     <None Include="Stores\Platforms\Miva\shipworks3.mv" />
     <None Include="Stores\Platforms\Miva\shipworks3Miva5.mv">

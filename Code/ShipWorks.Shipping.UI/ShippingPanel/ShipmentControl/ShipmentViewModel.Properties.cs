@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
@@ -53,6 +55,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Shipment ship date
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [Required(ErrorMessage = @"Ship date is required")]
+        [DateCompare(DateCompareType.Today, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Ship date must be today or in the future.")]
         public DateTime ShipDate
         {
             get { return shipDate; }

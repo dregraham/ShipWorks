@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 
@@ -8,7 +9,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// An interface intended to be used for shuffling package data between classes.
     /// </summary>
-    public interface IPackageAdapter : INotifyPropertyChanged
+    public interface IPackageAdapter : INotifyPropertyChanged, IDataErrorInfo
     {
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.

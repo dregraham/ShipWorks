@@ -15,7 +15,10 @@
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/EmptyButtonStyle.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/BlinkingRedErrorTemplate.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/DatePickerErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -36,40 +39,40 @@
 
         <TextBlock Grid.Row="0" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Carrier Name:</TextBlock>
-        <TextBox Grid.Row="0" Grid.Column="1"
+        <TextBox Grid.Row="0" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
                  ui:EntityFieldLength.FieldName="ShipmentOtherCarrier"
-                 Text="{Binding CarrierName}"/>
+                 Text="{Binding CarrierName, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Service:</TextBlock>
-        <TextBox Grid.Row="1" Grid.Column="1"
+        <TextBox Grid.Row="1" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
                  ui:EntityFieldLength.FieldName="ShipmentOtherService"
-                 Text="{Binding Service}" />
+                 Text="{Binding Service, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
         <TextBlock Grid.Row="2" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Ship date:</TextBlock>
-        <DatePicker Grid.Row="2" Grid.Column="1"
+        <DatePicker Grid.Row="2" Grid.Column="1" Style="{DynamicResource DatePickerErrorTemplate}"
                     Width="125" HorizontalAlignment="Left"
                     Margin="4 0 0 0"
-                    SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
         <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,8,0,0"
                    Style="{StaticResource GridLabel}">Weight:</TextBlock>
         <weight:WeightControl Grid.Row="3" Grid.Column="1"
                 Margin="0,3,0,0"
 				HorizontalAlignment="Left"
-				Weight="{Binding ShipmentContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				Weight="{Binding ShipmentContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
         <TextBlock Grid.Row="4" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Cost:</TextBlock>
-        <TextBox Grid.Row="4" Grid.Column="1"
-                 Text="{Binding Cost,StringFormat=C}" />
+        <TextBox Grid.Row="4" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
+                 Text="{Binding Cost, StringFormat=C, Converter={StaticResource EmptyMoney}, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
         <TextBlock Grid.Row="5" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Tracking #:</TextBlock>
-        <TextBox Grid.Row="5" Grid.Column="1"
+        <TextBox Grid.Row="5" Grid.Column="1" Style="{DynamicResource TextBoxErrorTemplate}"
                  ui:EntityFieldLength.FieldName="ShipmentTracking"
-                 Text="{Binding TrackingNumber}"  />
+                 Text="{Binding TrackingNumber, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"  />
 
         <TextBlock Grid.Row="6" Grid.Column="0"
                    Style="{StaticResource GridLabel}">Insurance:</TextBlock>
@@ -86,8 +89,10 @@
                     Orientation="Horizontal">
             <TextBlock Style="{StaticResource GridLabel}" 
                        Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insured Value:'}"></TextBlock>
-            <TextBox Width="80"  Margin="4 4 0 0"
-                     Text="{Binding InsuranceViewModel.InsuranceChoice.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=c, FallbackValue='50.50'}"/>
+            <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"
+                     Text="{Binding InsuranceViewModel.InsuranceChoice.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat=c, FallbackValue='50.50', 
+                     Converter={StaticResource EmptyMoney},
+                     TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
         </StackPanel>
 
     </Grid>

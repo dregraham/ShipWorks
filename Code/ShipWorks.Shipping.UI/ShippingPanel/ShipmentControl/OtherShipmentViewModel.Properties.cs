@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using GalaSoft.MvvmLight.Command;
+using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
@@ -56,6 +58,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Name of the carrier used
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [StringLength(50, ErrorMessage = @"Carrier may not be longer than 50 characters.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = @"Carrier is required.")]
         public string CarrierName
         {
             get { return carrierName; }
@@ -66,6 +70,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Name of the service used
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [StringLength(50, ErrorMessage = @"Service may not be longer than 50 characters.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = @"Service is required.")]
         public string Service
         {
             get { return service; }
@@ -76,6 +82,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Cost of the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [DecimalCompare(0, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Cost must be greater than or equal to $0.00.")]
+        [Range(0, 999999, ErrorMessage = @"Please enter a valid cost.")]
+        [Required]
         public decimal Cost
         {
             get { return cost; }

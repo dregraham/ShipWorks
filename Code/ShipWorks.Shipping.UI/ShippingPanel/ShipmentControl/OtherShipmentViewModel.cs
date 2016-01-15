@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,7 +15,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// <summary>
     /// View model for use by ShipmentControl
     /// </summary>
-    public partial class OtherShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging
+    public partial class OtherShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging, IDataErrorInfo
     {
         private readonly PropertyChangedHandler handler;
 
@@ -86,7 +87,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             if (CustomsAllowed && CustomsItems != null)
             {
-                shipmentAdapter.CustomsItems = new EntityCollection<ShipmentCustomsItemEntity>(CustomsItems);
+                shipmentAdapter.CustomsItems = new EntityCollection<ShipmentCustomsItemEntity>(CustomsItems.Select(ci => ci.ShipmentCustomsItemEntity).ToList());
             }
 
             shipmentAdapter.ContentWeight = ShipmentContentWeight;
@@ -106,7 +107,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 return;
             }
 
-            CustomsItems = new ObservableCollection<ShipmentCustomsItemEntity>(shipmentAdapter.CustomsItems);
+            CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter?.CustomsItems?.Select(ci => new ShipmentCustomsItemAdapter(ci)).ToList());
 
             TotalCustomsValue = shipmentAdapter.Shipment.CustomsValue;
 
@@ -125,8 +126,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             // Pass null as the shipment for now so that we don't have db updates/syncing until we actually want to save.
             ShipmentCustomsItemEntity shipmentCustomsItemEntity = customsManager.CreateCustomsItem(null);
-            CustomsItems.Add(shipmentCustomsItemEntity);
-            SelectedCustomsItem = shipmentCustomsItemEntity;
+            IShipmentCustomsItemAdapter shipmentCustomsItemAdapter = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
+            CustomsItems.Add(shipmentCustomsItemAdapter);
+            SelectedCustomsItem = shipmentCustomsItemAdapter;
         }
 
         /// <summary>
@@ -148,20 +150,54 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void OnSelectedCustomsItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.UnitValue.FieldIndex].Name, StringComparison.OrdinalIgnoreCase) ||
-                e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Quantity.FieldIndex].Name, StringComparison.OrdinalIgnoreCase))
+            if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.UnitValue), StringComparison.OrdinalIgnoreCase) ||
+                e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Quantity), StringComparison.OrdinalIgnoreCase))
             {
-                TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
+                TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
             }
 
-            if (e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Weight.FieldIndex].Name, StringComparison.OrdinalIgnoreCase) ||
-                e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Quantity.FieldIndex].Name, StringComparison.OrdinalIgnoreCase))
+            if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Weight), StringComparison.OrdinalIgnoreCase) ||
+                e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Quantity), StringComparison.OrdinalIgnoreCase))
             {
                 ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
             }
         }
 
         #endregion Customs
+
+        #region IDataErrorInfo
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                // If the shipment is processed, don't validate anything.
+                if (shipmentAdapter?.Shipment?.Processed == true)
+                {
+                    return string.Empty;
+                }
+
+                return InputValidation<OtherShipmentViewModel>.Validate(this, columnName);
+            }
+        }
+
+        /// <summary>
+        /// IDataErrorInfo Error implementation
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// List of all validation errors
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> AllErrors()
+        {
+            return InputValidation<OtherShipmentViewModel>.Validate(this);
+        }
+
+        #endregion
 
         /// <summary>
         /// Dispose of any held resources

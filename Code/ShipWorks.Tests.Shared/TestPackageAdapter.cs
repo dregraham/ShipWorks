@@ -35,5 +35,36 @@ namespace ShipWorks.Tests.Shared
 
             return this.HashCode();
         }
+
+        #region IDataErrorInfo
+
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                string errorMessage = InputValidation<TestPackageAdapter>.Validate(this, columnName);
+
+                return errorMessage;
+            }
+        }
+
+        /// <summary>
+        /// IDataErrorInfo Error implementation
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// List of all validation errors
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> AllErrors()
+        {
+            return InputValidation<TestPackageAdapter>.Validate(this);
+        }
+
+        #endregion
     }
 }

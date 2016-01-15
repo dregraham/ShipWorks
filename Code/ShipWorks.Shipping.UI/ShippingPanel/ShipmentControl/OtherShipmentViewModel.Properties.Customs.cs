@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using GalaSoft.MvvmLight.Command;
+using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
@@ -12,18 +14,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// </summary>
     public partial class OtherShipmentViewModel
     {
+        private IShipmentCustomsItemAdapter selectedCustomsItem;
+        private ObservableCollection<IShipmentCustomsItemAdapter> customsItems;
+        private readonly ICustomsManager customsManager;
         private bool customsAllowed;
         private decimal totalCustomsValue;
         private double shipmentContentWeight;
-        private ObservableCollection<ShipmentCustomsItemEntity> customsItems;
-        private ShipmentCustomsItemEntity selectedCustomsItem;
-        private readonly ICustomsManager customsManager;
         
         /// <summary>
         /// The list of customs items
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<ShipmentCustomsItemEntity> CustomsItems
+        public ObservableCollection<IShipmentCustomsItemAdapter> CustomsItems
         {
             get { return customsItems; }
             private set { handler.Set(nameof(CustomsItems), ref customsItems, value, true); }
@@ -40,9 +42,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         }
 
         /// <summary>
-        /// Sum of customs values?
+        /// Sum of customs values
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = @"Total customs value is required.")]
+        [Range(0.0001, 999999999, ErrorMessage = @"Please enter a valid customs value.")]
+        [DecimalCompare(0, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Total customs value must be greater than or equal $0.00.")]
         public decimal TotalCustomsValue
         {
             get { return totalCustomsValue; }
@@ -59,7 +64,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// The selected customs item
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShipmentCustomsItemEntity SelectedCustomsItem
+        public IShipmentCustomsItemAdapter SelectedCustomsItem
         {
             get { return selectedCustomsItem; }
             set
@@ -82,6 +87,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// The shipment content weight
         /// </summary>
         [Obfuscation(Exclude = true)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = @"Weight value is required.")]
+        [Range(0.0001, 999999999, ErrorMessage = @"Please enter a valid weight.")]
+        [DoubleCompare(0, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Weight must be greater than or equal $0.00.")]
         public double ShipmentContentWeight
         {
             get { return shipmentContentWeight; }

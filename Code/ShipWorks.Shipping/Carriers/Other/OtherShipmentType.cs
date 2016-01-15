@@ -94,6 +94,11 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
+            if (shipment.Processed)
+            {
+                return;
+            }
+
             base.UpdateDynamicShipmentData(shipment);
 
             // Other only has the option to use ShipWorks Insurance

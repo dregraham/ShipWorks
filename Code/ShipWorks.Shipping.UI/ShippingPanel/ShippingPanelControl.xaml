@@ -22,8 +22,8 @@
                 <ResourceDictionary Source="Styles/ShipWorksExpanderStyle.xaml"/>
                 <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Styles/Controls/LinkButton.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/Templates/TextBoxErrorTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
             <ui:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
@@ -86,7 +86,8 @@
                         <TextBlock Text="{Binding RequestedShippingMethod}" />
                     </WrapPanel>
                 </Grid>
-                <StackPanel Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
+                <StackPanel IsEnabled="{Binding AllowEditing}" 
+                            Visibility="{Binding ShipmentType,Converter={StaticResource VisibleWhenNotEqualToParameter},ConverterParameter={x:Static sw:ShipmentTypeCode.None}}">
                     <Border>
                         <Expander
                         IsExpanded="{Binding IsOriginExpanded, Source={x:Static ui:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
@@ -176,8 +177,8 @@
                                             <TextBlock Foreground="Gray">
                                                 <TextBlock.Text>
                                                     <MultiBinding StringFormat="{}{0}, {1} ">
-                                                        <Binding Path="Destination.FullName" />
-                                                        <Binding Path="DomesticInternationalText" />
+                                                        <Binding Path="Destination.FullName" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                                                        <Binding Path="DomesticInternationalText" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
                                                     </MultiBinding>
                                                 </TextBlock.Text>
                                             </TextBlock>

@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
@@ -18,13 +19,15 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
+using ShipWorks.UI;
+using ShipWorks.UI.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 {
     /// <summary>
     /// View model for use by ShipmentControl
     /// </summary>
-    public partial class ShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging
+    public partial class ShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging, IDataErrorInfo
     {
         private readonly IRateSelectionFactory rateSelectionFactory;
         private readonly IDisposable subscriptions;
@@ -32,7 +35,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
         private readonly IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory;
         private readonly IDimensionsManager dimensionsManager;
-        private readonly IShippingViewModelFactory shippingViewModelFactory;
 
         [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
         public virtual event PropertyChangedEventHandler PropertyChanged;
@@ -64,7 +66,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             this.rateSelectionFactory = rateSelectionFactory;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             this.dimensionsManager = dimensionsManager;
-            this.shippingViewModelFactory = shippingViewModelFactory;
             this.customsManager = customsManager;
 
             InsuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
@@ -160,7 +161,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             if (CustomsAllowed && CustomsItems != null)
             {
-                shipmentAdapter.CustomsItems = new EntityCollection<ShipmentCustomsItemEntity>(CustomsItems);
+                shipmentAdapter.CustomsItems = new EntityCollection<ShipmentCustomsItemEntity>(CustomsItems.Select(ci => ci.ShipmentCustomsItemEntity).ToList());
             }
 
             shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
@@ -253,7 +254,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 return;
             }
 
-            CustomsItems = new ObservableCollection<ShipmentCustomsItemEntity>(shipmentAdapter.CustomsItems);
+            CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter?.CustomsItems?.Select(ci => new ShipmentCustomsItemAdapter(ci)).ToList());
 
             TotalCustomsValue = shipmentAdapter.Shipment.CustomsValue;
 
@@ -272,8 +273,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             // Pass null as the shipment for now so that we don't have db updates/syncing until we actually want to save.
             ShipmentCustomsItemEntity shipmentCustomsItemEntity = customsManager.CreateCustomsItem(null);
-            CustomsItems.Add(shipmentCustomsItemEntity);
-            SelectedCustomsItem = shipmentCustomsItemEntity;
+            IShipmentCustomsItemAdapter shipmentCustomsItemAdapter = new ShipmentCustomsItemAdapter(shipmentCustomsItemEntity);
+            CustomsItems.Add(shipmentCustomsItemAdapter);
+            SelectedCustomsItem = shipmentCustomsItemAdapter;
         }
 
         /// <summary>
@@ -299,14 +301,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void OnSelectedCustomsItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.UnitValue.FieldIndex].Name, StringComparison.OrdinalIgnoreCase) ||
-                e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Quantity.FieldIndex].Name, StringComparison.OrdinalIgnoreCase))
+            if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.UnitValue), StringComparison.OrdinalIgnoreCase) ||
+                e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Quantity), StringComparison.OrdinalIgnoreCase))
             {
                 TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
             }
 
-            if (e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Weight.FieldIndex].Name, StringComparison.OrdinalIgnoreCase) ||
-                e.PropertyName.Equals(SelectedCustomsItem.Fields[ShipmentCustomsItemFields.Quantity.FieldIndex].Name, StringComparison.OrdinalIgnoreCase))
+            if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Weight), StringComparison.OrdinalIgnoreCase) ||
+                e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Quantity), StringComparison.OrdinalIgnoreCase))
             {
                 double originalShipmentcontentWeight = ShipmentContentWeight;
                 ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
@@ -330,6 +332,41 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
         }
         #endregion Customs
+
+        #region IDataErrorInfo
+
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                // If the shipment is processed, don't validate anything.
+                if (shipmentAdapter?.Shipment?.Processed == true)
+                {
+                    return string.Empty;
+                }
+
+                return InputValidation<ShipmentViewModel>.Validate(this, columnName);
+            }
+        }
+
+        /// <summary>
+        /// IDataErrorInfo Error implementation
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// List of all validation errors
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> AllErrors()
+        {
+            return InputValidation<ShipmentViewModel>.Validate(this);
+        }
+
+        #endregion
 
         /// <summary>
         /// Dispose resources
