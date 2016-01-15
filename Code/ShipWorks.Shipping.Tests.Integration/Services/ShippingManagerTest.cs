@@ -8,6 +8,7 @@ using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -227,6 +228,91 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
             shipmentType.Verify(x => x.ConfigureNewShipment(shipment));
+        }
+
+        [Fact]
+        public void CreateShipment_DelegatesToUpdateDynamicShipmentData_OnShipmentType()
+        {
+            var shipmentType = mock.CreateMock<FedExShipmentType>();
+            shipmentType.CallBase = true;
+
+            mock.Override<IShipmentTypeManager>()
+                .Setup(x => x.InitialShipmentType(It.IsAny<ShipmentEntity>()))
+                .Returns(shipmentType.Object);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            shipmentType.Verify(x => x.UpdateDynamicShipmentData(shipment));
+        }
+
+        [Fact]
+        public void CreateShipment_SavesCustomsItems_WhenShipmentIsInternational()
+        {
+            Modify.Order(context.Order)
+                .WithItem(i =>
+                {
+                    i.Set(x => x.Name, "Foo");
+                    i.Set(x => x.UnitPrice, 1.8M);
+                    i.Set(x => x.Quantity, 3);
+                    i.Set(x => x.Weight, 2.5);
+                })
+                .WithItem(i =>
+                {
+                    i.Set(x => x.Name, "Bar");
+                    i.Set(x => x.UnitPrice, 2.2M);
+                    i.Set(x => x.Quantity, 2);
+                    i.Set(x => x.Weight, 0.6);
+                })
+                .Set(x => x.ShipCountryCode, "UK").Save();
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            {
+                var predicate = new RelationPredicateBucket(ShipmentCustomsItemFields.ShipmentID == shipment.ShipmentID);
+                EntityCollection<ShipmentCustomsItemEntity> customs = new EntityCollection<ShipmentCustomsItemEntity>();
+                adapter.FetchEntityCollection(customs, predicate);
+
+                Assert.Equal(2, customs.Count);
+
+                Assert.Equal("US", customs[0].CountryOfOrigin);
+                Assert.Equal("Foo", customs[0].Description);
+                Assert.Equal(3, customs[0].Quantity);
+                Assert.Equal(2.5, customs[0].Weight);
+                Assert.Equal(1.8M, customs[0].UnitValue);
+
+                Assert.Equal("US", customs[1].CountryOfOrigin);
+                Assert.Equal("Bar", customs[1].Description);
+                Assert.Equal(2, customs[1].Quantity);
+                Assert.Equal(0.6, customs[1].Weight);
+                Assert.Equal(2.2M, customs[1].UnitValue);
+            }
+        }
+
+        [Fact]
+        public void CreateShipment_SetsCustomsData_WhenShipmentIsInternational()
+        {
+            Modify.Order(context.Order)
+                .WithItem(i =>
+                {
+                    i.Set(x => x.Name, "Foo");
+                    i.Set(x => x.UnitPrice, 1.8M);
+                    i.Set(x => x.Quantity, 3);
+                    i.Set(x => x.Weight, 2.5);
+                })
+                .WithItem(i =>
+                {
+                    i.Set(x => x.Name, "Bar");
+                    i.Set(x => x.UnitPrice, 2.2M);
+                    i.Set(x => x.Quantity, 2);
+                    i.Set(x => x.Weight, 0.6);
+                })
+                .Set(x => x.ShipCountryCode, "UK").Save();
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal(9.8M, shipment.CustomsValue);
+            Assert.True(shipment.CustomsGenerated);
         }
 
         [Fact]
