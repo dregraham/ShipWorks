@@ -27,6 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Endicia
                 .SingleInstance();
 
             builder.RegisterType<EndiciaAccountRepository>()
+                .As<ICarrierAccountRepository<EndiciaAccountEntity>>()
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Endicia)
                 .SingleInstance();
 

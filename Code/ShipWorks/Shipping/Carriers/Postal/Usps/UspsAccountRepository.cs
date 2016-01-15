@@ -12,13 +12,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Returns a list of USPS accounts.
         /// </summary>
-        public override IEnumerable<UspsAccountEntity> Accounts
-        {
-            get
-            {
-                return UspsAccountManager.UspsAccounts.ToList();
-            }
-        }
+        public override IEnumerable<UspsAccountEntity> Accounts => UspsAccountManager.UspsAccounts.ToList();
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => UspsAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a USPS account for the provided accountID.

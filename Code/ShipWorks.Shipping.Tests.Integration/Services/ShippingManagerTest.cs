@@ -269,6 +269,109 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Assert.Equal((int) FedExDropoffType.RegularPickup, shipment.FedEx.DropoffType);
         }
+
+        [Fact]
+        public void CreateShipment_ResetsAccountData_WhenFedExAccountDoesNotExist()
+        {
+            var account = Create.CarrierAccount<FedExAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsFedEx(p => p.Set(x => x.FedExAccountID, account.AccountId + 2000))
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.FedEx);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal(account.AccountId, shipment.FedEx.FedExAccountID);
+        }
+
+        [Fact]
+        public void CreateShipment_AppliesProfilesInOrder_ForFedExShipment()
+        {
+            var profile = Create.Profile()
+                .AsFedEx(p => p.Set(x => x.DropoffType, (int) FedExDropoffType.DropBox))
+                .AsFedEx(p => p.Set(x => x.SmartPostConfirmation, true))
+                .Save();
+
+            var node = CreateFilterNode(context.Order.OrderID);
+
+            Create.Entity<ShippingDefaultsRuleEntity>()
+                .Set(x => x.ShippingProfileID, profile.ShippingProfileID)
+                .Set(x => x.ShipmentType, (int) ShipmentTypeCode.Usps)
+                .Set(x => x.FilterNodeID, node.FilterNodeID)
+                .Save();
+
+            var profile2 = Create.Profile()
+                .AsFedEx(p => p.Set(x => x.DropoffType, (int) FedExDropoffType.RegularPickup))
+                .Save();
+
+            var node2 = CreateFilterNode(context.Order.OrderID);
+
+            Create.Entity<ShippingDefaultsRuleEntity>()
+                .Set(x => x.ShippingProfileID, profile2.ShippingProfileID)
+                .Set(x => x.ShipmentType, (int) ShipmentTypeCode.Usps)
+                .Set(x => x.FilterNodeID, node2.FilterNodeID)
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.FedEx);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal((int) FedExDropoffType.RegularPickup, shipment.FedEx.DropoffType);
+            Assert.True(shipment.FedEx.SmartPostConfirmation);
+        }
+
+        [Fact]
+        public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForFedExShipment()
+        {
+            var profile = Create.Profile()
+                .AsOther()
+                .Set(x => x.ReturnShipment, true)
+                .Save();
+
+            var node = CreateFilterNode(context.Order.OrderID);
+
+            Create.Entity<ShippingDefaultsRuleEntity>()
+                .Set(x => x.ShippingProfileID, profile.ShippingProfileID)
+                .Set(x => x.ShipmentType, (int) ShipmentTypeCode.Other)
+                .Set(x => x.FilterNodeID, node.FilterNodeID)
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.FedEx);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.False(shipment.ReturnShipment);
+        }
+
+
+
+
+        private static FilterNodeEntity CreateFilterNode(long objectID)
+        {
+            var filter = Create.Entity<FilterEntity>()
+                .Save();
+
+            var sequence = Create.Entity<FilterSequenceEntity>()
+                .Set(x => x.Filter, filter)
+                .Save();
+
+            var content = Create.Entity<FilterNodeContentEntity>()
+                .Save();
+
+            Create.Entity<FilterNodeContentDetailEntity>()
+                .Set(x => x.FilterNodeContentID, content.FilterNodeContentID)
+                .Set(x => x.ObjectID, objectID)
+                .Save();
+
+            return Create.Entity<FilterNodeEntity>()
+                .Set(x => x.FilterSequence, sequence)
+                .Set(x => x.FilterNodeContent, content)
+                .Save();
+        }
+
+
         #endregion
 
         #region "Ups"
@@ -297,6 +400,22 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Assert.Equal("Foo bar", shipment.Ups.CostCenter);
         }
+
+        [Fact]
+        public void CreateShipment_ResetsAccountData_WhenUpsAccountDoesNotExist()
+        {
+            var account = Create.CarrierAccount<UpsAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsUps(p => p.Set(x => x.UpsAccountID, account.AccountId + 2000))
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal(account.AccountId, shipment.Ups.UpsAccountID);
+        }
         #endregion
 
         #region "iParcel"
@@ -324,6 +443,22 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
             Assert.Equal((int) iParcelServiceType.Saver, shipment.IParcel.Service);
+        }
+
+        [Fact]
+        public void CreateShipment_ResetsAccountData_WheniParcelAccountDoesNotExist()
+        {
+            var account = Create.CarrierAccount<IParcelAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsIParcel(p => p.Set(x => x.IParcelAccountID, account.AccountId + 2000))
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.iParcel);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal(account.AccountId, shipment.IParcel.IParcelAccountID);
         }
         #endregion
 
@@ -358,6 +493,22 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             Assert.Equal((int) PostalServiceType.FirstClass, shipment.Postal.Service);
             Assert.True(shipment.Postal.Usps.HidePostage);
         }
+
+        [Fact]
+        public void CreateShipment_ResetsAccountData_WhenUspsAccountDoesNotExist()
+        {
+            var account = Create.CarrierAccount<UspsAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsPostal(p => p.AsUsps(u => u.Set(x => x.UspsAccountID, account.UspsAccountID + 2000)))
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.Usps);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal(account.AccountId, shipment.Postal.Usps.UspsAccountID);
+        }
         #endregion
 
         #region "Endicia"
@@ -391,6 +542,22 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             Assert.Equal((int) PostalServiceType.FirstClass, shipment.Postal.Service);
             Assert.True(shipment.Postal.Endicia.ScanBasedReturn);
         }
+
+        [Fact]
+        public void CreateShipment_ResetsAccountData_WhenEndiciaAccountDoesNotExist()
+        {
+            var account = Create.CarrierAccount<EndiciaAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsPostal(p => p.AsEndicia(u => u.Set(x => x.EndiciaAccountID, account.EndiciaAccountID + 2000)))
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.Endicia);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal(account.AccountId, shipment.Postal.Endicia.EndiciaAccountID);
+        }
         #endregion
 
         #region "OnTrac"
@@ -417,6 +584,22 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
             Assert.Equal((int) OnTracServiceType.Sunrise, shipment.OnTrac.Service);
+        }
+
+        [Fact]
+        public void CreateShipment_ResetsAccountData_WhenOnTracAccountDoesNotExist()
+        {
+            var account = Create.CarrierAccount<OnTracAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsOnTrac(u => u.Set(x => x.OnTracAccountID, account.OnTracAccountID + 2000))
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal(account.AccountId, shipment.OnTrac.OnTracAccountID);
         }
         #endregion
 

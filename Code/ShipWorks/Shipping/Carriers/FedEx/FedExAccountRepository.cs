@@ -3,12 +3,20 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
+    /// <summary>
+    /// FedEx account repository
+    /// </summary>
     public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity>, ICarrierAccountRepository<FedExAccountEntity>
     {
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
         public override IEnumerable<FedExAccountEntity> Accounts => FedExAccountManager.Accounts;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => FedExAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.

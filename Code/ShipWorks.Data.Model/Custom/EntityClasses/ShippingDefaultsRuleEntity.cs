@@ -2,10 +2,7 @@
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
-    /// <summary>
-    /// Extensions on the LLBLgen entity
-    /// </summary>
-    public partial class ShippingProviderRuleEntity : IRuleEntity
+    public partial class ShippingDefaultsRuleEntity : IRuleEntity
     {
         /// <summary>
         /// Strongly typed shipment type

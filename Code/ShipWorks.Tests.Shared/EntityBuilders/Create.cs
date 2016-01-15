@@ -1,4 +1,5 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.Shared.EntityBuilders
@@ -36,5 +37,11 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public static StoreEntityBuilder<T> Store<T>() where T : StoreEntity, new() =>
             new StoreEntityBuilder<T>();
+
+        /// <summary>
+        /// Create a carrier account
+        /// </summary>
+        public static CarrierAccountEntityBuilder<T> CarrierAccount<T>() where T : EntityBase2, ICarrierAccount, new() =>
+            new CarrierAccountEntityBuilder<T>();
     }
 }
