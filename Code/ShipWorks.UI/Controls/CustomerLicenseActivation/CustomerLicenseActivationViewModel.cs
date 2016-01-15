@@ -88,7 +88,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
             "https://www.interapptive.com/account/forgotpassword.php";
 
         /// <summary>
-        /// The password reset link
+        /// The account creation link
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string CreateAccountLink =>
