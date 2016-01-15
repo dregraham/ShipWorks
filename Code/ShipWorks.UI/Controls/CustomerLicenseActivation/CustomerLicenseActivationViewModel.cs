@@ -26,7 +26,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(Func<string,ICustomerLicense> customerLicenseFactory, IUserService userManager)
+        public CustomerLicenseActivationViewModel(Func<string, ICustomerLicense> customerLicenseFactory, IUserService userManager)
         {
             this.customerLicense = customerLicenseFactory(string.Empty);
             this.userManager = userManager;
@@ -78,6 +78,15 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
 
                 return insecurePassword;
             }
+        }
+
+        /// <summary>
+        /// The password reset link
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string PasswordResetLink
+        {
+            get { return "https://www.interapptive.com/account/forgotpassword.php"; }
         }
 
         /// <summary>
