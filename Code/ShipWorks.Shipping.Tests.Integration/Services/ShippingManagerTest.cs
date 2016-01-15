@@ -11,6 +11,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
+using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Shipping.Carriers.OnTrac.Enums;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -240,7 +243,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         #region "Carrier specific tests"
-
+        #region "FedEx"
         [Fact]
         public void CreateShipment_LoadsFedExData_WhenShipmentTypeIsFedEx()
         {
@@ -266,6 +269,185 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Assert.Equal((int) FedExDropoffType.RegularPickup, shipment.FedEx.DropoffType);
         }
+        #endregion
+
+        #region "Ups"
+        [Fact]
+        public void CreateShipment_LoadsUpsData_WhenShipmentTypeIsUps()
+        {
+            SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.NotNull(shipment.Ups);
+            Assert.Equal(1, shipment.Ups.Packages.Count);
+        }
+
+        [Fact]
+        public void CreateShipment_AppliesDefaultUpsProfile_WhenShipmentTypeIsUps()
+        {
+            Create.Profile()
+                .AsPrimary()
+                .AsUps(p => p.Set(x => x.CostCenter, "Foo bar"))
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal("Foo bar", shipment.Ups.CostCenter);
+        }
+        #endregion
+
+        #region "iParcel"
+        [Fact]
+        public void CreateShipment_LoadsiParcelData_WhenShipmentTypeIsiParcel()
+        {
+            SetDefaultShipmentType(ShipmentTypeCode.iParcel);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.NotNull(shipment.IParcel);
+            Assert.Equal(1, shipment.IParcel.Packages.Count);
+        }
+
+        [Fact]
+        public void CreateShipment_AppliesDefaultiParcelProfile_WhenShipmentTypeIsiParcel()
+        {
+            Create.Profile()
+                .AsPrimary()
+                .AsIParcel(p => p.Set(x => x.Service, (int) iParcelServiceType.Saver))
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.iParcel);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal((int) iParcelServiceType.Saver, shipment.IParcel.Service);
+        }
+        #endregion
+
+        #region "Usps"
+        [Fact]
+        public void CreateShipment_LoadsUspsData_WhenShipmentTypeIsUsps()
+        {
+            SetDefaultShipmentType(ShipmentTypeCode.Usps);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.NotNull(shipment.Postal);
+            Assert.NotNull(shipment.Postal.Usps);
+        }
+
+        [Fact]
+        public void CreateShipment_AppliesDefaultUspsProfile_WhenShipmentTypeIsUsps()
+        {
+            Create.Profile()
+                .AsPrimary()
+                .AsPostal(p =>
+                {
+                    p.AsUsps(u => u.Set(x => x.HidePostage, true));
+                    p.Set(x => x.Service, (int) PostalServiceType.FirstClass);
+                })
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.Usps);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal((int) PostalServiceType.FirstClass, shipment.Postal.Service);
+            Assert.True(shipment.Postal.Usps.HidePostage);
+        }
+        #endregion
+
+        #region "Endicia"
+        [Fact]
+        public void CreateShipment_LoadsEndiciaData_WhenShipmentTypeIsEndicia()
+        {
+            SetDefaultShipmentType(ShipmentTypeCode.Endicia);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.NotNull(shipment.Postal);
+            Assert.NotNull(shipment.Postal.Endicia);
+        }
+
+        [Fact]
+        public void CreateShipment_AppliesDefaultEndiciaProfile_WhenShipmentTypeIsEndicia()
+        {
+            Create.Profile()
+                .AsPrimary()
+                .AsPostal(p =>
+                {
+                    p.AsEndicia(u => u.Set(x => x.ScanBasedReturn, true));
+                    p.Set(x => x.Service, (int) PostalServiceType.FirstClass);
+                })
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.Endicia);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal((int) PostalServiceType.FirstClass, shipment.Postal.Service);
+            Assert.True(shipment.Postal.Endicia.ScanBasedReturn);
+        }
+        #endregion
+
+        #region "OnTrac"
+        [Fact]
+        public void CreateShipment_LoadsOnTracData_WhenShipmentTypeIsOnTrac()
+        {
+            SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.NotNull(shipment.OnTrac);
+        }
+
+        [Fact]
+        public void CreateShipment_AppliesDefaultOnTracProfile_WhenShipmentTypeIsOnTrac()
+        {
+            Create.Profile()
+                .AsPrimary()
+                .AsOnTrac(u => u.Set(x => x.Service, (int) OnTracServiceType.Sunrise))
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal((int) OnTracServiceType.Sunrise, shipment.OnTrac.Service);
+        }
+        #endregion
+
+        #region "Other"
+        [Fact]
+        public void CreateShipment_LoadsOtherData_WhenShipmentTypeIsOther()
+        {
+            SetDefaultShipmentType(ShipmentTypeCode.Other);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.NotNull(shipment.Other);
+        }
+
+        [Fact]
+        public void CreateShipment_AppliesDefaultOtherProfile_WhenShipmentTypeIsOther()
+        {
+            Create.Profile()
+                .AsPrimary()
+                .AsOther(u => u.Set(x => x.Service, "Foo"))
+                .Save();
+
+            SetDefaultShipmentType(ShipmentTypeCode.Other);
+
+            ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
+
+            Assert.Equal("Foo", shipment.Other.Service);
+        }
+        #endregion
+
+        #endregion
 
         /// <summary>
         /// Set the default shipment type in the shipping settings
@@ -276,8 +458,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             settings.DefaultShipmentTypeCode = defaultType;
             ShippingSettings.Save(settings);
         }
-
-        #endregion
 
         public void Dispose() => context.Dispose();
     }
