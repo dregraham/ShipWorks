@@ -269,22 +269,24 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 var predicate = new RelationPredicateBucket(ShipmentCustomsItemFields.ShipmentID == shipment.ShipmentID);
-                EntityCollection<ShipmentCustomsItemEntity> customs = new EntityCollection<ShipmentCustomsItemEntity>();
-                adapter.FetchEntityCollection(customs, predicate);
+                using (EntityCollection<ShipmentCustomsItemEntity> customs = new EntityCollection<ShipmentCustomsItemEntity>())
+                {
+                    adapter.FetchEntityCollection(customs, predicate);
 
-                Assert.Equal(2, customs.Count);
+                    Assert.Equal(2, customs.Count);
 
-                Assert.Equal("US", customs[0].CountryOfOrigin);
-                Assert.Equal("Foo", customs[0].Description);
-                Assert.Equal(3, customs[0].Quantity);
-                Assert.Equal(2.5, customs[0].Weight);
-                Assert.Equal(1.8M, customs[0].UnitValue);
+                    Assert.Equal("US", customs[0].CountryOfOrigin);
+                    Assert.Equal("Foo", customs[0].Description);
+                    Assert.Equal(3, customs[0].Quantity);
+                    Assert.Equal(2.5, customs[0].Weight);
+                    Assert.Equal(1.8M, customs[0].UnitValue);
 
-                Assert.Equal("US", customs[1].CountryOfOrigin);
-                Assert.Equal("Bar", customs[1].Description);
-                Assert.Equal(2, customs[1].Quantity);
-                Assert.Equal(0.6, customs[1].Weight);
-                Assert.Equal(2.2M, customs[1].UnitValue);
+                    Assert.Equal("US", customs[1].CountryOfOrigin);
+                    Assert.Equal("Bar", customs[1].Description);
+                    Assert.Equal(2, customs[1].Quantity);
+                    Assert.Equal(0.6, customs[1].Weight);
+                    Assert.Equal(2.2M, customs[1].UnitValue);
+                }
             }
         }
 
