@@ -559,25 +559,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                                 // use the endpoint associated with the country entered when the store was setup.
                                 if (!string.IsNullOrWhiteSpace(amazonStore.AmazonApiRegion))
                                 {
-                                    string domain;
-
-                                    switch (amazonStore.AmazonApiRegion)
-                                    {
-                                        case "US":
-                                            domain = "amazon.com";
-                                            break;
-                                        case "CA":
-                                            domain= "amazon.ca";
-                                            break;
-                                        case "MX":
-                                            domain = "amazon.com.mx";
-                                            break;
-                                        default:
-                                            domain = "amazon.co.uk";
-                                            break;
-                                    }
-
-                                    amazonStore.DomainName = domain;
+                                    amazonStore.DomainName = GetDomainNameFromApiRegion(amazonStore);
                                     StoreManager.SaveStore(amazonStore);
                                 }
                             }
@@ -592,6 +574,44 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             return amazonStore.DomainName;
+        }
+
+        /// <summary>
+        /// Gets an Amazon domain name, base of off the API region
+        /// </summary>
+        /// <param name="amazonStore">The amazon store.</param>
+        /// <returns></returns>
+        private static string GetDomainNameFromApiRegion(AmazonStoreEntity amazonStore)
+        {
+            // There are some marketplaces in here we don't currently support.
+            // Figured it wouldn't hurt to plan for the future.
+            switch (amazonStore.AmazonApiRegion)
+            {
+                case "US":
+                    return "amazon.com";
+                case "CA":
+                    return "amazon.ca";
+                case "MX":
+                    return "amazon.com.mx";
+                case "UK":
+                    return "amazon.co.uk";
+                case "DE":
+                    return "amazon.de";
+                case "FR":
+                    return "amazon.fr";
+                case "IT":
+                    return "amazon.it";
+                case "ES":
+                    return "amazon.es";
+                case "JP":
+                    return "amazon.co.jp";
+                case "CN":
+                    return "amazon.cn";
+                case "IN":
+                    return "amazon.in";
+                default:
+                    return "amazon.com";
+            }
         }
 
         /// <summary>
