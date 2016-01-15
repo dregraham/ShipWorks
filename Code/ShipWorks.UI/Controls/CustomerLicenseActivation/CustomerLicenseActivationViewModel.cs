@@ -84,10 +84,15 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// The password reset link
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string PasswordResetLink
-        {
-            get { return "https://www.interapptive.com/account/forgotpassword.php"; }
-        }
+        public string PasswordResetLink => 
+            "https://www.interapptive.com/account/forgotpassword.php";
+
+        /// <summary>
+        /// The password reset link
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string CreateAccountLink =>
+            "https://registration.shipworks.com/#!&p=create-account";
 
         /// <summary>
         /// Saves the user to the database
