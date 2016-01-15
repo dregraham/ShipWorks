@@ -16,7 +16,6 @@ using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipSense;
@@ -334,7 +333,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_LoadsFedExData_WhenShipmentTypeIsFedEx()
         {
-            SetDefaultShipmentType(ShipmentTypeCode.FedEx);
+            context.SetDefaultShipmentType(ShipmentTypeCode.FedEx);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -350,7 +349,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsFedEx(p => p.Set(x => x.DropoffType, (int) FedExDropoffType.RegularPickup))
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.FedEx);
+            context.SetDefaultShipmentType(ShipmentTypeCode.FedEx);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -366,7 +365,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsFedEx(p => p.Set(x => x.FedExAccountID, account.AccountId + 2000))
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.FedEx);
+            context.SetDefaultShipmentType(ShipmentTypeCode.FedEx);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -386,7 +385,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.FedEx,
                 x => x.AsFedEx(p => p.Set(s => s.DropoffType, (int) FedExDropoffType.RegularPickup)));
 
-            SetDefaultShipmentType(ShipmentTypeCode.FedEx);
+            context.SetDefaultShipmentType(ShipmentTypeCode.FedEx);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -400,24 +399,19 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
-            SetDefaultShipmentType(ShipmentTypeCode.FedEx);
+            context.SetDefaultShipmentType(ShipmentTypeCode.FedEx);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
             Assert.False(shipment.ReturnShipment);
         }
-
-
-
-
-
         #endregion
 
         #region "Ups"
         [Fact]
         public void CreateShipment_LoadsUpsData_WhenShipmentTypeIsUps()
         {
-            SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
+            context.SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -433,7 +427,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsUps(p => p.Set(x => x.CostCenter, "Foo bar"))
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
+            context.SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -449,7 +443,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsUps(p => p.Set(x => x.UpsAccountID, account.AccountId + 2000))
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
+            context.SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -469,7 +463,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.UpsOnLineTools,
                 x => x.AsUps(p => p.Set(s => s.CostCenter, "Foo")));
 
-            SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
+            context.SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -483,7 +477,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
-            SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
+            context.SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -495,7 +489,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_LoadsiParcelData_WhenShipmentTypeIsiParcel()
         {
-            SetDefaultShipmentType(ShipmentTypeCode.iParcel);
+            context.SetDefaultShipmentType(ShipmentTypeCode.iParcel);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -511,7 +505,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsIParcel(p => p.Set(x => x.Service, (int) iParcelServiceType.Saver))
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.iParcel);
+            context.SetDefaultShipmentType(ShipmentTypeCode.iParcel);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -527,7 +521,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsIParcel(p => p.Set(x => x.IParcelAccountID, account.AccountId + 2000))
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.iParcel);
+            context.SetDefaultShipmentType(ShipmentTypeCode.iParcel);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -547,7 +541,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.iParcel,
                 x => x.AsIParcel(p => p.Set(s => s.Service, (int) iParcelServiceType.SaverDeferred)));
 
-            SetDefaultShipmentType(ShipmentTypeCode.iParcel);
+            context.SetDefaultShipmentType(ShipmentTypeCode.iParcel);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -561,7 +555,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
-            SetDefaultShipmentType(ShipmentTypeCode.iParcel);
+            context.SetDefaultShipmentType(ShipmentTypeCode.iParcel);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -573,7 +567,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_LoadsUspsData_WhenShipmentTypeIsUsps()
         {
-            SetDefaultShipmentType(ShipmentTypeCode.Usps);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Usps);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -593,7 +587,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 })
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.Usps);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Usps);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -610,7 +604,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsPostal(p => p.AsUsps(u => u.Set(x => x.UspsAccountID, account.UspsAccountID + 2000)))
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.Usps);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Usps);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -630,7 +624,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Usps,
                 x => x.AsPostal(o => o.AsUsps(p => p.Set(s => s.RateShop, true))));
 
-            SetDefaultShipmentType(ShipmentTypeCode.Usps);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Usps);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -644,7 +638,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
-            SetDefaultShipmentType(ShipmentTypeCode.Usps);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Usps);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -656,7 +650,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_LoadsEndiciaData_WhenShipmentTypeIsEndicia()
         {
-            SetDefaultShipmentType(ShipmentTypeCode.Endicia);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Endicia);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -676,7 +670,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 })
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.Endicia);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Endicia);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -694,7 +688,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsPostal(p => p.AsEndicia(u => u.Set(x => x.EndiciaAccountID, account.EndiciaAccountID + 2000)))
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.Endicia);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Endicia);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -714,7 +708,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Endicia,
                 x => x.AsPostal(o => o.AsEndicia(p => p.Set(s => s.ScanBasedReturn, true))));
 
-            SetDefaultShipmentType(ShipmentTypeCode.Endicia);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Endicia);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -728,7 +722,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
-            SetDefaultShipmentType(ShipmentTypeCode.Endicia);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Endicia);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -740,7 +734,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_LoadsOnTracData_WhenShipmentTypeIsOnTrac()
         {
-            SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
+            context.SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -755,7 +749,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsOnTrac(u => u.Set(x => x.Service, (int) OnTracServiceType.Sunrise))
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
+            context.SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -771,7 +765,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsOnTrac(u => u.Set(x => x.OnTracAccountID, account.OnTracAccountID + 2000))
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
+            context.SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -791,7 +785,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.OnTrac,
                 x => x.AsOnTrac(p => p.Set(s => s.Service, (int) OnTracServiceType.SunriseGold)));
 
-            SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
+            context.SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -805,7 +799,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
-            SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
+            context.SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -817,7 +811,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_LoadsOtherData_WhenShipmentTypeIsOther()
         {
-            SetDefaultShipmentType(ShipmentTypeCode.Other);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Other);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -832,7 +826,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsOther(u => u.Set(x => x.Service, "Foo"))
                 .Save();
 
-            SetDefaultShipmentType(ShipmentTypeCode.Other);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Other);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -852,7 +846,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
                 x => x.AsOther(p => p.Set(s => s.Service, "Foo")));
 
-            SetDefaultShipmentType(ShipmentTypeCode.Other);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Other);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -866,7 +860,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.OnTrac,
                 x => x.AsOnTrac().Set(p => p.ReturnShipment, true));
 
-            SetDefaultShipmentType(ShipmentTypeCode.Other);
+            context.SetDefaultShipmentType(ShipmentTypeCode.Other);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
 
@@ -875,16 +869,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         #endregion
 
         #endregion
-
-        /// <summary>
-        /// Set the default shipment type in the shipping settings
-        /// </summary>
-        private static void SetDefaultShipmentType(ShipmentTypeCode defaultType)
-        {
-            var settings = ShippingSettings.Fetch();
-            settings.DefaultShipmentTypeCode = defaultType;
-            ShippingSettings.Save(settings);
-        }
 
         /// <summary>
         /// Create a filter node

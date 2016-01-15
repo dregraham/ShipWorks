@@ -152,6 +152,7 @@
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Filters\FilterHelperWrapperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shipping\CustomsManagerTest.cs" />
     <Compile Include="Stores\Content\OrderManagerTest.cs" />
   </ItemGroup>
   <ItemGroup>
