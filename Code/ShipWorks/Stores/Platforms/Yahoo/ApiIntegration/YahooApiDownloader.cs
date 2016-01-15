@@ -24,6 +24,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         private readonly IYahooApiWebClient webClient;
         private readonly ISqlAdapterRetry sqlAdapter;
         private const int InvalidStartRangeErrorCode = 20021;
+        private const int CatalogAccessForbidden = 10010;
+        private bool CatalogEnabled = true;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiDownloader"/> class.
@@ -405,7 +407,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 itemEntity.Thumbnail = url.TrimEnd('>');
             }
 
-            itemEntity.Weight = GetItemWeight(item.ItemID);
+            if (CatalogEnabled)
+            {
+                itemEntity.Weight = GetItemWeight(item.ItemID);
+            }
 
             LoadOrderItemAttributes(itemEntity, item);
         }
@@ -437,7 +442,15 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             // So make the call to get the item weight and cache it
             YahooResponse response = webClient.GetItem(itemID);
 
-            YahooCatalogItem newItem = response.ResponseResourceList.Catalog.ItemList.Item.FirstOrDefault();
+            // Check the get item response for the catalog access forbidden error code. If
+            // we get the error, set CatalogEnabled to false and return 0
+            if (response?.ErrorMessages?.Error?.FirstOrDefault()?.Code == CatalogAccessForbidden)
+            {
+                CatalogEnabled = false;
+                return 0;
+            }
+
+            YahooCatalogItem newItem = response?.ResponseResourceList.Catalog.ItemList.Item.FirstOrDefault();
 
             if (newItem == null)
             {

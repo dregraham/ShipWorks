@@ -75,21 +75,20 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
                 return "Yahoo only supports positive, numeric order numbers";
             }
 
-            string error;
-
             try
             {
                 YahooResponse response = StoreWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
                     .ValidateCredentials();
 
-                error = response.ErrorMessages == null ? string.Empty : CheckCredentialsError(response);
+                string error = CheckCredentialsError(response);
+
+                // If the error message matches this one, then we know the credentials are good.
+                return error == "StatusID needs to be specified in correct format" ? string.Empty : error;
             }
             catch (Exception ex)
             {
                 return $"Error connecting to Yahoo Api: {ex.Message}";
             }
-
-            return error;
         }
     }
 }

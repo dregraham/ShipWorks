@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         private long? backupOrderNumber;
         private YahooOrderNumberValidation isValid;
         private string validationErrorMessage;
+        private const int InvalidStatusIDFormat = 10402;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiAccountViewModel"/> class.
@@ -176,6 +177,8 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
                         case 10009:
                             ValidationErrorMessage = "Invalid Access Token";
                             return ValidationErrorMessage;
+                        case InvalidStatusIDFormat:
+                            return "StatusID needs to be specified in correct format";
                         case 20021:
                             ValidationErrorMessage = $"Order #{BackupOrderNumber} does not exist";
                             break;
@@ -241,7 +244,11 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
                 YahooResponse response = StoreWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
                     .ValidateCredentials();
 
-                return response.ErrorMessages == null ? string.Empty : CheckCredentialsError(response);
+
+                string error = CheckCredentialsError(response);
+
+                // If the error message matches this one, then we know the credentials are good.
+                return error == "StatusID needs to be specified in correct format" ? string.Empty : error;
             }
             catch (Exception ex)
             {
