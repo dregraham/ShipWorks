@@ -181,37 +181,44 @@ namespace ShipWorks.Shipping.Services
                             .Except(customsItems.Select(ci => ci.ObjectID))
                             .ToList();
 
-                    foreach (ShipmentCustomsItemEntity sci in objectIDsToAdd)
-                    {
-                        sci.Shipment = Shipment;
-                    }
-
-                    foreach (Guid objectID in objectIDsToDelete)
-                    {
-                        ShipmentCustomsItemEntity sci = shipment.CustomsItems.First(ci => ci.ObjectID == objectID);
-                        shipment.CustomsItems.Remove(sci);
-                    }
-
-                    for (int i = 0; i < customsItems.Count; i++)
-                    {
-                        ShipmentCustomsItemEntity newShipmentCustomsItem = customsItems[i];
-                        ShipmentCustomsItemEntity origShipmentCustomsItem = shipment.CustomsItems[i];
-                        origShipmentCustomsItem.CountryOfOrigin = newShipmentCustomsItem.CountryOfOrigin;
-                        origShipmentCustomsItem.Description = newShipmentCustomsItem.Description;
-                        origShipmentCustomsItem.HarmonizedCode = newShipmentCustomsItem.HarmonizedCode;
-                        origShipmentCustomsItem.NumberOfPieces = newShipmentCustomsItem.NumberOfPieces;
-                        origShipmentCustomsItem.Quantity = newShipmentCustomsItem.Quantity;
-                        origShipmentCustomsItem.ShipmentCustomsItemID = newShipmentCustomsItem.ShipmentCustomsItemID;
-                        origShipmentCustomsItem.UnitPriceAmount = newShipmentCustomsItem.UnitPriceAmount;
-                        origShipmentCustomsItem.UnitValue = newShipmentCustomsItem.UnitValue;
-                        origShipmentCustomsItem.Weight = newShipmentCustomsItem.Weight;
-                    }
-
+                    UpdateCustomsItemsForShipment(objectIDsToAdd, objectIDsToDelete);
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.Message);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Add/Remove customs items
+        /// </summary>
+        private void UpdateCustomsItemsForShipment(List<ShipmentCustomsItemEntity> objectIDsToAdd, List<Guid> objectIDsToDelete)
+        {
+            foreach (ShipmentCustomsItemEntity sci in objectIDsToAdd)
+            {
+                sci.Shipment = Shipment;
+            }
+
+            foreach (Guid objectID in objectIDsToDelete)
+            {
+                ShipmentCustomsItemEntity sci = shipment.CustomsItems.First(ci => ci.ObjectID == objectID);
+                shipment.CustomsItems.Remove(sci);
+            }
+
+            for (int i = 0; i < customsItems.Count; i++)
+            {
+                ShipmentCustomsItemEntity newShipmentCustomsItem = customsItems[i];
+                ShipmentCustomsItemEntity origShipmentCustomsItem = shipment.CustomsItems[i];
+                origShipmentCustomsItem.CountryOfOrigin = newShipmentCustomsItem.CountryOfOrigin;
+                origShipmentCustomsItem.Description = newShipmentCustomsItem.Description;
+                origShipmentCustomsItem.HarmonizedCode = newShipmentCustomsItem.HarmonizedCode;
+                origShipmentCustomsItem.NumberOfPieces = newShipmentCustomsItem.NumberOfPieces;
+                origShipmentCustomsItem.Quantity = newShipmentCustomsItem.Quantity;
+                origShipmentCustomsItem.ShipmentCustomsItemID = newShipmentCustomsItem.ShipmentCustomsItemID;
+                origShipmentCustomsItem.UnitPriceAmount = newShipmentCustomsItem.UnitPriceAmount;
+                origShipmentCustomsItem.UnitValue = newShipmentCustomsItem.UnitValue;
+                origShipmentCustomsItem.Weight = newShipmentCustomsItem.Weight;
             }
         }
 
