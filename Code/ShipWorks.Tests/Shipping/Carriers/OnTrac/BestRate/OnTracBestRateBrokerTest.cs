@@ -20,10 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.BestRate
             genericRepositoryMock = new Mock<ICarrierAccountRepository<OnTracAccountEntity>>();
             genericShipmentTypeMock = new Mock<OnTracShipmentType>();
 
-            testObject = new OnTracBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
-            {
-                GetRatesAction = (shipment, type) => genericShipmentTypeMock.Object.GetRates(shipment)
-            };
+            testObject = new OnTracBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
         }
 
         [Fact]

@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators.Editors;
 using System.Diagnostics;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
+using static System.String;
 
 namespace ShipWorks.Data.Grid.Columns
 {
@@ -152,7 +153,7 @@ namespace ShipWorks.Data.Grid.Columns
             // Attempt to load settings for each decorator
             foreach (GridColumnDisplayDecorator decorator in decorators)
             {
-                XPathNavigator settings = xpath.SelectSingleNode(string.Format("//Decorator[@identifier = '{0}']", decorator.Identifier));
+                XPathNavigator settings = xpath.SelectSingleNode(Format("//Decorator[@identifier = '{0}']", decorator.Identifier));
                 if (settings != null)
                 {
                     decorator.DeserializeXml(settings);
@@ -274,10 +275,27 @@ namespace ShipWorks.Data.Grid.Columns
             formattedValue.Image = GetDisplayImage(value);
             formattedValue.ForeColor = GetDisplayForeColor(value);
             formattedValue.FontStyle = GetDisplayFontStyle(value);
+            formattedValue.ToolTipText = GetToolTip(value);
 
             ApplyDecoration(formattedValue);
 
             return formattedValue;
+        }
+
+        /// <summary>
+        /// Gets the tool tip.
+        /// </summary>
+        public virtual string GetToolTip(object value)
+        {
+            return Empty;
+        }
+
+        /// <summary>
+        /// Gets the tool tip text.
+        /// </summary>
+        internal string GetTooltipText(EntityGridRow row, EntityGridColumn column)
+        {
+            return row.GetFormattedValue(column).ToolTipText;
         }
 
         /// <summary>
@@ -311,10 +329,10 @@ namespace ShipWorks.Data.Grid.Columns
         {
             if (value == null)
             {
-                return string.Empty;
+                return Empty;
             }
 
-            return string.Format(GetValueFormatString(), value);
+            return Format(GetValueFormatString(), value);
         }
 
         /// <summary>

@@ -1825,7 +1825,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits OrderEntity's mappings</summary>
 		private void InitOrderEntityMappings()
 		{
-			base.AddElementMapping( "OrderEntity", "ShipWorksLocal", @"dbo", "Order", 73 );
+			base.AddElementMapping( "OrderEntity", "ShipWorksLocal", @"dbo", "Order", 74 );
 			base.AddElementFieldMapping( "OrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "OrderEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "OrderEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
@@ -1899,6 +1899,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "OrderEntity", "ShipUnparsedName", "ShipUnparsedName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 70 );
 			base.AddElementFieldMapping( "OrderEntity", "ShipSenseHashKey", "ShipSenseHashKey", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 71 );
 			base.AddElementFieldMapping( "OrderEntity", "ShipSenseRecognitionStatus", "ShipSenseRecognitionStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 72 );
+			base.AddElementFieldMapping( "OrderEntity", "ShipAddressType", "ShipAddressType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 73 );
 		}
 		/// <summary>Inits OrderChargeEntity's mappings</summary>
 		private void InitOrderChargeEntityMappings()
@@ -3158,9 +3159,10 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits YahooOrderItemEntity's mappings</summary>
 		private void InitYahooOrderItemEntityMappings()
 		{
-			base.AddElementMapping( "YahooOrderItemEntity", "ShipWorksLocal", @"dbo", "YahooOrderItem", 2 );
+			base.AddElementMapping( "YahooOrderItemEntity", "ShipWorksLocal", @"dbo", "YahooOrderItem", 3 );
 			base.AddElementFieldMapping( "YahooOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "YahooOrderItemEntity", "YahooProductID", "YahooProductID", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "YahooOrderItemEntity", "Url", "Url", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 2 );
 		}
 		/// <summary>Inits YahooProductEntity's mappings</summary>
 		private void InitYahooProductEntityMappings()
@@ -3173,10 +3175,13 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits YahooStoreEntity's mappings</summary>
 		private void InitYahooStoreEntityMappings()
 		{
-			base.AddElementMapping( "YahooStoreEntity", "ShipWorksLocal", @"dbo", "YahooStore", 3 );
+			base.AddElementMapping( "YahooStoreEntity", "ShipWorksLocal", @"dbo", "YahooStore", 6 );
 			base.AddElementFieldMapping( "YahooStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "YahooStoreEntity", "YahooEmailAccountID", "YahooEmailAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "YahooStoreEntity", "TrackingUpdatePassword", "TrackingUpdatePassword", false, (int)SqlDbType.VarChar, 100, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "YahooStoreEntity", "YahooStoreID", "YahooStoreID", false, (int)SqlDbType.VarChar, 100, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "YahooStoreEntity", "AccessToken", "AccessToken", false, (int)SqlDbType.VarChar, 200, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "YahooStoreEntity", "BackupOrderNumber", "BackupOrderNumber", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 5 );
 		}
 
 	}

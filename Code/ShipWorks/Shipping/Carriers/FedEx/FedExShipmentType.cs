@@ -1,31 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
-using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -34,12 +27,10 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Api;
-using Interapptive.Shared.Net;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -53,62 +44,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode
-        {
-            get
-            {
-                return ShipmentTypeCode.FedEx;
-            }
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.FedEx;
 
         /// <summary>
         /// FedEx accounts have an address that can be used as the shipment origin
         /// </summary>
-        public override bool SupportsAccountAsOrigin
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SupportsAccountAsOrigin => true;
 
         /// <summary>
         /// FedEx supports rates
         /// </summary>
-        public override bool SupportsGetRates
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SupportsGetRates => true;
 
         /// <summary>
         /// Returns are supported for Online Tools
         /// </summary>
-        public override bool SupportsReturns
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SupportsReturns => true;
 
         /// <summary>
         /// Supports getting counter rates.
         /// </summary>
-        public override bool SupportsCounterRates
-        {
-            get { return true; }
-        }
+        public override bool SupportsCounterRates => true;
 
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
-        public override bool HasAccounts
-        {
-            get { return SettingsRepository.GetAccounts().Any(); }
-        }
+        public override bool HasAccounts => SettingsRepository.GetAccounts().Any();
 
         /// <summary>
         /// Gets a value indicating whether the shipment type [supports multiple packages].
@@ -116,10 +77,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <value>
         /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
         /// </value>
-        public override bool SupportsMultiplePackages
-        {
-            get { return true; }
-        }
+        public override bool SupportsMultiplePackages => true;
 
         /// <summary>
         /// Gets the service types that have been available for this shipment type (i.e have not 
@@ -996,61 +954,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Get a list of rates for the FedEx shipment
-        /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-            ICarrierSettingsRepository originalSettings = SettingsRepository;
-            ICertificateInspector originalInspector = CertificateInspector;
-            string originalHubID = shipment.FedEx.SmartPostHubID;
-
-            try
-            {
-                // Check with the SettingsRepository here rather than FedExAccountManager, so getting 
-                // counter rates from the broker is not impacted
-                if (!SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted)
-                {
-                    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
-
-                    // We need to swap out the SettingsRepository and certificate inspector 
-                    // to get FedEx counter rates
-                    SettingsRepository = new FedExCounterRateAccountRepository(TangoCredentialStore.Instance);
-                    CertificateInspector = new CertificateInspector(TangoCredentialStore.Instance.FedExCertificateVerificationData);
-                }
-
-                return GetCachedRates<FedExException>(shipment, GetRatesFromApi);
-            }
-            catch (CounterRatesOriginAddressException)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
-                return errorRates;
-            }
-            finally
-            {
-                // Switch the settings repository back to the original now that we have counter rates
-                SettingsRepository = originalSettings;
-                CertificateInspector = originalInspector;
-                shipment.FedEx.SmartPostHubID = originalHubID;
-            }
-        }
-
-        /// <summary>
-        /// Get a list of rates for the FedEx shipment from the FedEx API
-        /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
-        {
-            return FedExShippingClerkFactory.CreateShippingClerk(shipment, SettingsRepository).GetRates(shipment);
-        }
-
-        /// <summary>
         /// Provide FedEx tracking results for the given shipment
         /// </summary>
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             try
             {
-                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
+                IShippingClerk shippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(shipment, new FedExSettingsRepository());
                 return shippingClerk.Track(shipment);
             }
             catch (FedExException ex)
@@ -1074,41 +984,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new FedExShipmentProcessingSynchronizer();
-        }
-
-        /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            try
-            {
-                // Okay to "new up" the shipping clerk here, as this class is the root consumer 
-                // that drives the underlying FedEx API and outside of the current scope of unit testing,
-                // so there isn't a need to be able to specify the dependencies of the shipping clerk
-                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
-                shippingClerk.Ship(shipment);
-            }
-            catch (FedExException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
-        }
-
-        /// <summary>
-        /// Void the given fedex shipment
-        /// </summary>
-        public override void VoidShipment(ShipmentEntity shipment)
-        {
-            try
-            {
-                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
-                shippingClerk.Void(shipment);
-            }
-            catch (FedExException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
         }
 
         /// <summary>
@@ -1165,50 +1040,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
         }
 
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(FedExShipmentFields.FedExAccountID);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.WeightUnitType);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.Signature);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.Service);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.PackagingType);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.DropoffType);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SaturdayDelivery);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.OriginResidentialDetermination);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostHubID);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostIndicia);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostEndorsement);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.CodEnabled);
-                ratingField.ShipmentFields.Add(FedExShipmentFields.NonStandardContainer);
-
-                ratingField.PackageFields.Add(FedExPackageFields.DimsWeight);
-                ratingField.PackageFields.Add(FedExPackageFields.DeclaredValue);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsLength);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsHeight);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsWidth);
-                ratingField.PackageFields.Add(FedExPackageFields.ContainsAlcohol);
-                ratingField.PackageFields.Add(FedExPackageFields.DryIceWeight);
-
-                return ratingField;
-            }
-        }
-
-        /// <summary>
-        /// Gets the rating hash based on the shipment's configuration.
-        /// </summary>
-        public override string GetRatingHash(ShipmentEntity shipment)
-        {
-            return RatingFields.GetRatingHash(shipment, shipment.FedEx.Packages);
-        }
-
         /// <summary>
         /// Saves the requested label format to the child shipment
         /// </summary>
@@ -1231,26 +1062,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Check to see if a package dimensions are valid for carriers that require dimensions.
-        /// </summary>
-        public override bool DimensionsAreValid(double length, double width, double height)
-        {
-            if (length < 1 || width < 1 || height < 1)
-            {
-                return false;
-            }
-
-            return base.DimensionsAreValid(length, width, height);
-        }
-
-        /// <summary>
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address.
         /// </summary>
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
             if (FedExUtility.IsSmartPostEnabled(shipment) 
-                && Geography.IsUSInternationalTerritory(shipment.ShipPerson)
+                && shipment.ShipPerson.IsUSInternationalTerritory()
                 && ((FedExServiceType)shipment.FedEx.Service) == FedExServiceType.SmartPost)
             {
                 return false;

@@ -376,6 +376,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -1289,6 +1291,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CustomOrderIdentifier. </summary>
@@ -1624,6 +1628,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ClickCartProOrderID. </summary>
@@ -1785,6 +1791,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CommerceInterfaceOrderNumber. </summary>
@@ -2189,6 +2197,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>EbayOrderID. </summary>
@@ -2857,6 +2867,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WasPaid. </summary>
@@ -4226,6 +4238,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>GrouponOrderID. </summary>
@@ -4894,6 +4908,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>LemonStandOrderID. </summary>
@@ -5189,6 +5205,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MagentoOrderID. </summary>
@@ -5467,6 +5485,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>BuyerNumber. </summary>
@@ -5871,6 +5891,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>NetworkSolutionsOrderID. </summary>
@@ -6113,6 +6135,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>InvoiceNumber. </summary>
@@ -6634,6 +6658,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6886,6 +6912,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>OrderMotionShipmentID. </summary>
@@ -7185,6 +7213,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>TransactionID. </summary>
@@ -7625,6 +7655,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ConfirmationNumber. </summary>
@@ -7958,6 +7990,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PoNumber. </summary>
@@ -8836,6 +8870,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ShopifyOrderID. </summary>
@@ -10673,6 +10709,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>YahooOrderID. </summary>
@@ -10728,6 +10766,8 @@ namespace ShipWorks.Data.Model
 		OrderItemID,
 		///<summary>YahooProductID. </summary>
 		YahooProductID,
+		///<summary>Url. </summary>
+		Url,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10822,6 +10862,12 @@ namespace ShipWorks.Data.Model
 		YahooEmailAccountID,
 		///<summary>TrackingUpdatePassword. </summary>
 		TrackingUpdatePassword,
+		///<summary>YahooStoreID. </summary>
+		YahooStoreID,
+		///<summary>AccessToken. </summary>
+		AccessToken,
+		///<summary>BackupOrderNumber. </summary>
+		BackupOrderNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}

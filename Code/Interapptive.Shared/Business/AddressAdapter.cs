@@ -133,6 +133,7 @@ namespace Interapptive.Shared.Business
             toAddress.AddressValidationError = fromAddress.AddressValidationError;
             toAddress.AddressValidationStatus = fromAddress.AddressValidationStatus;
             toAddress.AddressValidationSuggestionCount = fromAddress.AddressValidationSuggestionCount;
+            toAddress.AddressType = fromAddress.AddressType;
         }
 
         /// <summary>
@@ -432,6 +433,15 @@ namespace Interapptive.Shared.Business
             string trimmedRight = right == null ? string.Empty : right.Trim();
 
             return string.Equals(trimmedLeft, trimmedRight, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets or sets the type of the address.
+        /// </summary>
+        public int AddressType
+        {
+            get { return GetField<int>("AddressType"); }
+            set { SetField("AddressType", value); }
         }
     }
 }

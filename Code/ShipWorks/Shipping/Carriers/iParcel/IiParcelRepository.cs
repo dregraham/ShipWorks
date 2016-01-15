@@ -34,11 +34,5 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <param name="shipment">The shipment.</param>
         /// <returns>An iParcelAccountEntity object.</returns>
         IParcelAccountEntity GetiParcelAccount(ShipmentEntity shipment);
-
-        /// <summary>
-        /// Populates the order details (order entity and order items) for the given shipment.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        void PopulateOrderDetails(ShipmentEntity shipment);
     }
 }

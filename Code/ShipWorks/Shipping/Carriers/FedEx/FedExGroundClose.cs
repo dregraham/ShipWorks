@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             List<FedExEndOfDayCloseEntity> closings = new List<FedExEndOfDayCloseEntity>();
             
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, new FedExSettingsRepository());
+            IFedExShippingClerk shippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(null, new FedExSettingsRepository());
 
             if (FedExAccountManager.Accounts.Count > 0 && FedExAccountManager.Accounts.All(a => a.Is2xMigrationPending))
             {

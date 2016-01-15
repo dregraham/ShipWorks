@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -8,6 +10,8 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Tests.Integration.MSTest.Fixtures;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
@@ -73,10 +77,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
 
         protected override decimal RateShipment(ShipmentEntity shipment)
         {
-            UpsOltShipmentType UpsShipmentType = new UpsOltShipmentType();
-            RateGroup response = UpsShipmentType.GetRates(shipment);
-
-            return response.Rates.Sum(x => x.Amount);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IRatingService ratingService = lifetimeScope.ResolveKeyed<IRatingService>(ShipmentTypeCode.UpsOnLineTools);
+                return ratingService.GetRates(shipment).Rates.Sum(x => x.Amount);
+            }
         }
 
         protected override void ShipShipment(ShipmentEntity shipment)
@@ -95,10 +100,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
             {
                 shipment.Ups.Subclassification = (int)UpsPostalSubclassificationType.Irregular;
             }
-
-            UpsOltShipmentType upsOltShipmentType = new UpsOltShipmentType();
-            upsOltShipmentType.ProcessShipment(shipment);
-
+            
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILabelService labelService = lifetimeScope.ResolveKeyed<ILabelService>(ShipmentTypeCode.UpsOnLineTools);
+                
+                labelService.Create(shipment);
+            }
+            
             shipment.ContentWeight = shipment.Ups.Packages.Sum(p => p.DimsWeight);
         }
 

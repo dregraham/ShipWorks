@@ -34,6 +34,7 @@ using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Users.Audit;
 using System.Reflection;
 using Interapptive.Shared;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -708,7 +709,8 @@ namespace ShipWorks.Stores.Communication
             address.ResidentialStatus = (int)ValidationDetailStatusType.Unknown;
             address.AddressValidationSuggestionCount = 0;
             address.AddressValidationError = string.Empty;
-
+            address.AddressType = (int) AddressType.NotChecked;
+            
             ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
 
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))

@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.StorePages
+﻿using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
+
+namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.StorePages
 {
     partial class YahooEmailWizardPage
     {
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
             this.skipCheckBox = new System.Windows.Forms.CheckBox();
-            this.emailAccountControl = new ShipWorks.Stores.Platforms.Yahoo.YahooEmailAccountControl();
+            this.emailAccountControl = new YahooEmailAccountControl();
             this.storeNameLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
@@ -109,7 +111,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label storeNameLabel;
-        private ShipWorks.Stores.Platforms.Yahoo.YahooEmailAccountControl emailAccountControl;
+        private YahooEmailAccountControl emailAccountControl;
         private System.Windows.Forms.CheckBox skipCheckBox;
     }
 }

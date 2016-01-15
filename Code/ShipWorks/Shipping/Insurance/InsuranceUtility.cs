@@ -131,6 +131,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Check for any insurance issues in the given list
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         public static void ValidateShipment(ShipmentEntity shipment)
         {
             StoreEntity store = StoreManager.GetStore(shipment.Order.StoreID);

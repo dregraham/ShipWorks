@@ -64,7 +64,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void FedExShippingClerkReturned_WhenNullShipmentRequested_Test()
         {
             IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null,
-                settingsRepository.Object, CreateMockFedExRepository, CreateMockFimsRepository, CreateFedExRequestFactory);
+                settingsRepository.Object, null, CreateMockFedExRepository,
+                CreateMockFimsRepository, CreateFedExRequestFactory);
 
             Assert.True(shippingClerk is FedExShippingClerk);
         }
@@ -75,13 +76,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             settingsRepository.Setup(s => s.UseTestServer).Returns(true);
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFims;
             IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity,
-                settingsRepository.Object, CreateMockFedExRepository, CreateMockFimsRepository, CreateFedExRequestFactory);
+                settingsRepository.Object, null, CreateMockFedExRepository, CreateMockFimsRepository,
+                CreateFedExRequestFactory);
 
             Assert.True(shippingClerk is FimsShippingClerk);
 
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFims;
             shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object,
-                CreateMockFedExRepository, CreateMockFimsRepository, CreateFedExRequestFactory);
+                null, CreateMockFedExRepository, CreateMockFimsRepository, CreateFedExRequestFactory);
 
             Assert.True(shippingClerk is FimsShippingClerk);
         }

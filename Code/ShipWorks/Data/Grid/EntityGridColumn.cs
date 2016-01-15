@@ -91,7 +91,7 @@ namespace ShipWorks.Data.Grid
             // This is because right now SandGrid does not work with the outlook summary thing unless we override the bounds here.  If its ever fixed, we can override the bounds
             // in a GridRow.DrawRowForeground override.
             bounds.Height = DetailViewSettings.SingleRowHeight;
-
+            
             base.DrawCell(context, row, value, cellFont, image, bounds, selected, textFormat, cellForeColor);
         }
 
@@ -292,6 +292,14 @@ namespace ShipWorks.Data.Grid
             }
 
             return textBounds;
+        }
+
+        /// <summary>
+        /// Gets the tooltip text.
+        /// </summary>
+        public string GetTooltipText(EntityGridRow row)
+        {
+            return DisplayType.GetTooltipText(row, this);
         }
     }
 }

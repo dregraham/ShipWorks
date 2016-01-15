@@ -144,12 +144,6 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.OnTrac:
                     return new OnTracShipmentType();
 
-                case ShipmentTypeCode.iParcel:
-                    return new iParcelShipmentType();
-
-                case ShipmentTypeCode.BestRate:
-                    return new BestRateShipmentType();
-
                 case ShipmentTypeCode.Usps:
                     return new UspsShipmentType();
             }

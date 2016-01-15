@@ -2,6 +2,7 @@
 using Autofac;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Pdf;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
@@ -73,10 +74,18 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterInstance(Messenger.Current)
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterAssemblyModules(assemblies);
 
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<LogEntryFactory>()
+                .AsImplementedInterfaces()
+                .AsSelf();
 
             builder.RegisterType<ObjectReferenceManagerWrapper>()
                 .AsImplementedInterfaces();

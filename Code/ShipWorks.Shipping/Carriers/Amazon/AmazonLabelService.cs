@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using Interapptive.Shared;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Imaging;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Utility;
-using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -22,75 +18,43 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// <summary>
     /// Manage label through Amazon
     /// </summary>
-    public class AmazonLabelService : IAmazonLabelService
+    public class AmazonLabelService : ILabelService
     {
-        private readonly IOrderManager orderManager;
-        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
-        private readonly IAmazonShippingWebClient webClient;
-        private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IDataResourceManager resourceManager;
         private readonly IEnumerable<IAmazonLabelEnforcer> labelEnforcers;
-        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonLabelService));
+        private readonly IIndex<AmazonMwsApiCall, IAmazonShipmentRequest> amazonRequest;
         private readonly IObjectReferenceManager objectReferenceManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        public AmazonLabelService(IAmazonShippingWebClient webClient, IAmazonMwsWebClientSettingsFactory settingsFactory,
-            IOrderManager orderManager, IAmazonShipmentRequestDetailsFactory requestFactory,
-            IDataResourceManager resourceManager, IEnumerable<IAmazonLabelEnforcer> labelEnforcers,
+        public AmazonLabelService(IDataResourceManager resourceManager,
+            IEnumerable<IAmazonLabelEnforcer> labelEnforcers,
+            IIndex<AmazonMwsApiCall, IAmazonShipmentRequest> amazonRequest,
             IObjectReferenceManager objectReferenceManager)
         {
-            // TODO: refactor to get parameters down to 5 or less
-
-            this.webClient = webClient;
-            this.settingsFactory = settingsFactory;
-            this.orderManager = orderManager;
-            this.requestFactory = requestFactory;
             this.resourceManager = resourceManager;
             this.labelEnforcers = labelEnforcers;
+            this.amazonRequest = amazonRequest;
             this.objectReferenceManager = objectReferenceManager;
         }
 
         /// <summary>
         /// Create the label
         /// </summary>
-        [SuppressMessage("SonarQube", "S3240:The simplest possible condition syntax should be used",
-            Justification = "More readable this way.")]
         public void Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            orderManager.PopulateOrderDetails(shipment);
-            AmazonOrderEntity order = shipment.Order as AmazonOrderEntity;
-            if (order == null)
-            {
-                throw new ShippingException("Amazon shipping can only be used for Amazon orders");
-            }
-
             EnforceLabelPolicies(shipment);
 
-            IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
-            ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
-
-            // Send a max of $100 in insured value for carriers who aren't Stamps.  Send $0 for Stamps
-            if (!shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase))
-            {
-                requestDetails.ShippingServiceOptions.DeclaredValue.Amount = Math.Min(shipment.Amazon.InsuranceValue, 100m);
-            }
-            else
-            {
-                requestDetails.ShippingServiceOptions.DeclaredValue.Amount = 0;
-            }
-
-            CreateShipmentResponse labelResponse = webClient.CreateShipment(requestDetails, settings, shipment.Amazon.ShippingServiceID);
+            AmazonShipment labelResponse = amazonRequest[AmazonMwsApiCall.CreateShipment].Submit(shipment);
 
             // Save shipment info
-            SaveShipmentInfoToEntity(labelResponse.CreateShipmentResult.Shipment, shipment);
+            SaveShipmentInfoToEntity(labelResponse, shipment);
 
             // Save the label
-            SaveLabel(labelResponse.CreateShipmentResult.Shipment.Label.FileContents, shipment.ShipmentID);
+            SaveLabel(labelResponse.Label.FileContents, shipment.ShipmentID);
 
             VerifyShipment(shipment);
         }
@@ -100,25 +64,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
-            if (shipment.Amazon.AmazonUniqueShipmentID == null)
-            {
-                log.Error($"Attempting to void shipment with shipment id = {shipment.ShipmentID }, but AmazonUniqueShipmentID was null");
-                throw new AmazonShippingException("Amazon shipment is missing the AmazonUniqueShipmentID");
-            }
-
-            IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
-
-            webClient.CancelShipment(settings, shipment.Amazon.AmazonUniqueShipmentID);
+            amazonRequest[AmazonMwsApiCall.CancelShipment].Submit(shipment);
         }
 
         /// <summary>
         /// Save the shipment info to the entity
         /// </summary>
-        public void SaveShipmentInfoToEntity(Shipment amazonShipment, ShipmentEntity shipment)
+        private void SaveShipmentInfoToEntity(AmazonShipment amazonShipment, ShipmentEntity shipment)
         {
-            // Save shipment info to shipment entity
             shipment.TrackingNumber = amazonShipment.TrackingId;
             shipment.ShipmentCost = amazonShipment.ShippingService.Rate.Amount;
             shipment.Amazon.AmazonUniqueShipmentID = amazonShipment.ShipmentId;

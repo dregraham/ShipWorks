@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="ShipWorks" Platform="DotNet">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
     <Name>Interapptive.Shared</Name>
     <Name>ShipWorks.Shared</Name>
-    <Name>ShipWorks.SqlServer</Name>
     <Name>ShipWorks.Core</Name>
     <Name>ShipWorks.Shipping</Name>
     <Name>ShipWorks.Shipping.UI</Name>
@@ -69,10 +68,18 @@
     <Name>System.Reactive.Linq</Name>
     <Name>System.Reactive.Interfaces</Name>
     <Name>System.Reactive.Core</Name>
+    <Name>ShipWorks.UI</Name>
+    <Name>PresentationFramework</Name>
+    <Name>System.Xaml</Name>
+    <Name>PresentationCore</Name>
+    <Name>WindowsFormsIntegration</Name>
+    <Name>System.Reactive.PlatformServices</Name>
+    <Name>System.Reactive.Windows.Threading</Name>
+    <Name>ShipWorks.SqlServer</Name>
   </FrameworkAssemblies>
   <Dirs>
-    <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319</Dir>
-    <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319\WPF</Dir>
+    <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319</Dir>
+    <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\WPF</Dir>
     <Dir>..\Artifacts\Application</Dir>
     <Dir>..\Code\ShipWorks\bin\Debug</Dir>
     <Dir>..\Code\ShipWorks.Data.Adapter\bin\Debug</Dir>
@@ -141,7 +148,8 @@
   <SourceFileRebasing FromPath="" ToPath="" />
   <PathVariables />
   <RuleFiles />
-  <ProjectRules AreActive="True" /><Queries>
+  <ProjectRules AreActive="True" />
+  <Queries>
     <Group Name="Code Quality" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types too big - critical</Name>
 warnif count > 0 from t in JustMyCode.Types where 
@@ -4243,7 +4251,7 @@ select new { m }
 
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreComplexMethod attributes reached</Name>
-warnif count > 83
+warnif count > 90
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreComplexMethod*") 
@@ -4252,7 +4260,7 @@ orderby m.FullName
 select new { m }
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreTooManyParams attributes reached</Name>
-warnif count > 59
+warnif count > 61 // Makes this 59 in the rating branch merge
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreTooManyParams*") 
@@ -4269,7 +4277,7 @@ from m in JustMyCode.Types.Where(m=>
 orderby m.FullName
 select new { m }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongMethod attributes reached</Name>
-warnif count > 381
+warnif count > 390
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreLongMethod*") 
@@ -4277,4 +4285,5 @@ from m in JustMyCode.Methods.Where(m=>
 orderby m.FullName
 select new { m }]]></Query>
     </Group>
-  </Queries></NDepend>
+  </Queries>
+</NDepend>
