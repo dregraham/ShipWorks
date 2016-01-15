@@ -12,10 +12,12 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
     public class PostalProfileEntityBuilder : EntityBuilder<PostalProfileEntity>
     {
         private readonly ProfileEntityBuilder parentBuilder;
+        private readonly bool isPrimaryProfile;
 
-        public PostalProfileEntityBuilder(ProfileEntityBuilder builder)
+        public PostalProfileEntityBuilder(ProfileEntityBuilder builder, bool isPrimary)
         {
             parentBuilder = builder;
+            isPrimaryProfile = isPrimary;
         }
 
         /// <summary>
@@ -51,6 +53,11 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         {
             TBuilder builder = new TBuilder();
             builderConfiguration?.Invoke(builder);
+
+            if (isPrimaryProfile)
+            {
+                builder.SetDefaultsOnNullableFields();
+            }
 
             parentBuilder.Set(x => x.ShipmentTypeCode, ProfileTypeCode);
             Set(ProfileAccessor, builder.Build());

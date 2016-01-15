@@ -255,21 +255,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_AppliesDefaultFedExProfile_WhenShipmentTypeIsFedEx()
         {
-            var profile = Create.Entity<ShippingProfileEntity>()
-                .Set(x => x.ShipmentTypeCode, ShipmentTypeCode.FedEx)
-                .Set(x => x.ShipmentTypePrimary, true)
-                .Save();
-
-            Create.Entity<FedExProfileEntity>()
-                .Set(x => x.ShippingProfile, profile)
-                .Set(x => x.DropoffType, (int) FedExDropoffType.RegularPickup)
+            Create.Profile()
+                .AsPrimary()
+                .AsFedEx(p => p.Set(x => x.DropoffType, (int) FedExDropoffType.RegularPickup))
                 .Save();
 
             SetDefaultShipmentType(ShipmentTypeCode.FedEx);
 
             ShipmentEntity shipment = ShippingManager.CreateShipment(context.Order, mock.Container);
-
-            Assert.NotNull(shipment.FedEx);
 
             Assert.Equal((int) FedExDropoffType.RegularPickup, shipment.FedEx.DropoffType);
         }

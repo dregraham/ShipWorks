@@ -13,6 +13,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
     /// </summary>
     public class ProfileEntityBuilder : EntityBuilder<ShippingProfileEntity>
     {
+        private bool isPrimaryProfile = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -39,6 +41,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public ProfileEntityBuilder AsPrimary()
         {
+            isPrimaryProfile = true;
+            SetDefaultsOnNullableFields();
             Set(x => x.ShipmentTypePrimary, true);
             return this;
         }
@@ -72,7 +76,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         {
             Set(x => x.ShipmentTypeCode, ShipmentTypeCode.PostalWebTools);
 
-            PostalProfileEntityBuilder builder = new PostalProfileEntityBuilder(this);
+            PostalProfileEntityBuilder builder = new PostalProfileEntityBuilder(this, isPrimaryProfile);
             builderConfiguration?.Invoke(builder);
 
             Set(x => x.Postal, builder.Build());
@@ -146,6 +150,11 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         {
             TBuilder builder = new TBuilder();
             builderConfiguration?.Invoke(builder);
+
+            if (isPrimaryProfile)
+            {
+                builder.SetDefaultsOnNullableFields();
+            }
 
             Set(x => x.ShipmentTypeCode, shipmentTypeCode);
             Set(shipmentAccessor, builder.Build());
