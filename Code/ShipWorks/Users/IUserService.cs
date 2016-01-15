@@ -1,4 +1,6 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Users.Logon;
 
 namespace ShipWorks.Users
 {
@@ -11,5 +13,15 @@ namespace ShipWorks.Users
         /// Create a user for the given credentials
         /// </summary>
         UserEntity CreateUser(string username, string password, bool isAdmin);
+
+        /// <summary>
+        /// Logs the user in
+        /// </summary>
+        EnumResult<UserServiceLogonResultType> Logon(LogonCredentials credentials);
+
+        /// <summary>
+        /// Logs the user in using their saved credentials
+        /// </summary>
+        EnumResult<UserServiceLogonResultType> Logon();
     }
 }

@@ -541,7 +541,17 @@ namespace ShipWorks
             // May already be logged on
             if (!UserSession.IsLoggedOn)
             {
-                if (!UserSession.LogonLastUser())
+                IUserService userService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUserService>();
+
+                EnumResult<UserServiceLogonResultType> logonResult = userService.Logon();
+
+                if(logonResult.Value == UserServiceLogonResultType.TangoAccountDisabled)
+                {
+                    MessageHelper.ShowError(this, logonResult.Message);
+                    return;
+                }
+
+                if(logonResult.Value == UserServiceLogonResultType.InvalidCredentials)
                 {
                     using (LogonDlg dlg = new LogonDlg())
                     {
@@ -725,8 +735,8 @@ namespace ShipWorks
         private void LogonToShipWorksAsyncGetLicenseStatus(object state)
         {
             // Update our edition for each store.  Eventually this will also be where we log with tango the sw version being used and maybe other things
-            LicenseFactory licenseFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseFactory>();
-            var licenses = licenseFactory.GetLicenses().ToList();
+            LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
+            var licenses = licenseService.GetLicenses().ToList();
             licenses.ForEach(license => license.Refresh());
 
             ForceHeartbeat();

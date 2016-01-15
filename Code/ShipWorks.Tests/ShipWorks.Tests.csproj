@@ -194,7 +194,7 @@
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
     <Compile Include="ApplicationCore\Licensing\ActivationResponseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseTest.cs" />
-    <Compile Include="ApplicationCore\Licensing\LicenseFactoryTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseServiceTest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientFactoryTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializerTest.cs" />
@@ -557,6 +557,7 @@
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinderTest.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinderTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
+    <Compile Include="Users\UserServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />

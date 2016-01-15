@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using System;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -16,9 +17,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             ConfigurationData.CheckForChangesNeeded();
 
-            ConfigurationEntity config = ConfigurationData.Fetch();
-
-            return config.CustomerKey;
+            try
+            {
+                ConfigurationEntity config = ConfigurationData.Fetch();
+                return config.CustomerKey;
+            }
+            catch (NullReferenceException)
+            {
+                // No database connection exists so we return an empty string
+                return string.Empty;
+            }
         }
     }
 }

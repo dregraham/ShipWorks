@@ -2249,7 +2249,14 @@ namespace ShipWorks.Data.Administration
                 // If we created the admin user, go ahead and log that user in
                 if (adminUserCreated)
                 {
-                    UserSession.Logon(tangoUserControlHost.ViewModel.Email, tangoUserControlHost.ViewModel.DecryptedPassword, true);
+                    IUserService userService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUserService>();
+
+                    EnumResult<UserServiceLogonResultType> logonResult = userService.Logon(new LogonCredentials(tangoUserControlHost.ViewModel.Email, tangoUserControlHost.ViewModel.DecryptedPassword, true));
+
+                    if (logonResult.Value != UserServiceLogonResultType.Success)
+                    {
+                        MessageHelper.ShowError(this, logonResult.Message);
+                    }
                 }
             }
         }

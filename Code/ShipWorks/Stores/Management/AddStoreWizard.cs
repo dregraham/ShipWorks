@@ -45,6 +45,9 @@ using ShipWorks.Editions.Brown;
 using ShipWorks.ApplicationCore.Setup;
 using ShipWorks.UI.Controls;
 using ShipWorks.Stores.Communication;
+using ShipWorks.ApplicationCore;
+using Autofac;
+using ShipWorks.Users.Logon;
 
 namespace ShipWorks.Stores.Management
 {
@@ -137,8 +140,11 @@ namespace ShipWorks.Stores.Management
 
             bool complete = false;
 
-            // Logon the user - this has failed in the wild (FB 275179), so instead of crashing, we'll ask them to log in again
-            if (UserSession.Logon(username, password, true))
+            IUserService userService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUserService>();
+
+            EnumResult<UserServiceLogonResultType> logonResult = userService.Logon(new LogonCredentials(username, password, true));
+
+            if (logonResult.Value == UserServiceLogonResultType.Success)
             {
                 // Initialize the session
                 UserManager.InitializeForCurrentUser();
@@ -157,7 +163,7 @@ namespace ShipWorks.Stores.Management
             }
             else
             {
-                MessageHelper.ShowWarning(originalWizard.Owner, "There was a problem while logging in. Please try again.");
+                MessageHelper.ShowWarning(originalWizard.Owner, logonResult.Message);
             }
 
             // Counts as a cancel on the original wizard if they didn't complete the setup.

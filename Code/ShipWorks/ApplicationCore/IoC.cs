@@ -101,7 +101,8 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .AsSelf();
 
-            builder.RegisterType<LicenseFactory>()
+            builder.RegisterType<LicenseService>()
+                .AsImplementedInterfaces()
                 .AsSelf();
 
             builder.RegisterType<CustomerLicenseWriter>()
@@ -119,6 +120,9 @@ namespace ShipWorks.ApplicationCore
                 .ExternallyOwned();
 
             builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
+
+            builder.RegisterType<UserSessionWrapper>()
+                .AsImplementedInterfaces();
 
             current = builder.Build();
         }

@@ -103,7 +103,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
             {
                 try
                 {
-                    // Activate the software using the given username/password
+                    // Activate the software using an empty license with the given username/password
                     customerLicense.Activate(Email, DecryptedPassword);
                     userManager.CreateUser(Email, DecryptedPassword, true);
                 }

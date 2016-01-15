@@ -523,8 +523,8 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private static void CheckLicense(StoreEntity store)
         {
-            LicenseFactory licenseFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseFactory>();
-            ILicense license = licenseFactory.GetLicense(store);
+            LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
+            ILicense license = licenseService.GetLicense(store);
             license.Refresh();
 
             if (license.IsDisabled)
