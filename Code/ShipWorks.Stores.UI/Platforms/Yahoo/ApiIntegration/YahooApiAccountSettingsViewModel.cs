@@ -83,7 +83,10 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
                 string error = CheckCredentialsError(response);
 
                 // If the error message matches this one, then we know the credentials are good.
-                return error == "StatusID needs to be specified in correct format" ? string.Empty : error;
+                return error.Equals("StatusID needs to be specified in correct format",
+                    StringComparison.InvariantCultureIgnoreCase) ?
+                    string.Empty :
+                    error;
             }
             catch (Exception ex)
             {
