@@ -601,6 +601,7 @@
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationViewModel.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseReader.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseWriter.cs" />
+    <Compile Include="ApplicationCore\Licensing\IDatabaseIdentifier.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicense.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicenseService.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
