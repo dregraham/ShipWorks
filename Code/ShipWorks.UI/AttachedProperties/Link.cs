@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
@@ -8,6 +9,7 @@ namespace ShipWorks.UI.AttachedProperties
     /// <summary>
     /// Attached property for opening a link in a browser
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class Link
     {
         /// <summary>
