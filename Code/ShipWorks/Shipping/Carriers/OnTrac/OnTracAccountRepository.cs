@@ -11,6 +11,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override IEnumerable<OnTracAccountEntity> Accounts => OnTracAccountManager.Accounts;
 
         /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => OnTracAccountManager.CheckForChangesNeeded();
+
+        /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>

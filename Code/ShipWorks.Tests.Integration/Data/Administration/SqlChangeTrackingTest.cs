@@ -2,71 +2,54 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared.Data;
-using Xunit;
-using Moq;
-using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
+using ShipWorks.Startup;
+using ShipWorks.Tests.Shared.Database;
+using Xunit;
 
 namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
 {
-    public class SqlChangeTrackingTest
+    [Collection("Database collection")]
+    [Trait("Category", "ContinuousIntegration")]
+    public class SqlChangeTrackingTest : IDisposable
     {
         private SqlChangeTracking testObject;
+        private readonly DataContext context;
 
-        private ShipWorksInitializer initializer;
-        private readonly Mock<ExecutionMode> executionMode;
-
-        public SqlChangeTrackingTest()
+        public SqlChangeTrackingTest(DatabaseFixture db)
         {
-            executionMode = new Mock<ExecutionMode>();
-            executionMode.Setup(m => m.IsUISupported).Returns(true);
-
-            initializer = new ShipWorksInitializer(executionMode.Object, null);
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
 
             testObject = new SqlChangeTracking();
         }
 
-        private string TablesWithChangeTrackingQuery
-        {
-            get 
-            {
-                return @"SELECT SYS.TABLES.NAME 
-	
-	                    FROM sys.change_tracking_tables
+        private string TablesWithChangeTrackingQuery =>
+            @"SELECT SYS.TABLES.NAME
+                FROM sys.change_tracking_tables
+                INNER JOIN sys.tables
+                    ON sys.tables.object_id = sys.change_tracking_tables.object_id
+                INNER JOIN sys.schemas
+                    ON sys.schemas.schema_id = sys.tables.schema_id";
 
-	                    INNER JOIN sys.tables 
-		                    ON sys.tables.object_id = sys.change_tracking_tables.object_id
-	                    INNER JOIN sys.schemas 
-		                    ON sys.schemas.schema_id = sys.tables.schema_id"; 
-            }
-        }
+        private string DisableChangeTrackingOnAllTablesQuery =>
+            @"DECLARE @SQL NVARCHAR(MAX)='';
+                SELECT @SQL = @SQL + 'ALTER TABLE [' + t.name + '] Disable Change_tracking;'
+                FROM sys.change_tracking_tables ct
+                    JOIN sys.tables t
+                        ON ct.object_id= t.object_id
+                    JOIN sys.schemas s
+                        ON t.schema_id= s.schema_id;
 
-        private string DisableChangeTrackingOnAllTablesQuery
-        {
-            get
-            {
-                return @"DECLARE @SQL NVARCHAR(MAX)='';
-                        SELECT @SQL = @SQL + 'ALTER TABLE [' + t.name + '] Disable Change_tracking;'
-                        FROM sys.change_tracking_tables ct
-	                        JOIN sys.tables t
-		                        ON ct.object_id= t.object_id
-	                        JOIN sys.schemas s
-		                        ON t.schema_id= s.schema_id;
+                PRINT @SQL;
+                EXEC sp_executesql @SQL;";
 
-                        PRINT @SQL;
-                        EXEC sp_executesql @SQL;";
-            }
-        }
-        
         [Fact]
         [Trait("Category", "ContinuousIntegration")]
         public void TablesRequiringChangeTracking_CountMatchesNumberOfTablesWithChangeTrackingInDatabase_Test()
         {
-            // This assumes a database is being used that has change tracking configured correctly on 
+            // This assumes a database is being used that has change tracking configured correctly on
             // the appropriate tables (i.e. seed database)
 
             // This test in addition to the test for matching actual table names, ensures that the exact
@@ -78,7 +61,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
         [Trait("Category", "ContinuousIntegration")]
         public void TablesRequiringChangeTracking_MatchesTableNamesWithChangeTrackingInDatabase_Test()
         {
-            // This assumes a database is being used that has change tracking configured correctly on 
+            // This assumes a database is being used that has change tracking configured correctly on
             // the appropriate tables (i.e. seed database)
             List<string> expectedTableNames = GetTablesWithChangeTrackingEnabledFromDatabase();
 
@@ -121,7 +104,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
         {
             const string changeTrackingQueryFormat =
                 @"SELECT COUNT(0)
-                    FROM SYS.CHANGE_TRACKING_DATABASES 
+                    FROM SYS.CHANGE_TRACKING_DATABASES
                     WHERE database_id = DB_ID('{0}')";
 
             using (SqlConnection con = SqlSession.Current.OpenConnection())
@@ -131,7 +114,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
                     cmd.CommandText = string.Format(changeTrackingQueryFormat, cmd.Connection.Database);
                     int count = (int) cmd.ExecuteScalar();
 
-                    // Consider change tracking disabled if the current database was not in the list of 
+                    // Consider change tracking disabled if the current database was not in the list of
                     // change tracking databases in SQL Server
                     return count > 0;
                 }
@@ -193,5 +176,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
 
             return tableNames;
         }
+
+        public void Dispose() => context.Dispose();
     }
 }

@@ -12,13 +12,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Returns a list of Endicia accounts.
         /// </summary>
-        public override IEnumerable<EndiciaAccountEntity> Accounts
-        {
-            get
-            {
-                return EndiciaAccountManager.EndiciaAccounts.ToList();
-            }
-        }
+        public override IEnumerable<EndiciaAccountEntity> Accounts => EndiciaAccountManager.EndiciaAccounts.ToList();
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => EndiciaAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a Endicia account for the provided accountID.

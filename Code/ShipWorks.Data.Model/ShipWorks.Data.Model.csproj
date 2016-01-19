@@ -163,10 +163,12 @@
     <Compile Include="Custom\EntityClasses\FedExAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\InsurancePolicyEntity.cs" />
     <Compile Include="Custom\EntityClasses\iParcelAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\IRuleEntity.cs" />
     <Compile Include="Custom\EntityClasses\NullCarrierAccount.cs" />
     <Compile Include="Custom\EntityClasses\NullEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderItemEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ShippingDefaultsRuleEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingProfileEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingProviderRuleEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingSettingsEntity.cs" />

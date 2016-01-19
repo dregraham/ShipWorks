@@ -1,5 +1,4 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.Custom;
+﻿using ShipWorks.Data.Model.Custom;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -9,6 +8,11 @@ namespace ShipWorks.Shipping.Carriers
     /// <typeparam name="T"></typeparam>
     public interface ICarrierAccountRepository<T> : ICarrierAccountRetriever<T> where T : ICarrierAccount
     {
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        void CheckForChangesNeeded();
+
         /// <summary>
         /// Returns the default account as defined by the primary profile
         /// </summary>

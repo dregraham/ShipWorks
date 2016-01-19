@@ -8,9 +8,10 @@ using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 
-namespace ShipWorks.Tests.Stores.Content
+namespace ShipWorks.Core.Tests.Integration.Stores.Content
 {
     [Collection("Database collection")]
+    [Trait("Category", "ContinuousIntegration")]
     public class OrderManagerTest : IDisposable
     {
         private readonly DataContext context;

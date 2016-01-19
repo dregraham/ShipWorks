@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers
@@ -13,6 +12,14 @@ namespace ShipWorks.Shipping.Carriers
         /// Returns a list of postal (w/o postage) accounts.
         /// </summary>
         public IEnumerable<NullCarrierAccount> Accounts => new List<NullCarrierAccount> { new NullCarrierAccount() };
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public void CheckForChangesNeeded()
+        {
+            // Since we have no accounts, this doesn't need to do anything
+        }
 
         /// <summary>
         /// Returns a postal (w/o postage) account for the provided accountID.
