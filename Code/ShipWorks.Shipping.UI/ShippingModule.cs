@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.ApplicationCode;
@@ -19,6 +20,7 @@ namespace ShipWorks.Shipping.UI
     /// <summary>
     /// IoC registration module for this assembly
     /// </summary>
+    [NDependIgnore]
     public class ShippingModule : Module
     {
         /// <summary>
