@@ -105,7 +105,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<AddressSelector>()
+            builder.Register((_, p) => new AddressSelector(p.OfType<string>().FirstOrDefault()))
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShipBillAddressEditorDlg>();
