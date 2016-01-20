@@ -149,7 +149,6 @@
     <Compile Include="Controls\AlignmentWrapPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
-    <Compile Include="Services\IMessageHelper.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
     <Compile Include="UiModule.cs" />
     <Compile Include="ValueConverters\BooleanComparisonConverter.cs" />

@@ -152,6 +152,7 @@
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ShipmentLoaderTest.cs" />
+    <Compile Include="Services\ShipmentProcessorTest.cs" />
     <Compile Include="Services\ShippingManagerTest.cs" />
     <Compile Include="Services\ShippingManagerWrapperTest.cs" />
     <Compile Include="Services\ShippingProfileManagerWrapperTest.cs" />

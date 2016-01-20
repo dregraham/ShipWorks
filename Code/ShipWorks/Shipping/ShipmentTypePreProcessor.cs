@@ -16,8 +16,8 @@ namespace ShipWorks.Shipping
     {
 
         /// <summary>
-        /// Uses the synchronizer to check whether an account exists and call the counterRatesProcessing callback 
-        /// provided when trying to process a shipment without any accounts for this shipment type in ShipWorks, 
+        /// Uses the synchronizer to check whether an account exists and call the counterRatesProcessing callback
+        /// provided when trying to process a shipment without any accounts for this shipment type in ShipWorks,
         /// otherwise the shipment is unchanged.
         /// </summary>
         /// <param name="synchronizer">The synchronizer.</param>
@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping
                 }
                 else
                 {
-                    // The user created an account, so try to grab the account and use it 
+                    // The user created an account, so try to grab the account and use it
                     // to process the shipment
                     ShippingSettings.CheckForChangesNeeded();
                     if (synchronizer.HasAccounts)

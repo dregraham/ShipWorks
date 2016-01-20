@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Stores;
-using Interapptive.Shared.Utility;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS;
 using System.Xml.Linq;
 using Interapptive.Shared;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Editions
 {
     /// <summary>
     /// Base class for each possible edition of ShipWorks.  Also represents the Standard Edition.
     /// </summary>
-    public class Edition
+    public class Edition : IEdition
     {
         StoreEntity store;
         EditionSharedOptions sharedOptions = new EditionSharedOptions();
@@ -36,7 +33,7 @@ namespace ShipWorks.Editions
             }
 
             // Initialize to an empty shipment type restriction set
-            ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(store.StoreID, (XElement)null);
+            ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(store.StoreID, (XElement) null);
 
             this.store = store;
         }
@@ -61,7 +58,7 @@ namespace ShipWorks.Editions
         /// Gets or sets the shipment type functionality that can be configured.
         /// </summary>
         public ShipmentTypeFunctionality ShipmentTypeFunctionality { get; set; }
-        
+
         /// <summary>
         /// Add a restriction to the edition
         /// </summary>
@@ -156,7 +153,7 @@ namespace ShipWorks.Editions
             AddStampsConsolidatorRestrictions();
 
             // Load the shipment type functionality into the restriction set
-            foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof (ShipmentTypeCode)))
+            foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof(ShipmentTypeCode)))
             {
                 List<ShipmentTypeRestrictionType> restrictionTypes = ShipmentTypeFunctionality[typeCode].ToList();
 
@@ -169,7 +166,7 @@ namespace ShipWorks.Editions
                 {
                     AddRestriction(EditionFeature.ShipmentTypeRegistration, typeCode, EditionRestrictionLevel.Hidden);
 
-                    // If account registration is not allowed and there are no accounts in the db for this shipment type, 
+                    // If account registration is not allowed and there are no accounts in the db for this shipment type,
                     // it is effectively a disabled shipment type, so go ahead and add that restriction as well.
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(typeCode);
                     if (!shipmentType.HasAccounts)
@@ -251,9 +248,9 @@ namespace ShipWorks.Editions
         private void UpdateDefaultShippingType()
         {
             ShippingSettingsEntity shippingSettingsEntity = ShippingSettings.Fetch();
-            ShipmentTypeCode currentDefaultShipmentTypeCode = (ShipmentTypeCode)shippingSettingsEntity.DefaultType;
+            ShipmentTypeCode currentDefaultShipmentTypeCode = (ShipmentTypeCode) shippingSettingsEntity.DefaultType;
 
-            IEnumerable<ShipmentTypeCode> disabledShipmentTypeCodes = restrictions.Where(er => er.Feature == EditionFeature.ShipmentType).Select(er => (ShipmentTypeCode)er.Data);
+            IEnumerable<ShipmentTypeCode> disabledShipmentTypeCodes = restrictions.Where(er => er.Feature == EditionFeature.ShipmentType).Select(er => (ShipmentTypeCode) er.Data);
 
             if (disabledShipmentTypeCodes.Contains(currentDefaultShipmentTypeCode))
             {
@@ -271,7 +268,12 @@ namespace ShipWorks.Editions
         }
 
         /// <summary>
-        /// The ShipmentType that should be the initial default for the edition, or null if it doesnt matter.
+        /// Get a serialized version of this edition
+        /// </summary>
+        public string Serialize() => EditionSerializer.Serialize(this);
+
+        /// <summary>
+        /// The ShipmentType that should be the initial default for the edition, or null if it doesn't matter.
         /// </summary>
         public virtual ShipmentTypeCode? DefaultShipmentType
         {

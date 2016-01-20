@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Tests.Shared;
-using ShipWorks.UI;
 using ShipWorks.UI.Controls.AddressControl;
 using Xunit;
 

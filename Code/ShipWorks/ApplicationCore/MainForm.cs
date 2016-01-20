@@ -266,12 +266,12 @@ namespace ShipWorks
                 }
             }
 
-            // If its still not setup, dont go on
+            // If its still not setup, don't go on
             if (!SqlSession.IsConfigured)
             {
                 return;
             }
-            
+
             // Initiate the logon sequence
             InitiateLogon();
         }
@@ -418,9 +418,9 @@ namespace ShipWorks
         [NDependIgnoreLongMethod]
         private bool LogonToSqlServer()
         {
-            // If we are here b\c MSDE was uinstalled, but SQL 08 isn't ready yet, we need to force the user back into the Database Upgrade window when they come back.
-            // If we didn't do that, then they wouldnt be able to get back in b\c normally it requires a successfully connection (which they can't have now, b\c MSDE is
-            // uinstalled).
+            // If we are here b\c MSDE was uninstalled, but SQL 08 isn't ready yet, we need to force the user back into the Database Upgrade window when they come back.
+            // If we didn't do that, then they wouldn't be able to get back in b\c normally it requires a successfully connection (which they can't have now, b\c MSDE is
+            // uninstalled).
             if (SqlServerInstaller.IsMsdeMigrationInProgress)
             {
                 log.InfoFormat("Forcing Database Upgrade window open to to MSDE migration file existing.");
@@ -663,7 +663,7 @@ namespace ShipWorks
             // Start auto downloading immediately
             DownloadManager.StartAutoDownloadIfNeeded(true);
 
-            // Then, if we are downloading any stores for the very very first time, auto-show the progress
+            // Then, if we are downloading any stores for the very first time, auto-show the progress
             if (StoreManager.GetLastDownloadTimes().Any(pair => pair.Value == null && DownloadManager.IsDownloading(pair.Key)))
             {
                 ShowDownloadProgress();
@@ -710,7 +710,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Load initial data when logging in in a background thread.  Its not perfect, but it does keep it a bit more responsive
+        /// Load initial data when logging in a background thread.  Its not perfect, but it does keep it a bit more responsive
         /// </summary>
         private void LogonToShipWorksAsyncLoad(object state)
         {
@@ -742,7 +742,7 @@ namespace ShipWorks
         {
             bool editionChanged = false;
 
-            // Update our edition for each store.  Eventually this will also be where we log with tango the sw version being used and maybe other things
+            // Update our edition for each store.  Eventually this will also be where we log with tango the ShipWorks version being used and maybe other things
             foreach (StoreEntity store in StoreManager.GetEnabledStores())
             {
                 try
@@ -750,7 +750,7 @@ namespace ShipWorks
                     ShipWorksLicense license = new ShipWorksLicense(store.License);
                     if (!license.IsTrial)
                     {
-                        LicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
+                        ILicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
 
                         if (accountDetail.ActivationState == LicenseActivationState.Active ||
                             accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere ||

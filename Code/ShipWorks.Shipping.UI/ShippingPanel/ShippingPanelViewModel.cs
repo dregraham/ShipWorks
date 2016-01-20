@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.UI;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
@@ -15,9 +16,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.UI.ShippingPanel.CustomsControl;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
-using ShipWorks.UI;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -94,13 +93,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             PropertyChanging += OnPropertyChanging;
 
-            ProcessShipmentCommand = new RelayCommand(ProcessShipment);
+            CreateLabelCommand = new RelayCommand(ProcessShipment);
         }
 
         /// <summary>
         /// Command that triggers processing of the current shipment
         /// </summary>
-        public ICommand ProcessShipmentCommand { get; }
+        public ICommand CreateLabelCommand { get; }
 
         /// <summary>
         /// Is the current shipment domestic

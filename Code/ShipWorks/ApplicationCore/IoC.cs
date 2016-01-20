@@ -8,6 +8,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Core.Messaging;
@@ -120,6 +121,9 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterInstance(SqlDateTimeProvider.Current)
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
+
+            builder.RegisterType<TangoWebClientWrapper>()
+                .As<ITangoWebClient>();
 
             builder.Register(c => UserSession.Security)
                 .As<ISecurityContext>()

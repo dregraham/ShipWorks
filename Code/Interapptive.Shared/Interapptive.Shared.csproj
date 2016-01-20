@@ -176,6 +176,7 @@
     <Compile Include="System.ComponentModel.DataAnnotations\MinLengthAttribute.cs" />
     <Compile Include="System.ComponentModel.DataAnnotations\PhoneAttribute.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />
+    <Compile Include="UI\IMessageHelper.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
