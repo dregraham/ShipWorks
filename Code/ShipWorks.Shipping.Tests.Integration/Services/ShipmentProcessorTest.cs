@@ -20,6 +20,7 @@ using Xunit;
 namespace ShipWorks.Shipping.Tests.Services
 {
     [Collection("Database collection")]
+    [Trait("Category", "ContinuousIntegration")]
     public class ShipmentProcessorTest
     {
         private ShipmentProcessor testObject;
