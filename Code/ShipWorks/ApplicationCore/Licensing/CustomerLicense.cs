@@ -68,7 +68,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Uses the ILicenseWriter provided in the constructor to save this instance
         /// to a data source.
         /// </summary>
-        private void Save()
+        public void Save()
         {
             licenseWriter.Write(this);
         }
