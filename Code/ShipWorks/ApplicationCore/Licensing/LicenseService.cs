@@ -4,6 +4,7 @@ using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.Ebay.WizardPages;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -12,24 +13,26 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class LicenseService : ILicenseService
     {
+        private readonly ICustomerLicenseReader reader;
         private readonly Func<string, ICustomerLicense> customerLicenseFactory;
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
-        private readonly bool isLegacy;
-        private readonly string customerKey;
+
 
         /// <summary>
         /// Constructor
         /// </summary>
         public LicenseService(ICustomerLicenseReader reader, Func<string, ICustomerLicense> customerLicenseFactory, Func<StoreEntity, StoreLicense> storeLicenseFactory,  IStoreManager storeManager)
         {
+            this.reader = reader;
             this.customerLicenseFactory = customerLicenseFactory;
             this.storeLicenseFactory = storeLicenseFactory;
             this.storeManager = storeManager;
-
-            customerKey = reader.Read();
-            isLegacy = string.IsNullOrEmpty(customerKey);
         }
+
+        private string CustomerKey => reader.Read();
+
+        private bool IsLegacy => string.IsNullOrEmpty(CustomerKey);
 
         /// <summary>
         /// Returns the correct ILicense for the store
@@ -37,9 +40,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         public ILicense GetLicense(StoreEntity store)
         {
             // If Legacy, return store license, else return customer license
-            return isLegacy ?
+            return IsLegacy ?
                 (ILicense) storeLicenseFactory(store) :
-                 customerLicenseFactory(customerKey);
+                 customerLicenseFactory(CustomerKey);
         }
 
         /// <summary>
@@ -48,9 +51,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         public IEnumerable<ILicense> GetLicenses()
         {
             // If Legacy, return store licenses for each store, else return a single customer license
-            return isLegacy ?
+            return IsLegacy ?
                 storeManager.GetEnabledStores().Select(GetLicense) :
-                new[] {customerLicenseFactory(customerKey)};
+                new[] {customerLicenseFactory(CustomerKey)};
         }
 
         /// <summary>
@@ -59,12 +62,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         public EnumResult<LogOnRestrictionLevel> AllowsLogOn()
         {
             // Legacy users are always allowed to log on, only new pricing restricts logon
-            if (isLegacy)
+            if (IsLegacy)
             {
                 return new EnumResult<LogOnRestrictionLevel>(LogOnRestrictionLevel.None);
             }
             
-            ILicense customerLicense = customerLicenseFactory(customerKey);
+            ILicense customerLicense = customerLicenseFactory(CustomerKey);
 
             // Customer licenses that are disabled cannot logon, refresh the 
             //license info with tango before checking if the license is disabled

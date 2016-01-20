@@ -1,6 +1,7 @@
 ﻿using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -9,6 +10,16 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class CustomerLicenseReader : ICustomerLicenseReader
     {
+        private readonly IEncryptionProvider encryptionProvider;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public CustomerLicenseReader(IEncryptionProvider encryptionProvider)
+        {
+            this.encryptionProvider = encryptionProvider;
+        }
+
         /// <summary>
         /// Reads this License
         /// </summary>
@@ -17,16 +28,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             ConfigurationData.CheckForChangesNeeded();
 
-            try
-            {
-                ConfigurationEntity config = ConfigurationData.Fetch();
-                return config.CustomerKey;
-            }
-            catch (NullReferenceException)
-            {
-                // No database connection exists so we return an empty string
-                return string.Empty;
-            }
+            ConfigurationEntity config = ConfigurationData.Fetch();
+            return encryptionProvider.Decrypt(config.CustomerKey);
         }
     }
 }
