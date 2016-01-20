@@ -350,7 +350,6 @@ namespace ShipWorks.Data.Administration
                                 // Save the license
                                 customerLicense.Save();
                             }
-
                         }
                     }
                 }

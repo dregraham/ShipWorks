@@ -15,15 +15,24 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public Guid Get()
         {
-            if (identifier==null)
+            try
             {
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
-                {
-                    identifier = SqlCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
-                }
-            }
 
-            return identifier.Value;
+
+                if (identifier == null)
+                {
+                    using (SqlConnection con = SqlSession.Current.OpenConnection())
+                    {
+                        identifier = SqlCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
+                    }
+                }
+
+                return identifier.Value;
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseIdentifierException(ex);
+            }
         }
     }
 }

@@ -125,10 +125,12 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<LicenseEncryptionProvider>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             builder.RegisterType<DatabaseIdentifier>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             current = builder.Build();
         }

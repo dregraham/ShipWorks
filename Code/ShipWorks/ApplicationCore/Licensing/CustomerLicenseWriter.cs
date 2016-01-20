@@ -32,7 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             config.CustomerKey = encryptionProvider.Encrypt(customerLicense.Key);
 
-            // Save the key to the ConfiguartionEntity 
+            // Save the key to the ConfigurationEntity 
             ConfigurationData.Save(config);
         }
     }
