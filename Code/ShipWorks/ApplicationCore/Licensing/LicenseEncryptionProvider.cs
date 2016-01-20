@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -8,7 +11,10 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class LicenseEncryptionProvider : IEncryptionProvider
     {
-        private readonly IDatabaseIdentifier databaseID;
+        private readonly byte[] key;
+        private readonly byte[] iv;
+        readonly UTF8Encoding byteTransform = new UTF8Encoding();
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
@@ -16,15 +22,25 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="databaseID">The database identifier.</param>
         public LicenseEncryptionProvider(IDatabaseIdentifier databaseID)
         {
-            this.databaseID = databaseID;
+            key = byteTransform.GetBytes(databaseID.Get().ToString());
+            iv = CreateIV();
+        }
+
+        private byte[] CreateIV()
+        {
+            byte[] bytes = {125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14};
+
+            return bytes;
         }
 
         /// <summary>
         /// Encrypts the given decrypted text.
         /// </summary>
-        public string Encrypt(string decryptedText)
-        {
-            return SecureText.Encrypt(decryptedText, databaseID.Get().ToString().ToUpperInvariant());
+        public string Encrypt(string plainText)
+       {
+            byte[] encryptedBytes = GetEncryptedBytes(plainText, key, iv);
+
+            return Encoding.UTF8.GetString(encryptedBytes);
         }
 
         /// <summary>
@@ -38,9 +54,58 @@ namespace ShipWorks.ApplicationCore.Licensing
                 throw new ShipWorksLicenseException("Cannot decrypt an empty string");
             }
 
+            byte[] encryptedBytes = byteTransform.GetBytes(encryptedText);
+
+            return GetDecryptedString(encryptedBytes, key, iv);
+        }
+
+        private byte[] GetEncryptedBytes(string plainText, byte[] key, byte[] iv)
+        {
+            byte[] plainBytes = byteTransform.GetBytes(plainText);
+
             try
             {
-                return SecureText.Decrypt(encryptedText, databaseID.Get().ToString().ToUpperInvariant());
+                AesManaged aes = new AesManaged
+                {
+                    Key = key,
+                    IV = iv
+                };
+
+                MemoryStream memStream = new MemoryStream();
+
+                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+
+                CryptoStream cryptoStream = new CryptoStream(memStream, encryptor, CryptoStreamMode.Write);
+
+                cryptoStream.Write(plainBytes, 0, plainBytes.Length);
+
+                return memStream.ToArray();
+            }
+            catch (Exception)
+            {
+                throw new Exception("Encryption error");
+            }
+        }
+
+        private string GetDecryptedString(byte[] encryptedText, byte[] key, byte[] iv)
+        {
+            try
+            {
+                MemoryStream memStream = new MemoryStream(encryptedText);
+
+                AesManaged aes = new AesManaged
+                {
+                    Key = key,
+                    IV = iv
+                };
+
+                ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+
+                CryptoStream cryptoStream = new CryptoStream(memStream, decryptor, CryptoStreamMode.Read);
+
+                StreamReader streamReader = new StreamReader(cryptoStream);
+
+                return streamReader.ReadToEnd();
             }
             catch (DatabaseIdentifierException ex)
             {

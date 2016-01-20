@@ -8,7 +8,7 @@
         /// <summary>
         /// Encrypts the given decrypted text.
         /// </summary>
-        string Encrypt(string decryptedText);
+        string Encrypt(string plainText);
 
         /// <summary>
         /// Decrypts the given encrypted text.
