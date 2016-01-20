@@ -345,7 +345,7 @@ namespace ShipWorks.Data.Administration
                             if (installed < new Version(4, 9, 0, 0))
                             {
                                 // Resolve a CustomerLicense passing in an empty string as the key parameter
-                                CustomerLicense customerLicense = IoC.UnsafeGlobalLifetimeScope.Resolve<CustomerLicense>(new TypedParameter(typeof(string), string.Empty));
+                                ICustomerLicense customerLicense = IoC.UnsafeGlobalLifetimeScope.Resolve<ICustomerLicense>(new TypedParameter(typeof(string), string.Empty));
 
                                 // Save the license
                                 customerLicense.Save();

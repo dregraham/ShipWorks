@@ -30,14 +30,22 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Decrypts the given encrypted text.
         /// </summary>
+        /// <exception cref="ShipWorksLicenseException"></exception>
         public string Decrypt(string encryptedText)
         {
             if (string.IsNullOrWhiteSpace(encryptedText))
             {
-                throw new ArgumentException("Cannot decrypt an empty string");
+                throw new ShipWorksLicenseException("Cannot decrypt an empty string");
             }
 
-            return SecureText.Decrypt(encryptedText, databaseID.Get().ToString().ToUpperInvariant());
+            try
+            {
+                return SecureText.Decrypt(encryptedText, databaseID.Get().ToString().ToUpperInvariant());
+            }
+            catch (DatabaseIdentifierException ex)
+            {
+                throw new ShipWorksLicenseException(ex.Message, ex);
+            }
         }
     }
 }

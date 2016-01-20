@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.ApplicationCore.Licensing
+﻿using System.Web.UI.WebControls;
+
+namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// License describes the capabilities of the customer's license.

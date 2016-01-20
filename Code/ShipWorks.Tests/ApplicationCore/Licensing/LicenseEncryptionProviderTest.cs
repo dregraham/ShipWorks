@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         [Fact]
         public void Decrypt_ThrowsArgumentException_WhenGivenEmptyString_Test()
         {
-            Assert.Throws<ArgumentException>(() => testObject.Decrypt(""));
+            Assert.Throws<ShipWorksLicenseException>(() => testObject.Decrypt(""));
         }
     }
 }
