@@ -10,6 +10,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 using System;
 using Interapptive.Shared;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -58,7 +59,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, amazonOrder);
 
-            GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
+            IAmazonMwsWebClientSettings settings = settingsFactory.Create(shipment.Amazon);
+
+            if (string.IsNullOrWhiteSpace(settings.Credentials.MerchantID) || string.IsNullOrWhiteSpace(settings.Credentials.AuthToken))
+            {
+                throw new AmazonShippingException("Please go to store settings and enter your Amazon SellerId and AuthToken.");
+            }
+
+            GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settings);
 
             RateGroup rateGroup = GetRateGroupFromResponse(response);
 

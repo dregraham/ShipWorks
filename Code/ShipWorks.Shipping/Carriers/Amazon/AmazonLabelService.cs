@@ -16,6 +16,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using Interapptive.Shared;
 using log4net;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             orderManager.PopulateOrderDetails(shipment);
-            AmazonOrderEntity order = shipment.Order as AmazonOrderEntity;
+            IAmazonOrder order = shipment.Order as IAmazonOrder;
             if (order == null)
             {
                 throw new ShippingException("Amazon shipping can only be used for Amazon orders");
@@ -153,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Converts Ppf to Cropped label image
+        /// Converts Pdf to Cropped label image
         /// </summary>
         private bool SavePdfLabel(PdfDocument pdf, long shipmentID)
         {
