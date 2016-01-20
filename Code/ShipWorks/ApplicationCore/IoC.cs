@@ -124,6 +124,9 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<LicenseEncryptionProvider>()
+                .AsImplementedInterfaces();
+
             current = builder.Build();
         }
     }
