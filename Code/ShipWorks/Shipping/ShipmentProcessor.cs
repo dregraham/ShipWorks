@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -64,7 +65,11 @@ namespace ShipWorks.Shipping
         /// <param name="chosenRate">Rate that was chosen to use, if there was any</param>
         /// <param name="counterRateCarrierConfiguredWhileProcessing">Execute after a counter rate carrier was configured</param>
         /// <returns></returns>
-        public Task<IEnumerable<ProcessShipmentResult>> Process(IEnumerable<ShipmentEntity> shipments, ICarrierConfigurationShipmentRefresher shipmentRefresher, RateResult chosenRate, Action counterRateCarrierConfiguredWhileProcessing)
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
+        public Task<IEnumerable<ProcessShipmentResult>> Process(IEnumerable<ShipmentEntity> shipments,
+            ICarrierConfigurationShipmentRefresher shipmentRefresher,
+            RateResult chosenRate, Action counterRateCarrierConfiguredWhileProcessing)
         {
             owner = ownerRetriever();
 

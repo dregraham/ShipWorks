@@ -1,11 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
-using System;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
@@ -24,13 +25,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// <summary>
         /// Serialization constructor
         /// </summary>
-        protected UpsOpenAccountSoapException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+        protected UpsOpenAccountSoapException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
             base(serializationInfo, streamingContext)
         { }
 
         /// <summary>
-        /// Extract the numeric errror code from the USPS exception
+        /// Extract the numeric error code from the USPS exception
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static string ParseException(SoapException ex)
         {
             string message = "";
@@ -58,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                     {
                         if (messageNode != null)
                         {
-                            string text = (string)messageNode;
+                            string text = (string) messageNode;
 
                             text = Regex.Replace(text, "@.*?'", "'", RegexOptions.Singleline);
                             text = Regex.Replace(text, "@.*?$", "", RegexOptions.Singleline);
@@ -80,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                 }
             }
 
-            // If its blank, fallback to the exception message
+            // If its blank, fall back to the exception message
             if (string.IsNullOrEmpty(message))
             {
                 message = ex.Message;

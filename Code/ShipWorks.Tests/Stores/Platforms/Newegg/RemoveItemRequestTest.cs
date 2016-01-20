@@ -1,13 +1,14 @@
-﻿using Xunit;
-using System.Collections.Generic;
-using ShipWorks.Stores.Platforms.Newegg;
-using ShipWorks.Stores.Platforms.Newegg.Net;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 using Interapptive.Shared.Net;
+using ShipWorks.Stores.Platforms.Newegg;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
+using ShipWorks.Stores.Platforms.Newegg.Net;
+using ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
-using ShipWorks.Stores.Platforms.Newegg.Enums;
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
@@ -123,8 +124,8 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
 
             // Since we configured our request with a mocked Newegg request we can inspect
-            // the data/configuration of the request 
-            Assert.Equal(HttpVerb.Put, ((Mocked.MockedNeweggRequest)successfulRequest).Method);
+            // the data/configuration of the request
+            Assert.Equal(HttpVerb.Put, ((Mocked.MockedNeweggRequest) successfulRequest).Method);
         }
 
         [Fact]
@@ -136,35 +137,22 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
 
             // Since we configured our request with a mocked Newegg request we can inspect
-            // the data/configuration of the request 
-            Assert.Equal(expectedUrl, ((Mocked.MockedNeweggRequest)successfulRequest).Url);
+            // the data/configuration of the request
+            Assert.Equal(expectedUrl, ((Mocked.MockedNeweggRequest) successfulRequest).Url);
         }
 
         [Fact]
         public void RemoveItems_BuildsRequestBody_WithSellerPartNumbersOfItemsToRemove_Test()
         {
-            // Note: this is brittle as it requires the string to be in the exact same
-            // format as that in the implementation. Look into incorporating XmlDiff 
-            // to compare the two XML documents
             testObject = new RemoveItemRequest(credentials, successfulRequest);
-            string expectedRequestBody = string.Format(@"<NeweggAPIRequest>
-                      <OperationType>KillItemRequest</OperationType>
-                      <RequestBody>
-                        <KillItem>
-                          <Order>
-                            <ItemList><Item><SellerPartNumber>{0}</SellerPartNumber></Item>
-                            </ItemList>
-                          </Order>
-                        </KillItem>
-                      </RequestBody>
-                    </NeweggAPIRequest>", sellerPartNumberToRemove);
-
 
             testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
 
-            // Since we configured our request with a mocked Newegg request we can inspect
-            // the data/configuration of the request 
-            Assert.Equal(0, string.Compare(expectedRequestBody, ((Mocked.MockedNeweggRequest)successfulRequest).Body.Trim()));
+            XDocument requestDocument = XDocument.Parse(((Mocked.MockedNeweggRequest) successfulRequest).Body);
+            var request = requestDocument.Descendants("NeweggAPIRequest").First();
+
+            Assert.Equal("KillItemRequest", request.Element("OperationType").Value);
+            Assert.Equal(sellerPartNumberToRemove, request.Descendants("SellerPartNumber").Single().Value);
         }
     }
 }

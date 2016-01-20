@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Diagnostics;
 using Moq;
-using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Common.Threading;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Population;
+using ShipWorks.Startup;
+using ShipWorks.Tests.Shared.Database;
 using Xunit;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
 {
+    [Collection("Database collection")]
     public class ShipSenseLoaderTest
     {
         private ShipSenseLoader testObject;
+        private readonly DataContext context;
 
-        private readonly Mock<ExecutionMode> executionMode;
-        private readonly Mock<IProgressReporter> progressReporter;
-
-        public ShipSenseLoaderTest()
+        public ShipSenseLoaderTest(DatabaseFixture db)
         {
-            executionMode = new Mock<ExecutionMode>();
-            executionMode.Setup(m => m.IsUISupported).Returns(true);
-
-            progressReporter = new Mock<IProgressReporter>();
-
-            var initializer = new ShipWorksInitializer(executionMode.Object, null);
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
         }
 
         [Fact]
@@ -36,7 +31,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
             Stopwatch stopWatch = new Stopwatch();
             using (ShipSenseLoaderGateway gateway = new ShipSenseLoaderGateway(new Knowledgebase()))
             {
-                testObject = new ShipSenseLoader(progressReporter.Object, gateway);
+                testObject = new ShipSenseLoader(new Mock<IProgressReporter>().Object, gateway);
 
                 stopWatch.Start();
                 testObject.LoadData();

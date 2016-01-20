@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Core;
+using Interapptive.Shared;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.AddressValidation;
@@ -55,6 +56,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static IContainer Initialize(IContainer container, params Assembly[] assemblies)
         {
             var builder = new ContainerBuilder();

@@ -347,9 +347,15 @@ namespace ShipWorks.Shipping.Settings
                 ExcludedPackageTypeRepository excludedPackageTypeRepository = new ExcludedPackageTypeRepository();
                 excludedPackageTypeRepository.Save(excludedPackages);
 
+                bool wasDirty = settings.IsDirty;
                 ShippingSettings.Save(settings);
 
                 adapter.Commit();
+
+                if (wasDirty)
+                {
+                    Messenger.Current.Send(new ShippingSettingsChangedMessage(this, settings));
+                }
             }
         }
 
