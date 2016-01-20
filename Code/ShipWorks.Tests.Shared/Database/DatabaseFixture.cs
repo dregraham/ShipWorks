@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
@@ -40,7 +41,12 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         public DatabaseFixture()
         {
-            string databaseName = "ShipWorks_Shipping_Tests_Integration";
+            string databaseName = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Select(x => x.GetName().Name)
+                .FirstOrDefault(x => x.Contains("Integration") && x.Contains("ShipWorks"))
+                .Replace(".", "_");
+
             executionModeScope = new ExecutionModeScope(new TestExecutionMode());
 
             checkpoint = new Checkpoint();
