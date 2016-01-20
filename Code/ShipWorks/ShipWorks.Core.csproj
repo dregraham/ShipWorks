@@ -607,6 +607,7 @@
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilities.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseService.cs" />
     <Compile Include="ApplicationCore\Licensing\LogOnRestrictionLevel.cs" />
     <Compile Include="ApplicationCore\Licensing\StoreLicense.cs" />
