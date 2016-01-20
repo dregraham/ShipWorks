@@ -9046,7 +9046,7 @@
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EmailAccounts.estimate.sql" />
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EmailAccounts.sql" />
     <None Include="Resources\sw_cubes_32x32.png" />
-    <None Include="Resources\InfoTip.png" />
+    <Resource Include="Resources\InfoTip.png" />
     <Resource Include="Resources\check.png" />
     <None Include="Resources\information.png" />
     <EmbeddedResource Include="ApplicationCore\Options\OptionPageLogging.resx">
@@ -10696,6 +10696,8 @@
     <None Include="Resources\house.png" />
     <None Include="Resources\island.jpg" />
     <None Include="Resources\island.png" />
+    <Content Include="Resources\info.png" />
+    <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

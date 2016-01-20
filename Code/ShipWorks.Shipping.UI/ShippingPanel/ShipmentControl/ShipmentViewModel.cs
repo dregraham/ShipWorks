@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             SelectedPackageAdapter = PackageAdapters.FirstOrDefault();
 
-            InsuranceViewModel.Load(PackageAdapters, SelectedPackageAdapter);
+            InsuranceViewModel.Load(PackageAdapters, SelectedPackageAdapter, shipmentAdapter);
 
             UpdateSelectedDimensionsProfile();
 

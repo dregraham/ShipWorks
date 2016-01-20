@@ -5,10 +5,13 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reflection;
 using System.Text;
+using System.Windows;
+using GalaSoft.MvvmLight.Command;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -19,12 +22,24 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     {
         private readonly PropertyChangedHandler handler;
         private readonly IShippingManager shippingManager;
+        private readonly IShippingSettings shippingSettings;
         private IPackageAdapter selectedPackageAdapter;
         private IEnumerable<IPackageAdapter> packageAdapters;
         private IInsuranceChoice insuranceChoice;
+        private ICarrierShipmentAdapter shipmentAdapter;
         private string insuranceLabelDisplayText;
         private string insuranceTypeLabelDisplayText;
         private string insuranceValueLabelDisplayText;
+        
+        /// <summary>
+        /// Shipment adapter
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICarrierShipmentAdapter ShipmentAdapter
+        {
+            get { return shipmentAdapter; }
+            set { handler.Set(nameof(ShipmentAdapter), ref shipmentAdapter, value, true); }
+        }
 
         /// <summary>
         /// Shipment selected package adapter
@@ -98,6 +113,106 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             get { return insuranceValueLabelDisplayText; }
             set { handler.Set(nameof(InsuranceValueLabelDisplayText), ref insuranceValueLabelDisplayText, value, true); }
         }
+
+        
+        private string insuranceInfoTipCaptionText;
+        /// <summary>
+        /// Sets the insurance caption text
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string InsuranceInfoTipCaptionText
+        {
+            get { return insuranceInfoTipCaptionText; }
+            set { handler.Set(nameof(InsuranceInfoTipCaptionText), ref insuranceInfoTipCaptionText, value); }
+        }
+
+
+        private string insuranceCostDisplayText;
+        /// <summary>
+        /// Sets the insurance cost label text
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string InsuranceCostDisplayText
+        {
+            get { return insuranceCostDisplayText; }
+            set { handler.Set(nameof(InsuranceCostDisplayText), ref insuranceCostDisplayText, value); }
+        }
+
+        private string insuranceInfoTipDisplayText;
+        /// <summary>
+        /// Sets the insurance type label text value
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string InsuranceInfoTipDisplayText
+        {
+            get { return insuranceInfoTipDisplayText; }
+            set { handler.Set(nameof(InsuranceInfoTipDisplayText), ref insuranceInfoTipDisplayText, value); }
+        }
+
+        private string insuranceLinkDisplayText;
+        /// <summary>
+        /// Sets the insurance cost label text
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string InsuranceLinkDisplayText
+        {
+            get { return insuranceLinkDisplayText; }
+            set { handler.Set(nameof(InsuranceLinkDisplayText), ref insuranceLinkDisplayText, value); }
+        }
+
+        private object insuranceLinkTag;
+        /// <summary>
+        /// Sets the insurance link tag
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public object InsuranceLinkTag
+        {
+            get { return insuranceLinkTag; }
+            set { handler.Set(nameof(InsuranceLinkTag), ref insuranceLinkTag, value); }
+        }
+
+        private Visibility infoTipVisibility;
+        /// <summary>
+        /// Sets the visibility of the InfoTip
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Visibility InfoTipVisibility
+        {
+            get { return infoTipVisibility; }
+            set { handler.Set(nameof(InfoTipVisibility), ref infoTipVisibility, value); }
+        }
+
+        private Visibility costVisibility;
+        /// <summary>
+        /// Sets the visibility of the cost
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Visibility CostVisibility
+        {
+            get { return costVisibility; }
+            set { handler.Set(nameof(CostVisibility), ref costVisibility, value); }
+        }
+
+        private Visibility linkVisibility;
+        /// <summary>
+        /// Sets the visibility of the cost
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Visibility LinkVisibility
+        {
+            get { return linkVisibility; }
+            set { handler.Set(nameof(LinkVisibility), ref linkVisibility, value); }
+        }
+
+
+        /// <summary>
+        /// RelayCommand for showing the insurance promo dialog
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public RelayCommand ShowInsurancePromoDialogCommand => new RelayCommand(ShowInsurancePromoDialog);
+
+
+
 
         /// <summary>
         /// Are all the insurance shipments FedEx?

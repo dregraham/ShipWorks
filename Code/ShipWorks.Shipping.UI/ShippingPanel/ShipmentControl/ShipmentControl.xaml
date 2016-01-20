@@ -7,6 +7,7 @@
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:insurancePromoControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.InsurancePromoControl"
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -240,6 +241,8 @@
                          Text="{Binding InsuranceViewModel.InsuranceChoice.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat=c, FallbackValue='50.50', 
                          Converter={StaticResource EmptyMoney},
                          TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+
+                <insurancePromoControl:InsurancePromoControl  DataContext="{Binding Path=InsuranceViewModel, Mode=OneWay}"/>
             </StackPanel>
         </Grid>
     </StackPanel>

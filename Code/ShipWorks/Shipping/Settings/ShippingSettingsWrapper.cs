@@ -49,5 +49,10 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public void InitializeForCurrentDatabase(ExecutionMode executionMode) =>
             ShippingSettings.InitializeForCurrentDatabase();
+
+        /// <summary>
+        /// Save the current shipping settings
+        /// </summary>
+        public void Save(ShippingSettingsEntity shippingSettings) => ShippingSettings.Save(shippingSettings);
     }
 }
