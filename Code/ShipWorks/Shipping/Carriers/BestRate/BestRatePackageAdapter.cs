@@ -170,6 +170,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Update the insurance fields on the package
+        /// </summary>
+        public void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            // Nothing to do here since they only have ShipWorks insurance as an option
+        }
+
+        /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         public string HashCode()

@@ -190,6 +190,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Update the insurance fields on the package
+        /// </summary>
+        public void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            shipment.InsuranceProvider = shippingSettings.UspsInsuranceProvider;
+            InsuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Postal, null);
+        }
+
+        /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         public string HashCode()

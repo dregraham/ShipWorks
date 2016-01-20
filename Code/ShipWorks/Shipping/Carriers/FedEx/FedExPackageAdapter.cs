@@ -213,6 +213,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Update the insurance fields on the package
+        /// </summary>
+        public void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            // If there is more than one package, only declared value is allowed, so just return.
+            if (shipmentEntity.FedEx.Packages.Count > 1)
+            {
+                return;
+            }
+
+            if (shipmentEntity.InsuranceProvider != shippingSettings.FedExInsuranceProvider)
+            {
+                shipmentEntity.InsuranceProvider = shippingSettings.FedExInsuranceProvider;
+            }
+
+            if (packageEntity.InsurancePennyOne != shippingSettings.FedExInsurancePennyOne)
+            {
+                packageEntity.InsurancePennyOne = shippingSettings.FedExInsurancePennyOne;
+            }
+
+            InsuranceChoice = new InsuranceChoice(shipmentEntity, packageEntity, packageEntity, packageEntity);
+        }
+
+        /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         public string HashCode()

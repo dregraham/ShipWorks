@@ -83,5 +83,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             return GetPackageAdapters();
         }
+
+        /// <summary>
+        /// Update the insurance fields on the shipment and packages
+        /// </summary>
+        public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            // If there is more than one package, only declared value is allowed, so just return.
+            if (Shipment.FedEx.Packages.Count() > 1)
+            {
+                return;
+            }
+
+            if (Shipment.InsuranceProvider != shippingSettings.FedExInsuranceProvider)
+            {
+                Shipment.InsuranceProvider = shippingSettings.FedExInsuranceProvider;
+            }
+
+            foreach (FedExPackageEntity packageEntity in Shipment.FedEx.Packages)
+            {
+                if (packageEntity.InsurancePennyOne != shippingSettings.FedExInsurancePennyOne)
+                {
+                    packageEntity.InsurancePennyOne = shippingSettings.FedExInsurancePennyOne;
+                }
+            }
+        }
     }
 }

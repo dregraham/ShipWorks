@@ -192,6 +192,30 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
+        /// Update the insurance fields on the package
+        /// </summary>
+        public void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            // If there is more than one package, only declared value is allowed, so just return.
+            if (shipmentEntity.IParcel.Packages.Count > 1)
+            {
+                return;
+            }
+
+            if (shipmentEntity.InsuranceProvider != shippingSettings.IParcelInsuranceProvider)
+            {
+                shipmentEntity.InsuranceProvider = shippingSettings.IParcelInsuranceProvider;
+            }
+
+            if (packageEntity.InsurancePennyOne != shippingSettings.IParcelInsurancePennyOne)
+            {
+                packageEntity.InsurancePennyOne = shippingSettings.IParcelInsurancePennyOne;
+            }
+
+            InsuranceChoice = new InsuranceChoice(shipmentEntity, packageEntity, packageEntity, packageEntity);
+        }
+
+        /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         public string HashCode()

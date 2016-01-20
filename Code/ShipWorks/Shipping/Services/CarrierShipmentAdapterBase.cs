@@ -247,5 +247,10 @@ namespace ShipWorks.Shipping.Services
         {
             get { return !shipmentType.IsDomestic(shipment); }
         }
+
+        /// <summary>
+        /// Update the insurance fields on the shipment and packages
+        /// </summary>
+        public abstract void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings);
     }
 }

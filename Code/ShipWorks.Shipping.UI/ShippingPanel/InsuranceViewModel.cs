@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     /// <summary>
     /// View model for displaying and saving shipment insurance information
     /// </summary>
-    public partial class InsuranceViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
+    public partial class InsuranceViewModel : IInsuranceViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -31,21 +31,23 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Constructor
         /// </summary>
-        public InsuranceViewModel(IShippingManager shippingManager, IShippingSettings shippingSettings) : this()
+        public InsuranceViewModel(IShippingManager shippingManager, IShippingSettings shippingSettings, IInsuranceUtility insuranceUtility) : this()
         {
             this.shippingManager = shippingManager;
             this.shippingSettings = shippingSettings;
+            this.insuranceUtility = insuranceUtility;
         }
 
         /// <summary>
         /// Load based on package adapters for a shipment
         /// </summary>
-        public void Load(IEnumerable<IPackageAdapter> currentPackageAdapters, IPackageAdapter currentPackageAdapter, ICarrierShipmentAdapter shipmentAdapter)
+        public void Load(IEnumerable<IPackageAdapter> currentPackageAdapters, IPackageAdapter currentPackageAdapter, ICarrierShipmentAdapter currentShipmentAdapter)
         {
+            ShipmentAdapter = currentShipmentAdapter;
             PackageAdapters = currentPackageAdapters;
             SelectedPackageAdapter = currentPackageAdapter;
             InsuranceChoice = SelectedPackageAdapter.InsuranceChoice;
-            ShipmentAdapter = shipmentAdapter;
+            InsuranceValue = InsuranceChoice.InsuranceValue;
 
             UpdateCostDisplay();
         }
@@ -64,7 +66,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             // Get the cost 
-            InsuranceCost cost = InsuranceUtility.GetInsuranceCost(shipmentAdapter.Shipment, InsuranceChoice.InsuranceValue);
+            InsuranceCost cost = insuranceUtility.GetInsuranceCost(shipmentAdapter.Shipment, InsuranceChoice.InsuranceValue);
 
             if (InsuranceChoice.InsuranceProvider != InsuranceProvider.ShipWorks)
             {
@@ -175,43 +177,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void ShowInsurancePennyOneDialog()
         {
-            var shipmentTypeCode = (ShipmentTypeCode) InsuranceLinkTag;
-
-            using (InsurancePennyOneDlg dlg = new InsurancePennyOneDlg(ShippingManager.GetCarrierName(shipmentTypeCode), true))
-            {
-                dlg.ShowDialog();
-
-                if (dlg.PennyOne)
-                {
-                    ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-                    if (ShipmentTypeManager.IsFedEx(shipmentTypeCode))
-                    {
-                        settings.FedExInsurancePennyOne = true;
-                    }
-                    else if (ShipmentTypeManager.IsUps(shipmentTypeCode))
-                    {
-                        settings.UpsInsurancePennyOne = true;
-                    }
-                    else if (shipmentTypeCode == ShipmentTypeCode.OnTrac)
-                    {
-                        settings.OnTracInsurancePennyOne = true;
-                    }
-                    else if (shipmentTypeCode == ShipmentTypeCode.iParcel)
-                    {
-                        settings.IParcelInsurancePennyOne = true;
-                    }
-                    else
-                    {
-                        throw new ArgumentOutOfRangeException("linkSavings.Tag", shipmentTypeCode,
-                            "Invalid ShipmentTypeCode for PennyOne Insurance");
-                    }
-
-                    ShippingSettings.Save(settings);
-
-                    InsuranceChoice.InsurancePennyOne = true;
-                }
-            }
+            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) InsuranceLinkTag;
+            insuranceUtility.ShowInsurancePennyOneDlg(shipmentTypeCode);
         }
 
         /// <summary>
@@ -220,51 +187,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private void ShowInsuranceBenefitsDialog()
         {
             ShipmentEntity shipment = ShipmentAdapter.Shipment;
-            InsuranceCost cost = (InsuranceCost) InsuranceLinkTag;
+            InsuranceCost insuranceCost = (InsuranceCost) InsuranceLinkTag;
 
-            using (InsuranceBenefitsDlg dlg = new InsuranceBenefitsDlg(cost, shipment.InsuranceProvider != (int) InsuranceProvider.ShipWorks))
-            {
-                dlg.ShowDialog();
-
-                if (dlg.ShipWorksInsuranceEnabled)
-                {
-                    ShippingSettingsEntity settings = shippingSettings.Fetch();
-
-                    ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
-
-                    if (ShipmentTypeManager.IsFedEx(shipmentType))
-                    {
-                        settings.FedExInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-                    }
-                    else if (ShipmentTypeManager.IsUps(shipmentType))
-                    {
-                        settings.UpsInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-                    }
-                    else if (shipmentType == ShipmentTypeCode.OnTrac)
-                    {
-                        settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-                    }
-                    else if (shipmentType == ShipmentTypeCode.iParcel)
-                    {
-                        settings.IParcelInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-                    }
-                    else if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
-                    {
-                        settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("Invalid ShipmentType unhandled in savings link: " +
-                                                            shipment.ShipmentType);
-                    }
-
-                    shippingSettings.Save(settings);
-
-                    // We also need to update the shipment to reflect the change, so that the UI picks it up on the reload
-                    InsuranceChoice.Shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
-                    handler.Set(nameof(InsuranceChoice), ref insuranceChoice, insuranceChoice, true);
-                }
-            }
+            insuranceUtility.ShowInsuranceBenefitsDlg(shipment, insuranceCost);
         }
 
         /// <summary>

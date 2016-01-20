@@ -71,5 +71,13 @@ namespace ShipWorks.Shipping.Carriers.None
         {
             return GetPackageAdapters();
         }
+
+        /// <summary>
+        /// Update the insurance fields on the shipment and packages
+        /// </summary>
+        public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            
+        }
     }
 }

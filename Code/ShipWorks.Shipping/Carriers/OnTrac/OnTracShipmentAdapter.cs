@@ -68,5 +68,21 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// Are customs allowed?
         /// </summary>
         public override bool CustomsAllowed => false;
+
+        /// <summary>
+        /// Update the insurance fields on the shipment and packages
+        /// </summary>
+        public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            if (Shipment.InsuranceProvider != shippingSettings.OnTracInsuranceProvider)
+            {
+                Shipment.InsuranceProvider = shippingSettings.OnTracInsuranceProvider;
+            }
+
+            if (Shipment.OnTrac.InsurancePennyOne != shippingSettings.OnTracInsurancePennyOne)
+            {
+                Shipment.OnTrac.InsurancePennyOne = shippingSettings.OnTracInsurancePennyOne;
+            }
+        }
     }
 }

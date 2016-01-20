@@ -65,5 +65,10 @@ namespace ShipWorks.Shipping.Services
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         string HashCode();
+
+        /// <summary>
+        /// Update the insurance fields on the package
+        /// </summary>
+        void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings);
     }
 }

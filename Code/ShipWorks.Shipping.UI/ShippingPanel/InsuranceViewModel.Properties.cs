@@ -30,7 +30,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private string insuranceLabelDisplayText;
         private string insuranceTypeLabelDisplayText;
         private string insuranceValueLabelDisplayText;
-        
+        private decimal insuranceValue;
+        private IInsuranceUtility insuranceUtility;
+
         /// <summary>
         /// Shipment adapter
         /// </summary>
@@ -65,7 +67,22 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
-        /// Shipment selected package adapter
+        /// Shipment selected package adapter insurance value
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public decimal InsuranceValue
+        {
+            get { return insuranceValue; }
+            set
+            {
+                handler.Set(nameof(InsuranceValue), ref insuranceValue, value, true);
+                InsuranceChoice.InsuranceValue = insuranceValue;
+                UpdateCostDisplay();
+            }
+        }
+
+        /// <summary>
+        /// Shipment selected package adapter insurance choice
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IInsuranceChoice InsuranceChoice
@@ -203,7 +220,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             get { return linkVisibility; }
             set { handler.Set(nameof(LinkVisibility), ref linkVisibility, value); }
         }
-
 
         /// <summary>
         /// RelayCommand for showing the insurance promo dialog

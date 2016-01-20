@@ -65,5 +65,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             return GetPackageAdapters();
         }
+
+        /// <summary>
+        /// Update the insurance fields on the shipment and packages
+        /// </summary>
+        public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            
+        }
     }
 }

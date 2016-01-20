@@ -13,10 +13,10 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel Height="20" Orientation="Horizontal">
+    <StackPanel  Orientation="Horizontal">
         <Image Width="16" Height="16" Margin="0 0 0 0" 
                 Visibility="{Binding InfoTipVisibility, FallbackValue=Visible}"
-                VerticalAlignment="Bottom"
+                VerticalAlignment="Center"
                 Source="/ShipWorks.Core;component/Resources/InfoTip.png">
             <Image.ToolTip>
                 <ToolTip>
@@ -34,7 +34,7 @@
                             VerticalAlignment="Top"
                             Stretch="None"/>
 
-                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
                             <TextBlock Text="{Binding InsuranceInfoTipCaptionText}" FontWeight="Bold"></TextBlock>
                             <TextBlock Text="{Binding InsuranceInfoTipDisplayText}"></TextBlock>
                         </StackPanel>
@@ -43,11 +43,11 @@
             </Image.ToolTip>
         </Image>
 
-        <TextBlock Margin="5 0 0 0" 
+        <TextBlock Margin="5 0 0 0" VerticalAlignment="Center"
                         Visibility="{Binding CostVisibility, FallbackValue=Visible}"
                         Text="{Binding Path=InsuranceCostDisplayText, FallbackValue='$0.55'}"></TextBlock>
 
-        <Button Margin="5"
+        <Button Margin="5 0 0 0" VerticalAlignment="Center"
                 Visibility="{Binding LinkVisibility, FallbackValue=Visible}"
                 Content="{Binding Path=InsuranceLinkDisplayText, FallbackValue='$50.00'}"
                 Style="{StaticResource LinkButtonStyle}"
