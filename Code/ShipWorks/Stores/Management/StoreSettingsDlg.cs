@@ -25,8 +25,11 @@ using Interapptive.Shared.UI;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using System.Collections;
+using Autofac;
 using ShipWorks.AddressValidation.Enums;
 using Interapptive.Shared;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Management
 {
@@ -102,7 +105,7 @@ namespace ShipWorks.Stores.Management
         {
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
 
-            // Download policy 
+            // Download policy
             downloadPolicy = ComputerDownloadPolicy.Load(store);
 
             // Load the download policy choices and start listening for changes
@@ -133,6 +136,30 @@ namespace ShipWorks.Stores.Management
 
             // If the store is not enabled, we disable\hide certain settings
             UpdateStoreEnabledDisplay();
+
+            // Check whether or not to display license tab
+            CheckLicense(store);
+        }
+
+        /// <summary>
+        /// Checks the license to determine whether or not to display the license tab.
+        /// </summary>
+        /// <remarks>
+        /// If store license (legacy customer), display it.
+        /// If customer license (new customer), don't display it.
+        /// </remarks>
+        /// <param name="storeEntity">The store entity.</param>
+        private void CheckLicense(StoreEntity storeEntity)
+        {
+            LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
+
+            ILicense license = licenseService.GetLicense(storeEntity);
+
+            // If legacy customer or magic keys down, display license
+            if (!license.IsLegacy && !InterapptiveOnly.MagicKeysDown)
+            {
+                optionControl.Controls.Remove(optionPageLicense);
+            }
         }
 
         /// <summary>
@@ -313,7 +340,7 @@ namespace ShipWorks.Stores.Management
                                        currentSetting == AddressValidationStoreSettingType.ValidateAndNotify)
                                       && (newSetting == AddressValidationStoreSettingType.ManualValidationOnly ||
                                           newSetting == AddressValidationStoreSettingType.ValidationDisabled);
-            
+
             store.AddressValidationSetting = (int)addressValidationSetting.SelectedValue;
 
             return result;
@@ -514,7 +541,7 @@ namespace ShipWorks.Stores.Management
                     }
                 }
 
-                // Have to make sure our in-memory list of presets stays current.  The in-memory Stores list does not get updated at this point - 
+                // Have to make sure our in-memory list of presets stays current.  The in-memory Stores list does not get updated at this point -
                 // that happens only in the MainForm
                 StatusPresetManager.CheckForChanges();
 
