@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,10 +18,20 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
     {
         readonly AutoMock mock;
         readonly Subject<IShipWorksMessage> subject;
+        private readonly ShipmentEntity processedShipment;
+        private readonly Mock<ShippingPanelViewModel> viewModelMock;
 
         public ShipmentsProcessedPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            processedShipment = new ShipmentEntity { ShipmentID = 123 };
+            viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v =>
+            {
+                v.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 123 });
+            });
+
+            mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
 
             subject = new Subject<IShipWorksMessage>();
             mock.Provide<IObservable<IShipWorksMessage>>(subject);
@@ -29,11 +40,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_DoesNotCallPopulate_WhenMessageTypeIsntExpected()
         {
-            var viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v =>
-            {
-                v.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 123 });
-            });
-
             ShipmentsProcessedPipeline testObject = mock.Create<ShipmentsProcessedPipeline>();
             testObject.Register(viewModelMock.Object);
 
@@ -45,11 +51,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_DoesNotCallPopulate_WhenProcessedShipmentsAreNotInViewModel()
         {
-            var viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v =>
-            {
-                v.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 123 });
-            });
-
             ShipmentsProcessedPipeline testObject = mock.Create<ShipmentsProcessedPipeline>();
             testObject.Register(viewModelMock.Object);
 
@@ -62,12 +63,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_CallsPopulate_WithCarrierCreatedFromShipment()
         {
-            var processedShipment = new ShipmentEntity { ShipmentID = 123 };
-            var viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v =>
-            {
-                v.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 123 });
-            });
-
             var shipmentAdapter = mock.Create<ICarrierShipmentAdapter>();
 
             mock.Mock<ICarrierShipmentAdapterFactory>()
@@ -81,6 +76,24 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
                 new[] { new ProcessShipmentResult(processedShipment) }));
 
             viewModelMock.Verify(x => x.Populate(shipmentAdapter));
+        }
+
+        [Fact]
+        public void Register_ExecutesOnDispatcherThread_WhenProcessingIsFinished()
+        {
+            var scheduler = new TestSchedulerProvider();
+            mock.Provide<ISchedulerProvider>(scheduler);
+
+            ShipmentsProcessedPipeline testObject = mock.Create<ShipmentsProcessedPipeline>();
+            testObject.Register(viewModelMock.Object);
+
+            subject.OnNext(new ShipmentsProcessedMessage(this,
+                new[] { new ProcessShipmentResult(processedShipment) }));
+
+            scheduler.Dispatcher.AdvanceBy(1);
+
+            mock.Mock<ICarrierShipmentAdapterFactory>()
+                .Verify(x => x.Get(It.IsAny<ShipmentEntity>()));
         }
 
         public void Dispose()

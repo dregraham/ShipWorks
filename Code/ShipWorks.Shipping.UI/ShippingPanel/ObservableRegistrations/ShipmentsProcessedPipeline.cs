@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Services;
@@ -15,15 +16,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentsProcessedPipeline(IObservable<IShipWorksMessage> messageStream,
-            ICarrierShipmentAdapterFactory shipmentAdapterFactory)
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory,
+            ISchedulerProvider schedulerProvider)
         {
             this.messageStream = messageStream;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
+            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -34,6 +38,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             return messageStream.OfType<ShipmentsProcessedMessage>()
                 .Select(x => x.Shipments.FirstOrDefault(r => r.Shipment.ShipmentID == viewModel.Shipment.ShipmentID))
                 .Where(x => x.Shipment != null)
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .SubscribeWithRetry(x => HandleShipmentsProcessed(viewModel, x));
         }
 
