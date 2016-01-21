@@ -847,6 +847,12 @@
     <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
     <Compile Include="Shipping\IRatingService.cs" />
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
+    <Compile Include="Stores\Management\ActivationErrorWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Management\ActivationErrorWizardPage.Designer.cs">
+      <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
@@ -7870,6 +7876,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\EnumCheckboxControl.resx">
       <DependentUpon>EnumCheckboxControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Management\ActivationErrorWizardPage.resx">
+      <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.resx">
       <DependentUpon>ChannelAdvisorAmazonSettingsControl.cs</DependentUpon>
