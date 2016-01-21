@@ -40,6 +40,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Encrypt(string plainText)
         {
+            // AES can not encrypt empty strings. So when we get
+            // a legacy customer license, set the key to a fixed string,
+            // so that when we decrypt later, we know it is actually
+            // supposed to be an empty string.
             if (plainText.IsNullOrWhiteSpace())
             {
                 plainText = LegacyUserLicense;
@@ -61,6 +65,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             string decryptedText = GetDecryptedString(encryptedText);
 
+            // If we get the fixed legacy user string, we know it is
+            // a legacy customer. So return a blank license key.
             if (decryptedText.Equals(LegacyUserLicense))
             {
                 decryptedText = "";
