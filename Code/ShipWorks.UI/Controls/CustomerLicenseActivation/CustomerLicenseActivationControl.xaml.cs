@@ -13,15 +13,5 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         {
             InitializeComponent();
         }
-
-        /// <summary>
-        /// Opens hyperlink in default browser
-        /// </summary>
-        private void HyperlinkOnRequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-            e.Handled = true;
-        }
-
     }
 }
