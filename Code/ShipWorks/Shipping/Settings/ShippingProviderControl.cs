@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 using Autofac;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -18,6 +19,8 @@ namespace ShipWorks.Shipping.Settings
     /// </summary>
     public partial class ShippingProviderControl : UserControl
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(ShippingProviderControl));
+
         List<ShipmentType> activeShipmentTypes;
         private IDisposable carrierConfiguredToken;
         private readonly IShippingProviderRuleManager shippingProviderRuleManager;
@@ -181,12 +184,16 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
+            log.Info("Saving provider rules");
+
             settings.DefaultType = (int) (ShipmentTypeCode) shipmentTypeCombo.SelectedValue;
 
             foreach (ShippingProviderRuleControl ruleControl in panelMain.Controls)
             {
                 ruleControl.SaveSettings();
             }
+
+            log.Info("Provider rules saved");
         }
 
         /// <summary>

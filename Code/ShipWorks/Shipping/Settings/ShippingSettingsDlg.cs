@@ -326,9 +326,7 @@ namespace ShipWorks.Shipping.Settings
                          : ShipmentBlankPhoneOption.SpecifiedPhone);
                 settings.BlankPhoneNumber = blankPhone.Text;
 
-                log.Info("Saving provider rules");
                 providerRulesControl.SaveSettings(settings);
-                log.Info("Provider rules saved");
 
                 List<ExcludedServiceTypeEntity> excludedServices = new List<ExcludedServiceTypeEntity>();
                 List<ExcludedPackageTypeEntity> excludedPackages = new List<ExcludedPackageTypeEntity>();

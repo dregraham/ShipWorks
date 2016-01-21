@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="ShipWorks" Platform="DotNet">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
@@ -142,7 +142,8 @@
   <SourceFileRebasing FromPath="" ToPath="" />
   <PathVariables />
   <RuleFiles />
-  <ProjectRules AreActive="True" /><Queries>
+  <ProjectRules AreActive="True" />
+  <Queries>
     <Group Name="Code Quality" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types too big - critical</Name>
 warnif count > 0 from t in JustMyCode.Types where 
@@ -4234,7 +4235,7 @@ warnif count > 43 from  t in JustMyCode.Types where !t.ParentAssembly.Name.Conta
 
 select new { t, t.NbLinesOfCode }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreAttribute attributes reached</Name>
-warnif count > 19
+warnif count > 20
 
 from m in JustMyCode.Types.Where(m=> 
         m.HasAttribute("*.NDependIgnoreAttribute*") 
@@ -4278,4 +4279,5 @@ from m in JustMyCode.Methods.Where(m=>
 orderby m.FullName
 select new { m }]]></Query>
     </Group>
-  </Queries></NDepend>
+  </Queries>
+</NDepend>
