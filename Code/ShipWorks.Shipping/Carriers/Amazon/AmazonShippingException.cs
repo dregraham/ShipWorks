@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     case "shippingservicenotavailable":
                         return "The shipping service specified does not exist or is not available for the specified parameters (for example, Weight).";
                     case "resourcenotfound":
-                        return "The order specified cannot be found for your SellerId.";
+                        return "The resource specified (such as ShipmentId or AmazonOrderId) does not exist.";
                     default:
                         return message;
                 }
