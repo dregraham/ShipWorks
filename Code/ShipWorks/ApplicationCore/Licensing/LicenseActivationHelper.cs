@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
-using ShipWorks.ApplicationCore.Licensing.MessageBoxes;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
@@ -197,7 +196,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Check the account detail for validity and display any problems to the user
+        /// Check the account detail for validity and return message for the user.
         /// </summary>
         public static string GetActivationStateMessage(LicenseAccountDetail accountDetail)
         {
