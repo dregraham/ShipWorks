@@ -107,7 +107,7 @@
             this.linkiParcelRegistration.Name = "linkiParcelRegistration";
             this.linkiParcelRegistration.Size = new System.Drawing.Size(160, 13);
             this.linkiParcelRegistration.TabIndex = 2;
-            this.linkiParcelRegistration.Text = "www.i-parcel.com/contact.aspx";
+            this.linkiParcelRegistration.Text = "https://www.i-parcel.com/en/contact-us";
             this.linkiParcelRegistration.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.linkiParcelRegistration.Click += new System.EventHandler(this.OnClickRegistrationLink);
             // 
