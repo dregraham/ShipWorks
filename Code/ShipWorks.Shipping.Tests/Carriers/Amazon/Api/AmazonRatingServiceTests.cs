@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 using ShipWorks.Shipping.Carriers.Amazon;
 using Xunit;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 {
@@ -32,6 +33,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         [Fact]
         public void GetRates_ReturnsThreeRates_WhenApiResponseHasThreeServices()
         {
+            AmazonStoreEntity store = new AmazonStoreEntity
+            {
+                MerchantID = "123",
+                AuthToken = "123"
+            };
+
+            mock.Mock<IAmazonMwsWebClientSettingsFactory>()
+                .Setup(f => f.Create(It.IsAny<AmazonShipmentEntity>()))
+                .Returns(new AmazonMwsWebClientSettings(store as IAmazonCredentials));
+
             GetEligibleShippingServicesResponse response = ResponseWithServices(() => Enumerable.Range(1, 3)
                 .Select(x => new ShippingService { Rate = new Rate { Amount = x } }));
 
@@ -47,10 +58,58 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         }
 
         [Fact]
+        public void GetRates_ThrowsShippingException_WhenAuthTokenIsBlank()
+        {
+            AmazonStoreEntity store = new AmazonStoreEntity
+            {
+                MerchantID = "123",
+                AuthToken = ""
+            };
+
+            mock.Mock<IAmazonMwsWebClientSettingsFactory>()
+                .Setup(f => f.Create(It.IsAny<AmazonShipmentEntity>()))
+                .Returns(new AmazonMwsWebClientSettings(store as IAmazonCredentials));
+
+            AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+
+            AmazonShippingException ex = Assert.Throws<AmazonShippingException>(() => testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes)));
+            Assert.Equal("To ship this order, please go to Manage > Stores > Edit and enter your Amazon SellerID and AuthToken.", ex.Message);
+        }
+
+        [Fact]
+        public void GetRates_ThrowsShippingException_WhenMerchantIDIsBlank()
+        {
+            AmazonStoreEntity store = new AmazonStoreEntity
+            {
+                MerchantID = "",
+                AuthToken = "123"
+            };
+
+            mock.Mock<IAmazonMwsWebClientSettingsFactory>()
+                .Setup(f => f.Create(It.IsAny<AmazonShipmentEntity>()))
+                .Returns(new AmazonMwsWebClientSettings(store as IAmazonCredentials));
+
+            AmazonRatingService testObject = mock.Create<AmazonRatingService>();
+
+            AmazonShippingException ex = Assert.Throws<AmazonShippingException>(() => testObject.GetRates(SampleShipmentAmazonOrer(AmazonMwsIsPrime.Yes)));
+            Assert.Equal("To ship this order, please go to Manage > Stores > Edit and enter your Amazon SellerID and AuthToken.", ex.Message);
+        }
+
+        [Fact]
         public void GetRates_ReturnsNoRates_WhenApiReturnsOneServiceWithNullRate()
         {
-            GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService());
+            AmazonStoreEntity store = new AmazonStoreEntity
+            {
+                MerchantID = "123",
+                AuthToken = "123"
+            };
 
+            mock.Mock<IAmazonMwsWebClientSettingsFactory>()
+                .Setup(f => f.Create(It.IsAny<AmazonShipmentEntity>()))
+                .Returns(new AmazonMwsWebClientSettings(store as IAmazonCredentials));
+
+            GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService());
+            
             mock.Mock<IAmazonShippingWebClient>()
                     .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
                     .Returns(response);
@@ -70,6 +129,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 Rate = new Rate { Amount = 1 },
                 ShippingServiceName = null
             });
+
+            AmazonStoreEntity store = new AmazonStoreEntity
+            {
+                MerchantID = "123",
+                AuthToken = "123"
+            };
+
+            mock.Mock<IAmazonMwsWebClientSettingsFactory>()
+                .Setup(f => f.Create(It.IsAny<AmazonShipmentEntity>()))
+                .Returns(new AmazonMwsWebClientSettings(store as IAmazonCredentials));
 
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
@@ -94,6 +163,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 ShippingServiceOfferId = "Bar"
             });
 
+            AmazonStoreEntity store = new AmazonStoreEntity
+            {
+                MerchantID = "123",
+                AuthToken = "123"
+            };
+
+            mock.Mock<IAmazonMwsWebClientSettingsFactory>()
+                .Setup(f => f.Create(It.IsAny<AmazonShipmentEntity>()))
+                .Returns(new AmazonMwsWebClientSettings(store as IAmazonCredentials));
+
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
                 .Returns(response);
@@ -116,6 +195,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             List<string> tAndC2 = new List<string>() { "USPS" };
             GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
 
+            AmazonStoreEntity store = new AmazonStoreEntity
+            {
+                MerchantID = "123",
+                AuthToken = "123"
+            };
+
+            mock.Mock<IAmazonMwsWebClientSettingsFactory>()
+                .Setup(f => f.Create(It.IsAny<AmazonShipmentEntity>()))
+                .Returns(new AmazonMwsWebClientSettings(store as IAmazonCredentials));
+
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
                 .Returns(response);
@@ -134,6 +223,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             List<string> tAndC = new List<string>() { "FEDEX", "UPS" };
             List<string> tAndC2 = new List<string>() { "USPS" };
             GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
+
+            AmazonStoreEntity store = new AmazonStoreEntity
+            {
+                MerchantID = "123",
+                AuthToken = "123"
+            };
+
+            mock.Mock<IAmazonMwsWebClientSettingsFactory>()
+                .Setup(f => f.Create(It.IsAny<AmazonShipmentEntity>()))
+                .Returns(new AmazonMwsWebClientSettings(store as IAmazonCredentials));
 
             mock.Mock<IAmazonShippingWebClient>()
                 .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
@@ -180,6 +279,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 ShippingServiceId = "Foo",
                 ShippingServiceOfferId = "Bar"
             });
+
+            var store = new AmazonStoreEntity
+            {
+                MerchantID = "123",
+                AuthToken = "123"
+            };
+
+            mock.Mock<IAmazonMwsWebClientSettingsFactory>()
+                .Setup(f => f.Create(It.IsAny<AmazonShipmentEntity>()))
+                .Returns(new AmazonMwsWebClientSettings(store as IAmazonCredentials));
 
             mock.Mock<IAmazonRateGroupFilter>()
                 .Setup(x => x.Filter(It.IsAny<RateGroup>()))

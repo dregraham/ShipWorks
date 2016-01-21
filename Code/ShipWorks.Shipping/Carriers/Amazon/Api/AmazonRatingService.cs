@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             if (string.IsNullOrWhiteSpace(settings.Credentials.MerchantID) || string.IsNullOrWhiteSpace(settings.Credentials.AuthToken))
             {
-                throw new AmazonShippingException("Please go to store settings and enter your Amazon SellerId and AuthToken.");
+                throw new AmazonShippingException("To ship this order, please go to Manage > Stores > Edit and enter your Amazon SellerID and AuthToken.");
             }
 
             GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settings);
