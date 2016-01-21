@@ -29,6 +29,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         string Key { get; }
 
         /// <summary>
+        /// Is the license legacy
+        /// </summary>
+        bool IsLegacy { get; }
+
+        /// <summary>
         /// Activate a new store
         /// </summary>
         EnumResult<LicenseActivationState> Activate(StoreEntity store);
