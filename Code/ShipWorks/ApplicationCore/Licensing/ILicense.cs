@@ -1,4 +1,7 @@
-﻿namespace ShipWorks.ApplicationCore.Licensing
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+
+namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// License describes the capabilities of the customer's license.
@@ -24,5 +27,10 @@
         /// The license key
         /// </summary>
         string Key { get; }
+
+        /// <summary>
+        /// Activate a new store
+        /// </summary>
+        EnumResult<LicenseActivationState> Activate(StoreEntity store);
     }
 }

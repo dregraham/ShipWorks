@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -28,6 +29,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The license key
         /// </summary>
         public string Key { get; private set; }
+
+        public EnumResult<LicenseActivationState> Activate(StoreEntity store)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Reason the license is Disabled

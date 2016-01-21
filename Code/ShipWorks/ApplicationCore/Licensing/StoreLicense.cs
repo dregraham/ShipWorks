@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -33,6 +34,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// License key
         /// </summary>
         public string Key { get; }
+
+        public EnumResult<LicenseActivationState> Activate(StoreEntity store)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Refreshes store license data.
