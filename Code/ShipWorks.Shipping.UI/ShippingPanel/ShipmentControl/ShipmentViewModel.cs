@@ -184,6 +184,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void HandleShippingSettingsChangedMessage(ShippingSettingsChangedMessage message)
         {
+            if (shipmentAdapter.Shipment.Processed)
+            {
+                return;
+            }
+
             shipmentAdapter.UpdateInsuranceFields(message.ShippingSettings);
             foreach (var packageAdapter in PackageAdapters)
             {
