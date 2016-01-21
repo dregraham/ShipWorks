@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         public YahooResponse ValidateCredentials()
         {
-            return ProcessRequest(CreateSearchItemRangeRequest(1, 2, "keyword"), "GetItemRange");
+            return GetCustomOrderStatus(-1);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             string body = RequestBodyIntro + GetRequestBodyIntro +
                           "<CustomOrderStatusListQuery>" +
                           "<CustomQueryParams>" +
-                          "<StatusID>16</StatusID>" +
+                          $"<StatusID>{statusID}</StatusID>" +
                           "</CustomQueryParams>" +
                           "</CustomOrderStatusListQuery>" +
                           "</ResourceList>" +
