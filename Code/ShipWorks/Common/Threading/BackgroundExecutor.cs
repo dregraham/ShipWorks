@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
 
@@ -37,9 +38,6 @@ namespace ShipWorks.Common.Threading
         // Whether to delay showing the progress dialog
         private readonly bool delayProgressDialog;
 
-        // Flag to indicate the user of the executor knows that exceptions can occur and is prepared to handle them.
-        bool propagateException = false;
-
         #region class OperationState
 
         class OperationState<TState>
@@ -56,6 +54,9 @@ namespace ShipWorks.Common.Threading
             public ProgressItem WorkProgress;
 
             public ProgressDisplayDelayer DisplayDelayer;
+
+            public TaskCompletionSource<BackgroundExecutorCompletedEventArgs<T>> CompletionSource { get; internal set; }
+            public TaskScheduler Scheduler { get; internal set; }
         }
 
         #endregion
@@ -86,22 +87,10 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// The owner window for marshaling and progress window ownership
-        /// </summary>
-        public IWin32Window Owner
-        {
-            get { return owner; }
-        }
-
-        /// <summary>
         /// Indicates if an exception will be propagated to the ExecuteCompleted event.  If false, then the exception is left unhandled,
         /// and the app will likely crash.  Only set this to true if the hooked up ExecuteCompleted even is prepared to handle exceptions.
         /// </summary>
-        public bool PropagateException
-        {
-            get { return propagateException; }
-            set { propagateException = value; }
-        }
+        public bool PropagateException { get; set; }
 
         /// <summary>
         /// Execute the operation asynchronously using the given entity key collection
@@ -114,10 +103,8 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// Execute the operation asynchronously using the given item collection
         /// </summary>
-        public void ExecuteAsync(BackgroundExecutorCallback<T> worker, IEnumerable<T> items, object userState)
-        {
+        public Task<BackgroundExecutorCompletedEventArgs<T>> ExecuteAsync(BackgroundExecutorCallback<T> worker, IEnumerable<T> items, object userState) =>
             ExecuteAsync(null, worker, items, userState);
-        }
 
         /// <summary>
         /// Execute the operation asynchronously using the given entity key collection
@@ -138,7 +125,7 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// Execute the operation asynchronously using the given item collection
         /// </summary>
-        private void ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker, IEnumerable<T> items, object userState)
+        private Task<BackgroundExecutorCompletedEventArgs<T>> ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker, IEnumerable<T> items, object userState)
         {
             if (worker == null)
             {
@@ -182,6 +169,9 @@ namespace ShipWorks.Common.Threading
 
             ProgressDisplayDelayer delayer = new ProgressDisplayDelayer(progressDlg);
 
+            TaskCompletionSource<BackgroundExecutorCompletedEventArgs<T>> completionSource =
+                new TaskCompletionSource<BackgroundExecutorCompletedEventArgs<T>>();
+
             // Queue the work.  We copy the items to a new list so changes to the original IEnumerable don't affect us.
             ThreadPool.QueueUserWorkItem(
                 ExceptionMonitor.WrapWorkItem(InternalExecute, "working"),
@@ -194,13 +184,17 @@ namespace ShipWorks.Common.Threading
                     InitializerProgress = initializerProgress,
                     Worker = worker,
                     WorkProgress = workProgress,
-                    DisplayDelayer = delayer
+                    DisplayDelayer = delayer,
+                    CompletionSource = completionSource,
+                    Scheduler = TaskScheduler.FromCurrentSynchronizationContext()
                 });
 
             // Show the progress window only after a certain amount of time goes by
             // if configured to do so
             double delaySeconds = delayProgressDialog ? .25 : 0;
             delayer.ShowAfter(owner, TimeSpan.FromSeconds(delaySeconds));
+
+            return completionSource.Task;
         }
 
         /// <summary>
@@ -256,10 +250,7 @@ namespace ShipWorks.Common.Threading
                 workProgress.Starting();
 
                 // Raise the starting event, if there is listeners
-                if (ExecuteStarting != null)
-                {
-                    ExecuteStarting(this, EventArgs.Empty);
-                }
+                ExecuteStarting?.Invoke(this, EventArgs.Empty);
 
                 try
                 {
@@ -285,7 +276,7 @@ namespace ShipWorks.Common.Threading
                 }
                 catch (Exception ex)
                 {
-                    if (propagateException)
+                    if (PropagateException)
                     {
                         errorEx = ex;
                     }
@@ -299,43 +290,32 @@ namespace ShipWorks.Common.Threading
             // Handler for ExecuteCompleting
             if (errorEx == null)
             {
-                EventHandler handler = ExecuteCompleting;
-                if (handler != null)
+                try
                 {
-                    try
+                    ExecuteCompleting?.Invoke(this, EventArgs.Empty);
+                }
+                catch (Exception ex)
+                {
+                    if (PropagateException)
                     {
-                        handler(this, EventArgs.Empty);
+                        errorEx = ex;
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        if (propagateException)
-                        {
-                            errorEx = ex;
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        throw;
                     }
                 }
             }
 
-            // check for disposed owner
-            Control toInvokeOn = owner;
-            if (toInvokeOn.IsDisposed)
-            {
-                // Fall back to the main form to invoke the callback
-                toInvokeOn = Program.MainForm;
-            }
+            BackgroundExecutorCompletedEventArgs<T> eventArgs =
+                new BackgroundExecutorCompletedEventArgs<T>(operationState.WorkProgress.IsCancelRequested, issues, errorEx, operationState.UserState);
 
-            // make sure it still hasn't been disposed
-            if (!toInvokeOn.IsDisposed)
+            operationState.CompletionSource.Task.ContinueWith(x =>
             {
-                toInvokeOn.BeginInvoke(
-                    new MethodInvoker<BackgroundExecutorCompletedEventArgs<T>, ProgressDisplayDelayer>(OnExecuteCompleted),
-                    new BackgroundExecutorCompletedEventArgs<T>(operationState.WorkProgress.IsCancelRequested, issues, errorEx, operationState.UserState),
-                    operationState.DisplayDelayer);
-            }
+                OnExecuteCompleted(eventArgs, operationState.DisplayDelayer);
+            }, operationState.Scheduler);
+
+            operationState.CompletionSource.SetResult(eventArgs);
         }
 
         /// <summary>
@@ -345,10 +325,7 @@ namespace ShipWorks.Common.Threading
         {
             delayer.NotifyComplete();
 
-            if (ExecuteCompleted != null)
-            {
-                ExecuteCompleted(this, e);
-            }
+            ExecuteCompleted?.Invoke(this, e);
         }
     }
 }

@@ -973,11 +973,12 @@ namespace ShipWorks.Shipping
         /// Processes the shipment.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void ProcessShipment(long shipmentID, Dictionary<long, Exception> licenseCheckCache, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
+        public static void ProcessShipment(long shipmentID, IDictionary<long, Exception> licenseCheckCache, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
         {
             log.InfoFormat("Shipment {0}  - Process Start", shipmentID);
 
-            UserSession.Security.DemandPermission(PermissionType.ShipmentsCreateEditProcess, shipmentID);
+            lifetimeScope.Resolve<ISecurityContext>()
+                .DemandPermission(PermissionType.ShipmentsCreateEditProcess, shipmentID);
 
             try
             {
@@ -1069,7 +1070,7 @@ namespace ShipWorks.Shipping
         /// is validated, and processing results are logged to tango.
         /// </summary>
         [NDependIgnoreLongMethod]
-        private static void ProcessShipmentHelper(ShipmentEntity shipment, StoreEntity storeEntity, Dictionary<long, Exception> licenseCheckCache)
+        private static void ProcessShipmentHelper(ShipmentEntity shipment, StoreEntity storeEntity, IDictionary<long, Exception> licenseCheckCache)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
@@ -1088,7 +1089,7 @@ namespace ShipWorks.Shipping
                 // Make sure the type is setup - its possible it's not in the case of upgrading from V2
                 if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
                 {
-                    throw new ShippingException(String.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
+                    throw new ShippingException(string.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
                 }
 
                 // Validate that the license is valid
@@ -1170,6 +1171,7 @@ namespace ShipWorks.Shipping
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
+                    DateTime shipmentDate;
 
                     using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
@@ -1177,6 +1179,8 @@ namespace ShipWorks.Shipping
                             lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
 
                         labelService.Create(shipment);
+
+                        shipmentDate = lifetimeScope.Resolve<IDateTimeProvider>().UtcNow;
                     }
 
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
@@ -1199,7 +1203,7 @@ namespace ShipWorks.Shipping
                     }
 
                     shipment.Processed = true;
-                    shipment.ProcessedDate = DateTime.UtcNow;
+                    shipment.ProcessedDate = shipmentDate;
                     shipment.ProcessedUserID = UserSession.User.UserID;
                     shipment.ProcessedComputerID = UserSession.Computer.ComputerID;
 
@@ -1226,7 +1230,8 @@ namespace ShipWorks.Shipping
                 // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
                 if (!shipmentType.ProcessingCompletesExternally)
                 {
-                    shipment.OnlineShipmentID = TangoWebClient.LogShipment(storeEntity, shipment);
+                    shipment.OnlineShipmentID = new TangoWebClientFactory().CreateWebClient()
+                        .LogShipment(storeEntity, shipment);
 
                     log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
 
@@ -1290,28 +1295,10 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Clear specified shipment data if not relevant
-        /// </summary>
-        /// <param name="adapter">SqlAdapter that will be used to delete child shipment entities</param>
-        /// <param name="shipment">Shipment from which child shipment data will be deleted</param>
-        /// <param name="childShipmentType">Type of child shipment that should be deleted</param>
-        /// <param name="shipmentIdField">Field that specifies the ShipmentId for the child</param>
-        /// <param name="requiredForTypes">Delete this child shipment unless it is one of the specified types</param>
-        private static void ClearOtherShipmentData(IDataAccessAdapter adapter, ShipmentEntity shipment, Type childShipmentType, EntityField2 shipmentIdField, params ShipmentTypeCode[] requiredForTypes)
-        {
-            if (requiredForTypes.Contains((ShipmentTypeCode) shipment.ShipmentType))
-            {
-                return;
-            }
-
-            adapter.DeleteEntitiesDirectly(childShipmentType, new RelationPredicateBucket(shipmentIdField == shipment.ShipmentID));
-        }
-
-        /// <summary>
         /// Validate that the given store is licensed to ship.  If there is an error its stored in licenseCheckCache.  If there is already
         /// an error for the store in licenseCheckCache, then its reused and no trip to tango is taken.
         /// </summary>
-        private static void ValidateLicense(StoreEntity store, Dictionary<long, Exception> licenseCheckCache)
+        private static void ValidateLicense(StoreEntity store, IDictionary<long, Exception> licenseCheckCache)
         {
             long storeID = store.StoreID;
 
@@ -1418,7 +1405,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static string GetArrivalDescription(DateTime localArrival)
         {
-            return String.Format("({0} {1})", localArrival.DayOfWeek, localArrival.ToString("h:mm tt"));
+            return string.Format("({0} {1})", localArrival.DayOfWeek, localArrival.ToString("h:mm tt"));
         }
 
         /// <summary>

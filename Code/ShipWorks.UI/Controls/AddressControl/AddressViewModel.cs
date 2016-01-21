@@ -8,6 +8,7 @@ using System.Reflection;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.UI;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Core.UI;

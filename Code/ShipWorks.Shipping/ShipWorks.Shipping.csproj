@@ -203,6 +203,8 @@
     <Compile Include="Rating\RateSelectionFactory.cs" />
     <Compile Include="Services\ShipmentFactory.cs" />
     <Compile Include="Services\ShipmentLoaderService.cs" />
+    <Compile Include="Services\ShipmentProcessor.cs" />
+    <Compile Include="Services\ShipmentProcessorExecutionState.cs" />
     <Compile Include="Services\ShipmentProcessorService.cs" />
     <Compile Include="Services\ShipmentTypeManagerWrapper.cs" />
     <Compile Include="Services\ShipmentTypeProvider.cs" />

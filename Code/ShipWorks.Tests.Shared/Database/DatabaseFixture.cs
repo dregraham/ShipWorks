@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
@@ -40,7 +41,12 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         public DatabaseFixture()
         {
-            string databaseName = "ShipWorks_Shipping_Tests_Integration";
+            string databaseName = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Select(x => x.GetName().Name)
+                .FirstOrDefault(x => x.Contains("Integration") && x.Contains("ShipWorks"))
+                .Replace(".", "_");
+
             executionModeScope = new ExecutionModeScope(new TestExecutionMode());
 
             checkpoint = new Checkpoint();
@@ -86,11 +92,21 @@ namespace ShipWorks.Tests.Shared.Database
         /// <remarks>When this context is disposed, everything created inside it is rolled back.  Further,
         /// calling this method again will dispose the previous context.  This is because when a test results
         /// in an exception, the context may not be disposed properly in the test itself.</remarks>
-        public DataContext CreateDataContext(Action<IContainer> initializeContainer)
+        public DataContext CreateDataContext(Action<IContainer> initializeContainer) =>
+            CreateDataContext(initializeContainer, x => { });
+
+        /// <summary>
+        /// Create a data context for use in a test
+        /// </summary>
+        /// <remarks>When this context is disposed, everything created inside it is rolled back.  Further,
+        /// calling this method again will dispose the previous context.  This is because when a test results
+        /// in an exception, the context may not be disposed properly in the test itself.</remarks>
+        public DataContext CreateDataContext(Action<IContainer> initializeContainer, Action<AutoMock> configureMock)
         {
             AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             initializeContainer(mock.Container);
+            configureMock?.Invoke(mock);
 
             using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
             {

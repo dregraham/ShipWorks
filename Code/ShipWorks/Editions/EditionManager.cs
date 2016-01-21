@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using ShipWorks.Editions.Brown;
-using ShipWorks.Editions.Freemium;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
-using System.Diagnostics;
-using System.Configuration;
-using log4net;
-using ShipWorks.Stores;
-using ShipWorks.Data.Model.EntityClasses;
-using System.IO;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.ApplicationCore.Licensing;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Editions
 {
@@ -83,7 +75,7 @@ namespace ShipWorks.Editions
         private static void UpdateRestrictions(IEnumerable<StoreEntity> stores)
         {
             // Convert to a List so we can iterate it more than once.
-            List<StoreEntity> storeEntities = (List<StoreEntity>)(stores as IList<StoreEntity> ?? stores.ToList());
+            List<StoreEntity> storeEntities = (List<StoreEntity>) (stores as IList<StoreEntity> ?? stores.ToList());
 
             // If no stores were passed, like from Initalization, just return.
             if (!storeEntities.Any())
@@ -103,7 +95,7 @@ namespace ShipWorks.Editions
             // Now that we have the full list of restrictions, remove any registration restrictions if needed.
             restrictions = RemoveRestrictionIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, storeEntities);
 
-            // If there weren't any accounts for Endicia and registration was restricted, we disable the shipment type too.  So remove that restriction 
+            // If there weren't any accounts for Endicia and registration was restricted, we disable the shipment type too.  So remove that restriction
             // if needed.
             restrictions = RemoveRestrictionIfNeeded(EditionFeature.ShipmentType, ShipmentTypeCode.Endicia, restrictions, storeEntities);
 
@@ -120,8 +112,8 @@ namespace ShipWorks.Editions
         /// <summary>
         /// If the only feature restrictions are for trial stores, and no restrictions for non-trial stores exist,
         /// the user should be able to use the feature.
-        /// 
-        /// This will return an modified list of restrictions if only trial restrictions exist. 
+        ///
+        /// This will return an modified list of restrictions if only trial restrictions exist.
         /// </summary>
         public static List<EditionRestriction> RemoveRestrictionIfNeeded(EditionFeature editionFeature, object restrictionData, List<EditionRestriction> restrictions, List<StoreEntity> stores)
         {
@@ -148,11 +140,11 @@ namespace ShipWorks.Editions
         }
 
         /// <summary>
-        /// The current set of edition restrictions 
+        /// The current set of edition restrictions
         /// </summary>
         public static EditionRestrictionSet ActiveRestrictions
         {
-            get 
+            get
             {
                 lock (restrictionLock)
                 {
@@ -181,10 +173,10 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Update the given store to make sure it's set with the given edition data.  The store is not edited directly - any change is saved directly to the database.
         /// </summary>
-        public static bool UpdateStoreEdition(StoreEntity store, Edition edition)
+        public static bool UpdateStoreEdition(StoreEntity store, IEdition edition)
         {
             // See if the edition changed
-            string updatedEdition = EditionSerializer.Serialize(edition);
+            string updatedEdition = edition.Serialize();
             if (store.Edition != updatedEdition)
             {
                 StoreEntity prototype = new StoreEntity(store.StoreID) { IsNew = false };
@@ -206,7 +198,7 @@ namespace ShipWorks.Editions
         }
 
         /// <summary>
-        /// Return true if unrestricted on exit, or false if restricted. Shows the edition upgrade window if applicable.  
+        /// Return true if unrestricted on exit, or false if restricted. Shows the edition upgrade window if applicable.
         /// </summary>
         public static bool HandleRestrictionIssue(IWin32Window owner, EditionRestrictionIssue issue)
         {

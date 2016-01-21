@@ -22,7 +22,7 @@
     <xunit Assemblies="@(IntegrationAssemblies)"
       Xml="TestResults\integration.xml"
       IncludeTraits="$(IncludeTraits)"
-      ParallelizeAssemblies="false"
+      ParallelizeAssemblies="true"
       ParallelizeTestCollections="false" />
   </Target>
 
