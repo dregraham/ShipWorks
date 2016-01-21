@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -54,7 +56,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             ShipmentContentWeight = shipmentAdapter.ContentWeight;
 
             IPackageAdapter packageAdapter = shipmentAdapter.GetPackageAdapters().FirstOrDefault();
-            InsuranceViewModel.Load(new[] { packageAdapter }, packageAdapter);
+            InsuranceViewModel.Load(new[] { packageAdapter }, packageAdapter, shipmentAdapter);
 
             OtherShipmentEntity otherShipment = shipmentAdapter.Shipment.Other;
 
@@ -78,7 +80,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             shipmentAdapter.Shipment.ShipmentCost = Cost;
             shipmentAdapter.Shipment.TrackingNumber = TrackingNumber;
-
+            
             OtherShipmentEntity otherShipment = shipmentAdapter.Shipment.Other;
             Debug.Assert(otherShipment != null);
 

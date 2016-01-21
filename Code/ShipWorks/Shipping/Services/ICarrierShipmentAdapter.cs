@@ -92,5 +92,10 @@ namespace ShipWorks.Shipping.Services
         /// Are customs allowed?
         /// </summary>
         bool CustomsAllowed { get; }
+
+        /// <summary>
+        /// Update the insurance fields on the shipment
+        /// </summary>
+        void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings);
     }
 }

@@ -3,6 +3,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.ApplicationCode;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Rating;
@@ -57,7 +58,12 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<InsuranceUtilityWrapper>()
+                .AsImplementedInterfaces()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
+
             builder.RegisterType<InsuranceViewModel>()
+                .AsImplementedInterfaces()
                 .FindConstructorsWith(new NonDefaultConstructorFinder());
 
             builder.RegisterType<OrderSelectionChangedHandler>()

@@ -64,5 +64,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             return GetPackageAdapters();
         }
+
+        /// <summary>
+        /// Update the insurance fields on the shipment and packages
+        /// </summary>
+        public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            Shipment.InsuranceProvider = shippingSettings.EndiciaInsuranceProvider;
+        }
     }
 }

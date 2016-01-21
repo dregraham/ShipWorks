@@ -63,5 +63,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Other
         {
             return GetPackageAdapters();
         }
+
+        /// <summary>
+        /// Update the insurance fields on the shipment and packages
+        /// </summary>
+        public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            // Nothing to do as Other is only allowed to use ShipWorks insurance
+        }
     }
 }

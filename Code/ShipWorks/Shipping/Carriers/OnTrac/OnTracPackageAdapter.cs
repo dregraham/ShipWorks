@@ -191,6 +191,24 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Update the insurance fields on the package
+        /// </summary>
+        public void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            if (shipment.InsuranceProvider != shippingSettings.OnTracInsuranceProvider)
+            {
+                shipment.InsuranceProvider = shippingSettings.OnTracInsuranceProvider;
+            }
+
+            if (shipment.OnTrac.InsurancePennyOne != shippingSettings.OnTracInsurancePennyOne)
+            {
+                shipment.OnTrac.InsurancePennyOne = shippingSettings.OnTracInsurancePennyOne;
+            }
+
+            InsuranceChoice = new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac);
+        }
+
+        /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         public string HashCode()

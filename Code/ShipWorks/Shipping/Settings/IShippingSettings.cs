@@ -27,5 +27,10 @@ namespace ShipWorks.Shipping.Settings
         /// The list of shipment types that have been fully configured for use within ShipWorks
         /// </summary>
         IEnumerable<ShipmentTypeCode> GetConfiguredTypes();
+
+        /// <summary>
+        /// Save the current shipping settings
+        /// </summary>
+        void Save(ShippingSettingsEntity shippingSettings);
     }
 }
