@@ -3,18 +3,24 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using Interapptive.Shared.Utility;
+using Quartz.Util;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
-    /// Class for encrypting and decrypting license keys
+    /// Class for encrypting and decrypting customer license keys. Not necessarily a secure
+    /// implementation of AES, because the IV is not random. We mostly wanted to use AES to
+    /// move away from the SecureText class.
     /// </summary>
+    /// <remarks> We are encrypting the customer license key because for legacy customers,
+    /// this field will be empty in the database. Meaning a new customer could fake being
+    /// legacy by deleting the value. Since we are encrypting the key, even if it is empty,
+    /// it will appear to have a value.
+    /// </remarks>
     public class LicenseEncryptionProvider : IEncryptionProvider
     {
-        private readonly byte[] key;
-        private readonly byte[] iv;
-        readonly UTF8Encoding byteTransform = new UTF8Encoding();
-
+        private const string LegacyUserLicense = "ShipWorks legacy user";
+        private readonly AesManaged aes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
@@ -22,25 +28,24 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="databaseID">The database identifier.</param>
         public LicenseEncryptionProvider(IDatabaseIdentifier databaseID)
         {
-            key = byteTransform.GetBytes(databaseID.Get().ToString());
-            iv = CreateIV();
-        }
-
-        private byte[] CreateIV()
-        {
-            byte[] bytes = {125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14};
-
-            return bytes;
+            aes = new AesManaged()
+            {
+                Key = databaseID.Get().ToByteArray(),
+                IV = new byte[] { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 }
+            };
         }
 
         /// <summary>
-        /// Encrypts the given decrypted text.
+        /// Encrypts the given plain text.
         /// </summary>
         public string Encrypt(string plainText)
-       {
-            byte[] encryptedBytes = GetEncryptedBytes(plainText, key, iv);
+        {
+            if (plainText.IsNullOrWhiteSpace())
+            {
+                plainText = LegacyUserLicense;
+            }
 
-            return Encoding.UTF8.GetString(encryptedBytes);
+            return GetEncryptedString(plainText);
         }
 
         /// <summary>
@@ -49,67 +54,62 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <exception cref="ShipWorksLicenseException"></exception>
         public string Decrypt(string encryptedText)
         {
-            if (string.IsNullOrWhiteSpace(encryptedText))
+            if (encryptedText.IsNullOrWhiteSpace())
             {
                 throw new ShipWorksLicenseException("Cannot decrypt an empty string");
             }
 
-            byte[] encryptedBytes = byteTransform.GetBytes(encryptedText);
+            string decryptedText = GetDecryptedString(encryptedText);
 
-            return GetDecryptedString(encryptedBytes, key, iv);
+            if (decryptedText.Equals(LegacyUserLicense))
+            {
+                decryptedText = "";
+            }
+
+            return decryptedText;
         }
 
-        private byte[] GetEncryptedBytes(string plainText, byte[] key, byte[] iv)
-        {
-            byte[] plainBytes = byteTransform.GetBytes(plainText);
-
-            try
-            {
-                AesManaged aes = new AesManaged
-                {
-                    Key = key,
-                    IV = iv
-                };
-
-                MemoryStream memStream = new MemoryStream();
-
-                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-
-                CryptoStream cryptoStream = new CryptoStream(memStream, encryptor, CryptoStreamMode.Write);
-
-                cryptoStream.Write(plainBytes, 0, plainBytes.Length);
-
-                return memStream.ToArray();
-            }
-            catch (Exception)
-            {
-                throw new Exception("Encryption error");
-            }
-        }
-
-        private string GetDecryptedString(byte[] encryptedText, byte[] key, byte[] iv)
+        /// <summary>
+        /// Gets the encrypted string.
+        /// </summary>
+        /// <param name="plainText">The plain text.</param>
+        private string GetEncryptedString(string plainText)
         {
             try
             {
-                MemoryStream memStream = new MemoryStream(encryptedText);
+                ICryptoTransform encryptor = aes.CreateEncryptor();
 
-                AesManaged aes = new AesManaged
-                {
-                    Key = key,
-                    IV = iv
-                };
+                byte[] buffer = Encoding.ASCII.GetBytes(plainText);
 
-                ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+                return Convert.ToBase64String(encryptor.TransformFinalBlock(buffer, 0, buffer.Length));
+            }
+            catch (Exception ex)
+            {
+                throw new EncryptionException(ex.Message, ex);
+            }
+        }
 
-                CryptoStream cryptoStream = new CryptoStream(memStream, decryptor, CryptoStreamMode.Read);
+        /// <summary>
+        /// Gets the decrypted string.
+        /// </summary>
+        /// <param name="encryptedText">The encrypted text.</param>
+        private string GetDecryptedString(string encryptedText)
+        {
+            try
+            {
+                ICryptoTransform decryptor = aes.CreateDecryptor();
 
-                StreamReader streamReader = new StreamReader(cryptoStream);
+                byte[] buffer = Convert.FromBase64String(encryptedText);
 
-                return streamReader.ReadToEnd();
+                return Encoding.ASCII.GetString(decryptor.TransformFinalBlock(buffer, 0, buffer.Length));
             }
             catch (DatabaseIdentifierException ex)
             {
                 throw new ShipWorksLicenseException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new EncryptionException(ex.Message, ex);
             }
         }
     }
