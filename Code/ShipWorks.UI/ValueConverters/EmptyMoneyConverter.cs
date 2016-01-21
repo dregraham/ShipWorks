@@ -38,13 +38,14 @@ namespace ShipWorks.UI.ValueConverters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             decimal result = 0M;
+            string stringValue = value?.ToString();
 
-            if (string.IsNullOrEmpty(value as string))
+            if (string.IsNullOrEmpty(stringValue))
             {
                 return result; 
             }
-
-            decimal.TryParse(value.ToString(), out result);
+            
+            decimal.TryParse(stringValue, NumberStyles.Currency, CultureInfo.CurrentCulture, out result);
 
             return result;
         }

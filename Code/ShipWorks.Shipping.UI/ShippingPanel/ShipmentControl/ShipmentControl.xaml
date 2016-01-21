@@ -229,9 +229,8 @@
                        Text="{Binding InsuranceViewModel.InsuranceLabelDisplayText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance:'}"></TextBlock>
             <StackPanel  Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
                 <CheckBox Margin="4 4 0 0" Name="IsInsured"
+                    Content="{Binding InsuranceViewModel.InsuranceTypeLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance Type'}"
                     IsChecked="{Binding InsuranceViewModel.InsuranceChoice.Insured, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock  Margin="4 4 0 0"
-                    Text="{Binding InsuranceViewModel.InsuranceTypeLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance Type'}"></TextBlock>
             </StackPanel>
 
             <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal">

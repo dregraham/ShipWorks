@@ -22,7 +22,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     {
         private readonly PropertyChangedHandler handler;
         private readonly IShippingManager shippingManager;
-        private readonly IShippingSettings shippingSettings;
         private IPackageAdapter selectedPackageAdapter;
         private IEnumerable<IPackageAdapter> packageAdapters;
         private IInsuranceChoice insuranceChoice;
@@ -31,7 +30,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private string insuranceTypeLabelDisplayText;
         private string insuranceValueLabelDisplayText;
         private decimal insuranceValue;
-        private IInsuranceUtility insuranceUtility;
+        private readonly IInsuranceUtility insuranceUtility;
 
         /// <summary>
         /// Shipment adapter
@@ -226,10 +225,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         [Obfuscation(Exclude = true)]
         public RelayCommand ShowInsurancePromoDialogCommand => new RelayCommand(ShowInsurancePromoDialog);
-
-
-
-
+        
         /// <summary>
         /// Are all the insurance shipments FedEx?
         /// </summary>

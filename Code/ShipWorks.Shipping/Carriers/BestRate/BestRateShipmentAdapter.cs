@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
-            
+            // Nothing to do as BestRate is only allowed to use ShipWorks insurance
         }
     }
 }

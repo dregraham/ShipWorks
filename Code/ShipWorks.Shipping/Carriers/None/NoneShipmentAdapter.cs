@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
-            
+            // Nothing to do as None has no insurance 
         }
     }
 }

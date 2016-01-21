@@ -97,5 +97,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Load based on package adapters for a shipment
         /// </summary>
         void Load(IEnumerable<IPackageAdapter> currentPackageAdapters, IPackageAdapter currentPackageAdapter, ICarrierShipmentAdapter currentShipmentAdapter);
+
+        /// <summary>
+        /// Shipment selected package adapter insurance value
+        /// </summary>
+        decimal InsuranceValue { get; set; }
     }
 }

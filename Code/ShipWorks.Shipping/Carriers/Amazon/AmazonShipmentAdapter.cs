@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
-            
+            // Nothing to do as Amazon is only allowed to use ShipWorks insurance
         }
     }
 }

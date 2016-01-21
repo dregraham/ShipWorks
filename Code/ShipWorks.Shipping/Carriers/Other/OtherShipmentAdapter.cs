@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Other
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
-            
+            // Nothing to do as Other is only allowed to use ShipWorks insurance
         }
     }
 }

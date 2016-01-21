@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl"
              xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight"
              xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:insurancePromoControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.InsurancePromoControl"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:OtherShipmentViewModel}"
              d:DesignHeight="224.36" d:DesignWidth="300">
     <UserControl.Resources>
@@ -79,9 +80,8 @@
         <Label Grid.Row="6" Grid.Column="1">
             <StackPanel Orientation="Horizontal">
                 <CheckBox Margin="0 4 0 0"
-					IsChecked="{Binding InsuranceViewModel.InsuranceChoice.Insured, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock  Margin="2 3 0 0"
-                    Text="{Binding InsuranceViewModel.InsuranceTypeLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance Type'}"></TextBlock>
+                          Content="{Binding InsuranceViewModel.InsuranceTypeLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance Type'}"
+					      IsChecked="{Binding InsuranceViewModel.InsuranceChoice.Insured, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </Label>
 
@@ -90,10 +90,12 @@
             <TextBlock Style="{StaticResource GridLabel}" 
                        Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insured Value:'}"></TextBlock>
             <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"
-                     Text="{Binding InsuranceViewModel.InsuranceChoice.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat=c, FallbackValue='50.50', 
+                     IsEnabled="{Binding InsuranceViewModel.InsuranceChoice.Insured, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding InsuranceViewModel.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat=c, FallbackValue='50.50', 
                      Converter={StaticResource EmptyMoney},
                      TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
-        </StackPanel>
 
+            <insurancePromoControl:InsurancePromoControl  DataContext="{Binding Path=InsuranceViewModel, Mode=OneWay}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -31,10 +31,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Constructor
         /// </summary>
-        public InsuranceViewModel(IShippingManager shippingManager, IShippingSettings shippingSettings, IInsuranceUtility insuranceUtility) : this()
+        public InsuranceViewModel(IShippingManager shippingManager, IInsuranceUtility insuranceUtility) : this()
         {
             this.shippingManager = shippingManager;
-            this.shippingSettings = shippingSettings;
             this.insuranceUtility = insuranceUtility;
         }
 
@@ -134,14 +133,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                     LinkVisibility = Visibility.Visible;
                     InsuranceLinkTag = cost;
 
+                    // Default to learn more
+                    InsuranceLinkDisplayText = "(Learn more)";
+
                     // Only show savings if there is a savings
                     if (cost.Carrier.HasValue && cost.Carrier > cost.ShipWorks)
                     {
-                        InsuranceLinkDisplayText = string.Format("(Compare to ${0:0.00})", cost.Carrier);
-                    }
-                    else
-                    {
-                        InsuranceLinkDisplayText = "(Learn more)";
+                        InsuranceLinkDisplayText = $"(Compare to ${cost.Carrier:0.00})";
                     }
                 }
                 else
@@ -231,9 +229,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
                 if (AllDelcaredValueType(choices))
                 {
-                    // loadedInsurance will always have at least one value when insurance provider is not null
-                    string carrierName = shippingManager.GetCarrierName(SelectedPackageAdapter.InsuranceChoice.Shipment.ShipmentTypeCode);
-
+                    string carrierName = shippingManager.GetCarrierName(ShipmentAdapter.ShipmentTypeCode);
+                    
                     value = $"{carrierName} Declared Value";
                 }
 
