@@ -525,6 +525,22 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
                 .Verify(x => x.ShowInformation("Foo Bar"));
         }
 
+        [Theory]
+        [InlineData("Mo", "MO")]
+        [InlineData("mo", "MO")]
+        [InlineData("MO", "MO")]
+        [InlineData("Missouri", "MO")]
+        public void Save_SavesStateCode_IfStateIsValidStateName(string value, string expected)
+        {
+            AddressViewModel testObject = mock.Create<AddressViewModel>();
+            testObject.StateProvCode = value;
+
+            var adapter = new PersonAdapter();
+            testObject.SaveToEntity(adapter);
+
+            Assert.Equal(expected, adapter.StateProvCode);
+        }
+
         public void VerifyPropertySetterResetsValidationStatus(Action<AddressViewModel> setAction)
         {
             entityBasedAdapter.AddressValidationStatus = (int) AddressValidationStatusType.Fixed;

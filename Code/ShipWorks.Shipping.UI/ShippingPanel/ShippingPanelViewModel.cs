@@ -6,6 +6,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.Messaging;
@@ -17,6 +18,7 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
+using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -33,6 +35,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IDisposable subscriptions;
         private readonly IMessageHelper messageHelper;
         private readonly IShippingViewModelFactory shippingViewModelFactory;
+
+        private bool isLoadingShipment;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -66,29 +70,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Destination = shippingViewModelFactory.GetAddressViewModel();
             Destination.IsAddressValidationEnabled = true;
 
-            Origin.PropertyChangeStream
-                .Select(_ => ShipmentAdapter?.Shipment?.OriginPerson)
-                .Where(x => x != null)
-                .Subscribe(x =>
-                {
-                    ShipmentAdapter.Shipment.OriginPerson.StateProvCode = Origin.StateProvCode;
-                    ShipmentAdapter.Shipment.OriginPerson.PostalCode = Origin.PostalCode;
-                    ShipmentAdapter.Shipment.OriginPerson.CountryCode = Origin.CountryCode;
-                    shipmentViewModel.LoadCustoms();
-                });
-            Destination.PropertyChangeStream
-                .Select(_ => ShipmentAdapter?.Shipment?.ShipPerson)
-                .Where(x => x != null)
-                .Subscribe(x =>
-                {
-                    ShipmentAdapter.Shipment.ShipPerson.StateProvCode = Destination.StateProvCode;
-                    ShipmentAdapter.Shipment.ShipPerson.PostalCode = Destination.PostalCode;
-                    ShipmentAdapter.Shipment.ShipPerson.CountryCode = Destination.CountryCode;
-                    shipmentViewModel.LoadCustoms();
-                });
-
             // Wiring up observables needs objects to not be null, so do this last.
-            subscriptions = new CompositeDisposable(registrations.Select(x => x.Register(this)));
+            subscriptions = new CompositeDisposable(registrations.Select(x => x.Register(this))
+                .Concat(new[] {
+                    LoadCustomsWhenAddressChanges(Origin, x => ShipmentAdapter?.Shipment?.OriginPerson),
+                    LoadCustomsWhenAddressChanges(Destination, x => ShipmentAdapter?.Shipment?.ShipPerson)
+                }));
+
             WireUpObservables();
 
             PropertyChanging += OnPropertyChanging;
@@ -167,6 +155,22 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             //    });
         }
 #pragma warning restore S125 // Sections of code should not be "commented out"
+
+        /// <summary>
+        /// Load customs when address properties change
+        /// </summary>
+        private IDisposable LoadCustomsWhenAddressChanges(AddressViewModel model, Func<string, PersonAdapter> getAdapter)
+        {
+            return model.PropertyChangeStream
+                .Where(_ => !isLoadingShipment)
+                .Select(getAdapter)
+                .Where(person => person != null)
+                .Subscribe(person =>
+                {
+                    model.SaveToEntity(person);
+                    shipmentViewModel.LoadCustoms();
+                });
+        }
 
         /// <summary>
         /// Save the current shipment to the database
@@ -252,6 +256,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public virtual void Populate(ICarrierShipmentAdapter fromShipmentAdapter)
         {
+            isLoadingShipment = true;
+
             ShipmentAdapter = fromShipmentAdapter;
             InitialShipmentTypeCode = ShipmentAdapter.ShipmentTypeCode;
 
@@ -285,6 +291,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             SupportsMultiplePackages = ShipmentAdapter.SupportsMultiplePackages;
 
             ShipmentViewModel.Load(ShipmentAdapter);
+
+            isLoadingShipment = false;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.UI.ShippingPanel;
+using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
@@ -21,14 +23,17 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Integration.Services
 {
+    [SuppressMessage("SonarQube", "S3215: \"interface\" instances should not be cast to concrete types",
+        Justification = "We're casting to test results")]
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class ShippingPanelViewModelTest
+    public class ShippingPanelViewModelTest : IDisposable
     {
         private ShippingPanelViewModel testObject;
         private readonly DataContext context;
         private readonly ShipmentEntity shipment;
         private readonly TestSchedulerProvider scheduler;
+        private IDisposable subscription;
 
         public ShippingPanelViewModelTest(DatabaseFixture db)
         {
@@ -73,26 +78,85 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             testObject = context.Mock.Create<ShippingPanelViewModel>();
             var source = new TaskCompletionSource<ShipmentsProcessedMessage>();
 
-            IDisposable subscription = null;
-            try
-            {
-                subscription = Messenger.Current.OfType<ShipmentsProcessedMessage>()
-                    .Subscribe(x => source.SetResult(x));
+            subscription = Messenger.Current.OfType<ShipmentsProcessedMessage>()
+                .Subscribe(x => source.SetResult(x));
 
-                testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
-                testObject.CreateLabelCommand.Execute(null);
+            testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+            testObject.CreateLabelCommand.Execute(null);
 
-                var message = await source.Task;
+            var message = await source.Task;
 
-                scheduler.Dispatcher.Start();
+            scheduler.Dispatcher.Start();
 
-                Assert.Equal(testObject.ShipmentAdapter.Shipment.RowVersion,
-                    message.Shipments.FirstOrDefault().Shipment.RowVersion);
-            }
-            finally
-            {
-                subscription?.Dispose();
-            }
+            Assert.Equal(testObject.ShipmentAdapter.Shipment.RowVersion,
+                message.Shipments.FirstOrDefault().Shipment.RowVersion);
+        }
+
+        [Fact]
+        public void Populate_DoesNotModifyShipmentDestination_WhenPreviousShipmentWasLoaded()
+        {
+            testObject = context.Mock.Create<ShippingPanelViewModel>();
+            testObject.Destination.StateProvCode = "Missouri";
+
+            Modify.Shipment(shipment).Set(x => x.ShipStateProvCode, "MO").Save();
+
+            testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+
+            Assert.Equal("MO", shipment.ShipStateProvCode);
+        }
+
+        [Fact]
+        public void Populate_DoesNotModifyShipmentOrigin_WhenPreviousShipmentWasLoaded()
+        {
+            testObject = context.Mock.Create<ShippingPanelViewModel>();
+            testObject.Origin.StateProvCode = "Missouri";
+
+            Modify.Shipment(shipment).Set(x => x.OriginStateProvCode, "MO").Save();
+
+            testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+
+            Assert.Equal("MO", shipment.OriginStateProvCode);
+        }
+
+        [Fact]
+        public void Populate_LoadsCustoms_WhenShipmentIsInternational()
+        {
+            testObject = context.Mock.Create<ShippingPanelViewModel>();
+
+            Modify.Shipment(shipment).AsPostal(x => x.AsUsps())
+                .WithCustomsItem()
+                .Set(x => x.OriginCountryCode, "US")
+                .Set(x => x.ShipCountryCode, "UK")
+                .Save();
+
+            testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+
+            Assert.Equal(1, (testObject.ShipmentViewModel as ShipmentViewModel).CustomsItems.Count);
+        }
+
+        [Fact]
+        public void LoadsCustoms_WhenShipmentSwitchesFromDomesticToInternational()
+        {
+            testObject = context.Mock.Create<ShippingPanelViewModel>();
+
+            Modify.Shipment(shipment).AsPostal(x => x.AsUsps())
+                .WithCustomsItem()
+                .Set(x => x.OriginCountryCode, "US")
+                .Set(x => x.ShipCountryCode, "US")
+                .Save();
+
+            testObject.Populate(context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipment));
+
+            Assert.Null((testObject.ShipmentViewModel as ShipmentViewModel).CustomsItems);
+
+            testObject.Destination.CountryCode = "UK";
+
+            Assert.Equal(1, (testObject.ShipmentViewModel as ShipmentViewModel).CustomsItems.Count);
+        }
+
+        public void Dispose()
+        {
+            subscription?.Dispose();
         }
     }
 }
