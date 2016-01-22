@@ -149,6 +149,16 @@
       <DependentUpon>AmazonProfileControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Amazon\AmazonShippingModule.cs" />
+    <Compile Include="Carriers\BestRate\BestRateShippingModule.cs" />
+    <Compile Include="Carriers\FedEx\FedExShippingModule.cs" />
+    <Compile Include="Carriers\iParcel\iParcelShippingModule.cs" />
+    <Compile Include="Carriers\None\NoneShippingModule.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracShippingModule.cs" />
+    <Compile Include="Carriers\Other\OtherShippingModule.cs" />
+    <Compile Include="Carriers\Postal\Endicia\EndiciaShippingModule.cs" />
+    <Compile Include="Carriers\Postal\Express1\Express1ShippingModule.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsShippingModule.cs" />
+    <Compile Include="Carriers\Postal\WebTools\WebToolsShippingModule.cs" />
     <Compile Include="Carriers\Ups\UpsShippingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingModule.cs" />

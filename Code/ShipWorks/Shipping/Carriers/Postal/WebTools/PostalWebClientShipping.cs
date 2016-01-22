@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using System.IO;
 using System.Xml;
@@ -15,12 +13,12 @@ using ShipWorks.UI;
 using ShipWorks.Data.Connection;
 using System.Diagnostics;
 using System.Drawing.Imaging;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using System.Web;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Imaging;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -393,7 +391,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         }
 
         /// <summary>
-        /// Get the XML tag base for the given internatino shipment
+        /// Get the XML tag base for the given international shipment
         /// </summary>
         private static string GetInternationalServiceTagBase(PostalShipmentEntity postalShipment)
         {
@@ -642,7 +640,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         }
 
         /// <summary>
-        /// Process the error-free resonse of the given usps shipment
+        /// Process the error-free response of the given usps shipment
         /// </summary>
         private static void ProcessXmlResponseInternational(PostalShipmentEntity postalShipment, XmlDocument xmlDocument)
         {
@@ -658,7 +656,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             string part5 = XPathUtility.Evaluate(xpath, "//Page5Image", "");
             string part6 = XPathUtility.Evaluate(xpath, "//Page6Image", "");
 
-            // If there is no part6 - but there is a part5 - everytime ive seen that it means the part5 is instructions, so remove it
+            // If there is no part6 - but there is a part5 - every time I've seen that it means the part5 is instructions, so remove it
             if (string.IsNullOrEmpty(part6))
             {
                 part5 = "";
@@ -676,56 +674,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         }
 
         /// <summary>
-        /// Save the given label for the specified shipment
+        /// Save the given label using autocrop
         /// </summary>
         private static void SaveInternationalLabels(PostalShipmentEntity postalShipment, string labelImage, List<string> labelParts)
         {
-            Rectangle crop;
-
-            // Crop depends on service type
-            switch ((PostalServiceType)postalShipment.Service)
-            {
-                case PostalServiceType.InternationalPriority:
-                    {
-                        if (labelParts.Count == 0)
-                        {
-                            crop = new Rectangle(211, 191, 1287, 792);
-                        }
-                        else
-                        {
-                            crop = new Rectangle(49, 54, 1606, 1052);
-                        }
-                        break;
-                    }
-
-                case PostalServiceType.InternationalExpress:
-                    {
-                        crop = new Rectangle(52, 53, 1602, 1052);
-                        break;
-                    }
-
-                case PostalServiceType.InternationalFirst:
-                    {
-                        crop = new Rectangle(211, 191, 1287, 792);
-                        break;
-                    }
-
-                default:
-                    throw new InvalidOperationException("Invalid international service type.");
-            }
-
-            SaveInternationalLabel(postalShipment, labelImage, crop, "LabelPrimary");
+            SaveAutoCropLabel(postalShipment, labelImage, "LabelPrimary");
 
             for (int i = 0; i < labelParts.Count; i++)
             {
-                SaveInternationalLabel(postalShipment, labelParts[i], crop, string.Format("LabelPart{0}", i + 2));
+                SaveAutoCropLabel(postalShipment, labelParts[i], string.Format("LabelPart{0}", i + 2));
             }
         }
 
         /// <summary>
         /// Save the given label using the specified cropping
         /// </summary>
-        private static void SaveInternationalLabel(PostalShipmentEntity postalShipment, string labelImage, Rectangle crop, string name)
+        private static void SaveAutoCropLabel(PostalShipmentEntity postalShipment, string labelImage, string name)
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -733,18 +697,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
                 using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(labelImage)))
                 {
-                    using (Image imageLabel = Image.FromStream(stream))
+                    using (Bitmap bitmapImage = EdgeDetection.CropImageStream(stream))
                     {
-                        stream.Position = 0;
-
-                        using (Image imageLabelCrop = DisplayHelper.CropImage(imageLabel, crop.X, crop.Y, crop.Width, crop.Height))
+                        using (MemoryStream imageStream = new MemoryStream())
                         {
-                            using (MemoryStream imageStream = new MemoryStream())
-                            {
-                                imageLabelCrop.Save(imageStream, ImageFormat.Png);
+                            bitmapImage.Save(imageStream, ImageFormat.Png);
 
-                                DataResourceManager.CreateFromBytes(imageStream.ToArray(), postalShipment.ShipmentID, name);
-                            }
+                            DataResourceManager.CreateFromBytes(imageStream.ToArray(), postalShipment.ShipmentID, name);
                         }
                     }
                 }

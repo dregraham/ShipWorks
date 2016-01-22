@@ -16,11 +16,21 @@ namespace Interapptive.Shared.Imaging
         /// Crops a bitmap based on edge detection
         /// Only works with Black and White images
         /// </summary>
-        [NDependIgnoreLongMethodAttribute]
-        public static Bitmap Crop(Stream stream)
+        public static Bitmap CropImageStream(this Stream stream)
         {
-            Bitmap image = new Bitmap(stream);
+            using (Bitmap image = new Bitmap(stream))
+            {
+                return image.Crop();
+            }
+        }
 
+        /// <summary>
+        /// Crops a bitmap based on edge detection
+        /// Only works with Black and White images
+        /// </summary>
+        [NDependIgnoreLongMethod]
+        public static Bitmap Crop(this Bitmap image)
+        {
             //get image data
             int[] imagePixels;
             BitmapData bitmapData = CreateBitmapData(image, out imagePixels);
@@ -134,7 +144,6 @@ namespace Interapptive.Shared.Imaging
             image.UnlockBits(bitmapData);
             return bitmapData;
         }
-
 
         /// <summary>
         /// Creates a new image using the cropped image data

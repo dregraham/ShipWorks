@@ -512,8 +512,7 @@
             this.linkWorldShipMaps.Size = new System.Drawing.Size(82, 13);
             this.linkWorldShipMaps.TabIndex = 14;
             this.linkWorldShipMaps.Text = "explained here.";
-            this.linkWorldShipMaps.Url = "http://www.interapptive.com/shipworks/help";
-            // 
+            this.linkWorldShipMaps.Url = "http://support.shipworks.com/support/solutions/articles/104799-setting-up-worldship";
             // worldShipAgree2
             // 
             this.worldShipAgree2.AutoSize = true;

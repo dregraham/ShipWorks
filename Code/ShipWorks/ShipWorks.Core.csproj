@@ -114,9 +114,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\ActiproSoftware.WinUICore.Net20.dll</HintPath>
     </Reference>
-    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.25.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Apitron.PDF.Rasterizer.dll</HintPath>
+    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.66.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.66.0\lib\net40\Apitron.PDF.Rasterizer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Autofac">
       <HintPath>..\..\Components\Autofac.dll</HintPath>
@@ -710,6 +710,8 @@
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
+    <Compile Include="Data\IObjectReferenceManager.cs" />
+    <Compile Include="Data\ObjectReferenceManagerWrapper.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
     <Compile Include="Editions\EditionManagerWrapper.cs" />
     <Compile Include="Editions\IEditionManager.cs" />
@@ -823,7 +825,18 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingToken.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensions.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateConsolidatePostalRates.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
+    <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
+    <Compile Include="Shipping\ICachedRatesService.cs" />
+    <Compile Include="Shipping\ILabelService.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
+    <Compile Include="Shipping\IRatingService.cs" />
+    <Compile Include="Shipping\ISupportExpress1Rates.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />

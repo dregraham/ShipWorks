@@ -92,14 +92,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// </summary>
         protected override BrokerException WrapShippingException(ShippingException ex)
         {
-            OnTracException onTracException = ex.InnerException as OnTracException;
-
-            if (onTracException != null && onTracException.DoesNotServiceLocation)
-            {
-                return new BrokerException(ex, BrokerExceptionSeverityLevel.Warning, ShipmentType);
-            }
-
-            return base.WrapShippingException(ex);
+            return ex.Message.ToLower().Contains("zip code entered is invalid or not serviced by ontrac") ?
+                new BrokerException(ex, BrokerExceptionSeverityLevel.Warning, ShipmentType) :
+                base.WrapShippingException(ex);
         }
 
         /// <summary>

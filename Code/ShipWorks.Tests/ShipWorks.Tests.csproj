@@ -235,7 +235,6 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevelComparerTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressValidatorTest.cs" />
-    <Compile Include="Shipping\Carriers\BestRate\Fake\FakeExceptionHandlerBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Fake\FakeRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

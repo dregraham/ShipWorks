@@ -51,8 +51,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.convertToExpeditedControl.DescriptionText = resources.GetString("convertToExpeditedControl.DescriptionText");
             this.convertToExpeditedControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.convertToExpeditedControl.LinkText = "Click here to add these discounted rates from IntuiShip through your existing Sta" +
-    "mps.com account at no additional cost.";
+            this.convertToExpeditedControl.LinkText = "Click here to add these discounted rates through your existing Stamps.com account at no additional cost.";
             this.convertToExpeditedControl.Location = new System.Drawing.Point(3, 225);
             this.convertToExpeditedControl.Name = "convertToExpeditedControl";
             this.convertToExpeditedControl.Size = new System.Drawing.Size(425, 193);

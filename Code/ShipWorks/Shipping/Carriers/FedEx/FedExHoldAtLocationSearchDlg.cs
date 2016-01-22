@@ -179,7 +179,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void RequestAddresses(object sender, DoWorkEventArgs e)
         {
-            IFedExShippingClerk fedExShippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
+            IFedExShippingClerk fedExShippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(shipment, new FedExSettingsRepository());
 
             e.Result = fedExShippingClerk.PerformHoldAtLocationSearch(shipment);
         }
