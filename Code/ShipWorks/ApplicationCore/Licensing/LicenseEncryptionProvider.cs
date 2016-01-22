@@ -18,26 +18,22 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </remarks>
     public class LicenseEncryptionProvider : IEncryptionProvider
     {
+        private readonly IDatabaseIdentifier databaseId;
         private const string LegacyUserLicense = "ShipWorks legacy user";
-        private readonly AesManaged aes;
-
+        private readonly Lazy<AesManaged> aes;
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
         /// </summary>
-        /// <param name="databaseID">The database identifier.</param>
-        public LicenseEncryptionProvider(IDatabaseIdentifier databaseID)
+        /// <param name="databaseId">The database identifier.</param>
+        public LicenseEncryptionProvider(IDatabaseIdentifier databaseId)
         {
-            aes = new AesManaged();
-            aes.IV = new byte[] { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 };
-
-            try
+            this.databaseId = databaseId;
+            aes = new Lazy<AesManaged>(() => new AesManaged()
             {
-                aes.Key = databaseID.Get().ToByteArray();
-            }
-            catch (DatabaseIdentifierException ex)
-            {
-                throw new EncryptionException(ex.Message, ex);
-            }
+                IV = new byte[] { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 },
+                Key = GetDatabaseId()
+            });
         }
 
         /// <summary>
@@ -87,7 +83,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                ICryptoTransform encryptor = aes.CreateEncryptor();
+                ICryptoTransform encryptor = aes.Value.CreateEncryptor();
 
                 byte[] buffer = Encoding.ASCII.GetBytes(plainText);
 
@@ -107,7 +103,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                ICryptoTransform decryptor = aes.CreateDecryptor();
+                ICryptoTransform decryptor = aes.Value.CreateDecryptor();
 
                 byte[] buffer = Convert.FromBase64String(encryptedText);
 
@@ -117,6 +113,25 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new EncryptionException(ex.Message, ex);
             }
+        }
+
+
+        /// <summary>
+        /// Get DatabaseId value
+        /// </summary>
+        private byte[] GetDatabaseId()
+        {
+            byte[] key;
+            try
+            {
+                key = databaseId.Get().ToByteArray();
+            }
+            catch (DatabaseIdentifierException ex)
+            {
+                throw new EncryptionException(ex.Message, ex);
+            }
+
+            return key;
         }
     }
 }
