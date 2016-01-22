@@ -35,15 +35,22 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Key { get; }
 
-        public EnumResult<LicenseActivationState> Activate(StoreEntity store)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Is the license legacy
         /// </summary>
         public bool IsLegacy => true;
+
+        /// <summary>
+        /// Make sure the 
+        /// </summary>
+        public EnumResult<LicenseActivationState> Activate(StoreEntity newStore)
+        {
+            ShipWorksLicense license = new ShipWorksLicense(store.License);
+
+            return license.IsTrial ? 
+                new EnumResult<LicenseActivationState>(LicenseActivationState.Active) : 
+                LicenseActivationHelper.ActivateAndSetLicense(newStore, newStore.License);
+        }
 
         /// <summary>
         /// Refreshes store license data.
