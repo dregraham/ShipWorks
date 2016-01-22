@@ -593,6 +593,7 @@
     <Compile Include="ApplicationCore\IInitializeForCurrentSession.cs" />
     <Compile Include="ApplicationCore\IoC.cs" />
     <Compile Include="ApplicationCore\Licensing\ActivationResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\AddStoreResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseReader.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
