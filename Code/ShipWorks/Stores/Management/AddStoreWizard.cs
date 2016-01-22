@@ -77,6 +77,11 @@ namespace ShipWorks.Stores.Management
         bool isFreemiumMode = false;
 
         /// <summary>
+        /// Indicates if we show the activation page.
+        /// </summary>
+        private bool showActivationError = false;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         private AddStoreWizard()
@@ -455,15 +460,6 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnStepNextAlreadyActive(object sender, WizardStepEventArgs e)
         {
-            LicenseActivationState licenseState = LicenseActivationHelper.ActivateAndSetLicense(store, licenseKey.Text.Trim(), this);
-
-            if (licenseState != LicenseActivationState.Active)
-            {
-                e.NextPage = CurrentPage;
-                return;
-            }
-            else
-            {
                 if (EditionSerializer.Restore(store) is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
                 {
                     MessageHelper.ShowError(this, "The license you entered is for the Endicia Free for eBay ShipWorks edition.  That edition only supports a single store, and you already have some stores in ShipWorks.");
@@ -471,7 +467,6 @@ namespace ShipWorks.Stores.Management
                     e.NextPage = CurrentPage;
                     return;
                 }
-            }
         }
 
         /// <summary>
@@ -878,6 +873,30 @@ namespace ShipWorks.Stores.Management
 
             try
             {
+
+                if (!string.IsNullOrEmpty(licenseKey.Text))
+                {
+                    store.License = licenseKey.Text;
+                }
+                ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
+                ILicense license = licenseService.GetLicense(store);
+                EnumResult<LicenseActivationState> activateResult = license.Activate(store);
+                if (activateResult.Value != LicenseActivationState.Active)
+                {
+                    e.Skip = true;
+
+                    if (license.IsLegacy)
+                    {
+                        e.SkipToPage = wizardPageAlreadyActive;
+                    }
+                    else
+                    {
+                        showActivationError = true;
+                        wizardPageActivationError.ErrorMessage = activateResult.Message;
+                        e.SkipToPage = wizardPageActivationError;
+                    }
+                }
+
                 // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
                 FilterLayoutContext.PushScope();
 
@@ -928,8 +947,6 @@ namespace ShipWorks.Stores.Management
 
                 e.Skip = true;
                 e.SkipToPage = wizardPageContactInfo;
-
-                return;
             }
             finally
             {
@@ -969,5 +986,13 @@ namespace ShipWorks.Stores.Management
 
         #endregion
 
+        /// <summary>
+        /// Skip this page if no error has ocurred.
+        /// </summary>
+        private void OnSteppingIntoWizardPageActivationError(object sender, WizardSteppingIntoEventArgs e)
+        {
+            e.Skip = !showActivationError;
+            showActivationError = false;
+        }
     }
 }

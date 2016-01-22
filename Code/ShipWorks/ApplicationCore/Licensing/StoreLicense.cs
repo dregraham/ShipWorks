@@ -41,8 +41,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsLegacy => true;
 
         /// <summary>
-        /// Make sure the 
+        /// Activate a new store
         /// </summary>
+        /// <remarks>
+        /// Make sure store is populated with the appropriate license key.
+        /// </remarks>
         public EnumResult<LicenseActivationState> Activate(StoreEntity newStore)
         {
             ShipWorksLicense license = new ShipWorksLicense(store.License);
