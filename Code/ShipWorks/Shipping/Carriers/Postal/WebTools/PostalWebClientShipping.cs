@@ -697,7 +697,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
                 using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(labelImage)))
                 {
-                    using (Bitmap bitmapImage = EdgeDetection.Crop(stream))
+                    using (Bitmap bitmapImage = EdgeDetection.CropImageStream(stream))
                     {
                         using (MemoryStream imageStream = new MemoryStream())
                         {
