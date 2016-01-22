@@ -386,6 +386,110 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             }
         }
 
+        [Fact]
+        public void Save_UpdatesShipmentAdapterCustomsItems_WithViewModelValue_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                CreateDefaultShipmentAdapter(mock);
+
+                shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(true);
+                shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());
+
+                OtherShipmentViewModel testObject = mock.Create<OtherShipmentViewModel>();
+
+                testObject.CustomsAllowed = true;
+                testObject.Load(shipmentAdapter.Object);
+
+                testObject.ShipDate = testObject.ShipDate.AddDays(1);
+
+                testObject.CustomsItems.Add(new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity(3)));
+
+                testObject.Save();
+
+                shipmentAdapter.Verify(sa => sa.CustomsItems, Times.Once());
+            }
+        }
+
+        [Fact]
+        public void Indexer_ReturnsEmptyString_WhenShipmentIsProcessed_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger messenger = new TestMessenger();
+                mock.Provide<IMessenger>(messenger);
+
+                shipment.Processed = true;
+                CreateDefaultShipmentAdapter(mock);
+                shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+                OtherShipmentViewModel testObject = mock.Create<OtherShipmentViewModel>();
+                testObject.Load(shipmentAdapter.Object);
+
+                Assert.Equal(string.Empty, testObject["TotalCustomsValue"]);
+            }
+        }
+
+        [Fact]
+        public void Indexer_ReturnsError_WhenTotalCustomsValueIsInvalid_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger messenger = new TestMessenger();
+                mock.Provide<IMessenger>(messenger);
+
+                shipment.Processed = false;
+                CreateDefaultShipmentAdapter(mock);
+                shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+                OtherShipmentViewModel testObject = mock.Create<OtherShipmentViewModel>();
+                testObject.Load(shipmentAdapter.Object);
+                testObject.TotalCustomsValue = -1;
+
+                Assert.NotEqual(string.Empty, testObject["TotalCustomsValue"]);
+            }
+        }
+
+        [Fact]
+        public void AllErrors_ReturnsListOfErrors_WhenTotalCustomsValueIsInvalid_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger messenger = new TestMessenger();
+                mock.Provide<IMessenger>(messenger);
+
+                shipment.Processed = false;
+                CreateDefaultShipmentAdapter(mock);
+                shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+                OtherShipmentViewModel testObject = mock.Create<OtherShipmentViewModel>();
+                testObject.Load(shipmentAdapter.Object);
+                testObject.TotalCustomsValue = -1;
+
+                Assert.NotNull(testObject.AllErrors());
+                Assert.InRange(testObject.AllErrors().Count, 1, Int32.MaxValue);
+            }
+        }
+
+        [Fact]
+        public void Error_ReturnsNull_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger messenger = new TestMessenger();
+                mock.Provide<IMessenger>(messenger);
+
+                shipment.Processed = false;
+                CreateDefaultShipmentAdapter(mock);
+                shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+                OtherShipmentViewModel testObject = mock.Create<OtherShipmentViewModel>();
+                testObject.Load(shipmentAdapter.Object);
+
+                Assert.Null(testObject.Error);
+            }
+        }
+
         private void CreateDefaultShipmentAdapter(AutoMock mock)
         {
             CreatePackageAdapters(1);

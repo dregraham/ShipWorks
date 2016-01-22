@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
+using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -711,10 +712,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 testObject.ServiceType = testObject.ServiceType++;
                 testObject.SelectedDimensionsProfile = dimensionsManager.Object.Profiles(testObject.PackageAdapters.First()).FirstOrDefault();
 
+                testObject.CustomsItems.Add(new ShipmentCustomsItemAdapter(new ShipmentCustomsItemEntity(3)));
+
                 testObject.Save();
 
-                shipmentAdapter.VerifySet(sa => sa.ShipDate = testObject.ShipDate, Times.Once());
-                shipmentAdapter.VerifySet(sa => sa.ServiceType = testObject.ServiceType);
+                shipmentAdapter.Verify(sa => sa.CustomsItems, Times.Once());
             }
         }
 
@@ -825,6 +827,146 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                 testObject.DeleteCustomsItemCommand.Execute(null);
 
                 Assert.Equal(2, testObject.CustomsItems.Count);
+            }
+        }
+
+        [Fact]
+        public void HandleShippingSettingsChangedMessage_DoesNotUpdateInsuranceFields_WhenShipmentIsProcessed_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                using (TestMessenger messenger = new TestMessenger())
+                {
+                    mock.Provide<IMessenger>(messenger);
+
+                    shipment.Processed = true;
+                    CreateDefaultShipmentAdapter(mock, 2);
+                    shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+                    ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                    testObject.Load(shipmentAdapter.Object);
+
+                    messenger.Send(new ShippingSettingsChangedMessage(this, new ShippingSettingsEntity()));
+
+                    shipmentAdapter.Verify(sa => sa.UpdateInsuranceFields(It.IsAny<ShippingSettingsEntity>()),
+                        Times.Never);
+                }
+            }
+        }
+
+        [Fact]
+        public void HandleShippingSettingsChangedMessage_UpdatesInsuranceFields_WhenShipmentIsNotProcessed_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger messenger = new TestMessenger();
+                mock.Provide<IMessenger>(messenger);
+
+                shipment.Processed = false;
+                CreateDefaultShipmentAdapter(mock, 2);
+                shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+                List<Mock<IPackageAdapter>> mockPackageAdapters = new List<Mock<IPackageAdapter>>()
+                {
+                    new Mock<IPackageAdapter>(),
+                    new Mock<IPackageAdapter>()
+                };
+
+                shipmentAdapter.Setup(sa => sa.GetPackageAdapters(It.IsAny<int>())).Returns(mockPackageAdapters.Select(mpa => mpa.Object));
+                shipmentAdapter.Setup(sa => sa.GetPackageAdapters()).Returns(mockPackageAdapters.Select(mpa => mpa.Object));
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+
+                testObject.Load(shipmentAdapter.Object);
+
+                messenger.Send(new ShippingSettingsChangedMessage(this, new ShippingSettingsEntity()));
+
+                shipmentAdapter.Verify(sa => sa.UpdateInsuranceFields(It.IsAny<ShippingSettingsEntity>()), Times.Once);
+
+                foreach (Mock<IPackageAdapter> mpa in mockPackageAdapters)
+                {
+                    mpa.Verify(pa => pa.UpdateInsuranceFields(It.IsAny<ShippingSettingsEntity>()), Times.Once());
+                }
+            }
+        }
+
+        [Fact]
+        public void Indexer_ReturnsEmptyString_WhenShipmentIsProcessed_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger messenger = new TestMessenger();
+                mock.Provide<IMessenger>(messenger);
+
+                shipment.Processed = true;
+                CreateDefaultShipmentAdapter(mock, 2);
+                shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+                testObject.Load(shipmentAdapter.Object);
+
+                Assert.Equal(string.Empty, testObject["TotalCustomsValue"]);
+            }
+        }
+
+        [Fact]
+        public void Indexer_ReturnsError_WhenTotalCustomsValueIsInvalid_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger messenger = new TestMessenger();
+                mock.Provide<IMessenger>(messenger);
+
+                shipment.Processed = false;
+                CreateDefaultShipmentAdapter(mock, 2);
+                shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+                testObject.Load(shipmentAdapter.Object);
+                testObject.TotalCustomsValue = -1;
+
+                Assert.NotEqual(string.Empty, testObject["TotalCustomsValue"]);
+            }
+        }
+
+        [Fact]
+        public void AllErrors_ReturnsListOfErrors_WhenTotalCustomsValueIsInvalid_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger messenger = new TestMessenger();
+                mock.Provide<IMessenger>(messenger);
+
+                shipment.Processed = false;
+                CreateDefaultShipmentAdapter(mock, 2);
+                shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+                testObject.Load(shipmentAdapter.Object);
+                testObject.TotalCustomsValue = -1;
+
+                Assert.NotNull(testObject.AllErrors());
+                Assert.InRange(testObject.AllErrors().Count, 1, Int32.MaxValue);
+            }
+        }
+
+        [Fact]
+        public void Error_ReturnsNull_Test()
+        {
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                TestMessenger messenger = new TestMessenger();
+                mock.Provide<IMessenger>(messenger);
+
+                shipment.Processed = false;
+                CreateDefaultShipmentAdapter(mock, 2);
+                shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipment);
+
+                ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+                testObject.Load(shipmentAdapter.Object);
+
+                Assert.Null(testObject.Error);
             }
         }
 

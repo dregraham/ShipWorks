@@ -148,6 +148,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controls\AddressControl\AddressViewModelTest.cs" />
+    <Compile Include="ValueConverters\EmptyDoubleConverterTest.cs" />
+    <Compile Include="ValueConverters\EmptyMoneyConverterTest.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>
