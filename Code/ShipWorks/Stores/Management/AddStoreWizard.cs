@@ -869,8 +869,6 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
         {
-            int storeCount = StoreManager.GetAllStores().Count;
-
             try
             {
 
@@ -878,23 +876,10 @@ namespace ShipWorks.Stores.Management
                 {
                     store.License = licenseKey.Text;
                 }
-                ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
-                ILicense license = licenseService.GetLicense(store);
-                EnumResult<LicenseActivationState> activateResult = license.Activate(store);
-                if (activateResult.Value != LicenseActivationState.Active)
-                {
-                    e.Skip = true;
 
-                    if (license.IsLegacy)
-                    {
-                        e.SkipToPage = wizardPageAlreadyActive;
-                    }
-                    else
-                    {
-                        showActivationError = true;
-                        wizardPageActivationError.ErrorMessage = activateResult.Message;
-                        e.SkipToPage = wizardPageActivationError;
-                    }
+                if (!ValidateLicense(e))
+                {
+                    return;
                 }
 
                 // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
@@ -909,19 +894,7 @@ namespace ShipWorks.Stores.Management
                     StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
                     storeFilterRepository.Save(true);
 
-                    // Adjust the default shipment type based on edition
-                    if (storeCount == 0)
-                    {
-                        ShipmentTypeCode? defaultType = EditionSerializer.Restore(store).DefaultShipmentType;
-
-                        if (defaultType != null)
-                        {
-                            ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-                            shippingSettings.DefaultType = (int) defaultType.Value;
-
-                            ShippingSettings.Save(shippingSettings);
-                        }
-                    }
+                    AdjustShipmentType();
 
                     // By default we auto-download every 15 minutes
                     store.AutoDownload = true;
@@ -952,6 +925,52 @@ namespace ShipWorks.Stores.Management
             {
                 FilterLayoutContext.PopScope();
             }
+        }
+
+        /// <summary>
+        /// Adjust the default shipment type based on edition
+        /// </summary>
+        private void AdjustShipmentType()
+        {
+            if (StoreManager.GetAllStores().Count == 0)
+            {
+                ShipmentTypeCode? defaultType = EditionSerializer.Restore(store).DefaultShipmentType;
+
+                if (defaultType != null)
+                {
+                    ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
+                    shippingSettings.DefaultType = (int)defaultType.Value;
+
+                    ShippingSettings.Save(shippingSettings);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Validates the License - sets up skip properties when appropriate
+        /// </summary>
+        private bool ValidateLicense(WizardSteppingIntoEventArgs e)
+        {
+            ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
+            ILicense license = licenseService.GetLicense(store);
+            EnumResult<LicenseActivationState> activateResult = license.Activate(store);
+            if (activateResult.Value != LicenseActivationState.Active)
+            {
+                e.Skip = true;
+
+                if (license.IsLegacy)
+                {
+                    e.SkipToPage = wizardPageAlreadyActive;
+                }
+                else
+                {
+                    showActivationError = true;
+                    wizardPageActivationError.ErrorMessage = activateResult.Message;
+                    e.SkipToPage = wizardPageActivationError;
+                }
+            }
+
+            return !e.Skip;
         }
 
         /// <summary>
