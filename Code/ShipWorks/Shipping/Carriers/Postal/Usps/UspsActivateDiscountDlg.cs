@@ -57,6 +57,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 signUpForExpeditedControl.Visible = false;
                 convertToExpeditedControl.Visible = true;
 
+                // Resize the control 
+                convertToExpeditedControl.learnMore.Location = new System.Drawing.Point(26, 81);
+                convertToExpeditedControl.linkLabel1.Location = new System.Drawing.Point(26, 110);
+                convertToExpeditedControl.Size = new System.Drawing.Size(425, 150);
+
                 convertToExpeditedControl.Top = signUpForExpeditedControl.Top;
                 Height = convertToExpeditedControl.Bottom + 85;
                 close.Top = convertToExpeditedControl.Bottom + 20;

@@ -94,9 +94,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Label labelConversionDescription;
-        private System.Windows.Forms.Label labelHeader;
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.LinkLabel learnMore;
+        public System.Windows.Forms.Label labelConversionDescription;
+        public System.Windows.Forms.Label labelHeader;
+        public System.Windows.Forms.LinkLabel linkLabel1;
+        public System.Windows.Forms.LinkLabel learnMore;
     }
 }
