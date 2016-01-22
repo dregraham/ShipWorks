@@ -20,8 +20,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly IDatabaseIdentifier databaseId;
         private const string LegacyUserLicense = "ShipWorks legacy user";
-        private readonly Lazy<AesManaged> aes;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
         /// </summary>
@@ -29,11 +28,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public LicenseEncryptionProvider(IDatabaseIdentifier databaseId)
         {
             this.databaseId = databaseId;
-            aes = new Lazy<AesManaged>(() => new AesManaged()
-            {
-                IV = new byte[] { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 },
-                Key = GetDatabaseId()
-            });
         }
 
         /// <summary>
@@ -83,7 +77,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                ICryptoTransform encryptor = aes.Value.CreateEncryptor();
+                ICryptoTransform encryptor = Aes.CreateEncryptor();
 
                 byte[] buffer = Encoding.ASCII.GetBytes(plainText);
 
@@ -103,7 +97,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                ICryptoTransform decryptor = aes.Value.CreateDecryptor();
+                ICryptoTransform decryptor = Aes.CreateDecryptor();
 
                 byte[] buffer = Convert.FromBase64String(encryptedText);
 
@@ -115,23 +109,29 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
         }
 
-
         /// <summary>
         /// Get DatabaseId value
         /// </summary>
-        private byte[] GetDatabaseId()
+        private AesManaged Aes
         {
-            byte[] key;
-            try
+            get
             {
-                key = databaseId.Get().ToByteArray();
-            }
-            catch (DatabaseIdentifierException ex)
-            {
-                throw new EncryptionException(ex.Message, ex);
-            }
+                byte[] key;
+                try
+                {
+                    key = databaseId.Get().ToByteArray();
+                }
+                catch (DatabaseIdentifierException ex)
+                {
+                    throw new EncryptionException(ex.Message, ex);
+                }
 
-            return key;
+                return new AesManaged()
+                {
+                    IV = new byte[] {125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14},
+                    Key = key
+                };
+            }
         }
     }
 }

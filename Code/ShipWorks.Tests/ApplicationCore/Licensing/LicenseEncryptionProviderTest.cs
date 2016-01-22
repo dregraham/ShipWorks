@@ -65,13 +65,28 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Constructor_ThrowsEncryptionException_WhenDatabaseIdentifierNotFound_Test()
+        public void Encrypt_ThrowsEncryptionException_WhenDatabaseIdentifierNotFound_Test()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IDatabaseIdentifier>().Setup(x => x.Get()).Throws<DatabaseIdentifierException>();
 
-                Assert.Throws<EncryptionException>(() => new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object));
+                var testObject = new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object);
+
+                Assert.Throws<EncryptionException>(() => testObject.Encrypt("test"));
+            }
+        }
+
+        [Fact]
+        public void Decrypt_ThrowsEncryptionException_WhenDatabaseIdentifierNotFound_Test()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IDatabaseIdentifier>().Setup(x => x.Get()).Throws<DatabaseIdentifierException>();
+
+                var testObject = new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object);
+
+                Assert.Throws<EncryptionException>(() => testObject.Decrypt("test"));
             }
         }
     }
