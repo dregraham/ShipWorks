@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace ShipWorks.ApplicationCore.Licensing
 {
     [Serializable]
-    internal class EncryptionException : Exception
+    public class EncryptionException : Exception
     {
         public EncryptionException()
         {

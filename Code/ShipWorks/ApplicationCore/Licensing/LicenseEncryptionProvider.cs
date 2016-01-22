@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using Interapptive.Shared.Utility;
@@ -28,11 +27,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="databaseID">The database identifier.</param>
         public LicenseEncryptionProvider(IDatabaseIdentifier databaseID)
         {
-            aes = new AesManaged()
+            aes = new AesManaged();
+            aes.IV = new byte[] { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 };
+
+            try
             {
-                Key = databaseID.Get().ToByteArray(),
-                IV = new byte[] { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 }
-            };
+                aes.Key = databaseID.Get().ToByteArray();
+            }
+            catch (DatabaseIdentifierException ex)
+            {
+                throw new EncryptionException(ex.Message, ex);
+            }
         }
 
         /// <summary>
@@ -55,12 +60,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Decrypts the given encrypted text.
         /// </summary>
-        /// <exception cref="ShipWorksLicenseException"></exception>
         public string Decrypt(string encryptedText)
         {
             if (encryptedText.IsNullOrWhiteSpace())
             {
-                throw new ShipWorksLicenseException("Cannot decrypt an empty string");
+                throw new EncryptionException("Cannot decrypt an empty string");
             }
 
             string decryptedText = GetDecryptedString(encryptedText);
@@ -108,10 +112,6 @@ namespace ShipWorks.ApplicationCore.Licensing
                 byte[] buffer = Convert.FromBase64String(encryptedText);
 
                 return Encoding.ASCII.GetString(decryptor.TransformFinalBlock(buffer, 0, buffer.Length));
-            }
-            catch (DatabaseIdentifierException ex)
-            {
-                throw new ShipWorksLicenseException(ex.Message, ex);
             }
             catch (Exception ex)
             {

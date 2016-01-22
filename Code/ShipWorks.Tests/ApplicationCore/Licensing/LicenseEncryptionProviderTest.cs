@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using Autofac.Extras.Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using Xunit;
@@ -60,9 +59,20 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Decrypt_ThrowsArgumentException_WhenGivenEmptyString_Test()
+        public void Decrypt_ThrowsEncryptionException_WhenGivenEmptyString_Test()
         {
-            Assert.Throws<ShipWorksLicenseException>(() => testObject.Decrypt(""));
+            Assert.Throws<EncryptionException>(() => testObject.Decrypt(""));
+        }
+
+        [Fact]
+        public void Constructor_ThrowsEncryptionException_WhenDatabaseIdentifierNotFound_Test()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IDatabaseIdentifier>().Setup(x => x.Get()).Throws<DatabaseIdentifierException>();
+
+                Assert.Throws<EncryptionException>(() => new LicenseEncryptionProvider(mock.Mock<IDatabaseIdentifier>().Object));
+            }
         }
     }
 }
