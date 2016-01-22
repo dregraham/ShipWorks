@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using ShipWorks.Shipping;
 using ShipWorks.UI.ValueConverters;
 using Xunit;
 
@@ -7,8 +6,8 @@ namespace ShipWorks.UI.Tests.ValueConverters
 {
     public class EmptyMoneyConverterTest
     {
-        private string zeroDollars = 0.ToString("C", CultureInfo.CurrentCulture);
-        private string fiveDollars = (5.00M).ToString("C", CultureInfo.CurrentCulture);
+        private readonly string zeroDollars = 0.ToString("C", CultureInfo.CurrentCulture);
+        private readonly string fiveDollars = (5.00M).ToString("C", CultureInfo.CurrentCulture);
 
         [Fact]
         public void Convert_ReturnsZeroDollars_WhenValueIsNull()
@@ -81,7 +80,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         public void ConvertBack_ReturnsZeroDollars_WhenValueIsNull()
         {
             EmptyMoneyConverter testObject = new EmptyMoneyConverter();
-            decimal result = (decimal)testObject.ConvertBack(null, typeof(decimal), null, null);
+            decimal result = (decimal) testObject.ConvertBack(null, typeof(decimal), null, null);
             Assert.Equal(0M, result);
         }
 
@@ -89,7 +88,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         public void ConvertBack_ReturnsZeroDollars_WhenValueIsBlankString()
         {
             EmptyMoneyConverter testObject = new EmptyMoneyConverter();
-            decimal result = (decimal)testObject.ConvertBack(string.Empty, typeof(decimal), null, CultureInfo.CurrentCulture);
+            decimal result = (decimal) testObject.ConvertBack(string.Empty, typeof(decimal), null, CultureInfo.CurrentCulture);
             Assert.Equal(0M, result);
         }
 
@@ -102,7 +101,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         {
             EmptyMoneyConverter testObject = new EmptyMoneyConverter();
             string convertResult = testObject.Convert(value, typeof(string), null, null).ToString();
-            decimal convertBackResult = (decimal)testObject.ConvertBack(convertResult, typeof(decimal), null, CultureInfo.CurrentCulture);
+            decimal convertBackResult = (decimal) testObject.ConvertBack(convertResult, typeof(decimal), null, CultureInfo.CurrentCulture);
             Assert.Equal(convertBackResult.ToString("C", CultureInfo.CurrentCulture), convertResult);
         }
 
@@ -115,7 +114,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         {
             EmptyMoneyConverter testObject = new EmptyMoneyConverter();
             string convertResult = testObject.Convert(value, typeof(string), null, null).ToString();
-            decimal convertBackResult = (decimal)testObject.ConvertBack(convertResult, typeof(decimal), null, CultureInfo.CurrentCulture);
+            decimal convertBackResult = (decimal) testObject.ConvertBack(convertResult, typeof(decimal), null, CultureInfo.CurrentCulture);
             Assert.Equal(convertBackResult.ToString("C", CultureInfo.CurrentCulture), convertResult);
         }
     }

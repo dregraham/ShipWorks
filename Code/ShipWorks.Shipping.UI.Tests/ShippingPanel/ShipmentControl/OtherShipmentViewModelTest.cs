@@ -20,8 +20,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         private readonly ShipmentEntity shipment = new ShipmentEntity(1);
         private Mock<ICarrierShipmentAdapter> shipmentAdapter;
         private readonly List<OtherPackageAdapter> packageAdapters = new List<OtherPackageAdapter>();
+        readonly AutoMock mock;
         TestMessenger messenger;
-        AutoMock mock;
 
         public OtherShipmentViewModelTest()
         {
