@@ -18,12 +18,14 @@
         ParallelizeTestCollections="true" />
   </Target>
 
+  <!-- We need the integration tests to run in parallel so that the correct synchronization context gets set.
+  		 If they are not run in parallel, some async tests will deadlock -->
   <Target Name="Integration">
     <xunit Assemblies="@(IntegrationAssemblies)"
       Xml="TestResults\integration.xml"
       IncludeTraits="$(IncludeTraits)"
       ParallelizeAssemblies="true"
-      ParallelizeTestCollections="false" />
+      ParallelizeTestCollections="true" />
   </Target>
 
 </Project>
