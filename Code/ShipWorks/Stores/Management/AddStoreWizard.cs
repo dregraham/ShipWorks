@@ -81,6 +81,8 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private bool showActivationError = false;
 
+        private readonly ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -403,8 +405,8 @@ namespace ShipWorks.Stores.Management
 
             try
             {
-                // If w are in freemium mode, and we already have a valid freemium edition store, then don't try to get a trial - it would fail anyway saying they aren't eligible
-                if (isFreemiumMode && (EditionSerializer.Restore(store) is FreemiumFreeEdition) && new ShipWorksLicense(store.License).IsValid)
+                // If we are legacy or are in freemium mode, and we already have a valid freemium edition store, then don't try to get a trial - it would fail anyway saying they aren't eligible
+                if (licenseService.IsLegacy || isFreemiumMode && (EditionSerializer.Restore(store) is FreemiumFreeEdition) && new ShipWorksLicense(store.License).IsValid)
                 {
                     // We already have their license
                     e.Skip = true;
@@ -951,7 +953,6 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private bool ValidateLicense(WizardSteppingIntoEventArgs e)
         {
-            ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
             ILicense license = licenseService.GetLicense(store);
             EnumResult<LicenseActivationState> activateResult = license.Activate(store);
             if (activateResult.Value != LicenseActivationState.Active)

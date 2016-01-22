@@ -32,6 +32,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Is this store a legacy customer?
+        /// </summary>
+        public bool IsLegacy => isLegacy;
+
+        /// <summary>
         /// Returns the correct ILicense for the store
         /// </summary>
         public ILicense GetLicense(StoreEntity store)
