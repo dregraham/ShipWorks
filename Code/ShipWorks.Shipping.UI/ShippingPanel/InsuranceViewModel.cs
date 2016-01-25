@@ -45,8 +45,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ShipmentAdapter = currentShipmentAdapter;
             PackageAdapters = currentPackageAdapters;
             SelectedPackageAdapter = currentPackageAdapter;
-            InsuranceChoice = SelectedPackageAdapter.InsuranceChoice;
-            InsuranceValue = InsuranceChoice.InsuranceValue;
+            InsuranceChoice = SelectedPackageAdapter?.InsuranceChoice;
+
+            if (InsuranceChoice != null)
+            {
+                InsuranceValue = InsuranceChoice.InsuranceValue;
+            }
 
             UpdateCostDisplay();
         }
@@ -56,7 +60,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void UpdateCostDisplay()
         {
-            if (PackageAdapters.Count() > 1)
+            if (InsuranceChoice == null ||PackageAdapters.Count() > 1)
             {
                 InfoTipVisibility = Visibility.Collapsed;
                 CostVisibility = Visibility.Collapsed;
@@ -65,17 +69,19 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             // Get the cost 
-            InsuranceCost cost = insuranceUtility.GetInsuranceCost(shipmentAdapter.Shipment, InsuranceChoice.InsuranceValue);
+            InsuranceCost = insuranceUtility.GetInsuranceCost(shipmentAdapter.Shipment, InsuranceChoice.InsuranceValue);
 
             if (InsuranceChoice.InsuranceProvider != InsuranceProvider.ShipWorks)
             {
-                ShowCarrierCost(cost);
+                ShowCarrierCost(InsuranceCost);
             }
             else
             {
-                ShowShipWorksInsuranceCost(cost);
+                ShowShipWorksInsuranceCost(InsuranceCost);
             }
         }
+
+        public InsuranceCost InsuranceCost { get; set; }
 
         /// <summary>
         /// Updates the controls to show the carrier cost.
@@ -85,17 +91,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             InfoTipVisibility = Visibility.Collapsed;
             CostVisibility = Visibility.Collapsed;
-            LinkVisibility = Visibility.Visible;
 
             if (cost.ShipWorks > 0 && cost.Carrier.HasValue && cost.Carrier > cost.ShipWorks)
             {
-                CostVisibility = Visibility.Visible;
+                LinkVisibility = Visibility.Visible;
 
                 InsuranceLinkDisplayText = string.Format("(Learn how to save ${0:0.00})", cost.Carrier - cost.ShipWorks);
                 InsuranceLinkTag = cost;
             }
             else
             {
+                LinkVisibility = Visibility.Collapsed;
                 InsuranceLinkDisplayText = string.Empty;
             }
         }

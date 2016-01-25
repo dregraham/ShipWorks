@@ -166,7 +166,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShippingPanel\InsuranceViewModelTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\DomesticInternationalDisplayPipelineTest.cs" />
