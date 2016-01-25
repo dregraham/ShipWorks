@@ -537,7 +537,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 IsCityStateZipOk = result.CityStateZipOK,
                 ResidentialIndicator = result.ResidentialDeliveryIndicator,
                 IsPoBox = result.IsPOBox,
-                MatchedAddress = address,
+                MatchedAddress = result.Address,
                 Candidates = result.CandidateAddresses,
                 BadAddressMessage = badAddressMessage,
                 StatusCodes = result.StatusCodes
