@@ -131,7 +131,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the active stores from Tango.
         /// </summary>
-        IEnumerable<ActiveStore> GetActiveStores();
+        IEnumerable<ActiveStore> GetActiveStores(ICustomerLicense license);
 
         /// <summary>
         /// Deletes a store from Tango.

@@ -238,5 +238,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             return TangoWebClient.GetLicenseCapabilities(license);
         }
+
+        /// <summary>
+        /// Gets the active stores from Tango.
+        /// </summary>
+        public IEnumerable<ActiveStore> GetActiveStores(ICustomerLicense license)
+        {
+            return TangoWebClient.GetActiveStores(license);
+        }
+
+        /// <summary>
+        /// Deletes a store from Tango.
+        /// </summary>
+        public void DeleteStore(ICustomerLicense customerLicense, string storeLicenseKey)
+        {
+            TangoWebClient.DeleteStore(customerLicense, storeLicenseKey);
+        }
     }
 }
