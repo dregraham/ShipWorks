@@ -1166,6 +1166,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
         }
 
+        /// <summary>
+        /// Gets the active stores from Tango
+        /// </summary>
         public static IEnumerable<ActiveStore> GetActiveStores(ICustomerLicense license)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
@@ -1187,7 +1190,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 ActiveStore activeStore = new ActiveStore()
                 {
                     Name = XPathUtility.Evaluate(xpath, "//storeInfo", string.Empty),
-                    StoreLicenseKey = XPathUtility.Evaluate(xpath, "amz:Title", string.Empty),
+                    StoreLicenseKey = XPathUtility.Evaluate(xpath, "//license", string.Empty),
                 };
 
                 activeStores.Add(activeStore);
@@ -1196,9 +1199,19 @@ namespace ShipWorks.ApplicationCore.Licensing
             return activeStores;
         }
 
+        /// <summary>
+        /// Deletes a store from Tango
+        /// </summary>
         public static void DeleteStore(ICustomerLicense customerLicense, string storeLicenseKey)
         {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
+            postRequest.Variables.Add("action", "deletestore");
+            postRequest.Variables.Add("custlicense", customerLicense.Key);
+            postRequest.Variables.Add("storelicensekey[]", storeLicenseKey);
+            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
         }
     }
 }
