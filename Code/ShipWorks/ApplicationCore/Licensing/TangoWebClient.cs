@@ -1165,5 +1165,40 @@ namespace ShipWorks.ApplicationCore.Licensing
                 throw new TangoException(ex);
             }
         }
+
+        public static IEnumerable<ActiveStore> GetActiveStores(ICustomerLicense license)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "getactivestores");
+            postRequest.Variables.Add("custlicense", license.Key);
+            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
+
+            List<ActiveStore> activeStores = new List<ActiveStore>();
+
+            XPathNamespaceNavigator navigator = new XPathNamespaceNavigator(xmlResponse);
+
+            foreach (XPathNavigator tempXpath in navigator.Select("//ActiveStore"))
+            {
+                XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(tempXpath, navigator.Namespaces);
+
+                ActiveStore activeStore = new ActiveStore()
+                {
+                    Name = XPathUtility.Evaluate(xpath, "//storeInfo", string.Empty),
+                    StoreLicenseKey = XPathUtility.Evaluate(xpath, "amz:Title", string.Empty),
+                };
+
+                activeStores.Add(activeStore);
+            }
+
+            return activeStores;
+        }
+
+        public static void DeleteStore(ICustomerLicense customerLicense, string storeLicenseKey)
+        {
+
+        }
     }
 }

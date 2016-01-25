@@ -29,5 +29,10 @@
         /// Is the license legacy
         /// </summary>
         bool IsLegacy { get; }
+
+        /// <summary>
+        /// Is the user over their channel limit
+        /// </summary>
+        bool IsOverChannelLimit { get; set; }
     }
 }
