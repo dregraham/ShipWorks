@@ -85,6 +85,10 @@
     <Compile Include="AttachedProperties\Link.cs" />
     <Compile Include="Behaviors\PasswordBoxBindingBehavior.cs" />
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitDlg.xaml.cs">
+      <DependentUpon>ChannelLimitDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml.cs">
       <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
     </Compile>
@@ -140,6 +144,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\ChannelLimit\ChannelLimitDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
