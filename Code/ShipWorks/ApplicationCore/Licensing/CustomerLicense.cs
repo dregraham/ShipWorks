@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -93,6 +94,15 @@ namespace ShipWorks.ApplicationCore.Licensing
                 DisabledReason = ex.Message;
                 log.Warn(ex);
             }
+        }
+
+        /// <summary>
+        /// IEnumerable of ActiveStores for the license
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ActiveStore> GetActiveStores()
+        {
+            throw new NotImplementedException();
         }
     }
 }
