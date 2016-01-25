@@ -64,8 +64,9 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.25.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
-      <HintPath>..\..\Components\Apitron.PDF.Rasterizer.dll</HintPath>
+    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.66.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.66.0\lib\net40\Apitron.PDF.Rasterizer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -177,6 +178,7 @@
     <Compile Include="System.ComponentModel.DataAnnotations\PhoneAttribute.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
+    <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
@@ -385,7 +387,6 @@
     <Compile Include="NotFoundException.cs" />
     <Compile Include="ObjectDeletedException.cs" />
     <Compile Include="Pdf\PdfDocument.cs" />
-    <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Properties\Flags.Designer.cs">
       <DependentUpon>Flags.resx</DependentUpon>
       <AutoGen>True</AutoGen>

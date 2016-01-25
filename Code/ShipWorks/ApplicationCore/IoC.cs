@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Autofac;
 using Autofac.Core;
 using Interapptive.Shared;
+using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.AddressValidation;
@@ -137,6 +138,12 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<LogEntryFactory>()
                 .AsImplementedInterfaces()
                 .AsSelf();
+
+            builder.RegisterType<ObjectReferenceManagerWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<PdfDocument>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces();
