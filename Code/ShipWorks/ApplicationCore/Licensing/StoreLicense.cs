@@ -56,5 +56,13 @@ namespace ShipWorks.ApplicationCore.Licensing
                 DisabledReason = ex.Message;
             }
         }
+
+        /// <summary>
+        /// Store licenses do not have channel limits
+        /// </summary>
+        /// <remarks>
+        /// Always returns false
+        /// </remarks>
+        public bool IsOverChannelLimit() => false;
     }
 }

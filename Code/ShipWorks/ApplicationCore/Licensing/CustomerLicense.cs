@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -49,7 +50,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The license capabilities.
         /// </summary>
         public LicenseCapabilities LicenseCapabilities { get; set; }
-
+        
         /// <summary>
         /// Activates the customer license
         /// </summary>
@@ -102,7 +103,36 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <returns></returns>
         public IEnumerable<ActiveStore> GetActiveStores()
         {
-            throw new NotImplementedException();
+            return tangoWebClient.GetActiveStores();
+        }
+
+        /// <summary>
+        /// Is the license over the ChannelLimit
+        /// </summary>
+        public bool IsOverChannelLimit()
+        {
+            List<StoreTypeCode> channels = new List<StoreTypeCode>();
+
+            foreach (ActiveStore store in GetActiveStores())
+            {
+                // Create a ShipWorksLicense using the key
+                ShipWorksLicense storeLicense = new ShipWorksLicense(store.StoreLicenseKey);
+
+                // If the StoreTypeCode is not in our list add it
+                if (!channels.Contains(storeLicense.StoreTypeCode))
+                {
+                    channels.Add(storeLicense.StoreTypeCode);
+                }
+            }
+
+            // If the list of channels is greater than Number of channels 
+            // return true for IsOverChannelLimit
+            if (channels.Count > LicenseCapabilities.NumberOfChannels)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
