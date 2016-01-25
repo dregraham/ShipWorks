@@ -61,10 +61,6 @@
       <HintPath>..\..\packages\Autofac.Extras.Moq.4.0.0\lib\net45\Autofac.Extras.Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Common.Logging.dll</HintPath>
-    </Reference>
     <Reference Include="Excel">
       <HintPath>..\..\Components\Excel.dll</HintPath>
     </Reference>
