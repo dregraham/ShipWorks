@@ -14,8 +14,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         public AddStoreResponse(XmlDocument xmlResponse)
         {
             XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
-            Error = XPathUtility.Evaluate(xpath, "//*[local-name()='Error']", "");
-            Key = XPathUtility.Evaluate(xpath, "//*[local-name()='LicenseKey']", "");
+            Error = XPathUtility.Evaluate(xpath, "//Error", "");
+            Key = XPathUtility.Evaluate(xpath, "//License/Key", "");
 
             Success = string.IsNullOrEmpty(Error);
         }

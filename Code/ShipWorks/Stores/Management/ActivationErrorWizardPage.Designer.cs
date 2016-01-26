@@ -59,7 +59,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.errorMessage.Location = new System.Drawing.Point(44, 37);
             this.errorMessage.Name = "errorMessage";
-            this.errorMessage.Size = new System.Drawing.Size(395, 23);
+            this.errorMessage.Size = new System.Drawing.Size(395, 267);
             this.errorMessage.TabIndex = 2;
             this.errorMessage.Text = "An error has occurred";
             // 

@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-
-namespace ShipWorks.Stores.Management
+﻿namespace ShipWorks.Stores.Management
 {
     /// <summary>
     /// A page for use in the AddStoreWizard - Show license activation errors

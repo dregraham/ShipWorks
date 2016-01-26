@@ -37,6 +37,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             AddStoreResponse response = tangoWebClient.AddStore(this, store);
 
+            store.License = response.Key;
+
             return response.Success ?
                 new EnumResult<LicenseActivationState>(LicenseActivationState.Active) :
                 new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid, response.Error);

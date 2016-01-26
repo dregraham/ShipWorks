@@ -408,7 +408,7 @@ namespace ShipWorks.Stores.Management
                 ILicense license = licenseService.GetLicense(store);
 
                 // If we are legacy or are in freemium mode, and we already have a valid freemium edition store, then don't try to get a trial - it would fail anyway saying they aren't eligible
-                if (license.IsLegacy || (isFreemiumMode && (EditionSerializer.Restore(store) is FreemiumFreeEdition) && new ShipWorksLicense(store.License).IsValid))
+                if (!license.IsLegacy || (isFreemiumMode && (EditionSerializer.Restore(store) is FreemiumFreeEdition) && new ShipWorksLicense(store.License).IsValid))
                 {
                     // We already have their license
                     e.Skip = true;
@@ -875,6 +875,8 @@ namespace ShipWorks.Stores.Management
         {
             try
             {
+                // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
+                FilterLayoutContext.PushScope();
 
                 if (!string.IsNullOrEmpty(licenseKey.Text))
                 {
@@ -885,10 +887,7 @@ namespace ShipWorks.Stores.Management
                 {
                     return;
                 }
-
-                // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
-                FilterLayoutContext.PushScope();
-
+                
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     // Create the default presets
@@ -970,6 +969,7 @@ namespace ShipWorks.Stores.Management
                     showActivationError = true;
                     wizardPageActivationError.ErrorMessage = activateResult.Message;
                     e.SkipToPage = wizardPageActivationError;
+                    BackEnabled = false;
                 }
             }
 
@@ -1009,10 +1009,11 @@ namespace ShipWorks.Stores.Management
         #endregion
 
         /// <summary>
-        /// Skip this page if no error has ocurred.
+        /// Skip this page if no error has occurred.
         /// </summary>
         private void OnSteppingIntoWizardPageActivationError(object sender, WizardSteppingIntoEventArgs e)
         {
+            BackEnabled = false;
             e.Skip = !showActivationError;
             showActivationError = false;
         }
