@@ -42,6 +42,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             };
 
             elementHost.Child = page;
+
+            ViewModel.Load();
         }
 
         /// <summary>
