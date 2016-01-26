@@ -405,8 +405,10 @@ namespace ShipWorks.Stores.Management
 
             try
             {
+                ILicense license = licenseService.GetLicense(store);
+
                 // If we are legacy or are in freemium mode, and we already have a valid freemium edition store, then don't try to get a trial - it would fail anyway saying they aren't eligible
-                if (licenseService.IsLegacy || isFreemiumMode && (EditionSerializer.Restore(store) is FreemiumFreeEdition) && new ShipWorksLicense(store.License).IsValid)
+                if (license.IsLegacy || (isFreemiumMode && (EditionSerializer.Restore(store) is FreemiumFreeEdition) && new ShipWorksLicense(store.License).IsValid))
                 {
                     // We already have their license
                     e.Skip = true;
