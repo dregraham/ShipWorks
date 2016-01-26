@@ -109,30 +109,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Is the license over the ChannelLimit
         /// </summary>
-        public bool IsOverChannelLimit()
-        {
-            List<StoreTypeCode> channels = new List<StoreTypeCode>();
-
-            foreach (ActiveStore store in GetActiveStores())
-            {
-                // Create a ShipWorksLicense using the key
-                ShipWorksLicense storeLicense = new ShipWorksLicense(store.StoreLicenseKey);
-
-                // If the StoreTypeCode is not in our list add it
-                if (!channels.Contains(storeLicense.StoreTypeCode))
-                {
-                    channels.Add(storeLicense.StoreTypeCode);
-                }
-            }
-
-            // If the list of channels is greater than Number of channels 
-            // return true for IsOverChannelLimit
-            if (channels.Count > LicenseCapabilities.NumberOfChannels)
-            {
-                return true;
-            }
-
-            return false;
-        }
+        public bool IsOverChannelLimit() => 
+            LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit;
     }
 }
