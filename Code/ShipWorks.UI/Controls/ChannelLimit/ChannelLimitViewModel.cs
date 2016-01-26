@@ -61,9 +61,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             license.Refresh();
 
-            storeCollection = new ObservableCollection<ActiveStore>(license.GetActiveStores());
+            StoreCollection = new ObservableCollection<ActiveStore>(license.GetActiveStores());
 
-            UpdateErrorMessate();
+            UpdateErrorMesssage();
         }
 
         /// <summary>
@@ -125,13 +125,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Updates the error message to display to the user
         /// </summary>
-        private void UpdateErrorMessate()
+        private void UpdateErrorMesssage()
         {
             int numberToDelete = license.LicenseCapabilities.ActiveChannels - license.LicenseCapabilities.ChannelLimit;
 
             if (numberToDelete > 0)
             {
-
                 ErrorMessage = $"You have exceeded your channel limit. Please upgrade your plan or delete {numberToDelete} store types to continue using ShipWorks.";
             }            
         }
@@ -154,7 +153,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             license.Refresh();
 
-            UpdateErrorMessate();
+            StoreCollection.Clear();
+
+            license.GetActiveStores().ToList().ForEach(StoreCollection.Add);
+
+            UpdateErrorMesssage();
         }
 
         /// <summary>
