@@ -63,6 +63,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <remarks>
         /// Always returns false
         /// </remarks>
-        public bool IsOverChannelLimit() => false;
+        public bool IsOverChannelLimit => false;
     }
 }

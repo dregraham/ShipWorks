@@ -109,7 +109,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Is the license over the ChannelLimit
         /// </summary>
-        public bool IsOverChannelLimit() => 
+        public bool IsOverChannelLimit => 
             LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit;
     }
 }

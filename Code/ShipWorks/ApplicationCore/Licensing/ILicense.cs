@@ -33,6 +33,6 @@
         /// <summary>
         /// Is the user over their channel limit
         /// </summary>
-        bool IsOverChannelLimit();
+        bool IsOverChannelLimit { get; }
     }
 }

@@ -44,7 +44,13 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         public void Load()
         {
+            if (license.IsOverChannelLimit)
+            {
+
+            }
             storeCollection = new ObservableCollection<ActiveStore>(license.GetActiveStores());
+
+
 
             ErrorMessage = "";
         }
