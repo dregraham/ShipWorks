@@ -9,6 +9,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.Utility;
+using ShipWorks.Users.Audit;
+using ShipWorks.Stores.Management;
+using System.Windows.Forms;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
@@ -26,16 +29,18 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private string errorMessage;
         private IStoreManager storeManager;
         private IDeletionService deletionService;
+        private IWin32Window owner;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelLimitViewModel(ICustomerLicense license, ITangoWebClient tangoWebClient, IStoreManager storeManager, IDeletionService deletionService)
+        public ChannelLimitViewModel(ICustomerLicense license, ITangoWebClient tangoWebClient, IStoreManager storeManager, IDeletionService deletionService, IWin32Window owner)
         {
             this.license = license;
             this.tangoWebClient = tangoWebClient;
             this.storeManager = storeManager;
             this.deletionService = deletionService;
+            this.owner = owner;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             // Check to make sure we are getting a CustomerLicense
@@ -156,8 +161,16 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private void DeleteStoreEntity(StoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-
-            deletionService.DeleteStore(store);
+            using (StoreConfirmDeleteDlg dlg = new StoreConfirmDeleteDlg(store.StoreName))
+            {
+                if (dlg.ShowDialog(owner) == DialogResult.OK)
+                {
+                    using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditState.Disabled))
+                    {
+                        deletionService.DeleteStore(store);
+                    }
+                }
+            }
         }
     }
 }
