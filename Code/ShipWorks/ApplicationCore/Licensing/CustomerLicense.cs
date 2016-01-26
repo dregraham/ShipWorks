@@ -103,7 +103,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <returns></returns>
         public IEnumerable<ActiveStore> GetActiveStores()
         {
-            return tangoWebClient.GetActiveStores();
+            return tangoWebClient.GetActiveStores(this);
         }
 
         /// <summary>
