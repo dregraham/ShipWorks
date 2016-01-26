@@ -954,6 +954,8 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private bool ValidateLicense(WizardSteppingIntoEventArgs e)
         {
+            BackEnabled = false;
+
             ILicense license = licenseService.GetLicense(store);
             EnumResult<LicenseActivationState> activateResult = license.Activate(store);
             if (activateResult.Value != LicenseActivationState.Active)
@@ -969,7 +971,6 @@ namespace ShipWorks.Stores.Management
                     showActivationError = true;
                     wizardPageActivationError.ErrorMessage = activateResult.Message;
                     e.SkipToPage = wizardPageActivationError;
-                    BackEnabled = false;
                 }
             }
 
