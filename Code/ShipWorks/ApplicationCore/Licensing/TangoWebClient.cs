@@ -1179,6 +1179,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
 
+            CheckResponseForErrors(xmlResponse);
+
             List<ActiveStore> activeStores = new List<ActiveStore>();
 
             XPathNamespaceNavigator navigator = new XPathNamespaceNavigator(xmlResponse);
@@ -1212,6 +1214,23 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
+
+            CheckResponseForErrors(xmlResponse);
+        }
+
+        /// <summary>
+        /// Checks the response for errors.
+        /// </summary>
+        private static void CheckResponseForErrors(XmlDocument xmlResponse)
+        {
+            XPathNamespaceNavigator navigator = new XPathNamespaceNavigator(xmlResponse);
+
+            string error = XPathUtility.Evaluate(navigator, "//Error", string.Empty);
+
+            if (!error.Equals(string.Empty))
+            {
+                throw new TangoException(error);
+            }
         }
     }
 }
