@@ -89,6 +89,12 @@
       <DependentUpon>ChannelLimitDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitDlgHost.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\ChannelLimit\ChannelLimitDlgHost.Designer.cs">
+      <DependentUpon>ChannelLimitDlgHost.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml.cs">
       <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
     </Compile>
@@ -154,6 +160,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\ChannelLimit\ChannelLimitDlgHost.resx">
+      <DependentUpon>ChannelLimitDlgHost.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.resx">
       <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
     </EmbeddedResource>

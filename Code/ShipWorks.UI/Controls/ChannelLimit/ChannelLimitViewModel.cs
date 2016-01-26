@@ -10,7 +10,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     /// <summary>
     /// ViewModel for the ChannelLimitDlg
     /// </summary>
-    class ChannelLimitViewModel
+    public class ChannelLimitViewModel
     {
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -50,9 +50,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         }
 
         /// <summary>
-        /// Called when the Control is dismissed 
+        /// Called when the Control is dismissed
         /// </summary>
-        public void Dismis()
+        public void Dismiss()
         {
             license.Refresh();
         }
@@ -66,7 +66,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             get { return errorMessage; }
             set { handler.Set(nameof(ErrorMessage), ref errorMessage, value); }
         }
-        
+
         /// <summary>
         /// The selected store
         /// </summary>
