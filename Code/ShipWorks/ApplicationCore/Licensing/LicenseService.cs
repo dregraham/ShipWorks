@@ -32,7 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Customer Key read from the reader. 
         /// </summary>
-        /// <exception cref="ShipWorksLicenseException"></exception>
+        /// <exception cref="EncryptionException"></exception>
         private string CustomerKey => reader.Read();
 
         /// <summary>
@@ -41,12 +41,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <remarks>
         /// True if CustomerKey is null or empty
         /// </remarks>
-        /// <exception cref="ShipWorksLicenseException"></exception>
+        /// <exception cref="EncryptionException" />
         private bool IsLegacy => string.IsNullOrEmpty(CustomerKey);
 
         /// <summary>
         /// Returns the correct ILicense for the store
         /// </summary>
+        /// <exception cref="EncryptionException" />
         public ILicense GetLicense(StoreEntity store)
         {
             try
@@ -65,6 +66,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets all Licenses.
         /// </summary>
+        /// <exception cref="EncryptionException" />
         public IEnumerable<ILicense> GetLicenses()
         {
             try
@@ -83,6 +85,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Can the customer Logon?
         /// </summary>
+        /// <exception cref="EncryptionException" />
         public EnumResult<LogOnRestrictionLevel> AllowsLogOn()
         {
             try

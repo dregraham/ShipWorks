@@ -23,7 +23,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Reads this License
         /// </summary>
-        /// <exception cref="ShipWorksLicenseException"></exception>
         public string Read()
         {
             ConfigurationData.CheckForChangesNeeded();
