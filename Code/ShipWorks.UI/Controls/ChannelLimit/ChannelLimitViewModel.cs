@@ -2,6 +2,7 @@
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
@@ -12,6 +13,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     class ChannelLimitViewModel
     {
         private readonly PropertyChangedHandler handler;
+        public event PropertyChangedEventHandler PropertyChanged;
         private ActiveStore selectedStore;
         private ObservableCollection<ActiveStore> storeCollection;
         private readonly ICustomerLicense license;
@@ -25,6 +27,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             this.license = license;
             this.tangoWebClient = tangoWebClient;
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             // Check to make sure we are getting a CustomerLicense
             if (license.IsLegacy)
