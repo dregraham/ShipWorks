@@ -116,21 +116,20 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             get
             {
-                byte[] key;
                 try
                 {
-                    key = databaseId.Get().ToByteArray();
+                    byte[] key = databaseId.Get().ToByteArray();
+
+                    return new AesManaged()
+                    {
+                        IV = new byte[] { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 },
+                        Key = key
+                    };
                 }
                 catch (DatabaseIdentifierException ex)
                 {
                     throw new EncryptionException(ex.Message, ex);
                 }
-
-                return new AesManaged()
-                {
-                    IV = new byte[] {125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14},
-                    Key = key
-                };
             }
         }
     }
