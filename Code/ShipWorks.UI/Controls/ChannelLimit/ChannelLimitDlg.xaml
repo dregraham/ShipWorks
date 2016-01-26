@@ -133,7 +133,7 @@
 
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Store Name" DisplayMemberBinding="{Binding StoreName}" Width="125"/>
+                    <GridViewColumn Header="Store Name" DisplayMemberBinding="{Binding Name}" Width="125"/>
                     <GridViewColumn Header="Store Type" DisplayMemberBinding="{Binding StoreType}" Width="140"/>
                 </GridView>
             </ListView.View>

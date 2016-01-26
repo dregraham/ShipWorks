@@ -45,6 +45,7 @@ using log4net;
 using ShipWorks.Shipping.Policies;
 using Timer = System.Windows.Forms.Timer;
 using System.Reactive.Linq;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping
 {
@@ -2383,6 +2384,27 @@ namespace ShipWorks.Shipping
         {
             Cursor.Current = Cursors.WaitCursor;
             cancelProcessing = false;
+
+            LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
+
+            ILicense license = licenseService.GetLicenses().FirstOrDefault();
+
+            license.Refresh();
+
+            if (license.IsOverChannelLimit)
+            {
+                using (IChannelLimitDlgHost channelLimitDlgHost = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitDlgHost>())
+                {
+                    IWin32Window mainForm = IoC.UnsafeGlobalLifetimeScope.Resolve<IWin32Window>();
+                    channelLimitDlgHost.ShowDialog(mainForm);
+                }
+                license.Refresh();
+                if (license.IsOverChannelLimit)
+                {
+                    MessageHelper.ShowMessage(this, "Channel Limit Exceeded");
+                    return;
+                }
+            }
 
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
             SaveChangesToUIDisplayedShipments();

@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.ApplicationCore.Licensing
+﻿using Interapptive.Shared.Utility;
+
+namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// An active store retrieved from Tango
@@ -14,5 +16,16 @@
         /// The store name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// The store type
+        /// </summary>
+        public string StoreType
+        {
+            get
+            {
+                return EnumHelper.GetDescription(new ShipWorksLicense(StoreLicenseKey).StoreTypeCode);
+            }
+        }
     }
 }

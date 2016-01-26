@@ -34,21 +34,22 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelLimitViewModel(ICustomerLicense license, ITangoWebClient tangoWebClient, IStoreManager storeManager, IDeletionService deletionService, IWin32Window owner)
+        public ChannelLimitViewModel(ILicenseService licenseService, ITangoWebClient tangoWebClient, IStoreManager storeManager, IDeletionService deletionService, IWin32Window owner)
         {
-            this.license = license;
+            license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
+
+            // Check to make sure we are getting a CustomerLicense
+            if (license == null)
+            {
+                throw new ShipWorksLicenseException("Store licenses do not have channel limits.");
+            }
+
             this.tangoWebClient = tangoWebClient;
             this.storeManager = storeManager;
             this.deletionService = deletionService;
             this.owner = owner;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-
-            // Check to make sure we are getting a CustomerLicense
-            if (license.IsLegacy)
-            {
-                throw new ShipWorksLicenseException("Store licenses do not have channel limits.");
-            }
-
+            
             // Wire up the delete store click to the delete store method
             DeleteStoreClickCommand = new RelayCommand(DeleteStore, CanExecuteDeleteStore);
         }
@@ -58,6 +59,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         public void Load()
         {
+            license.Refresh();
+
             storeCollection = new ObservableCollection<ActiveStore>(license.GetActiveStores());
 
             UpdateErrorMessate();

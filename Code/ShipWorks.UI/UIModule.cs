@@ -22,8 +22,7 @@ namespace ShipWorks.UI
             builder.RegisterType<MessageHelperWrapper>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<ChannelLimitViewModel>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<ChannelLimitViewModel>();
 
             builder.RegisterType<ChannelLimitDlgHost>()
                 .AsImplementedInterfaces();

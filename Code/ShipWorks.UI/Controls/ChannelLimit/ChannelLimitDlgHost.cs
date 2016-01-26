@@ -36,6 +36,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void OnDlgLoad(object sender, EventArgs e)
         {
+            ViewModel.Load();
+
             ChannelLimitDlg page = new ChannelLimitDlg
             {
                 DataContext = ViewModel
