@@ -193,6 +193,7 @@ namespace :test do
 			# We need to filter the tests based on the categories provided
 			msbuild.parameters += " /p:IncludeTraits=\"Category=#{args.categoryFilter}\""
 			print "Category Parameter #{args.categoryFilter}"
+		
 		end
 
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
@@ -225,10 +226,10 @@ namespace :db do
 			USE master;
 			go
 			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '{DBNAME}')
-			ALTER DATABASE [{DBNAME}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+				ALTER DATABASE [{DBNAME}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
 			go
 			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '{DBNAME}')
-			ALTER DATABASE [{DBNAME}] SET MULTI_USER;
+				ALTER DATABASE [{DBNAME}] SET MULTI_USER;
 			go
 
 			-- Now it's safe to drop the database without any open connections

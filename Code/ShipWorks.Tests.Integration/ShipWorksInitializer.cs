@@ -13,6 +13,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Startup;
+using ShipWorks.Startup;
 using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
@@ -123,8 +124,8 @@ namespace ShipWorks.Tests.Integration.MSTest
                     case "MSTest-vm":
                         instance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
                         break;
-                    case "benz-pc":
-                        instance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
+                    case "benz-pc3":
+                        instance = Guid.Parse("{A74AED9C-0AB8-4649-B233-8DFBE774D9F8}");
                         break;
                     case "mirza-pc2":
                         instance = Guid.Parse("{1231F4A9-640C-4E08-A52A-AE3B2C2FB864}");
