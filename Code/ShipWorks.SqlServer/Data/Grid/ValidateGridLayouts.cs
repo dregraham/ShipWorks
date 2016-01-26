@@ -1,7 +1,4 @@
-using System;
-using System.Data;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
 using Microsoft.SqlServer.Server;
 
 
@@ -17,67 +14,65 @@ public partial class StoredProcedures
 
             SqlCommand cmd = con.CreateCommand();
             cmd.CommandText = @"
-            -- SET NOCOUNT ON added to prevent extra result sets from
-            -- interfering with SELECT statements.
-            SET NOCOUNT ON;
+                -- SET NOCOUNT ON added to prevent extra result sets from
+                -- interfering with SELECT statements.
+                SET NOCOUNT ON;
 
-            DECLARE @BrokenGridColumnLayout TABLE
-            (
-	            GridColumnLayoutID int
-            );
+                DECLARE @GridColumnLayoutID int;
 
-            WITH Grouped AS
-            (
-            SELECT GridColumnLayoutID,
-                    COUNT(*) AS Positions, 
-                    COUNT(DISTINCT Position) AS UniquePositions, 
-                    CAST(COUNT(*) * ((COUNT(*) - 1) / 2.0) AS int) AS TargetSum, 
-                    SUM(Position) AS ActualSum
-            FROM GridColumnPosition
-            GROUP BY GridColumnLayoutID
-            )
+                DECLARE @BrokenGridColumnLayout TABLE
+                (
+	                GridColumnLayoutID int
+                );
 
-            INSERT INTO @BrokenGridColumnLayout (GridColumnLayoutID)
-            SELECT GridColumnLayoutID 
-	            FROM Grouped g
-	            WHERE g.Positions != g.UniquePositions OR g.TargetSum != g.ActualSum;
+                DECLARE @WorkingGridColumnLayout TABLE
+                (
+	                GridColumnLayoutID int,
+	                GridColumnPositionID int,
+	                NewPosition int
+                );
 
-	            BEGIN TRY 
-		            WHILE (SELECT COUNT(*) FROM @BrokenGridColumnLayout) > 0
-			            BEGIN
+                WITH Grouped AS
+                (
+                SELECT GridColumnLayoutID,
+                        COUNT(*) AS Positions, 
+                        COUNT(DISTINCT Position) AS UniquePositions, 
+                        CAST(COUNT(*) * ((COUNT(*) - 1) / 2.0) AS int) AS TargetSum, 
+                        SUM(Position) AS ActualSum
+                FROM GridColumnPosition
+                GROUP BY GridColumnLayoutID
+                )
 
-				            DECLARE @OffendingId int;
-				            SELECT @OffendingId = (SELECT TOP(1) GridColumnLayoutID FROM @BrokenGridColumnLayout);
+                --Populate a table of all the GridColumnLayoutIDs that are broken
+                INSERT INTO @BrokenGridColumnLayout (GridColumnLayoutID)
+	                SELECT DISTINCT GridColumnLayoutID
+	                FROM Grouped g
+	                WHERE g.Positions != g.UniquePositions OR g.TargetSum != g.ActualSum
 
-					            DECLARE @GridColumnPositionId int
-					            DECLARE @Position int
-					            SELECT @Position = 0
+                -- While there are broken rows
+                WHILE (SELECT COUNT(*) FROM @BrokenGridColumnLayout) > 0
+                BEGIN
+	                -- The ID we are going to fix 
+	                SELECT @GridColumnLayoutID = (SELECT TOP(1) GridColumnLayoutID FROM @BrokenGridColumnLayout)
 
-					            DECLARE MY_CURSOR CURSOR 
-						            LOCAL STATIC READ_ONLY FORWARD_ONLY
-					            FOR 
-					            SELECT GridColumnPositionID 
-						            FROM GridColumnPosition
-						            WHERE GridColumnLayoutID = @OffendingId
-						            ORDER BY Position;
+	                -- Populate the @WorkingGridColumnLayout table with all of the GridColumnPositionIDs and new Positions
+	                INSERT INTO @WorkingGridColumnLayout (GridColumnLayoutID, GridColumnPositionID, NewPosition)
+		                SELECT GridColumnLayoutID, GridColumnPositionID ,ROW_NUMBER() OVER (ORDER BY Position) - 1
+		                FROM GridColumnPosition WHERE GridColumnLayoutID = @GridColumnLayoutID
+	
+	                -- Update the GridColumnPosition table with the new values from the @WorkingGridColumnLayout table 
+	                UPDATE GridColumnPosition 
+		                SET Position = wgcl.NewPosition 
+		                FROM GridColumnPosition gcp 
+		                INNER JOIN @WorkingGridColumnLayout wgcl 
+		                ON gcp.GridColumnPositionID = wgcl.GridColumnPositionID
 
-					            OPEN MY_CURSOR
-					            FETCH NEXT FROM MY_CURSOR INTO @GridColumnPositionId
-					            WHILE @@FETCH_STATUS = 0
-					            BEGIN 
-						            UPDATE GridColumnPosition SET Position = @Position WHERE GridColumnPositionID = @GridColumnPositionId
-						            SELECT @Position = @Position + 1
-						            FETCH NEXT FROM MY_CURSOR INTO @GridColumnPositionId
-					            END
-					            CLOSE MY_CURSOR
-					            DEALLOCATE MY_CURSOR
+	                -- Remove the id once its fixed
+	                DELETE FROM @BrokenGridColumnLayout 
+		                WHERE GridColumnLayoutID = @GridColumnLayoutID
 
-				            DELETE FROM @BrokenGridColumnLayout WHERE GridColumnLayoutID = @OffendingId;
-			            END
-	            END TRY
-	            BEGIN CATCH 
-		            RAISERROR('The grid layout is corrupt.', 16, 1);
-	            END CATCH;
+	                DELETE FROM @WorkingGridColumnLayout
+                END
             ";
 
             cmd.ExecuteNonQuery();
