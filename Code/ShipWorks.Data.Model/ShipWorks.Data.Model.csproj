@@ -94,9 +94,9 @@
     </CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
@@ -163,10 +163,12 @@
     <Compile Include="Custom\EntityClasses\FedExAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\InsurancePolicyEntity.cs" />
     <Compile Include="Custom\EntityClasses\iParcelAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\IRuleEntity.cs" />
     <Compile Include="Custom\EntityClasses\NullCarrierAccount.cs" />
     <Compile Include="Custom\EntityClasses\NullEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderItemEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ShippingDefaultsRuleEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingProfileEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingProviderRuleEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingSettingsEntity.cs" />

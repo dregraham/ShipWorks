@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.Endicia;
 
         /// <summary>
-        /// Reller of Endicia services.  
+        /// Reller of Endicia services.
         /// </summary>
         public virtual EndiciaReseller EndiciaReseller => EndiciaReseller.None;
 
@@ -269,7 +269,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
-            
+
             // A null reference error was being thrown.  Discoverred by Crash Reports.
             // Let's figure out what is null....
             if (shipment == null)
@@ -373,7 +373,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
         }
-        
+            
+                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS 
+                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS 
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
@@ -547,7 +549,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             if (shipment.Postal != null && shipment.Postal.Endicia != null)
             {
-                shipment.Postal.Endicia.RequestedLabelFormat = (int)requestedLabelFormat;                
+                shipment.Postal.Endicia.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
 

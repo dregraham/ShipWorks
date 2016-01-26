@@ -27,13 +27,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private ICarrierShipmentAdapter shipmentAdapter;
         private ObservableCollection<DimensionsProfileEntity> dimensionsProfiles;
         private DimensionsProfileEntity selectedDimensionsProfile;
-        private InsuranceViewModel insuranceViewModel;
+        private IInsuranceViewModel insuranceViewModel;
 
         /// <summary>
         /// The insurance view model to use.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public InsuranceViewModel InsuranceViewModel
+        public IInsuranceViewModel InsuranceViewModel
         {
             get { return insuranceViewModel; }
             set { handler.Set(nameof(InsuranceViewModel), ref insuranceViewModel, value); }

@@ -21,6 +21,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         {
             { 10010, "Invalid Yahoo Store ID" },
             { 10009, "Invalid Access Token" },
+            { 10402, "StatusID needs to be specified in correct format" },
             { 20021, "Order #{0} does not exist" }
         };
 
@@ -32,6 +33,10 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         private long? backupOrderNumber;
         private YahooOrderNumberValidation isValid;
         private string validationErrorMessage;
+        private const int InvalidUsernameCode = 10010;
+        private const int InvalidAccessTokenCode = 10009;
+        private const int InvalidStatusIDFormatCode = 10402;
+        private const int OrderDoesNotExistCode = 20021;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiAccountViewModel"/> class.
@@ -211,7 +216,14 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
                 YahooResponse response = StoreWebClient(new YahooStoreEntity { YahooStoreID = YahooStoreID, AccessToken = AccessToken })
                     .ValidateCredentials();
 
-                return response.ErrorMessages == null ? string.Empty : CheckCredentialsError(response);
+                string error = response.ErrorMessages == null ?
+                    string.Empty :
+                    CheckCredentialsError(response);
+
+                return error.Equals("StatusID needs to be specified in correct format",
+                    StringComparison.InvariantCultureIgnoreCase) ?
+                    string.Empty :
+                    error;
             }
             catch (Exception ex)
             {
@@ -234,13 +246,13 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
                 return "Please enter your Access Token";
             }
 
-            if (!BackupOrderNumber.HasValue)
+            if (string.IsNullOrWhiteSpace(BackupOrderNumber.ToString()))
             {
                 return "Please enter a starting order number. If you do not currently have any orders " +
                        "for this store, enter any number and you can reset it later.";
             }
 
-            if (BackupOrderNumber < 0)
+            if (BackupOrderNumber != null && BackupOrderNumber < 0)
             {
                 return "Yahoo only supports positive, numeric order numbers";
             }

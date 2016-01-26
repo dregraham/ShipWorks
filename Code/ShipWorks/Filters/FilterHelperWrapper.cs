@@ -17,7 +17,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Indicates if the given object is in the filter contents of the specified filter content id
         /// </summary>
-        public bool IsObjectInFilterContent(long orderID, ShippingProviderRuleEntity rule)
+        public bool IsObjectInFilterContent(long orderID, IRuleEntity rule)
         {
             if (rule == null)
             {

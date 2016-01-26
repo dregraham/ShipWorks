@@ -16,6 +16,11 @@ namespace ShipWorks.Shipping.Carriers
     public abstract class CarrierAccountRepositoryBase<T> : ICarrierAccountRepository<T> where T : ICarrierAccount
     {
         /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public abstract void CheckForChangesNeeded();
+
+        /// <summary>
         ///  Returns a list of accounts for the carrier.
         ///  </summary>
         public abstract IEnumerable<T> Accounts { get; }

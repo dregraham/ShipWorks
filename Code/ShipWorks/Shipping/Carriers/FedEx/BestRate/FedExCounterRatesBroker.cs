@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
@@ -60,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             RateGroup bestRates = new RateGroup(new List<RateResult>());
 
             // Use a settings repository to get counter rates
-            ((FedExShipmentType)ShipmentType).SettingsRepository = settingsRepository;
+            ((FedExShipmentType) ShipmentType).SettingsRepository = settingsRepository;
             ShipmentType.CertificateInspector = certificateInspector;
 
             // The dummy account wouldn't have an account number if we couldn't get one from Tango
@@ -75,10 +72,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             {
                 bestRates = base.GetBestRates(shipment, brokerExceptions);
 
-                foreach (BestRateResultTag bestRateResultTag in bestRates.Rates.Select(rate => (BestRateResultTag)rate.Tag))
+                foreach (BestRateResultTag bestRateResultTag in bestRates.Rates.Select(rate => (BestRateResultTag) rate.Tag))
                 {
-                    // We want FedEx account setup wizard to show when a rate is selected so the user 
-                    // can create their own FedEx account since these rates are just counter rates 
+                    // We want FedEx account setup wizard to show when a rate is selected so the user
+                    // can create their own FedEx account since these rates are just counter rates
                     // using a ShipWorks account.
                     bestRateResultTag.SignUpAction = new Func<bool>(DisplaySetupWizard);
                 }
@@ -87,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             {
                 if (ex.InnerExceptions.Count == 1 && ex.InnerExceptions.OfType<CounterRatesOriginAddressException>().Any())
                 {
-                    // There was a problem with the origin address, so add the invalid store address footer factory 
+                    // There was a problem with the origin address, so add the invalid store address footer factory
                     // to the rate group and eat the exception
                     bestRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentType));
                 }
@@ -102,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         }
 
         /// <summary>
-        /// Updates the shipment origin address for getting counter rates. In cases where a shipment is 
+        /// Updates the shipment origin address for getting counter rates. In cases where a shipment is
         /// configured to use the Account address or there is an incomplete "Other" address, we want
         /// to use the store address for getting counter rates.
         /// </summary>

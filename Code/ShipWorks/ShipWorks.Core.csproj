@@ -116,28 +116,33 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\ActiproSoftware.WinUICore.Net20.dll</HintPath>
     </Reference>
-    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.25.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Apitron.PDF.Rasterizer.dll</HintPath>
+    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.66.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.66.0\lib\net40\Apitron.PDF.Rasterizer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Autofac">
-      <HintPath>..\..\Components\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Autofac.Extras.Attributed">
-      <HintPath>..\..\Components\Autofac.Extras.Attributed.dll</HintPath>
+    <Reference Include="Autofac.Extras.Attributed, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.Extras.Attributed.3.3.0\lib\net40\Autofac.Extras.Attributed.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Autofac.Integration.Mef">
-      <HintPath>..\..\Components\Autofac.Integration.Mef.dll</HintPath>
+    <Reference Include="Autofac.Integration.Mef, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.Mef.3.0.3\lib\net40\Autofac.Integration.Mef.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Common.Logging.dll</HintPath>
+    <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Logging.Core">
-      <HintPath>..\..\Components\Common.Logging.Core.dll</HintPath>
+    <Reference Include="Common.Logging.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Logging.Log4Net1213">
-      <HintPath>..\..\Components\Common.Logging.Log4Net1213.dll</HintPath>
+    <Reference Include="Common.Logging.Log4Net1213, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Common.Logging.Log4Net1213.3.0.0\lib\net40\Common.Logging.Log4Net1213.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ComponentFactory.Krypton.Toolkit, Version=2.8.5.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -155,9 +160,9 @@
       <HintPath>..\..\Components\Divelements.SandRibbon.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -180,14 +185,14 @@
       <HintPath>..\..\Components\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Quartz.dll</HintPath>
+    <Reference Include="Quartz, Version=2.3.2.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Quartz.2.3.2\lib\net40\Quartz.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Rebex.Common, Version=2.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -637,6 +642,7 @@
     <Compile Include="ApplicationCore\IoC.cs" />
     <Compile Include="ApplicationCore\IRegisterDockableWindow.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
+    <Compile Include="ApplicationCore\Licensing\ILicenseAccountDetail.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebClientWrapper.cs" />
@@ -760,8 +766,11 @@
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\IDataProvider.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
+    <Compile Include="Data\IObjectReferenceManager.cs" />
+    <Compile Include="Data\ObjectReferenceManagerWrapper.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
     <Compile Include="Editions\EditionManagerWrapper.cs" />
+    <Compile Include="Editions\IEdition.cs" />
     <Compile Include="Editions\IEditionManager.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
     <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
@@ -769,6 +778,7 @@
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Messaging\Messages\ShippingSettingsChangedMessage.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
@@ -903,11 +913,16 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensions.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateConsolidatePostalRates.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
+    <Compile Include="Shipping\Insurance\IInsuranceUtility.cs" />
+    <Compile Include="Shipping\Insurance\InsuranceUtilityWrapper.cs" />
     <Compile Include="Shipping\IShipmentFactory.cs" />
     <Compile Include="Shipping\Services\CarrierShipmentAdapterBase.cs" />
     <Compile Include="Shipping\IShippingOriginManager.cs" />
@@ -1279,7 +1294,6 @@
     </Compile>
     <Compile Include="Shipping\Settings\ShippingSettingsWrapper.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
-    <Compile Include="Shipping\ShipmentProcessor.cs" />
     <Compile Include="Shipping\ShippingAddressEditStateType.cs" />
     <Compile Include="Stores\Content\IOrderUtility.cs" />
     <Compile Include="Stores\Content\OrderManager.cs" />
@@ -9046,7 +9060,7 @@
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EmailAccounts.estimate.sql" />
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\MigrateData_EmailAccounts.sql" />
     <None Include="Resources\sw_cubes_32x32.png" />
-    <None Include="Resources\InfoTip.png" />
+    <Resource Include="Resources\InfoTip.png" />
     <Resource Include="Resources\check.png" />
     <None Include="Resources\information.png" />
     <EmbeddedResource Include="ApplicationCore\Options\OptionPageLogging.resx">
@@ -10696,6 +10710,8 @@
     <None Include="Resources\house.png" />
     <None Include="Resources\island.jpg" />
     <None Include="Resources\island.png" />
+    <Content Include="Resources\info.png" />
+    <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

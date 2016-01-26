@@ -81,5 +81,30 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             return GetPackageAdapters();
         }
+
+        /// <summary>
+        /// Update the insurance fields on the shipment and packages
+        /// </summary>
+        public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            // If there is more than one package, only declared value is allowed, so just return.
+            if (Shipment.IParcel.Packages.Count > 1)
+            {
+                return;
+            }
+
+            if (Shipment.InsuranceProvider != shippingSettings.IParcelInsuranceProvider)
+            {
+                Shipment.InsuranceProvider = shippingSettings.IParcelInsuranceProvider;
+            }
+
+            foreach (IParcelPackageEntity packageEntity in Shipment.IParcel.Packages)
+            {
+                if (packageEntity.InsurancePennyOne != shippingSettings.IParcelInsurancePennyOne)
+                {
+                    packageEntity.InsurancePennyOne = shippingSettings.IParcelInsurancePennyOne;
+                }
+            }
+        }
     }
 }

@@ -30,17 +30,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             InitializeComponent();
 
-            convertToExpeditedControl.DescriptionText = "You can now save up to 46% on USPS Priority Mail and Priority Mail Express Shipments with ShipWorks " +
-                                                        "and IntuiShip, all through one single Stamps.com account. " + Environment.NewLine + Environment.NewLine +
-                                                        "There are no additional monthly fees and the service, tracking, and labels are exactly the same. " +
-                                                        "The only difference is that you pay less for postage!";
+            convertToExpeditedControl.DescriptionText = "You can now save up to 54% off Retail prices on USPS Priority Mail and Priority Mail Express " +
+                                                        "Shipments with ShipWorks, all through one single USPS account.  " +
+                                                        "No more switching between accounts to get the lowest rates!";
 
-            convertToExpeditedControl.LinkText = "Click here to add these discounted rates from IntuiShip through your existing Stamps.com account at no additional cost.";
+            convertToExpeditedControl.LinkText = "Click here to add these discounted rates through your existing Stamps.com account at no additional cost.";
 
-            signUpForExpeditedControl.DiscountText = "You can now save up to 46% on USPS Priority Mail and Priority Mail Express Shipments with ShipWorks " +
-                                                     "and IntuiShip, all through one single Stamps.com account." + Environment.NewLine + Environment.NewLine +
-                                                     "To get these discounts, you just need to open a Stamps.com account which will enable you to easily " +
-                                                     "print both USPS Priority Mail and Priority Mail Express labels and First Class shipping labels.";
+            signUpForExpeditedControl.DiscountText = "You can now save up to 54% off Retail prices on USPS Priority Mail and Priority Mail Express Shipments " + 
+                                                    "with ShipWorks, all through one single Stamps.com account." + Environment.NewLine + Environment.NewLine +
+                                                     "To get these discounts, you just need to open a Stamps.com account which will enable you to easily " + 
+                                                     "print USPS Priority Mail, Priority Mail Express labels and First Class shipping labels.";
         }
 
         /// <summary>
@@ -58,6 +57,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 requiresSignup = false;
                 signUpForExpeditedControl.Visible = false;
                 convertToExpeditedControl.Visible = true;
+
+                // Resize the control 
+                convertToExpeditedControl.learnMore.Location = new System.Drawing.Point(26, 81);
+                convertToExpeditedControl.linkLabel1.Location = new System.Drawing.Point(26, 110);
+                convertToExpeditedControl.Size = new System.Drawing.Size(425, 150);
 
                 convertToExpeditedControl.Top = signUpForExpeditedControl.Top;
                 Height = convertToExpeditedControl.Bottom + 85;

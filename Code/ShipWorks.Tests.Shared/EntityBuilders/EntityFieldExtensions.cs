@@ -34,6 +34,11 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         {
             Type type = field.DataType;
 
+            if (field.IsNullable && !setValueIfNullable)
+            {
+                return;
+            }
+
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 if (!setValueIfNullable)

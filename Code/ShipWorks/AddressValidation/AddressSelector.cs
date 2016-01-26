@@ -36,19 +36,11 @@ namespace ShipWorks.AddressValidation
         public event EventHandler AddressSelecting;
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        public AddressSelector() : this(string.Empty)
-        {
-
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="AddressSelector"/> class.
         /// </summary>
         public AddressSelector(string addressPrefix)
         {
-            this.addressPrefix = addressPrefix;
+            this.addressPrefix = addressPrefix ?? string.Empty;
         }
 
         /// <summary>

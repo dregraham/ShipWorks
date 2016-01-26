@@ -1,5 +1,6 @@
 using System;
 using Interapptive.Shared.Business;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -77,6 +78,15 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             get { return new PersonAdapter(this, string.Empty); }
             set { PersonAdapter.Copy(value, Address); }
+        }
+
+        /// <summary>
+        /// Strongly typed store type code
+        /// </summary>
+        public StoreTypeCode StoreTypeCode
+        {
+            get { return (StoreTypeCode) TypeCode; }
+            set { TypeCode = (int) value; }
         }
     }
 }

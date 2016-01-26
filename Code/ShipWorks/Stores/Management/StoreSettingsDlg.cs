@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Management
         // License info
         ShipWorksLicense license;
         TrialDetail trialDetail;
-        LicenseAccountDetail accountDetail;
+        ILicenseAccountDetail accountDetail;
 
         // Download policy
         ComputerDownloadPolicy downloadPolicy;
@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Management
         {
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
 
-            // Download policy 
+            // Download policy
             downloadPolicy = ComputerDownloadPolicy.Load(store);
 
             // Load the download policy choices and start listening for changes
@@ -468,7 +468,7 @@ namespace ShipWorks.Stores.Management
                     return;
                 }
 
-                // Save the settings tab to the store eneity
+                // Save the settings tab to the store entity
                 if (!SaveSettingsTab())
                 {
                     optionControl.SelectedPage = optionPageSettings;
@@ -518,7 +518,7 @@ namespace ShipWorks.Stores.Management
                     }
                 }
 
-                // Have to make sure our in-memory list of presets stays current.  The in-memory Stores list does not get updated at this point - 
+                // Have to make sure our in-memory list of presets stays current.  The in-memory Stores list does not get updated at this point -
                 // that happens only in the MainForm
                 StatusPresetManager.CheckForChanges();
 

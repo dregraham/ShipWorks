@@ -10,13 +10,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Returns a list of accounts for the carrier.
         /// </summary>
-        public override IEnumerable<UpsAccountEntity> Accounts
-        {
-            get
-            {
-                return UpsAccountManager.Accounts;
-            }
-        }
+        public override IEnumerable<UpsAccountEntity> Accounts => UpsAccountManager.Accounts;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => UpsAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.

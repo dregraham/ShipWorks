@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
-using ShipWorks.Stores;
-using ShipWorks.Shipping.Profiles;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
-using System.Diagnostics;
-using ShipWorks.Editions;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Core.Messaging;
 using System.Diagnostics.CodeAnalysis;
 using ShipWorks.Shipping.Services;
@@ -133,20 +134,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            List<TemplateLabelData> labelData = new List<TemplateLabelData>();
-
-            // Get the resource list for our shipment
-            List<DataResourceReference> resources =
-                DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID);
-
-            if (resources.Any())
-            {
-                // Add our standard label output
-                DataResourceReference labelResource = resources.Single(i => i.Label == "LabelPrimary");
-                labelData.Add(new TemplateLabelData(null, "Label", TemplateLabelCategory.Primary, labelResource));
-            }
-
-            return labelData;
+            return DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID)
+                .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
+                .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
+                    TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
+                .ToList();
         }
 
         /// <summary>

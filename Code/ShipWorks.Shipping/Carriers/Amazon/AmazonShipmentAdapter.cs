@@ -75,5 +75,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Are customs allowed?
         /// </summary>
         public override bool CustomsAllowed => false;
+
+        /// <summary>
+        /// Update the insurance fields on the shipment and packages
+        /// </summary>
+        public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            // Nothing to do as Amazon is only allowed to use ShipWorks insurance
+        }
     }
 }

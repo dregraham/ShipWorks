@@ -11,13 +11,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Gets all the Express1 Endicia accounts in the system
         /// </summary>
-        public override IEnumerable<EndiciaAccountEntity> Accounts
-        {
-            get
-            {
-                return EndiciaAccountManager.Express1Accounts;
-            }
-        }
+        public override IEnumerable<EndiciaAccountEntity> Accounts => EndiciaAccountManager.Express1Accounts;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => EndiciaAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Gets the Endicia account with the specified id.

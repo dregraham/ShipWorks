@@ -520,24 +520,19 @@ namespace ShipWorks.Shipping
 
                 // First apply the base profile
                 ApplyProfile(shipment, shippingProfileManager.GetOrCreatePrimaryProfile(this));
-            }
 
-            // Now apply ShipSense
-            ApplyShipSense(shipment);
+                // Now apply ShipSense
+                ApplyShipSense(shipment);
 
-            // Go through each additional profile and apply it as well
-            foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
-            {
-                ShippingProfileEntity profile = ShippingProfileManager.GetProfile(rule.ShippingProfileID);
-                if (profile != null)
+                IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
+
+                // Go through each additional profile and apply it as well
+                foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
                 {
-                    long? filterContentID = FilterHelper.GetFilterNodeContentID(rule.FilterNodeID);
-                    if (filterContentID != null)
+                    ShippingProfileEntity profile = ShippingProfileManager.GetProfile(rule.ShippingProfileID);
+                    if (profile != null && filterHelper.IsObjectInFilterContent(shipment.OrderID, rule))
                     {
-                        if (FilterHelper.IsObjectInFilterContent(shipment.OrderID, filterContentID.Value))
-                        {
-                            ApplyProfile(shipment, profile);
-                        }
+                        ApplyProfile(shipment, profile);
                     }
                 }
             }
@@ -660,7 +655,6 @@ namespace ShipWorks.Shipping
             }
         }
 
-
         /// <summary>
         /// Configures the shipment for ShipSense. This is useful for carriers that support
         /// multiple package shipments, allowing the shipment type a chance to add new packages
@@ -688,50 +682,6 @@ namespace ShipWorks.Shipping
         {
             return false;
         }
-
-        ///// <summary>
-        ///// Create a profile with the default settings for the shipment type
-        ///// </summary>
-        //public ShippingProfileEntity GetPrimaryProfile()
-        //{
-        //    ShippingProfileEntity profile = GetDefaultProfile();
-
-        //    if (profile == null)
-        //    {
-        //        lock (syncLock)
-        //        {
-        //            profile = GetDefaultProfile();
-
-        //            if (profile == null)
-        //            {
-        //                profile = new ShippingProfileEntity();
-        //                profile.Name = string.Format("Defaults - {0}", ShipmentTypeName);
-        //                profile.ShipmentType = (int) ShipmentTypeCode;
-        //                profile.ShipmentTypePrimary = true;
-
-        //                // Load the shipmentType specific profile data
-        //                LoadProfileData(profile, true);
-
-        //                // Configure it as a primary profile
-        //                ConfigurePrimaryProfile(profile);
-
-        //                // Save the profile
-        //                ShippingProfileManager.SaveProfile(profile);
-        //            }
-        //        }
-        //    }
-
-        //    return profile;
-        //}
-
-        ///// <summary>
-        ///// Gets the default profile if it exists
-        ///// </summary>
-        ///// <returns></returns>
-        //private ShippingProfileEntity GetDefaultProfile()
-        //{
-        //    return ShippingProfileManager.GetDefaultProfile(ShipmentTypeCode);
-        //}
 
         /// <summary>
         /// Allows bases classes to apply the default settings to the given profile

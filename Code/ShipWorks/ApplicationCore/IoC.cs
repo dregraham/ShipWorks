@@ -4,9 +4,12 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Core;
+using Interapptive.Shared;
+using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Core.Messaging;
@@ -55,6 +58,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static IContainer Initialize(IContainer container, params Assembly[] assemblies)
         {
             var builder = new ContainerBuilder();
@@ -102,7 +106,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<AddressSelector>()
+            builder.Register((_, p) => new AddressSelector(p.OfType<string>().FirstOrDefault()))
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShipBillAddressEditorDlg>();
@@ -119,6 +123,9 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
 
+            builder.RegisterType<TangoWebClientWrapper>()
+                .As<ITangoWebClient>();
+
             builder.Register(c => UserSession.Security)
                 .As<ISecurityContext>()
                 .ExternallyOwned();
@@ -131,6 +138,12 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<LogEntryFactory>()
                 .AsImplementedInterfaces()
                 .AsSelf();
+
+            builder.RegisterType<ObjectReferenceManagerWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<PdfDocument>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces();

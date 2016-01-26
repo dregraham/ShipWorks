@@ -436,7 +436,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         }
 
         /// <summary>
-        /// Internal CleanseAddress implementation intended to be warpped by the auth wrapper
+        /// Internal CleanseAddress implementation intended to be wrapped by the auth wrapper
         /// </summary>
         private Address CleanseAddressInternal(PersonAdapter person, UspsAccountEntity account, bool requireFullMatch)
         {
@@ -491,7 +491,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             address.Country = person.AdjustedCountryCode(ShipmentTypeCode.Usps);
 
             string badAddressMessage = null;
-
             CleanseAddressCompletedEventArgs result = null;
 
             try
@@ -503,18 +502,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 SoapException soapException = ex.InnerExceptions.OfType<SoapException>().FirstOrDefault();
                 if (soapException != null)
                 {
-                    log.Error(ex);
-
-                    // Rethrow the exception, but filter out namespaces and information that isn't useful to customers
-                    badAddressMessage = ex.Message.Replace("Invalid SOAP message due to XML Schema validation failure. ", string.Empty);
-                    badAddressMessage = Regex.Replace(badAddressMessage, @"http://stamps.com/xml/namespace/\d{4}/\d{1,2}/swsim/swsimv\d*:", string.Empty);
-
-                    return new UspsAddressValidationResults()
-                    {
-                        IsSuccessfulMatch = false,
-                        BadAddressMessage = badAddressMessage,
-                        Candidates = new List<Address>()
-                    };
+                    return BuildSoapSchemaExceptionMessage(ex, log);
                 }
 
                 InvalidOperationException invalidOperationException = ex.InnerExceptions.OfType<InvalidOperationException>().FirstOrDefault();
@@ -527,18 +515,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             catch (SoapException ex)
             {
-                log.Error(ex);
-
-                // Rethrow the exception, but filter out namespaces and information that isn't useful to customers
-                badAddressMessage = ex.Message.Replace("Invalid SOAP message due to XML Schema validation failure. ", string.Empty);
-                badAddressMessage = Regex.Replace(badAddressMessage, @"http://stamps.com/xml/namespace/\d{4}/\d{1,2}/swsim/swsimv\d*:", string.Empty);
-
-                return new UspsAddressValidationResults()
-                {
-                    IsSuccessfulMatch = false,
-                    BadAddressMessage = badAddressMessage,
-                    Candidates = new List<Address>()
-                };
+                return BuildSoapSchemaExceptionMessage(ex, log);
             }
             catch (Exception ex)
             {
@@ -560,7 +537,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 IsCityStateZipOk = result.CityStateZipOK,
                 ResidentialIndicator = result.ResidentialDeliveryIndicator,
                 IsPoBox = result.IsPOBox,
-                MatchedAddress = address,
+                MatchedAddress = result.Address,
                 Candidates = result.CandidateAddresses,
                 BadAddressMessage = badAddressMessage,
                 StatusCodes = result.StatusCodes
@@ -968,7 +945,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
 
-            // Per stamps - only send state for domestic - send province for Intl
+            // Per stamps - only send state for domestic - send province for international
             if (!toAddress.AsAddressAdapter().IsDomesticCountry())
             {
                 toAddress.Province = toAddress.State;
@@ -1249,7 +1226,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         }
 
         /// <summary>
-        /// Determines if the shipto address supports confirmation addons
+        /// Determines if the ship-to address supports confirmation addons
         /// </summary>
         private static bool SupportsConfirmation(ShipmentEntity shipment)
         {
@@ -1492,6 +1469,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 IntegrationID = integrationID,
                 Username = account == null ? "" : account.Username,
                 Password = account == null ? "" : SecureText.Decrypt(account.Password, account.Username)
+            };
+        }
+
+        /// <summary>
+        /// Build a soap schema exception message
+        /// </summary>
+        private static UspsAddressValidationResults BuildSoapSchemaExceptionMessage(Exception ex, ILog log)
+        {
+            log.Error(ex);
+
+            // Re-throw the exception, but filter out namespaces and information that isn't useful to customers
+            string badAddressMessage = ex.Message.Replace("Invalid SOAP message due to XML Schema validation failure. ", string.Empty);
+            badAddressMessage = Regex.Replace(badAddressMessage, @"http://stamps.com/xml/namespace/\d{4}/\d{1,2}/swsim/swsimv\d*:", string.Empty);
+
+            return new UspsAddressValidationResults()
+            {
+                IsSuccessfulMatch = false,
+                BadAddressMessage = badAddressMessage,
+                Candidates = new List<Address>()
             };
         }
     }

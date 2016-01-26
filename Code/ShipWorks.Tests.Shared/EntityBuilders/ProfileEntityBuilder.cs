@@ -79,6 +79,11 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             PostalProfileEntityBuilder builder = new PostalProfileEntityBuilder(this, isPrimaryProfile);
             builderConfiguration?.Invoke(builder);
 
+            if (isPrimaryProfile)
+            {
+                builder.SetDefaultsOnNullableFields();
+            }
+
             Set(x => x.Postal, builder.Build());
 
             return this;

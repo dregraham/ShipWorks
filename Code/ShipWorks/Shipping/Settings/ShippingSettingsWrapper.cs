@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -14,6 +16,16 @@ namespace ShipWorks.Shipping.Settings
     /// </remarks>
     public class ShippingSettingsWrapper : IShippingSettings, IInitializeForCurrentDatabase, ICheckForChangesNeeded
     {
+        private readonly IMessenger messenger;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShippingSettingsWrapper(IMessenger messenger)
+        {
+            this.messenger = messenger;
+        }
+
         /// <summary>
         /// Should shipments be auto created
         /// </summary>
@@ -49,5 +61,20 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public void InitializeForCurrentDatabase(ExecutionMode executionMode) =>
             ShippingSettings.InitializeForCurrentDatabase();
+
+        /// <summary>
+        /// Save the current shipping settings
+        /// </summary>
+        public void Save(ShippingSettingsEntity shippingSettings)
+        {
+            bool wasDirty = shippingSettings.IsDirty;
+
+            ShippingSettings.Save(shippingSettings);
+
+            if (wasDirty)
+            {
+                messenger.Send(new ShippingSettingsChangedMessage(this, shippingSettings));
+            }
+        }
     }
 }

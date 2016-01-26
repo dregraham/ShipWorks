@@ -214,6 +214,30 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Update the insurance fields on the package
+        /// </summary>
+        public void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            // If there is more than one package, only declared value is allowed, so just return.
+            if (shipmentEntity.Ups.Packages.Count > 1)
+            {
+                return;
+            }
+
+            if (shipmentEntity.InsuranceProvider != shippingSettings.UpsInsuranceProvider)
+            {
+                shipmentEntity.InsuranceProvider = shippingSettings.UpsInsuranceProvider;
+            }
+
+            if (packageEntity.InsurancePennyOne != shippingSettings.UpsInsurancePennyOne)
+            {
+                packageEntity.InsurancePennyOne = shippingSettings.UpsInsurancePennyOne;
+            }
+
+            InsuranceChoice = new InsuranceChoice(shipmentEntity, packageEntity, packageEntity, packageEntity);
+        }
+
+        /// <summary>
         /// Gets the hash code based on this package adapter's properties.
         /// </summary>
         public string HashCode()

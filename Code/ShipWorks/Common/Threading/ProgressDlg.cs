@@ -1,21 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
-using ShipWorks.Properties;
-using Interapptive.Shared;
-using log4net;
-using Interapptive.Shared.Utility;
-using System.Media;
-using ShipWorks.UI.Controls.SandGrid;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.Win32;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Win32;
+using log4net;
+using ShipWorks.Properties;
+using ShipWorks.UI.Controls.SandGrid;
 
 namespace ShipWorks.Common.Threading
 {
@@ -54,8 +48,8 @@ namespace ShipWorks.Common.Threading
         // Indiciates if the last known state of the progress provider was running.  This is just
         // so we don't update the header image too much, which screws up the animation.
         bool lastStateComplete = false;
-        
-        // Helps us with auto close on complete, to make sure we don't close automatically 
+
+        // Helps us with auto close on complete, to make sure we don't close automatically
         // before even starting
         bool hasStarted = false;
 
@@ -414,7 +408,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Schedule an update of the UI 
+        /// Schedule an update of the UI
         /// </summary>
         private void EnableUpdateTimer()
         {
@@ -457,7 +451,7 @@ namespace ShipWorks.Common.Threading
         /// Update the UI of the overall window to act appropriatly based on the progress
         /// </summary>
         private void UpdateProgressUI()
-        {            
+        {
             // Not interested if we are either not created yet, or already destroyed
             if (!IsHandleCreated)
             {
@@ -549,7 +543,7 @@ namespace ShipWorks.Common.Threading
             {
                 throw new InvalidOperationException("Cannot update progress display on non-UI thread.");
             }
-            
+
             row.Cells[0].Image = GetStatusImage(item.Status);
             row.Cells[1].Text = item.Name;
 

@@ -17,6 +17,7 @@ using Xunit;
 namespace ShipWorks.Shipping.Tests.Integration.Services
 {
     [Collection("Database collection")]
+    [Trait("Category", "ContinuousIntegration")]
     public class ShipmentLoaderTest : IDisposable
     {
         private readonly AutoMock mock;

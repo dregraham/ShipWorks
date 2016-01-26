@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Tests.Shared;
-using ShipWorks.UI;
 using ShipWorks.UI.Controls.AddressControl;
 using Xunit;
 
@@ -523,6 +523,22 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
 
             mock.Mock<IMessageHelper>()
                 .Verify(x => x.ShowInformation("Foo Bar"));
+        }
+
+        [Theory]
+        [InlineData("Mo", "MO")]
+        [InlineData("mo", "MO")]
+        [InlineData("MO", "MO")]
+        [InlineData("Missouri", "MO")]
+        public void Save_SavesStateCode_IfStateIsValidStateName(string value, string expected)
+        {
+            AddressViewModel testObject = mock.Create<AddressViewModel>();
+            testObject.StateProvCode = value;
+
+            var adapter = new PersonAdapter();
+            testObject.SaveToEntity(adapter);
+
+            Assert.Equal(expected, adapter.StateProvCode);
         }
 
         public void VerifyPropertySetterResetsValidationStatus(Action<AddressViewModel> setAction)

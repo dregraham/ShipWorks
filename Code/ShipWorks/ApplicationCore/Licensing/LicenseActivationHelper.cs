@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
-using ShipWorks.Stores;
-using ShipWorks.ApplicationCore.Licensing.MessageBoxes;
-using ShipWorks.Stores.Platforms;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Licensing.MessageBoxes;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -47,7 +43,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 if (accountDetail.ActivationState == LicenseActivationState.Active)
                 {
                     store.License = licenseKey;
-                    store.Edition = EditionSerializer.Serialize(accountDetail.Edition);
+                    store.Edition = accountDetail.Edition.Serialize();
                 }
 
                 return accountDetail.ActivationState;
@@ -95,7 +91,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 throw new ShipWorksLicenseException("The license is not a valid ShipWorks license.");
             }
 
-            if ((StoreTypeCode) store.TypeCode != license.StoreTypeCode)
+            if (store.StoreTypeCode != license.StoreTypeCode)
             {
                 throw new ShipWorksLicenseException(
                     string.Format(
@@ -123,7 +119,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                         "A ShipWorks license has been purchased for this trial.  Please enter " +
                         "your license to continue using ShipWorks.");
                 }
-                
+
                 // Trial expired
                 if (trialDetail.IsExpired)
                 {
@@ -136,10 +132,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             else
             {
-                LicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
+                ILicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
 
-                if (accountDetail.ActivationState == LicenseActivationState.Active || 
-                    accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere || 
+                if (accountDetail.ActivationState == LicenseActivationState.Active ||
+                    accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere ||
                     accountDetail.ActivationState == LicenseActivationState.ActiveNowhere)
                 {
                     EditionManager.UpdateStoreEdition(store, accountDetail.Edition);
@@ -204,7 +200,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                         break;
                     }
 
-                // This shouldnt happen - if it was active nowhere,
+                // This shouldn't happen - if it was active nowhere,
                 // then it should have been activated to us
                 case LicenseActivationState.ActiveNowhere:
                     {
@@ -257,7 +253,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Check that the given license and store combination represents a potentiall valid ShipWorks license.
+        /// Check that the given license and store combination represents a potentially valid ShipWorks license.
         /// </summary>
         private static bool CheckLicenseValidity(StoreEntity store, string licenseKey, IWin32Window owner)
         {

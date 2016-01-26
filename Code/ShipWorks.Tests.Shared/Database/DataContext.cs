@@ -1,6 +1,8 @@
 ﻿using System;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shared.EntityBuilders;
 
 namespace ShipWorks.Tests.Shared.Database
@@ -61,6 +63,16 @@ namespace ShipWorks.Tests.Shared.Database
         /// Default order entity
         /// </summary>
         public OrderEntity Order { get; private set; }
+
+        /// <summary>
+        /// Set the default shipment type in the shipping settings
+        /// </summary>
+        public void SetDefaultShipmentType(ShipmentTypeCode defaultType)
+        {
+            var settings = ShippingSettings.Fetch();
+            settings.DefaultShipmentTypeCode = defaultType;
+            ShippingSettings.Save(settings);
+        }
 
         /// <summary>
         /// Dispose the context

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
@@ -29,7 +29,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
-        public virtual LicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
+        public virtual ILicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
         {
             return TangoWebClient.GetLicenseStatus(licenseKey, store);
         }
@@ -79,16 +79,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public virtual void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
         {
-            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
+            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds
             // depending on the number of stores. May want to look into caching this information, but that could result
-            // in stale license data. Since customers aren't buying postage all the time, the additonal overhead to ensure
+            // in stale license data. Since customers aren't buying postage all the time, the additional overhead to ensure
             // accuracy may not be that big of a deal.
             List<StoreEntity> stores = StoreManager.GetAllStores();
-            IEnumerable<LicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store)).Where(l => l.Active);
+            IEnumerable<ILicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store)).Where(l => l.Active);
 
             // We only need to send up one license for each distinct customer ID
-            IEnumerable<LicenseAccountDetail> licensesForLogging = licenses.GroupBy(l => l.TangoCustomerID).Select(grp => grp.First());
-            foreach (LicenseAccountDetail license in licensesForLogging)
+            IEnumerable<ILicenseAccountDetail> licensesForLogging = licenses.GroupBy(l => l.TangoCustomerID).Select(grp => grp.First());
+            foreach (ILicenseAccountDetail license in licensesForLogging)
             {
                 TangoWebClient.LogPostageEvent(license, balance, purchaseAmount, shipmentTypeCode, accountIdentifier);
             }
@@ -98,10 +98,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
-        public virtual void LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
-        {
+        public virtual string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false) =>
             TangoWebClient.LogShipment(store, shipment, isRetry);
-        }
 
         /// <summary>
         /// Void the given processed shipment to Tango
@@ -181,7 +179,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         public virtual IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)
         {
             List<Nudge> nudges = new List<Nudge>();
-            
+
             foreach (StoreEntity store in stores)
             {
                 nudges.AddRange(TangoWebClient.GetNudges(store));
@@ -204,21 +202,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="account">The account.</param>
         public virtual void LogUspsAccount(UspsAccountEntity account)
         {
-            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
+            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds
             // depending on the number of stores. May want to look into caching this information, but that could result
-            // in stale license data. Since customers aren't buying postage all the time, the additonal overhead to ensure
+            // in stale license data. Since customers aren't buying postage all the time, the additional overhead to ensure
             // accuracy may not be that big of a deal.
             List<StoreEntity> stores = StoreManager.GetAllStores();
-            IEnumerable<LicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store)).Where(l => l.Active);
+            IEnumerable<ILicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store)).Where(l => l.Active);
 
             // We only need to send up one license for each distinct customer ID
-            IEnumerable<LicenseAccountDetail> licensesForLogging = licenses.GroupBy(l => l.TangoCustomerID).Select(grp => grp.First());
-            foreach (LicenseAccountDetail license in licensesForLogging)
+            IEnumerable<ILicenseAccountDetail> licensesForLogging = licenses.GroupBy(l => l.TangoCustomerID).Select(grp => grp.First());
+            foreach (ILicenseAccountDetail license in licensesForLogging)
             {
                 TangoWebClient.LogStampsAccount(license,
                                                 PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType) account.UspsReseller).ShipmentTypeCode,
                                                 account.Username,
-                                                (UspsAccountContractType)account.ContractType);
+                                                (UspsAccountContractType) account.ContractType);
             }
         }
     }

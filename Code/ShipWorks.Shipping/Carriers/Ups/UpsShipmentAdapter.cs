@@ -84,5 +84,30 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             return GetPackageAdapters();
         }
+
+        /// <summary>
+        /// Update the insurance fields on the shipment and packages
+        /// </summary>
+        public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
+        {
+            // If there is more than one package, only declared value is allowed, so just return.
+            if (Shipment.Ups.Packages.Count() > 1)
+            {
+                return;
+            }
+
+            if (Shipment.InsuranceProvider != shippingSettings.UpsInsuranceProvider)
+            {
+                Shipment.InsuranceProvider = shippingSettings.UpsInsuranceProvider;
+            }
+
+            foreach (UpsPackageEntity packageEntity in Shipment.Ups.Packages)
+            {
+                if (packageEntity.InsurancePennyOne != shippingSettings.UpsInsurancePennyOne)
+                {
+                    packageEntity.InsurancePennyOne = shippingSettings.UpsInsurancePennyOne;
+                }
+            }
+        }
     }
 }

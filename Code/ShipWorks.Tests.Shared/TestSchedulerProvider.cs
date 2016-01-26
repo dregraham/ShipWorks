@@ -1,9 +1,14 @@
-﻿using Interapptive.Shared.Threading;
-using System.Reactive.Concurrency;
+﻿using System.Reactive.Concurrency;
+using Interapptive.Shared.Threading;
 using Microsoft.Reactive.Testing;
 
 namespace ShipWorks.Tests.Shared
 {
+    /// <summary>
+    /// Scheduler provider that allows fine grained testing of schedulers
+    /// </summary>
+    /// <remarks>Use this provider when you want to actually test which scheduler is used or
+    /// when you need to verify timing</remarks>
     public class TestSchedulerProvider : ISchedulerProvider
     {
         private readonly TestScheduler currentThread = new TestScheduler();

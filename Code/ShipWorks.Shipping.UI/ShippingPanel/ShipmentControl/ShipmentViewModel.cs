@@ -72,7 +72,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
-                messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage));
+                messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage),
+                messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage));
         }
 
         /// <summary>
@@ -96,9 +97,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             RefreshDimensionsProfiles();
 
-            SelectedPackageAdapter = PackageAdapters.FirstOrDefault();
-
-            InsuranceViewModel.Load(PackageAdapters, SelectedPackageAdapter);
+            IPackageAdapter packageAdapter = PackageAdapters.FirstOrDefault();
+            InsuranceViewModel.Load(PackageAdapters, packageAdapter, shipmentAdapter);
+            SelectedPackageAdapter = packageAdapter;
 
             UpdateSelectedDimensionsProfile();
 
@@ -178,8 +179,27 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             ServiceType = rateSelection.ServiceType;
         }
 
+        /// <summary>
+        /// Called when the shipment service type has changed.
+        /// </summary>
+        private void HandleShippingSettingsChangedMessage(ShippingSettingsChangedMessage message)
+        {
+            if (shipmentAdapter.Shipment.Processed)
+            {
+                return;
+            }
+
+            shipmentAdapter.UpdateInsuranceFields(message.ShippingSettings);
+            foreach (var packageAdapter in PackageAdapters)
+            {
+                packageAdapter.UpdateInsuranceFields(message.ShippingSettings);
+            }
+
+            InsuranceViewModel.Load(PackageAdapters, SelectedPackageAdapter, shipmentAdapter);
+        }
+
         #region Dimensions
-        
+
         /// <summary>
         /// Updates the selected dimensions profile based on SelectedPackageAdapter
         /// </summary>

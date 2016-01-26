@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Interapptive.Shared.Utility;
-using System.Collections.ObjectModel;
-using System.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Business.Geography
 {
@@ -53,7 +51,9 @@ namespace Interapptive.Shared.Business.Geography
             }
 
             // Some carts send down variations of the US country name
-            if (String.Compare("united states", name, StringComparison.OrdinalIgnoreCase) == 0 || String.Compare("usa", name, StringComparison.OrdinalIgnoreCase) == 0 || String.Compare("united states of america", name, StringComparison.OrdinalIgnoreCase) == 0)
+            if (String.Compare("united states", name, StringComparison.OrdinalIgnoreCase) == 0 ||
+                String.Compare("usa", name, StringComparison.OrdinalIgnoreCase) == 0 ||
+                String.Compare("united states of america", name, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 return "US";
             }
@@ -99,7 +99,7 @@ namespace Interapptive.Shared.Business.Geography
         {
             MethodConditions.EnsureArgumentIsNotNull(address, "address");
 
-            return IsUSInternationalTerritory(address.CountryCode) || 
+            return IsUSInternationalTerritory(address.CountryCode) ||
                 (string.Equals(address.CountryCode, "US", StringComparison.OrdinalIgnoreCase) && IsUSInternationalTerritory(address.StateProvCode));
         }
 

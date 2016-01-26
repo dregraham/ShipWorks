@@ -116,8 +116,9 @@ namespace ShipWorks.Shipping
                 log.Error(ex);
             }
 
-            progressDlg.CloseForced();
+            progressDlg.Visible = false;
             OnLoadShipmentsCompleted();
+            progressDlg.CloseForced();
         }
 
         private bool ShouldValidate => StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();

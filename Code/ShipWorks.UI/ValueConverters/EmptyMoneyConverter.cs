@@ -12,8 +12,8 @@ namespace ShipWorks.UI.ValueConverters
         /// <summary>
         /// Convert
         /// </summary>
-       public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-       {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             if (value == null)
             {
                 return 0.ToString("C", CultureInfo.CurrentCulture);
@@ -29,7 +29,11 @@ namespace ShipWorks.UI.ValueConverters
                 return 0.ToString("C", CultureInfo.CurrentCulture);
             }
 
-            return System.Convert.ToDecimal(value).ToString("C", CultureInfo.CurrentCulture);
+            decimal result = 0M;
+            string stringValue = value?.ToString();
+            decimal.TryParse(stringValue, NumberStyles.Currency, CultureInfo.CurrentCulture, out result);
+
+            return result.ToString("C", CultureInfo.CurrentCulture);
         }
 
         /// <summary>
@@ -38,13 +42,14 @@ namespace ShipWorks.UI.ValueConverters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             decimal result = 0M;
+            string stringValue = value?.ToString();
 
-            if (string.IsNullOrEmpty(value as string))
+            if (string.IsNullOrEmpty(stringValue))
             {
                 return result; 
             }
-
-            decimal.TryParse(value.ToString(), out result);
+            
+            decimal.TryParse(stringValue, NumberStyles.Currency, CultureInfo.CurrentCulture, out result);
 
             return result;
         }

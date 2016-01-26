@@ -121,6 +121,7 @@
     <Compile Include="AutoMockExtensions.cs" />
     <Compile Include="Database\DatabaseFixture.cs" />
     <Compile Include="Database\DataContext.cs" />
+    <Compile Include="EntityBuilders\CarrierAccountEntityBuilder.cs" />
     <Compile Include="EntityBuilders\Create.cs" />
     <Compile Include="EntityBuilders\EntityBuilder.cs" />
     <Compile Include="EntityBuilders\EntityFieldExtensions.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="EntityBuilders\UpsProfileEntityBuilder.cs" />
     <Compile Include="EntityBuilders\UpsShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\PostalShipmentEntityBuilder.cs" />
+    <Compile Include="ImmediateSchedulerProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestExecutionMode.cs" />
     <Compile Include="TestMessenger.cs" />

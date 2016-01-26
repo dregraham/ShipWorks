@@ -49,26 +49,21 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <returns>An instance of IRegistrationPromotion.</returns>
         public IRegistrationPromotion CreateRegistrationPromotion()
         {
-            if (!PostalAccountsExist())
+            if (!PostalAccountsExist() || OnlyExpress1AccountsExist())
             {
-                return new NewPostalCustomerRegistrationPromotion();
-            }
-
-            if (OnlyExpress1AccountsExist())
-            {
-                return new Express1OnlyRegistrationPromotion();
+                return new Express1RegistrationPromotion();
             }
 
             if (endiciaAccountsExist)
             {
                 return AnyUspsResellerAccountsExist() ?
                     (IRegistrationPromotion) new EndiciaCbpRegistrationPromotion() :
-                    new EndiciaIntuishipRegistrationPromotion();
+                    new Express1RegistrationPromotion();
             }
 
             return AnyUspsResellerAccountsExist() ?
                 (IRegistrationPromotion) new UspsCbpRegistrationPromotion() :
-                new UspsIntuishipRegistrationPromotion();
+                new Express1RegistrationPromotion();
         }
 
         /// <summary>

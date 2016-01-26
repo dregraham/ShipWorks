@@ -10,6 +10,7 @@ using Xunit;
 namespace ShipWorks.Core.Tests.Integration.Filters
 {
     [Collection("Database collection")]
+    [Trait("Category", "ContinuousIntegration")]
     public class FilterHelperWrapperTest : IDisposable
     {
         private readonly DataContext context;

@@ -5,7 +5,6 @@ using System.Linq;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
@@ -35,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// </summary>
     public class AmazonStoreType : StoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonStoreType));
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
-            get 
+            get
             {
                 AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
 
@@ -108,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
             else
             {
-                // legacy 
+                // legacy
                 return new AmazonAccountSettingsControl();
             }
         }
@@ -123,9 +122,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
             bool showLegacy = (DateTime.UtcNow < new DateTime(2011, 10,10) && !InterapptiveOnly.MagicKeysDown) ||
                                 (InterapptiveOnly.MagicKeysDown && DateTime.UtcNow >= new DateTime(2011, 10, 10));
 
-            if (showLegacy) 
+            if (showLegacy)
             {
-                return new List<WizardPage>() 
+                return new List<WizardPage>()
                 {
                     new AmazonCredentialsPage(),
                     new AmazonCertificatePage(),
@@ -134,8 +133,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
             else
             {
-                return new List<WizardPage> () 
-                { 
+                return new List<WizardPage> ()
+                {
                     new AmazonMwsCountryPage(),
                     new AmazonMwsPage(),
                     new AmazonMwsDownloadCriteriaPage()
@@ -260,7 +259,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             storeCondition.Operator = EqualityOperator.Equals;
             storeCondition.Value = Store.StoreID;
             definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
-            
+
             definition.RootContainer.SecondGroup = InitialDataLoader.CreateDefinitionNotShipped().RootContainer;
 
             return new FilterEntity
@@ -273,7 +272,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Due to Amazon 
+        /// Due to Amazon
         /// </summary>
         public override int AutoDownloadMinimumMinutes
         {
@@ -364,13 +363,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 ErrorDate = new DateTime(2001, 1, 1),
                 ErrorReason = string.Empty
             });
-            
+
 
             // Assign the default weight downloading priority
             List<AmazonWeightField> weightPriority = new List<AmazonWeightField>()
             {
-                AmazonWeightField.PackagingWeight, 
-                AmazonWeightField.ItemWeight, 
+                AmazonWeightField.PackagingWeight,
+                AmazonWeightField.ItemWeight,
                 AmazonWeightField.TotalMetalWeight
             };
             AmazonWeights.SetWeightsPriority(storeEntity, weightPriority);
@@ -518,10 +517,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Gets the Amazon domain name associated with this store. 
+        /// Gets the Amazon domain name associated with this store.
         /// </summary>
         /// <returns>The domain name for the store (e.g. amazon.com, amazon.ca, etc.)</returns>
-        /// <exception cref="AmazonException">Thrown when an error occurs when the domain name needs to be looked 
+        /// <exception cref="AmazonException">Thrown when an error occurs when the domain name needs to be looked
         /// up via Amazon MWS</exception>
         public string GetDomainName()
         {
@@ -553,6 +552,17 @@ namespace ShipWorks.Stores.Platforms.Amazon
                                 amazonStore.DomainName = domainName;
                                 StoreManager.SaveStore(amazonStore);
                             }
+                            else
+                            {
+                                // There are some cases where the seller account is associated with a marketplace (US, CA, UK...), but that
+                                // marketplace is not returned in the above GetMarketplaces call. If that happens, instead of defualting to amazon.com,
+                                // use the endpoint associated with the country entered when the store was setup.
+                                if (!string.IsNullOrWhiteSpace(amazonStore.AmazonApiRegion))
+                                {
+                                    amazonStore.DomainName = GetDomainNameFromApiRegion(amazonStore);
+                                    StoreManager.SaveStore(amazonStore);
+                                }
+                            }
                         }
                     }
                 }
@@ -564,6 +574,44 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             return amazonStore.DomainName;
+        }
+
+        /// <summary>
+        /// Gets an Amazon domain name, base of off the API region
+        /// </summary>
+        /// <param name="amazonStore">The amazon store.</param>
+        /// <returns></returns>
+        private static string GetDomainNameFromApiRegion(AmazonStoreEntity amazonStore)
+        {
+            // There are some marketplaces in here we don't currently support.
+            // Figured it wouldn't hurt to plan for the future.
+            switch (amazonStore.AmazonApiRegion)
+            {
+                case "US":
+                    return "amazon.com";
+                case "CA":
+                    return "amazon.ca";
+                case "MX":
+                    return "amazon.com.mx";
+                case "UK":
+                    return "amazon.co.uk";
+                case "DE":
+                    return "amazon.de";
+                case "FR":
+                    return "amazon.fr";
+                case "IT":
+                    return "amazon.it";
+                case "ES":
+                    return "amazon.es";
+                case "JP":
+                    return "amazon.co.jp";
+                case "CN":
+                    return "amazon.cn";
+                case "IN":
+                    return "amazon.in";
+                default:
+                    return "amazon.com";
+            }
         }
 
         /// <summary>

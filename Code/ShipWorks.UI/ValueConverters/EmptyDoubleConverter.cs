@@ -15,9 +15,12 @@ namespace ShipWorks.UI.ValueConverters
        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             double defaultValue = 0D;
-            double.TryParse(parameter.ToString(), out defaultValue);
+            if (!string.IsNullOrWhiteSpace(parameter?.ToString()))
+            {
+                double.TryParse(parameter.ToString(), out defaultValue);
+            }
 
-            if (!(value is double))
+            if (string.IsNullOrWhiteSpace(value?.ToString()))
             {
                 return defaultValue;
             }
@@ -37,7 +40,7 @@ namespace ShipWorks.UI.ValueConverters
         {
             double result = 0D;
 
-            if (string.IsNullOrEmpty(value as string))
+            if (string.IsNullOrEmpty(value?.ToString()))
             {
                 return result; 
             }

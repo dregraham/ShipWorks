@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
-using Interapptive.Shared.Pdf;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -18,6 +19,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
     /// </summary>
     public class FedExLabelRepository : ILabelRepository
     {
+        private readonly IDataResourceManager dataResourceManager;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FedExLabelRepository()
+        {
+            dataResourceManager = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IDataResourceManager>>().Value;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FedExLabelRepository(IDataResourceManager dataResourceManager)
+        {
+            this.dataResourceManager = dataResourceManager;
+        }
+
         /// <summary>
         /// Responsible for saving retrieved FedEx Labels to Database
         /// </summary>
@@ -45,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         {
             string certificationId = GetCertificationId(reply);
 
-            // Save the label iamges
+            // Save the label images
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 foreach (CompletedPackageDetail packageReply in reply.CompletedShipmentDetail.CompletedPackageDetails)
@@ -97,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         /// </summary>
         /// <param name="reply">ProcessShipmentReply from FedEx</param>
         /// <param name="shipment">Shipment whose entity information we sent to FedEx </param>
-        private static void SaveShipmentLabels(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
+        private void SaveShipmentLabels(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
         {
             // Documents
             if (reply.CompletedShipmentDetail.ShipmentDocuments != null)
@@ -135,9 +154,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         }
 
         /// <summary>
-        /// Save a label of the given name ot the database from the specified label document
+        /// Save a label of the given name to the database from the specified label document
         /// </summary>
-        private static void SaveLabel(string name, ShippingDocument labelDocument, long ownerID, string certificationId)
+        private void SaveLabel(string name, ShippingDocument labelDocument, long ownerID, string certificationId)
         {
             // We need to know if this ever happens
             if (labelDocument.Parts.Length != 1)
@@ -149,10 +168,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
             {
                 using (MemoryStream pdfBytes = new MemoryStream(labelDocument.Parts[0].Image))
                 {
-                    using (PdfDocument pdf = new PdfDocument(pdfBytes))
-                    {
-                        DataResourceManager.CreateFromPdf(pdf, ownerID, name);
-                    }
+                    dataResourceManager.CreateFromPdf(pdfBytes, ownerID, name);
                 }
             }
             else
@@ -161,7 +177,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                 using (MemoryStream imageStream = new MemoryStream(labelDocument.Parts[0].Image))
                 {
                     // Save the label image
-                    DataResourceManager.CreateFromBytes(imageStream.ToArray(), ownerID, name);
+                    dataResourceManager.CreateFromBytes(imageStream.ToArray(), ownerID, name);
 
                     if (InterapptiveOnly.IsInterapptiveUser)
                     {

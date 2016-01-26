@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using Apitron.Licensing;
 using Interapptive.Shared;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
@@ -14,6 +15,5 @@ using Interapptive.Shared;
 [assembly: AssemblyDate("2000-01-01 12:00:00Z")]
 
 #pragma warning disable S103 // Lines should not be too long
-[assembly: Apitron.Licensing.ApitronPDFRasterizerLicense("eJyz8clMTs0rTrWzCSjKTylNLrFzLMgsKcrP0wtwcdMLSiwuSS3KrEotUjDWM1BwLCjIyUxOLMnMz4Nqs9GHabNxLi0uyc9NLbLzzAPqSSwoKMksSz20TkfBMy9Zz0YfLm2DZIpdcEZmQXh+UXaxjT6ysI1ncXFpqktiSaqdsYG+gZm+kYGhiY0+QtRGH+buBKfqk9sDmz5IzVy+0XnlC8F3zZkC2Qmm7zMvFSee9Mhbw5rcLBKfIeAXFj/pU55lhtimyRPrj7fZLpqzwvGxZO77fbMLZzQ9ZE28dX6PRHHlT76ibWtO8R1lOfKq/g/zmdnh0vNdZG/OORC0weXHjsYdCjO67t5yeG0olSRpoG8roGSe0FIPAG83g30=")]
+[assembly: ApitronPDFRasterizerLicense("eJyz8clMTs0rTrWzCSjKTylNLrFzLMgsKcrP0wtwcdMLSiwuSS3KrEotUjDWM1BwLCjIyUxOLMnMz4Nqs9GHabNxLi0uyc9NLbLzzAPqSSwoKMksSz20TkfBMy9Zz0YfLm2DZIpdcEZmQXh+UXaxjT6ysI1ncXFpqktiSaqdobm+oZG+kYGhqY0+QtRGH+Zuset29/YrRvy+wPau0nGlw9bpG/uk9xY/ZZ70IWp62vfPqYK3vykXOjh+uvXqqNIrv7X/58f/Uevm2CoZvnhWlIzM5I15Wt1Hl8Z4MKxRnbBFfjrbr2CludY7jnLtaXsewab2i8fb/ukn6zNO7oG5E2wL/rnPzig3qJC8FngwgT/T+u41p6M5AAH/hG4=")]
 #pragma warning restore S103 // Lines should not be too long
-
