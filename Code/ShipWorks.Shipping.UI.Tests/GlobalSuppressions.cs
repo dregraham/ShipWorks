@@ -1,0 +1,15 @@
+﻿
+// This file is used by Code Analysis to maintain SuppressMessage 
+// attributes that are applied to this project.
+// Project-level suppressions either have no target or are given 
+// a specific target and scoped to a namespace, type, member, etc.
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "S2930:\"IDisposables\" should be disposed", Justification = "<Pending>", Scope = "member", Target = "~M:ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl.OtherShipmentViewModelTest.AllErrors_ReturnsListOfErrors_WhenTotalCustomsValueIsInvalid_Test")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "S2930:\"IDisposables\" should be disposed", Justification = "<Pending>", Scope = "member", Target = "~M:ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl.OtherShipmentViewModelTest.Error_ReturnsNull_Test")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "S2930:\"IDisposables\" should be disposed", Justification = "<Pending>", Scope = "member", Target = "~M:ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl.OtherShipmentViewModelTest.Indexer_ReturnsEmptyString_WhenShipmentIsProcessed_Test")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "S2930:\"IDisposables\" should be disposed", Justification = "<Pending>", Scope = "member", Target = "~M:ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl.OtherShipmentViewModelTest.Indexer_ReturnsError_WhenTotalCustomsValueIsInvalid_Test")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "S2930:\"IDisposables\" should be disposed", Justification = "<Pending>", Scope = "member", Target = "~M:ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl.ShipmentViewModelTest.AllErrors_ReturnsListOfErrors_WhenTotalCustomsValueIsInvalid_Test")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "S2930:\"IDisposables\" should be disposed", Justification = "<Pending>", Scope = "member", Target = "~M:ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl.ShipmentViewModelTest.Error_ReturnsNull_Test")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "S2930:\"IDisposables\" should be disposed", Justification = "<Pending>", Scope = "member", Target = "~M:ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl.ShipmentViewModelTest.HandleShippingSettingsChangedMessage_UpdatesInsuranceFields_WhenShipmentIsNotProcessed_Test")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "S2930:\"IDisposables\" should be disposed", Justification = "<Pending>", Scope = "member", Target = "~M:ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl.ShipmentViewModelTest.Indexer_ReturnsEmptyString_WhenShipmentIsProcessed_Test")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "S2930:\"IDisposables\" should be disposed", Justification = "<Pending>", Scope = "member", Target = "~M:ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl.ShipmentViewModelTest.Indexer_ReturnsError_WhenTotalCustomsValueIsInvalid_Test")]
