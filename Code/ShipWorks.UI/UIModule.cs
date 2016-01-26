@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.UI.Controls.ChannelLimit;
 using ShipWorks.UI.Controls.CustomerLicenseActivation;
 using ShipWorks.UI.Services;
 
@@ -19,6 +20,9 @@ namespace ShipWorks.UI
                 .AsImplementedInterfaces();
 
             builder.RegisterType<MessageHelperWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ChannelLimitViewModel>()
                 .AsImplementedInterfaces();
         }
     }

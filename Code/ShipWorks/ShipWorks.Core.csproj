@@ -725,7 +725,9 @@
     <Compile Include="Data\Connection\ISqlSession.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
+    <Compile Include="Data\DeletionServiceWrapper.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
+    <Compile Include="Data\IDeletionService.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
     <Compile Include="Editions\EditionManagerWrapper.cs" />
     <Compile Include="Editions\IEditionManager.cs" />

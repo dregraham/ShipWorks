@@ -1,9 +1,14 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
@@ -19,14 +24,18 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly ICustomerLicense license;
         private readonly ITangoWebClient tangoWebClient;
         private string errorMessage;
+        private IStoreManager storeManager;
+        private IDeletionService deletionService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelLimitViewModel(ICustomerLicense license, ITangoWebClient tangoWebClient)
+        public ChannelLimitViewModel(ICustomerLicense license, ITangoWebClient tangoWebClient, IStoreManager storeManager, IDeletionService deletionService)
         {
             this.license = license;
             this.tangoWebClient = tangoWebClient;
+            this.storeManager = storeManager;
+            this.deletionService = deletionService;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             // Check to make sure we are getting a CustomerLicense
@@ -46,7 +55,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             storeCollection = new ObservableCollection<ActiveStore>(license.GetActiveStores());
 
-            ErrorMessage = $"You have exceeded your channel limit. Please upgrade your plan or delete {NumberToDelete()} store types to continue using ShipWorks.";
+            UpdateErrorMessate();
         }
 
         /// <summary>
@@ -106,19 +115,49 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         public RelayCommand DeleteStoreClickCommand { get; }
 
         /// <summary>
-        /// The number of channels to delete
+        /// Updates the error message to display to the user
         /// </summary>
-        /// <returns></returns>
-        private int NumberToDelete()
+        private void UpdateErrorMessate()
         {
-            return license.LicenseCapabilities.ActiveChannels - license.LicenseCapabilities.ChannelLimit;
+            int numberToDelete = license.LicenseCapabilities.ActiveChannels - license.LicenseCapabilities.ChannelLimit;
+
+            if (numberToDelete > 0)
+            {
+
+                ErrorMessage = $"You have exceeded your channel limit. Please upgrade your plan or delete {numberToDelete} store types to continue using ShipWorks.";
+            }            
         }
 
         /// <summary>
         /// Delete the selected store
         /// </summary>
-        public void DeleteStore()
+        private void DeleteStore()
         {
+            // Grab the local store entity that matches the license of the selected active store
+            StoreEntity store = storeManager.GetAllStores().Where(s => s.License == selectedStore.StoreLicenseKey).FirstOrDefault();
+
+            if (store != null)
+            {
+                DeleteStoreEntity(store);
+            }
+
+            // Remove the store form tango 
+            tangoWebClient.DeleteStore(license, selectedStore.StoreLicenseKey);
+
+            license.Refresh();
+
+            UpdateErrorMessate();
+        }
+
+        /// <summary>
+        /// Deletes the store entity
+        /// </summary>
+        /// <param name="store"></param>
+        private void DeleteStoreEntity(StoreEntity store)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
+
+            deletionService.DeleteStore(store);
         }
     }
 }
