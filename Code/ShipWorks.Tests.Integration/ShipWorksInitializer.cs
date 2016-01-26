@@ -13,7 +13,6 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Startup;
-using ShipWorks.Startup;
 using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
