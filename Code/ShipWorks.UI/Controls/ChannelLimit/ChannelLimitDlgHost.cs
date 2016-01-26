@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
     /// <summary>
     /// Winforms element for hosting the WPF ChannelLimitDlg
     /// </summary>
-    public partial class ChannelLimitDlgHost : Form
+    public partial class ChannelLimitDlgHost : Form, IChannelLimitDlgHost
     {
         /// <summary>
         /// Constructor
