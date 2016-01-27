@@ -26,6 +26,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     /// </summary>
     public class FedExResponseFactory : ICarrierResponseFactory
     {
+        private readonly ILabelRepository labelRepository;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FedExResponseFactory(ILabelRepository labelRepository)
+        {
+            this.labelRepository = labelRepository;
+        }
+
         /// <summary>
         /// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
         /// carrier API request to ship an order/create a label.
@@ -53,8 +63,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExShipmentCostManipulator()
             };
             
-            ILabelRepository labelRepository = new FedExLabelRepository();
-
             return new FedExShipResponse(processShipmentReply, request, shipmentEntity, labelRepository, shipmentManipulators);
         }
 

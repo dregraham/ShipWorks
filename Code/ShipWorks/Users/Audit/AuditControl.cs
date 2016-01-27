@@ -133,7 +133,7 @@ namespace ShipWorks.Users.Audit
             if (disposing)
             {
                 searchTerminated = true;
-                searchChangedEvent.Set();
+                searchChangedEvent?.Set();
 
                 if (components != null)
                 {

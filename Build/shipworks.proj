@@ -267,7 +267,7 @@
     <ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
     <ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
     <ObfuscationExcludedAssemblies Include="ActiproSoftware.WinUICore.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=1eba893a2bc55de5" />
-    <ObfuscationExcludedAssemblies Include="Apitron.PDF.Rasterizer, Version=3.0.25.0, Culture=neutral, PublicKeyToken=6E759DBB0039406E" />
+    <ObfuscationExcludedAssemblies Include="Apitron.PDF.Rasterizer, Version=3.0.66.0, Culture=neutral, PublicKeyToken=6E759DBB0039406E" />
     <ObfuscationExcludedAssemblies Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da" />
     <ObfuscationExcludedAssemblies Include="Autofac.Extras.Attributed, Version=3.3.0.213, Culture=neutral, PublicKeyToken=17863af14b0044da" />
     <ObfuscationExcludedAssemblies Include="Autofac.Integration.Mef, Version=3.0.3.0, Culture=neutral, PublicKeyToken=17863af14b0044da" />

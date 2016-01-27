@@ -1,10 +1,11 @@
-﻿using Interapptive.Shared.Net;
+﻿using System;
+using Interapptive.Shared.Net;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Settings;
@@ -17,54 +18,72 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     public class FedExShippingClerkFactory
     {
         /// <summary>
+        /// Creates a shipping clerk for a shipment
+        /// </summary>
+        public IFedExShippingClerk CreateShippingClerk(ShipmentEntity shipment, ICarrierSettingsRepository settingsRepository) =>
+            CreateShippingClerk(shipment, settingsRepository, new TrustingCertificateInspector());
+
+        /// <summary>
         /// Creates an IFedExShippingClerk with the specified shipment and ICertificateInspector.
         /// </summary>
         /// <param name="shipment">The shipment.  If this clerk should not need a shipment, like when doing a Close, just pass null.</param>
         /// <param name="settingsRepository">The ICarrierSettingsRepository.</param>
         /// <param name="certificateInspector">The certificate inspector to use</param>
-        private IFedExShippingClerk CreateShippingClerk(ShipmentEntity shipment, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+        public static IFedExShippingClerk CreateShippingClerk(ShipmentEntity shipment,
+                ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
         {
-            IFedExShippingClerk fedExShippingClerk = null;
-
-            if (!IsFimsShipment(shipment))
-            {
-                FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
-                {
-                    Inspector = certificateInspector,
-                    ForceVersionCapture = false,
-                    LabelRepository = new FedExLabelRepository(),
-                    RequestFactory = new FedExRequestFactory(settingsRepository),
-                    SettingsRepository = settingsRepository,
-                    Log = LogManager.GetLogger(typeof(FedExShippingClerk)),
-                    ExcludedServiceTypeRepository = new ExcludedServiceTypeRepository()
-                };
-
-                fedExShippingClerk = new FedExShippingClerk(parameters);
-            }
-            else
-            {
-                // TODO: Switch to use FIMS test server check when it's implemented.
-                if (settingsRepository.UseTestServer)
-                {
-                    fedExShippingClerk = new FimsShippingClerk(new FimsFakeWebClient(), new FimsLabelRepository());
-                }
-                else
-                {
-                    fedExShippingClerk = new FimsShippingClerk(new FimsWebClient(), new FimsLabelRepository());
-                }
-            }
-
-            return fedExShippingClerk;
+            return CreateShippingClerk(shipment, settingsRepository, certificateInspector,
+                new FedExLabelRepositoryFactory(), () => new FedExRequestFactory(settingsRepository));
         }
 
         /// <summary>
-        /// Creates a shipping clerk for a shipment
+        /// Creates an IFedExShippingClerk with the specified shipment and ICertificateInspector.
         /// </summary>
-        public IFedExShippingClerk CreateShippingClerk(ShipmentEntity shipment, ICarrierSettingsRepository settingsRepository)
+        /// <param name="shipment">The shipment.  If this clerk should not need a shipment, like when doing a Close, just pass null.</param>
+        /// <param name="settingsRepository">The ICarrierSettingsRepository.</param>
+        public static IFedExShippingClerk CreateShippingClerk(ShipmentEntity shipment,
+            ICarrierSettingsRepository settingsRepository,
+            ICertificateInspector certificateInspector,
+            IFedExLabelRepositoryFactory labelRepositoryFactory,
+            Func<IFedExRequestFactory> createRequestFactory)
         {
-            ICertificateInspector certificateInspector = null;
-            certificateInspector = new TrustingCertificateInspector();
-            return CreateShippingClerk(shipment, settingsRepository, certificateInspector);
+            return IsFimsShipment(shipment) ?
+                CreateFimsShippingClerk(settingsRepository, labelRepositoryFactory.CreateFims) :
+                CreateFedExShippingClerk(settingsRepository, certificateInspector,
+                    labelRepositoryFactory.CreateFedEx, createRequestFactory);
+        }
+
+        /// <summary>
+        /// Create a FedEx shipping clerk
+        /// </summary>
+        private static IFedExShippingClerk CreateFedExShippingClerk(ICarrierSettingsRepository settingsRepository,
+            ICertificateInspector certificateInspector,
+            Func<ILabelRepository> createLabelRepository, Func<IFedExRequestFactory> createRequestFactory)
+        {
+            FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
+            {
+                Inspector = certificateInspector,
+                ForceVersionCapture = false,
+                LabelRepository = createLabelRepository(),
+                RequestFactory = createRequestFactory(),
+                SettingsRepository = settingsRepository,
+                Log = LogManager.GetLogger(typeof(FedExShippingClerk)),
+                ExcludedServiceTypeRepository = new ExcludedServiceTypeRepository()
+            };
+
+            return new FedExShippingClerk(parameters);
+        }
+
+        /// <summary>
+        /// Create a FIMS shipping clerk
+        /// </summary>
+        private static IFedExShippingClerk CreateFimsShippingClerk(ICarrierSettingsRepository settingsRepository,
+            Func<IFimsLabelRepository> createFimsLabelRepository)
+        {
+            IFimsWebClient client = settingsRepository.UseTestServer ?
+                (IFimsWebClient) new FimsFakeWebClient() : new FimsWebClient();
+
+            return new FimsShippingClerk(client, createFimsLabelRepository());
         }
 
         /// <summary>
@@ -74,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             ICarrierSettingsRepository settingsRepository = null;
             ICertificateInspector certificateInspector = null;
-            
+
             // Create the appropriate settings, certificate inspector
             if (useCounterRates)
             {
@@ -95,9 +114,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         private static bool IsFimsShipment(ShipmentEntity shipment)
         {
-            return shipment != null && 
-                shipment.FedEx != null &&
-                FedExUtility.IsFimsService((FedExServiceType)shipment.FedEx.Service);
+            return shipment?.FedEx != null &&
+                FedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service);
         }
     }
 }

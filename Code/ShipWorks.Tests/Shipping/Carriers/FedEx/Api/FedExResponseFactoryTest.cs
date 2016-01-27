@@ -1,6 +1,6 @@
 using System.Linq;
-using Xunit;
 using Moq;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -10,10 +10,11 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
@@ -32,7 +33,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // Create a ship response with the correct native type
             nativeShipResponse = new ProcessShipmentReply();
 
-            testObject = new FedExResponseFactory();
+            var dataResourceManager = new Mock<IDataResourceManager>();
+
+            testObject = new FedExResponseFactory(new FedExLabelRepository(dataResourceManager.Object));
         }
 
         [Fact]

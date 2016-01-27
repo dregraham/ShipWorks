@@ -1,17 +1,16 @@
 ﻿using System;
-using System.IO;
-using Interapptive.Shared.IO.Zip;
-using Interapptive.Shared.Pdf;
-using Interapptive.Shared.Imaging;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Imaging;
+using Interapptive.Shared.IO.Zip;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -24,24 +23,29 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IDataResourceManager resourceManager;
         private readonly IEnumerable<IAmazonLabelEnforcer> labelEnforcers;
         private readonly IIndex<AmazonMwsApiCall, IAmazonShipmentRequest> amazonRequest;
-        
+        private readonly IObjectReferenceManager objectReferenceManager;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonLabelService(IDataResourceManager resourceManager, IEnumerable<IAmazonLabelEnforcer> labelEnforcers, IIndex<AmazonMwsApiCall, IAmazonShipmentRequest> amazonRequest)
+        public AmazonLabelService(IDataResourceManager resourceManager,
+            IEnumerable<IAmazonLabelEnforcer> labelEnforcers,
+            IIndex<AmazonMwsApiCall, IAmazonShipmentRequest> amazonRequest,
+            IObjectReferenceManager objectReferenceManager)
         {
             this.resourceManager = resourceManager;
             this.labelEnforcers = labelEnforcers;
             this.amazonRequest = amazonRequest;
+            this.objectReferenceManager = objectReferenceManager;
         }
-        
+
         /// <summary>
         /// Create the label
         /// </summary>
         public void Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            
+
             EnforceLabelPolicies(shipment);
 
             AmazonShipment labelResponse = amazonRequest[AmazonMwsApiCall.CreateShipment].Submit(shipment);
@@ -78,23 +82,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void SaveLabel(FileContents fileContents, long shipmentID)
         {
+            // Interapptive users have an unprocess button.  If we are reprocessing we need to clear the old images
+            objectReferenceManager.ClearReferences(shipmentID);
+
             // Decompress the label string
             byte[] labelBytes = GZipUtility.Decompress(Convert.FromBase64String(fileContents.Contents));
 
-            // If its a pdf we need to convert it
+            // If it's a PDF we need to convert it
             if (fileContents.FileType == "application/pdf")
             {
                 using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
                 {
-                    using (PdfDocument pdf = new PdfDocument(pdfBytes))
-                    {
-                        // Convert the PDF to images and then save to database
-                        // If cropping fails we save the pdf without cropping
-                        if (!SavePdfLabel(pdf, shipmentID))
-                        {
-                            resourceManager.CreateFromPdf(pdf, shipmentID, "LabelPrimary");
-                        }
-                    }
+                    resourceManager.CreateFromPdf(pdfBytes, shipmentID,
+                        i => i == 0 ? "LabelPrimary" : $"LabelPart{i}",
+                        SaveCroppedLabel);
                 }
             }
             else
@@ -105,44 +106,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Converts Ppf to Cropped label image
+        /// Save the cropped label
         /// </summary>
-        private bool SavePdfLabel(PdfDocument pdf, long shipmentID)
+        private byte[] SaveCroppedLabel(MemoryStream stream)
         {
-            // We need to convert the PDF into images and register each image as a resource in the database
-            List<Stream> images = pdf.ToImages().ToList();
-
-            // Try to crop the label 
-            try
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                // loop each image, if the pdf had multiple pages
-                for (int i = 0; i < images.Count; i++)
+                using (Bitmap labelImage = stream.CropImageStream())
                 {
-                    using (MemoryStream memoryStream = new MemoryStream())
-                    {
-                        // Create a cropped image
-                        Bitmap labelImage = EdgeDetection.Crop(images[i]);
-
-                        // Save the cropped image
-                        labelImage.Save(memoryStream, ImageFormat.Png);
-
-                        // If for some reason its a multi part label
-                        string labelName = i == 0 ? "LabelPrimary" : $"LabelPart{i}";
-
-                        // Save the label
-                        resourceManager.CreateFromBytes(memoryStream.ToArray(), shipmentID, labelName);
-                    }
+                    labelImage.Save(memoryStream, ImageFormat.Png);
                 }
+
+                return memoryStream.ToArray();
             }
-            catch (Exception)
-            {
-                // Something went wrong with the cropping
-                // return false and use the old method
-                // of saving a pdf
-                return false;
-            }
-            // everything worked
-            return true;
         }
 
         /// <summary>

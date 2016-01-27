@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project>
+  <actions />
+  <description></description>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>-1</daysToKeep>
+    <numToKeep>-1</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties />
+  <scm class="hudson.plugins.git.GitSCM"
+       plugin="git@2.3.5">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>ShipWorks3</name>
+        <url>//intfs01/development/Git/ShipWorks3x.git</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list" />
+    <extensions />
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <concurrentBuild>false</concurrentBuild>
+  <customWorkspace>c:\jenkins-builds\master-public</customWorkspace>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>rake build:public_installer[4.4.0]</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># A step to tag the commit in git with the version number of the installer versionNumber=`cat .build-label` tagName=&quot;ShipWorks_$versionNumber&quot; echo &quot;Tagging build as $tagName&quot; git tag -a $tagName -m &quot;Jenkins Build $versionNumber&quot; echo &quot;Pushing tag to origin&quot; git push origin $tagName</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>Artifacts/Distribute/*.*,Artifacts/Logs/*.*</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>true</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+    </hudson.tasks.ArtifactArchiver>
+    <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@1.0.8">
+      <unstableOnWarning>false</unstableOnWarning>
+      <failBuildOnError>false</failBuildOnError>
+      <parsingRulesPath>c:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
+    </hudson.plugins.logparser.LogParserPublisher>
+    <org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerPublisher plugin="artifactdeployer@0.33">
+      <entries>
+        <org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerEntry>
+          <includes>Artifacts/Distribute/*.*,Artifacts/Logs/*.*</includes>
+          <basedir></basedir>
+          <excludes></excludes>
+          <remote>\\intfs01\development\CruiseControl\Builds\ShipWorks\master\Public\</remote>
+          <flatten>false</flatten>
+          <deleteRemote>false</deleteRemote>
+          <deleteRemoteArtifacts>false</deleteRemoteArtifacts>
+          <deleteRemoteArtifactsByScript>false</deleteRemoteArtifactsByScript>
+          <failNoFilesDeploy>false</failNoFilesDeploy>
+        </org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerEntry>
+      </entries>
+      <deployEvenBuildFail>false</deployEvenBuildFail>
+    </org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerPublisher>
+    <hudson.tasks.Mailer plugin="mailer@1.15">
+      <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com c.hicks@shipworks.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+    <hudson.plugins.growl.GrowlPublisher plugin="growl@1.1">
+      <IP>10.1.10.121,10.1.10.109</IP>
+    </hudson.plugins.growl.GrowlPublisher>
+    <hudson.tasks.Fingerprinter>
+      <targets>Artifacts/Distribute/*.*, Artifacts/Logs/*.*</targets>
+    </hudson.tasks.Fingerprinter>
+  </publishers>
+  <buildWrappers />
+</project>

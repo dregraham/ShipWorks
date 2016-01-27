@@ -1,19 +1,18 @@
-﻿using System;
+﻿using System.Reflection;
 using Autofac;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Content;
-using System.Reflection;
 using Interapptive.Shared.Messaging;
-using log4net;
+using Interapptive.Shared.Pdf;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -86,7 +85,7 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<EditionManagerWrapper>()
                 .AsImplementedInterfaces();
-                
+
             builder.RegisterType<LogEntryFactory>()
                 .AsImplementedInterfaces()
                 .AsSelf();
@@ -131,6 +130,12 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<DatabaseIdentifier>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder.RegisterType<ObjectReferenceManagerWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<PdfDocument>()
+                .AsImplementedInterfaces();
+
 
             current = builder.Build();
         }

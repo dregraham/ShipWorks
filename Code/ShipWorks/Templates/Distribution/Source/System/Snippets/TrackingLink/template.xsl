@@ -17,21 +17,17 @@
         </a>
       </xsl:when>
 
-      <xsl:when test="contains(ServiceUsed, 'USPS') or contains(ServiceUsed, 'SmartPost') or contains(ServiceUsed, 'DHL SM')">
-
-        <xsl:if test="contains(ServiceUsed, 'DHL SM')">
-          <a href="http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber={TrackingNumber}">
+      <xsl:when test="contains(ServiceUsed, 'DHL SM')">
+        <a href="http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber={TrackingNumber}">
             <xsl:value-of select="TrackingNumber"/>
-          </a>
-        </xsl:if>
-
-        <xsl:if test="not(contains(ServiceUsed, 'DHL SM'))">
-          <a href="https://tools.usps.com/go/TrackConfirmAction.action?tLabels={TrackingNumber}">
-            <xsl:value-of select="TrackingNumber"/>
-          </a>
-        </xsl:if>
-
+        </a>
       </xsl:when>
+
+    <xsl:when test="contains(ServiceUsed, 'USPS')">
+        <a href="https://tools.usps.com/go/TrackConfirmAction.action?tLabels={TrackingNumber}">
+          <xsl:value-of select="TrackingNumber"/>
+        </a>
+    </xsl:when>
 
       <xsl:when test="contains(ServiceUsed, 'FedEx')">
         <xsl:choose>
