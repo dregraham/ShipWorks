@@ -375,6 +375,7 @@
     <Compile Include="Utility\GuidHelper.cs" />
     <Compile Include="Utility\HiddenAttribute.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />
+    <Compile Include="Utility\IEncryptionProvider.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
     <Compile Include="Utility\MethodConditions.cs" />

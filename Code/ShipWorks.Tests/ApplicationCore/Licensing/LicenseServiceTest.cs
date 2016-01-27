@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
@@ -144,6 +145,23 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
+        public void GetLicense_ReturnsDisabledLicense_WhenReaderThrowsLicenseException()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICustomerLicenseReader>()
+                    .Setup(r => r.Read())
+                    .Throws<ShipWorksLicenseException>();
+
+                LicenseService testObject = mock.Create<LicenseService>();
+
+                ILicense license = testObject.GetLicense(new StoreEntity());
+
+                Assert.IsType<DisabledLicense>(license);
+            }
+        }
+
+        [Fact]
         public void GetLicenses_ReturnsTwoStoreLicenses_WhenLegacyAndTwoStoresEnabled()
         {
             using (var mock = AutoMock.GetLoose())
@@ -185,6 +203,24 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 Assert.Equal(1, licenses.Count());
                 Assert.True(licenses[0] is ICustomerLicense);
+            }
+        }
+
+        [Fact]
+        public void GetLicenses_ReturnsDisabledLicense_WhenReaderThrowsLicenseException()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<ICustomerLicenseReader>()
+                    .Setup(r => r.Read())
+                    .Throws<ShipWorksLicenseException>();
+
+                LicenseService testObject = mock.Create<LicenseService>();
+
+                IEnumerable<ILicense> licenses = testObject.GetLicenses().ToArray();
+
+                Assert.Equal(1, licenses.Count());
+                Assert.IsType<DisabledLicense>(licenses.Single());
             }
         }
 

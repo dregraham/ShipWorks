@@ -8,6 +8,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using Xunit;
 using log4net;
 using System.Collections.Generic;
+using System;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
@@ -201,6 +202,22 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 customerLicense.Refresh();
 
                 log.Verify(l => l.Warn(It.IsAny<TangoException>()), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void Save_RethrowsException_FromLicenseWriter()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var writer = mock.Mock<ICustomerLicenseWriter>();
+
+                writer.Setup(w => w.Write(It.IsAny<ICustomerLicense>())).Throws(new Exception("some random exception"));
+                
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                var ex = Assert.Throws<Exception>(() => customerLicense.Save());
+                Assert.Equal("some random exception", ex.Message);
             }
         }
     }
