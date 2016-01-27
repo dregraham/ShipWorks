@@ -24,7 +24,7 @@ namespace ShipWorks.UI
 
             builder.RegisterType<ChannelLimitViewModel>();
 
-            builder.RegisterType<ChannelLimitDlgHost>()
+            builder.RegisterType<ChannelLimitDlg>()
                 .AsImplementedInterfaces();
         }
     }

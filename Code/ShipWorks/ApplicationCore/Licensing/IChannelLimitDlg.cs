@@ -6,9 +6,10 @@ using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
-    public interface IChannelLimitDlgHost : IDisposable
+    public interface IChannelLimitDlg
     {
-        DialogResult ShowDialog(IWin32Window owner);
+        bool? ShowDialog();
     }
+
 }
 

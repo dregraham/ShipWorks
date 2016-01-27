@@ -11,17 +11,32 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
     /// <summary>
     /// Interaction logic for ChannelLimitDlg.xaml
     /// </summary>
-    public partial class ChannelLimitDlg : UserControl
+    public partial class ChannelLimitDlg : Window
     {
+        private readonly ChannelLimitViewModel viewModel;
+
         public ChannelLimitDlg()
         {
             InitializeComponent();
+        }
+
+        public ChannelLimitDlg(ChannelLimitViewModel viewModel) : this()
+        {
+            this.viewModel = viewModel;
+            ChannelLimit.DataContext = viewModel;
+            viewModel.Load();
+        }
+
+        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            viewModel.Dismiss();
         }
     }
 }

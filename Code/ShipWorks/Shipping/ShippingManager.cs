@@ -1085,6 +1085,18 @@ namespace ShipWorks.Shipping
             {
                 throw new ShippingException(license.DisabledReason);
             }
+            if (license.IsOverChannelLimit)
+            {
+                IChannelLimitDlg channelLimitDlg = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitDlg>();
+
+                channelLimitDlg.ShowDialog();
+                license.Refresh();
+
+                if (license.IsOverChannelLimit)
+                {
+                    throw new ShippingException("Channel Limit Exceeded");
+                }
+            }
         }
 
         /// <summary>
