@@ -14,6 +14,30 @@
         <ui:EnumImageConverter x:Key="EnumToImage" />
         <FrameworkElement x:Key="ProxyElement"
                           DataContext="{Binding}"/>
+
+        <Style TargetType="TextBlock" x:Key="AmountStyle">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        <Style TargetType="DataGridCell" x:Key="NoSelection">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        </Style>
+        <Style TargetType="DataGridCell" x:Key="SpacingStyle" BasedOn="{StaticResource NoSelection}">
+            <Setter Property="Padding" Value="4,0,4,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Border Padding="{TemplateBinding Padding}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Grid Margin="4,4,4,4">
         <Grid.RowDefinitions>
@@ -37,13 +61,8 @@
                   CanUserSortColumns="False"
                   CanUserReorderColumns="False"
                   CanUserResizeColumns="False"
+                  CellStyle="{StaticResource NoSelection}"
                   IsReadOnly="True">
-            <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                </Style>
-            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Provider">
                     <DataGridTemplateColumn.CellTemplate>
@@ -58,21 +77,29 @@
                 <DataGridTextColumn Header="Days"
                                     Binding="{Binding Days}" />
                 <DataGridTextColumn Header="Shipping"
+                                    CellStyle="{StaticResource SpacingStyle}"
+                                    ElementStyle="{StaticResource AmountStyle}"
                                     Visibility="{Binding DataContext.ShowShipping,
                                         Source={StaticResource ProxyElement},
                                         Converter={StaticResource BooleanToVisibility}}"
                                     Binding="{Binding Shipping}" />
                 <DataGridTextColumn Header="Tax"
+                                    CellStyle="{StaticResource SpacingStyle}"
+                                    ElementStyle="{StaticResource AmountStyle}"
                                     Visibility="{Binding DataContext.ShowTaxes,
                                         Source={StaticResource ProxyElement},
                                         Converter={StaticResource BooleanToVisibility}}"
                                     Binding="{Binding Taxes}" />
                 <DataGridTextColumn Header="Duty"
+                                    CellStyle="{StaticResource SpacingStyle}"
+                                    ElementStyle="{StaticResource AmountStyle}"
                                     Visibility="{Binding DataContext.ShowDuties,
                                         Source={StaticResource ProxyElement},
                                         Converter={StaticResource BooleanToVisibility}}"
                                     Binding="{Binding Duties}" />
                 <DataGridTextColumn Header="Rate"
+                                    CellStyle="{StaticResource SpacingStyle}"
+                                    ElementStyle="{StaticResource AmountStyle}"
                                     Binding="{Binding Rate}" />
             </DataGrid.Columns>
         </DataGrid>
