@@ -68,8 +68,9 @@
             </i:Interaction.Behaviors>
         </PasswordBox>
         <TextBlock Grid.Row="2" Grid.Column="2">
+            <Hyperlink NavigateUri="{Binding CreateAccountLink}" attachedProperties:Link.OpenInBrowser="true" >I don't have a ShipWorks account</Hyperlink>
+            <Separator Width="1" Visibility="Hidden" />
             <Hyperlink NavigateUri="{Binding PasswordResetLink}" attachedProperties:Link.OpenInBrowser="true">Forgot Password</Hyperlink>
-            <Hyperlink NavigateUri="{Binding CreateAccountLink}" attachedProperties:Link.OpenInBrowser="true">I don't have a ShipWorks account</Hyperlink>
         </TextBlock>
     </Grid>
 
