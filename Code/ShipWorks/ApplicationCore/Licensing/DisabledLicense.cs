@@ -51,6 +51,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsLegacy => false;
 
         /// <summary>
+        /// Not over limit, but I did debate throwing for this...
+        /// </summary>
+        public bool IsOverChannelLimit => false;
+
+        /// <summary>
         /// Throws - We shouldn't try to activate a disabled license.
         /// </summary>
         public EnumResult<LicenseActivationState> Activate(StoreEntity store)
