@@ -1,4 +1,6 @@
-﻿using System.Web.UI.WebControls;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using System.Web.UI.WebControls;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -26,5 +28,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The license key
         /// </summary>
         string Key { get; }
+
+        /// <summary>
+        /// Is the license legacy
+        /// </summary>
+        bool IsLegacy { get; }
+
+        /// <summary>
+        /// Activate a new store
+        /// </summary>
+        EnumResult<LicenseActivationState> Activate(StoreEntity store);
     }
 }

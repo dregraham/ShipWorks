@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -18,5 +19,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Can the customer Logon?
         /// </summary>
         EnumResult<LogOnRestrictionLevel> AllowsLogOn();
+
+        /// <summary>
+        /// Returns the correct ILicense for the store
+        /// </summary>
+        ILicense GetLicense(StoreEntity store);
     }
 }

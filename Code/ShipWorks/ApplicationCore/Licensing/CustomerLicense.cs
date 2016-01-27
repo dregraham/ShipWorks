@@ -1,13 +1,14 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// Class to store customer license information
     /// </summary>
-    public class CustomerLicense : ICustomerLicense, ILicense
+    public class CustomerLicense : ICustomerLicense
     {
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
@@ -28,6 +29,25 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The license key
         /// </summary>
         public string Key { get; private set; }
+
+        /// <summary>
+        /// Activate a new store
+        /// </summary>
+        public EnumResult<LicenseActivationState> Activate(StoreEntity store)
+        {
+            AddStoreResponse response = tangoWebClient.AddStore(this, store);
+
+            store.License = response.Key;
+
+            return response.Success ?
+                new EnumResult<LicenseActivationState>(LicenseActivationState.Active) :
+                new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid, response.Error);
+        }
+
+        /// <summary>
+        /// Is the license legacy
+        /// </summary>
+        public bool IsLegacy => false;
 
         /// <summary>
         /// Reason the license is Disabled

@@ -61,8 +61,8 @@
             this.linkLabel1.Size = new System.Drawing.Size(378, 32);
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Click here to add these discounted rates from IntuiShip through your existing Sta" +
-    "mps.com account at no additional cost.";
+            this.linkLabel1.Text = "Click here to add these discounted rates through your existing Stamps.com account" +
+    " at no additional cost.";
             this.linkLabel1.Click += new System.EventHandler(this.OnStartSaving);
             // 
             // learnMore

@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -33,6 +34,26 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// License key
         /// </summary>
         public string Key { get; }
+
+        /// <summary>
+        /// Is the license legacy
+        /// </summary>
+        public bool IsLegacy => true;
+
+        /// <summary>
+        /// Activate a new store
+        /// </summary>
+        /// <remarks>
+        /// Make sure store is populated with the appropriate license key.
+        /// </remarks>
+        public EnumResult<LicenseActivationState> Activate(StoreEntity newStore)
+        {
+            ShipWorksLicense license = new ShipWorksLicense(store.License);
+
+            return license.IsTrial ? 
+                new EnumResult<LicenseActivationState>(LicenseActivationState.Active) : 
+                LicenseActivationHelper.ActivateAndSetLicense(newStore, newStore.License);
+        }
 
         /// <summary>
         /// Refreshes store license data.
