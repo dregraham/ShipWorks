@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             Shipping = SetAuxiliaryAmount(rate, rate.Shipping);
             Taxes = SetAuxiliaryAmount(rate, rate.Taxes);
             Duties = SetAuxiliaryAmount(rate, rate.Duties);
-            Rate = rate.Selectable ? rate.FormattedAmount : ""; //, rate.AmountFootnote;
+            Rate = rate.Selectable ? rate.FormattedAmount : ""; //, rate.AmountFootnote
         }
 
         /// <summary>

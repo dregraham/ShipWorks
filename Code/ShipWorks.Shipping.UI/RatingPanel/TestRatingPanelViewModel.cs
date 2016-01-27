@@ -5,7 +5,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
 #if DEBUG
     public class TestRatingPanelViewModel : RatingPanelViewModel
     {
-        public TestRatingPanelViewModel() : base(null)
+        public TestRatingPanelViewModel() : base()
         {
             Rates = new List<RateResultDisplay>
             {

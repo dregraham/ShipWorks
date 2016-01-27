@@ -12,6 +12,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private bool showTaxes;
         private bool showDuties;
         private bool showFootnotes;
+        private bool isLoading;
         private IEnumerable<RateResultDisplay> rates;
         private IEnumerable<object> footnotes;
 
@@ -73,6 +74,16 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             get { return rates; }
             set { handler.Set(nameof(Footnotes), ref footnotes, value); }
+        }
+
+        /// <summary>
+        /// Are rates currently being loaded
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            set { handler.Set(nameof(IsLoading), ref isLoading, value); }
         }
     }
 }

@@ -12,10 +12,12 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public RatesRetrievedMessage(object sender, string ratingHash)
+        public RatesRetrievedMessage(object sender, string ratingHash, RateGroup rateGroup, ICarrierShipmentAdapter shipmentAdapter)
         {
             Sender = sender;
             RatingHash = ratingHash;
+            RateGroup = rateGroup;
+            ShipmentAdapter = shipmentAdapter;
         }
 
         /// <summary>
