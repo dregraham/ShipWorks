@@ -181,14 +181,20 @@
   <ItemGroup>
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
+    <Compile Include="RatingPanel\RateResultDisplay.cs" />
     <Compile Include="RatingPanel\RatingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="RatingPanel\RatingPanel.Designer.cs">
       <DependentUpon>RatingPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="RatingPanel\RatingPanelControl.xaml.cs">
+      <DependentUpon>RatingPanelControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RatingPanel\RatingPanelRegistration.cs" />
     <Compile Include="RatingPanel\RatingPanelViewModel.cs" />
+    <Compile Include="RatingPanel\RatingPanelViewModel.Properties.cs" />
+    <Compile Include="RatingPanel\TestRatingPanelViewModel.cs" />
     <Compile Include="ShippingPanel\CustomsControl\CustomsControl.xaml.cs">
       <DependentUpon>CustomsControl.xaml</DependentUpon>
     </Compile>
@@ -431,6 +437,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="RatingPanel\RatingPanelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ShippingPanel\CustomsControl\CustomsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -2,14 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using System.Runtime.InteropServices;
-using System.Drawing;
-using System.Linq;
 using log4net;
-using System.Windows.Forms;
-using System.Diagnostics;
-using Interapptive.Shared;
-using Interapptive.Shared.Win32;
 
 namespace Interapptive.Shared.Utility
 {
@@ -84,7 +77,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Formats amount to a currency amount with support for a half penny.
         /// </summary>
-        public static string FormatFriendlyCurrency(decimal amount)
+        public static string FormatFriendlyCurrency(this decimal amount)
         {
             string formattedAmount = amount.ToString("c");
             decimal truncatedAmount = decimal.Parse(formattedAmount, NumberStyles.Currency);
