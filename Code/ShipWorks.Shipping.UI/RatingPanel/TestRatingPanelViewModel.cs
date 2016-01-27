@@ -18,6 +18,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
 
             ShowShipping = true;
             ShowTaxes = true;
+            ShowFootnotes = false;
         }
     }
 #endif

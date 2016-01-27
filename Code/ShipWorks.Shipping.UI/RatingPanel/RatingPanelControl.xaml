@@ -103,7 +103,9 @@
                                     Binding="{Binding Rate}" />
             </DataGrid.Columns>
         </DataGrid>
-        <ListView Grid.Row="2">
+        <ListView Grid.Row="2"
+                  ItemsSource="{Binding Footnotes}"
+                  Visibility="{Binding ShowFootnotes,Converter={StaticResource BooleanToVisibility}}">
 
         </ListView>
     </Grid>
