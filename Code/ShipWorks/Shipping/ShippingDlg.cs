@@ -2393,12 +2393,11 @@ namespace ShipWorks.Shipping
 
             if (license.IsOverChannelLimit)
             {
-                using (IChannelLimitDlgHost channelLimitDlgHost = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitDlgHost>())
-                {
-                    IWin32Window mainForm = IoC.UnsafeGlobalLifetimeScope.Resolve<IWin32Window>();
-                    channelLimitDlgHost.ShowDialog(mainForm);
-                }
+                IChannelLimitDlg channelLimitDlg = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitDlg>();
+
+                channelLimitDlg.ShowDialog();
                 license.Refresh();
+
                 if (license.IsOverChannelLimit)
                 {
                     MessageHelper.ShowMessage(this, "Channel Limit Exceeded");

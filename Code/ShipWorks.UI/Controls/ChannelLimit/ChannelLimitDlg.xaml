@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ShipWorks.UI.Controls.ChannelLimit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Closing="OnClosing">
-    <Grid>
+    <Grid> 
         <local:ChannelLimit x:Name="ChannelLimit" ></local:ChannelLimit>
     </Grid>
 </Window>
