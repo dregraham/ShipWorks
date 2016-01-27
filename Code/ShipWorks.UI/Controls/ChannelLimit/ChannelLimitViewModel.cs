@@ -61,7 +61,28 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             license.Refresh();
 
-            StoreCollection = new ObservableCollection<ActiveStore>(license.GetActiveStores());
+            // if we dont have a store collection make one
+            if (StoreCollection == null)
+            {
+                StoreCollection = new ObservableCollection<ActiveStore>();
+            }
+            
+            // clear the collection
+            StoreCollection.Clear();
+
+            // load the collection with the licenses active stores
+            license.GetActiveStores().ToList().ForEach(StoreCollection.Add);
+
+            foreach (StoreEntity store in storeManager.GetAllStores())
+            {
+                ActiveStore activeStoreMatch = StoreCollection.Where(s => s.StoreLicenseKey == store.License).FirstOrDefault();
+
+                // if we did not find a match add it to the collection 
+                if (activeStoreMatch == null)
+                {
+                    StoreCollection.Add(new ActiveStore() { Name = "(Local) " + store.StoreName , StoreLicenseKey = store.License });
+                }
+            }
 
             UpdateErrorMesssage();
         }
@@ -129,10 +150,14 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             int numberToDelete = license.LicenseCapabilities.ActiveChannels - license.LicenseCapabilities.ChannelLimit;
 
-            if (numberToDelete > 0)
+            if (numberToDelete == 0)
+            {
+                ErrorMessage = $"You have exceeded your channel limit. Please upgrade your plan or delete 1 store type to continue using ShipWorks.";
+            }
+            else if (numberToDelete > 0)
             {
                 ErrorMessage = $"You have exceeded your channel limit. Please upgrade your plan or delete {numberToDelete} store types to continue using ShipWorks.";
-            }            
+            }     
         }
 
         /// <summary>
@@ -151,15 +176,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             // Remove the store form tango 
             tangoWebClient.DeleteStore(license, selectedStore.StoreLicenseKey);
 
-            license.Refresh();
-
-            StoreCollection.Clear();
-
-            license.GetActiveStores().ToList().ForEach(StoreCollection.Add);
-
-            UpdateErrorMesssage();
+            Load();
         }
-
+        
         /// <summary>
         /// Deletes the store entity
         /// </summary>

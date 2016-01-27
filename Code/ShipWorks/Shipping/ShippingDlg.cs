@@ -2400,7 +2400,6 @@ namespace ShipWorks.Shipping
 
                 if (license.IsOverChannelLimit)
                 {
-                    MessageHelper.ShowMessage(this, "Channel Limit Exceeded");
                     return;
                 }
             }

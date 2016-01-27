@@ -1,4 +1,6 @@
 ﻿using Interapptive.Shared.Utility;
+using ShipWorks.Stores;
+using System.Drawing;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -18,13 +20,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string Name { get; set; }
 
         /// <summary>
-        /// The store type
+        /// The store icon
         /// </summary>
-        public string StoreType
+        public StoreTypeCode StoreType
         {
             get
             {
-                return EnumHelper.GetDescription(new ShipWorksLicense(StoreLicenseKey).StoreTypeCode);
+                return new ShipWorksLicense(StoreLicenseKey).StoreTypeCode;
             }
         }
     }

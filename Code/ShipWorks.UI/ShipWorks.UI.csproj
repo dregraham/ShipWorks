@@ -85,13 +85,20 @@
     <Compile Include="AttachedProperties\Link.cs" />
     <Compile Include="Behaviors\PasswordBoxBindingBehavior.cs" />
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
-    <Compile Include="Controls\ChannelLimit\ChannelLimit.xaml.cs">
-      <DependentUpon>ChannelLimit.xaml</DependentUpon>
+    <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteViewModel.cs" />
+    <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteDlg.xaml.cs">
+      <DependentUpon>ChannelConfirmDeleteDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ChannelLimit\ChannelLimitDlg.xaml.cs">
       <DependentUpon>ChannelLimitDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitDlgHost.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\ChannelLimit\ChannelLimitDlgHost.Designer.cs">
+      <DependentUpon>ChannelLimitDlgHost.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml.cs">
       <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
     </Compile>
@@ -107,6 +114,7 @@
     <Compile Include="Services\IMessageHelper.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
     <Compile Include="UIModule.cs" />
+    <Compile Include="ValueConverters\EnumDescriptionConverter.cs" />
     <Compile Include="ValueConverters\EnumImageConverter.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
@@ -147,13 +155,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\ChannelLimit\ChannelLimit.xaml">
+    <Page Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ChannelLimit\ChannelLimitDlg.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -161,6 +169,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\ChannelLimit\ChannelLimitDlgHost.resx">
+      <DependentUpon>ChannelLimitDlgHost.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.resx">
       <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
     </EmbeddedResource>
