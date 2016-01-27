@@ -19,6 +19,9 @@ using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.ApplicationCore;
+using Autofac;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Data.Administration
 {
@@ -34,7 +37,7 @@ namespace ShipWorks.Data.Administration
         static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Update");
 
         /// <summary>
-        /// Get the dabase schema version that is required by this version of ShipWorks
+        /// Get the database schema version that is required by this version of ShipWorks
         /// </summary>
         public static Version GetRequiredSchemaVersion()
         {
@@ -42,7 +45,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Indiciates if the connection to the given database is the exact database version required for ShipWorks
+        /// Indicates if the connection to the given database is the exact database version required for ShipWorks
         /// </summary>
         public static bool IsCorrectSchemaVersion()
         {
@@ -292,7 +295,7 @@ namespace ShipWorks.Data.Administration
                                 ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
                             }
                             
-                            // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it everytime, even if not needed)
+                            // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
                             SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
 
                             // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
@@ -313,7 +316,7 @@ namespace ShipWorks.Data.Administration
                                 {
                                     foreach (ActionEntity action in actions)
                                     {
-                                        // Some trigger's state depend on the enabledness of the action
+                                        // Some trigger's state depend on the enabled state of the action
                                         ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
 
                                         if (scheduledTrigger?.Schedule != null )
@@ -335,6 +338,17 @@ namespace ShipWorks.Data.Administration
 
                                     adapter.Commit();
                                 }
+                            }
+
+                            // update Configuration table Key column to have an encrypted empty string 
+                            // using the GetDatabaseGuid stored procedure as the salt. 
+                            if (installed < new Version(4, 9, 0, 0))
+                            {
+                                // Resolve a CustomerLicense passing in an empty string as the key parameter
+                                ICustomerLicense customerLicense = IoC.UnsafeGlobalLifetimeScope.Resolve<ICustomerLicense>(new TypedParameter(typeof(string), string.Empty));
+
+                                // Save the license
+                                customerLicense.Save();
                             }
                         }
                     }
@@ -363,7 +377,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Update the schema version store procuedure to match the required schema version.  This should only be called after installing or updating to the latest schema.
+        /// Update the schema version store procedure to match the required schema version.  This should only be called after installing or updating to the latest schema.
         /// </summary>
         public static void UpdateSchemaVersionStoredProcedure(SqlConnection con)
         {
@@ -471,7 +485,7 @@ namespace ShipWorks.Data.Administration
                 // Execute the script
                 SqlScript executor = sqlLoader[script.ScriptName];
 
-                // Update the progress as we complete each bactch in the script
+                // Update the progress as we complete each batch in the script
                 executor.BatchCompleted += delegate(object sender, SqlScriptBatchCompletedEventArgs args)
                 {
                     // Update the progress
@@ -506,7 +520,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Since our filters use column masks that are exactly dependant on column positioning, we regenerate them every time
+        /// Since our filters use column masks that are exactly dependent on column positioning, we regenerate them every time
         /// there is a schema change, just in case.
         /// </summary>
         private static void UpdateFilters(ProgressItem progress, SqlConnection connection, SqlTransaction transaction)
@@ -515,8 +529,8 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                // We need to push a new scope for the layout context, b\c if the user ends up cancelling the wizard, it needs to be restored to the
-                // way it was.  And if it doesnt, the layout context gets reloaded anyway.
+                // We need to push a new scope for the layout context, b\c if the user ends up canceling the wizard, it needs to be restored to the
+                // way it was.  And if it doesn't, the layout context gets reloaded anyway.
                 FilterLayoutContext.PushScope();
 
                 // Regenerate the filters

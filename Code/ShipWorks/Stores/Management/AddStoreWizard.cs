@@ -77,6 +77,13 @@ namespace ShipWorks.Stores.Management
         bool isFreemiumMode = false;
 
         /// <summary>
+        /// Indicates if we show the activation page.
+        /// </summary>
+        private bool showActivationError = false;
+
+        private readonly ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
+        
+        /// <summary>
         /// Constructor
         /// </summary>
         private AddStoreWizard()
@@ -398,8 +405,10 @@ namespace ShipWorks.Stores.Management
 
             try
             {
-                // If w are in freemium mode, and we already have a valid freemium edition store, then don't try to get a trial - it would fail anyway saying they aren't eligible
-                if (isFreemiumMode && (EditionSerializer.Restore(store) is FreemiumFreeEdition) && new ShipWorksLicense(store.License).IsValid)
+                ILicense license = licenseService.GetLicense(store);
+
+                // If we are legacy or are in freemium mode, and we already have a valid freemium edition store, then don't try to get a trial - it would fail anyway saying they aren't eligible
+                if (!license.IsLegacy || (isFreemiumMode && (EditionSerializer.Restore(store) is FreemiumFreeEdition) && new ShipWorksLicense(store.License).IsValid))
                 {
                     // We already have their license
                     e.Skip = true;
@@ -455,15 +464,6 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnStepNextAlreadyActive(object sender, WizardStepEventArgs e)
         {
-            LicenseActivationState licenseState = LicenseActivationHelper.ActivateAndSetLicense(store, licenseKey.Text.Trim(), this);
-
-            if (licenseState != LicenseActivationState.Active)
-            {
-                e.NextPage = CurrentPage;
-                return;
-            }
-            else
-            {
                 if (EditionSerializer.Restore(store) is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
                 {
                     MessageHelper.ShowError(this, "The license you entered is for the Endicia Free for eBay ShipWorks edition.  That edition only supports a single store, and you already have some stores in ShipWorks.");
@@ -471,7 +471,6 @@ namespace ShipWorks.Stores.Management
                     e.NextPage = CurrentPage;
                     return;
                 }
-            }
         }
 
         /// <summary>
@@ -874,13 +873,21 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
         {
-            int storeCount = StoreManager.GetAllStores().Count;
-
             try
             {
                 // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
                 FilterLayoutContext.PushScope();
 
+                if (!string.IsNullOrEmpty(licenseKey.Text))
+                {
+                    store.License = licenseKey.Text;
+                }
+
+                if (!ValidateLicense(e))
+                {
+                    return;
+                }
+                
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     // Create the default presets
@@ -890,19 +897,7 @@ namespace ShipWorks.Stores.Management
                     StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
                     storeFilterRepository.Save(true);
 
-                    // Adjust the default shipment type based on edition
-                    if (storeCount == 0)
-                    {
-                        ShipmentTypeCode? defaultType = EditionSerializer.Restore(store).DefaultShipmentType;
-
-                        if (defaultType != null)
-                        {
-                            ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-                            shippingSettings.DefaultType = (int) defaultType.Value;
-
-                            ShippingSettings.Save(shippingSettings);
-                        }
-                    }
+                    AdjustShipmentType();
 
                     // By default we auto-download every 15 minutes
                     store.AutoDownload = true;
@@ -928,13 +923,58 @@ namespace ShipWorks.Stores.Management
 
                 e.Skip = true;
                 e.SkipToPage = wizardPageContactInfo;
-
-                return;
             }
             finally
             {
                 FilterLayoutContext.PopScope();
             }
+        }
+
+        /// <summary>
+        /// Adjust the default shipment type based on edition
+        /// </summary>
+        private void AdjustShipmentType()
+        {
+            if (StoreManager.GetAllStores().Count == 0)
+            {
+                ShipmentTypeCode? defaultType = EditionSerializer.Restore(store).DefaultShipmentType;
+
+                if (defaultType != null)
+                {
+                    ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
+                    shippingSettings.DefaultType = (int)defaultType.Value;
+
+                    ShippingSettings.Save(shippingSettings);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Validates the License - sets up skip properties when appropriate
+        /// </summary>
+        private bool ValidateLicense(WizardSteppingIntoEventArgs e)
+        {
+            BackEnabled = false;
+
+            ILicense license = licenseService.GetLicense(store);
+            EnumResult<LicenseActivationState> activateResult = license.Activate(store);
+            if (activateResult.Value != LicenseActivationState.Active)
+            {
+                e.Skip = true;
+
+                if (license.IsLegacy)
+                {
+                    e.SkipToPage = wizardPageAlreadyActive;
+                }
+                else
+                {
+                    showActivationError = true;
+                    wizardPageActivationError.ErrorMessage = activateResult.Message;
+                    e.SkipToPage = wizardPageActivationError;
+                }
+            }
+
+            return !e.Skip;
         }
 
         /// <summary>
@@ -969,5 +1009,14 @@ namespace ShipWorks.Stores.Management
 
         #endregion
 
+        /// <summary>
+        /// Skip this page if no error has occurred.
+        /// </summary>
+        private void OnSteppingIntoWizardPageActivationError(object sender, WizardSteppingIntoEventArgs e)
+        {
+            BackEnabled = false;
+            e.Skip = !showActivationError;
+            showActivationError = false;
+        }
     }
 }

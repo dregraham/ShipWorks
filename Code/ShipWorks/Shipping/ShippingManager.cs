@@ -1075,7 +1075,7 @@ namespace ShipWorks.Shipping
         /// <param name="storeEntity">The store entity.</param>
         private static void CheckLicense(StoreEntity storeEntity)
         {
-            LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
+            ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
 
             ILicense license = licenseService.GetLicense(storeEntity);
 

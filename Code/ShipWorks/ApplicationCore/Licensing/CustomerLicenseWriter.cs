@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 
@@ -9,6 +10,16 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class CustomerLicenseWriter : ICustomerLicenseWriter
     {
+        private readonly IEncryptionProvider encryptionProvider;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public CustomerLicenseWriter(IEncryptionProvider encryptionProvider)
+        {
+            this.encryptionProvider = encryptionProvider;
+        }
+
         /// <summary>
         /// Writes the customer license to the database
         /// </summary>
@@ -17,11 +28,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Initialize Configuration data as it does not exist 
             // when we need to write the key to the database
             ConfigurationData.InitializeForCurrentDatabase();
-
             ConfigurationEntity config = ConfigurationData.Fetch();
-            config.CustomerKey = customerLicense.Key;
 
-            // Save the key to the ConfiguartionEntity 
+            config.CustomerKey = encryptionProvider.Encrypt(customerLicense.Key);
+
+            // Save the key to the ConfigurationEntity 
             ConfigurationData.Save(config);
         }
     }

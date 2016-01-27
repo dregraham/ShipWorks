@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Stores;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -30,6 +31,20 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The license key
         /// </summary>
         public string Key { get; private set; }
+
+        /// <summary>
+        /// Activate a new store
+        /// </summary>
+        public EnumResult<LicenseActivationState> Activate(StoreEntity store)
+        {
+            AddStoreResponse response = tangoWebClient.AddStore(this, store);
+
+            store.License = response.Key;
+
+            return response.Success ?
+                new EnumResult<LicenseActivationState>(LicenseActivationState.Active) :
+                new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid, response.Error);
+        }
 
         /// <summary>
         /// Is the license legacy
@@ -75,7 +90,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Uses the ILicenseWriter provided in the constructor to save this instance
         /// to a data source.
         /// </summary>
-        private void Save()
+        public void Save()
         {
             licenseWriter.Write(this);
         }

@@ -8,6 +8,11 @@ namespace ShipWorks.ApplicationCore.Licensing
     public interface ICustomerLicense : ILicense
     {
         /// <summary>
+        /// Saves the license
+        /// </summary>
+        void Save();
+
+        /// <summary>
         /// Activate a customer license
         /// </summary>
         void Activate(string email, string password);

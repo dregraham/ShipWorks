@@ -1,4 +1,8 @@
-﻿namespace ShipWorks.ApplicationCore.Licensing
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using System.Web.UI.WebControls;
+
+namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// License describes the capabilities of the customer's license.
@@ -34,5 +38,10 @@
         /// Is the user over their channel limit
         /// </summary>
         bool IsOverChannelLimit { get; }
+
+        /// <summary>
+        /// Activate a new store
+        /// </summary>
+        EnumResult<LicenseActivationState> Activate(StoreEntity store);
     }
 }
