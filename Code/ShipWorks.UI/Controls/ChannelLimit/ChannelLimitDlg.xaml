@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShipWorks.UI.Controls.ChannelLimit"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Closing="OnClosing">
+             d:DesignHeight="261" d:DesignWidth="434" Closing="OnClosing" WindowStyle="ToolWindow" Title="Channel Limit Exceeded">
     <Grid> 
         <local:ChannelLimit x:Name="ChannelLimit" ></local:ChannelLimit>
     </Grid>
