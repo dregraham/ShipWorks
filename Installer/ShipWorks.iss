@@ -23,10 +23,10 @@
 #endif
 
 [Setup]
-AppName=ShipWorks®
+AppName=ShipWorksï¿½
 AppVersion={#= Version} {#= EditionName}
-AppVerName=ShipWorks® {#= Version} {#= EditionName}
-AppPublisher=Interapptive®, Inc.
+AppVerName=ShipWorksï¿½ {#= Version} {#= EditionName}
+AppPublisher=Interapptiveï¿½, Inc.
 AppPublisherURL=http://www.shipworks.com
 AppSupportURL=http://www.shipworks.com
 AppUpdatesURL=http://www.shipworks.com
@@ -54,10 +54,10 @@ AlwaysRestart=false
 ShowLanguageDialog=no
 AllowUNCPath=false
 VersionInfoVersion={#= Version}
-VersionInfoCompany=Interapptive®, Inc.
-VersionInfoDescription=Interapptive® ShipWorks®
-VersionInfoTextVersion=ShipWorks® {#= Version}
-VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2013
+VersionInfoCompany=Interapptiveï¿½, Inc.
+VersionInfoDescription=Interapptiveï¿½ ShipWorksï¿½
+VersionInfoTextVersion=ShipWorksï¿½ {#= Version}
+VersionInfoCopyright=Copyright ï¿½ Interapptiveï¿½, Inc. 2003-2013
 ArchitecturesInstallIn64BitMode=x64
 AppendDefaultDirName=false
 
@@ -100,8 +100,11 @@ Source: {#AppArtifacts}\Common.Logging.Log4Net1213.dll; DestDir: {app}; Flags: o
 Source: {#AppArtifacts}\ComponentFactory.Krypton.Toolkit.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Divelements.SandGrid.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Divelements.SandRibbon.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\GalaSoft.MvvmLight.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\GalaSoft.MvvmLight.Extras.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Interapptive.Shared.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\log4net.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Microsoft.Practices.ServiceLocation.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Microsoft.Threading.Tasks.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Microsoft.Threading.Tasks.Extensions.Desktop.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Microsoft.Threading.Tasks.Extensions.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
