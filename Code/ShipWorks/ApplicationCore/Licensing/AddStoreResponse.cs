@@ -15,7 +15,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlResponse);
             Error = XPathUtility.Evaluate(xpath, "//Error", "");
-            Key = XPathUtility.Evaluate(xpath, "//License/Key", "");
+            Key = XPathUtility.Evaluate(xpath, "//LicenseKey", "");
 
             Success = string.IsNullOrEmpty(Error);
         }
