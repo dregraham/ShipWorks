@@ -1,4 +1,7 @@
-﻿namespace ShipWorks.ApplicationCore.Licensing
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+
+namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// License describes the capabilities of the customer's license.
@@ -29,5 +32,10 @@
         /// Is the license legacy
         /// </summary>
         bool IsLegacy { get; }
+
+        /// <summary>
+        /// Activate a new store
+        /// </summary>
+        EnumResult<LicenseActivationState> Activate(StoreEntity store);
     }
 }
