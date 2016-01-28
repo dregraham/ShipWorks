@@ -293,6 +293,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ShipmentViewModel.Load(ShipmentAdapter);
 
             isLoadingShipment = false;
+
+            messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter));
         }
 
         /// <summary>
@@ -422,7 +424,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter));
         }
-
 
         /// <summary>
         /// Determines if a view model field is used for the shipment's rating criteria.

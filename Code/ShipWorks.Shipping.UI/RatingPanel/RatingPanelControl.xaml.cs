@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             InitializeComponent();
 
-            DataContext = new TestRatingPanelViewModel();
+            DataContext = viewModel;
         }
     }
 }

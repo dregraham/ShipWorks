@@ -1,5 +1,4 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping
@@ -22,6 +21,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Is the given field a rating field
         /// </summary>
-        bool IsRatingField(EntityField2 changedField);
+        bool IsRatingField(string changedField);
     }
 }

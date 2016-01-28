@@ -1,5 +1,4 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Core.Messaging;
+﻿using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Messaging.Messages
@@ -9,8 +8,6 @@ namespace ShipWorks.Messaging.Messages
     /// </summary>
     public class ShipmentChangedMessage : IShipWorksMessage
     {
-        private readonly EntityField2 changedField;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -23,7 +20,7 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentChangedMessage(object sender, ICarrierShipmentAdapter shipment, EntityField2 changedField)
+        public ShipmentChangedMessage(object sender, ICarrierShipmentAdapter shipment, string changedField)
         {
             Sender = sender;
             ShipmentAdapter = shipment;
@@ -43,6 +40,6 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// The field that has changed
         /// </summary>
-        public EntityField2 ChangedField { get; }
+        public string ChangedField { get; }
     }
 }
