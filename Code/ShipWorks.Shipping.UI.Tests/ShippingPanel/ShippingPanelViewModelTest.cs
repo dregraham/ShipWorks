@@ -180,20 +180,21 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public void Save_DoesNotSendShipmentChangedMessage_WhenLoadingOrderTest()
+        public void Save_SendsOneShipmentChangedMessage_WhenLoadingOrderTest()
         {
             OrderSelectionChangedMessage message = new OrderSelectionChangedMessage(null, new List<OrderSelectionLoaded> { orderSelectionLoaded });
 
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
             testObject.LoadOrder(message);
 
-            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>()), Times.Never);
+            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>()), Times.Once);
         }
 
         [Fact]
         public void Save_DoesNotSendShipmentChangedMessage_WhenNothingChanged_Test()
         {
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+            mock.Mock<IMessenger>().ResetCalls();
 
             testObject.Save();
 
