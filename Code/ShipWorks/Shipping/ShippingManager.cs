@@ -1085,6 +1085,11 @@ namespace ShipWorks.Shipping
             {
                 throw new ShippingException(license.DisabledReason);
             }
+
+            if (license.IsOverChannelLimit)
+            {
+                throw new ShippingException("Channel limit exceeded.");
+            }
         }
 
         /// <summary>
@@ -1193,7 +1198,7 @@ namespace ShipWorks.Shipping
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
-                    
+
                     using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
                         ILabelService labelService =
