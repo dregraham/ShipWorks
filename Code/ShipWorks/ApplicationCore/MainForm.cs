@@ -235,9 +235,12 @@ namespace ShipWorks
             // If the action is to open the DB setup, we can do that now - no need to logon first.
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
             {
-                using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard())
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    dlg.ShowDialog(this);
+                    using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard(lifetimeScope))
+                    {
+                        dlg.ShowDialog(this);
+                    }
                 }
             }
 
@@ -269,33 +272,40 @@ namespace ShipWorks
         /// </summary>
         private bool OpenDatabaseConfiguration()
         {
-            // If we aren't configured at all
-            if (!SqlSession.IsConfigured)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                // If we aren't configured and 2012 is supported, open the fast track setup wizard
-                if (SqlServerInstaller.IsSqlServer2012Supported)
+                // If we aren't configured at all
+                if (!SqlSession.IsConfigured)
                 {
-                    using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard())
-                    {
-                        return wizard.ShowDialog(this) == DialogResult.OK;
-                    }
+                
+                        // If we aren't configured and 2012 is supported, open the fast track setup wizard
+                        if (SqlServerInstaller.IsSqlServer2012Supported)
+                        {
+                            using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard(lifetimeScope))
+                            {
+                                return wizard.ShowDialog(this) == DialogResult.OK;
+                            }
+                        }
+                        else
+                        {
+                            using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard(lifetimeScope))
+                            {
+                                return wizard.ShowDialog(this) == DialogResult.OK;
+                            }
+                        }
+                
+
+
                 }
+                // Otherwise, we use our normal database setup wizard
                 else
                 {
-                    using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard())
+                    using (DatabaseDetailsDlg dlg = new DatabaseDetailsDlg(lifetimeScope))
                     {
-                        return wizard.ShowDialog(this) == DialogResult.OK;
-                    }
-                }
-            }
-            // Otherwise, we use our normal database setup wizard
-            else
-            {
-                using (DatabaseDetailsDlg dlg = new DatabaseDetailsDlg())
-                {
-                    dlg.ShowDialog(this);
+                        dlg.ShowDialog(this);
 
-                    return dlg.DatabaseConfigurationChanged;
+                        return dlg.DatabaseConfigurationChanged;
+                    }
                 }
             }
         }
@@ -541,23 +551,26 @@ namespace ShipWorks
             // May already be logged on
             if (!UserSession.IsLoggedOn)
             {
-                IUserService userService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUserService>();
-
-                EnumResult<UserServiceLogonResultType> logonResult = userService.Logon();
-
-                if(logonResult.Value == UserServiceLogonResultType.TangoAccountDisabled)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    MessageHelper.ShowError(this, logonResult.Message);
-                    return;
-                }
+                    IUserService userService = lifetimeScope.Resolve<IUserService>();
 
-                if(logonResult.Value == UserServiceLogonResultType.InvalidCredentials)
-                {
-                    using (LogonDlg dlg = new LogonDlg())
+                    EnumResult<UserServiceLogonResultType> logonResult = userService.Logon();
+
+                    if (logonResult.Value == UserServiceLogonResultType.TangoAccountDisabled)
                     {
-                        if (dlg.ShowDialog(this) != DialogResult.OK)
+                        MessageHelper.ShowError(this, logonResult.Message);
+                        return;
+                    }
+
+                    if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials)
+                    {
+                        using (LogonDlg dlg = new LogonDlg())
                         {
-                            return;
+                            if (dlg.ShowDialog(this) != DialogResult.OK)
+                            {
+                                return;
+                            }
                         }
                     }
                 }

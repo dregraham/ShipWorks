@@ -10,6 +10,7 @@ using ShipWorks.Data.Connection;
 using Interapptive.Shared.Utility;
 using System.Data.SqlClient;
 using log4net;
+using Autofac;
 
 namespace ShipWorks.Data.Administration
 {
@@ -22,13 +23,16 @@ namespace ShipWorks.Data.Administration
 
         // Indicates if remote connections were enabled while the window was open
         bool databaseConfigurationChanged = false;
+        private ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DatabaseDetailsDlg()
+        public DatabaseDetailsDlg(ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
+
+            this.lifetimeScope = lifetimeScope;
         }
 
         /// <summary>
@@ -143,7 +147,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnEnableRemoteConnections(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard(DetailedDatabaseSetupWizard.SetupMode.EnableRemoteConnections))
+            using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard(DetailedDatabaseSetupWizard.SetupMode.EnableRemoteConnections, lifetimeScope))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
@@ -159,7 +163,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnConfigureDatabase(object sender, EventArgs e)
         {
-            using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard())
+            using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard(lifetimeScope))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
