@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping
@@ -48,21 +45,6 @@ namespace ShipWorks.Shipping
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
         ShipmentEntity GetShipment(long shipmentID);
-
-        /// <summary>
-        /// Get rates for the given shipment using the appropriate ShipmentType
-        /// </summary>
-        RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType);
-
-        /// <summary>
-        /// Get rates for the given shipment using the appropriate ShipmentType
-        /// </summary>
-        RateGroup GetRates(ShipmentEntity shipment);
-
-        /// <summary>
-        /// Get rates asynchronously
-        /// </summary>
-        Task<RateGroup> GetRatesAsync(ShipmentEntity shipment, ShipmentType shipmentType, CancellationToken token);
 
         /// <summary>
         /// Removes the specified shipment from the cache

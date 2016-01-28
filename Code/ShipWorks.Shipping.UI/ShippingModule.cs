@@ -79,6 +79,9 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<RatesRetriever>()
+                .AsImplementedInterfaces();
+
             builder.RegisterType<RatingPanel.RatingPanel>();
 
             builder.RegisterType<RatingPanelViewModel>();
