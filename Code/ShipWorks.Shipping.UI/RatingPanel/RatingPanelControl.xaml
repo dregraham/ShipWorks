@@ -12,6 +12,7 @@
     <UserControl.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <ui:ImageToBitmapSourceConverter x:Key="ImageToBitmapSource" />
+        <ui:InvertBooleanConverter x:Key="InvertBoolean" />
         <FrameworkElement x:Key="ProxyElement"
                           DataContext="{Binding}"/>
 
@@ -39,75 +40,106 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid Margin="4,4,4,4">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <ContentControl Visibility="Collapsed"
-                        Content="{StaticResource ProxyElement}"/>
-        <TextBlock>Rates</TextBlock>
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Rates}"
-                  HeadersVisibility="Column"
-                  AutoGenerateColumns="false"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  CanUserResizeRows="False"
-                  AlternatingRowBackground="#FFEEEEEE"
-                  HorizontalGridLinesBrush="#FFCCCCCC"
-                  VerticalGridLinesBrush="#FFCCCCCC"
-                  CanUserSortColumns="False"
-                  CanUserReorderColumns="False"
-                  CanUserResizeColumns="False"
-                  SelectionMode="Single"
-                  CellStyle="{StaticResource NoSelection}"
-                  IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Provider">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding ProviderLogo,Converter={StaticResource ImageToBitmapSource}}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Service"
-                                    Width="*"
-                                    Binding="{Binding Description}" />
-                <DataGridTextColumn Header="Days"
-                                    Binding="{Binding Days}" />
-                <DataGridTextColumn Header="Shipping"
-                                    CellStyle="{StaticResource SpacingStyle}"
-                                    ElementStyle="{StaticResource AmountStyle}"
-                                    Visibility="{Binding DataContext.ShowShipping,
-                                        Source={StaticResource ProxyElement},
-                                        Converter={StaticResource BooleanToVisibility}}"
-                                    Binding="{Binding Shipping}" />
-                <DataGridTextColumn Header="Tax"
-                                    CellStyle="{StaticResource SpacingStyle}"
-                                    ElementStyle="{StaticResource AmountStyle}"
-                                    Visibility="{Binding DataContext.ShowTaxes,
-                                        Source={StaticResource ProxyElement},
-                                        Converter={StaticResource BooleanToVisibility}}"
-                                    Binding="{Binding Taxes}" />
-                <DataGridTextColumn Header="Duty"
-                                    CellStyle="{StaticResource SpacingStyle}"
-                                    ElementStyle="{StaticResource AmountStyle}"
-                                    Visibility="{Binding DataContext.ShowDuties,
-                                        Source={StaticResource ProxyElement},
-                                        Converter={StaticResource BooleanToVisibility}}"
-                                    Binding="{Binding Duties}" />
-                <DataGridTextColumn Header="Rate"
-                                    CellStyle="{StaticResource SpacingStyle}"
-                                    ElementStyle="{StaticResource AmountStyle}"
-                                    Binding="{Binding Rate}" />
-            </DataGrid.Columns>
-        </DataGrid>
-        <ListView Grid.Row="2"
-                  ItemsSource="{Binding Footnotes}"
-                  Visibility="{Binding ShowFootnotes,Converter={StaticResource BooleanToVisibility}}">
+    <DockPanel>
+        <Grid Margin="4,4,4,4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ContentControl Visibility="Collapsed"
+                            Content="{StaticResource ProxyElement}"/>
+            <TextBlock>Rates</TextBlock>
+            <DataGrid Grid.Row="1"
+                        IsEnabled="{Binding IsLoading,Converter={StaticResource InvertBoolean}}"
+                        ItemsSource="{Binding Rates}"
+                        HeadersVisibility="Column"
+                        AutoGenerateColumns="false"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        CanUserResizeRows="False"
+                        AlternatingRowBackground="#FFEEEEEE"
+                        HorizontalGridLinesBrush="#FFCCCCCC"
+                        VerticalGridLinesBrush="#FFCCCCCC"
+                        CanUserSortColumns="False"
+                        CanUserReorderColumns="False"
+                        CanUserResizeColumns="False"
+                        SelectionMode="Single"
+                        CellStyle="{StaticResource NoSelection}"
+                        IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Provider">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding ProviderLogo,Converter={StaticResource ImageToBitmapSource}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Service"
+                                        Width="*"
+                                        Binding="{Binding Description}" />
+                    <DataGridTextColumn Header="Days"
+                                        Binding="{Binding Days}" />
+                    <DataGridTextColumn Header="Shipping"
+                                        CellStyle="{StaticResource SpacingStyle}"
+                                        ElementStyle="{StaticResource AmountStyle}"
+                                        Visibility="{Binding DataContext.ShowShipping,
+                                            Source={StaticResource ProxyElement},
+                                            Converter={StaticResource BooleanToVisibility}}"
+                                        Binding="{Binding Shipping}" />
+                    <DataGridTextColumn Header="Tax"
+                                        CellStyle="{StaticResource SpacingStyle}"
+                                        ElementStyle="{StaticResource AmountStyle}"
+                                        Visibility="{Binding DataContext.ShowTaxes,
+                                            Source={StaticResource ProxyElement},
+                                            Converter={StaticResource BooleanToVisibility}}"
+                                        Binding="{Binding Taxes}" />
+                    <DataGridTextColumn Header="Duty"
+                                        CellStyle="{StaticResource SpacingStyle}"
+                                        ElementStyle="{StaticResource AmountStyle}"
+                                        Visibility="{Binding DataContext.ShowDuties,
+                                            Source={StaticResource ProxyElement},
+                                            Converter={StaticResource BooleanToVisibility}}"
+                                        Binding="{Binding Duties}" />
+                    <DataGridTextColumn Header="Rate"
+                                        CellStyle="{StaticResource SpacingStyle}"
+                                        ElementStyle="{StaticResource AmountStyle}"
+                                        Binding="{Binding Rate}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <ListView Grid.Row="2"
+                        ItemsSource="{Binding Footnotes}"
+                        Visibility="{Binding ShowFootnotes,Converter={StaticResource BooleanToVisibility}}">
 
-        </ListView>
-    </Grid>
+            </ListView>
+        </Grid>
+        <Popup Placement="Center" IsOpen="{Binding IsLoading}">
+            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="8">
+                <StackPanel>
+                    <Image Grid.Column="2"
+                   RenderTransformOrigin=".5,.5"
+                   Source="/Shipworks.Core;component/Resources/Progress/circle_ball_blue.gif">
+                        <Image.RenderTransform>
+                            <RotateTransform x:Name="AnimatedRotateTransform" Angle="0" />
+                        </Image.RenderTransform>
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="Control.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation By="10"
+                                                 Duration="0:0:1"
+                                                 RepeatBehavior="Forever"
+                                                 Storyboard.TargetName="AnimatedRotateTransform"
+                                                 Storyboard.TargetProperty="Angle"
+                                                 To="360" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
+                    <TextBlock>Checking rates...</TextBlock>
+                </StackPanel>
+            </Border>
+        </Popup>
+    </DockPanel>
 </UserControl>
