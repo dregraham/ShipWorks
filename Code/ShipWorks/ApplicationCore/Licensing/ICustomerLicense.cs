@@ -26,6 +26,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The license capabilities
         /// </summary>
-        LicenseCapabilities LicenseCapabilities { get; set; }
+        ILicenseCapabilities LicenseCapabilities { get; set; }
     }
 }

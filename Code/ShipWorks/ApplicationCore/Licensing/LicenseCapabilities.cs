@@ -8,7 +8,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Exposes license capabilities from tango XML.
     /// </summary>
-    public class LicenseCapabilities
+    public class LicenseCapabilities : ILicenseCapabilities
     {
         /// <summary>
         /// Constructor - Sets capabilities based on the xml response.

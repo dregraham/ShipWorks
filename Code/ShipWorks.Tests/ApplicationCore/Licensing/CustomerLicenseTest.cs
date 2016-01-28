@@ -220,5 +220,55 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 Assert.Equal("some random exception", ex.Message);
             }
         }
+
+        [Fact]
+        public void EnforceChannelLimit_()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities
+                    .Setup(lc => lc.ActiveChannels)
+                    .Returns(5);
+
+                mock.Mock<ITangoWebClient>()
+                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Returns(licenseCapabilities.Object);
+
+                var channelLimitDlg = mock.Mock<IChannelLimitDlg>();
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                testObject.EnforceChannelLimit();
+
+                channelLimitDlg.Verify(d=>d.ShowDialog(), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void EnforceChannelLimit_DialogNotShown_WhenUnderChannelLimit()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities
+                    .Setup(lc => lc.ActiveChannels)
+                    .Returns(0);
+
+                mock.Mock<ITangoWebClient>()
+                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Returns(licenseCapabilities.Object);
+
+                var channelLimitDlg = mock.Mock<IChannelLimitDlg>();
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                testObject.EnforceChannelLimit();
+
+                channelLimitDlg.Verify(d => d.ShowDialog(), Times.Never);
+            }
+        }
     }
 }

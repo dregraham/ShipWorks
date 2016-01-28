@@ -56,6 +56,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Nothing to enforce
+        /// </summary>
+        public void EnforceChannelLimit()
+        {
+        }
+
+        /// <summary>
         /// Refreshes store license data.
         /// </summary>
         public void Refresh()

@@ -60,7 +60,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EnumResult<LicenseActivationState> Activate(StoreEntity store)
         {
-            throw new System.NotImplementedException();
+            throw new ShipWorksLicenseException("Activate not valid for a disabled license.");
+        }
+
+        /// <summary>
+        /// Trhows - We shouldn't enforce a channel limit on a disabled store.
+        /// </summary>
+        public void EnforceChannelLimit()
+        {
+            throw new ShipWorksLicenseException("Channel Limit not valid for a disalbed license.");
         }
     }
 }

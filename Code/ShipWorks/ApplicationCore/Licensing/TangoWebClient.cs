@@ -1146,7 +1146,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the license capabilities.
         /// </summary>
-        public static LicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
+        public static ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 

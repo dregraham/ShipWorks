@@ -24,10 +24,5 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Returns the correct ILicense for the store
         /// </summary>
         ILicense GetLicense(StoreEntity store);
-        
-        /// <summary>
-        /// If License is over the channel limit prompt user to delete channels
-        /// </summary>
-        void EnforceChannelLimit();
     }
 }

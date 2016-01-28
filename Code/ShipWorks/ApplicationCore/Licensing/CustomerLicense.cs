@@ -14,16 +14,18 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
+        private readonly Func<IChannelLimitDlg> channelLimitDlgFactory;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicense(string key, ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, Func<Type, ILog> logFactory)
+        public CustomerLicense(string key, ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, Func<Type, ILog> logFactory, Func<IChannelLimitDlg> channelLimitDlgFactory)
         {
             Key = key;
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
+            this.channelLimitDlgFactory = channelLimitDlgFactory;
             log = logFactory(typeof(CustomerLicense));
         }
 
@@ -45,6 +47,20 @@ namespace ShipWorks.ApplicationCore.Licensing
                 new EnumResult<LicenseActivationState>(LicenseActivationState.Active) :
                 new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid, response.Error);
         }
+       
+        /// <summary>
+        /// If License is over the channel limit prompt user to delete channels
+        /// </summary>
+        public void EnforceChannelLimit()
+        {
+            Refresh();
+
+            if (IsOverChannelLimit)
+            {
+                IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory();
+                channelLimitDlg.ShowDialog();
+            }
+        }
 
         /// <summary>
         /// Is the license legacy
@@ -64,7 +80,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The license capabilities.
         /// </summary>
-        public LicenseCapabilities LicenseCapabilities { get; set; }
+        public ILicenseCapabilities LicenseCapabilities { get; set; }
         
         /// <summary>
         /// Activates the customer license

@@ -2313,7 +2313,7 @@ namespace ShipWorks
             {
                 LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
 
-                licenseService.EnforceChannelLimit();
+                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
 
                 // Start the download
                 DownloadManager.StartDownload(stores, DownloadInitiatedBy.User);
@@ -2336,7 +2336,7 @@ namespace ShipWorks
 
             LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
 
-            licenseService.EnforceChannelLimit();
+            licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
 
             // Start the download
             DownloadManager.StartDownload(new List<StoreEntity> { store }, DownloadInitiatedBy.User);

@@ -17,7 +17,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
 
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -61,14 +60,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 return new DisabledLicense(ex.Message);
             }
-        }
-
-        /// <summary>
-        /// If License is over the channel limit prompt user to delete channels
-        /// </summary>
-        public void EnforceChannelLimit()
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
