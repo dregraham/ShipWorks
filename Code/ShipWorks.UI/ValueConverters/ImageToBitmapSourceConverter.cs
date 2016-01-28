@@ -8,20 +8,19 @@ using System.Windows.Data;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Interapptive.Shared.Utility;
 using ShipWorks.Properties;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.UI.ValueConverters
 {
     /// <summary>
-    /// Convert an enum to an image
+    /// Convert an image to bitmap source so it can be bound
     /// </summary>
     [Obfuscation(Exclude = true)]
-    public class EnumImageConverter : IValueConverter
+    public class ImageToBitmapSourceConverter : IValueConverter
     {
         /// <summary>
-        /// Convert an enum value into an image for use in an Image control
+        /// Convert an image to a bitmap source for use in an Image control
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -31,13 +30,7 @@ namespace ShipWorks.UI.ValueConverters
                 return Imaging.CreateBitmapSourceFromHBitmap(Resources.check16.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             }
 
-            Enum enumValue = (Enum) value;
-            if (enumValue == null)
-            {
-                return null;
-            }
-
-            Image image = EnumHelper.GetImage(enumValue);
+            Image image = value as Image;
             if (image == null)
             {
                 return BitmapSource.Create(2, 2, 96, 96,
@@ -54,13 +47,8 @@ namespace ShipWorks.UI.ValueConverters
         }
 
         /// <summary>
-        /// Converts the image back to an enum value
+        /// Converts the bitmap source back to an image
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="targetType">Type of the target.</param>
-        /// <param name="parameter">The parameter.</param>
-        /// <param name="culture">The culture.</param>
-        /// <exception cref="System.NotImplementedException"></exception>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

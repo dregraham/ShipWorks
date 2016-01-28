@@ -11,7 +11,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-        <ui:EnumImageConverter x:Key="EnumToImage" />
+        <ui:ImageToBitmapSourceConverter x:Key="ImageToBitmapSource" />
         <FrameworkElement x:Key="ProxyElement"
                           DataContext="{Binding}"/>
 
@@ -61,13 +61,14 @@
                   CanUserSortColumns="False"
                   CanUserReorderColumns="False"
                   CanUserResizeColumns="False"
+                  SelectionMode="Single"
                   CellStyle="{StaticResource NoSelection}"
                   IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Provider">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding ShipmentType,Converter={StaticResource EnumToImage}}" />
+                            <Image Source="{Binding ProviderLogo,Converter={StaticResource ImageToBitmapSource}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

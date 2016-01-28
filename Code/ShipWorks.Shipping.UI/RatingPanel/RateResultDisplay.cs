@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Drawing;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
@@ -12,7 +13,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
 
         public RateResultDisplay(RateResult rate)
         {
-            ShipmentType = rate.ShipmentType;
+            ProviderLogo = rate.ProviderLogo;
             Description = rate.Description;
             Days = rate.Days;
             Shipping = SetAuxiliaryAmount(rate, rate.Shipping);
@@ -36,6 +37,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         public string Rate { get; set; }
         public string Shipping { get; set; }
         public string Taxes { get; set; }
-        public ShipmentTypeCode ShipmentType { get; set; }
+        public Image ProviderLogo { get; set; }
     }
 }

@@ -158,6 +158,7 @@
     <Compile Include="ValueConverters\EmptyDoubleConverter.cs" />
     <Compile Include="ValueConverters\EmptyMoneyConverter.cs" />
     <Compile Include="ValueConverters\EnumDescriptionConverter.cs" />
+    <Compile Include="ValueConverters\ImageToBitmapSourceConverter.cs" />
     <Compile Include="ValueConverters\EnumImageConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
     <Compile Include="ValueConverters\StateProvinceConverter.cs" />
