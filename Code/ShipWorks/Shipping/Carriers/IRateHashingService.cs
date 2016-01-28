@@ -1,15 +1,16 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping
 {
     /// <summary>
-    /// Rate Hasing Service Interface
+    /// Rate Hashing Service Interface
     /// </summary>
     public interface IRateHashingService
     {
         /// <summary>
-        /// Fields of a shipment 
+        /// Fields of a shipment
         /// </summary>
         RatingFields RatingFields { get; }
 
@@ -17,5 +18,10 @@ namespace ShipWorks.Shipping
         /// Gets the rating hash based on the shipment's configuration.
         /// </summary>
         string GetRatingHash(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Is the given field a rating field
+        /// </summary>
+        bool IsRatingField(EntityField2 changedField);
     }
 }

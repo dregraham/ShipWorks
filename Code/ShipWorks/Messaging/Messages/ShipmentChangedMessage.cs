@@ -1,7 +1,5 @@
-﻿using Autofac;
-using ShipWorks.ApplicationCore;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Messaging.Messages
@@ -11,24 +9,40 @@ namespace ShipWorks.Messaging.Messages
     /// </summary>
     public class ShipmentChangedMessage : IShipWorksMessage
     {
+        private readonly EntityField2 changedField;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentChangedMessage(object sender, ICarrierShipmentAdapter shipment)
         {
             Sender = sender;
-            
             ShipmentAdapter = shipment;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShipmentChangedMessage(object sender, ICarrierShipmentAdapter shipment, EntityField2 changedField)
+        {
+            Sender = sender;
+            ShipmentAdapter = shipment;
+            ChangedField = changedField;
         }
 
         /// <summary>
         /// Originator of the message
         /// </summary>
-        public object Sender { get; private set; }
+        public object Sender { get; }
 
         /// <summary>
         /// Shipment that has changed
         /// </summary>
-        public ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
+        public ICarrierShipmentAdapter ShipmentAdapter { get; }
+
+        /// <summary>
+        /// The field that has changed
+        /// </summary>
+        public EntityField2 ChangedField { get; }
     }
 }
