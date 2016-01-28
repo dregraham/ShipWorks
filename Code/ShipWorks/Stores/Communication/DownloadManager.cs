@@ -523,13 +523,16 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private static void CheckLicense(StoreEntity store)
         {
-            LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
-            ILicense license = licenseService.GetLicense(store);
-            license.Refresh();
-
-            if (license.IsDisabled)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                throw new ShipWorksLicenseException(license.DisabledReason);
+                LicenseService licenseService = lifetimeScope.Resolve<LicenseService>();
+                ILicense license = licenseService.GetLicense(store);
+                license.Refresh();
+
+                if (license.IsDisabled)
+                {
+                    throw new ShipWorksLicenseException(license.DisabledReason);
+                }
             }
         }
 

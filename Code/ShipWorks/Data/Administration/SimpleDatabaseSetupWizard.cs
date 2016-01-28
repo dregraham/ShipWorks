@@ -50,6 +50,7 @@ namespace ShipWorks.Data.Administration
 
         // The user setup wizard page
         private readonly ICustomerLicenseActivation tangoUserControlHost;
+        private ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// What we need to do from elevation
@@ -75,7 +76,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Constructor
         /// </summary>
-        public SimpleDatabaseSetupWizard()
+        public SimpleDatabaseSetupWizard(ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
@@ -83,8 +84,10 @@ namespace ShipWorks.Data.Administration
             sqlInstaller.InitializeForCurrentSqlSession();
             sqlInstaller.Exited += OnPrepareAutomaticDatabaseExited;
 
+            this.lifetimeScope = lifetimeScope;
+
             // Resolve the user control
-            tangoUserControlHost = IoC.UnsafeGlobalLifetimeScope.Resolve<ICustomerLicenseActivation>();
+            tangoUserControlHost = lifetimeScope.Resolve<ICustomerLicenseActivation>();
             tangoUserControlHost.StepNext += OnStepNextCreateUsername;
 
             // Replace the user wizard page with the new tango user wizard page
@@ -122,7 +125,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnOpenDetailedSetup(object sender, EventArgs e)
         {
-            using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard())
+            using (DetailedDatabaseSetupWizard dlg = new DetailedDatabaseSetupWizard(lifetimeScope))
             {
                 BeginInvoke(new MethodInvoker(Hide));
 
@@ -218,7 +221,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Simple UI timer we use to keep the progress of LocalDb install aproximated
+        /// Simple UI timer we use to keep the progress of LocalDb install approximated
         /// </summary>
         void OnLocalDbProgressTimer(object sender, EventArgs e)
         {
@@ -244,7 +247,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// The elevated preparations are coplete
+        /// The elevated preparations are complete
         /// </summary>
         private void OnPrepareAutomaticDatabaseExited(object sender, EventArgs e)
         {

@@ -2385,7 +2385,7 @@ namespace ShipWorks.Shipping
             Cursor.Current = Cursors.WaitCursor;
             cancelProcessing = false;
 
-            LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
+            LicenseService licenseService = lifetimeScope.Resolve<LicenseService>();
 
             ILicense license = licenseService.GetLicenses().FirstOrDefault();
 
@@ -2393,7 +2393,7 @@ namespace ShipWorks.Shipping
 
             if (license.IsOverChannelLimit)
             {
-                IChannelLimitDlg channelLimitDlg = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitDlg>();
+                IChannelLimitDlg channelLimitDlg = lifetimeScope.Resolve<IChannelLimitDlg>();
 
                 channelLimitDlg.ShowDialog();
                 license.Refresh();
