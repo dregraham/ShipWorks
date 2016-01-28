@@ -3,6 +3,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Logon;
 using System;
+using System.Linq;
 
 namespace ShipWorks.Users
 {
@@ -66,6 +67,11 @@ namespace ShipWorks.Users
             }
 
             bool loggedOnToShipWorks = loginAction();
+
+            if (loggedOnToShipWorks)
+            {
+                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
+            }
 
             // At this point Tango says the user is allowed to logon to ShipWorks, but we still need
             // to check for valid credentials.

@@ -277,7 +277,7 @@ namespace ShipWorks
                 // If we aren't configured at all
                 if (!SqlSession.IsConfigured)
                 {
-                
+
                         // If we aren't configured and 2012 is supported, open the fast track setup wizard
                         if (SqlServerInstaller.IsSqlServer2012Supported)
                         {
@@ -293,9 +293,6 @@ namespace ShipWorks
                                 return wizard.ShowDialog(this) == DialogResult.OK;
                             }
                         }
-                
-
-
                 }
                 // Otherwise, we use our normal database setup wizard
                 else
@@ -944,12 +941,10 @@ namespace ShipWorks
                 throw new AppearanceException("The file is not a valid ShipWorks layout.", ex);
             }
 
-
             // Read the panels.xml file that was extracted
             string panelXml = File.ReadAllText(Path.Combine(tempPath, "panels.xml"), Encoding.Unicode);
             XmlDocument panelDoc = new XmlDocument();
             panelDoc.LoadXml(panelXml);
-
 
             // Check to see if the Window GUID for the rates panel is present. The GUID value is set at
             // design-time by the designer sandDockManager, so we can look for it
@@ -3473,7 +3468,6 @@ namespace ShipWorks
                 MessageHelper.ShowError(this, ex.Message);
             }
         }
-
 
         /// <summary>
         /// User has initiated the FedEx SmartPost close
