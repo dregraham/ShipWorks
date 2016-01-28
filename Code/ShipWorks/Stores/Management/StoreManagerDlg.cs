@@ -380,7 +380,6 @@ namespace ShipWorks.Stores.Management
                     ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
                     licenseService.GetLicense(state.Store).DeleteStore(state.Store);
                 }
-                    
             }
 
             state.ProgressProvider.ProgressItems[0].Completed();

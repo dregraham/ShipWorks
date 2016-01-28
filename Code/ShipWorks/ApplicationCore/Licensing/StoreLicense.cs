@@ -10,16 +10,14 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly StoreEntity store;
         private readonly ILog log;
-        private readonly IDeletionService deletionService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StoreLicense(StoreEntity store, Func<Type, ILog> logFactory, IDeletionService deletionService)
+        public StoreLicense(StoreEntity store, Func<Type, ILog> logFactory)
         {
             this.store = store;
             log = logFactory(GetType());
-            this.deletionService = deletionService;
             Key = store.License;
         }
 
@@ -42,6 +40,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Is the license legacy
         /// </summary>
         public bool IsLegacy => true;
+
+        /// <summary>
+        /// Store licenses do not have channel limits
+        /// </summary>
+        /// <remarks>
+        /// Always returns false
+        /// </remarks>
+        public bool IsOverChannelLimit => false;
 
         /// <summary>
         /// Activate a new store
@@ -89,15 +95,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="store"></param>
         public void DeleteStore(StoreEntity store)
         {
-            deletionService.DeleteStore(store);
+            DeletionService.DeleteStore(store);
         }
-
-        /// <summary>
-        /// Store licenses do not have channel limits
-        /// </summary>
-        /// <remarks>
-        /// Always returns false
-        /// </remarks>
-        public bool IsOverChannelLimit => false;
     }
 }

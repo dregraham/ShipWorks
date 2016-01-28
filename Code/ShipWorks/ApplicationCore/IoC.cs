@@ -138,11 +138,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<PdfDocument>()
                 .AsImplementedInterfaces();
-
-            builder.RegisterType<DeletionServiceWrappe>()
+            
+            builder.RegisterType<DeletionServiceWrapper>()
                 .AsImplementedInterfaces();
-
-
 
             current = builder.Build();
         }

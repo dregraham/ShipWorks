@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Data
 {
@@ -11,5 +12,10 @@ namespace ShipWorks.Data
         /// Delete the given store
         /// </summary>
         void DeleteStore(StoreEntity store);
+        
+        /// <summary>
+        /// Deletes all the stores for the given channel
+        /// </summary>
+        void DeleteChannel(StoreTypeCode channel);
     }
 }

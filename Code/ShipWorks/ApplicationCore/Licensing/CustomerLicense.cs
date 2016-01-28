@@ -6,6 +6,7 @@ using ShipWorks.Stores;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using System.Linq;
+using Interapptive.Shared;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -18,13 +19,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly ICustomerLicenseWriter licenseWriter;
         private readonly Func<IChannelLimitDlg> channelLimitDlgFactory;
         private readonly ILog log;
-        private IDeletionService deletionService;
-        private IStoreManager storeManager;
+        private readonly IDeletionService deletionService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicense(string key, ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, Func<Type, ILog> logFactory, IDeletionService deletionService, IStoreManager storeManager, Func<IChannelLimitDlg> channelLimitDlgFactory)
+        [NDependIgnoreTooManyParams]
+        public CustomerLicense(string key, ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, Func<Type, ILog> logFactory, IDeletionService deletionService, Func<IChannelLimitDlg> channelLimitDlgFactory)
         {
             Key = key;
             this.tangoWebClient = tangoWebClient;
@@ -32,7 +33,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 			this.channelLimitDlgFactory = channelLimitDlgFactory;
             log = logFactory(typeof(CustomerLicense));
             this.deletionService = deletionService;
-            this.storeManager = storeManager;
         }
 
         /// <summary>
@@ -88,6 +88,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public ILicenseCapabilities LicenseCapabilities { get; set; }
         
+        /// <summary>
+        /// Is the license over the ChannelLimit
+        /// </summary>
+        public bool IsOverChannelLimit =>
+            LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit;
+
         /// <summary>
         /// Activates the customer license
         /// </summary>
@@ -154,19 +160,15 @@ namespace ShipWorks.ApplicationCore.Licensing
                 return;
             }
 
+            // Save the key to use later
+            string licenseKey = store.License;
+
+            // Remove the store from the database
             log.Warn($"Deleting store: {store.StoreName}");
-
-            // grab the stores license
-            string license = store.License;
-
-            // Remove the store from ShipWorks
             deletionService.DeleteStore(store);
 
-            // Delete the stores in tango
-            if (!string.IsNullOrWhiteSpace(license))
-            {
-                tangoWebClient.DeleteStore(this, license);
-            }
+            // Tell tango to delete the licenseKey
+            tangoWebClient.DeleteStore(this, licenseKey);
         }
 
         /// <summary>
@@ -179,28 +181,14 @@ namespace ShipWorks.ApplicationCore.Licensing
                 return;
             }
 
+            // Delete all of the local stores for the given StoreTypeCode
             log.Warn($"Deleting channel: {EnumHelper.GetDescription(storeType)}");
+            deletionService.DeleteChannel(storeType);
 
-            // Get a list of licenses we are about to delete
-            // Because we are removing the channel add all of the active licenses from tango to
-            // to delete our list of licenses
+            // Get a list of licenses that are active in tango and match the channel we are deleting
+            // but are not in ShipWorks and tell tango to delete them
             IEnumerable<string> licensesToDelete = GetActiveStores().Where(a => a.StoreType == storeType).Select(a => a.StoreLicenseKey);
-            
-            // Get all of the local stores that match the type we want to remove
-            List<StoreEntity> localStoresToDelete = storeManager.GetAllStores().Where(s => s.TypeCode == (int)storeType).ToList();
-
-            // if there are no local stores of that type return 
-            if (localStoresToDelete.Any())
-            {
-                // remove the local stores individually 
-                localStoresToDelete.ForEach(DeleteStore);
-            }
+            tangoWebClient.DeleteStores(this, licensesToDelete);
         }
-
-        /// <summary>
-        /// Is the license over the ChannelLimit
-        /// </summary>
-        public bool IsOverChannelLimit => 
-            LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit;
     }
 }
