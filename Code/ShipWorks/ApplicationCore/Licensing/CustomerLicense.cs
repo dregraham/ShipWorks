@@ -149,6 +149,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="store"></param>
         public void DeleteStore(StoreEntity store)
         {
+            if (store == null)
+            {
+                return;
+            }
+
             log.Warn($"Deleting store: {store.StoreName}");
 
             // grab the stores license
@@ -156,9 +161,12 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Remove the store from ShipWorks
             deletionService.DeleteStore(store);
-            
+
             // Delete the stores in tango
-            tangoWebClient.DeleteStore(this, license);
+            if (!string.IsNullOrWhiteSpace(license))
+            {
+                tangoWebClient.DeleteStore(this, license);
+            }
         }
 
         /// <summary>
@@ -166,20 +174,35 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void DeleteChannel(StoreTypeCode storeType)
         {
-            log.Warn($"Deleting channel: {EnumHelper.GetDescription(storeType)}");
+            if (storeType == StoreTypeCode.Invalid)
+            {
+                return;
+            }
 
-            // Get all of the stores that match the type we want to remove
-            IEnumerable<StoreEntity> localStoresToDelete = storeManager.GetAllStores().Where(s => s.TypeCode == (int)storeType);
+            log.Warn($"Deleting channel: {EnumHelper.GetDescription(storeType)}");
 
             // Get a list of licenses we are about to delete
             List<string> licensesToDelete = new List<string>();
-            localStoresToDelete.ToList().ForEach(s => licensesToDelete.Add(s.License));
 
-            // remove the local stores individually 
-            localStoresToDelete.ToList().ForEach(DeleteStore);
+            // Because we are removing the channel add all of the active licenses from tango to
+            // to delete our list of licenses
+            licensesToDelete.AddRange(GetActiveStores().Where(a => a.StoreType == storeType).Select(a => a.StoreLicenseKey));
+            
+            // Get all of the local stores that match the type we want to remove
+            IEnumerable<StoreEntity> localStoresToDelete = storeManager.GetAllStores().Where(s => s.TypeCode == (int)storeType);
 
-            // Delete the stores in tango
-            tangoWebClient.DeleteStores(this, licensesToDelete);
+            // if there are no local stores of that type return 
+            if (localStoresToDelete.Any())
+            {
+                // add the local keys to the list of licensesToDelete
+                localStoresToDelete.ToList().ForEach(s => licensesToDelete.Add(s.License));
+
+                // remove the local stores individually 
+                localStoresToDelete.ToList().ForEach(DeleteStore);
+            }
+            
+            // remove the keys in tango
+            tangoWebClient.DeleteStores(this, licensesToDelete.Distinct());
         }
 
         /// <summary>
