@@ -272,38 +272,40 @@ namespace ShipWorks
         /// </summary>
         private bool OpenDatabaseConfiguration()
         {
-            // If we aren't configured at all
-            if (!SqlSession.IsConfigured)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                // If we aren't configured at all
+                if (!SqlSession.IsConfigured)
                 {
-                    // If we aren't configured and 2012 is supported, open the fast track setup wizard
-                    if (SqlServerInstaller.IsSqlServer2012Supported)
-                    {
-                        using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard(lifetimeScope))
+                
+                        // If we aren't configured and 2012 is supported, open the fast track setup wizard
+                        if (SqlServerInstaller.IsSqlServer2012Supported)
                         {
-                            return wizard.ShowDialog(this) == DialogResult.OK;
+                            using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard(lifetimeScope))
+                            {
+                                return wizard.ShowDialog(this) == DialogResult.OK;
+                            }
                         }
-                    }
-                    else
-                    {
-                        using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard(lifetimeScope))
+                        else
                         {
-                            return wizard.ShowDialog(this) == DialogResult.OK;
+                            using (DetailedDatabaseSetupWizard wizard = new DetailedDatabaseSetupWizard(lifetimeScope))
+                            {
+                                return wizard.ShowDialog(this) == DialogResult.OK;
+                            }
                         }
-                    }
+                
+
+
                 }
-
-
-            }
-            // Otherwise, we use our normal database setup wizard
-            else
-            {
-                using (DatabaseDetailsDlg dlg = new DatabaseDetailsDlg())
+                // Otherwise, we use our normal database setup wizard
+                else
                 {
-                    dlg.ShowDialog(this);
+                    using (DatabaseDetailsDlg dlg = new DatabaseDetailsDlg(lifetimeScope))
+                    {
+                        dlg.ShowDialog(this);
 
-                    return dlg.DatabaseConfigurationChanged;
+                        return dlg.DatabaseConfigurationChanged;
+                    }
                 }
             }
         }
