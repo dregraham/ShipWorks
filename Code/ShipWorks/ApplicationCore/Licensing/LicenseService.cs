@@ -64,6 +64,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// If License is over the channel limit prompt user to delete channels
+        /// </summary>
+        public void EnforceChannelLimit()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Gets all Licenses.
         /// </summary>
         /// <exception cref="EncryptionException" />
