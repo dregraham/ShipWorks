@@ -533,11 +533,11 @@ namespace ShipWorks.Stores.Communication
                 {
                     throw new ShipWorksLicenseException(license.DisabledReason);
                 }
-            }
 
-            if (license.IsOverChannelLimit)
-            {
-                throw new ShipWorksLicenseException("Channel Limit Exceeded.");
+                if (license.IsOverChannelLimit)
+                {
+                    throw new ShipWorksLicenseException("Channel Limit Exceeded.");
+                }
             }
         }
 
