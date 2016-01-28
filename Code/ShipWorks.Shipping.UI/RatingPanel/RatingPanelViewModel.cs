@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
@@ -56,11 +55,11 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         public void LoadRates(RatesRetrievedMessage message)
         {
-            Rates = message.RateGroup.Rates.Select(x => new RateResultDisplay(x));
+            Rates = message.RateGroup.Rates.Select(x => new RateResultDisplay(x)).ToArray();
 
-            ShowDuties = Rates.None(x => string.IsNullOrEmpty(x.Duties));
-            ShowTaxes = Rates.None(x => string.IsNullOrEmpty(x.Taxes));
-            ShowShipping = Rates.None(x => string.IsNullOrEmpty(x.Shipping));
+            ShowDuties = Rates.Any(x => !string.IsNullOrEmpty(x.Duties));
+            ShowTaxes = Rates.Any(x => !string.IsNullOrEmpty(x.Taxes));
+            ShowShipping = Rates.Any(x => !string.IsNullOrEmpty(x.Shipping));
 
             IsLoading = false;
         }
