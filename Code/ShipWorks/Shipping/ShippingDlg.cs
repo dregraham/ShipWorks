@@ -2387,22 +2387,7 @@ namespace ShipWorks.Shipping
 
             LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
 
-            ILicense license = licenseService.GetLicenses().FirstOrDefault();
-
-            license.Refresh();
-
-            if (license.IsOverChannelLimit)
-            {
-                IChannelLimitDlg channelLimitDlg = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitDlg>();
-
-                channelLimitDlg.ShowDialog();
-                license.Refresh();
-
-                if (license.IsOverChannelLimit)
-                {
-                    return;
-                }
-            }
+            licenseService.EnforceChannelLimit();
 
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
             SaveChangesToUIDisplayedShipments();
