@@ -8,6 +8,13 @@ namespace ShipWorks.Stores.Services
     /// </summary>
     public class StoreTypeManagerWrapper : IStoreTypeManager
     {
+        private readonly IStoreManager storeManager;
+
+        public StoreTypeManagerWrapper(IStoreManager storeManager)
+        {
+            this.storeManager = storeManager;
+        }
+
         /// <summary>
         /// Returns all store types in ShipWorks
         /// </summary>
@@ -24,9 +31,18 @@ namespace ShipWorks.Stores.Services
         public StoreType GetType(StoreTypeCode typeCode) => StoreTypeManager.GetType(typeCode);
 
         /// <summary>
-        /// Get the ShipmentType based on the given type code
+        /// Get the StoreType based on the given type code
         /// </summary>
         public StoreType GetType(StoreTypeCode typeCode, StoreEntity store) =>
             StoreTypeManager.GetType(typeCode, store);
+
+        /// <summary>
+        /// Get the store type from the shipment
+        /// </summary>
+        public StoreType GetType(ShipmentEntity shipment)
+        {
+            StoreEntity store = storeManager.GetRelatedStore(shipment.ShipmentID);
+            return StoreTypeManager.GetType(store);
+        }
     }
 }
