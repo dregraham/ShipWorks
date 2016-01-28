@@ -1246,6 +1246,25 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Deletes a stores from Tango
+        /// </summary>
+        public static void DeleteStores(ICustomerLicense customerLicense, IEnumerable<string> storeLicenseKeys)
+        {
+            string licenseKeyParam = string.Join(",", storeLicenseKeys);
+
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "deletestore");
+            postRequest.Variables.Add("custlicense", customerLicense.Key);
+            postRequest.Variables.Add("storelicensekey[]", licenseKeyParam);
+            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
+
+            CheckResponseForErrors(xmlResponse);
+        }
+
+        /// <summary>
         /// Checks the response for errors.
         /// </summary>
         private static void CheckResponseForErrors(XmlDocument xmlResponse)

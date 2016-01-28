@@ -48,5 +48,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// If License is over the channel limit prompt user to delete channels
         /// </summary>
         void EnforceChannelLimit();
+
+        /// <summary>
+        /// Deletes a store
+        /// </summary>
+        /// <param name="store"></param>
+        void DeleteStore(StoreEntity store);
     }
 }

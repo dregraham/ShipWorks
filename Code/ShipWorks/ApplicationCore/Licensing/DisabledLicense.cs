@@ -1,3 +1,4 @@
+using System;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -69,6 +70,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         public void EnforceChannelLimit()
         {
             throw new ShipWorksLicenseException("Channel Limit not valid for a disalbed license.");
+        }
+
+        /// <summary>
+        /// Throws we should not try to delete a disabled license
+        /// </summary>
+        /// <param name="store"></param>
+        public void DeleteStore(StoreEntity store)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -9,14 +10,16 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly StoreEntity store;
         private readonly ILog log;
+        private readonly IDeletionService deletionService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StoreLicense(StoreEntity store, Func<Type, ILog> logFactory)
+        public StoreLicense(StoreEntity store, Func<Type, ILog> logFactory, IDeletionService deletionService)
         {
             this.store = store;
             log = logFactory(GetType());
+            this.deletionService = deletionService;
             Key = store.License;
         }
 
@@ -78,6 +81,15 @@ namespace ShipWorks.ApplicationCore.Licensing
                 log.Warn(ex.Message, ex);
                 DisabledReason = ex.Message;
             }
+        }
+
+        /// <summary>
+        /// Deletes the store
+        /// </summary>
+        /// <param name="store"></param>
+        public void DeleteStore(StoreEntity store)
+        {
+            deletionService.DeleteStore(store);
         }
 
         /// <summary>

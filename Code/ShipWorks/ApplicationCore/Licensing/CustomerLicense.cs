@@ -4,6 +4,8 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Stores;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data;
+using System.Linq;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -16,17 +18,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly ICustomerLicenseWriter licenseWriter;
         private readonly Func<IChannelLimitDlg> channelLimitDlgFactory;
         private readonly ILog log;
+        private IDeletionService deletionService;
+        private IStoreManager storeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicense(string key, ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, Func<Type, ILog> logFactory, Func<IChannelLimitDlg> channelLimitDlgFactory)
+        public CustomerLicense(string key, ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, Func<Type, ILog> logFactory, IDeletionService deletionService, IStoreManager storeManager, Func<IChannelLimitDlg> channelLimitDlgFactory)
         {
             Key = key;
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
-            this.channelLimitDlgFactory = channelLimitDlgFactory;
+			this.channelLimitDlgFactory = channelLimitDlgFactory;
             log = logFactory(typeof(CustomerLicense));
+            this.deletionService = deletionService;
+            this.storeManager = storeManager;
         }
 
         /// <summary>
@@ -135,6 +141,45 @@ namespace ShipWorks.ApplicationCore.Licensing
         public IEnumerable<ActiveStore> GetActiveStores()
         {
             return tangoWebClient.GetActiveStores(this);
+        }
+
+        /// <summary>
+        /// Deletes the given store
+        /// </summary>
+        /// <param name="store"></param>
+        public void DeleteStore(StoreEntity store)
+        {
+            log.Warn($"Deleting store: {store.StoreName}");
+
+            // grab the stores license
+            string license = store.License;
+
+            // Remove the store from ShipWorks
+            deletionService.DeleteStore(store);
+            
+            // Delete the stores in tango
+            tangoWebClient.DeleteStore(this, license);
+        }
+
+        /// <summary>
+        /// Delete the given channel
+        /// </summary>
+        public void DeleteChannel(StoreTypeCode storeType)
+        {
+            log.Warn($"Deleting channel: {EnumHelper.GetDescription(storeType)}");
+
+            // Get all of the stores that match the type we want to remove
+            IEnumerable<StoreEntity> localStoresToDelete = storeManager.GetAllStores().Where(s => s.TypeCode == (int)storeType);
+
+            // Get a list of licenses we are about to delete
+            List<string> licensesToDelete = new List<string>();
+            localStoresToDelete.ToList().ForEach(s => licensesToDelete.Add(s.License));
+
+            // remove the local stores individually 
+            localStoresToDelete.ToList().ForEach(DeleteStore);
+
+            // Delete the stores in tango
+            tangoWebClient.DeleteStores(this, licensesToDelete);
         }
 
         /// <summary>

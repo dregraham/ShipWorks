@@ -254,7 +254,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             TangoWebClient.DeleteStore(customerLicense, storeLicenseKey);
         }
-		
+
+        /// <summary>
+        /// Deletes multiple stores from Tango.
+        /// </summary>
+        public void DeleteStores(ICustomerLicense customerLicense, IEnumerable<string> storeLicenseKeys)
+        {
+            TangoWebClient.DeleteStores(customerLicense, storeLicenseKeys);
+        }
+
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>

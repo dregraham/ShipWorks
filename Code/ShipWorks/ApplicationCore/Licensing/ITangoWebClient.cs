@@ -139,6 +139,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         void DeleteStore(ICustomerLicense customerLicense, string storeLicenseKey);
 
         /// <summary>
+        /// Deletes multiple stores from Tango.
+        /// </summary>
+        void DeleteStores(ICustomerLicense customerLicense, IEnumerable<string> storeLicenseKeys);
+
+        /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
         AddStoreResponse AddStore(ICustomerLicense license, StoreEntity store);

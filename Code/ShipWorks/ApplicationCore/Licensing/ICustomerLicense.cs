@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ShipWorks.Stores;
+using System.Collections.Generic;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -20,11 +21,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// IEnumerable of ActiveStores for the license
         /// </summary>
+        /// <returns></returns>
         IEnumerable<ActiveStore> GetActiveStores();
 
         /// <summary>
         /// The license capabilities
         /// </summary>
         ILicenseCapabilities LicenseCapabilities { get; set; }
+
+        /// <summary>
+        /// Deletes the given channel
+        /// </summary>
+        void DeleteChannel(StoreTypeCode storeType);
     }
 }
