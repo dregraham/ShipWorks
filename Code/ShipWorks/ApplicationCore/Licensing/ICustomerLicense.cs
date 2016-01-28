@@ -20,7 +20,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// IEnumerable of ActiveStores for the license
         /// </summary>
-        /// <returns></returns>
         IEnumerable<ActiveStore> GetActiveStores();
 
         /// <summary>

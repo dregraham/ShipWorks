@@ -19,14 +19,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     /// </summary>
     public partial class ChannelLimit
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ChannelLimit()
         {
             InitializeComponent();
-        }
-
-        public ChannelLimit(ChannelLimitViewModel viewModel) : this()
-        {
-            DataContext = viewModel;
         }
     }
 }

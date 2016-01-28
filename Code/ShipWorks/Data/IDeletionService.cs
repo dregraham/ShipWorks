@@ -10,7 +10,6 @@ namespace ShipWorks.Data
         /// <summary>
         /// Delete the given store
         /// </summary>
-        /// <param name="store"></param>
         void DeleteStore(StoreEntity store);
     }
 }

@@ -32,12 +32,18 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
             this.storeManager = storeManager;
         }
 
+        /// <summary>
+        /// Load the view model
+        /// </summary>
         public void Load(StoreTypeCode storeType)
         {
             intro = $"Delete channel {EnumHelper.GetDescription(storeType)} and all of its content?";
             message = GetDeleteMessage(storeType);
         }
 
+        /// <summary>
+        /// Gets appropriate messaging for store type
+        /// </summary>
         private string GetDeleteMessage(StoreTypeCode storeType)
         {
             return $"I understand this permanently deletes all data for the channel, including stores ({GetStoreNamesToDelete(storeType)}), customers, orders, and shipments.";

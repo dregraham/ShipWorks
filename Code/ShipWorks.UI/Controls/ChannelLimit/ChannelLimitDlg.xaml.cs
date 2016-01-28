@@ -22,11 +22,17 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     {
         private readonly ChannelLimitViewModel viewModel;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ChannelLimitDlg()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ChannelLimitDlg(ChannelLimitViewModel viewModel) : this()
         {
             this.viewModel = viewModel;
@@ -34,6 +40,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             viewModel.Load();
         }
 
+        /// <summary>
+        /// Calls Dismiss on viewmodel
+        /// </summary>
         private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             viewModel.Dismiss();

@@ -132,11 +132,13 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<DatabaseIdentifier>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
             builder.RegisterType<ObjectReferenceManagerWrapper>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<PdfDocument>()
                 .AsImplementedInterfaces();
+
             builder.RegisterType<DeletionServiceWrappe>()
                 .AsImplementedInterfaces();
 
