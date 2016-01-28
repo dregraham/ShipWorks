@@ -606,6 +606,13 @@ namespace ShipWorks
                 return;
             }
 
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
+            }
+            
             // If there are no stores, we need to make sure one is added before continuing
             if (StoreManager.GetDatabaseStoreCount() == 0)
             {
@@ -2306,10 +2313,13 @@ namespace ShipWorks
 
             if (stores.Count > 0)
             {
-                LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
-
+                    licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
+                }
+                
                 // Start the download
                 DownloadManager.StartDownload(stores, DownloadInitiatedBy.User);
 
@@ -2329,10 +2339,12 @@ namespace ShipWorks
             Divelements.SandRibbon.MenuItem menuItem = (Divelements.SandRibbon.MenuItem) sender;
             StoreEntity store = (StoreEntity) menuItem.Tag;
 
-            LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-            licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
-
+                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
+            }
             // Start the download
             DownloadManager.StartDownload(new List<StoreEntity> { store }, DownloadInitiatedBy.User);
 

@@ -68,11 +68,6 @@ namespace ShipWorks.Users
 
             bool loggedOnToShipWorks = loginAction();
 
-            if (loggedOnToShipWorks)
-            {
-                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
-            }
-
             // At this point Tango says the user is allowed to logon to ShipWorks, but we still need
             // to check for valid credentials.
             return loggedOnToShipWorks ?
