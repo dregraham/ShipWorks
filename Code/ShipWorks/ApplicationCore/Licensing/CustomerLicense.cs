@@ -86,13 +86,36 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The license capabilities.
         /// </summary>
-        public ILicenseCapabilities LicenseCapabilities { get; set; }
-        
+        private ILicenseCapabilities LicenseCapabilities { get; set; }
+
         /// <summary>
         /// Is the license over the ChannelLimit
         /// </summary>
-        public bool IsOverChannelLimit =>
-            LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit;
+        public bool IsOverChannelLimit
+        {
+            get
+            {
+                return LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit; 
+            }
+        }
+
+        /// <summary>
+        /// The number of licenses needed to be deleted to be in compliance
+        /// </summary>
+        public int NumberOfChannelsOverLimit
+        {
+            get
+            {
+                int numberOfChannelsOverLimit = 0;
+
+                if (IsOverChannelLimit)
+                {
+                    numberOfChannelsOverLimit = LicenseCapabilities.ActiveChannels - LicenseCapabilities.ChannelLimit;
+                }
+                
+                return numberOfChannelsOverLimit;
+            }
+        }
 
         /// <summary>
         /// Activates the customer license

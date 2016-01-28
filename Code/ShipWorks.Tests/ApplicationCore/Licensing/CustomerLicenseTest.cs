@@ -155,17 +155,17 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 LicenseCapabilities licenseResponse = new LicenseCapabilities(new XmlDocument());
 
-                licenseResponse.Crm = true;
+                var tangoWebClient =
+                    mock.Mock<ITangoWebClient>();
 
-                mock.Mock<ITangoWebClient>()
-                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                tangoWebClient.Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
                     .Returns(licenseResponse);
 
                 CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
                 customerLicense.Refresh();
 
-                Assert.Equal(customerLicense.LicenseCapabilities,licenseResponse);
+                tangoWebClient.Verify(wc => wc.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()), Times.Once);
             }
         }
 
@@ -222,7 +222,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void EnforceChannelLimit_()
+        public void EnforceChannelLimit_DialogShown_WhenOverChannelLimit()
         {
             using (var mock = AutoMock.GetLoose())
             {

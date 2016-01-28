@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using System.Collections.ObjectModel;
@@ -26,17 +25,15 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private StoreTypeCode selectedStoreType;
         private ObservableCollection<StoreTypeCode> channelCollection;
         private readonly ICustomerLicense license;
-        private readonly ITangoWebClient tangoWebClient;
         private string errorMessage;
-        private IStoreManager storeManager;
-        private Func<IChannelConfirmDeleteFactory> confirmDeleteFactory;
+        private readonly IStoreManager storeManager;
+        private readonly Func<IChannelConfirmDeleteFactory> confirmDeleteFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ChannelLimitViewModel(
             ILicenseService licenseService, 
-            ITangoWebClient tangoWebClient, 
             IStoreManager storeManager,
             Func<IChannelConfirmDeleteFactory> confirmDeleteFactory)
         {
@@ -48,7 +45,6 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 throw new ShipWorksLicenseException("Store licenses do not have channel limits.");
             }
 
-            this.tangoWebClient = tangoWebClient;
             this.storeManager = storeManager;
             this.confirmDeleteFactory = confirmDeleteFactory;
 
@@ -155,16 +151,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void UpdateErrorMesssage()
         {
-            int numberToDelete = license.LicenseCapabilities.ActiveChannels - license.LicenseCapabilities.ChannelLimit;
-
-            if (numberToDelete == 1)
-            {
-                ErrorMessage = $"You have exceeded your channel limit. Please upgrade your plan or delete 1 channel to continue using ShipWorks.";
-            }
-            else if (numberToDelete >= 2)
-            {
-                ErrorMessage = $"You have exceeded your channel limit. Please upgrade your plan or delete {numberToDelete} channels to continue using ShipWorks.";
-            }     
+            ErrorMessage =
+                $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel(s) to continue using ShipWorks.";
         }
 
         /// <summary>
@@ -172,10 +160,10 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void DeleteChannel()
         {
-            IEnumerable<StoreTypeCode> localStoreTypeCodes = storeManager.GetAllStores().Select(s => (StoreTypeCode)s.TypeCode).Distinct();
+            List<StoreTypeCode> localStoreTypeCodes = storeManager.GetAllStores().Select(s => (StoreTypeCode)s.TypeCode).Distinct().ToList();
 
             // If we are trying to delete the only store type in ShipWorks display an error and dont delete
-            if (localStoreTypeCodes.Count() == 1 && localStoreTypeCodes.Contains(SelectedStoreType))
+            if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType))
             {
                 ErrorMessage = ErrorMessage + $" \n \nYou cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.";
                 return;
@@ -187,7 +175,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             if (deleteDlg.DialogResult == true)
             {
-                using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditState.Disabled))
+                using (new AuditBehaviorScope(AuditState.Disabled))
                 {
                     // Delete the channel
                     license.DeleteChannel(selectedStoreType);
