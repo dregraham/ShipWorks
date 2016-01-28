@@ -17,7 +17,7 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
     /// <summary>
     /// Interaction logic for ChannelConfirmDeleteDlg.xaml
     /// </summary>
-    public partial class ChannelConfirmDeleteDlg : Window
+    public partial class ChannelConfirmDeleteDlg : Window, IChannelConfirmDeleteDlg
     {
         /// <summary>
         /// Constructor

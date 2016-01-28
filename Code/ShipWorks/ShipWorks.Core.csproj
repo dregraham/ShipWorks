@@ -10351,7 +10351,7 @@
     <None Include="Resources\document_dirty1.png" />
     <None Include="Resources\branch1.png" />
     <None Include="Resources\nav_redo_yellow.png" />
-    <None Include="Resources\school_delete32.png" />
+    <Resource Include="Resources\school_delete32.png" />
     <None Include="Resources\hourglass_11.png" />
     <None Include="Resources\currency_dollar_green16.png" />
     <None Include="Resources\logo_sdc.png" />

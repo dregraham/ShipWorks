@@ -5,13 +5,16 @@ using ShipWorks.Stores;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace ShipWorks.UI.Controls.ChannelLimit
+namespace ShipWorks.UI.Controls.ChannelConfirmDelete
 {
     /// <summary>
     /// ViewModel for the ChannelLimitDlg
     /// </summary>
-    public class ChannelConfirmDeleteViewModel
+    public class ChannelConfirmDeleteViewModel : IConfirmChannelDeleteViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
@@ -31,9 +34,36 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
         public void Load(StoreTypeCode storeType)
         {
-
+            intro = $"Delete channel {EnumHelper.GetDescription(storeType)} and all of its content?";
+            message = GetDeleteMessage(storeType);
         }
-        
+
+        private string GetDeleteMessage(StoreTypeCode storeType)
+        {
+            return $"I understand this permanently deletes all data for the channel, including stores ({GetStoreNamesToDelete(storeType)}), customers, orders, and shipments.";
+        }
+
+        /// <summary>
+        /// Creates the delete message
+        /// </summary>
+        private string GetStoreNamesToDelete(StoreTypeCode storeType)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            IEnumerable<StoreEntity> storesToDelete = storeManager.GetAllStores().Where(s => s.TypeCode == (int)storeType);
+
+            foreach (StoreEntity store in storesToDelete)
+            {
+                if (builder.Length != 0)
+                {
+                    builder.Append(", ");
+                }
+                builder.Append(store.StoreName);
+            }
+
+            return builder.ToString();
+        }
+
         /// <summary>
         /// The intro message to display to the user
         /// </summary>

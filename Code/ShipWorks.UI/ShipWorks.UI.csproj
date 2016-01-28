@@ -85,10 +85,14 @@
     <Compile Include="AttachedProperties\Link.cs" />
     <Compile Include="Behaviors\PasswordBoxBindingBehavior.cs" />
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
+    <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteViewModel.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteDlg.xaml.cs">
       <DependentUpon>ChannelConfirmDeleteDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ChannelConfirmDelete\IChannelConfirmDeleteDlg.cs" />
+    <Compile Include="Controls\ChannelConfirmDelete\IChannelConfirmDeleteFactory.cs" />
+    <Compile Include="Controls\ChannelConfirmDelete\IConfirmChannelDeleteViewModel.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimit.xaml.cs">
       <DependentUpon>ChannelLimit.xaml</DependentUpon>
     </Compile>

@@ -8,33 +8,39 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using Interapptive.Shared.Utility;
 using ShipWorks.Users.Audit;
-using ShipWorks.Stores.Management;
-using System.Windows.Forms;
+using ShipWorks.UI.Controls.ChannelConfirmDelete;
+using System.Collections.Generic;
+using System;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
     /// <summary>
     /// ViewModel for the ChannelLimitDlg
     /// </summary>
-    public class ChannelLimitViewModel
+    public class ChannelLimitViewModel : INotifyPropertyChanged
     {
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
-        private ActiveStore selectedStore;
-        private ObservableCollection<ActiveStore> storeCollection;
+        private StoreTypeCode selectedStoreType;
+        private ObservableCollection<StoreTypeCode> channelCollection;
         private readonly ICustomerLicense license;
         private readonly ITangoWebClient tangoWebClient;
         private string errorMessage;
         private IStoreManager storeManager;
         private IDeletionService deletionService;
-        private IWin32Window owner;
+        private Func<IChannelConfirmDeleteFactory> confirmDeleteFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelLimitViewModel(ILicenseService licenseService, ITangoWebClient tangoWebClient, IStoreManager storeManager, IDeletionService deletionService, IWin32Window owner)
+        public ChannelLimitViewModel(
+            ILicenseService licenseService, 
+            ITangoWebClient tangoWebClient, 
+            IStoreManager storeManager, 
+            IDeletionService deletionService,
+            Func<IChannelConfirmDeleteFactory> confirmDeleteFactory)
         {
             license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
 
@@ -47,11 +53,15 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             this.tangoWebClient = tangoWebClient;
             this.storeManager = storeManager;
             this.deletionService = deletionService;
-            this.owner = owner;
+            this.confirmDeleteFactory = confirmDeleteFactory;
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             
             // Wire up the delete store click to the delete store method
-            DeleteStoreClickCommand = new RelayCommand(DeleteStore, CanExecuteDeleteStore);
+            DeleteStoreClickCommand = new RelayCommand(DeleteChannel, CanExecuteDeleteStore);
+
+            // Set the selected store type to invalid
+            SelectedStoreType = StoreTypeCode.Invalid;
         }
 
         /// <summary>
@@ -59,28 +69,28 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         public void Load()
         {
+            SelectedStoreType = StoreTypeCode.Invalid;
+
             license.Refresh();
 
             // if we dont have a store collection make one
-            if (StoreCollection == null)
+            if (ChannelCollection == null)
             {
-                StoreCollection = new ObservableCollection<ActiveStore>();
+                ChannelCollection = new ObservableCollection<StoreTypeCode>();
             }
-            
+
             // clear the collection
-            StoreCollection.Clear();
+            ChannelCollection.Clear();
 
             // load the collection with the licenses active stores
-            license.GetActiveStores().ToList().ForEach(StoreCollection.Add);
+            license.GetActiveStores().ToList().ForEach(s => ChannelCollection.Add(new ShipWorksLicense(s.StoreLicenseKey).StoreTypeCode));
 
             foreach (StoreEntity store in storeManager.GetAllStores())
             {
-                ActiveStore activeStoreMatch = StoreCollection.Where(s => s.StoreLicenseKey == store.License).FirstOrDefault();
-
                 // if we did not find a match add it to the collection 
-                if (activeStoreMatch == null)
+                if (!ChannelCollection.Contains((StoreTypeCode)store.TypeCode))
                 {
-                    StoreCollection.Add(new ActiveStore() { Name = "(Local) " + store.StoreName , StoreLicenseKey = store.License });
+                    ChannelCollection.Add((StoreTypeCode)store.TypeCode);
                 }
             }
 
@@ -96,7 +106,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         }
 
         /// <summary>
-        /// The selected store
+        /// The error message displayed to the user
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string ErrorMessage
@@ -109,12 +119,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// The selected store
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ActiveStore SelectedStore
+        public StoreTypeCode SelectedStoreType
         {
-            get { return selectedStore; }
+            get { return selectedStoreType; }
             set
             {
-                handler.Set(nameof(SelectedStore), ref selectedStore, value);
+                handler.Set(nameof(SelectedStoreType), ref selectedStoreType, value);
 
                 // Update the status of the delete button to ensure that its valid
                 DeleteStoreClickCommand.RaiseCanExecuteChanged();
@@ -125,17 +135,17 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// Collection of stores
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<ActiveStore> StoreCollection
+        public ObservableCollection<StoreTypeCode> ChannelCollection
         {
-            get { return storeCollection; }
-            set { handler.Set(nameof(StoreCollection), ref storeCollection, value); }
+            get { return channelCollection; }
+            set { handler.Set(nameof(ChannelCollection), ref channelCollection, value); }
         }
 
         /// <summary>
         /// True if a store is selected
         /// </summary>
         [Obfuscation(Exclude = true)]
-        private bool CanExecuteDeleteStore() => selectedStore != null;
+        private bool CanExecuteDeleteStore() => SelectedStoreType != StoreTypeCode.Invalid;
 
         /// <summary>
         /// Delete Store ClickCommand
@@ -150,52 +160,56 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             int numberToDelete = license.LicenseCapabilities.ActiveChannels - license.LicenseCapabilities.ChannelLimit;
 
-            if (numberToDelete == 0)
+            if (numberToDelete == 1)
             {
-                ErrorMessage = $"You have exceeded your channel limit. Please upgrade your plan or delete 1 store type to continue using ShipWorks.";
+                ErrorMessage = $"You have exceeded your channel limit. Please upgrade your plan or delete 1 channel to continue using ShipWorks.";
             }
-            else if (numberToDelete > 0)
+            else if (numberToDelete >= 2)
             {
-                ErrorMessage = $"You have exceeded your channel limit. Please upgrade your plan or delete {numberToDelete} store types to continue using ShipWorks.";
+                ErrorMessage = $"You have exceeded your channel limit. Please upgrade your plan or delete {numberToDelete} channels to continue using ShipWorks.";
             }     
         }
 
         /// <summary>
         /// Delete the selected store
         /// </summary>
-        private void DeleteStore()
+        private void DeleteChannel()
         {
-            // Grab the local store entity that matches the license of the selected active store
-            StoreEntity store = storeManager.GetAllStores().Where(s => s.License == selectedStore.StoreLicenseKey).FirstOrDefault();
+            IEnumerable<StoreTypeCode> localStoreTypeCodes = storeManager.GetAllStores().Select(s => (StoreTypeCode)s.TypeCode).Distinct();
 
-            if (store != null)
+            // If we are trying to delete the only store type in ShipWorks display an error and dont delete
+            if (localStoreTypeCodes.Count() == 1 && localStoreTypeCodes.Contains(SelectedStoreType))
             {
-                DeleteStoreEntity(store);
+                ErrorMessage = ErrorMessage + $" \n \nYou cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.";
+
+                return;
             }
 
-            // Remove the store form tango 
-            tangoWebClient.DeleteStore(license, selectedStore.StoreLicenseKey);
+            IChannelConfirmDeleteDlg deleteDlg = confirmDeleteFactory().GetConfirmDeleteDlg(selectedStoreType);
 
-            Load();
-        }
-        
-        /// <summary>
-        /// Deletes the store entity
-        /// </summary>
-        /// <param name="store"></param>
-        private void DeleteStoreEntity(StoreEntity store)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-            using (StoreConfirmDeleteDlg dlg = new StoreConfirmDeleteDlg(store.StoreName))
+            deleteDlg.ShowDialog();
+
+            if (deleteDlg.DialogResult == true)
             {
-                if (dlg.ShowDialog(owner) == DialogResult.OK)
+                using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditState.Disabled))
                 {
-                    using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditState.Disabled))
-                    {
-                        deletionService.DeleteStore(store);
-                    }
+                    // Get all of the stores that match the type we want to remove
+                    IEnumerable<StoreEntity> localStoresToDelete = storeManager.GetAllStores().Where(s => s.TypeCode == (int)selectedStoreType);
+                    
+                    // Get a list of licenses we are about to delete
+                    List<string> licensesToDelete = new List<string>();
+                    localStoresToDelete.ToList().ForEach(s => licensesToDelete.Add(s.License));
+
+                    // remove the local stores individually 
+                    localStoresToDelete.ToList().ForEach(deletionService.DeleteStore);
+                    
+                    // tell tango to delete those active stores
+                    licensesToDelete.ForEach(l => tangoWebClient.DeleteStore(license, l));
                 }
             }
+
+            // call load to refresh everything
+            Load();
         }
     }
 }

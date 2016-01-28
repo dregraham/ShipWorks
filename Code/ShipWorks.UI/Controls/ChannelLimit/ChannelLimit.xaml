@@ -94,39 +94,30 @@
             Grid.ColumnSpan="2" 
             TextWrapping="WrapWithOverflow"
             Margin="10 10 10 0"
-            Text="{Binding ErrorMessage}"/>
-
+            Text="{Binding ErrorMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <ListView 
             Grid.Column="0" 
             Grid.Row="1" 
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            ItemsSource="{Binding StoreCollection}" 
-            SelectedItem="{Binding SelectedStore}"
+            ItemsSource="{Binding ChannelCollection}" 
+            SelectedItem="{Binding SelectedStoreType}"
             Margin="10 0 0 10">
 
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Store Name" Width="150">
+                    <GridViewColumn Header="Channel" Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="120"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Width="15" Source="{Binding Path=StoreType, Converter={StaticResource EnumImageConverter}}" />
-                                    <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                                </Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Width="15" Source="{Binding Converter={StaticResource EnumImageConverter}}" />
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Store Type" DisplayMemberBinding="{Binding StoreType, Converter={StaticResource EnumDescriptionConverter}}" Width="Auto"/>
-                </GridView>
+                   </GridView>
             </ListView.View>
         </ListView>
         <Button 

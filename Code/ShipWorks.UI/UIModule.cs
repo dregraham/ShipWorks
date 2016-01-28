@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
 using ShipWorks.UI.Controls.CustomerLicenseActivation;
 using ShipWorks.UI.Services;
@@ -26,6 +27,16 @@ namespace ShipWorks.UI
 
             builder.RegisterType<ChannelLimitDlg>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<ChannelConfirmDeleteViewModel>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ChannelConfirmDeleteDlg>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ChannelConfirmDeleteFactory>()
+                .AsImplementedInterfaces();
+                
         }
     }
 }
