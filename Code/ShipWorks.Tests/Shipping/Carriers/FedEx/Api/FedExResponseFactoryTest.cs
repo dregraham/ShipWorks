@@ -39,14 +39,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipResponse_ReturnsFedExShipResponse_Test()
+        public void CreateShipResponse_ReturnsFedExShipResponse()
         {
             ICarrierResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity());
             Assert.IsAssignableFrom<FedExShipResponse>(carrierResponse);
         }
 
         [Fact]
-        public void CreateShipResponse_ThrowsCarrierException_WhenNativeResponseIsNotProcessShipmentReply_Test()
+        public void CreateShipResponse_ThrowsCarrierException_WhenNativeResponseIsNotProcessShipmentReply()
         {
             // Try sending a string as the native response
             const string nativeResponseText = "the native response";
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipResponse_PopulatesManipulators_Test()
+        public void CreateShipResponse_PopulatesManipulators()
         {
             // This will obviously need to change as manipulators are added in the factory and also serve as a
             // reminder that to write the tests to ensure the manipulator type is present in the list
@@ -64,28 +64,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipResponse_AddsFedExShipmentTrackingManipulator_Test()
+        public void CreateShipResponse_AddsFedExShipmentTrackingManipulator()
         {
             FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
             Assert.Equal(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentTrackingManipulator)));
         }
 
         [Fact]
-        public void CreateShipResponse_AddsFedExShipmentCodManipulator_Test()
+        public void CreateShipResponse_AddsFedExShipmentCodManipulator()
         {
             FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
             Assert.Equal(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentCodManipulator)));
         }
 
         [Fact]
-        public void CreateShipResponse_AddsFedExShipmentCostManipulator_Test()
+        public void CreateShipResponse_AddsFedExShipmentCostManipulator()
         {
             FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
             Assert.Equal(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentCostManipulator)));
         }
 
         [Fact]
-        public void CreateShipResponse_AddsFedExLabelRepository_Test()
+        public void CreateShipResponse_AddsFedExLabelRepository()
         {
             FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
             Assert.IsAssignableFrom<FedExLabelRepository>(carrierResponse.LabelRepository);
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateGroundResponse Tests
 
         [Fact]
-        public void CreateGroundCloseResponse_ThrowsCarrierException_WhenResponseIsNull_Test()
+        public void CreateGroundCloseResponse_ThrowsCarrierException_WhenResponseIsNull()
         {
             GroundCloseReply closeReply = null;
 
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateGroundCloseResponse_ThrowsCarrierException_WhenNativeResponseIsNotGroundCloseReply_Test()
+        public void CreateGroundCloseResponse_ThrowsCarrierException_WhenNativeResponseIsNotGroundCloseReply()
         {
             SmartPostCloseReply smartPostCloseReply = new SmartPostCloseReply();
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateGroundCloseResponse_IsNotNull_Test()
+        public void CreateGroundCloseResponse_IsNotNull()
         {
             ICarrierResponse response = testObject.CreateGroundCloseResponse(new GroundCloseReply(), carrierRequest.Object);
 
@@ -119,7 +119,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateGroundCloseResponse_ReturnsGroundCarrierResponseType_Test()
+        public void CreateGroundCloseResponse_ReturnsGroundCarrierResponseType()
         {
             ICarrierResponse response = testObject.CreateGroundCloseResponse(new GroundCloseReply(), carrierRequest.Object);
 
@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateGroundCloseResponse_AddsManipulators_Test()
+        public void CreateGroundCloseResponse_AddsManipulators()
         {
             FedExGroundCloseResponse response = testObject.CreateGroundCloseResponse(new GroundCloseReply(), carrierRequest.Object) as FedExGroundCloseResponse;
 
@@ -135,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateGroundCloseResponse_AddsFedExCloseReportManipulator_Test()
+        public void CreateGroundCloseResponse_AddsFedExCloseReportManipulator()
         {
             FedExGroundCloseResponse response = testObject.CreateGroundCloseResponse(new GroundCloseReply(), carrierRequest.Object) as FedExGroundCloseResponse;
 
@@ -147,7 +147,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateSmartPostResponse Tests
 
         [Fact]
-        public void CreateSmartPostCloseResponse_ThrowsCarrierException_WhenResponseIsNull_Test()
+        public void CreateSmartPostCloseResponse_ThrowsCarrierException_WhenResponseIsNull()
         {
             SmartPostCloseReply closeReply = null;
 
@@ -155,7 +155,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSmartPostCloseResponse_ThrowsCarrierException_WhenNativeResponseIsNotSmartPostCloseReply_Test()
+        public void CreateSmartPostCloseResponse_ThrowsCarrierException_WhenNativeResponseIsNotSmartPostCloseReply()
         {
             GroundCloseReply smartPostCloseReply = new GroundCloseReply();
 
@@ -163,7 +163,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSmartPostCloseResponse_IsNotNull_Test()
+        public void CreateSmartPostCloseResponse_IsNotNull()
         {
             ICarrierResponse response = testObject.CreateSmartPostCloseResponse(new SmartPostCloseReply(), carrierRequest.Object);
 
@@ -171,7 +171,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSmartPostCloseResponse_ReturnsGroundCarrierResponseType_Test()
+        public void CreateSmartPostCloseResponse_ReturnsGroundCarrierResponseType()
         {
             ICarrierResponse response = testObject.CreateSmartPostCloseResponse(new SmartPostCloseReply(), carrierRequest.Object);
 
@@ -179,7 +179,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSmartPostCloseResponse_AddsManipulators_Test()
+        public void CreateSmartPostCloseResponse_AddsManipulators()
         {
             FedExSmartPostCloseResponse response = testObject.CreateSmartPostCloseResponse(new SmartPostCloseReply(), carrierRequest.Object) as FedExSmartPostCloseResponse;
 
@@ -187,7 +187,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSmartPostCloseResponse_AddsFedExCloseReportManipulator_Test()
+        public void CreateSmartPostCloseResponse_AddsFedExCloseReportManipulator()
         {
             FedExSmartPostCloseResponse response = testObject.CreateSmartPostCloseResponse(new SmartPostCloseReply(), carrierRequest.Object) as FedExSmartPostCloseResponse;
 
@@ -199,20 +199,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateRegisterCspUserResponse Tests
 
         [Fact]
-        public void CreateRegisterCspUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseIsNull_Test()
+        public void CreateRegisterCspUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseIsNull()
         {
             Assert.Throws<CarrierException>(() => testObject.CreateRegisterUserResponse(null, carrierRequest.Object));
         }
 
         [Fact]
-        public void CreateRegisterCspUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided_Test()
+        public void CreateRegisterCspUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided()
         {
             RegisterWebUserRequest invalidType = new RegisterWebUserRequest();
             Assert.Throws<CarrierException>(() => testObject.CreateRegisterUserResponse(invalidType, carrierRequest.Object));
         }
 
         [Fact]
-        public void CreateRegisterCspUserResponse_ReturnsFedExRegisterCspUserResponse_Test()
+        public void CreateRegisterCspUserResponse_ReturnsFedExRegisterCspUserResponse()
         {
             RegisterWebUserReply validType = new RegisterWebUserReply();
 
@@ -226,20 +226,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateSubscriptionResponse Tests
 
         [Fact]
-        public void CreateSubscriptionResponse_ThrowsCarrierException_WhenInvalidNativeResponseIsNull_Test()
+        public void CreateSubscriptionResponse_ThrowsCarrierException_WhenInvalidNativeResponseIsNull()
         {
             Assert.Throws<CarrierException>(() => testObject.CreateSubscriptionResponse(null, carrierRequest.Object));
         }
 
         [Fact]
-        public void CreateSubscriptionResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided_Test()
+        public void CreateSubscriptionResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided()
         {
             RegisterWebUserReply invalidType = new RegisterWebUserReply();
             Assert.Throws<CarrierException>(() => testObject.CreateSubscriptionResponse(invalidType, carrierRequest.Object));
         }
 
         [Fact]
-        public void CreateSubscriptionResponse_ReturnsFedExSubscriptionResponse_Test()
+        public void CreateSubscriptionResponse_ReturnsFedExSubscriptionResponse()
         {
             SubscriptionReply validType = new SubscriptionReply();
 
@@ -251,13 +251,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #endregion CreateSubscriptionResponse Tests
 
         [Fact]
-        public void CreateRateResponse_ThrowsCarrierException_WhenNativeResponseIsNotRateReply_Test()
+        public void CreateRateResponse_ThrowsCarrierException_WhenNativeResponseIsNotRateReply()
         {
             Assert.Throws<CarrierException>(() => testObject.CreateRateResponse(new GroundCloseReply(), carrierRequest.Object));
         }
 
         [Fact]
-        public void CreateRateResponse_ReturnsFedExRateResponse_Test()
+        public void CreateRateResponse_ReturnsFedExRateResponse()
         {
             ICarrierResponse response = testObject.CreateRateResponse(new RateReply(), carrierRequest.Object);
 

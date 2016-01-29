@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void ComputeHash_WithSingleItem_Test()
+        public void ComputeHash_WithSingleItem()
         {
             stringToHash = "{\"StoreID\":2005,\"Packages\":[{\"Length\":11.0,\"Width\":22.0,\"Height\":5.0,\"Weight\":1.9,\"ApplyAdditionalWeight\":false,\"AdditionalWeight\":0.0}],\"CustomsItems\":[]}";
 

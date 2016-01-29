@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.BestRate
     public class iParcelBestRateBrokerTest
     {
         [Fact]
-        public void GetInsuranceProvider_ReturnsShipWorks_iParcelSettingSpecfiesShipWorks_Test()
+        public void GetInsuranceProvider_ReturnsShipWorks_iParcelSettingSpecfiesShipWorks()
         {
             var mock = AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
             
@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.BestRate
         }
 
         [Fact]
-        public void GetInsuranceProvider_ReturnsCarrier_iParcelSettingSpecfiesCarrier_Test()
+        public void GetInsuranceProvider_ReturnsCarrier_iParcelSettingSpecfiesCarrier()
         {
             var mock = AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
 

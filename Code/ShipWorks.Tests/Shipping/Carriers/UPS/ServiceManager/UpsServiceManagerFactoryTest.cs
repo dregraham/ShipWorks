@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
         }
 
         [Fact]
-        public void Create_UsesServiceManagerCountryCode_ToDetermineServiceManagerToUse_Test()
+        public void Create_UsesServiceManagerCountryCode_ToDetermineServiceManagerToUse()
         {
             ShipmentEntity shipment = new ShipmentEntity {OriginCountryCode = "CA"};
             testObject.Create(shipment);
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
         }
 
         [Fact]
-        public void Create_ReturnsCanadaServiceManager_WhenOriginCountryCodeIsCA_Test()
+        public void Create_ReturnsCanadaServiceManager_WhenOriginCountryCodeIsCA()
         {
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "CA" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
         }
 
         [Fact]
-        public void Create_ReturnsPRServiceManager_WhenOriginCountryCodeIsPR_Test()
+        public void Create_ReturnsPRServiceManager_WhenOriginCountryCodeIsPR()
         {
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "PR" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
 
 
         [Fact]
-        public void Create_ReturnsUnitedStatesServiceManager_WhenOriginCountryCodeIsUS_Test()
+        public void Create_ReturnsUnitedStatesServiceManager_WhenOriginCountryCodeIsUS()
         {
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "US" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);
@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
         }
 
         [Fact]
-        public void Create_ReturnsUnitedStatesServiceManager_WhenOriginCountryCodeIsNotUS_AndNotCA_Test()
+        public void Create_ReturnsUnitedStatesServiceManager_WhenOriginCountryCodeIsNotUS_AndNotCA()
         {
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "GB" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);

@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetShipmentInsuranceProvider_ReturnsInvalid_OneBrokersWithNoAccounts_Test()
+        public void GetShipmentInsuranceProvider_ReturnsInvalid_OneBrokersWithNoAccounts()
         {
             var bestRateShipmentType = mock.Create<BestRateShipmentType>();
 
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void SupportsGetRates_ReturnsTrue_Test()
+        public void SupportsGetRates_ReturnsTrue()
         {
             BestRateShipmentType bestRateShipmentType = mock.Create<BestRateShipmentType>();
 
@@ -72,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetShipmentInsuranceProvider_ReturnsShipWorks_TwoBrokersWithAccountsAndShipWorksInsurance_Test()
+        public void GetShipmentInsuranceProvider_ReturnsShipWorks_TwoBrokersWithAccountsAndShipWorksInsurance()
         {
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.HasAccounts).Returns(true);
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.ShipWorks);
@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetShipmentInsuranceProvider_ReturnsInvalid_TwoBrokersWithAccountsAndCarrierInsurance_Test()
+        public void GetShipmentInsuranceProvider_ReturnsInvalid_TwoBrokersWithAccountsAndCarrierInsurance()
         {
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.HasAccounts).Returns(true);
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
@@ -100,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetShipmentInsuranceProvider_ReturnsCarrier_TwoBrokersWithAccountsAndCarrierInsurance_Test()
+        public void GetShipmentInsuranceProvider_ReturnsCarrier_TwoBrokersWithAccountsAndCarrierInsurance()
         {
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.HasAccounts).Returns(true);
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
@@ -114,13 +114,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void ProcessShipment_ThrowsInvalidOperationException_Test()
+        public void ProcessShipment_ThrowsInvalidOperationException()
         {
             Assert.Throws<InvalidOperationException>(() => labelService.Create(new ShipmentEntity()));
         }
 
         [Fact]
-        public void ApplySelectedShipmentRate_AddsRateSelectedEventToShipment_Test()
+        public void ApplySelectedShipmentRate_AddsRateSelectedEventToShipment()
         {
             shipment.BestRateEvents = 0;
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
@@ -130,7 +130,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void ApplySelectedShipmentRate_DoesNotRemoveOtherBestRateEvents_Test()
+        public void ApplySelectedShipmentRate_DoesNotRemoveOtherBestRateEvents()
         {
             shipment.BestRateEvents = (int)BestRateEventTypes.RatesCompared;
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
@@ -140,7 +140,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void ApplySelectedShipmentRate_CallsSelectActionSetOnTag_Test()
+        public void ApplySelectedShipmentRate_CallsSelectActionSetOnTag()
         {
             ShipmentEntity calledShipment = null;
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => calledShipment = entity } };
@@ -150,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void ApplySelectedShipmentRate_DoesNotCallSignUpActionOnTag_WhenSignUpActionIsNull_Test()
+        public void ApplySelectedShipmentRate_DoesNotCallSignUpActionOnTag_WhenSignUpActionIsNull()
         {
             ShipmentEntity calledShipment = null;
             bool? signUpActionResult = null;
@@ -184,78 +184,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             });
             rateGroupWithFooterNotAssociatedWithAmount.AddFootnoteFactory(notAssociatedWithAmountFooterFootnoteFactory.Object);
         }
-
-        // IsCustomsRequierd has a hard dependency to the database, so these are no longer testable 
-        // until that dependency is abstracted away
-        //[Fact]
-        //public void IsCustomsRequired_ReturnsFalse_WhenSingleBrokerDoesNotRequireCustoms_Test()
-        //{
-        //    broker = new Mock<IBestRateShippingBroker>();
-        //    broker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
-
-        //    brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object });
-
-        //    bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
-        //    Assert.False(isRequired);
-        //}
-
-        //[Fact]
-        //public void IsCustomsRequired_ReturnsFalse_WhenSingleBrokerRequiresCustoms_Test()
-        //{
-        //    broker = new Mock<IBestRateShippingBroker>();
-        //    broker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
-
-        //    brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object });
-
-        //    bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
-        //    Assert.True(isRequired);
-        //}
-
-        //[Fact]
-        //public void IsCustomsRequired_ReturnsFalse_WithMultipleBrokers_WhenNoBrokersRequireCustoms_Test()
-        //{
-        //    Mock<IBestRateShippingBroker> firstBroker = new Mock<IBestRateShippingBroker>();
-        //    firstBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
-
-        //    Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
-        //    secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
-
-        //    brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
-
-        //    bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
-        //    Assert.False(isRequired);
-        //}
-
-        //[Fact]
-        //public void IsCustomsRequired_ReturnsTrue_WithMultipleBrokers_WhenOneBrokerRequireCustoms_Test()
-        //{
-        //    Mock<IBestRateShippingBroker> firstBroker = new Mock<IBestRateShippingBroker>();
-        //    firstBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
-
-        //    Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
-        //    secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
-
-        //    brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
-
-        //    bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
-        //    Assert.True(isRequired);
-        //}
-
-        //[Fact]
-        //public void IsCustomsRequired_ReturnsTrue_WithMultipleBrokers_WhenAllBrokerRequireCustoms_Test()
-        //{
-        //    Mock<IBestRateShippingBroker> firstBroker = new Mock<IBestRateShippingBroker>();
-        //    firstBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
-
-        //    Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
-        //    secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
-
-        //    brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
-
-        //    bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
-        //    Assert.True(isRequired);
-        //}
-
+        
         // Helper methods for creating rate results
         private RateResult CreateRateResult(string description, string days, decimal amount, string tagResultKey)
         {

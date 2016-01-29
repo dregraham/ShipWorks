@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
         private ExecutionModeFactory testObject;
 
         [Fact]
-        public void Create_ThrowsNotImplementedException_WhenServiceIsSpecified_WithFullSwitch_Test()
+        public void Create_ThrowsNotImplementedException_WhenServiceIsSpecified_WithFullSwitch()
         {
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] { "/service=serviceName" });
             testObject = new ExecutionModeFactory(commandLine);
@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
         }
 
         [Fact]
-        public void Create_ThrowsNotImplementedException_WhenServiceIsSpecified_WithAbbreviatedSwitch_Test()
+        public void Create_ThrowsNotImplementedException_WhenServiceIsSpecified_WithAbbreviatedSwitch()
         {            
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] {"/s=serviceName"});
             testObject = new ExecutionModeFactory(commandLine);
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
         }
 
         [Fact]
-        public void Create_ReturnsCommandLineExecutionMode_WhenCommandIsSpecified_WithFullSwitch_Test()
+        public void Create_ReturnsCommandLineExecutionMode_WhenCommandIsSpecified_WithFullSwitch()
         {
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] { "/command:opensqlfirewall" });
             testObject = new ExecutionModeFactory(commandLine);
@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
         }
 
         [Fact]
-        public void Create_ReturnsCommandLineExecutionMode_WhenCommandIsSpecified_WithCmdSwitch_Test()
+        public void Create_ReturnsCommandLineExecutionMode_WhenCommandIsSpecified_WithCmdSwitch()
         {
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] {"/cmd:opensqlfirewall"});
             testObject = new ExecutionModeFactory(commandLine);
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
         }
 
         [Fact]
-        public void Create_ReturnsCommandLineExecutionMode_WhenCommandIsSpecified_WithAbbreviatedSwitch_Test()
+        public void Create_ReturnsCommandLineExecutionMode_WhenCommandIsSpecified_WithAbbreviatedSwitch()
         {
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] { "/c:opensqlfirewall" });
             testObject = new ExecutionModeFactory(commandLine);
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
         }
 
         [Fact]
-        public void Create_ReturnsUserInterfaceExecutionMode_WhenServiceIsNotSpecified_AndCommandIsNotSpecified_Test()
+        public void Create_ReturnsUserInterfaceExecutionMode_WhenServiceIsNotSpecified_AndCommandIsNotSpecified()
         {
             testObject = new ExecutionModeFactory(ShipWorksCommandLine.Empty);
 

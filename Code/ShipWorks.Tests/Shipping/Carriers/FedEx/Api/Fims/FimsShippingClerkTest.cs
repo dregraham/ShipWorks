@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         }
 
         [Fact]
-        public void Ship_ThrowsFedExException_WhenFimsUsernameIsBlank_Test()
+        public void Ship_ThrowsFedExException_WhenFimsUsernameIsBlank()
         {
             ShippingSettingsEntity shippingSettings = new ShippingSettingsEntity();
             shippingSettings.FedExFimsUsername = string.Empty;
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         }
 
         [Fact]
-        public void Ship_ThrowsFedExException_WhenFimsPasswordIsBlank_Test()
+        public void Ship_ThrowsFedExException_WhenFimsPasswordIsBlank()
         {
             ShippingSettingsEntity shippingSettings = new ShippingSettingsEntity();
             shippingSettings.FedExFimsUsername = "asdf";
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         }
 
         [Fact]
-        public void Ship_ThrowsFedExException_WhenServiceIsNotFims_Test()
+        public void Ship_ThrowsFedExException_WhenServiceIsNotFims()
         {
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExGround;
             
@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         }
 
         [Fact]
-        public void Ship_ThrowsFedExException_WhenShipCountryIsUs_Test()
+        public void Ship_ThrowsFedExException_WhenShipCountryIsUs()
         {
             shipmentEntity.ShipCountryCode = "US";
 
@@ -123,7 +123,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         }
 
         [Fact]
-        public void Ship_ThrowsFedExException_WhenCustomsItemsIsEmpty_Test()
+        public void Ship_ThrowsFedExException_WhenCustomsItemsIsEmpty()
         {
             shipmentEntity.CustomsItems.Clear();
             Exception ex = Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
@@ -131,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         }
 
         [Fact]
-        public void Ship_ThrowsFedExException_WhenPackageCountIsGreaterThan1_Test()
+        public void Ship_ThrowsFedExException_WhenPackageCountIsGreaterThan1()
         {
             shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
             shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
@@ -144,7 +144,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         #region GetRates Tests
 
         [Fact]
-        public void GetRates_ReturnsEmptyRateGroup_Test()
+        public void GetRates_ReturnsEmptyRateGroup()
         {
             RateGroup rateGroup = testObject.GetRates(shipmentEntity);
 

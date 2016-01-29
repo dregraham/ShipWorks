@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void Validate_AddsError_WhenNameIsMissing_Test()
+        public void Validate_AddsError_WhenNameIsMissing()
         {
             registration.MailingAddress.FirstName = string.Empty;
             registration.MailingAddress.MiddleName = string.Empty;
@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void Validate_AddsError_WhenCompanyIsMissing_Test()
+        public void Validate_AddsError_WhenCompanyIsMissing()
         {
             registration.MailingAddress.Company = string.Empty;
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void Validate_AddsError_WhenPhoneIsMissing_Test()
+        public void Validate_AddsError_WhenPhoneIsMissing()
         {
             registration.MailingAddress.Phone = string.Empty;
             
@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void Validate_AddsError_WhenEmailIsMissing_Test()
+        public void Validate_AddsError_WhenEmailIsMissing()
         {
             registration.MailingAddress.Email = string.Empty;
 
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void Validate_AddsError_WhenStreetIsMissing_Test()
+        public void Validate_AddsError_WhenStreetIsMissing()
         {
             registration.MailingAddress.Street1 = string.Empty;
 
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void Validate_AddsError_WhenCityIsMissing_Test()
+        public void Validate_AddsError_WhenCityIsMissing()
         {
             registration.MailingAddress.City = string.Empty;
 
@@ -121,7 +121,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void Validate_AddsError_WhenStateIsMissing_Test()
+        public void Validate_AddsError_WhenStateIsMissing()
         {
             registration.MailingAddress.StateProvCode = string.Empty;
 
@@ -132,7 +132,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void Validate_AddsError_WhenPostalCodeIsMissing_Test()
+        public void Validate_AddsError_WhenPostalCodeIsMissing()
         {
             registration.MailingAddress.PostalCode = string.Empty;
 
@@ -143,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void Validate_DelegatesToPaymentValidator_Test()
+        public void Validate_DelegatesToPaymentValidator()
         {
             testObject.Validate(registration);
 
@@ -152,7 +152,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
         
         [Fact]
-        public void ValidatePersonalInfo_AddsError_WhenNameIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenNameIsMissing()
         {
             registration.MailingAddress.FirstName = string.Empty;
             registration.MailingAddress.MiddleName = string.Empty;
@@ -165,7 +165,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePersonalInfo_AddsError_WhenCompanyIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenCompanyIsMissing()
         {
             registration.MailingAddress.Company = string.Empty;
 
@@ -176,7 +176,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePersonalInfo_AddsError_WhenPhoneIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenPhoneIsMissing()
         {
             registration.MailingAddress.Phone = string.Empty;
 
@@ -187,7 +187,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePersonalInfo_AddsError_WhenEmailIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenEmailIsMissing()
         {
             registration.MailingAddress.Email = string.Empty;
 
@@ -198,7 +198,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePersonalInfo_AddsError_WhenStreetIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenStreetIsMissing()
         {
             registration.MailingAddress.Street1 = string.Empty;
 
@@ -209,7 +209,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePersonalInfo_AddsError_WhenCityIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenCityIsMissing()
         {
             registration.MailingAddress.City = string.Empty;
 
@@ -220,7 +220,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePersonalInfo_AddsError_WhenStateIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenStateIsMissing()
         {
             registration.MailingAddress.StateProvCode = string.Empty;
 
@@ -231,7 +231,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePersonalInfo_AddsError_WhenPostalCodeIsMissing_Test()
+        public void ValidatePersonalInfo_AddsError_WhenPostalCodeIsMissing()
         {
             registration.MailingAddress.PostalCode = string.Empty;
 
@@ -244,7 +244,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
 
         [Fact]
-        public void ValidatePaymentInfo_DelegatesToPaymentValidator_Test()
+        public void ValidatePaymentInfo_DelegatesToPaymentValidator()
         {
             testObject.Validate(registration);
 

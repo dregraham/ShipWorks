@@ -35,13 +35,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenSmartPostHubIDIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenSmartPostHubIDIsNull()
         {
             shipmentEntity.FedEx.SmartPostHubID = null;
 
@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenSmartPostHubIDIsBlank_Test()
+        public void Manipulate_ThrowsCarrierException_WhenSmartPostHubIDIsBlank()
         {
             shipmentEntity.FedEx.SmartPostHubID = string.Empty;
 
@@ -75,14 +75,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenSmartPostIndiciaTypeIsInvalid_Test()
+        public void Manipulate_ThrowsCarrierException_WhenSmartPostIndiciaTypeIsInvalid()
         {
             carrierRequest.Object.ShipmentEntity.FedEx.SmartPostIndicia = 239955;
             Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullRequestedShipment_Test()
+        public void Manipulate_AccountsForNullRequestedShipment()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
             // the carrier request with the updated native request
@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_TotalInsuredValueIsNull_Test()
+        public void Manipulate_TotalInsuredValueIsNull()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SmartPostShipmentDetailIsNull_WhenShipmentTypeIsNotSmartPost_Test()
+        public void Manipulate_SmartPostShipmentDetailIsNull_WhenShipmentTypeIsNotSmartPost()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SmartPostHubIDsMatch_Test()
+        public void Manipulate_SmartPostHubIDsMatch()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -124,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SmartPostIndiciaTypesCorrect_WhenConverted_Test()
+        public void Manipulate_SmartPostIndiciaTypesCorrect_WhenConverted()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.BoundPrintedMatter;
@@ -158,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SmartPostEndorsementsCorrect_WhenConverted_Test()
+        public void Manipulate_SmartPostEndorsementsCorrect_WhenConverted()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.AddressCorrection;
@@ -197,7 +197,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SmartPostConfirmationIsCorrectForIndiciaType_Test()
+        public void Manipulate_SmartPostConfirmationIsCorrectForIndiciaType()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.ParcelSelect;
@@ -230,7 +230,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SmartPostCustomerManifestIdIsNull_WhenSmartPostCustomerManifestIsNull_Test()
+        public void Manipulate_SmartPostCustomerManifestIdIsNull_WhenSmartPostCustomerManifestIsNull()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             shipmentEntity.FedEx.SmartPostCustomerManifest = null;
@@ -241,7 +241,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SmartPostCustomerManifestIdMatchesValue_WhenSmartPostCustomerManifestPresent_Test()
+        public void Manipulate_SmartPostCustomerManifestIdMatchesValue_WhenSmartPostCustomerManifestPresent()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             shipmentEntity.FedEx.SmartPostCustomerManifest = "asdf1234";

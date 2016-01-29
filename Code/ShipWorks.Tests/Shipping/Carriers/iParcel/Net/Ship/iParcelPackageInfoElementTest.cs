@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_AddsPackagesElement_Test()
+        public void Build_AddsPackagesElement()
         {
             XElement element = testObject.Build();
 
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_AddsPackageInfoElement_Test()
+        public void Build_AddsPackageInfoElement()
         {
             XElement element = testObject.Build();
 
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_PackageInfoPackageNum_Test()
+        public void Build_PackageInfoPackageNum()
         {
             XElement element = testObject.Build();
 
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         #region Package Info Tests
         
         [Fact]
-        public void Build_PackageInfoPackageNum_WithMultiplePackages_Test()
+        public void Build_PackageInfoPackageNum_WithMultiplePackages()
         {
             // Setup the test by adding another package
             shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6, SkuAndQuantities = "98765, 20" });
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_PackageInfoContainsGeneralNode_Test()
+        public void Build_PackageInfoContainsGeneralNode()
         {
             XElement element = testObject.Build();
 
@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_PackageInfoContainsGeneralNode_WithMultiplePackages_Test()
+        public void Build_PackageInfoContainsGeneralNode_WithMultiplePackages()
         {
             // Setup the test by adding another package
             shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6, SkuAndQuantities = "98765, 20" });
@@ -134,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_PackageInfoContainsShipperNode_Test()
+        public void Build_PackageInfoContainsShipperNode()
         {
             XElement element = testObject.Build();
 
@@ -143,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_PackageInfoContainsShipperNode_WithMultiplePackages_Test()
+        public void Build_PackageInfoContainsShipperNode_WithMultiplePackages()
         {
             // Setup the test by adding another package
             shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6, SkuAndQuantities = "98765, 20" });
@@ -155,7 +155,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_PackageInfoContainsConsigneeNode_Test()
+        public void Build_PackageInfoContainsConsigneeNode()
         {
             XElement element = testObject.Build();
 
@@ -164,7 +164,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_PackageInfoContainsConsigneeNode_WithMultiplePackages_Test()
+        public void Build_PackageInfoContainsConsigneeNode_WithMultiplePackages()
         {
             // Setup the test by adding another package
             shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6, SkuAndQuantities = "98765, 20" });
@@ -176,7 +176,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
         
         [Fact]
-        public void Build_PackageInfoContainsContentsNode_Test()
+        public void Build_PackageInfoContainsContentsNode()
         {
             XElement element = testObject.Build();
 
@@ -185,7 +185,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_PackageInfoContainsContentsNode_WithMultiplePackages_Test()
+        public void Build_PackageInfoContainsContentsNode_WithMultiplePackages()
         {
             // Setup the test by adding another package
             shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6, SkuAndQuantities = "98765, 20" });
@@ -203,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         #region General Node Tests
 
         [Fact]
-        public void Build_GeneralNode_PaymentCurrency_Test()
+        public void Build_GeneralNode_PaymentCurrency()
         {
             XElement element = testObject.Build();
 
@@ -213,7 +213,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_DDPIsOne_WhenDeliveryDutyPaidIsTrue_Test()
+        public void Build_GeneralNode_DDPIsOne_WhenDeliveryDutyPaidIsTrue()
         {
             shipment.IParcel.IsDeliveryDutyPaid = true;
 
@@ -225,7 +225,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_DDPIsZero_WhenDeliveryDutyPaidIsFalse_Test()
+        public void Build_GeneralNode_DDPIsZero_WhenDeliveryDutyPaidIsFalse()
         {
             shipment.IParcel.IsDeliveryDutyPaid = false;
 
@@ -237,7 +237,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
         
         [Fact]
-        public void Build_GeneralNode_PackageNum_Test()
+        public void Build_GeneralNode_PackageNum()
         {
             XElement element = testObject.Build();
 
@@ -247,7 +247,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_PackageNum_WithMultiplePackage_Test()
+        public void Build_GeneralNode_PackageNum_WithMultiplePackage()
         {
             // Setup the test by adding another package
             shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6, SkuAndQuantities = "98765, 20" });
@@ -261,7 +261,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_Service_Test()
+        public void Build_GeneralNode_Service()
         {
             XElement element = testObject.Build();
 
@@ -271,7 +271,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_ServiceIsZero_WhenUsedForRatesIsTrue_Test()
+        public void Build_GeneralNode_ServiceIsZero_WhenUsedForRatesIsTrue()
         {
             testObject = new iParcelPackageInfoElement(shipment, tokenProcessor.Object, true, true);
 
@@ -283,7 +283,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_Reference_Test()
+        public void Build_GeneralNode_Reference()
         {
             shipment.IParcel.Reference = "Some reference";
 
@@ -296,7 +296,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_Reference_ProcessesTokens_Test()
+        public void Build_GeneralNode_Reference_ProcessesTokens()
         {
             shipment.IParcel.Reference = "Some reference";
 
@@ -306,7 +306,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_ContainsCustomsValueNode_ForInternationalShipment_Test()
+        public void Build_GeneralNode_ContainsCustomsValueNode_ForInternationalShipment()
         {
             shipment.IParcel.Packages[0].DeclaredValue = 4.23M;
             testObject = new iParcelPackageInfoElement(shipment, tokenProcessor.Object, false, false);
@@ -319,7 +319,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_DoesNotContainCustomsValueCurrencyNode_ForDomesticShipment_Test()
+        public void Build_GeneralNode_DoesNotContainCustomsValueCurrencyNode_ForDomesticShipment()
         {
             shipment.CustomsValue = 4.23M;
             testObject = new iParcelPackageInfoElement(shipment, tokenProcessor.Object, true, false);
@@ -331,7 +331,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_ContainsCustomsValueNode_WhenShipmentIsInternational_Test()
+        public void Build_GeneralNode_ContainsCustomsValueNode_WhenShipmentIsInternational()
         {
             shipment.IParcel.Packages[0].DeclaredValue = 100M;
             testObject = new iParcelPackageInfoElement(shipment, tokenProcessor.Object, false, false);
@@ -344,7 +344,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_ContainsCustomsValueNode_WhenShipmentIsInternational_MultiplePackages_Test()
+        public void Build_GeneralNode_ContainsCustomsValueNode_WhenShipmentIsInternational_MultiplePackages()
         {
             // Setup the test by adding another package
             shipment.IParcel.Packages[0].DeclaredValue = 100.22M;
@@ -361,7 +361,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
         
         [Fact]
-        public void Build_GeneralNode_SalePrice_Test()
+        public void Build_GeneralNode_SalePrice()
         {
             shipment.Order.OrderTotal = 100.43M;
 
@@ -373,7 +373,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_Items_Test()
+        public void Build_GeneralNode_Items()
         {
             // Two items were already added in the Initialize method
 
@@ -385,7 +385,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_WeightUnits_Test()
+        public void Build_GeneralNode_WeightUnits()
         {
             XElement element = testObject.Build();
 
@@ -395,7 +395,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_Weight_Test()
+        public void Build_GeneralNode_Weight()
         {
             // Package weight was set in the Initialize method
             XElement element = testObject.Build();
@@ -406,7 +406,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_MeasureUnits_Test()
+        public void Build_GeneralNode_MeasureUnits()
         {
             XElement element = testObject.Build();
 
@@ -416,7 +416,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_Length_Test()
+        public void Build_GeneralNode_Length()
         {
             // Package length was set in the Initialize method
             XElement element = testObject.Build();
@@ -427,7 +427,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_Width_Test()
+        public void Build_GeneralNode_Width()
         {
             // Package width was set in the Initialize method
             XElement element = testObject.Build();
@@ -438,7 +438,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_Height_Test()
+        public void Build_GeneralNode_Height()
         {
             // Package height was set in the Initialize method
             XElement element = testObject.Build();
@@ -449,7 +449,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_TrackingBarCode_Test()
+        public void Build_GeneralNode_TrackingBarCode()
         {
             XElement element = testObject.Build();
 
@@ -460,7 +460,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_GeneralDescription_Test()
+        public void Build_GeneralNode_GeneralDescription()
         {
             XElement element = testObject.Build();
 
@@ -471,7 +471,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsTrueAndProviderIsShipWorks_Test()
+        public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsTrueAndProviderIsShipWorks()
         {
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
             shipment.IParcel.Packages[0].Insurance = true;
@@ -497,7 +497,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsFalseAndProviderIsCarrierAndPackageValueGreaterThan100_Test()
+        public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsFalseAndProviderIsCarrierAndPackageValueGreaterThan100()
         {
             shipment.InsuranceProvider = (int)InsuranceProvider.Carrier;
             shipment.IParcel.Packages[0].Insurance = false;
@@ -511,7 +511,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsFalseAndProviderIsShipWorksAndPackageValueGreaterThan100_Test()
+        public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsFalseAndProviderIsShipWorksAndPackageValueGreaterThan100()
         {
             shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
             shipment.IParcel.Packages[0].Insurance = false;
@@ -525,7 +525,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsFalseAndProviderIsInvalidAndPackageValueGreaterThan100_Test()
+        public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsFalseAndProviderIsInvalidAndPackageValueGreaterThan100()
         {
             shipment.InsuranceProvider = (int)InsuranceProvider.Invalid;
             shipment.IParcel.Packages[0].Insurance = false;
@@ -539,7 +539,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
         
         [Fact]
-        public void Build_GeneralNode_ContainsInsuranceNode_WhenInsuranceIsTrueAndProviderIsCarrierAndPackageValueGreaterThan100_Test()
+        public void Build_GeneralNode_ContainsInsuranceNode_WhenInsuranceIsTrueAndProviderIsCarrierAndPackageValueGreaterThan100()
         {
             shipment.InsuranceProvider = (int)InsuranceProvider.Carrier;
             shipment.IParcel.Packages[0].Insurance = true;
@@ -558,7 +558,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         #region Shipper Tests
 
         [Fact]
-        public void Build_ShipperNode_PackageNum_Test()
+        public void Build_ShipperNode_PackageNum()
         {
             XElement element = testObject.Build();
 
@@ -568,7 +568,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ShipperNode_PackageNum_WithMultiplePackage_Test()
+        public void Build_ShipperNode_PackageNum_WithMultiplePackage()
         {
             // Setup the test by adding another package
             shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6, SkuAndQuantities = "98765, 20" });
@@ -582,7 +582,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ShipperNode_Name_Test()
+        public void Build_ShipperNode_Name()
         {
             XElement element = testObject.Build();
 
@@ -592,7 +592,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ShipperNode_Address1_Test()
+        public void Build_ShipperNode_Address1()
         {
             XElement element = testObject.Build();
 
@@ -602,7 +602,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ShipperNode_Address2_Test()
+        public void Build_ShipperNode_Address2()
         {
             XElement element = testObject.Build();
 
@@ -612,7 +612,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ShipperNode_City_Test()
+        public void Build_ShipperNode_City()
         {
             XElement element = testObject.Build();
 
@@ -622,7 +622,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ShipperNode_StateProvince_Test()
+        public void Build_ShipperNode_StateProvince()
         {
             XElement element = testObject.Build();
 
@@ -632,7 +632,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ShipperNode_PostCode_Test()
+        public void Build_ShipperNode_PostCode()
         {
             XElement element = testObject.Build();
 
@@ -642,7 +642,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ShipperNode_CountryCode_Test()
+        public void Build_ShipperNode_CountryCode()
         {
             XElement element = testObject.Build();
 
@@ -652,7 +652,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ShipperNode_CountryCodeIsAdjustedForUK_Test()
+        public void Build_ShipperNode_CountryCodeIsAdjustedForUK()
         {
             shipment.OriginCountryCode = "UK";
             XElement element = testObject.Build();
@@ -671,7 +671,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         #region Consignee Tests
 
         [Fact]
-        public void Build_ConsigneeNode_PackageNum_Test()
+        public void Build_ConsigneeNode_PackageNum()
         {
             XElement element = testObject.Build();
 
@@ -681,7 +681,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_PackageNum_WithMultiplePackage_Test()
+        public void Build_ConsigneeNode_PackageNum_WithMultiplePackage()
         {
             // Setup the test by adding another package
             shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6, SkuAndQuantities = "98765, 20" });
@@ -695,7 +695,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_Name_Test()
+        public void Build_ConsigneeNode_Name()
         {
             XElement element = testObject.Build();
 
@@ -705,7 +705,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_Address1_Test()
+        public void Build_ConsigneeNode_Address1()
         {
             XElement element = testObject.Build();
 
@@ -715,7 +715,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_Address2_Test()
+        public void Build_ConsigneeNode_Address2()
         {
             XElement element = testObject.Build();
 
@@ -725,7 +725,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_City_Test()
+        public void Build_ConsigneeNode_City()
         {
             XElement element = testObject.Build();
 
@@ -735,7 +735,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_StateProvince_Test()
+        public void Build_ConsigneeNode_StateProvince()
         {
             XElement element = testObject.Build();
 
@@ -745,7 +745,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_PostCode_Test()
+        public void Build_ConsigneeNode_PostCode()
         {
             XElement element = testObject.Build();
 
@@ -755,7 +755,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_CountryCode_Test()
+        public void Build_ConsigneeNode_CountryCode()
         {
             XElement element = testObject.Build();
 
@@ -765,7 +765,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_CountryCodeIsAdjustedForUK_Test()
+        public void Build_ConsigneeNode_CountryCodeIsAdjustedForUK()
         {
             shipment.ShipCountryCode = "UK";
             XElement element = testObject.Build();
@@ -776,7 +776,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_Phone_Test()
+        public void Build_ConsigneeNode_Phone()
         {
             XElement element = testObject.Build();
 
@@ -786,7 +786,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_Email_Test()
+        public void Build_ConsigneeNode_Email()
         {
             XElement element = testObject.Build();
 
@@ -796,7 +796,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_TrackBySMSIsOne_WhenTrackBySMSIsTrue_Test()
+        public void Build_ConsigneeNode_TrackBySMSIsOne_WhenTrackBySMSIsTrue()
         {
             shipment.IParcel.TrackBySMS = true;
 
@@ -808,7 +808,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_TrackBySMSIsZero_WhenTrackBySMSIsFalse_Test()
+        public void Build_ConsigneeNode_TrackBySMSIsZero_WhenTrackBySMSIsFalse()
         {
             shipment.IParcel.TrackBySMS = false;
 
@@ -820,7 +820,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_TrackByEmailIsOne_WhenTrackByEmailIsTrue_Test()
+        public void Build_ConsigneeNode_TrackByEmailIsOne_WhenTrackByEmailIsTrue()
         {
             shipment.IParcel.TrackByEmail = true;
 
@@ -832,7 +832,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ConsigneeNode_TrackByEmailIsZero_WhenTrackByEmailIsFalse_Test()
+        public void Build_ConsigneeNode_TrackByEmailIsZero_WhenTrackByEmailIsFalse()
         {
             shipment.IParcel.TrackByEmail = false;
 
@@ -850,7 +850,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         #region Contents Tests
 
         [Fact]
-        public void Build_ContentsNode_PackageNum_Test()
+        public void Build_ContentsNode_PackageNum()
         {
             XElement element = testObject.Build();
 
@@ -860,7 +860,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ContentsNode_PackageNum_WithMultiplePackage_Test()
+        public void Build_ContentsNode_PackageNum_WithMultiplePackage()
         {
             // Setup the test by adding another package
             shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6, SkuAndQuantities = "98765, 20" });
@@ -876,7 +876,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
 
 
         [Fact]
-        public void Build_ItemNode_PackageNum_Test()
+        public void Build_ItemNode_PackageNum()
         {
             XElement element = testObject.Build();
 
@@ -887,7 +887,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ItemNode_PackageNum_WithMultiplePackage_Test()
+        public void Build_ItemNode_PackageNum_WithMultiplePackage()
         {
             // Setup the test by adding another package
             shipment.IParcel.Packages.Add(new IParcelPackageEntity { Weight = .77, DimsHeight = 10, DimsLength = 4, DimsWidth = 6, SkuAndQuantities = "98765, 20 | 123456, 10" });
@@ -902,7 +902,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ItemNode_Description_Test()
+        public void Build_ItemNode_Description()
         {
             XElement element = testObject.Build();
 
@@ -913,7 +913,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ItemNode_Quantity_Test()
+        public void Build_ItemNode_Quantity()
         {
             XElement element = testObject.Build();
 
@@ -924,7 +924,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ItemNode_Weight_Test()
+        public void Build_ItemNode_Weight()
         {
             XElement element = testObject.Build();
 
@@ -936,7 +936,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ItemNode_Value_Test()
+        public void Build_ItemNode_Value()
         {
             XElement element = testObject.Build();
 
@@ -947,7 +947,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ItemNode_HSCode_Test()
+        public void Build_ItemNode_HSCode()
         {
             XElement element = testObject.Build();
 
@@ -961,7 +961,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ItemNode_SKU_Test()
+        public void Build_ItemNode_SKU()
         {
             XElement element = testObject.Build();
 
@@ -972,7 +972,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ItemNode_CountryOfManufacture_Test()
+        public void Build_ItemNode_CountryOfManufacture()
         {
             XElement element = testObject.Build();
 
@@ -986,7 +986,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ItemNode_ContentInfo_SinglePackage_Test()
+        public void Build_ItemNode_ContentInfo_SinglePackage()
         {
             XElement element = testObject.Build();
 

@@ -24,13 +24,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         }
 
         [Fact]
-        public void GetInsuranceProvider_ReturnsShipWorks_FedExSettingSpecfiesShipWorks_Test()
+        public void GetInsuranceProvider_ReturnsShipWorks_FedExSettingSpecfiesShipWorks()
         {
             Assert.Equal(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { FedExInsuranceProvider = (int)InsuranceProvider.ShipWorks }));
         }
 
         [Fact]
-        public void GetInsuranceProvider_ReturnsCarrier_FedExSettingSpecfiesCarrier_Test()
+        public void GetInsuranceProvider_ReturnsCarrier_FedExSettingSpecfiesCarrier()
         {
             Assert.Equal(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { FedExInsuranceProvider = (int)InsuranceProvider.Carrier }));
         }

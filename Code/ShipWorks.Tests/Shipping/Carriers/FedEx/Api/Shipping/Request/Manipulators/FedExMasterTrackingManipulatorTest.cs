@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HasNoMasterInformation_SequenceNumberIsZero_Test()
+        public void Manipulate_HasNoMasterInformation_SequenceNumberIsZero()
         {
             request.SequenceNumber = 0;
 
@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HasMasterInformation_SequenceNumberIsOne_Test()
+        public void Manipulate_HasMasterInformation_SequenceNumberIsOne()
         {
             request.SequenceNumber = 1;
 
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_CorrectFormIdSet_FormIdIsXyz_Test()
+        public void Manipulate_CorrectFormIdSet_FormIdIsXyz()
         {
             request.SequenceNumber = 1;
 
@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_CorrectTrackingIdSet_TrackingNumberIsAbc_Test()
+        public void Manipulate_CorrectTrackingIdSet_TrackingNumberIsAbc()
         {
             request.SequenceNumber = 1;
 

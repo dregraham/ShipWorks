@@ -29,13 +29,13 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void AppendChangeSet_ThrowsShipSenseException_WhenArgumentIsNull_Test()
+        public void AppendChangeSet_ThrowsShipSenseException_WhenArgumentIsNull()
         {
             Assert.Throws<ShipSenseException>(() => testObject.WriteTo(null));
         }
 
         [Fact]
-        public void ChangeSet_HasTimestamp_Test()
+        public void ChangeSet_HasTimestamp()
         {
             XElement changeSets = new XElement("ChangeSets");
 
@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ChangeSets_HaveTimestamps_Test()
+        public void ChangeSets_HaveTimestamps()
         {
             XElement changeSets = new XElement("ChangeSets");
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void AppendChangeSet_DelegatesToPackageXmlWriter_Test()
+        public void AppendChangeSet_DelegatesToPackageXmlWriter()
         {
             XElement changeSets = new XElement("ChangeSets");
 
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void AppendChangeSet_DelegatesToCustomsXmlWriter_WhenAppliedCustomsIsTrue_Test()
+        public void AppendChangeSet_DelegatesToCustomsXmlWriter_WhenAppliedCustomsIsTrue()
         {
             entry.AppliedCustoms = true;
             XElement changeSets = new XElement("ChangeSets");
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void AppendChangeSet_DoesNotDelegateToCustomsXmlWriter_WhenAppliedCustomsIsFalse_Test()
+        public void AppendChangeSet_DoesNotDelegateToCustomsXmlWriter_WhenAppliedCustomsIsFalse()
         {
             entry.AppliedCustoms = false;
             XElement changeSets = new XElement("ChangeSets");
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void AppendChangeSet_AppendsChangeSetNode_ToElementProvided_Test()
+        public void AppendChangeSet_AppendsChangeSetNode_ToElementProvided()
         {
             XElement changeSets = new XElement("ChangeSets");
 

@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExApiException_WhenHighestSeverityIsError_Test()
+        public void Manipulate_ThrowsFedExApiException_WhenHighestSeverityIsError()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
 
@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExApiException_WhenHighestSeverityIsFailure_Test()
+        public void Manipulate_ThrowsFedExApiException_WhenHighestSeverityIsFailure()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         }
 
         [Fact]
-        public void Manipulate_ResultSummaryIsUnknown_WhenTrackDetailsIsNull_Test()
+        public void Manipulate_ResultSummaryIsUnknown_WhenTrackDetailsIsNull()
         {
             nativeResponse.CompletedTrackDetails[0].TrackDetails = null;
 
@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         }
 
         [Fact]
-        public void Manipulate_ResultSummaryIsUnknown_WhenTrackDetailsIsEmpty_Test()
+        public void Manipulate_ResultSummaryIsUnknown_WhenTrackDetailsIsEmpty()
         {
             nativeResponse.CompletedTrackDetails[0].TrackDetails = new TrackDetail[0];
 
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         }
 
         [Fact]
-        public void Manipulate_ResultSummaryIsNoTrackingInfoReturned_WhenTrackDetailsStatusDescriptionIsEmpty_Test()
+        public void Manipulate_ResultSummaryIsNoTrackingInfoReturned_WhenTrackDetailsStatusDescriptionIsEmpty()
         {
             nativeResponse.CompletedTrackDetails[0].TrackDetails[0].StatusDetail.Description = string.Empty;
 
@@ -80,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         }
 
         [Fact]
-        public void Manipulate_LocationContainsCountryName_ForInternationalShipments_Test()
+        public void Manipulate_LocationContainsCountryName_ForInternationalShipments()
         {
             // Setup the shipment to be international
             shipment.ShipCountryCode = "CA";
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         }
 
         [Fact]
-        public void Manipulate_LocationDoesNotContainCountryName_ForDomesticShipments_Test()
+        public void Manipulate_LocationDoesNotContainCountryName_ForDomesticShipments()
         {
             // Setup the shipment to be a domestic Canadian shipment
             shipment.ShipCountryCode = "CA";
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         }
 
         [Fact]
-        public void Manipulate_DetailIsEmpty_WhenTrackingEventsIsNull_Test()
+        public void Manipulate_DetailIsEmpty_WhenTrackingEventsIsNull()
         {
             nativeResponse.CompletedTrackDetails[0].TrackDetails[0].Events = null;
 
