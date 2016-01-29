@@ -12,6 +12,7 @@ using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using System.Collections.Generic;
 using System;
 using Interapptive.Shared.Utility;
+using log4net;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
@@ -28,14 +29,16 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private string errorMessage;
         private readonly IStoreManager storeManager;
         private readonly Func<IChannelConfirmDeleteFactory> confirmDeleteFactory;
-
+        private readonly ILog log;
+        
         /// <summary>
         /// Constructor
         /// </summary>
         public ChannelLimitViewModel(
             ILicenseService licenseService, 
             IStoreManager storeManager,
-            Func<IChannelConfirmDeleteFactory> confirmDeleteFactory)
+            Func<IChannelConfirmDeleteFactory> confirmDeleteFactory,
+            Func<Type, ILog> logFactory)
         {
             license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
 
@@ -55,6 +58,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             // Set the selected store type to invalid
             SelectedStoreType = StoreTypeCode.Invalid;
+
+            log = logFactory(typeof(ChannelLimitViewModel));
         }
 
         /// <summary>
@@ -165,7 +170,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             // If we are trying to delete the only store type in ShipWorks display an error and dont delete
             if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType))
             {
-                ErrorMessage = ErrorMessage + $" \n \nYou cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.";
+                ErrorMessage += $" \n \nYou cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.";
                 return;
             }
 
@@ -178,12 +183,28 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 using (new AuditBehaviorScope(AuditState.Disabled))
                 {
                     // Delete the channel
-                    license.DeleteChannel(selectedStoreType);
+                    try
+                    {
+                        license.DeleteChannel(selectedStoreType);
+                    }
+                    catch (ShipWorksLicenseException ex)
+                    {
+                        log.Error("Error deleting channel", ex);
+                        ErrorMessage += "\n\nError deleting Channel. Please try again.";
+                    }
                 }
             }
 
-            // call load to refresh everything
-            Load();
+            try
+            {
+                // call load to refresh everything
+                Load();
+            }
+            catch (ShipWorksLicenseException ex)
+            {
+                log.Error("Error getting channels to reload dialog", ex);
+                ErrorMessage += "\n\nError getting channels from server.";
+            }
         }
     }
 }

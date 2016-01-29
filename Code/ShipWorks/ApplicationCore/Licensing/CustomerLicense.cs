@@ -41,34 +41,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string Key { get; private set; }
 
         /// <summary>
-        /// Activate a new store
-        /// </summary>
-        public EnumResult<LicenseActivationState> Activate(StoreEntity store)
-        {
-            AddStoreResponse response = tangoWebClient.AddStore(this, store);
-
-            store.License = response.Key;
-
-            return response.Success ?
-                new EnumResult<LicenseActivationState>(LicenseActivationState.Active) :
-                new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid, response.Error);
-        }
-       
-        /// <summary>
-        /// If License is over the channel limit prompt user to delete channels
-        /// </summary>
-        public void EnforceChannelLimit()
-        {
-            Refresh();
-
-            if (IsOverChannelLimit)
-            {
-                IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory();
-                channelLimitDlg.ShowDialog();
-            }
-        }
-
-        /// <summary>
         /// Is the license legacy
         /// </summary>
         public bool IsLegacy => false;
@@ -95,7 +67,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             get
             {
-                return LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit; 
+                return (LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit) &&
+                    !LicenseCapabilities.IsInTrial; 
             }
         }
 
@@ -115,6 +88,20 @@ namespace ShipWorks.ApplicationCore.Licensing
                 
                 return numberOfChannelsOverLimit;
             }
+        }
+
+        /// <summary>
+        /// Activate a new store
+        /// </summary>
+        public EnumResult<LicenseActivationState> Activate(StoreEntity store)
+        {
+            AddStoreResponse response = tangoWebClient.AddStore(this, store);
+
+            store.License = response.Key;
+
+            return response.Success ?
+                new EnumResult<LicenseActivationState>(LicenseActivationState.Active) :
+                new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid, response.Error);
         }
 
         /// <summary>
@@ -147,6 +134,27 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// If License is over the channel limit prompt user to delete channels
+        /// </summary>
+        public void EnforceChannelLimit()
+        {
+            Refresh();
+
+            if (IsOverChannelLimit)
+            {
+                try
+                {
+                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory();
+                    channelLimitDlg.ShowDialog();
+                }
+                catch (ShipWorksLicenseException ex)
+                {
+                    log.Error("Error thrown when displaying channel limit dialog", ex);
+                }
+            }
+        }
+
+        /// <summary>
         /// Refresh the License capabilities from Tango
         /// </summary>
         public void Refresh()
@@ -169,7 +177,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <returns></returns>
         public IEnumerable<ActiveStore> GetActiveStores()
         {
-            return tangoWebClient.GetActiveStores(this);
+            try
+            {
+                return tangoWebClient.GetActiveStores(this);
+            }
+            catch (TangoException ex)
+            {
+                throw new ShipWorksLicenseException(ex.Message, ex);
+            }
         }
 
         /// <summary>

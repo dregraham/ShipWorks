@@ -40,6 +40,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         bool IsOverChannelLimit { get; }
 
         /// <summary>
+        /// The number of licenses needed to be deleted to be in compliance
+        /// </summary>
+        int NumberOfChannelsOverLimit { get; }
+
+        /// <summary>
         /// Activate a new store
         /// </summary>
         EnumResult<LicenseActivationState> Activate(StoreEntity store);

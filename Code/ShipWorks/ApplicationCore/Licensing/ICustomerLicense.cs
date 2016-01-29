@@ -27,10 +27,5 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Deletes the given channel
         /// </summary>
         void DeleteChannel(StoreTypeCode storeType);
-
-        /// <summary>
-        /// The number of licenses needed to be deleted to be in compliance
-        /// </summary>
-        int NumberOfChannelsOverLimit { get; }
     }
 }
