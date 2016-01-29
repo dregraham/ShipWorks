@@ -37,7 +37,7 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
         /// </summary>
         public void Load(StoreTypeCode storeType)
         {
-            intro = $"Delete channel {EnumHelper.GetDescription(storeType)} and all of its content?";
+            intro = $"Delete {EnumHelper.GetDescription(storeType)} channel and all of its content?";
             message = GetDeleteMessage(storeType);
         }
 
@@ -46,7 +46,7 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
         /// </summary>
         private string GetDeleteMessage(StoreTypeCode storeType)
         {
-            return $"I understand this permanently deletes all data for the channel, including stores ({GetStoreNamesToDelete(storeType)}), customers, orders, and shipments.";
+            return $"I understand this permanently deletes all data for the channel, including stores{GetStoreNamesToDelete(storeType)}, customers, orders, and shipments.";
         }
 
         /// <summary>
@@ -65,6 +65,12 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
                     builder.Append(", ");
                 }
                 builder.Append(store.StoreName);
+            }
+
+            if (builder.Length != 0)
+            {
+                builder.Insert(0, " (");
+                builder.Append(")");
             }
 
             return builder.ToString();

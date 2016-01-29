@@ -10095,7 +10095,7 @@
     <None Include="Resources\data_disk.png" />
     <None Include="Resources\data_into.png" />
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\DropAssembly.sql" />
-    <None Include="Resources\delete2.png" />
+    <Resource Include="Resources\delete2.png" />
     <None Include="Resources\arrow_down_blue.png" />
     <None Include="Resources\arrow_up_blue.png" />
     <None Include="Resources\funnel_add.png" />

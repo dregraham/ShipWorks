@@ -7,7 +7,8 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance local:ChannelConfirmDeleteViewModel}"
              d:DesignHeight="153" d:DesignWidth="458"
-             ResizeMode="NoResize" FontFamily="Tahoma" FontSize="8.25pt" Height="153" Width="458">
+             ResizeMode="NoResize" FontFamily="Tahoma" FontSize="8.25pt" Height="153" Width="458"
+             WindowStyle="ToolWindow" Title="Channel Delete">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>

@@ -7,7 +7,8 @@
              xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance local:ChannelLimitViewModel}"
-             d:DesignHeight="300" d:DesignWidth="450">
+             d:DesignHeight="300" d:DesignWidth="450"
+             FontFamily="Tahoma" FontSize="8.25pt">
     <UserControl.Resources>
         <valueConverters:EnumImageConverter x:Key="EnumImageConverter" />
         <valueConverters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
@@ -120,26 +121,43 @@
                    </GridView>
             </ListView.View>
         </ListView>
-        <Button 
-            Grid.Column="1" 
-            Grid.Row="1" 
-            x:Name="delete" 
-            Content="Delete" 
-            VerticalAlignment="Top"
-            HorizontalAlignment="Right"
-            Height="20" Width="128" 
-            Margin="0 0 10 0"
-            Command="{Binding DeleteStoreClickCommand}"/>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <Button
+                Grid.Row="0"
+                x:Name="upgrade" 
+                Content="Upgrade Plan" 
+                Margin="0 0 0 10"
+                Height="20" Width="128"/>
 
-        <Button 
-            Grid.Column="1" 
-            Grid.Row="1" 
-            x:Name="upgrade" 
-            Content="Upgrade Plan" 
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Right"
-            Margin="0 0 10 10"
-            Height="20" Width="128"/>
+            <Button
+                Grid.Row="1"
+                x:Name="delete" 
+                Margin="0 0 0 10"
+                Height="20" Width="128" 
+                Command="{Binding DeleteStoreClickCommand}">
+                    <DockPanel Width="125">
+                        <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/delete2.png"/>
+                        <TextBlock TextAlignment="Center" Margin="-14 0 0 0">Delete</TextBlock>
+                    </DockPanel>
+            </Button>
+
+            <Button
+                Grid.Row="2"
+                VerticalAlignment="Bottom"
+                x:Name="close" 
+                Content="Close" 
+                Margin="0 0 0 10"
+                Height="20" Width="128"/>
+        </Grid>
+
+
+
     </Grid>
 
 
