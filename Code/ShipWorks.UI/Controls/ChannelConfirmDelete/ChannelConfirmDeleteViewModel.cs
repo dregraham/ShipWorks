@@ -14,7 +14,7 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
     /// <summary>
     /// ViewModel for the ChannelLimitDlg
     /// </summary>
-    public class ChannelConfirmDeleteViewModel : IConfirmChannelDeleteViewModel
+    public class ChannelConfirmDeleteViewModel : IConfirmChannelDeleteViewModel, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;

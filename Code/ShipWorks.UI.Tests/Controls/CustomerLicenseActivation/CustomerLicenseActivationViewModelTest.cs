@@ -9,7 +9,7 @@ using ShipWorks.UI.Controls.CustomerLicenseActivation;
 using ShipWorks.Users;
 using Xunit;
 
-namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
+namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
 {
     public class CustomerLicenseActivationViewModelTest
     {

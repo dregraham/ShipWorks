@@ -6,7 +6,7 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
     /// <summary>
     /// Factory for the ChannelConfirmDelete Dialog
     /// </summary>
-    class ChannelConfirmDeleteFactory : IChannelConfirmDeleteFactory
+    public class ChannelConfirmDeleteFactory : IChannelConfirmDeleteFactory
     {
         private readonly Func<IChannelConfirmDeleteDlg> dialogFactory;
         private readonly Func<IConfirmChannelDeleteViewModel> viewModelFactory;
@@ -42,6 +42,5 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
             // return the dialog
             return dlg;
         }
-
     }
 }

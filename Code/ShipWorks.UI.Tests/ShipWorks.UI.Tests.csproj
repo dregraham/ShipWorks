@@ -134,6 +134,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\CannelConfirmDelete\ChannelConfirmDeleteFactoryTest.cs" />
+    <Compile Include="Controls\CannelConfirmDelete\ChannelConfirmDeleteViewModelTest.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModelTest.cs" />
     <Compile Include="Controls\MultiValueBinders\CheckboxMultiValueBinderTest.cs" />
     <Compile Include="Controls\MultiValueBinders\GenericMultiValueBinderTest.cs" />
