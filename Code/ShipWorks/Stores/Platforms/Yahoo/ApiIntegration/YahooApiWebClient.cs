@@ -242,7 +242,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Cleans the response.
         /// </summary>
         /// <param name="response">The response to clean</param>
-        private string CleanResponse(string response)
+        private static string CleanResponse(string response)
         {
             response = response.Replace("<ystorews:ystorewsResponse xmlns:ystorews=\"urn:yahoo:sbs:ystorews\" >", "<ystorewsResponse>");
             response = response.Replace("</ystorews:ystorewsResponse>", "</ystorewsResponse>");
@@ -291,7 +291,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");
 
-                    return DeserializeResponse<YahooResponse>(CleanResponse(responseData));
+                    return DeserializeResponse<YahooResponse>(responseData);
                 }
             }
             // Unfortunately if any error occurs on Yahoo's side, they throw 400 errors causing
@@ -310,7 +310,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 using (StreamReader reader = new StreamReader(webEx.Response.GetResponseStream()))
                 {
-                    return DeserializeResponse<YahooResponse>(CleanResponse(reader.ReadToEnd()));
+                    return DeserializeResponse<YahooResponse>(reader.ReadToEnd());
                 }
             }
         }
@@ -322,7 +322,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             try
             {
-                return SerializationUtility.DeserializeFromXml<T>(xml);
+                return SerializationUtility.DeserializeFromXml<T>(CleanResponse(xml));
             }
             catch (InvalidOperationException ex)
             {

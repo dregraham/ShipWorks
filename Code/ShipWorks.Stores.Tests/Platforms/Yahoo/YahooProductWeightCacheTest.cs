@@ -22,10 +22,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         {
             LruCache<string, YahooCatalogItem> lruCache = cache.GetStoreProductWeightCache(storeID);
 
-            lruCache["1"] = new YahooCatalogItem() {ShipWeight = 5};
+            lruCache["1"] = new YahooCatalogItem() {ShipWeight = "5"};
 
             Assert.Equal(1, cache.GetStoreProductWeightCache(storeID).Keys.Count);
-            Assert.Equal(5, cache.GetStoreProductWeightCache(storeID)["1"].ShipWeight);
+            Assert.Equal("5", cache.GetStoreProductWeightCache(storeID)["1"].ShipWeight);
         }
     }
 }
