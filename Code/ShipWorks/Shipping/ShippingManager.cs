@@ -1088,7 +1088,9 @@ namespace ShipWorks.Shipping
 
             if (license.IsOverChannelLimit)
             {
-                throw new ShippingException("Channel limit exceeded.");
+                string plural = license.NumberOfChannelsOverLimit > 1 ? "s" : string.Empty;
+                throw new ShippingException(
+                    $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to download orders.");
             }
         }
 

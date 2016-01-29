@@ -538,7 +538,7 @@ namespace ShipWorks.Stores.Communication
                 {
                     string plural = license.NumberOfChannelsOverLimit > 1 ? "s" : string.Empty;
                     throw new ShipWorksLicenseException(
-                        $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to continue using ShipWorks.");
+                        $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to download orders.");
                 }
             }
         }

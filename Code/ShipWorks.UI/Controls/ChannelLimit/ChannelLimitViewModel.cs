@@ -158,7 +158,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             string plural = license.NumberOfChannelsOverLimit > 1 ? "s" : string.Empty;
             ErrorMessage =
-                $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to continue using ShipWorks.";
+                $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to continue downloading orders and creating shipment labels.";
         }
 
         /// <summary>
