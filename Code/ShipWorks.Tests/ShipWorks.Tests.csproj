@@ -564,9 +564,6 @@
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksSchedulerServiceTests.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
-    <Compile Include="UI\Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModelTest.cs" />
-    <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinderTest.cs" />
-    <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinderTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
     <Compile Include="Users\UserServiceTest.cs" />
   </ItemGroup>
