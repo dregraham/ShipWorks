@@ -11,6 +11,9 @@ using ShipWorks.Users.Audit;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using System.Collections.Generic;
 using System;
+using System.Windows;
+using System.Windows.Forms.VisualStyles;
+using System.Windows.Input;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -41,21 +44,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             Func<Type, ILog> logFactory)
         {
             license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
-
-            // Check to make sure we are getting a CustomerLicense
-            if (license == null)
-            {
-                throw new ShipWorksLicenseException("Store licenses do not have channel limits.");
-            }
-
             this.storeManager = storeManager;
             this.confirmDeleteFactory = confirmDeleteFactory;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             
-            // Wire up the delete store click to the delete store method
-            DeleteStoreClickCommand = new RelayCommand(DeleteChannel, CanExecuteDeleteStore);
-
             // Set the selected store type to invalid
             SelectedStoreType = StoreTypeCode.Invalid;
 
@@ -67,6 +60,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         public void Load()
         {
+            // Check to make sure we are getting a CustomerLicense
+            if (license == null)
+            {
+                throw new ShipWorksLicenseException("Store licenses do not have channel limits.");
+            }
+
             SelectedStoreType = StoreTypeCode.Invalid;
 
             license.Refresh();
@@ -149,7 +148,16 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// Delete Store ClickCommand
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public RelayCommand DeleteStoreClickCommand { get; }
+        public RelayCommand DeleteStoreClickCommand => new RelayCommand(DeleteChannel, CanExecuteDeleteStore);
+
+        /// <summary>
+        /// Closes the window
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public RelayCommand<Window> CloseClickCommand
+        {
+            get { return new RelayCommand<Window>(w => w.Close()); }
+        }
 
         /// <summary>
         /// Updates the error message to display to the user

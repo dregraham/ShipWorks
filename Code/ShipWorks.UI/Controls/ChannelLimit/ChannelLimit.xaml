@@ -153,7 +153,9 @@
                 x:Name="close" 
                 Content="Close" 
                 Margin="0 0 0 10"
-                Height="20" Width="128"/>
+                Height="20" Width="128"
+                Command="{Binding CloseClickCommand, Mode=OneWay}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
         </Grid>
 
 
