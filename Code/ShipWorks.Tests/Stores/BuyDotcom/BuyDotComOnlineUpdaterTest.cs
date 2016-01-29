@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         }
 
         [Fact]
-        public void GetTrackingType_ReturnsDhlGlobalMail_WhenEndiciaAndDhlServiceUsed_Test()
+        public void GetTrackingType_ReturnsDhlGlobalMail_WhenEndiciaAndDhlServiceUsed()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         }
 
         [Fact]
-        public void GetTrackingType_ReturnsOther_WhenEndiciaAndConsolidatorServiceUsed_Test()
+        public void GetTrackingType_ReturnsOther_WhenEndiciaAndConsolidatorServiceUsed()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
             postalShipmentEntity.Service = (int)PostalServiceType.ConsolidatorDomestic;
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         }
 
         [Fact]
-        public void GetTrackingType_ReturnsDhlGlobalMail_WhenUspsAndDhlServiceUsed_Test()
+        public void GetTrackingType_ReturnsDhlGlobalMail_WhenUspsAndDhlServiceUsed()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
 
         [Fact]
-        public void GetTrackingType_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed_Test()
+        public void GetTrackingType_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
@@ -108,7 +108,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         }
 
         [Fact]
-        public void GetTrackingType_ReturnsUsps_WhenUspsAndFirstClassServiceUsed_Test()
+        public void GetTrackingType_ReturnsUsps_WhenUspsAndFirstClassServiceUsed()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
@@ -124,7 +124,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
 
         [Fact]
-        public void GetTrackingType_ReturnsUsps_WhenOtherAndFirstClassServiceUsed_Test()
+        public void GetTrackingType_ReturnsUsps_WhenOtherAndFirstClassServiceUsed()
         {
             shipmentEntity.Other = otherShipmentEntity;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
@@ -135,7 +135,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         }
 
         [Fact]
-        public void GetTrackingType_ReturnsDhlGlobalMail_WhenOtherAndDhlServiceUsed_Test()
+        public void GetTrackingType_ReturnsDhlGlobalMail_WhenOtherAndDhlServiceUsed()
         {
             otherShipmentEntity.Carrier = "dhl";
             shipmentEntity.Other = otherShipmentEntity;

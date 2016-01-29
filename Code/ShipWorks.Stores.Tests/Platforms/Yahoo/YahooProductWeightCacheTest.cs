@@ -11,14 +11,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         private string storeID = "yhst-12345";
 
         [Fact]
-        public void GetStoreProductWeightCache_ReturnsNewLruCache_WhenGivenNewStoreID_Test()
+        public void GetStoreProductWeightCache_ReturnsNewLruCache_WhenGivenNewStoreID()
         {
             Assert.IsAssignableFrom<LruCache<string, YahooCatalogItem>>(cache.GetStoreProductWeightCache(storeID));
             Assert.Equal(0, cache.GetStoreProductWeightCache(storeID).Keys.Count);
         }
 
         [Fact]
-        public void GetStoreProductWeightCache_ReturnsExistingLruCache_WhenGivenExistingStoreID_Test()
+        public void GetStoreProductWeightCache_ReturnsExistingLruCache_WhenGivenExistingStoreID()
         {
             LruCache<string, YahooCatalogItem> lruCache = cache.GetStoreProductWeightCache(storeID);
 

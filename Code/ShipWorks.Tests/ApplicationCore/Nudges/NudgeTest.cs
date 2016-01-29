@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [Fact]
-        public void CreateButtons_OrdersButtonsByOptionIndex_Test()
+        public void CreateButtons_OrdersButtonsByOptionIndex()
         {
             List<NudgeOptionButton> buttons = testObject.CreateButtons();
 
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [Fact]
-        public void CreateButtons_SetsWidthOfButtonsToMatchWidestButton_Test()
+        public void CreateButtons_SetsWidthOfButtonsToMatchWidestButton()
         {
             List<NudgeOptionButton> buttons = testObject.CreateButtons();
             

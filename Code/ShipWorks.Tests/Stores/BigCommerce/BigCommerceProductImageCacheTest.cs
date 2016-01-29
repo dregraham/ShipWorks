@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Stores.BigCommerce
     {
 
         [Fact]
-        public void EmptyListOfCaches_AddsNewCacheAndReturnsIt_Test()
+        public void EmptyListOfCaches_AddsNewCacheAndReturnsIt()
         {
             BigCommerceProductImageCache cache = (new BigCommerceProductImageCache());
 
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Stores.BigCommerce
         }
 
         [Fact]
-        public void TwoStores_GetTheirOwnCache_Test()
+        public void TwoStores_GetTheirOwnCache()
         {
             BigCommerceProductImageCache cache = (new BigCommerceProductImageCache());
 

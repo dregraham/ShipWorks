@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExShipperManipulator_ReturnsRequestedShipment_Test()
+        public void Manipulate_FedExShipperManipulator_ReturnsRequestedShipment()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExShipperManipulator_ReturnsValidRequestedShipmentShipper_Test()
+        public void Manipulate_FedExShipperManipulator_ReturnsValidRequestedShipmentShipper()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ResidentialSpecifiedIsTrue_Test()
+        public void Manipulate_ResidentialSpecifiedIsTrue()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.Residential;
 
@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenResidentialTypeIsSpecified_Test()
+        public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenResidentialTypeIsSpecified()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.Residential;
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ShipperAddressResidentialFlagIsFalse_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyIsNull_Test()
+        public void Manipulate_ShipperAddressResidentialFlagIsFalse_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyIsNull()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
             shipmentEntity.OriginCompany = null;
@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyIsEmpty_Test()
+        public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyIsEmpty()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
             shipmentEntity.OriginCompany = string.Empty;
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ShipperAddressResidentialFlagIsFalse_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyHasValue_Test()
+        public void Manipulate_ShipperAddressResidentialFlagIsFalse_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyHasValue()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
             shipmentEntity.OriginCompany = "Penetrode";
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenFedExAddressLookupTypeIsSpecified_Test()
+        public void Manipulate_ThrowsInvalidOperationException_WhenFedExAddressLookupTypeIsSpecified()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.FedExAddressLookup;
 
@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AddressAddedToRecipeint_RequestedShipmentIsReturn_Test()
+        public void Manipulate_AddressAddedToRecipeint_RequestedShipmentIsReturn()
         {
             shipmentEntity.ReturnShipment = true;
 

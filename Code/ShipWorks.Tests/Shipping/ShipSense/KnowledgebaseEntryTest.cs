@@ -80,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void Constructor_HydratingFromJson_Test()
+        public void Constructor_HydratingFromJson()
         {
             testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
 
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_ThrowsInvalidOperationException_WhenPackageCountDoesNotMatchAdapterCount_AndConsolidateIsFalse_Test()
+        public void ApplyTo_ThrowsInvalidOperationException_WhenPackageCountDoesNotMatchAdapterCount_AndConsolidateIsFalse()
         {
             adapters = new List<IPackageAdapter>
             {
@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AssignsAdditionalWeightOfEachAdapter_WhenConsolidateIsFalse_Test()
+        public void ApplyTo_AssignsAdditionalWeightOfEachAdapter_WhenConsolidateIsFalse()
         {
             testObject.ApplyTo(adapters);
 
@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AssignsHeightOfEachAdapter_WhenConsolidateIsFalse_Test()
+        public void ApplyTo_AssignsHeightOfEachAdapter_WhenConsolidateIsFalse()
         {
             testObject.ApplyTo(adapters);
 
@@ -136,7 +136,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AssignsLengthOfEachAdapter_WhenConsolidateIsFalse_Test()
+        public void ApplyTo_AssignsLengthOfEachAdapter_WhenConsolidateIsFalse()
         {
             testObject.ApplyTo(adapters);
 
@@ -147,7 +147,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AssignsWeightOfEachAdapter_WhenConsolidateIsFalse_Test()
+        public void ApplyTo_AssignsWeightOfEachAdapter_WhenConsolidateIsFalse()
         {
             testObject.ApplyTo(adapters);
 
@@ -158,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AssignsApplyAdditionalWeightOfEachAdapter_WhenConsolidateIsFalse_Test()
+        public void ApplyTo_AssignsApplyAdditionalWeightOfEachAdapter_WhenConsolidateIsFalse()
         {
             testObject.ApplyTo(adapters);
 
@@ -169,7 +169,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AssignsWidthOfEachAdapter_WhenConsolidateIsFalse_Test()
+        public void ApplyTo_AssignsWidthOfEachAdapter_WhenConsolidateIsFalse()
         {
             testObject.ApplyTo(adapters);
 
@@ -180,7 +180,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AssignsSummedAdditionalWeightToPackageAdapter_WhenConsolidateIsTrue_AndPackageAdapterCountIsOne_Test()
+        public void ApplyTo_AssignsSummedAdditionalWeightToPackageAdapter_WhenConsolidateIsTrue_AndPackageAdapterCountIsOne()
         {
             testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
 
@@ -190,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AssignsHeightOfEachAdapter_WhenConsolidateIsTrue_Test()
+        public void ApplyTo_AssignsHeightOfEachAdapter_WhenConsolidateIsTrue()
         {
             testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
 
@@ -200,7 +200,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AssignsLengthOfEachAdapter_WhenConsolidateIsTrue_Test()
+        public void ApplyTo_AssignsLengthOfEachAdapter_WhenConsolidateIsTrue()
         {
             testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
 
@@ -210,7 +210,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AssignsSummedWeightToPackageAdapter_WhenConsolidateIsTrue_AndPackageAdapterCountIsOne_Test()
+        public void ApplyTo_AssignsSummedWeightToPackageAdapter_WhenConsolidateIsTrue_AndPackageAdapterCountIsOne()
         {
             testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
 
@@ -220,7 +220,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AssignsWidthOfEachAdapter_WhenConsolidateIsTrue_Test()
+        public void ApplyTo_AssignsWidthOfEachAdapter_WhenConsolidateIsTrue()
         {
             testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
 
@@ -230,7 +230,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AppliedCustomsIsFalse_WhenCustomsItemsAreNotProvided_Test()
+        public void ApplyTo_AppliedCustomsIsFalse_WhenCustomsItemsAreNotProvided()
         {
             testObject.ApplyTo(adapters);
 
@@ -238,7 +238,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AppliedCustomsIsTrue_WhenCustomsItemsAreProvided_Test()
+        public void ApplyTo_AppliedCustomsIsTrue_WhenCustomsItemsAreProvided()
         {
             testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
 
@@ -251,7 +251,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyTo_AppliedCustomsIsFalse_WhenEmptyCollectionOfCustomsItemsIsProvided_Test()
+        public void ApplyTo_AppliedCustomsIsFalse_WhenEmptyCollectionOfCustomsItemsIsProvided()
         {
             testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
 
@@ -263,7 +263,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyFrom_RegeneratesPackages_Test()
+        public void ApplyFrom_RegeneratesPackages()
         {
             adapters = new List<IPackageAdapter>
             {
@@ -277,7 +277,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyFrom_AssignsAdditionalWeightOfPackage_Test()
+        public void ApplyFrom_AssignsAdditionalWeightOfPackage()
         {
             testObject.ApplyFrom(adapters);
 
@@ -294,7 +294,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyFrom_AssignsApplyAdditionalWeightOfPackage_Test()
+        public void ApplyFrom_AssignsApplyAdditionalWeightOfPackage()
         {
             testObject.ApplyFrom(adapters);
 
@@ -311,7 +311,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyFrom_AssignsHeightOfPackage_Test()
+        public void ApplyFrom_AssignsHeightOfPackage()
         {
             testObject.ApplyFrom(adapters);
 
@@ -327,7 +327,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyFrom_AssignsLengthOfPackage_Test()
+        public void ApplyFrom_AssignsLengthOfPackage()
         {
             testObject.ApplyFrom(adapters);
 
@@ -343,7 +343,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyFrom_AssignsWeightOfPackage_Test()
+        public void ApplyFrom_AssignsWeightOfPackage()
         {
             testObject.ApplyFrom(adapters);
 
@@ -359,7 +359,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyFrom_AssignsWidthOfPackage_Test()
+        public void ApplyFrom_AssignsWidthOfPackage()
         {
             testObject.ApplyFrom(adapters);
 
@@ -375,7 +375,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ToJson_WithoutCustomsItems_Test()
+        public void ToJson_WithoutCustomsItems()
         {
             const string ExpectedJson = "{\"Packages\":[{\"Hash\":\"kbpackage1\",\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Hash\":\"kbpackage2\",\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[]}";
 
@@ -384,7 +384,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ToJson_WithCustomsItems_Test()
+        public void ToJson_WithCustomsItems()
         {
             const string ExpectedJson = "{\"Packages\":[{\"Hash\":\"kbpackage1\",\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Hash\":\"kbpackage2\",\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[{\"Hash\":\"1vqnsTCD5w+HRRTJzxvKgn/DSrSALwZNQmVmmXSrsn0=\",\"Description\":\"Test description\",\"Quantity\":2.3,\"Weight\":1.1,\"UnitValue\":4.32,\"CountryOfOrigin\":\"US\",\"HarmonizedCode\":\"ABC123\",\"NumberOfPieces\":4,\"UnitPriceAmount\":2.35},{\"Hash\":\"HnvWz08kmYOaMUtB5MQISzRTua6g4jrKlPe4poInD5s=\",\"Description\":\"Another test description\",\"Quantity\":2.0,\"Weight\":0.1,\"UnitValue\":6.22,\"CountryOfOrigin\":\"CA\",\"HarmonizedCode\":\"XYZ789\",\"NumberOfPieces\":1,\"UnitPriceAmount\":9.31}]}";
             testObject.CustomsItems = new List<KnowledgebaseCustomsItem>
@@ -418,7 +418,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void ApplyFrom_AddsKbCustomsInfo_Test()
+        public void ApplyFrom_AddsKbCustomsInfo()
         {
             testObject.CustomsItems = new List<KnowledgebaseCustomsItem>();
 
@@ -466,7 +466,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void Matches_ReturnsTrue_Test()
+        public void Matches_ReturnsTrue()
         {
             ShipmentEntity shipment = CreateMatchingShipment();
 
@@ -478,7 +478,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void Matches_ReturnsFalse_WhenPackageCountsDoNotMatch_Test()
+        public void Matches_ReturnsFalse_WhenPackageCountsDoNotMatch()
         {
             // Change the store ID of the matching shipment
             ShipmentEntity shipment = CreateMatchingShipment();
@@ -496,7 +496,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void Matches_ReturnsFalse_WhenPackageWeightDoesNotMatch_Test()
+        public void Matches_ReturnsFalse_WhenPackageWeightDoesNotMatch()
         {
             // Change the store ID of the matching shipment
             ShipmentEntity shipment = CreateMatchingShipment();
@@ -514,7 +514,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void Matches_ReturnsFalse_WhenPackageHeightDoesNotMatch_Test()
+        public void Matches_ReturnsFalse_WhenPackageHeightDoesNotMatch()
         {
             // Change the store ID of the matching shipment
             ShipmentEntity shipment = CreateMatchingShipment();
@@ -532,7 +532,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void Matches_ReturnsFalse_WhenPackageLengthDoesNotMatch_Test()
+        public void Matches_ReturnsFalse_WhenPackageLengthDoesNotMatch()
         {
             // Change the store ID of the matching shipment
             ShipmentEntity shipment = CreateMatchingShipment();
@@ -550,7 +550,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void Matches_ReturnsFalse_WhenPackageWidthDoesNotMatch_Test()
+        public void Matches_ReturnsFalse_WhenPackageWidthDoesNotMatch()
         {
             // Change the store ID of the matching shipment
             ShipmentEntity shipment = CreateMatchingShipment();
@@ -568,7 +568,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void Matches_ReturnsFalse_WhenPackageAdditionalWeightDoesNotMatch_Test()
+        public void Matches_ReturnsFalse_WhenPackageAdditionalWeightDoesNotMatch()
         {
             // Change the store ID of the matching shipment
             ShipmentEntity shipment = CreateMatchingShipment();
@@ -586,7 +586,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        public void Matches_ReturnsFalse_WhenPackageApplyAdditionalWeightDoesNotMatch_Test()
+        public void Matches_ReturnsFalse_WhenPackageApplyAdditionalWeightDoesNotMatch()
         {
             // Change the store ID of the matching shipment
             ShipmentEntity shipment = CreateMatchingShipment();

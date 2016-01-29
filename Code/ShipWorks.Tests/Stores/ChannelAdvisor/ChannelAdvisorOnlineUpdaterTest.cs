@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetShipmentClassCode_ReturnsConsolidator_WhenEndiciaAndConsolidatorServiceUsed_Test()
+        public void GetShipmentClassCode_ReturnsConsolidator_WhenEndiciaAndConsolidatorServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetShipmentClassCode_ReturnsGlobalMail_WhenEndiciaAndDhlServiceUsed_Test()
+        public void GetShipmentClassCode_ReturnsGlobalMail_WhenEndiciaAndDhlServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
@@ -72,7 +72,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetShipmentClassCode_ReturnsGlobalMail_WhenUspsAndDhlServiceUsed_Test()
+        public void GetShipmentClassCode_ReturnsGlobalMail_WhenUspsAndDhlServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetShipmentClassCode_ReturnsFirstClass_WhenEndiciaAndFirstClassServiceUsed_Test()
+        public void GetShipmentClassCode_ReturnsFirstClass_WhenEndiciaAndFirstClassServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetShipmentClassCode_ReturnsFirstClass_WhenUspsAndFirstClassServiceUsed_Test()
+        public void GetShipmentClassCode_ReturnsFirstClass_WhenUspsAndFirstClassServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
@@ -108,7 +108,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetShipmentClassCode_ReturnsMi_WhenUpsAndMiServiceUsed_Test()
+        public void GetShipmentClassCode_ReturnsMi_WhenUpsAndMiServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.UpsOnLineTools);
 
@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetShipmentClassCode_ReturnsGround_WhenUpsAndGroundServiceUsed_Test()
+        public void GetShipmentClassCode_ReturnsGround_WhenUpsAndGroundServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.UpsOnLineTools);
 
@@ -142,7 +142,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsConsolidator_WhenEndiciaAndConsolidatorServiceUsed_Test()
+        public void GetCarrierCode_ReturnsConsolidator_WhenEndiciaAndConsolidatorServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
@@ -154,7 +154,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsDHL_WhenEndiciaAndDhlServiceUsed_Test()
+        public void GetCarrierCode_ReturnsDHL_WhenEndiciaAndDhlServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
@@ -166,7 +166,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsDHL_WhenUspsAndDhlServiceUsed_Test()
+        public void GetCarrierCode_ReturnsDHL_WhenUspsAndDhlServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
@@ -178,7 +178,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed_Test()
+        public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
@@ -190,7 +190,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenUspsAndDhlServiceUsed_Test()
+        public void GetCarrierCode_ReturnsUsps_WhenUspsAndDhlServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 

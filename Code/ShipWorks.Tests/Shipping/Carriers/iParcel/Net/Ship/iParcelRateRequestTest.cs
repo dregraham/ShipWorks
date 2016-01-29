@@ -68,44 +68,44 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void OperationName_Test()
+        public void OperationName()
         {
             Assert.Equal("SubmitPack", testObject.OperationName);
         }
 
         [Fact]
-        public void RootElementName_Test()
+        public void RootElementName()
         {
             Assert.Equal("iparcelPackageUpload", testObject.RootElementName);
         }
 
         [Fact]
-        public void RequestElements_ContainsThreeItems_Test()
+        public void RequestElements_ContainsThreeItems()
         {
             Assert.Equal(3, testObject.RequestElements.Count);
         }
 
         [Fact]
-        public void RequestElements_ContainsVersionElement_Test()
+        public void RequestElements_ContainsVersionElement()
         {
             Assert.Equal(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelVersionElement)));
         }
 
         [Fact]
-        public void RequestElements_ContainsShipValidationElement_Test()
+        public void RequestElements_ContainsShipValidationElement()
         {
             Assert.Equal(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelShipValidationElement)));
         }
 
         [Fact]
-        public void RequestElements_ContainsPackageInfoElement_Test()
+        public void RequestElements_ContainsPackageInfoElement()
         {
             Assert.Equal(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelPackageInfoElement)));
         }
 
 
         [Fact]
-        public void ValidationElement_IsConfiguredForRates_Test()
+        public void ValidationElement_IsConfiguredForRates()
         {
             // Already have a test that there is exactly one element of this type, so we can just grab the first one
             iParcelShipValidationElement validationElement = (iParcelShipValidationElement)testObject.RequestElements.First(e => e.GetType() == typeof(iParcelShipValidationElement));

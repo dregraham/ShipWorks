@@ -18,13 +18,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         private const string errorMessage = "an error message";
 
         [Fact]
-        public void ValidateDataIsProvided_ReturnsNoErrors_WhenValueProvided_Test()
+        public void ValidateDataIsProvided_ReturnsNoErrors_WhenValueProvided()
         {
             Assert.Equal(Express1Utilities.ValidateDataIsProvided("aValue", errorMessage).Count(), 0);
         }
 
         [Fact]
-        public void ValidateDataIsProvided_ReturnsErrors_WhenValueIsBlank_Test()
+        public void ValidateDataIsProvided_ReturnsErrors_WhenValueIsBlank()
         {
             IEnumerable<Express1ValidationError> errors = Express1Utilities.ValidateDataIsProvided("", errorMessage);
             Assert.Equal(errors.Count(), 1);
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidateDataIsProvided_ReturnsErrors_WhenValueIsSpaces_Test()
+        public void ValidateDataIsProvided_ReturnsErrors_WhenValueIsSpaces()
         {
             IEnumerable<Express1ValidationError> errors = Express1Utilities.ValidateDataIsProvided("  ", errorMessage);
             Assert.Equal(errors.Count(), 1);
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidateDataIsProvided_ReturnsErrors_WhenValueIsNull_Test()
+        public void ValidateDataIsProvided_ReturnsErrors_WhenValueIsNull()
         {
             IEnumerable<Express1ValidationError> errors = Express1Utilities.ValidateDataIsProvided(null, errorMessage);
             Assert.Equal(errors.Count(), 1);

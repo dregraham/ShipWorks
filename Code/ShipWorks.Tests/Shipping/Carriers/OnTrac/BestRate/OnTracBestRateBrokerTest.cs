@@ -24,13 +24,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.BestRate
         }
 
         [Fact]
-        public void GetInsuranceProvider_ReturnsShipWorks_OnTracSettingSpecfiesShipWorks_Test()
+        public void GetInsuranceProvider_ReturnsShipWorks_OnTracSettingSpecfiesShipWorks()
         {
             Assert.Equal(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks}));
         }
 
         [Fact]
-        public void GetInsuranceProvider_ReturnsCarrier_OnTracSettingSpecfiesCarrier_Test()
+        public void GetInsuranceProvider_ReturnsCarrier_OnTracSettingSpecfiesCarrier()
         {
             Assert.Equal(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { OnTracInsuranceProvider = (int)InsuranceProvider.Carrier }));
         }

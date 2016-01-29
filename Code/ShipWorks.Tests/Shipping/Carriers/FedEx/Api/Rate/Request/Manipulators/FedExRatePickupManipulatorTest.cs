@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_FedExPickupManipulator_ReturnsRequestedDropoffRequestCourrier_Test()
+        public void Manipulate_FedExPickupManipulator_ReturnsRequestedDropoffRequestCourrier()
         {
             shipmentEntity.FedEx.DropoffType = (int)FedExDropoffType.RequestCourier;
 
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_FedExPickupManipulator_ReturnsRequestedDropoffStation_Test()
+        public void Manipulate_FedExPickupManipulator_ReturnsRequestedDropoffStation()
         {
             shipmentEntity.FedEx.DropoffType = (int)FedExDropoffType.Station;
 
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
         
         [Fact]
-        public void Manipulate_DropoffTypeSpecifiedIsTrue_Test()
+        public void Manipulate_DropoffTypeSpecifiedIsTrue()
         {
             testObject.Manipulate(carrierRequest.Object);
 

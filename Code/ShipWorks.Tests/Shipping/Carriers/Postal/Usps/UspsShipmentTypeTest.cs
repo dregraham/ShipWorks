@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsUspsCounterRateBroker_WhenNoUspsAccountsExist_Test()
+        public void GetShippingBroker_ReturnsUspsCounterRateBroker_WhenNoUspsAccountsExist()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
             testObject.AccountRepository = accountRepository.Object;
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsUspsRateBroker_WhenUspsAccountExists_Test()
+        public void GetShippingBroker_ReturnsUspsRateBroker_WhenUspsAccountExists()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity> { new UspsAccountEntity() });
             testObject.AccountRepository = accountRepository.Object;

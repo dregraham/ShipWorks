@@ -34,13 +34,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             CarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_AndNotVoidReport_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_AndNotVoidReport()
         {
             // Setup the native request to be an unexpected type
             CarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new ShipmentReply());
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNull_ForVoid_Test()
+        public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNull_ForVoid()
         {
             // Only setup is  to set the detail to null value
             nativeRequest.WebAuthenticationDetail = null;
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNotNull_ForVoid_Test()
+        public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNotNull_ForVoid()
         {
             // No additional setup since everything is in the Initialize method
             testObject.Manipulate(CarrierRequest.Object);

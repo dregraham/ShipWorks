@@ -44,31 +44,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
 
 
         [Fact]
-        public void GetGateway_ReturnsExpress1ScanFormGateway_Test()
+        public void GetGateway_ReturnsExpress1ScanFormGateway()
         {
             Assert.IsAssignableFrom<Express1EndiciaScanFormGateway>(testObject.GetGateway());
         }
 
         [Fact]
-        public void ShippingCarrierName_Test()
+        public void ShippingCarrierName()
         {
             Assert.Equal("USPS (Express1 for Endicia)", testObject.ShippingCarrierName);
         }
 
         [Fact]
-        public void ShipmentTypeCode_Test()
+        public void ShipmentTypeCode()
         {
             Assert.Equal(ShipmentTypeCode.Express1Endicia, testObject.ShipmentTypeCode);
         }
 
         [Fact]
-        public void GetPrinter_ReturnsDefaultScanFormPrinter_Test()
+        public void GetPrinter_ReturnsDefaultScanFormPrinter()
         {
             Assert.IsAssignableFrom<DefaultScanFormPrinter>(testObject.GetPrinter());
         }
 
         [Fact]
-        public void GetExistingScanFormBatches_DelegatesToRepository_Test()
+        public void GetExistingScanFormBatches_DelegatesToRepository()
         {
             testObject.GetExistingScanFormBatches();
 
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
         }
 
         [Fact]
-        public void GetEligibleShipmentIDs_DelegatesToRepository_Test()
+        public void GetEligibleShipmentIDs_DelegatesToRepository()
         {
             testObject.GetEligibleShipmentIDs();
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
         }
 
         [Fact]
-        public void GetEligibleShipmentIDs_Bucket_Test()
+        public void GetEligibleShipmentIDs_Bucket()
         {
             testObject.GetEligibleShipmentIDs();
 
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
         }
 
         [Fact]
-        public void Save_DelegatesToRepository_Test()
+        public void Save_DelegatesToRepository()
         {
             ScanFormBatch batch = new ScanFormBatch(null, null, null);
             testObject.Save(batch);
@@ -112,13 +112,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
         }
 
         [Fact]
-        public void Save_ThrowsShippingException_WhenScanFormBatchIsNull_Test()
+        public void Save_ThrowsShippingException_WhenScanFormBatchIsNull()
         {
             Assert.Throws<ShippingException>(() => testObject.Save(null));
         }
 
         [Fact]
-        public void Save_LogsMessage_WhenScanFormEntityIsNull_Test()
+        public void Save_LogsMessage_WhenScanFormEntityIsNull()
         {
             try
             {

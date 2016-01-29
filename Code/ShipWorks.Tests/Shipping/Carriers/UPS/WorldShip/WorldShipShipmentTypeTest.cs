@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsWorldShipShippingBroker_Test()
+        public void GetShippingBroker_ReturnsWorldShipShippingBroker()
         {
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
 

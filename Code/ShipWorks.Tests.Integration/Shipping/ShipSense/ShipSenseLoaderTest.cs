@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
         [Fact]
         [Trait("Category", "ShipSense")]
         [Trait("Category", "ContinuousIntegration")]
-        public void LoadData_WithSeededDatabase_CompletesInFiveSecondsOrLess_Test()
+        public void LoadData_WithSeededDatabase_CompletesInFiveSecondsOrLess()
         {
             // This assumes it is being run against the "seeded" database (see SeedDatabase.sql script
             // in solution directory)

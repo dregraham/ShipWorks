@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [Fact]
-        public void Filter_RemovesWorldShipBroker_WhenListContainsUpsBrokerAndWorldShipBroker_Test()
+        public void Filter_RemovesWorldShipBroker_WhenListContainsUpsBrokerAndWorldShipBroker()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
             {
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [Fact]
-        public void Filter_KeepsUpsBroker_WhenListContainsUpsBrokerAndWorldShipBroker_Test()
+        public void Filter_KeepsUpsBroker_WhenListContainsUpsBrokerAndWorldShipBroker()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
             {
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [Fact]
-        public void Filter_DoesNotRemoveWorldShipBroker_WhenListOnlyContainsWorldShipBroker_Test()
+        public void Filter_DoesNotRemoveWorldShipBroker_WhenListOnlyContainsWorldShipBroker()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
             {
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [Fact]
-        public void Filter_KeepsUpsBroker_WhenListOnlyContainsUpsBroker_Test()
+        public void Filter_KeepsUpsBroker_WhenListOnlyContainsUpsBroker()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
             {

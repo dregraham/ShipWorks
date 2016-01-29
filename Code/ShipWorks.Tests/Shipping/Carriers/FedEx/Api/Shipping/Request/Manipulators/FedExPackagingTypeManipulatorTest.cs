@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExPackagingTypeManipulator_ReturnsPackagingType_Test()
+        public void Manipulate_FedExPackagingTypeManipulator_ReturnsPackagingType()
         {
             testObject.Manipulate(carrierRequest.Object);
             
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExPackagingTypeManipulator_ReturnsExtraLargeBoxPackagingType_Test()
+        public void Manipulate_FedExPackagingTypeManipulator_ReturnsExtraLargeBoxPackagingType()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.ExtraLargeBox;
             testObject.Manipulate(carrierRequest.Object);
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExPackagingTypeManipulator_ReturnsSmallBoxPackagingType_Test()
+        public void Manipulate_FedExPackagingTypeManipulator_ReturnsSmallBoxPackagingType()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.SmallBox;
             testObject.Manipulate(carrierRequest.Object);
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExPackagingTypeManipulator_ReturnsLargeBoxPackagingType_Test()
+        public void Manipulate_FedExPackagingTypeManipulator_ReturnsLargeBoxPackagingType()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.LargeBox;
             testObject.Manipulate(carrierRequest.Object);
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExPackagingTypeManipulator_ReturnsMediumPackagingType_Test()
+        public void Manipulate_FedExPackagingTypeManipulator_ReturnsMediumPackagingType()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.MediumBox;
             testObject.Manipulate(carrierRequest.Object);

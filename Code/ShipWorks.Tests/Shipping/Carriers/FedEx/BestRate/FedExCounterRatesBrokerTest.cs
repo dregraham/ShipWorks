@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         }
 
         [Fact]
-        public void GetBestRates_SetsSettingsRepository_Test()
+        public void GetBestRates_SetsSettingsRepository()
         {
             ShipmentEntity shipment = new ShipmentEntity
             {
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         }
 
         [Fact]
-        public void GetBestRates_SetsCertificateInspector_Test()
+        public void GetBestRates_SetsCertificateInspector()
         {
             List<BrokerException> brokerExceptions = new List<BrokerException>();
             ShipmentEntity shipment = new ShipmentEntity
