@@ -1,19 +1,14 @@
-﻿using GalaSoft.MvvmLight.Command;
-using ShipWorks.ApplicationCore.Licensing;
+﻿using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using ShipWorks.Users.Audit;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using System.Collections.Generic;
 using System;
-using System.Windows;
-using System.Windows.Forms.VisualStyles;
-using System.Windows.Input;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -22,7 +17,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     /// <summary>
     /// ViewModel for the ChannelLimitDlg
     /// </summary>
-    public class ChannelLimitViewModel : INotifyPropertyChanged
+    public partial class ChannelLimitViewModel : INotifyPropertyChanged
     {
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,11 +32,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelLimitViewModel(
-            ILicenseService licenseService, 
-            IStoreManager storeManager,
-            Func<IChannelConfirmDeleteFactory> confirmDeleteFactory,
-            Func<Type, ILog> logFactory)
+        public ChannelLimitViewModel(ILicenseService licenseService, IStoreManager storeManager, Func<IChannelConfirmDeleteFactory> confirmDeleteFactory, Func<Type, ILog> logFactory)
         {
             license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
             this.storeManager = storeManager;
@@ -103,61 +94,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         }
 
         /// <summary>
-        /// The error message displayed to the user
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string ErrorMessage
-        {
-            get { return errorMessage; }
-            set { handler.Set(nameof(ErrorMessage), ref errorMessage, value); }
-        }
-
-        /// <summary>
-        /// The selected store
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public StoreTypeCode SelectedStoreType
-        {
-            get { return selectedStoreType; }
-            set
-            {
-                handler.Set(nameof(SelectedStoreType), ref selectedStoreType, value);
-
-                // Update the status of the delete button to ensure that its valid
-                DeleteStoreClickCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        /// <summary>
-        /// Collection of stores
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ObservableCollection<StoreTypeCode> ChannelCollection
-        {
-            get { return channelCollection; }
-            set { handler.Set(nameof(ChannelCollection), ref channelCollection, value); }
-        }
-
-        /// <summary>
         /// True if a store is selected
         /// </summary>
-        [Obfuscation(Exclude = true)]
-        private bool CanExecuteDeleteStore() => SelectedStoreType != StoreTypeCode.Invalid;
-
-        /// <summary>
-        /// Delete Store ClickCommand
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public RelayCommand DeleteStoreClickCommand => new RelayCommand(DeleteChannel, CanExecuteDeleteStore);
-
-        /// <summary>
-        /// Closes the window
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public RelayCommand<Window> CloseClickCommand
+        private bool CanExecuteDeleteStore()
         {
-            get { return new RelayCommand<Window>(w => w.Close()); }
-        }
+            return SelectedStoreType != StoreTypeCode.Invalid;
+        } 
 
         /// <summary>
         /// Updates the error message to display to the user
