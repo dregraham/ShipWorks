@@ -13,6 +13,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private bool showDuties;
         private bool showFootnotes;
         private bool isLoading;
+        private bool showEmptyMessage;
+        private string emptyMessage;
+
         private IEnumerable<RateResultDisplay> rates;
         private IEnumerable<object> footnotes;
 
@@ -84,6 +87,26 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             get { return isLoading; }
             set { handler.Set(nameof(IsLoading), ref isLoading, value); }
+        }
+
+        /// <summary>
+        /// Should the empty message be shown
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowEmptyMessage
+        {
+            get { return showEmptyMessage; }
+            set { handler.Set(nameof(ShowEmptyMessage), ref showEmptyMessage, value); }
+        }
+
+        /// <summary>
+        /// Should the empty message be shown
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string EmptyMessage
+        {
+            get { return emptyMessage; }
+            set { handler.Set(nameof(EmptyMessage), ref emptyMessage, value); }
         }
     }
 }

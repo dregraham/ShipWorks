@@ -107,18 +107,37 @@
                                         Binding="{Binding Rate}" />
                 </DataGrid.Columns>
             </DataGrid>
+
+            <Border Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Visibility="{Binding ShowEmptyMessage,Converter={StaticResource BooleanToVisibility}}">
+                <TextBlock Text="Foo" />
+            </Border>
+            
             <ListView Grid.Row="2"
                         ItemsSource="{Binding Footnotes}"
                         Visibility="{Binding ShowFootnotes,Converter={StaticResource BooleanToVisibility}}">
 
             </ListView>
-        </Grid>
-        <Popup Placement="Center" IsOpen="{Binding IsLoading}">
-            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="8">
+
+            <Border Background="White" 
+                    BorderBrush="Black" 
+                    BorderThickness="1" 
+                    Padding="8"
+                    Grid.RowSpan="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Visibility="{Binding IsLoading,Converter={StaticResource BooleanToVisibility}}"
+                    >
                 <StackPanel>
                     <Image Grid.Column="2"
-                   RenderTransformOrigin=".5,.5"
-                   Source="/Shipworks.Core;component/Resources/Progress/circle_ball_blue.gif">
+                           RenderTransformOrigin=".5,.5"
+                           Width="24"
+                           Height="24"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Source="/Shipworks.Core;component/Resources/Progress/circle_ball_blue.gif">
                         <Image.RenderTransform>
                             <RotateTransform x:Name="AnimatedRotateTransform" Angle="0" />
                         </Image.RenderTransform>
@@ -140,6 +159,7 @@
                     <TextBlock>Checking rates...</TextBlock>
                 </StackPanel>
             </Border>
-        </Popup>
+        </Grid>
+        
     </DockPanel>
 </UserControl>
