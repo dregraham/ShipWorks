@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Encrypt_ReturnsEncryptedString_WhenGivenDecryptedString_Test()
+        public void Encrypt_ReturnsEncryptedString_WhenGivenDecryptedString()
         {
             string encryptedText = testObject.Encrypt(decryptedString);
 
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Encrypt_ReturnsEncryptedString_WhenGivenEmptyString_Test()
+        public void Encrypt_ReturnsEncryptedString_WhenGivenEmptyString()
         {
             string encryptedText = testObject.Encrypt(string.Empty);
 
@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Decrypt_ReturnsDecryptedString_WhenGivenEncryptedString_Test()
+        public void Decrypt_ReturnsDecryptedString_WhenGivenEncryptedString()
         {
             string decryptedText = testObject.Decrypt(encryptedString);
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Decrypt_ReturnsEmptyString_WhenGivenEncryptedEmptyString_Test()
+        public void Decrypt_ReturnsEmptyString_WhenGivenEncryptedEmptyString()
         {
             string decryptedText = testObject.Decrypt(encryptedEmptyString);
 
@@ -59,13 +59,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Decrypt_ThrowsEncryptionException_WhenGivenEmptyString_Test()
+        public void Decrypt_ThrowsEncryptionException_WhenGivenEmptyString()
         {
             Assert.Throws<EncryptionException>(() => testObject.Decrypt(""));
         }
 
         [Fact]
-        public void Encrypt_ThrowsEncryptionException_WhenDatabaseIdentifierNotFound_Test()
+        public void Encrypt_ThrowsEncryptionException_WhenDatabaseIdentifierNotFound()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Decrypt_ThrowsEncryptionException_WhenDatabaseIdentifierNotFound_Test()
+        public void Decrypt_ThrowsEncryptionException_WhenDatabaseIdentifierNotFound()
         {
             using (var mock = AutoMock.GetLoose())
             {
