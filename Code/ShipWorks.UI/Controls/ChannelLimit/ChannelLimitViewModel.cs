@@ -9,6 +9,9 @@ using ShipWorks.Users.Audit;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using System.Collections.Generic;
 using System;
+using System.Windows;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -27,17 +30,19 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private string errorMessage;
         private readonly IStoreManager storeManager;
         private readonly Func<IChannelConfirmDeleteFactory> confirmDeleteFactory;
+        private readonly IMessageHelper messageHelper;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ChannelLimitViewModel(ILicenseService licenseService, IStoreManager storeManager,
-            Func<IChannelConfirmDeleteFactory> confirmDeleteFactory, Func<Type, ILog> logFactory)
+            Func<IChannelConfirmDeleteFactory> confirmDeleteFactory, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
         {
             license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
             this.storeManager = storeManager;
             this.confirmDeleteFactory = confirmDeleteFactory;
+            this.messageHelper = messageHelper;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -112,6 +117,25 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             string plural = license.NumberOfChannelsOverLimit > 1 ? "s" : string.Empty;
             ErrorMessage =
                 $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to continue downloading orders and creating shipment labels.";
+        }
+
+        /// <summary>
+        /// Upgrade the account
+        /// </summary>
+        private void UpgradeAccount()
+        {
+            string upgradeAccountLink = "www.shipworks.com";
+
+            try
+            {
+                System.Diagnostics.Process.Start(upgradeAccountLink);
+            }
+            catch (Win32Exception ex)
+            {
+                log.Error($"Failed to open URL '{upgradeAccountLink}'", ex);
+                messageHelper.ShowError($"ShipWorks could not open the URL '{upgradeAccountLink}'.\n\n({ex.Message})");
+                throw;
+            }   
         }
 
         /// <summary>

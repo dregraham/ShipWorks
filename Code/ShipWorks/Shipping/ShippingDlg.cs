@@ -1628,16 +1628,23 @@ namespace ShipWorks.Shipping
 
             foreach (ShipmentEntity shipment in shipments)
             {
-                if (!shipment.Processed)
+                try
                 {
-                    ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
-                    ShipmentTypeManager.GetType(shipment).UpdateTotalWeight(shipment);
-
-                    // If the there is a specific shipment type selected, set it
-                    if (!comboShipmentType.MultiValued)
+                    if (!shipment.Processed)
                     {
-                        shipment.ShipmentType = (int)(ShipmentTypeCode)comboShipmentType.SelectedValue;
+                        ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
+                        ShipmentTypeManager.GetType(shipment).UpdateTotalWeight(shipment);
+
+                        // If the there is a specific shipment type selected, set it
+                        if (!comboShipmentType.MultiValued)
+                        {
+                            shipment.ShipmentType = (int)(ShipmentTypeCode)comboShipmentType.SelectedValue;
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.Message);
                 }
             }
         }

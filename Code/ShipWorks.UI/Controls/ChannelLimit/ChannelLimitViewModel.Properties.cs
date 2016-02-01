@@ -41,6 +41,15 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         }
 
         /// <summary>
+        /// Upgrade Account ClickCommand
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public RelayCommand UpgradeClickCommand
+        {
+            get { return new RelayCommand(UpgradeAccount); }
+        }
+
+        /// <summary>
         /// Closes the window
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -58,6 +67,5 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             get { return channelCollection; }
             set { handler.Set(nameof(ChannelCollection), ref channelCollection, value); }
         }
-
     }
 }
