@@ -36,7 +36,13 @@ namespace ShipWorks.UI
 
             builder.RegisterType<ChannelConfirmDeleteFactory>()
                 .AsImplementedInterfaces();
-                
+
+            builder.RegisterType<CustomerLicenseActivationDlg>()
+                .Named<IDialog>("CustomerLicenseActivationDlg");
+
+            builder.RegisterType<CustomerLicenseActivartionDlgViewModel>()
+                .AsImplementedInterfaces();
+
         }
     }
 }
