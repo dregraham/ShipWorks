@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
         
         [Fact]
         [Trait("Category", "ContinuousIntegration")]
-        public void TablesRequiringChangeTracking_CountMatchesNumberOfTablesWithChangeTrackingInDatabase_Test()
+        public void TablesRequiringChangeTracking_CountMatchesNumberOfTablesWithChangeTrackingInDatabase()
         {
             // This assumes a database is being used that has change tracking configured correctly on 
             // the appropriate tables (i.e. seed database)
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
 
         [Fact]
         [Trait("Category", "ContinuousIntegration")]
-        public void TablesRequiringChangeTracking_MatchesTableNamesWithChangeTrackingInDatabase_Test()
+        public void TablesRequiringChangeTracking_MatchesTableNamesWithChangeTrackingInDatabase()
         {
             // This assumes a database is being used that has change tracking configured correctly on 
             // the appropriate tables (i.e. seed database)
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
 
         [Fact]
         [Trait("Category", "ContinuousIntegration")]
-        public void Enable_TurnsOnChangeTrackingForDatabase_Test()
+        public void Enable_TurnsOnChangeTrackingForDatabase()
         {
             // Setup
             DisableChangeTrackingOnAllTables();
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
 
         [Fact]
         [Trait("Category", "ContinuousIntegration")]
-        public void Enable_TurnsOnChangeTrackingForAllTables_Test()
+        public void Enable_TurnsOnChangeTrackingForAllTables()
         {
             // Setup
             DisableChangeTrackingOnAllTables();

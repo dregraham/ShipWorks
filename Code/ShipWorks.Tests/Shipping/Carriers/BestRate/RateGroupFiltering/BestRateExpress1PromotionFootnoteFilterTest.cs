@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void Filter_RemovesDuplicatePromotionalFootnoteFactories_Test()
+        public void Filter_RemovesDuplicatePromotionalFootnoteFactories()
         {
             List<RateResult> rates = new List<RateResult>
             {
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void Filter_RetainsOnePromotionalFootnoteFactory_WhenRateGroupHasMultiplePromoFootnoteFactories_Test()
+        public void Filter_RetainsOnePromotionalFootnoteFactory_WhenRateGroupHasMultiplePromoFootnoteFactories()
         {
             List<RateResult> rates = new List<RateResult>
             {
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void Filter_RemovesNonEndiciaPromotionalFootnoteFactories_WhenRateGroupHasMultiplePromoFootnoteFactories_Test()
+        public void Filter_RemovesNonEndiciaPromotionalFootnoteFactories_WhenRateGroupHasMultiplePromoFootnoteFactories()
         {
             List<RateResult> rates = new List<RateResult>
             {
@@ -112,7 +112,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void Filter_RetainsUspsPromotionalFootnoteFactory_WhenRateGroupOnlyHasUspsBasedPromoFootnoteFactory_Test()
+        public void Filter_RetainsUspsPromotionalFootnoteFactory_WhenRateGroupOnlyHasUspsBasedPromoFootnoteFactory()
         {
             List<RateResult> rates = new List<RateResult>
             {

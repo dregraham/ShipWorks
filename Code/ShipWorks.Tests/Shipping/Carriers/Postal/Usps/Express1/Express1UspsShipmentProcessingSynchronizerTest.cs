@@ -22,14 +22,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
         }
 
         [Fact]
-        public void HasAccounts_DelegatesToRepository_Test()
+        public void HasAccounts_DelegatesToRepository()
         {
             bool hasAccounts = testObject.HasAccounts;
             accountRepository.Verify(r => r.Accounts, Times.Once());
         }
 
         [Fact]
-        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
+        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount()
         {
             List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
             {
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
         }
 
         [Fact]
-        public void SaveAccountToShipment_ThrowsUspsException_WhenNoAccounts_Test()
+        public void SaveAccountToShipment_ThrowsUspsException_WhenNoAccounts()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
         }
 
         [Fact]
-        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount()
         {
             List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
             {
@@ -85,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
         }
 
         [Fact]
-        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts()
         {
             List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
             {

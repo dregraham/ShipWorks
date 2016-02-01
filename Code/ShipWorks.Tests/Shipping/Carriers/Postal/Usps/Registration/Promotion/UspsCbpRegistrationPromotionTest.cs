@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
         }
 
         [Fact]
-        public void GetPromoCode_ReturnsShipWorks2_Test()
+        public void GetPromoCode_ReturnsShipWorks2()
         {
             string promo = testObject.GetPromoCode();
 
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
         }
 
         [Fact]
-        public void IsMonthlyFeeWaived_ReturnsFalse_Test()
+        public void IsMonthlyFeeWaived_ReturnsFalse()
         {
             Assert.Equal(false, testObject.IsMonthlyFeeWaived);
         }

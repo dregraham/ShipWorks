@@ -27,21 +27,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         }
 
         [Fact]
-        public void UserCredentialKey_Test()
+        public void UserCredentialKey()
         {
             // Make sure the user credentials return those retrieved from the repository
             Assert.Equal("username", testObject.UserCredentialsKey);
         }
 
         [Fact]
-        public void UserCredentialsPassword_IsEncrypted_WhenFedExPasswordIsNotNull_Test()
+        public void UserCredentialsPassword_IsEncrypted_WhenFedExPasswordIsNotNull()
         {
             // Make sure the user credentials return those retrieved from the repository
             Assert.Equal(SecureText.Decrypt("password", "FedEx"), testObject.UserCredentialsPassword);
         }
 
         [Fact]
-        public void UserCredentialsPassword_IsNull_WhenFedExPasswordIsNull_Test()
+        public void UserCredentialsPassword_IsNull_WhenFedExPasswordIsNull()
         {
             // setup the test by setting the password to ull
             shippingSettings.FedExPassword = null;
@@ -52,42 +52,42 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
 
 
         [Fact]
-        public void CspCredentialKey_Test()
+        public void CspCredentialKey()
         {
             // Testing the property value to make sure inadvertent changes are not made
             Assert.Equal("HmTIi6ILfEtv3p42", testObject.CspCredentialKey);
         }
 
         [Fact]
-        public void CspCredentialPassword_Test()
+        public void CspCredentialPassword()
         {
             // Testing the property value to make sure inadvertent changes are not made
             Assert.Equal("YcLZTdWF7NALqoCD0szKwVnif", testObject.CspCredentialPassword);
         }
 
         [Fact]
-        public void ClientProductionId_Test()
+        public void ClientProductionId()
         {
             // Testing the property value to make sure inadvertent changes are not made
             Assert.Equal("IEOQ", testObject.ClientProductId);
         }
 
         [Fact]
-        public void ClientProductionVersion_Test()
+        public void ClientProductionVersion()
         {
             // Testing the property value to make sure inadvertent changes are not made
             Assert.Equal("7038", testObject.ClientProductVersion);
         }
 
         [Fact]
-        public void CspSolutionId_Test()
+        public void CspSolutionId()
         {
             // Testing the property value to make sure inadvertent changes are not made
             Assert.Equal("086", testObject.CspSolutionId);
         }
 
         [Fact]
-        public void EndpointUrl_ReturnsTestingUrl_WhenUsingTestServer_Test()
+        public void EndpointUrl_ReturnsTestingUrl_WhenUsingTestServer()
         {
             // We've setup the repository in the initialize method to indicate we should use the 
             // test server, so there's no additional setup needed
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         }
 
         [Fact]
-        public void EndpointUrl_ReturnsProductionUrl_WhenNotUsingTestServer_Test()
+        public void EndpointUrl_ReturnsProductionUrl_WhenNotUsingTestServer()
         {
             // setup the repository to indicate we should be using the production server
             settingsRepository.Setup(r => r.UseTestServer).Returns(false);

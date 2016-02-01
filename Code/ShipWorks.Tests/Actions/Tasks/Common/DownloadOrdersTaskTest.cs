@@ -14,13 +14,13 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void RequiresInput_ReturnsNone_Test()
+        public void RequiresInput_ReturnsNone()
         {
             Assert.Equal(testObject.InputRequirement, ActionTaskInputRequirement.None);
         }
 
         [Fact]
-        public void Initalize_DeserializesXmlTaskSettingsToStoreIDs_Test()
+        public void Initalize_DeserializesXmlTaskSettingsToStoreIDs()
         {
             const string TaskSettings = @"
                     <Settings>

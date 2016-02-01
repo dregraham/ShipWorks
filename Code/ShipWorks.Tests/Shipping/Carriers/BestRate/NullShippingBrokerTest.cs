@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
         
         [Fact]
-        public void GetBestRates_ReturnsEmptyList_Test()
+        public void GetBestRates_ReturnsEmptyList()
         {
             IEnumerable<RateResult> rates = testObject.GetBestRates(new ShipmentEntity(), new List<BrokerException>()).Rates;
 
@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void HasAccounts_ReturnsFalse_Test()
+        public void HasAccounts_ReturnsFalse()
         {
             Assert.False(testObject.HasAccounts);
         }

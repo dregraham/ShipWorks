@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
         }
 
         [Fact]
-        public void Build_AddsValidationElement_Test()
+        public void Build_AddsValidationElement()
         {
             XElement element = testObject.Build();
 
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
         }
 
         [Fact]
-        public void Build_ValidationElement_ContainsUsernameElement_Test()
+        public void Build_ValidationElement_ContainsUsernameElement()
         {
             XElement element = testObject.Build();
             XElement usernameElement = element.XPathSelectElement("/UserName");
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
         }
 
         [Fact]
-        public void Build_ValidationElement_ContainsPasswordElement_Test()
+        public void Build_ValidationElement_ContainsPasswordElement()
         {
             XElement element = testObject.Build();
             XElement passwordElement = element.XPathSelectElement("/Password");
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
         }
 
         [Fact]
-        public void Build_ValidationElement_ContainsAgreeTermsElement_Test()
+        public void Build_ValidationElement_ContainsAgreeTermsElement()
         {
             XElement element = testObject.Build();
             XElement termsElement = element.XPathSelectElement("/AgreeTerms");
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
         }
 
         [Fact]
-        public void Build_ValidationElement_ContainsSDNDPLCheckedElement_Test()
+        public void Build_ValidationElement_ContainsSDNDPLCheckedElement()
         {
             XElement element = testObject.Build();
             XElement checkedElement = element.XPathSelectElement("/SDNDPLChecked");
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
         }
 
         [Fact]
-        public void Build_ValidationElement_ContainsExportLicenseCheckedElement_Test()
+        public void Build_ValidationElement_ContainsExportLicenseCheckedElement()
         {
             XElement element = testObject.Build();
             XElement checkedElement = element.XPathSelectElement("/ExportLicenseChecked");

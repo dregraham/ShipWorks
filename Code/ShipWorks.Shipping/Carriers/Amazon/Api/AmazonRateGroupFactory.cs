@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
 
             // Add terms and conditions footnote if needed
-            List<string> carriers = response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier.CarrierName;
+            List<string> carriers = response.GetEligibleShippingServicesResult?.TermsAndConditionsNotAcceptedCarrierList?.TermsAndConditionsNotAcceptedCarrier?.CarrierName;
             if (carriers != null && carriers.Any())
             {
                 List<string> carrierNames = carriers.Distinct().ToList();

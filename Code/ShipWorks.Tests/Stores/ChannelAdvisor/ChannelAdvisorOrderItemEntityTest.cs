@@ -8,7 +8,7 @@ namespace ShipWorks.Tests.Stores.Amazon
     {
 
         [Fact]
-        public void ChannelAdvisorOrderItemEntity_Implements_IAmazonOrder_Test()
+        public void ChannelAdvisorOrderItemEntity_Implements_IAmazonOrder()
         {
             IAmazonOrderItem testObject = new ChannelAdvisorOrderItemEntity() as IAmazonOrderItem;
 

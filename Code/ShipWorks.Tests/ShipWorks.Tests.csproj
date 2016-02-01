@@ -205,7 +205,6 @@
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\DisabledLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseServiceTest.cs" />
-    <Compile Include="ApplicationCore\Licensing\TangoWebClientFactoryTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProviderTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializerTest.cs" />
@@ -477,7 +476,6 @@
     <Compile Include="Shipping\Carriers\UPS\UpsUtilityTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipShipmentTypeTest.cs" />
-    <Compile Include="Shipping\CustomsManagerTest.cs" />
     <Compile Include="Shipping\Editing\Rating\RateResultTest.cs" />
     <Compile Include="Shipping\Insurance\InsuranceChoiceTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProviderTest.cs" />

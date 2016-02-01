@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_CurrencyCodeIsSetToUsd_Test()
+        public void Manipulate_CurrencyCodeIsSetToUsd()
         {
             testObject.Manipulate(request);
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_AccountCountryIsCanada_CurrencyCodeIsSetToCad_Test()
+        public void Manipulate_AccountCountryIsCanada_CurrencyCodeIsSetToCad()
         {
             mockRequest
                 .Setup(r => r.CarrierAccountEntity)
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_InvoiceNumberIsSet_Test()
+        public void Manipulate_InvoiceNumberIsSet()
         {
             testObject.Manipulate(request);
 
@@ -81,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_InvoiceDateIsSet_Test()
+        public void Manipulate_InvoiceDateIsSet()
         {
             testObject.Manipulate(request);
 
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_InvoiceAmount_Test()
+        public void Manipulate_InvoiceAmount()
         {
             testObject.Manipulate(request);
 
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_ControlIdIsSet_Test()
+        public void Manipulate_ControlIdIsSet()
         {
             testObject.Manipulate(request);
 

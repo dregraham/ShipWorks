@@ -24,34 +24,34 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         }
         
         [Fact]
-        public void Constructor_ThrowsInvalidOperationException_WhenGivenNonLemonStandStoreEntity_Test()
+        public void Constructor_ThrowsInvalidOperationException_WhenGivenNonLemonStandStoreEntity()
         {
             Assert.Throws<InvalidOperationException>(() => new LemonStandStoreType(store.Object));
         }
 
         [Fact]
-        public void InternalLicenseIdentifier_LicenseIdentifierMatchesStoreUrl_WhenStoreIsGivenStoreUrl_Test()
+        public void InternalLicenseIdentifier_LicenseIdentifierMatchesStoreUrl_WhenStoreIsGivenStoreUrl()
         {
             testObject = new LemonStandStoreType(lemonStandStore.Object);
             Assert.Equal(storeUrl, testObject.LicenseIdentifier);
         }
 
         [Fact]
-        public void TypeCode_ThrowsInvalidOperationException_WhenGivenNonLemonStandTypeCode_Test()
+        public void TypeCode_ThrowsInvalidOperationException_WhenGivenNonLemonStandTypeCode()
         {
             lemonStandStore.Setup(s => s.TypeCode).Returns(69);
             Assert.Throws<InvalidOperationException>(() => new LemonStandStoreType(lemonStandStore.Object));
         }
 
         [Fact]
-        public void CreateStoreInstance_ReturnsLemonStandStoreEntity_WhenCalled_Test()
+        public void CreateStoreInstance_ReturnsLemonStandStoreEntity_WhenCalled()
         {
             testObject = new LemonStandStoreType(lemonStandStore.Object);
             Assert.IsAssignableFrom<LemonStandStoreEntity>(testObject.CreateStoreInstance());
         }
 
         [Fact]
-        public void CreateBasicSearchOrderConditions_ReturnsConditionGroup_WhenCalled_Test()
+        public void CreateBasicSearchOrderConditions_ReturnsConditionGroup_WhenCalled()
         {
             testObject = new LemonStandStoreType(lemonStandStore.Object);
             Assert.IsAssignableFrom<ConditionGroup>(testObject.CreateBasicSearchOrderConditions("1"));

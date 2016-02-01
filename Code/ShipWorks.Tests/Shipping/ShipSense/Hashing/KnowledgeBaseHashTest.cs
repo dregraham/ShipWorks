@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void ComputeHash_ReturnsInvalidResult_WhenUniquenessKeyIsNotFound_Test()
+        public void ComputeHash_ReturnsInvalidResult_WhenUniquenessKeyIsNotFound()
         {
             ShipSenseOrderItemKey invalidKey = new ShipSenseOrderItemKey { Quantity = 3 };
             keys = new List<ShipSenseOrderItemKey>
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
 
         [Fact]
-        public void ComputeHash_WithSingleKey_Test()
+        public void ComputeHash_WithSingleKey()
         {
             ShipSenseOrderItemKey key = new ShipSenseOrderItemKey { Quantity = 3 };
             key.Add("Code", "Code-1");
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void ComputeHash_WithMultipleKeys_Test()
+        public void ComputeHash_WithMultipleKeys()
         {
             ShipSenseOrderItemKey key1 = new ShipSenseOrderItemKey { Quantity = 3 };
             key1.Add("Code", "Code-1");
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void ComputeHash_ReturnsSameResult_WhenKeyValuesAreSame_AndQuantitiesAreSame_Test()
+        public void ComputeHash_ReturnsSameResult_WhenKeyValuesAreSame_AndQuantitiesAreSame()
         {
             ShipSenseOrderItemKey key1 = new ShipSenseOrderItemKey { Quantity = 3 };
             key1.Add("Code", "Code-1");
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void ComputeHash_ReturnsDifferentResults_WhenKeyValuesAreSame_AndQuantitiesDiffer_Test()
+        public void ComputeHash_ReturnsDifferentResults_WhenKeyValuesAreSame_AndQuantitiesDiffer()
         {
             ShipSenseOrderItemKey key1 = new ShipSenseOrderItemKey { Quantity = 3 };
             key1.Add("Code", "Code-1");
@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void ComputeHash_ReturnsInvalidHashResult_WhenKeyCollectionIsEmpty_Test()
+        public void ComputeHash_ReturnsInvalidHashResult_WhenKeyCollectionIsEmpty()
         {
             KnowledgebaseHashResult result = testObject.ComputeHash(new List<ShipSenseOrderItemKey>());
 

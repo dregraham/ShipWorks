@@ -11,7 +11,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
         private DashboardSchedulerServiceStoppedItem testObject;
 
         [Fact]
-        public void Initialize_CanUserDismiss_Test()
+        public void Initialize_CanUserDismiss()
         {
             testObject = new DashboardSchedulerServiceStoppedItem();
 
@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
         }
 
         [Fact]
-        public void Initialize_PrimaryText_Test()
+        public void Initialize_PrimaryText()
         {
             testObject = new DashboardSchedulerServiceStoppedItem();
 
@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
         }
 
         [Fact]
-        public void Initialize_SecondaryText_Test()
+        public void Initialize_SecondaryText()
         {
             testObject = new DashboardSchedulerServiceStoppedItem();
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
         }
         
         [Fact]
-        public void Initialize_ImageIsNotNull_Test()
+        public void Initialize_ImageIsNotNull()
         {
             testObject = new DashboardSchedulerServiceStoppedItem();
 

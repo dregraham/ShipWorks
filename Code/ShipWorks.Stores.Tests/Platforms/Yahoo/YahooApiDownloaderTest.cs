@@ -49,43 +49,43 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void LoadOrder_LoadsOrderDetails_WhenGivenYahooResponse_Test()
+        public void LoadOrder_LoadsOrderDetails_WhenGivenYahooResponse()
         {
             Assert.Equal("Tracked", orderEntity.OnlineStatus);
         }
 
         [Fact]
-        public void LoadOrder_LoadsShippingAddress_WhenGivenYahooResponse_Test()
+        public void LoadOrder_LoadsShippingAddress_WhenGivenYahooResponse()
         {
             Assert.Equal("chris", orderEntity.ShipFirstName);
         }
 
         [Fact]
-        public void LoadOrder_LoadsBillingAddress_WhenGivenYahooResponse_Test()
+        public void LoadOrder_LoadsBillingAddress_WhenGivenYahooResponse()
         {
             Assert.Equal("hicks", orderEntity.BillLastName);
         }
 
         [Fact]
-        public void LoadOrder_LoadsItems_WhenGivenYahooResponse_Test()
+        public void LoadOrder_LoadsItems_WhenGivenYahooResponse()
         {
             Assert.Equal("hubbabubbagum", ((YahooOrderItemEntity)orderEntity.OrderItems.FirstOrDefault()).YahooProductID);
         }
 
         [Fact]
-        public void LoadOrder_LoadsItemAttributes_WhenGivenYahooResponse_Test()
+        public void LoadOrder_LoadsItemAttributes_WhenGivenYahooResponse()
         {
             Assert.Equal("Large", orderEntity.OrderItems.FirstOrDefault().OrderItemAttributes.FirstOrDefault().Description);
         }
 
         [Fact]
-        public void LoadOrder_LoadsOrderTotals_WhenGivenYahooResponse_Test()
+        public void LoadOrder_LoadsOrderTotals_WhenGivenYahooResponse()
         {
             Assert.Equal(.2m, orderEntity.OrderTotal);
         }
 
         [Fact]
-        public void LoadOrder_LoadsOrderCharges_WhenGivenYahooResponse_Test()
+        public void LoadOrder_LoadsOrderCharges_WhenGivenYahooResponse()
         {
             Assert.Equal(0,
                 orderEntity.OrderCharges.Where(charge => charge.Description == "Shipping")
@@ -93,13 +93,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void LoadOrder_LoadsGiftMessages_WhenGivenYahooResponse_Test()
+        public void LoadOrder_LoadsGiftMessages_WhenGivenYahooResponse()
         {
             Assert.Equal("Enjoy", orderEntity.OrderItems.LastOrDefault().OrderItemAttributes.FirstOrDefault().Description);
         }
 
         [Fact]
-        public void LoadOrder_LoadsPrivateNotes_WhenGivenYahooResponse_Test()
+        public void LoadOrder_LoadsPrivateNotes_WhenGivenYahooResponse()
         {
             EntityCollection<NoteEntity> notes = orderEntity.Notes;
             string note = notes.Where(x => x.Visibility == (int)NoteVisibility.Internal).Select(x => x.Text).FirstOrDefault();
@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void LoadOrder_LoadsPublicNotes_WhenGivenYahooResponse_Test()
+        public void LoadOrder_LoadsPublicNotes_WhenGivenYahooResponse()
         {
             EntityCollection<NoteEntity> notes = orderEntity.Notes;
             string note = notes.Where(x => x.Visibility == (int)NoteVisibility.Public).Select(x => x.Text).FirstOrDefault();
@@ -117,13 +117,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void LoadOrder_LoadsPaymentDetails_WhenGivenYahooResponse_Test()
+        public void LoadOrder_LoadsPaymentDetails_WhenGivenYahooResponse()
         {
             Assert.Equal("Purchase Order", orderEntity.OrderPaymentDetails.FirstOrDefault().Value);
         }
 
         [Fact]
-        public void ParseYahooDateTime_ReturnsCorrectDateTime_WhenGivenValidYahooDateString_Test()
+        public void ParseYahooDateTime_ReturnsCorrectDateTime_WhenGivenValidYahooDateString()
         {
             DateTime expectedDateTime = new DateTime(2013, 9, 10, 9, 33, 14, DateTimeKind.Utc).ToUniversalTime();
 
@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void ParseYahooDateTime_ThrowsYahooException_WhenGivenInvalidYahooDateString_Test()
+        public void ParseYahooDateTime_ThrowsYahooException_WhenGivenInvalidYahooDateString()
         {
             Assert.Throws<YahooException>(() => testObject.ParseYahooDateTime("This is clearly not a valid date string"));
         }

@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Actions
         private ComputerActionPolicy testObject;
 
         [Fact]
-        public void ToCsv_WithSingleComputer_Test()
+        public void ToCsv_WithSingleComputer()
         {
             List<ComputerEntity> computers = new List<ComputerEntity>
             {
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Actions
         }
 
         [Fact]
-        public void ToCsv_WithMultipleComputers_Test()
+        public void ToCsv_WithMultipleComputers()
         {
             string computerIDs = "1001, 2001, 3001,4001";
 
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Actions
         }
 
         [Fact]
-        public void IsComputerAllowed_ReturnsFalse_Test()
+        public void IsComputerAllowed_ReturnsFalse()
         {
             string computerIDs = "1001, 2001, 3001,4001";
 
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Actions
         }
 
         [Fact]
-        public void IsComputerAllowed_ReturnsTrue_Test()
+        public void IsComputerAllowed_ReturnsTrue()
         {
             string computerIDs = "1001, 2001, 3001,4001";
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Actions
         }
 
         [Fact]
-        public void Constructor_LoadsComputersFromCsv_WithSingleComputerId_Test()
+        public void Constructor_LoadsComputersFromCsv_WithSingleComputerId()
         {
             string computerIDs = "1001";
 
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Actions
         }
 
         [Fact]
-        public void Constructor_LoadsComputersFromCsv_WithMultipleComputerIds_Test()
+        public void Constructor_LoadsComputersFromCsv_WithMultipleComputerIds()
         {
             string computerIDs = "1001, 2001, 3001,4001";
 
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Actions
         }
 
         [Fact]
-        public void Constructor_LoadsComputersFromActionEntityInternalComputerLimitedList_WithSingleComputerId_Test()
+        public void Constructor_LoadsComputersFromActionEntityInternalComputerLimitedList_WithSingleComputerId()
         {
             string computerIDs = "1001, 2001, 3001,4001";
 
@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Actions
         }
 
         [Fact]
-        public void Constructor_LoadsComputersFromActionEntityInternalComputerLimitedList_WithMutlipleComputerIds_Test()
+        public void Constructor_LoadsComputersFromActionEntityInternalComputerLimitedList_WithMutlipleComputerIds()
         {
             string computerIDs = "1001, 2001, 3001,4001,5001";
 
