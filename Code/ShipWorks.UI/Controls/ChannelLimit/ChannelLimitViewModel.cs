@@ -28,22 +28,23 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly IStoreManager storeManager;
         private readonly Func<IChannelConfirmDeleteFactory> confirmDeleteFactory;
         private readonly ILog log;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelLimitViewModel(ILicenseService licenseService, IStoreManager storeManager, Func<IChannelConfirmDeleteFactory> confirmDeleteFactory, Func<Type, ILog> logFactory)
+        public ChannelLimitViewModel(ILicenseService licenseService, IStoreManager storeManager,
+            Func<IChannelConfirmDeleteFactory> confirmDeleteFactory, Func<Type, ILog> logFactory)
         {
             license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
             this.storeManager = storeManager;
             this.confirmDeleteFactory = confirmDeleteFactory;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            
+
             // Set the selected store type to invalid
             SelectedStoreType = StoreTypeCode.Invalid;
 
-            log = logFactory(typeof(ChannelLimitViewModel));
+            log = logFactory(typeof (ChannelLimitViewModel));
         }
 
         /// <summary>
@@ -71,14 +72,16 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             ChannelCollection.Clear();
 
             // load the collection with the licenses active stores
-            license.GetActiveStores().ToList().ForEach(s => ChannelCollection.Add(new ShipWorksLicense(s.StoreLicenseKey).StoreTypeCode));
+            license.GetActiveStores()
+                .ToList()
+                .ForEach(s => ChannelCollection.Add(new ShipWorksLicense(s.StoreLicenseKey).StoreTypeCode));
 
             foreach (StoreEntity store in storeManager.GetAllStores())
             {
                 // if we did not find a match add it to the collection 
-                if (!ChannelCollection.Contains((StoreTypeCode)store.TypeCode))
+                if (!ChannelCollection.Contains((StoreTypeCode) store.TypeCode))
                 {
-                    ChannelCollection.Add((StoreTypeCode)store.TypeCode);
+                    ChannelCollection.Add((StoreTypeCode) store.TypeCode);
                 }
             }
 
@@ -99,7 +102,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private bool CanExecuteDeleteStore()
         {
             return SelectedStoreType != StoreTypeCode.Invalid;
-        } 
+        }
 
         /// <summary>
         /// Updates the error message to display to the user
@@ -116,12 +119,15 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void DeleteChannel()
         {
-            List<StoreTypeCode> localStoreTypeCodes = storeManager.GetAllStores().Select(s => (StoreTypeCode)s.TypeCode).Distinct().ToList();
+            List<StoreTypeCode> localStoreTypeCodes =
+                storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
 
             // If we are trying to delete the only store type in ShipWorks display an error and dont delete
             if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType))
             {
-                ErrorMessage += $" \n \nYou cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.";
+                UpdateErrorMesssage();
+                ErrorMessage +=
+                    $"\n \nYou cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.";
                 return;
             }
 

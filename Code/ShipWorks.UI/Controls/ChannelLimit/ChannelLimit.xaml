@@ -103,7 +103,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             ItemsSource="{Binding ChannelCollection}" 
-            SelectedItem="{Binding SelectedStoreType}"
+            SelectedValue="{Binding SelectedStoreType}"
             Margin="10 0 0 10">
 
             <ListView.View>

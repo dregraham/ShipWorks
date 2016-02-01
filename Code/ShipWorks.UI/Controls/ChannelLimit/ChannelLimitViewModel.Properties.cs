@@ -28,13 +28,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         public StoreTypeCode SelectedStoreType
         {
             get { return selectedStoreType; }
-            set
-            {
-                handler.Set(nameof(SelectedStoreType), ref selectedStoreType, value);
-
-                // Update the status of the delete button to ensure that its valid
-                DeleteStoreClickCommand.RaiseCanExecuteChanged();
-            }
+            set { handler.Set(nameof(SelectedStoreType), ref selectedStoreType, value); }
         }
 
         /// <summary>
@@ -43,10 +37,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         [Obfuscation(Exclude = true)]
         public RelayCommand DeleteStoreClickCommand
         {
-            get
-            {
-                return new RelayCommand(DeleteChannel, CanExecuteDeleteStore);
-            }
+            get { return new RelayCommand(DeleteChannel, CanExecuteDeleteStore); }
         }
 
         /// <summary>
@@ -55,12 +46,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         [Obfuscation(Exclude = true)]
         public RelayCommand<Window> CloseClickCommand
         {
-            get
-            {
-                return new RelayCommand<Window>(w => w.Close());
-            }
+            get { return new RelayCommand<Window>(w => w.Close()); }
         }
-        
+
         /// <summary>
         /// Collection of stores
         /// </summary>
