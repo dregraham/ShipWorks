@@ -149,7 +149,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [ExcelData("DataSources\\FedExAll.xlsx", "OneRate")]
         [Theory]
         [Trait("Category", "FedEx")]
-        public void Ship_FedExOneRate_Test(DataRow row)
+        public void Ship_FedExOneRate(DataRow row)
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
 
