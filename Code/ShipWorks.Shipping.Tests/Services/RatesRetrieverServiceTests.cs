@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -100,10 +101,10 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             rateHashingService.Setup(x => x.GetRatingHash(It.IsAny<ShipmentEntity>())).Returns("Foo");
 
-            var rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
+            var results = GenericResult.FromError<RateGroup>("Foo");
             mock.Mock<IRatesRetriever>()
                 .Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
-                .Returns(rateGroup);
+                .Returns(results);
 
             var shipmentAdapter = mock.Create<ICarrierShipmentAdapter>();
 
@@ -118,7 +119,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
                 Assert.Equal(testObject, message.Sender);
                 Assert.Equal("Foo", message.RatingHash);
-                Assert.Equal(rateGroup, message.RateGroup);
+                Assert.Equal(results, message.Results);
                 Assert.Equal(shipmentAdapter, message.ShipmentAdapter);
             }
         }

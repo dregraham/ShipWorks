@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping
@@ -11,11 +12,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
-        RateGroup GetRates(ShipmentEntity shipment);
+        GenericResult<RateGroup> GetRates(ShipmentEntity shipment);
 
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
-        RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType);
+        GenericResult<RateGroup> GetRates(ShipmentEntity shipment, ShipmentType shipmentType);
     }
 }

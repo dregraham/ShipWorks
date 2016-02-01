@@ -729,22 +729,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
-        public static RateGroup GetRates(ShipmentEntity shipment)
-        {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                return lifetimeScope.Resolve<IRatesRetriever>().GetRates(shipment);
-            }
-        }
-
-        /// <summary>
-        /// Get rates for the given shipment using the appropriate ShipmentType
-        /// </summary>
         public static RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return lifetimeScope.Resolve<IRatesRetriever>().GetRates(shipment, shipmentType);
+                return lifetimeScope.Resolve<IRatesRetriever>().GetRates(shipment, shipmentType).Value;
             }
         }
 

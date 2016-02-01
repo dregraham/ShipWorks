@@ -112,7 +112,44 @@ namespace ShipWorks.Shipping.Tests.Services
 
             var results = testObject.GetRates(shipment, shipmentType.Object);
 
-            Assert.Equal(rateGroup, results);
+            Assert.Equal(rateGroup, results.Value);
+        }
+
+        [Fact]
+        public void GetRates_ReturnsMessage_WhenShipmentIsProcessed()
+        {
+            var shipment = new ShipmentEntity { ShipmentID = 123, Processed = true };
+            var testObject = mock.Create<RatesRetriever>();
+
+            var results = testObject.GetRates(shipment, shipmentType.Object);
+
+            Assert.Contains("processed", results.Message);
+        }
+
+        [Fact]
+        public void GetRates_ReturnsMessage_WhenShipmentTypeDoesNotSupportRating()
+        {
+            var shipment = new ShipmentEntity { ShipmentID = 123 };
+            var testObject = mock.Create<RatesRetriever>();
+
+            shipmentType.Setup(x => x.SupportsGetRates).Returns(false);
+
+            var results = testObject.GetRates(shipment, shipmentType.Object);
+
+            Assert.Contains("does not support", results.Message);
+        }
+
+        [Fact]
+        public void GetRates_ReturnsEmptyRateResult_WhenNotSuccessful()
+        {
+            var shipment = new ShipmentEntity { ShipmentID = 123 };
+            var testObject = mock.Create<RatesRetriever>();
+
+            shipmentType.Setup(x => x.SupportsGetRates).Returns(false);
+
+            var results = testObject.GetRates(shipment, shipmentType.Object);
+
+            Assert.Empty(results.Value.Rates);
         }
 
         public void Dispose()

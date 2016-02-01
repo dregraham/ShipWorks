@@ -112,24 +112,23 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Visibility="{Binding ShowEmptyMessage,Converter={StaticResource BooleanToVisibility}}">
-                <TextBlock Text="Foo" />
+                <TextBlock Text="{Binding EmptyMessage}" />
             </Border>
-            
+
             <ListView Grid.Row="2"
                         ItemsSource="{Binding Footnotes}"
                         Visibility="{Binding ShowFootnotes,Converter={StaticResource BooleanToVisibility}}">
 
             </ListView>
 
-            <Border Background="White" 
-                    BorderBrush="Black" 
-                    BorderThickness="1" 
+            <Border Background="White"
+                    BorderBrush="Black"
+                    BorderThickness="1"
                     Padding="8"
                     Grid.RowSpan="3"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Visibility="{Binding IsLoading,Converter={StaticResource BooleanToVisibility}}"
-                    >
+                    Visibility="{Binding IsLoading,Converter={StaticResource BooleanToVisibility}}">
                 <StackPanel>
                     <Image Grid.Column="2"
                            RenderTransformOrigin=".5,.5"
@@ -160,6 +159,6 @@
                 </StackPanel>
             </Border>
         </Grid>
-        
+
     </DockPanel>
 </UserControl>

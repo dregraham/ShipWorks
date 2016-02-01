@@ -1,4 +1,5 @@
-﻿using ShipWorks.Core.Messaging;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
@@ -12,11 +13,11 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public RatesRetrievedMessage(object sender, string ratingHash, RateGroup rateGroup, ICarrierShipmentAdapter shipmentAdapter)
+        public RatesRetrievedMessage(object sender, string ratingHash, GenericResult<RateGroup> rates, ICarrierShipmentAdapter shipmentAdapter)
         {
             Sender = sender;
             RatingHash = ratingHash;
-            RateGroup = rateGroup;
+            Results = rates;
             ShipmentAdapter = shipmentAdapter;
         }
 
@@ -33,7 +34,7 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Retrieved rates
         /// </summary>
-        public RateGroup RateGroup { get; }
+        public GenericResult<RateGroup> Results { get; }
 
         /// <summary>
         /// Shipment for which the rates have been retrieved

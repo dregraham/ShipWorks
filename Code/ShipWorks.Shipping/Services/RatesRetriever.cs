@@ -1,4 +1,6 @@
-﻿using Autofac.Features.Indexed;
+﻿using System.Linq;
+using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -27,7 +29,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment)
+        public GenericResult<RateGroup> GetRates(ShipmentEntity shipment)
         {
             ShipmentType shipmentType = shipmentTypeLookup[shipment.ShipmentTypeCode];
             return GetRates(shipment, shipmentType);
@@ -36,8 +38,20 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
+        public GenericResult<RateGroup> GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
         {
+            if (shipment.Processed)
+            {
+                string message = "The shipment has already been processed.";
+                return GenericResult.FromError(message, new RateGroup(Enumerable.Empty<RateResult>()));
+            }
+
+            if (!shipmentType.SupportsGetRates)
+            {
+                string message = $"The provider \"{shipmentType.ShipmentTypeName}\" does not support retrieving rates.";
+                return GenericResult.FromError(message, new RateGroup(Enumerable.Empty<RateResult>()));
+            }
+
             // Ensure data is valid and up-to-date
             shipmentType.UpdateDynamicShipmentData(shipment);
 
@@ -68,7 +82,7 @@ namespace ShipWorks.Shipping.Services
             // Copy back any best rate events that were set on the clone
             shipment.BestRateEvents |= clonedShipment.BestRateEvents;
 
-            return rateResults;
+            return GenericResult.FromSuccess(rateResults);
         }
     }
 }

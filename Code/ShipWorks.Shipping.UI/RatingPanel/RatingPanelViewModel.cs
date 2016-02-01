@@ -55,7 +55,18 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         public void LoadRates(RatesRetrievedMessage message)
         {
-            Rates = message.RateGroup.Rates.Select(x => new RateResultDisplay(x)).ToArray();
+            if (message.Results.Success)
+            {
+                Rates = message.Results.Value.Rates.Select(x => new RateResultDisplay(x)).ToArray();
+                ShowEmptyMessage = false;
+                EmptyMessage = string.Empty;
+            }
+            else
+            {
+                Rates = Enumerable.Empty<RateResultDisplay>();
+                EmptyMessage = message.Results.Message;
+                ShowEmptyMessage = true;
+            }
 
             ShowDuties = Rates.Any(x => !string.IsNullOrEmpty(x.Duties));
             ShowTaxes = Rates.Any(x => !string.IsNullOrEmpty(x.Taxes));
