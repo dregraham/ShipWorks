@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
         [XmlElement(ElementName = "ShipWeight")]
         public string ShipWeightTransport
         {
-            // Deserialization error if UnitPrice node is empty. This resolves that.
+            // Deserialization error if ShipWeight node is empty. This resolves that.
             set
             {
                 double result;
