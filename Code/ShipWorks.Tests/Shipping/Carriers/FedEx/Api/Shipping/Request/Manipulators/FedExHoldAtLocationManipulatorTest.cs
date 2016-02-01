@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HoldAtLocationDetailIsNull_WhenShipmentEntityHoldAtLocationIsNull_Test()
+        public void Manipulate_HoldAtLocationDetailIsNull_WhenShipmentEntityHoldAtLocationIsNull()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HoldAtLocationDetailIsNotCreated_WhenShipmentEntityHoldAtLocationEnabledisFalse_Test()
+        public void Manipulate_HoldAtLocationDetailIsNotCreated_WhenShipmentEntityHoldAtLocationEnabledisFalse()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
 
@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HoldAtLocationDetailIsNotNull_ShipmentEntityHoldAtLocationIsFullyPopulated_Test()
+        public void Manipulate_HoldAtLocationDetailIsNotNull_ShipmentEntityHoldAtLocationIsFullyPopulated()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
             
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HoldAtLocationDetailValuesMatchShipmentEntity_ShipmentEntityHoldAtLocationIsFullyPopulated_Test()
+        public void Manipulate_HoldAtLocationDetailValuesMatchShipmentEntity_ShipmentEntityHoldAtLocationIsFullyPopulated()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
             
@@ -100,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HoldAtLocationDetailLocationTypeNull_HoldAtLocationDetailLocationTypeSpecifiedIsFalse_Test()
+        public void Manipulate_HoldAtLocationDetailLocationTypeNull_HoldAtLocationDetailLocationTypeSpecifiedIsFalse()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
 
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HoldAtLocationDetailLocationTypeIsNotNull_HoldAtLocationDetailLocationTypeSpecifiedIsTrue_Test()
+        public void Manipulate_HoldAtLocationDetailLocationTypeIsNotNull_HoldAtLocationDetailLocationTypeSpecifiedIsTrue()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
 
@@ -129,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HoldAtLocationDetailResidentialNull_HoldAtLocationDetailResidentialSpecifiedIsFalse_Test()
+        public void Manipulate_HoldAtLocationDetailResidentialNull_HoldAtLocationDetailResidentialSpecifiedIsFalse()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
 
@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HoldAtLocationDetailResidentialIsNotNull_HoldAtLocationDetailResidentialSpecifiedIsTrue_Test()
+        public void Manipulate_HoldAtLocationDetailResidentialIsNotNull_HoldAtLocationDetailResidentialSpecifiedIsTrue()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
 

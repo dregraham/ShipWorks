@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         private LemonStandOrderIdentifier testObject;
 
         [Fact]
-        public void ToString_ReturnsCorrectString_WhenGivenValidOrderID_Test()
+        public void ToString_ReturnsCorrectString_WhenGivenValidOrderID()
         {
             testObject = new LemonStandOrderIdentifier("1");
 
@@ -27,21 +27,21 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         }
         
         [Fact]
-        public void ApplyTo_ThrowsInvalidOperationException_WhenGivenNonLemonStandOrderEntity_Test()
+        public void ApplyTo_ThrowsInvalidOperationException_WhenGivenNonLemonStandOrderEntity()
         {
             testObject = new LemonStandOrderIdentifier("1");
             Assert.Throws<InvalidOperationException>(() => testObject.ApplyTo(order.Object));
         }
         
         [Fact]
-        public void ApplyTo_ThrowsInvalidOperationException_WhenPassedNullOrderEntity_Test()
+        public void ApplyTo_ThrowsInvalidOperationException_WhenPassedNullOrderEntity()
         {
             testObject = new LemonStandOrderIdentifier("1");
             Assert.Throws<InvalidOperationException>(() => testObject.ApplyTo((LemonStandOrderEntity) null));
         }
         
         [Fact]
-        public void ApplyTo_ThrowsArgumentNullException_WhenPassedNullDownloadDetailEntity_Test()
+        public void ApplyTo_ThrowsArgumentNullException_WhenPassedNullDownloadDetailEntity()
         {
             testObject = new LemonStandOrderIdentifier("1");
             Assert.Throws<ArgumentNullException>(() => testObject.ApplyTo((DownloadDetailEntity) null));

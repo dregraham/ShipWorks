@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
         }
 
         [Fact]
-        public void CreateScanForms_ThrowsExpress1Exception_WhenAccountEntityIsNull_Test()
+        public void CreateScanForms_ThrowsExpress1Exception_WhenAccountEntityIsNull()
         {
             // Setup the GetAccountEntity method to return a null value
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns((IEntity2)null);
@@ -35,13 +35,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
         }
 
         [Fact]
-        public void CreateScanForms_ThrowsExpress1Exception_WhenShipmentsIsNull_Test()
+        public void CreateScanForms_ThrowsExpress1Exception_WhenShipmentsIsNull()
         {
             Assert.Throws<Express1EndiciaException>(() => testObject.CreateScanForms(scanFormBatch, null));
         }
 
         [Fact]
-        public void CreateScanForms_ThrowsExpress1Exception_WhenShipmentsIsEmpty_Test()
+        public void CreateScanForms_ThrowsExpress1Exception_WhenShipmentsIsEmpty()
         {
             Assert.Throws<Express1EndiciaException>(() => testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>()));
         }

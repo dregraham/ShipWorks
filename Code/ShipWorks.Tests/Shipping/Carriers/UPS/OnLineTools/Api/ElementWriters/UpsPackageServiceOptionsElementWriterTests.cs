@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_WritesVerbalConfirmationName_Test()
+        public void WriteServiceOptionsElement_WritesVerbalConfirmationName()
         {
             package.VerbalConfirmationEnabled = true;
             package.VerbalConfirmationName = "Angus Bludgeonfordshire";
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationName_WhenVerbalConfirmationEnabledIsFalse_Test()
+        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationName_WhenVerbalConfirmationEnabledIsFalse()
         {
             package.VerbalConfirmationEnabled = false;
             package.VerbalConfirmationName = "Angus Bludgeonfordshire";
@@ -72,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_WritesVerbalConfirmationPhoneNumber_Test()
+        public void WriteServiceOptionsElement_WritesVerbalConfirmationPhoneNumber()
         {
             package.VerbalConfirmationEnabled = true;
             package.VerbalConfirmationPhone = "(555) 867-5309";
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationPhoneNumber_WhenVerbalConfirmationEnabledIsFalse_Test()
+        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationPhoneNumber_WhenVerbalConfirmationEnabledIsFalse()
         {
             package.VerbalConfirmationEnabled = false;
             package.VerbalConfirmationPhone = "(555) 867-5309";
@@ -102,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_WritesVerbalConfirmationPhoneExtension_Test()
+        public void WriteServiceOptionsElement_WritesVerbalConfirmationPhoneExtension()
         {
             package.VerbalConfirmationEnabled = true;
             package.VerbalConfirmationPhoneExtension = "1228";
@@ -117,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationPhoneExtension_WhenVerbalConfirmationEnabledIsFalse_Test()
+        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationPhoneExtension_WhenVerbalConfirmationEnabledIsFalse()
         {
             package.VerbalConfirmationEnabled = false;
             package.VerbalConfirmationPhoneExtension = "1228";
@@ -132,7 +132,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmation_WhenShipmentIsReturn_Test()
+        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmation_WhenShipmentIsReturn()
         {
             package.VerbalConfirmationEnabled = true;
             shipment.Shipment.ReturnShipment = true;
@@ -148,7 +148,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmation_WhenVerbalConfirmationEnabledIsFalse_Test()
+        public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmation_WhenVerbalConfirmationEnabledIsFalse()
         {
             package.VerbalConfirmationEnabled = false;
             package.VerbalConfirmationName = "Samuel David James Rutherford III, Esq.";
@@ -163,7 +163,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_WritesDryIceRegulationSet_Test()
+        public void WriteServiceOptionsElement_WritesDryIceRegulationSet()
         {
             package.DryIceEnabled = true;
             package.DryIceRegulationSet = (int)UpsDryIceRegulationSet.Iata;
@@ -178,7 +178,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_WritesDryIceUnitOfMeasurementCode_Test()
+        public void WriteServiceOptionsElement_WritesDryIceUnitOfMeasurementCode()
         {
             package.DryIceEnabled = true;
 
@@ -192,7 +192,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_WritesDryIceWeight_Test()
+        public void WriteServiceOptionsElement_WritesDryIceWeight()
         {
             package.DryIceEnabled = true;
             package.DryIceWeight = 4.3; //kg, per settings
@@ -209,7 +209,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_WritesDryIceMedicalUseIndicator_Test()
+        public void WriteServiceOptionsElement_WritesDryIceMedicalUseIndicator()
         {
             package.DryIceEnabled = true;
             package.DryIceRegulationSet = (int)UpsDryIceRegulationSet.Cfr;
@@ -225,7 +225,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_DoesNotWriteDryIceMedicalUseIndicator_WhenNotForMedicalUse_Test()
+        public void WriteServiceOptionsElement_DoesNotWriteDryIceMedicalUseIndicator_WhenNotForMedicalUse()
         {
             package.DryIceEnabled = true;
             package.DryIceRegulationSet = (int)UpsDryIceRegulationSet.Cfr;
@@ -241,7 +241,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_DoesNotWriteDryIceMedicalUseIndicator_WhenRegulationSetIsNotCfr_Test()
+        public void WriteServiceOptionsElement_DoesNotWriteDryIceMedicalUseIndicator_WhenRegulationSetIsNotCfr()
         {
             package.DryIceEnabled = true;
             package.DryIceRegulationSet = (int)UpsDryIceRegulationSet.Iata;
@@ -257,7 +257,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_DoesNotWriteDryIce_WhenDryIceIsNotEnabled_Test()
+        public void WriteServiceOptionsElement_DoesNotWriteDryIce_WhenDryIceIsNotEnabled()
         {
             package.DryIceEnabled = false;
 

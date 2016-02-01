@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void AddExistingAccount_ValidatesRegistration_Test()
+        public void AddExistingAccount_ValidatesRegistration()
         {
             testObject.AddExistingAccount();
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void AddExistingAccount_VerifiesAccount_Test()
+        public void AddExistingAccount_VerifiesAccount()
         {
             testObject.AddExistingAccount();
 
@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void AddExistingAccount_DelegatesToRepository_Test()
+        public void AddExistingAccount_DelegatesToRepository()
         {
             testObject.AddExistingAccount();
 
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void SaveAccount_DelegatesToRepository_Test()
+        public void SaveAccount_DelegatesToRepository()
         {
             testObject.AddExistingAccount();
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void CreateNewAccount_ValidatesRegistration_Test()
+        public void CreateNewAccount_ValidatesRegistration()
         {
             testObject.CreateNewAccount();
 
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void CreateNewAccount_DelegatesToGateway_Test()
+        public void CreateNewAccount_DelegatesToGateway()
         {
             testObject.CreateNewAccount();
 
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void CreateNewAccount_AssignsAccountNumber_Test()
+        public void CreateNewAccount_AssignsAccountNumber()
         {
             testObject.CreateNewAccount();
 
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void CreateNewAccount_AssignsPassword_Test()
+        public void CreateNewAccount_AssignsPassword()
         {
             testObject.CreateNewAccount();
 
@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void CreateNewAccount_DelegatesToRepository_Test()
+        public void CreateNewAccount_DelegatesToRepository()
         {
             testObject.CreateNewAccount();
 
@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePersonalInfo_DelegatesToValidator_Test()
+        public void ValidatePersonalInfo_DelegatesToValidator()
         {
             testObject.ValidatePersonalInfo();
 
@@ -130,7 +130,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePaymentInfo_DelegatesToValidator_Test()
+        public void ValidatePaymentInfo_DelegatesToValidator()
         {
             testObject.ValidatePaymentInfo();
 
@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void DeleteAccount_DelegatesToRepository_WhenAccountIDHasValue_Test()
+        public void DeleteAccount_DelegatesToRepository_WhenAccountIDHasValue()
         {
             testObject.AccountId = 1000;
 
@@ -148,7 +148,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void DeleteAccount_DoesNotDelegateToRepository_WhenAccountIDIsNull_Test()
+        public void DeleteAccount_DoesNotDelegateToRepository_WhenAccountIDIsNull()
         {
             testObject.AccountId = null;
 
@@ -158,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void DeleteAccount_DoesNotDelegateToRepository_WhenAccountIDHasNotBeenAssigned_Test()
+        public void DeleteAccount_DoesNotDelegateToRepository_WhenAccountIDHasNotBeenAssigned()
         {
             testObject.DeleteAccount();
 
@@ -166,7 +166,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void EncryptedPassword_DelegatesToEncryptionStrategy_Test()
+        public void EncryptedPassword_DelegatesToEncryptionStrategy()
         {
             string encryptedPassword = testObject.EncryptedPassword;
 
@@ -174,7 +174,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void EncryptedPassword_DoesNotModifyValue_FromEncryptionStrategy_Test()
+        public void EncryptedPassword_DoesNotModifyValue_FromEncryptionStrategy()
         {
             encryptionStrategy.Setup(s => s.EncryptPassword(It.IsAny<Express1Registration>())).Returns("ThePasswordHasBeenEncrypted");
             string encryptedPassword = testObject.EncryptedPassword;

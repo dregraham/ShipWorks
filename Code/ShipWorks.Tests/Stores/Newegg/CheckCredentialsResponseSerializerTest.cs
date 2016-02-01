@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
 
         [Fact]
-        public void Deserialize_ReturnsCheckCredentialResult_WhenSucessfulResponse_Test()
+        public void Deserialize_ReturnsCheckCredentialResult_WhenSucessfulResponse()
         {
             object result = serializer.Deserialize(successfulResponseXml);
 
@@ -59,20 +59,20 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_CheckCredentialResultIsSuccessful_WhenSucessfulResponse_Test()
+        public void Deserialize_CheckCredentialResultIsSuccessful_WhenSucessfulResponse()
         {
             CheckCredentialsResult result = serializer.Deserialize(successfulResponseXml) as CheckCredentialsResult;
             Assert.True(result.IsSuccessful);
         }
 
         [Fact]
-        public void Deserialize_ThrowsInvalidOperationException_WhenInvalidSellerId_Test()
+        public void Deserialize_ThrowsInvalidOperationException_WhenInvalidSellerId()
         {
             Assert.Throws<InvalidOperationException>(() => serializer.Deserialize(invalidSellerIdXml));
         }
 
         [Fact]
-        public void Deserialize_ThrowsInvalidOperationException_WhenInvalidSecretKey_Test()
+        public void Deserialize_ThrowsInvalidOperationException_WhenInvalidSecretKey()
         {
             Assert.Throws<InvalidOperationException>(() => serializer.Deserialize(invalidSecretKeyXml));
         }

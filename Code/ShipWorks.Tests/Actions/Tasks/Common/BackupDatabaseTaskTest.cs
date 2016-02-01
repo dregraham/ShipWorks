@@ -6,7 +6,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
     public class BackupDatabaseTaskTest
     {
         [Fact]
-        public void Initialize_DeserializesXmlCorrectly_Test()
+        public void Initialize_DeserializesXmlCorrectly()
         {
             // Create a new purge database task to serialize
             BackupDatabaseTask initialObject = new BackupDatabaseTask();

@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_AccountNameIsInterapptive_Test()
+        public void Manipulate_AccountNameIsInterapptive()
         {
             testObject.Manipulate(request);
 
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_AccountNumberIsSet_Test()
+        public void Manipulate_AccountNumberIsSet()
         {
             testObject.Manipulate(request);
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_PostalCodeIsSet_Test()
+        public void Manipulate_PostalCodeIsSet()
         {
             testObject.Manipulate(request);
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_CountryCodeIsSet_Test()
+        public void Manipulate_CountryCodeIsSet()
         {
             testObject.Manipulate(request);
 

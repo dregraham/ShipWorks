@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         private BestRateEventsDescription testObject;
 
         [Fact]
-        public void ToString_ReturnsNone_WhenNoneIsOnlyFlag_Test()
+        public void ToString_ReturnsNone_WhenNoneIsOnlyFlag()
         {
             testObject = new BestRateEventsDescription(BestRateEventTypes.None);
 
@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void ToString_ExcludesNone_WhenValueHasOneOtherValue_Test()
+        public void ToString_ExcludesNone_WhenValueHasOneOtherValue()
         {
             testObject = new BestRateEventsDescription(BestRateEventTypes.None | BestRateEventTypes.RatesCompared);
 
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void ToString_ExcludesNone_WhenValueHasMultipleFlags_Test()
+        public void ToString_ExcludesNone_WhenValueHasMultipleFlags()
         {
             testObject = new BestRateEventsDescription(BestRateEventTypes.RatesCompared | BestRateEventTypes.RateSelected);
 

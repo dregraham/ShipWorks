@@ -62,14 +62,14 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_ThrowsInvalidOperationException_WhenErrorResponseReceived_Test()
+        public void GetDownloadInfo_ThrowsInvalidOperationException_WhenErrorResponseReceived()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, failureRequest);
             Assert.Throws<NeweggException>(() => testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All));
         }
 
         [Fact]
-        public void GetDownloadInfo_ReturnsDownloadInfo_WhenSuccessfulResponseReceived_Test()
+        public void GetDownloadInfo_ReturnsDownloadInfo_WhenSuccessfulResponseReceived()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DownloadInfo info = testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All);
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_ReturnsDownloadInfoWithTotalOrders_WhenSuccessfulResponseReceived_Test()
+        public void GetDownloadInfo_ReturnsDownloadInfoWithTotalOrders_WhenSuccessfulResponseReceived()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DownloadInfo info = testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All);
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_ReturnsDownloadInfoWithStartDate_WhenSuccessfulResponseReceived_Test()
+        public void GetDownloadInfo_ReturnsDownloadInfoWithStartDate_WhenSuccessfulResponseReceived()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DateTime fromDate = DateTime.Parse("5/1/2012");
@@ -101,7 +101,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_ReturnsDownloadInfoWithEndDate_WhenSuccessfulResponseReceived_Test()
+        public void GetDownloadInfo_ReturnsDownloadInfoWithEndDate_WhenSuccessfulResponseReceived()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DateTime fromDate = DateTime.Parse("5/1/2012");
@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
 
         [Fact]
-        public void GetDownloadInfo_PageCountIsZero_WhenZeroOrdersToDownload_Test()
+        public void GetDownloadInfo_PageCountIsZero_WhenZeroOrdersToDownload()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, zeroOrdersRequest);
             DateTime fromDate = DateTime.Parse("5/1/2012");
@@ -126,7 +126,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_PageCountIsOne_WhenFortyTwoOrdersToDownload_Test()
+        public void GetDownloadInfo_PageCountIsOne_WhenFortyTwoOrdersToDownload()
         {
             // A test case for total orders not being evenly divided by max page size - page count 
             // should be "rounded up" to the next integer value
@@ -140,7 +140,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_PageCountIsTwo_WhenTwoHundredOrdersToDownload_Test()
+        public void GetDownloadInfo_PageCountIsTwo_WhenTwoHundredOrdersToDownload()
         {
             // A test case for total orders being evenly divided by the max page size
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, twoHundredOrdersRequest);
@@ -153,7 +153,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_FindsStartDate_FromListOfOrders_Test()
+        public void GetDownloadInfo_FindsStartDate_FromListOfOrders()
         {
             DateTime expectedStartDateInPST = TimeZoneInfo.ConvertTime(DateTime.Parse("1/5/2011 4:32:02 AM"), TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
             DateTime expectedStartDateInUtc = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(expectedStartDateInPST, "Pacific Standard Time", "GMT Standard Time");
@@ -179,7 +179,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_FindsEndDate_FromListOfOrders_Test()
+        public void GetDownloadInfo_FindsEndDate_FromListOfOrders()
         {
             DateTime expectedEndDateInPST = TimeZoneInfo.ConvertTime(DateTime.Parse("12/1/2012 4:29:19 PM"), TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
             DateTime expectedEndDateInUtc = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(expectedEndDateInPST, "Pacific Standard Time", "GMT Standard Time");
@@ -205,7 +205,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_FindsTotalOrders_FromListOfOrders_Test()
+        public void GetDownloadInfo_FindsTotalOrders_FromListOfOrders()
         {
             List<Order> orders = new List<Order>
             {
@@ -227,7 +227,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_CalculatesPageCount_FromListOfOrders_WhenFortyTwoOrders_Test()
+        public void GetDownloadInfo_CalculatesPageCount_FromListOfOrders_WhenFortyTwoOrders()
         {
             List<Order> orders = new List<Order>();
             for (int i = 0; i < 42; i++)
@@ -242,7 +242,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_CalculatesPageCount_FromListOfOrders_WhenZeroOrders_Test()
+        public void GetDownloadInfo_CalculatesPageCount_FromListOfOrders_WhenZeroOrders()
         {
             List<Order> orders = new List<Order>();
 
@@ -253,7 +253,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_StartDateIsNow_FromListOfOrders_WhenZeroOrders_Test()
+        public void GetDownloadInfo_StartDateIsNow_FromListOfOrders_WhenZeroOrders()
         {
             DateTime utcNowForComparison = DateTime.UtcNow;
             List<Order> orders = new List<Order>();
@@ -265,7 +265,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_EndDateIsNow_FromListOfOrders_WhenZeroOrders_Test()
+        public void GetDownloadInfo_EndDateIsNow_FromListOfOrders_WhenZeroOrders()
         {
             DateTime utcNowForComparison = DateTime.UtcNow;
             List<Order> orders = new List<Order>();
@@ -277,7 +277,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_CalculatesPageCount_FromListOfOrders_WhenTwoHundredOrders_Test()
+        public void GetDownloadInfo_CalculatesPageCount_FromListOfOrders_WhenTwoHundredOrders()
         {
             List<Order> orders = new List<Order>();
             for (int i = 0; i < 200; i++)
@@ -292,7 +292,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Download_RequestBodyContainsOrderNumberNodes_WhenDownloadingSpecificOrders_Test()
+        public void Download_RequestBodyContainsOrderNumberNodes_WhenDownloadingSpecificOrders()
         {
             List<Order> ordersToDownload = new List<Order>
             {

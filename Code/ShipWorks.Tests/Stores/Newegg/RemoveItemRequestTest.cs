@@ -83,21 +83,21 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void RemoveItems_ThrowsNeweggException_WhenErrorResponseIsReceived_Test()
+        public void RemoveItems_ThrowsNeweggException_WhenErrorResponseIsReceived()
         {
             testObject = new RemoveItemRequest(credentials, errorRequest);
             Assert.Throws<NeweggException>(() => testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove }));
         }
 
         [Fact]
-        public void RemoveItems_ThrowsNeweggException_WhenIsSuccessfulIsFalse_Test()
+        public void RemoveItems_ThrowsNeweggException_WhenIsSuccessfulIsFalse()
         {
             testObject = new RemoveItemRequest(credentials, failedRequest);
             Assert.Throws<NeweggException>(() => testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove }));
         }
 
         [Fact]
-        public void RemoveItems_ReturnsItemRemovalResult_WithItemsRemoved_WhenIsSuccessfulIsTrue_Test()
+        public void RemoveItems_ReturnsItemRemovalResult_WithItemsRemoved_WhenIsSuccessfulIsTrue()
         {
             testObject = new RemoveItemRequest(credentials, successfulRequest);
             ItemRemovalResult result = testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void RemoveItems_ReturnsItemRemovalResult_WithOrderNumber_WhenIsSuccessfulIsTrue_Test()
+        public void RemoveItems_ReturnsItemRemovalResult_WithOrderNumber_WhenIsSuccessfulIsTrue()
         {
             testObject = new RemoveItemRequest(credentials, successfulRequest);
             ItemRemovalResult result = testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void RemoveItems_UsesPutRequestMethod_Test()
+        public void RemoveItems_UsesPutRequestMethod()
         {
             testObject = new RemoveItemRequest(credentials, successfulRequest);
 
@@ -128,7 +128,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void RemoveItems_FormatsUrlWithOrderNumberAndSellerId_Test()
+        public void RemoveItems_FormatsUrlWithOrderNumberAndSellerId()
         {
             string expectedUrl = string.Format("https://api.newegg.com/marketplace/ordermgmt/killitem/orders/{0}/?sellerid={1}", orderNumberToRemoveFrom, sellerId);
             testObject = new RemoveItemRequest(credentials, successfulRequest);
@@ -141,7 +141,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void RemoveItems_BuildsRequestBody_WithSellerPartNumbersOfItemsToRemove_Test()
+        public void RemoveItems_BuildsRequestBody_WithSellerPartNumbersOfItemsToRemove()
         {
             // Note: this is brittle as it requires the string to be in the exact same
             // format as that in the implementation. Look into incorporating XmlDiff 

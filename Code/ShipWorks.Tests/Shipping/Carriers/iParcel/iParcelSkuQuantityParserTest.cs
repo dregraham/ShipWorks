@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Parse_SkuQuantity_Test()
+        public void Parse_SkuQuantity()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45 | XYZ, 2343");
 
@@ -80,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Parse_SkuQuantity_SingleItem_Test()
+        public void Parse_SkuQuantity_SingleItem()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45");
 
@@ -91,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Parse_SkuQuantity_SkuContainsPunctuation_Test()
+        public void Parse_SkuQuantity_SkuContainsPunctuation()
         {
             Dictionary<string, int> items = testObject.Parse("ABC._~;123, 45 | XYZ, 2343");
 
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Parse_SkuQuantity_DanglingPipe_Test()
+        public void Parse_SkuQuantity_DanglingPipe()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45 | XYZ, 2343|");
 
@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Parse_SkuQuantity_DanglingPipeAndTrailingWhitespace_Test()
+        public void Parse_SkuQuantity_DanglingPipeAndTrailingWhitespace()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45 | XYZ, 2343|        ");
 
@@ -131,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Parse_DelegatesToTokenProcessor_Test()
+        public void Parse_DelegatesToTokenProcessor()
         {
             testObject.Parse("000000, 5 | 111111, 6");
 
@@ -140,7 +140,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Parse_ThrowsiParcelException_WhenSkuQuantityGroupingLengthIsNotTwo_Test()
+        public void Parse_ThrowsiParcelException_WhenSkuQuantityGroupingLengthIsNotTwo()
         {
 
             // This will generate a skuQuantity array with only a single item (2343)
@@ -148,26 +148,26 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Parse_ThrowsiParcelException_WhenSkuQuantityGroupingIsMissingPipe_Test()
+        public void Parse_ThrowsiParcelException_WhenSkuQuantityGroupingIsMissingPipe()
         {
             // Pipe is missing after the first quantity value
             Assert.Throws<iParcelException>(() => testObject.Parse("ABC123, 45 XYZ, 2343"));
         }
 
         [Fact]
-        public void Parse_ThrowsiParcelException_WhenSkuQuantityListIsMissingSku_Test()
+        public void Parse_ThrowsiParcelException_WhenSkuQuantityListIsMissingSku()
         {
             Assert.Throws<iParcelException>(() => testObject.Parse("123456789, 45 | , 2343"));
         }
 
         [Fact]
-        public void Parse_ThrowsiParcelException_WhenQuantityIsString_Test()
+        public void Parse_ThrowsiParcelException_WhenQuantityIsString()
         {
             Assert.Throws<iParcelException>(() => testObject.Parse("123456789, 45 | 123, ABC"));
         }
 
         [Fact]
-        public void Parse_ThrowsiParcelException_WhenQuantityIsDecimal_Test()
+        public void Parse_ThrowsiParcelException_WhenQuantityIsDecimal()
         {
             Assert.Throws<iParcelException>(() => testObject.Parse("123456789, 45 | 123, 45.4"));
         }

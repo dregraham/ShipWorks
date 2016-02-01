@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
         }
 
         [Fact]
-        public void GetNewShipment_GetsShipmentFromOnTrac_WhenParametersAndResultsAreValid_Test()
+        public void GetNewShipment_GetsShipmentFromOnTrac_WhenParametersAndResultsAreValid()
         {
             var shippingResult = RunSuccessfullGetNewShipment();
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
         }
 
         [Fact]
-        public void GetNewShipment_RequestingUrlIsCorrect_WhenParametersAndResultsAreValid_Test()
+        public void GetNewShipment_RequestingUrlIsCorrect_WhenParametersAndResultsAreValid()
         {
             RunSuccessfullGetNewShipment();
 
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
         }
 
         [Fact]
-        public void GetNewShipment_RequestVerbIsPost_WhenParametersAndResultsAreValid_Test()
+        public void GetNewShipment_RequestVerbIsPost_WhenParametersAndResultsAreValid()
         {
             RunSuccessfullGetNewShipment();
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
         }
 
         [Fact]
-        public void GetNewShipment_RequestIsLogged_WhenParametersAndResultsAreValid_Test()
+        public void GetNewShipment_RequestIsLogged_WhenParametersAndResultsAreValid()
         {
             RunSuccessfullGetNewShipment();
 
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
         }
 
         [Fact]
-        public void GetNewShipment_ResponseIsLogged_WhenParametersAndResultsAreValid_Test()
+        public void GetNewShipment_ResponseIsLogged_WhenParametersAndResultsAreValid()
         {
             RunSuccessfullGetNewShipment();
 
@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
         }
 
         [Fact]
-        public void GetNewShipment_OnTracError_ReturnedXmlInBadFormat_Test()
+        public void GetNewShipment_OnTracError_ReturnedXmlInBadFormat()
         {
             //fake string response from OnTrac
             const string fakedResponseXml =

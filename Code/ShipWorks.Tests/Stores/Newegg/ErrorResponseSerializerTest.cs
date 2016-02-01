@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
 
         [Fact]
-        public void Deserialize_ReturnsErrorResult_WhenDeserializingErrorXml_Test()
+        public void Deserialize_ReturnsErrorResult_WhenDeserializingErrorXml()
         {
             object result = serializer.Deserialize(errorXml);
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_ThrowsInvalidOperationException_WhenDeserializingNonErrorXml_Test()
+        public void Deserialize_ThrowsInvalidOperationException_WhenDeserializingNonErrorXml()
         {
             Assert.Throws<InvalidOperationException>(() => serializer.Deserialize(nonErrorXml));
         }

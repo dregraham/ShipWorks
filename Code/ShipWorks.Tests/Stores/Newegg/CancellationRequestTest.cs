@@ -52,14 +52,14 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Cancel_ThrowsNeweggException_WhenErrorResponseIsReceived_Test()
+        public void Cancel_ThrowsNeweggException_WhenErrorResponseIsReceived()
         {
             testObject = new CancelOrderRequest(credentials, failedRequest);
             Assert.Throws<NeweggException>(() => testObject.Cancel(orderToCancel, CancellationReason.OutOfStock));
         }
 
         [Fact]
-        public void Cancel_ReturnsResultWithOrderNumber_WhenCancellingAnOrder_Test()
+        public void Cancel_ReturnsResultWithOrderNumber_WhenCancellingAnOrder()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
 
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Cancel_ReturnsResultWithVoidStatus_WhenCancellingAnOrder_Test()
+        public void Cancel_ReturnsResultWithVoidStatus_WhenCancellingAnOrder()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
 
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Cancel_ReturnsResultWithSellerId_WhenCancellingAnOrder_Test()
+        public void Cancel_ReturnsResultWithSellerId_WhenCancellingAnOrder()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
 

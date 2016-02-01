@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
          }
 
          [Fact]
-         public void GetIPAddress_LogsIPAddress_Test()
+         public void GetIPAddress_LogsIPAddress()
          {
              testObject.GetIPAddress();
 
