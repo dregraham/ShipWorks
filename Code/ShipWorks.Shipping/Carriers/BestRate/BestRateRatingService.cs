@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 if (distinctExceptions.Any())
                 {
-                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(shipmentTypeManager[ShipmentTypeCode.BestRate], distinctExceptions));
+                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(ShipmentTypeCode.BestRate, distinctExceptions));
                 }
 
                 return rateGroup;
@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             return compiledRateGroup;
         }
-        
+
         /// <summary>
         /// Starts getting rates for a broker
         /// </summary>

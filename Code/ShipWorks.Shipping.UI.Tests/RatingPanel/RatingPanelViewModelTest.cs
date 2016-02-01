@@ -4,9 +4,11 @@ using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -213,6 +215,27 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             messenger.Send(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromError<RateGroup>("Foo"), null));
 
             Assert.Empty(testObject.Rates);
+        }
+
+        [Fact]
+        public void GetsFootnoteViewModels_WhenResultsHaveFootnotes()
+        {
+            var viewModel1 = mock.Create<IRateFootnoteFactory>();
+            var footnote1 = mock.CreateMock<IRateFootnoteFactory>();
+            footnote1.Setup(x => x.CreateViewModel(It.IsAny<ICarrierShipmentAdapter>())).Returns(viewModel1);
+            testRateGroup.AddFootnoteFactory(footnote1.Object);
+
+            var viewModel2 = mock.Create<IRateFootnoteFactory>();
+            var footnote2 = mock.CreateMock<IRateFootnoteFactory>();
+            footnote2.Setup(x => x.CreateViewModel(It.IsAny<ICarrierShipmentAdapter>())).Returns(viewModel2);
+            testRateGroup.AddFootnoteFactory(footnote2.Object);
+
+            var testObject = mock.Create<RatingPanelViewModel>();
+            messenger.Send(new RatesRetrievingMessage(this, string.Empty));
+            messenger.Send(new RatesRetrievedMessage(this, string.Empty, testResult, null));
+
+            Assert.Contains(viewModel1, testObject.Footnotes);
+            Assert.Contains(viewModel2, testObject.Footnotes);
         }
 
         public void Dispose()

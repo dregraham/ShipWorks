@@ -2,6 +2,8 @@
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
@@ -14,6 +16,14 @@ namespace ShipWorks.Shipping.Carriers.Usps
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<UspsRateDiscountedFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
+            builder.RegisterType<UspsRatePromotionFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
             builder.RegisterType<UspsShipmentType>()
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Usps);

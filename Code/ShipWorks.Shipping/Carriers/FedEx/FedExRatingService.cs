@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private readonly FedExAccountRepository fedExAccountRepository;
         private readonly FedExShipmentType fedExShipmentType;
         private readonly FedExShippingClerkFactory shippingClerkFactory;
-        
+
         public FedExRatingService(FedExAccountRepository fedExAccountRepository,
             FedExShipmentType fedExShipmentType,
             FedExShippingClerkFactory shippingClerkFactory)
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(fedExShipmentType));
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.FedEx));
                 return errorRates;
             }
             finally

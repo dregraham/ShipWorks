@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType));
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.ShipmentTypeCode));
                 return errorRates;
             }
             catch (Exception ex) when (ex is UpsException || ex is InvalidPackageDimensionsException)

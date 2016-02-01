@@ -179,6 +179,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteViewModel.cs" />
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
     <Compile Include="RatingPanel\RateResultDisplay.cs" />
@@ -437,6 +439,58 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="RatingPanel\FootnoteTemplates\BrokerExceptionsRateFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\Express1RateNotQualifiedFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\Express1DiscountedRateFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\CounterRatesInvalidStoreAddressFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\UspsRateDiscountedFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\UspsRateNotQualifiedFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\Express1RatePromotionFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\UspsRatePromotionFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\ExceptionsRateFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\InformationFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\AmazonNotLinkedFootnoteViewModelTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\FootnoteTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="RatingPanel\RatingPanelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

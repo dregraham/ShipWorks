@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         [Obfuscation(Exclude = true)]
         public bool ShowFootnotes
         {
-            get { return showDuties; }
+            get { return showFootnotes; }
             set { handler.Set(nameof(ShowFootnotes), ref showFootnotes, value); }
         }
 
@@ -73,9 +73,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// List of footnotes
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<RateResultDisplay> Footnotes
+        public IEnumerable<object> Footnotes
         {
-            get { return rates; }
+            get { return footnotes; }
             set { handler.Set(nameof(Footnotes), ref footnotes, value); }
         }
 

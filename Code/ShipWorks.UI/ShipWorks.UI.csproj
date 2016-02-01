@@ -147,6 +147,9 @@
     <Compile Include="Controls\AddressControl\AddressViewModel.cs" />
     <Compile Include="Controls\AddressControl\AddressViewModel.Properties.cs" />
     <Compile Include="Controls\AlignmentWrapPanel.cs" />
+    <Compile Include="Controls\TypeBasedTemplateSelector\Template.cs" />
+    <Compile Include="Controls\TypeBasedTemplateSelector\TemplateCollection.cs" />
+    <Compile Include="Controls\TypeBasedTemplateSelector\TypeBasedTemplateSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />

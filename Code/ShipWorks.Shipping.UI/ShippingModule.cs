@@ -3,6 +3,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.ApplicationCode;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Profiles;
@@ -50,6 +51,10 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<ExceptionsRateFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
             builder.RegisterType<ExcludedPackageTypeRepository>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -57,6 +62,10 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ExcludedServiceTypeRepository>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<InformationFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
 
             builder.RegisterType<InsuranceUtilityWrapper>()
                 .AsImplementedInterfaces()

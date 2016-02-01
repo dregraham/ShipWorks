@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -6,7 +7,18 @@ using System.Reactive.Linq;
 using Interapptive.Shared.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
+using ShipWorks.Shipping.Carriers.Other;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.NotQualified;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.UI.Carriers.Amazon;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -67,6 +79,35 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 EmptyMessage = message.Results.Message;
                 ShowEmptyMessage = true;
             }
+
+            Footnotes = message.Results.Value.FootnoteFactories
+                .Concat(new[] {
+                    (IRateFootnoteFactory) new AmazonNotLinkedFootnoteFactory(ShipmentTypeCode.Usps),
+                    new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(new [] {"Foo", "Bar" }),
+                    new InformationFootnoteFactory("This is a test message..."),
+                    new ExceptionsRateFootnoteFactory(ShipmentTypeCode.Other, new Exception("This is the exception message")),
+                    new ExceptionsRateFootnoteFactory(ShipmentTypeCode.Other, new InvalidPackageDimensionsException("This is the exception message")),
+                    new UspsRatePromotionFootnoteFactory(ShipmentTypeCode.Other, new ShipmentEntity(), true),
+                    new UspsRatePromotionFootnoteFactory(ShipmentTypeCode.Other, new ShipmentEntity(), false),
+                    new UspsRateNotQualifiedFootnoteFactory(ShipmentTypeCode.Other),
+                    new UspsRateDiscountedFootnoteFactory(ShipmentTypeCode.Other, new List<RateResult>(), new List<RateResult>()),
+                    new Express1PromotionRateFootnoteFactory(ShipmentTypeCode.Other, null),
+                    new Express1NotQualifiedRateFootnoteFactory(ShipmentTypeCode.Other),
+                    new Express1DiscountedRateFootnoteFactory(ShipmentTypeCode.Other, new List<RateResult>(), new List<RateResult>()),
+                    new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Other),
+                    new BrokerExceptionsRateFootnoteFactory(ShipmentTypeCode.Other, new [] {
+                        new BrokerException(new ShippingException("Error"), BrokerExceptionSeverityLevel.Error, new OtherShipmentType())
+                    }),
+                    new BrokerExceptionsRateFootnoteFactory(ShipmentTypeCode.Other, new [] {
+                        new BrokerException(new ShippingException("Information"), BrokerExceptionSeverityLevel.Information, new OtherShipmentType())
+                    }),
+                    new BrokerExceptionsRateFootnoteFactory(ShipmentTypeCode.Other, new [] {
+                        new BrokerException(new ShippingException("Warning"), BrokerExceptionSeverityLevel.Warning, new OtherShipmentType())
+                    })
+                })
+                .Select(x => x.CreateViewModel(message.ShipmentAdapter))
+                .ToList();
+            ShowFootnotes = Footnotes.Any();
 
             ShowDuties = Rates.Any(x => !string.IsNullOrEmpty(x.Duties));
             ShowTaxes = Rates.Any(x => !string.IsNullOrEmpty(x.Taxes));

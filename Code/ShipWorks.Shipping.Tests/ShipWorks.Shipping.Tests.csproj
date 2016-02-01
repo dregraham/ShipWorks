@@ -169,6 +169,7 @@
     <Compile Include="Carriers\Ups\WorldShip\WorldShipShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Loading\ShipmentLoaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rating\ExceptionsRateFootnoteFactoryTests.cs" />
     <Compile Include="Services\Account\ShippingAccountListProviderTest.cs" />
     <Compile Include="Services\RatesRetrieverServiceTests.cs" />
     <Compile Include="Services\RatesRetrieverTests.cs" />

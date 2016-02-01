@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(Enumerable.Empty<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentTypeManager[ShipmentTypeCode.Usps]));
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Usps));
 
                 return errorRates;
             }

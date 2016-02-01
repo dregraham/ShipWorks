@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Shipping.Editing;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {
     /// <summary>
-    /// An implementation of the IRateFootnoteFactory that creates instances of a 
+    /// An implementation of the IRateFootnoteFactory that creates instances of a
     /// BrokerExceptionsRateFootnoteControl.
     /// </summary>
     public class BrokerExceptionsRateFootnoteFactory : IRateFootnoteFactory
@@ -20,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// <param name="shipmentType">The shipment type that the factory is being create for.</param>
         /// <param name="brokerExceptions">The broker exceptions.</param>
         /// <exception cref="System.InvalidOperationException">One or more broker exceptions must be provided.</exception>
-        public BrokerExceptionsRateFootnoteFactory(ShipmentType shipmentType, IEnumerable<BrokerException> brokerExceptions)
+        public BrokerExceptionsRateFootnoteFactory(ShipmentTypeCode shipmentTypeCode, IEnumerable<BrokerException> brokerExceptions)
         {
             IEnumerable<BrokerException> exceptions = brokerExceptions as IList<BrokerException> ?? brokerExceptions.ToList();
 
@@ -29,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
                 throw new InvalidOperationException("One or more broker exceptions must be provided.");
             }
 
-            ShipmentTypeCode = shipmentType.ShipmentTypeCode;
+            ShipmentTypeCode = shipmentTypeCode;
             this.brokerExceptions = exceptions;
         }
 
@@ -53,7 +55,23 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// <returns>A BrokerExceptionsRateFootnoteControl object.</returns>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
-            return new BrokerExceptionsRateFootnoteControl(brokerExceptions);
+            return new BrokerExceptionsRateFootnoteControl(brokerExceptions, GetSeverityLevel());
         }
+
+        /// <summary>
+        /// Get a view model that represents this footnote
+        /// </summary>
+        public object CreateViewModel(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IBrokerExceptionsRateFootnoteViewModel viewModel = lifetimeScope.Resolve<IBrokerExceptionsRateFootnoteViewModel>();
+                viewModel.BrokerExceptions = brokerExceptions;
+                viewModel.SeverityLevel = GetSeverityLevel();
+                return viewModel;
+            }
+        }
+
+        private BrokerExceptionSeverityLevel GetSeverityLevel() => brokerExceptions.FirstOrDefault().SeverityLevel;
     }
 }

@@ -6,7 +6,6 @@ using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
@@ -26,6 +25,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
+
+            builder.RegisterType<AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
 
             builder.RegisterType<AmazonShippingWebClient>()
                 .AsImplementedInterfaces()
@@ -110,7 +113,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<NullShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Amazon)
                 .SingleInstance();
-				
+
             builder.RegisterType<AmazonCreateShipmentRequest>()
                 .Keyed<IAmazonShipmentRequest>(AmazonMwsApiCall.CreateShipment);
 

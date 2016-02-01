@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Xunit;
 using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 {
@@ -17,7 +16,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         private Mock<IRateFootnoteFactory> nonInvalidAddressFootnote;
         private Mock<IRateFootnoteFactory> anotherNonInvalidAddressFootnote;
         private Mock<IRateFootnoteFactory> aThirdInvalidAddressFootnote;
-        private Mock<ShipmentType> shipmentType;
 
         private RateGroup rateGroup;
 
@@ -32,18 +30,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             rateGroup.AddFootnoteFactory(anotherNonInvalidAddressFootnote.Object);
             rateGroup.AddFootnoteFactory(aThirdInvalidAddressFootnote.Object);
 
-            shipmentType = new Mock<ShipmentType>();
-
             testObject = new CounterRatesInvalidStoreAddressFootnoteFilter();
         }
 
         [Fact]
         public void Filter_RemovesDuplicateCounterRatesInvalidStoreAddressFootnoteFactory_Test()
-        {            
-            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
-            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
-            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
-            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
+        {
+            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Other));
+            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Other));
+            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Other));
+            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Other));
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
@@ -53,10 +49,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         [Fact]
         public void Filter_RetainsOtherFootnotes_WhenDuplicateCounterRatesInvalidStoreAddressFootnoteFactoryAreRemoved_Test()
         {
-            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
-            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
-            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
-            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
+            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Other));
+            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Other));
+            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Other));
+            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Other));
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
@@ -67,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         [Fact]
         public void Filter_RetainsCounterRatesInvalidStoreAddressFootnoteFactory_WhenOnlyOneExists_Test()
         {
-            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
+            rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Other));
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 

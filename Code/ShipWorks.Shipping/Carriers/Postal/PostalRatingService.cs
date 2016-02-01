@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
-using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal
@@ -46,20 +44,20 @@ namespace ShipWorks.Shipping.Carriers.Postal
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(Enumerable.Empty<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentTypeManager[(ShipmentTypeCode)shipment.ShipmentType]));
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipment.ShipmentTypeCode));
                 return errorRates;
             }
 
             RateGroup rates = new RateGroup(Enumerable.Empty<RateResult>());
 
-            if (!shipmentTypeManager[(ShipmentTypeCode)shipment.ShipmentType].IsShipmentTypeRestricted)
+            if (!shipmentTypeManager[(ShipmentTypeCode) shipment.ShipmentType].IsShipmentTypeRestricted)
             {
                 // Only get counter rates if the shipment type has not been restricted
                 rates = ratingServiceFactory[ShipmentTypeCode.PostalWebTools].GetRates(shipment);
 
                 foreach (RateResult rate in rates.Rates.Where(rate => rate.ProviderLogo != null))
                 {
-                    rate.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType);
+                    rate.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType);
                 }
             }
 
@@ -71,8 +69,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         protected virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
-            List<PostalServiceType> availableServiceTypes = shipmentTypeManager[(ShipmentTypeCode)shipment.ShipmentType].GetAvailableServiceTypes().Select(s => (PostalServiceType)s).Union(new List<PostalServiceType> { (PostalServiceType)shipment.Postal.Service }).ToList();
-            return rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)).ToList();
+            List<PostalServiceType> availableServiceTypes = shipmentTypeManager[(ShipmentTypeCode) shipment.ShipmentType].GetAvailableServiceTypes().Select(s => (PostalServiceType) s).Union(new List<PostalServiceType> { (PostalServiceType) shipment.Postal.Service }).ToList();
+            return rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
         }
 
         /// <summary>
@@ -91,10 +89,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     .ToList();
 
             var validExpress1Rates = rates
-                .Where(e => availabelServiceTypes.Contains(((PostalRateSelection)e.OriginalTag).ServiceType))
+                .Where(e => availabelServiceTypes.Contains(((PostalRateSelection) e.OriginalTag).ServiceType))
                 .ToList();
 
-            validExpress1Rates.ForEach(e => {
+            validExpress1Rates.ForEach(e =>
+            {
                 e.ShipmentType = baseShipmentType;
                 e.ProviderLogo = e.ProviderLogo != null ? EnumHelper.GetImage(express1ShipmentType) : null;
             });
