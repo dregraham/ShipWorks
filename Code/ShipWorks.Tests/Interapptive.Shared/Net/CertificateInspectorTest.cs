@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
         }
 
         [Fact]
-        public void Inspect_ReturnsTrusted_WhenFedExCertificateVerificationDataIsEmpty_Test()
+        public void Inspect_ReturnsTrusted_WhenFedExCertificateVerificationDataIsEmpty()
         {
             testObject = new CertificateInspector(string.Empty);
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
         }
         
         [Fact]
-        public void Inspect_ReturnsNone_WhenCertificateIsNull_Test()
+        public void Inspect_ReturnsNone_WhenCertificateIsNull()
         {
             request.Setup(r => r.Certificate).Returns<X509Certificate>(null);
             testObject = new CertificateInspector(certificateVerificationData);
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
         }
 
         [Fact]
-        public void Inspect_ReturnsSpoofed_WhenCertificateSubjectDoesNotMatchExpectedValues_Test()
+        public void Inspect_ReturnsSpoofed_WhenCertificateSubjectDoesNotMatchExpectedValues()
         {
             request.Setup(r => r.Certificate).Returns(noMatchCertificate);
             testObject = new CertificateInspector(certificateVerificationData);
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
         }
 
         [Fact]
-        public void Inspect_ReturnsTrusted_WhenCertificateSubjectMatchesAllExpectedValues_WithSingleExpectedValue_Test()
+        public void Inspect_ReturnsTrusted_WhenCertificateSubjectMatchesAllExpectedValues_WithSingleExpectedValue()
         {
             request.Setup(r => r.Certificate).Returns(singleMatchCertificate);
 
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
         }
 
         [Fact]
-        public void Inspect_ReturnsTrusted_WhenCertificateSubjectMatchesAllExpectedValues_WithMultipleExpectedValues_Test()
+        public void Inspect_ReturnsTrusted_WhenCertificateSubjectMatchesAllExpectedValues_WithMultipleExpectedValues()
         {
             request.Setup(r => r.Certificate).Returns(multiMatchCertificate);
 

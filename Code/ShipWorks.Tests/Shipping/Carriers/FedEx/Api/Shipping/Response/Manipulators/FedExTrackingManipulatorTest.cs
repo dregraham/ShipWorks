@@ -32,14 +32,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
 
         [Fact]
-        public void Manipulate_MasterTrackingNumberAddedToShipment_WhenMasterTrackingIdPresent_Test()
+        public void Manipulate_MasterTrackingNumberAddedToShipment_WhenMasterTrackingIdPresent()
         {
             testObject.Manipulate(fedExShipResponse);
             Assert.Equal(shipmentEntity.TrackingNumber, "MasterTrackingNumber");
         }
 
         [Fact]
-        public void Manipulate_PackageTrackingNumberAddedToShipment_WhenNoMasterTrackingIdPresent_Test()
+        public void Manipulate_PackageTrackingNumberAddedToShipment_WhenNoMasterTrackingIdPresent()
         {
             //remove master tracking
             processShipmentReply.CompletedShipmentDetail.MasterTrackingId = null;
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         }
 
         [Fact]
-        public void Manipulate_PackageTrackingNumberAddedToSecondPackage_WhenSequenceNumberIsTwo_Test()
+        public void Manipulate_PackageTrackingNumberAddedToSecondPackage_WhenSequenceNumberIsTwo()
         {
             processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].SequenceNumber = "2";
 

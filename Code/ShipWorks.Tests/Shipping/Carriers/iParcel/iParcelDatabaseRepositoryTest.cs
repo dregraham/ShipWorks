@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         
-        public void SaveLabel_Test()
+        public void SaveLabel()
         {
             // MARKED WITH THE IGNORE ATTRIBTE SINCE THIS ISN'T REALLY A UNIT TEST (DUE
             // TO THE DATABASE DEPENDENCIES). THIS WAS JUST A QUICK CHECK THAT THE IMAGE 
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
 
         [Fact]
-        public void SaveTrackingInfoToEntity_AssignsTrackingNumber_Test()
+        public void SaveTrackingInfoToEntity_AssignsTrackingNumber()
         {
             // We can unit test this since the repository is not interacting with an external dependency 
             // (i.e. the database) in the SaveTrackingInfoToEntity method
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void SaveTrackingInfoToEntity_AssignsParcelNumber_Test()
+        public void SaveTrackingInfoToEntity_AssignsParcelNumber()
         {
             // We can unit test this since the repository is not interacting with an external dependency 
             // (i.e. the database) in the SaveTrackingInfoToEntity method

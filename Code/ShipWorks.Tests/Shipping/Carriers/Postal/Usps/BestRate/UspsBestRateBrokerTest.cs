@@ -100,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [Fact]
-        public void HasAccounts_DelegatesToAccountRepository_Test()
+        public void HasAccounts_DelegatesToAccountRepository()
         {
             bool hasAccounts = testObject.HasAccounts;
 
@@ -108,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [Fact]
-        public void HasAccounts_ReturnsTrue_WhenRepositoryHasMoreThanZeroAccounts_Test()
+        public void HasAccounts_ReturnsTrue_WhenRepositoryHasMoreThanZeroAccounts()
         {
             genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity> { new UspsAccountEntity() });
 
@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [Fact]
-        public void HasAccounts_ReturnsFalse_WhenRepositoryHasZeroAccounts_Test()
+        public void HasAccounts_ReturnsFalse_WhenRepositoryHasZeroAccounts()
         {
             genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
 
@@ -430,7 +430,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [Fact]
-        public void GetBestRates_OverridesDimsAddWeight_Test()
+        public void GetBestRates_OverridesDimsAddWeight()
         {
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                                    .Callback<ShipmentEntity>(x =>
@@ -504,7 +504,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [Fact]
-        public void GetInsuranceProvider_ReturnsShipWorks_WhenUsingShipWorksInsurance_Test()
+        public void GetInsuranceProvider_ReturnsShipWorks_WhenUsingShipWorksInsurance()
         {
             ShippingSettingsEntity shippingSettings = new ShippingSettingsEntity { UspsInsuranceProvider = (int)InsuranceProvider.ShipWorks };
 
@@ -512,7 +512,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [Fact]
-        public void GetInsuranceProvider_ReturnsCarrier_WhenUsingCarrierInsurance_Test()
+        public void GetInsuranceProvider_ReturnsCarrier_WhenUsingCarrierInsurance()
         {
             ShippingSettingsEntity shippingSettings = new ShippingSettingsEntity { UspsInsuranceProvider = (int) InsuranceProvider.Carrier };
 

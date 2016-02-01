@@ -26,20 +26,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
         #region CreateRegisterUserResponse Tests
         [Fact]
-        public void CreateRegisterUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseIsNull_Test()
+        public void CreateRegisterUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseIsNull()
         {
             Assert.Throws<CarrierException>(() => testObject.CreateRegisterUserResponse(null, carrierRequest.Object));
         }
 
         [Fact]
-        public void CreateRegisterUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided_Test()
+        public void CreateRegisterUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided()
         {
             UpsResponseFactory invalidType = new UpsResponseFactory();
             Assert.Throws<CarrierException>(() => testObject.CreateRegisterUserResponse(invalidType, carrierRequest.Object));
         }
 
         [Fact]
-        public void CreateRegisterUserResponse_ReturnsUpsRegisterUserResponse_Test()
+        public void CreateRegisterUserResponse_ReturnsUpsRegisterUserResponse()
         {
             RegisterResponse validType = new RegisterResponse();
 

@@ -8,7 +8,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
     {
 
         [Fact]
-        public void IsValid_ReturnsFalse_WhenOriginStreet1IsEmpty_Test()
+        public void IsValid_ReturnsFalse_WhenOriginStreet1IsEmpty()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginStreet1 = string.Empty;
@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void IsValid_ReturnsFalse_WhenOriginCityIsEmpty_Test()
+        public void IsValid_ReturnsFalse_WhenOriginCityIsEmpty()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginCity = string.Empty;
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void IsValid_ReturnsFalse_WhenOriginStateIsEmpty_Test()
+        public void IsValid_ReturnsFalse_WhenOriginStateIsEmpty()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginStateProvCode = string.Empty;
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void IsValid_ReturnsFalse_WhenOriginPostalCode1IsEmpty_Test()
+        public void IsValid_ReturnsFalse_WhenOriginPostalCode1IsEmpty()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginPostalCode = string.Empty;
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void IsValid_ReturnsFalse_WhenOriginCountryCodeIsEmpty_Test()
+        public void IsValid_ReturnsFalse_WhenOriginCountryCodeIsEmpty()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginCountryCode = string.Empty;
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void IsValid_ReturnsTrue_WhenOriginAddressIsComplete_Test()
+        public void IsValid_ReturnsTrue_WhenOriginAddressIsComplete()
         {
             ShipmentEntity shipment = CreateShipment();
 

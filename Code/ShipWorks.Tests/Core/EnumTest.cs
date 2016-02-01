@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Core
         }
 
         [Fact]
-        public void Verify_EnumObfuscation_IsSet_Test()
+        public void Verify_EnumObfuscation_IsSet()
         {
             IEnumerable<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.Contains("ShipWorks")).OrderBy(a => a.FullName);
             IEnumerable<Type> types = assemblies

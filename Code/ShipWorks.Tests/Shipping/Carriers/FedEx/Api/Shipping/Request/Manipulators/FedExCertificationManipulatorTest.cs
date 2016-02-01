@@ -59,13 +59,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullTransactionDetail_Test()
+        public void Manipulate_AccountsForNullTransactionDetail()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
             // the carrier request with the updated native request
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_DelegatesToSettingsRepository_Test()
+        public void Manipulate_DelegatesToSettingsRepository()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_DelegatesToTokenProcessor_Test()
+        public void Manipulate_DelegatesToTokenProcessor()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AssignsTransactionId_WhenIsInterapptiveUserIsTrue_AndReferencePOIsNonEmptyString_Test()
+        public void Manipulate_AssignsTransactionId_WhenIsInterapptiveUserIsTrue_AndReferencePOIsNonEmptyString()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -123,7 +123,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_DoesNotAssignTransactionId_WhenIsInterapptiveUserIsFalse_Test()
+        public void Manipulate_DoesNotAssignTransactionId_WhenIsInterapptiveUserIsFalse()
         {
             // Setup the repository to say the user is not an interapptive user
             settingsRepository.Setup(r => r.IsInterapptiveUser).Returns(false);
@@ -135,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_DoesNotAssignTransactionId_WhenReferencePOIsEmptyString_Test()
+        public void Manipulate_DoesNotAssignTransactionId_WhenReferencePOIsEmptyString()
         {
             // Setup the shipment's reference PO
             carrierRequest.Object.ShipmentEntity.FedEx.ReferencePO = string.Empty;
@@ -147,7 +147,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_DoesNotAssignTransactionId_WhenReferencePOIsNull_Test()
+        public void Manipulate_DoesNotAssignTransactionId_WhenReferencePOIsNull()
         {
             // Setup the shipment's reference PO to be a null value
             shipmentEntity = new ShipmentEntity()

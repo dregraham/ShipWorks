@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_UsesRawResponse_FromRequest_Test()
+        public void Process_UsesRawResponse_FromRequest()
         {
             testObject.Process();
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotExpected_Test()
+        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotExpected()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
 
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_LogsMessage_WhenStatusCodeIsNotRecognized_Test()
+        public void Process_LogsMessage_WhenStatusCodeIsNotRecognized()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
 
@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
+        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
 
@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful_Test()
+        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
             request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_LogsMessage_WhenStatusCodeIs419_ButNotSuccessful_Test()
+        public void Process_LogsMessage_WhenStatusCodeIs419_ButNotSuccessful()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
             request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
@@ -121,7 +121,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_LogsMessage_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
+        public void Process_LogsMessage_WhenStatusCodeIsRecongized_ButNotSuccessful()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
 
@@ -136,7 +136,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_SuccessfulResponse_Test()
+        public void Process_SuccessfulResponse()
         {
             // Response code of 200 is success
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.OK);
@@ -145,7 +145,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_SetsClaimStatus_WhenResponseIsSuccesful_Test()
+        public void Process_SetsClaimStatus_WhenResponseIsSuccesful()
         {
             testObject.Process();
 
@@ -153,7 +153,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_ReturnsNoStatusInformation_WhenStatusIsMissing_Test()
+        public void Process_ReturnsNoStatusInformation_WhenStatusIsMissing()
         {
             // Setup the simulated response from the request
             const string simulatedResponseBody = "{\"NotTheStatus\":\"\"}";
@@ -166,7 +166,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
 
 
         [Fact]
-        public void Process_LogsMessage_WhenStatusIsMissing_Test()
+        public void Process_LogsMessage_WhenStatusIsMissing()
         {
             // Setup the simulated response from the request
             const string simulatedResponseBody = "{\"NotTheStatus\":\"\"}";
@@ -178,7 +178,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_ThrowsInsureShipException_WhenResponseContentIsEmpty_Test()
+        public void Process_ThrowsInsureShipException_WhenResponseContentIsEmpty()
         {
             // Setup the simulated response from the request
             request.Setup(r => r.ResponseContent).Returns(string.Empty);
@@ -187,7 +187,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        public void Process_ThrowsInsureShipException_WhenResponseStreamIsNull_Test()
+        public void Process_ThrowsInsureShipException_WhenResponseStreamIsNull()
         {
             request.Setup(r => r.ResponseContent).Returns((string)null);
 

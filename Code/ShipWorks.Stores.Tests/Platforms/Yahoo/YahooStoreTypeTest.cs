@@ -43,25 +43,25 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void TypeCode_ReturnsYahooStoreTypeCode_Test()
+        public void TypeCode_ReturnsYahooStoreTypeCode()
         {
             Assert.Equal(StoreTypeCode.Yahoo, apiTestObject.TypeCode);
         }
 
         [Fact]
-        public void Constructor_ThrowsInvalidOperationException_WhenStoreIsNotYahoo_Test()
+        public void Constructor_ThrowsInvalidOperationException_WhenStoreIsNotYahoo()
         {
             Assert.Throws<InvalidOperationException>(() => new YahooStoreType(otherStore.Object));
         }
 
         [Fact]
-        public void AccountSettingsHelpUrl_ReturnsCorrectUrlString_Test()
+        public void AccountSettingsHelpUrl_ReturnsCorrectUrlString()
         {
             Assert.Equal("http://support.shipworks.com/solution/articles/4000068682-adding-a-yahoo-store-using-api", apiTestObject.AccountSettingsHelpUrl);
         }
 
         [Fact]
-        public void CreateStoreInstance_ReturnsInitializedYahooStoreEntity_Test()
+        public void CreateStoreInstance_ReturnsInitializedYahooStoreEntity()
         {
             YahooStoreEntity storeEntity = apiTestObject.CreateStoreInstance() as YahooStoreEntity;
 
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void CreateOrderIdentifier_ReturnsYahooOrderIdentifier_FromYahooOrder_Test()
+        public void CreateOrderIdentifier_ReturnsYahooOrderIdentifier_FromYahooOrder()
         {
             YahooOrderEntity order = new YahooOrderEntity() {YahooOrderID = "1"};
 
@@ -80,50 +80,50 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void CreateOrderIdentifier_ThrowsYahooException_WhenOrderIsNotYahooOrNull_Test()
+        public void CreateOrderIdentifier_ThrowsYahooException_WhenOrderIsNotYahooOrNull()
         {
             Assert.Throws<YahooException>(() => apiTestObject.CreateOrderIdentifier(new OrderEntity()));
             Assert.Throws<YahooException>(() => apiTestObject.CreateOrderIdentifier(null));
         }
 
         [Fact]
-        public void CreateOrderItemInstance_ReturnsYahooOrderItemEntity_Test()
+        public void CreateOrderItemInstance_ReturnsYahooOrderItemEntity()
         {
             Assert.IsAssignableFrom<YahooOrderItemEntity>(apiTestObject.CreateOrderItemInstance());
         }
 
         [Fact]
-        public void CreateDownloader_ReturnsYahooEmailDownloader_WhenEmailUser_Test()
+        public void CreateDownloader_ReturnsYahooEmailDownloader_WhenEmailUser()
         {
             Assert.IsAssignableFrom<YahooEmailDownloader>(emailTestObject.CreateDownloader());
         }
 
         [Fact]
-        public void CreateDownloader_ReturnsYahooApiDownloader_WhenApiUser_Test()
+        public void CreateDownloader_ReturnsYahooApiDownloader_WhenApiUser()
         {
             Assert.IsAssignableFrom<YahooApiDownloader>(apiTestObject.CreateDownloader());
         }
 
         [Fact]
-        public void CreateStoreSettingsControl_ReturnsEmailStoreSettingsControl_WhenEmailUser_Test()
+        public void CreateStoreSettingsControl_ReturnsEmailStoreSettingsControl_WhenEmailUser()
         {
             Assert.IsAssignableFrom<YahooEmailStoreSettingsControl>(emailTestObject.CreateStoreSettingsControl());
         }
 
         [Fact]
-        public void CreateStoreSettingsControl_ReturnsNull_WhenApiUser_Test()
+        public void CreateStoreSettingsControl_ReturnsNull_WhenApiUser()
         {
             Assert.Null(apiTestObject.CreateStoreSettingsControl());
         }
 
         [Fact]
-        public void CreateInitialFilters_ReturnsEmptyList_WhenEmailUser_Test()
+        public void CreateInitialFilters_ReturnsEmptyList_WhenEmailUser()
         {
             Assert.Equal(0, emailTestObject.CreateInitialFilters().Count);
         }
 
         [Fact]
-        public void CreateInitialFilters_ReturnsListOfAllYahooOrderStatusFilters_WhenApiUser_Test()
+        public void CreateInitialFilters_ReturnsListOfAllYahooOrderStatusFilters_WhenApiUser()
         {
             List<string> filterNames = apiTestObject.CreateInitialFilters().Select(filter => filter.Name).ToList();
 
@@ -134,7 +134,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void CreateOnlineUpdateInstanceCommands_OnlyReturnsUploadShipmentDetailsCommand_WhenEmailUser_Test()
+        public void CreateOnlineUpdateInstanceCommands_OnlyReturnsUploadShipmentDetailsCommand_WhenEmailUser()
         {
             List<MenuCommand> commands = emailTestObject.CreateOnlineUpdateInstanceCommands();
 
@@ -163,19 +163,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GridOnlineColumnSupported_ReturnsTrue_WhenApiUserAndColumnIsOnlineStatus_Test()
+        public void GridOnlineColumnSupported_ReturnsTrue_WhenApiUserAndColumnIsOnlineStatus()
         {
             Assert.True(apiTestObject.GridOnlineColumnSupported(OnlineGridColumnSupport.OnlineStatus));
         }
 
         [Fact]
-        public void GridOnlineColumnSupported_ReturnsFalse_WhenEmailUser_Test()
+        public void GridOnlineColumnSupported_ReturnsFalse_WhenEmailUser()
         {
             Assert.False(emailTestObject.GridOnlineColumnSupported(OnlineGridColumnSupport.OnlineStatus));
         }
 
         [Fact]
-        public void GridHyperlinkSupported_ReturnsTrue_WhenApiUserAndFieldIsOrderItemName_Test()
+        public void GridHyperlinkSupported_ReturnsTrue_WhenApiUserAndFieldIsOrderItemName()
         {
 
 
@@ -183,25 +183,25 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GridHyperlinkSupported_ReturnsFalse_WhenApiUserAndFieldIsNotOrderItemName_Test()
+        public void GridHyperlinkSupported_ReturnsFalse_WhenApiUserAndFieldIsNotOrderItemName()
         {
             Assert.False(apiTestObject.GridHyperlinkSupported(item, OrderFields.BillFirstName));
         }
 
         [Fact]
-        public void GridHyperlinkSupported_ReturnsFalse_WhenEmailUser_Test()
+        public void GridHyperlinkSupported_ReturnsFalse_WhenEmailUser()
         {
             Assert.False(emailTestObject.GridHyperlinkSupported(item, OrderItemFields.Name));
         }
 
         [Fact]
-        public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsNull_WhenEmailUser_Test()
+        public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsNull_WhenEmailUser()
         {
             Assert.Null(emailTestObject.CreateAddStoreWizardOnlineUpdateActionControl());
         }
 
         [Fact]
-        public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsOnlineUpdateShipmentUpdateActionControl_WhenApiUser_Test()
+        public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsOnlineUpdateShipmentUpdateActionControl_WhenApiUser()
         {
             Assert.IsAssignableFrom<OnlineUpdateShipmentUpdateActionControl>(
                 apiTestObject.CreateAddStoreWizardOnlineUpdateActionControl());

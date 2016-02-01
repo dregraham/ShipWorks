@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void CheckRestriction_ReturnsSuccess_WhenAmazonShippingTokenIsNotTodayAndAccountsExist_Test()
+        public void CheckRestriction_ReturnsSuccess_WhenAmazonShippingTokenIsNotTodayAndAccountsExist()
         {
             mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
                 .Setup(x => x.Accounts)
@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void CheckRestriction_ReturnsEnforcementFailureWithMessage_WhenAmazonShippingTokenIsToday_Test()
+        public void CheckRestriction_ReturnsEnforcementFailureWithMessage_WhenAmazonShippingTokenIsToday()
         {
             mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
                 .Setup(x => x.Accounts)
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
         
         [Fact]
-        public void CheckRestriction_ThrowsShippingException_WhenGivenNonAmazonShipment_Test()
+        public void CheckRestriction_ThrowsShippingException_WhenGivenNonAmazonShipment()
         {
             mock.Mock<IStoreManager>()
                 .Setup(x => x.GetRelatedStore(It.IsAny<ShipmentEntity>()))
@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void VerifyShipment_ThrowsShippingException_WhenGivenNonAmazonShipment_Test()
+        public void VerifyShipment_ThrowsShippingException_WhenGivenNonAmazonShipment()
         {
             mock.Mock<IStoreManager>()
                 .Setup(x => x.GetRelatedStore(It.IsAny<ShipmentEntity>()))

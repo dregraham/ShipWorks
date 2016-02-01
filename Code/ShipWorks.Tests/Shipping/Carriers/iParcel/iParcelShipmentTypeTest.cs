@@ -98,27 +98,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void SupportsMultiplePackages_ReturnsTrue_Test()
+        public void SupportsMultiplePackages_ReturnsTrue()
         {
             Assert.True(testObject.SupportsMultiplePackages);
         }
 
         [Fact]
-        public void TrackShipment_ThrowsArgumentNullException_Test()
+        public void TrackShipment_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.TrackShipment(null));
 
         }
 
         [Fact]
-        public void TrackShipment_ThrowsShippingException_WhenIParcelShipmentIsNull_Test()
+        public void TrackShipment_ThrowsShippingException_WhenIParcelShipmentIsNull()
         {
             shipment = new ShipmentEntity();
             Assert.Throws<ShippingException>(() => testObject.TrackShipment(shipment));
         }
 
         [Fact]
-        public void TrackShipment_ThrowsShippingException_WhenIParcelPackageListIsEmpty_Test()
+        public void TrackShipment_ThrowsShippingException_WhenIParcelPackageListIsEmpty()
         {
             while (shipment.IParcel.Packages.Count > 0)
             {
@@ -130,7 +130,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void TrackShipment_DelegatesToRepository_Test()
+        public void TrackShipment_DelegatesToRepository()
         {
             testObject.TrackShipment(shipment);
 
@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void TrackShipment_DelegatesToServiceGateway_Test()
+        public void TrackShipment_DelegatesToServiceGateway()
         {
             testObject.TrackShipment(shipment);
 
@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void TrackShipment_ExtractsTrackingInfo_ForDeliveredShipment_Test()
+        public void TrackShipment_ExtractsTrackingInfo_ForDeliveredShipment()
         {
             TrackingResult trackingResult = testObject.TrackShipment(shipment);
 
@@ -154,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void TrackShipment_ExtractsTrackingInfo_ForShipmentNotDelivered_Test()
+        public void TrackShipment_ExtractsTrackingInfo_ForShipmentNotDelivered()
         {
             serviceGateway.Setup(s => s.TrackShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>())).Returns(GetUndeliveredPackageTrackingInfo());
 
@@ -164,7 +164,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUS_WithDestinationInUK_Test()
+        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUS_WithDestinationInUK()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "UK" };
 
@@ -174,7 +174,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUS_WithDestinationInUS_Test()
+        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUS_WithDestinationInUS()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "US" };
 
@@ -184,7 +184,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInRU_Test()
+        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInRU()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "RU" };
 
@@ -194,7 +194,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInUK_Test()
+        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUK_WithDestinationInUK()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "UK" };
 
@@ -204,7 +204,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUS_WithDestinationInUS_AndShipmentUsesAccountAddress_Test()
+        public void GetShippingBroker_ReturnsNullShippingBroker_ForShipmentOriginatingInUS_WithDestinationInUS_AndShipmentUsesAccountAddress()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Account, OriginCountryCode = "US", ShipCountryCode = "US" };
 
@@ -214,7 +214,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInRU_AndShipmentUsesAccountAddress_Test()
+        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInRU_AndShipmentUsesAccountAddress()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "RU" };
 
@@ -226,7 +226,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInUK_AndShipmentUsesAccountAddress_Test()
+        public void GetShippingBroker_ReturnsiParcelBestRateBroker_ForShipmentOriginatingInUK_WithDestinationInUK_AndShipmentUsesAccountAddress()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int)ShipmentOriginSource.Account, OriginCountryCode = "UK", ShipCountryCode = "UK" };
 

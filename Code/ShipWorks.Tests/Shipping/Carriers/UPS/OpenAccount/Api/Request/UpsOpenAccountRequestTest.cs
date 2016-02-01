@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
         }
 
         [Fact]
-        public void Submit_DelegatesToUpsOpenAccountService_Test()
+        public void Submit_DelegatesToUpsOpenAccountService()
         {
             // No additional setup needed since it was performed in Initialize()
             ICarrierResponse response = testObject.Submit();
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
         }
 
         [Fact]
-        public void Submit_DelegatesToResponseFactory_WhenCreatingResponse_Test()
+        public void Submit_DelegatesToResponseFactory_WhenCreatingResponse()
         {
             // No additional setup needed since it was performed in Initialize()
             testObject.Submit();

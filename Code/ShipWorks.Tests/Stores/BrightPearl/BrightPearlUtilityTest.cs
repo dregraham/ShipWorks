@@ -12,7 +12,7 @@ namespace ShipWorks.Tests.Stores.Brightpearl
         private const string testUrl = @"https://ws-eu1.brightpearl.com/external-request/accountCode/shipworks-service/3.0/action";
         
         [Fact]
-        public void GetAccountId_GetsAccountID_Test()
+        public void GetAccountId_GetsAccountID()
         {
             string accountId = BrightpearlUtility.GetAccountId(testUrl);
 
@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Stores.Brightpearl
         }
 
         [Fact]
-        public void GetTimeZone_GetsGmtOrCet_Test()
+        public void GetTimeZone_GetsGmtOrCet()
         {
             BrightpearlServerTimeZoneType timeZone = BrightpearlUtility.GetTimeZone(testUrl);
 
@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Stores.Brightpearl
         }
 
         [Fact]
-        public void GetModuleUrl_GetsModuleUrl_Test()
+        public void GetModuleUrl_GetsModuleUrl()
         {
             string moduleUrl = BrightpearlUtility.GetModuleUrl("accountCode", BrightpearlServerTimeZoneType.Eu1);
 

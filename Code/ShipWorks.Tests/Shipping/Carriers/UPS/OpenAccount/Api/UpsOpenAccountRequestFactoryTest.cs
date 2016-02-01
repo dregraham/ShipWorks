@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
         }
 
         [Fact]
-        public void CreateOpenAccountRequest_ReturnsUpsOpenAccountRequest_Test()
+        public void CreateOpenAccountRequest_ReturnsUpsOpenAccountRequest()
         {
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest());
 
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
         }
 
         [Fact]
-        public void CreateOpenAccountRequest_PopulatesManipulators_Test()
+        public void CreateOpenAccountRequest_PopulatesManipulators()
         {
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest()) as UpsOpenAccountRequest;
 
@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
         }
 
         [Fact]
-        public void CreateOpenAccountRequest_AddsUpsOpenAccountAddEndUserInformation_Test()
+        public void CreateOpenAccountRequest_AddsUpsOpenAccountAddEndUserInformation()
         {
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest()) as UpsOpenAccountRequest;
 

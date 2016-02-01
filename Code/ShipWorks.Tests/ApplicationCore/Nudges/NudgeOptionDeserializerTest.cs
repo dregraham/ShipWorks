@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
         
         [Fact]
-        public void Deserialize_ThrowsNudgeOptionException_WhenMissingIndex_Test()
+        public void Deserialize_ThrowsNudgeOptionException_WhenMissingIndex()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Index").Remove();
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [Fact]
-        public void Deserialize_ThrowsNudgeOptionException_WhenIndexNotANumber_Test()
+        public void Deserialize_ThrowsNudgeOptionException_WhenIndexNotANumber()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Index").First().SetValue("hi");
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [Fact]
-        public void Deserialize_ThrowsNudgeOptionException_WhenMissingText_Test()
+        public void Deserialize_ThrowsNudgeOptionException_WhenMissingText()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Text").Remove();
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [Fact]
-        public void Deserialize_ThrowsNudgeOptionException_WhenMissingAction_Test()
+        public void Deserialize_ThrowsNudgeOptionException_WhenMissingAction()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Action").Remove();
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }                
 
         [Fact]
-        public void Deserialize_NudgeOptionHasCorrectIndex_Test()
+        public void Deserialize_NudgeOptionHasCorrectIndex()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [Fact]
-        public void Deserialize_NudgeOptionHasCorrectAction_Test()
+        public void Deserialize_NudgeOptionHasCorrectAction()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [Fact]
-        public void Deserialize_NudgeOptionHasCorrectText_Test()
+        public void Deserialize_NudgeOptionHasCorrectText()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
         
         [Fact]
-        public void Deserialize_SetsNudgeOptionID_Test()
+        public void Deserialize_SetsNudgeOptionID()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [Fact]
-        public void Deserialize_ThrowsNudgeException_WhenNudgeIDIsMissing_Test()
+        public void Deserialize_ThrowsNudgeException_WhenNudgeIDIsMissing()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("OptionId").Remove();

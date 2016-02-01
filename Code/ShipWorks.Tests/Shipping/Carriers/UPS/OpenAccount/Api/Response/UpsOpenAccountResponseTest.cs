@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
         }
 
         [Fact]
-        public void Process_UpsOpenAccountResponseException_WhenResponseStatusIsFailure_Test()
+        public void Process_UpsOpenAccountResponseException_WhenResponseStatusIsFailure()
         {
             nativeResponse = BuildOpenAccountResponse(false, "1323223");
             testObject = new UpsOpenAccountResponse(nativeResponse, carrierRequest.Object, manipulators.Select(m => m.Object));
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
         }
 
         [Fact]
-        public void Process_DelegatesToManipulators_WhenThereIsOneManipulator_Test()
+        public void Process_DelegatesToManipulators_WhenThereIsOneManipulator()
         {
             testObject.Process();
 
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
         }
 
         [Fact]
-        public void Process_DelegatesToManipulators_WhenThereAreMultipleManipulators_Test()
+        public void Process_DelegatesToManipulators_WhenThereAreMultipleManipulators()
         {
             // Add a second manipulator to the list
             Mock<ICarrierResponseManipulator> anotherManipulator = new Mock<ICarrierResponseManipulator>();

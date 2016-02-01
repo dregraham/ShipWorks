@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_ReturnsKeyForEachOrderItem_WithAllPropertiesAdded_Test()
+        public void GetKeys_ReturnsKeyForEachOrderItem_WithAllPropertiesAdded()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_ReturnsKeys_WithAllPropertiesInSpecifiedPropertyListAdded_Test()
+        public void GetKeys_ReturnsKeys_WithAllPropertiesInSpecifiedPropertyListAdded()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_ReturnsKeys_WithProperties_OrderedByPropertyName_Test()
+        public void GetKeys_ReturnsKeys_WithProperties_OrderedByPropertyName()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_ReturnsKeys_WithPropertyValues_Test()
+        public void GetKeys_ReturnsKeys_WithPropertyValues()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_ReturnsKeys_WithOnlyAttributesSpecifiedInAttributeListAdded_Test()
+        public void GetKeys_ReturnsKeys_WithOnlyAttributesSpecifiedInAttributeListAdded()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
@@ -80,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_ReturnsKeys_WithAttributeValues_Test()
+        public void GetKeys_ReturnsKeys_WithAttributeValues()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_ReturnsKeys_WithAttributes_OrderedByPropertyName_Test()
+        public void GetKeys_ReturnsKeys_WithAttributes_OrderedByPropertyName()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
 
         [Fact]
-        public void GetKeys_ConsolidatesItems_HavingDuplicateKeyValues_Test()
+        public void GetKeys_ConsolidatesItems_HavingDuplicateKeyValues()
         {
             orderItems = new List<OrderItemEntity>
             {
@@ -126,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_SumsQuantities_WhenConsolidatingItems_HavingDuplicateKeyValues_Test()
+        public void GetKeys_SumsQuantities_WhenConsolidatingItems_HavingDuplicateKeyValues()
         {
             orderItems = new List<OrderItemEntity>
             {
@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_ConsolidatesItems_WhenHavingMixtureOfDuplicateAndUniqueKeyValues_Test()
+        public void GetKeys_ConsolidatesItems_WhenHavingMixtureOfDuplicateAndUniqueKeyValues()
         {
             orderItems = new List<OrderItemEntity>
             {
@@ -174,7 +174,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_SumsQuantities_WhenConsolidatingItems_HavingMixtureOfDuplicateAndUniqueKeyValues_Test()
+        public void GetKeys_SumsQuantities_WhenConsolidatingItems_HavingMixtureOfDuplicateAndUniqueKeyValues()
         {
             orderItems = new List<OrderItemEntity>
             {
@@ -203,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
 
         [Fact]
-        public void GetKeys_CreatesSeparateKey_ForEachUniuqeKeyValue_Test()
+        public void GetKeys_CreatesSeparateKey_ForEachUniuqeKeyValue()
         {
             orderItems = new List<OrderItemEntity>
             {
@@ -217,7 +217,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_ConsolidatesItems_HavingSameAttributeValues_ButAttributesAreInDifferentOrder_Test()
+        public void GetKeys_ConsolidatesItems_HavingSameAttributeValues_ButAttributesAreInDifferentOrder()
         {
             orderItems = new List<OrderItemEntity>
             {
@@ -240,7 +240,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_SumsQuantity_WhenConsolidatingItems_HavingSameAttributeValues_ButAttributesAreInDifferentOrder_Test()
+        public void GetKeys_SumsQuantity_WhenConsolidatingItems_HavingSameAttributeValues_ButAttributesAreInDifferentOrder()
         {
             orderItems = new List<OrderItemEntity>
             {
@@ -263,7 +263,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [Fact]
-        public void GetKeys_IgnoresAttributes_HavingEmptyStringInDescription_Test()
+        public void GetKeys_IgnoresAttributes_HavingEmptyStringInDescription()
         {
             orderItems = new List<OrderItemEntity>
             {

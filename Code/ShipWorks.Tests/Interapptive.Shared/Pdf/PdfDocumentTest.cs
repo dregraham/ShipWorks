@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
         }
 
         [Fact]
-        public void ToImages_ReturnsPngImages_Test()
+        public void ToImages_ReturnsPngImages()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             const string ResourceName = "ShipWorks.Tests.Resources.MultiPagePdf.pdf";

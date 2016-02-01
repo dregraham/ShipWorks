@@ -63,13 +63,13 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_ThrowsInvalidOperationException_WhenDeserializingErrorResponseXml_Test()
+        public void Deserialize_ThrowsInvalidOperationException_WhenDeserializingErrorResponseXml()
         {
             Assert.Throws<InvalidOperationException>(() => serializer.Deserialize(errorResponseXml));
         }
 
         [Fact]
-        public void Deserialize_ReturnsDownloadResult_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ReturnsDownloadResult_WhenDeserializingSuccessfulResponseXml()
         {
             object result = serializer.Deserialize(successfulDownloadResponseXml);
 
@@ -78,63 +78,63 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_DownloadResultContainsSellerId_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_DownloadResultContainsSellerId_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("A09V", result.SellerId);
         }
 
         [Fact]
-        public void Deserialize_DownloadResultContainsResponseBody_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_DownloadResultContainsResponseBody_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.NotNull(result.Body);
         }
 
         [Fact]
-        public void Deserialize_ResponseBodyContainsPageCount_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ResponseBodyContainsPageCount_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal(1, result.Body.PageInfo.PageCount);
         }
 
         [Fact]
-        public void Deserialize_ResponseBodyContainsPageIndex_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ResponseBodyContainsPageIndex_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal(1, result.Body.PageInfo.CurrentPageIndex);
         }
 
         [Fact]
-        public void Deserialize_ResponseBodyContainsRecordCount_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ResponseBodyContainsRecordCount_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal(42, result.Body.PageInfo.RecordCount);
         }
 
         [Fact]
-        public void Deserialize_ResponseBodyContainsOrders_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ResponseBodyContainsOrders_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.NotNull(result.Body.Orders);
         }
 
         [Fact]
-        public void Deserialize_ResponseBodyContainsAllOrderRecords_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ResponseBodyContainsAllOrderRecords_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal(7, result.Body.Orders.Count);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsOrderNumber_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsOrderNumber_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal(150109083, result.Body.Orders[0].OrderNumber);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsOrderDate_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsOrderDate_WhenDeserializingSuccessfulResponseXml()
         {
             DateTime expectedOrderDate = DateTime.Parse("06/20/2012 16:48:53");
 
@@ -144,154 +144,154 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_OrderContainsOrderStatusDescription_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsOrderStatusDescription_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("Unshipped", result.Body.Orders[0].OrderStatusDescription);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsOrderStatus_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsOrderStatus_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal(NeweggOrderStatus.Unshipped, result.Body.Orders[0].OrderStatus);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsCustomerName_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsCustomerName_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("Estella Pan", result.Body.Orders[0].CustomerName);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsCustomerEmailAddress_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsCustomerEmailAddress_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("cpin0l4tdojyl956z@marketplace.newegg.com", result.Body.Orders[0].CustomerEmailAddress);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsCustomerPhoneNumber_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsCustomerPhoneNumber_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("626-271-9700EXT2225", result.Body.Orders[0].CustomerPhoneNumber);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsShipToAddress1_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsShipToAddress1_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("17708 Rowland St", result.Body.Orders[0].ShipToAddress1);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsShipToAddress2_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsShipToAddress2_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("Suite 100", result.Body.Orders[0].ShipToAddress2);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsShipToCity_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsShipToCity_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("Rowland Heights", result.Body.Orders[0].ShipToCity);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsShipToState_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsShipToState_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("CA", result.Body.Orders[0].ShipToState);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsShipToZipCode_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsShipToZipCode_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("91748-1119", result.Body.Orders[0].ShipToZipCode);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsShipToCountryCode_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsShipToCountryCode_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("USA", result.Body.Orders[0].ShipToCountryCode);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsShipService_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsShipService_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("Standard Shipping (5-15 business days)", result.Body.Orders[0].ShippingService);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsShipToFirstName_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsShipToFirstName_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("Estella", result.Body.Orders[0].ShipToFirstName);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsShipToLastName_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsShipToLastName_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("Pan", result.Body.Orders[0].ShipToLastName);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsShipToCompany_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsShipToCompany_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("Newegg - Test", result.Body.Orders[0].ShipToCompany);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsShippingAmount_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsShippingAmount_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal((decimal)1.00, result.Body.Orders[0].ShippingAmount);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsOrderItemAmount_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsOrderItemAmount_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal((decimal)24.90, result.Body.Orders[0].OrderItemAmount);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsDiscountAmount_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsDiscountAmount_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal((decimal)2.20, result.Body.Orders[0].DiscountAmount);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsRefundAmount_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsRefundAmount_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal((decimal)7.00, result.Body.Orders[0].RefundAmount);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsOrderTotalAmount_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsOrderTotalAmount_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal((decimal)23.70, result.Body.Orders[0].OrderTotalAmount);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsOrderQuantity_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsOrderQuantity_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal(10, result.Body.Orders[0].OrderQuantity);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsItems_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsItems_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
 
@@ -300,77 +300,77 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_ItemContainsSellerPartNumber_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ItemContainsSellerPartNumber_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("A09V-CA-001", result.Body.Orders[0].Items[0].SellerPartNumber);
         }
 
         [Fact]
-        public void Deserialize_ItemContainsNeweggItemNumber_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ItemContainsNeweggItemNumber_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("9SIA09V0876393", result.Body.Orders[0].Items[0].NeweggItemNumber);
         }
 
         [Fact]
-        public void Deserialize_ItemContainsManufacturerPartNumber_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ItemContainsManufacturerPartNumber_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("A069-CA-001", result.Body.Orders[0].Items[0].ManufacturerPartNumber);
         }
 
         [Fact]
-        public void Deserialize_ItemContainsUpcCode_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ItemContainsUpcCode_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("123456780000", result.Body.Orders[0].Items[0].UpcCode);
         }
 
         [Fact]
-        public void Deserialize_ItemContainsDescription_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ItemContainsDescription_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("Testing items only, please do not make purchase", result.Body.Orders[0].Items[0].Description);
         }
 
         [Fact]
-        public void Deserialize_ItemContainsQuantityOrdered_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ItemContainsQuantityOrdered_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal(5, result.Body.Orders[0].Items[0].QuantityOrdered);
         }
 
         [Fact]
-        public void Deserialize_ItemContainsQuantityShipped_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ItemContainsQuantityShipped_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal(0, result.Body.Orders[0].Items[0].QuantityShipped);
         }
 
         [Fact]
-        public void Deserialize_ItemContainsUnitPrice_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ItemContainsUnitPrice_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal((decimal)1.99, result.Body.Orders[0].Items[0].UnitPrice);
         }
 
         [Fact]
-        public void Deserialize_ItemContainsStatus_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ItemContainsStatus_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal(NeweggItemShippingStatus.Unshipped, result.Body.Orders[0].Items[0].ShippingStatus);
         }
 
         [Fact]
-        public void Deserialize_ItemContainsStatusDescription_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_ItemContainsStatusDescription_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             Assert.Equal("Unshipped", result.Body.Orders[0].Items[0].ShippingStatusDescription);
         }
 
         [Fact]
-        public void Deserialize_OrderContainsPackages_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_OrderContainsPackages_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -380,7 +380,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsType_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsType_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -389,7 +389,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsShipCarrier_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsShipCarrier_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -398,7 +398,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsShipService_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsShipService_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -407,7 +407,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsTrackingNumber_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsTrackingNumber_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -416,7 +416,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsShipDate_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsShipDate_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -425,7 +425,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsShipFromAddress_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsShipFromAddress_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -434,7 +434,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsShipFromAddress2_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsShipFromAddress2_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -443,7 +443,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsShipFromCity_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsShipFromCity_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -452,7 +452,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsShipFromState_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsShipFromState_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -461,7 +461,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsShipFromZipCode_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsShipFromZipCode_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -470,7 +470,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsShipFromName_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsShipFromName_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -479,7 +479,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageContainsItems_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageContainsItems_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -489,7 +489,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageItemContainsSellerPartNumber_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageItemContainsSellerPartNumber_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -498,7 +498,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageItemContainsManufacturerPartNumber_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageItemContainsManufacturerPartNumber_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -507,7 +507,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_PackageItemContainsQuantityShipped_WhenDeserializingSuccessfulResponseXml_Test()
+        public void Deserialize_PackageItemContainsQuantityShipped_WhenDeserializingSuccessfulResponseXml()
         {
             DownloadResult result = serializer.Deserialize(successfulDownloadResponseXml) as DownloadResult;
             int lastOrder = result.Body.Orders.Count - 1;
@@ -516,7 +516,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_XmlContainingElongatedHyphen_DoesNotThrowException_Test()
+        public void Deserialize_XmlContainingElongatedHyphen_DoesNotThrowException()
         {
             // Test created as a result of a customer had order data containing an elongated 
             // hyphen/dash (represented by â€“ characters) that was causing a crash. Test that
@@ -528,7 +528,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_XmlContainingUnicodeCharacters_DoesNotThrowException_Test()
+        public void Deserialize_XmlContainingUnicodeCharacters_DoesNotThrowException()
         {
             string badResponseXml = string.Empty;
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ShipWorks.Tests.Stores.Newegg.Artifacts.OrderDownloadWithUnicodeCharacter.xml"))
@@ -548,7 +548,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Deserialize_XmlMissingInvoiceNumber_Test()
+        public void Deserialize_XmlMissingInvoiceNumber()
         {
             string xml = string.Empty;
 

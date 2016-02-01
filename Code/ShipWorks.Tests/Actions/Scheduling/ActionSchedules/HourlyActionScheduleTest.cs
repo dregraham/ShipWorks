@@ -16,13 +16,13 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
         
         [Fact]
-        public void ScheduleType_ReturnsHourly_Test()
+        public void ScheduleType_ReturnsHourly()
         {
             Assert.Equal(ActionScheduleType.Hourly, testObject.ScheduleType);
         }
 
         [Fact]
-        public void FrequencyInHours_ChangesTo1_WhenSettingValueToZero_Test()
+        public void FrequencyInHours_ChangesTo1_WhenSettingValueToZero()
         {
             testObject.FrequencyInHours = 0;
 
@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FrequencyInHours_ChangesTo1_WhenSettingValueToNegativeValue_Test()
+        public void FrequencyInHours_ChangesTo1_WhenSettingValueToNegativeValue()
         {
             testObject.FrequencyInHours = -1;
 
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FrequencyInHours_ChangesTo23_WhenSettingValueGreaterThan23_Test()
+        public void FrequencyInHours_ChangesTo23_WhenSettingValueGreaterThan23()
         {
             testObject.FrequencyInHours = 24;
 
@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FrequencyInHours_AllowsPositiveValue_Test()
+        public void FrequencyInHours_AllowsPositiveValue()
         {
             // Prove that a positive number sets property correctly
             testObject.FrequencyInHours = 1;
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void CreateEditor_ReturnsHourlyActionScheduleEditor_Test()
+        public void CreateEditor_ReturnsHourlyActionScheduleEditor()
         {
             Assert.IsAssignableFrom<HourlyActionScheduleEditor>(testObject.CreateEditor());
         }

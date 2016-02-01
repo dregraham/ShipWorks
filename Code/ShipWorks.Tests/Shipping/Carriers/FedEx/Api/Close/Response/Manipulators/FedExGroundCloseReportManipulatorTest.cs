@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCloseEntityIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCloseEntityIsNull()
         {
             closeEntity = null;
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenCarrierAccountIsNotFedEx_Test()
+        public void Manipulate_ThrowsFedExException_WhenCarrierAccountIsNotFedEx()
         {
             carrierRequest.Setup(r => r.CarrierAccountEntity).Returns(new UpsAccountEntity());
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenCarrierAccountIsNull_Test()
+        public void Manipulate_ThrowsFedExException_WhenCarrierAccountIsNull()
         {
             carrierRequest.Setup(r => r.CarrierAccountEntity).Returns<IEntity2>(null);
 
@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         }
 
         [Fact]
-        public void Manipulate_SetsFedExAccountId_Test()
+        public void Manipulate_SetsFedExAccountId()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
 
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         }
 
         [Fact]
-        public void Manipulate_SetsAccountNumber_Test()
+        public void Manipulate_SetsAccountNumber()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         }
 
         [Fact]
-        public void Manipulate_SetsCloseDate_Test()
+        public void Manipulate_SetsCloseDate()
         {
             DateTime utcStart = DateTime.UtcNow;
 
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         }
 
         [Fact]
-        public void Manipulate_IsSmartPostIsFalse_Test()
+        public void Manipulate_IsSmartPostIsFalse()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
 
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         }
 
         [Fact]
-        public void Manipulate_DelegatesToRepositoryWhenToSave_Test()
+        public void Manipulate_DelegatesToRepositoryWhenToSave()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
 

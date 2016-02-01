@@ -13,6 +13,7 @@ using ShipWorks.UI;
 using ShipWorks.Data.Connection;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Globalization;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using System.Web;
@@ -304,11 +305,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
             foreach (ShipmentCustomsItemEntity customsItem in shipment.CustomsItems)
             {
+                decimal value = customsItem.UnitValue * (decimal)customsItem.Quantity;
+
                 xmlWriter.WriteStartElement("ItemDetail");
 
                 xmlWriter.WriteElementString("Description", customsItem.Description);
                 xmlWriter.WriteElementString("Quantity", customsItem.Quantity.ToString());
-                xmlWriter.WriteElementString("Value", customsItem.UnitValue.ToString());
+                xmlWriter.WriteElementString("Value",value.ToString(CultureInfo.InvariantCulture));
 
                 WeightValue contentWeight = new WeightValue(customsItem.Weight > 0 ? customsItem.Weight : 1.0 / 16);
                 xmlWriter.WriteElementString("NetPounds", contentWeight.PoundsOnly.ToString());
