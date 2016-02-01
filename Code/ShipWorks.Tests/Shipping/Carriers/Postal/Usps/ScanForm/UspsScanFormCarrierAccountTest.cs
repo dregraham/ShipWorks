@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         }
 
         [Fact]
-        public void ShipmentTypeCode()
+        public void ShipmentTypeCode_IsUsps()
         {
             Assert.Equal(ShipmentTypeCode.Usps, testObject.ShipmentTypeCode);
         }

@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         }
 
         [Fact]
-        public void ShipmentTypeCode()
+        public void ShipmentTypeCode_ShipmentTypeCodeIsEndicia()
         {
             Assert.Equal(ShipmentTypeCode.Endicia, testObject.ShipmentTypeCode);
         }

@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
         }
 
         [Fact]
-        public void ShipmentTypeCode()
+        public void ShipmentTypeCode_IsExpress1Endicia()
         {
             Assert.Equal(ShipmentTypeCode.Express1Endicia, testObject.ShipmentTypeCode);
         }
