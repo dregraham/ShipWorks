@@ -344,11 +344,14 @@ namespace ShipWorks.Data.Administration
                             // using the GetDatabaseGuid stored procedure as the salt. 
                             if (installed < new Version(4, 9, 0, 0))
                             {
-                                // Resolve a CustomerLicense passing in an empty string as the key parameter
-                                ICustomerLicense customerLicense = IoC.UnsafeGlobalLifetimeScope.Resolve<ICustomerLicense>(new TypedParameter(typeof(string), string.Empty));
+                                using (ILifetimeScope iocScope = IoC.BeginLifetimeScope())
+                                {
+                                    // Resolve a CustomerLicense passing in an empty string as the key parameter
+                                    ICustomerLicense customerLicense = iocScope.Resolve<ICustomerLicense>(new TypedParameter(typeof(string), string.Empty));
 
-                                // Save the license
-                                customerLicense.Save();
+                                    // Save the license
+                                    customerLicense.Save();
+                                }
                             }
                         }
                     }

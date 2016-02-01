@@ -104,8 +104,9 @@ namespace ShipWorks.Data
 
             try
             {
+                SqlAdapter adapterWithNoTimeout = new SqlAdapter(SqlSession.Current.OpenConnection(0));
                 SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("DeletionService.DeleteStore for store {0}", store.StoreName));
-                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) => DeleteStore(store, adapter));
+                sqlDeadlockRetry.ExecuteWithRetry(() => DeleteStore(store, adapterWithNoTimeout));
             }
             finally
             {
