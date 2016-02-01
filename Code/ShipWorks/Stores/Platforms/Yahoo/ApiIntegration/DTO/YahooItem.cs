@@ -17,34 +17,31 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
         public string ItemCode { get; set; }
 
         [XmlElement(ElementName = "Quantity")]
-        public string QuantityTransport
-        {
-            // Deserialization error if Quantity node is empty. This resolves that.
-            set
+        public string QuantityTransport { get; set; }
+
+        [XmlIgnore]
+        public double Quantity {
+            get
             {
                 double result;
-                double.TryParse(value, out result);
-                Quantity = result;
+                double.TryParse(QuantityTransport, out result);
+                return result;
             }
         }
-
-        [XmlIgnore]
-        public double Quantity { get; set; }
 
         [XmlElement(ElementName = "UnitPrice")]
-        public string UnitPriceTransport
-        {
-            // Deserialization error if UnitPrice node is empty. This resolves that.
-            set
-            {
-                decimal result;
-                decimal.TryParse(value, out result);
-                UnitPrice = result;
-            }
-        }
+        public string UnitPriceTransport { get; set; }
 
         [XmlIgnore]
-        public decimal UnitPrice { get; set; }
+        public decimal UnitPrice
+        {
+            get
+            {
+                decimal result;
+                decimal.TryParse(UnitPriceTransport, out result);
+                return result;
+            }
+        }
 
         [XmlElement(ElementName = "Description")]
         public string Description { get; set; }

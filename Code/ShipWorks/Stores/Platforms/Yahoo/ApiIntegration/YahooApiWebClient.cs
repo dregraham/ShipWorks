@@ -184,31 +184,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
-        /// Creates a search item range request. Currently only used to validate credentials
-        /// because it doesn't throw an error for an invalid start and end range like getting a
-        /// range of orders does.
-        /// </summary>
-        /// <param name="start">The starting Yahoo Item ID.</param>
-        /// <param name="end">The ending Yahoo Item ID</param>
-        /// <param name="keyword">The keyword to search for</param>
-        /// <returns></returns>
-        private HttpTextPostRequestSubmitter CreateSearchItemRangeRequest(int start, int end, string keyword)
-        {
-            string body = RequestBodyIntro + GetRequestBodyIntro +
-                "<CatalogQuery>" +
-                "<SimpleSearch>" +
-                $"<StartIndex>{start}</StartIndex>" +
-                $"<EndIndex>{end}</EndIndex>" +
-                $"<Keyword>{keyword}</Keyword>" +
-                "</SimpleSearch>" +
-                "</CatalogQuery>" +
-                "</ResourceList>" +
-                "</ystorewsRequest>";
-
-            return CreateCatalogRequestSubmitter(body);
-        }
-
-        /// <summary>
         /// Creates the order request submitter.
         /// </summary>
         /// <param name="xmlBody">The XML body</param>

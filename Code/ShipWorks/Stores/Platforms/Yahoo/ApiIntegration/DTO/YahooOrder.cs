@@ -8,19 +8,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
     public class YahooOrder
     {
         [XmlElement(ElementName = "OrderID")]
-        public string OrderIDTransport
-        {
-            // Deserialization error if OrderID node is empty. This resolves that.
-            set
-            {
-                long result;
-                long.TryParse(value, out result);
-                OrderID = result;
-            }
-        }
+        public string OrderIDTransport { get; set; }
 
         [XmlIgnore]
-        public long OrderID { get; set; }
+        public long OrderID {
+            get
+            {
+                long result;
+                long.TryParse(OrderIDTransport, out result);
+                return result;
+            }
+        }
 
         [XmlElement(ElementName = "CreationTime")]
         public string CreationTime { get; set; }
