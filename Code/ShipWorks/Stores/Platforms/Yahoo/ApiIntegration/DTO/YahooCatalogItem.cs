@@ -8,6 +8,18 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
     public class YahooCatalogItem
     {
         [XmlElement(ElementName = "ShipWeight")]
-        public string ShipWeight { get; set; }
+        public string ShipWeightTransport
+        {
+            // Deserialization error if UnitPrice node is empty. This resolves that.
+            set
+            {
+                double result;
+                double.TryParse(value, out result);
+                ShipWeight = result;
+            }
+        }
+
+        [XmlIgnore]
+        public double ShipWeight { get; set; }
     }
 }

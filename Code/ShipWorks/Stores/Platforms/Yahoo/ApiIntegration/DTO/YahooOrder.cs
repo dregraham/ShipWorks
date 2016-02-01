@@ -8,6 +8,18 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
     public class YahooOrder
     {
         [XmlElement(ElementName = "OrderID")]
+        public string OrderIDTransport
+        {
+            // Deserialization error if OrderID node is empty. This resolves that.
+            set
+            {
+                long result;
+                long.TryParse(value, out result);
+                OrderID = result;
+            }
+        }
+
+        [XmlIgnore]
         public long OrderID { get; set; }
 
         [XmlElement(ElementName = "CreationTime")]
@@ -28,35 +40,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
         [XmlElement(ElementName = "BillToInfo")]
         public YahooBillToInfo BillToInfo { get; set; }
 
-        [XmlElement(ElementName = "BuyerEmail")]
-        public string BuyerEmail { get; set; }
-
-        [XmlElement(ElementName = "CustomFieldsList")]
-        public YahooCustomFieldsList CustomFieldsList { get; set; }
-
         [XmlElement(ElementName = "ItemList")]
         public YahooItemList ItemList { get; set; }
 
         [XmlElement(ElementName = "OrderTotals")]
         public YahooOrderTotals OrderTotals { get; set; }
 
-        [XmlElement(ElementName = "Referer")]
-        public string Referer { get; set; }
-
         [XmlElement(ElementName = "MerchantNotes")]
         public string MerchantNotes { get; set; }
 
-        [XmlElement(ElementName = "EntryPoint")]
-        public string EntryPoint { get; set; }
-
         [XmlElement(ElementName = "BuyerComments")]
         public string BuyerComments { get; set; }
-
-        [XmlElement(ElementName = "PaymentProcessor")]
-        public string PaymentProcessor { get; set; }
-
-        [XmlElement(ElementName = "Currency")]
-        public string Currency { get; set; }
 
         [XmlElement(ElementName = "GiftMessage")]
         public string GiftMessage { get; set; }
@@ -66,8 +60,5 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
 
         [XmlElement(ElementName = "LastUpdatedTime")]
         public string LastUpdatedTime { get; set; }
-
-        [XmlElement(ElementName = "BuyerIP")]
-        public string BuyerIP { get; set; }
     }
 }

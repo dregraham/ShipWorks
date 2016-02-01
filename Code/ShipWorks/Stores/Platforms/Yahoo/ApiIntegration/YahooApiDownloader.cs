@@ -435,9 +435,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             if (item != null)
             {
-                double itemWeight;
-                double.TryParse(item.ShipWeight, out itemWeight);
-                return itemWeight;
+                return item.ShipWeight;
             }
 
             // If item is null, that means it is not in the cache
@@ -461,14 +459,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             productWeightCache[itemID] = newItem;
 
-            double newItemWeight = 0;
-
-            if (newItem.ShipWeight != null)
-            {
-                double.TryParse(newItem.ShipWeight, out newItemWeight);
-            }
-
-            return newItemWeight;
+            return newItem.ShipWeight;
         }
 
         /// <summary>
