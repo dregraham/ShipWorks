@@ -2,6 +2,7 @@
 using System.Reflection;
 using Autofac;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Pdf;
 using log4net;
@@ -47,6 +48,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void Initialize(params Assembly[] assemblies)
         {
             var builder = new ContainerBuilder();
