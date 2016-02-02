@@ -10,6 +10,4 @@
         /// </summary>
         bool? ShowDialog();
     }
-
 }
-

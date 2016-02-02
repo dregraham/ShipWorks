@@ -8,9 +8,10 @@
              d:DesignHeight="261" d:DesignWidth="434" 
              Height="261" Width="450"
              ResizeMode="NoResize"
-             Closing="OnClosing" WindowStyle="ToolWindow" Title="Channel Limit Exceeded">
-
+             Closing="OnClosing" 
+             WindowStyle="ToolWindow" 
+             Title="Channel Limit Exceeded">
     <Grid>
-        <local:ChannelLimit x:Name="ChannelLimit" ></local:ChannelLimit>
+        <local:ChannelLimitControl x:Name="ChannelLimitControl" />
     </Grid>
 </Window>

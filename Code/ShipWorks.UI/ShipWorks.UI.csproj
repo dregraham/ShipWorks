@@ -93,8 +93,8 @@
     <Compile Include="Controls\ChannelConfirmDelete\IChannelConfirmDeleteDlg.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\IChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\IConfirmChannelDeleteViewModel.cs" />
-    <Compile Include="Controls\ChannelLimit\ChannelLimit.xaml.cs">
-      <DependentUpon>ChannelLimit.xaml</DependentUpon>
+    <Compile Include="Controls\ChannelLimit\ChannelLimitControl.xaml.cs">
+      <DependentUpon>ChannelLimitControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ChannelLimit\ChannelLimitDlg.xaml.cs">
       <DependentUpon>ChannelLimitDlg.xaml</DependentUpon>
@@ -161,7 +161,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ChannelLimit\ChannelLimit.xaml">
+    <Page Include="Controls\ChannelLimit\ChannelLimitControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
