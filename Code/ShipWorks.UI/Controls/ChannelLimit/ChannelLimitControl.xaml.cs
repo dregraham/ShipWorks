@@ -17,12 +17,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     /// <summary>
     /// Interaction logic for ChannelLimitDlg.xaml
     /// </summary>
-    public partial class ChannelLimit
+    public partial class ChannelLimitControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelLimit()
+        public ChannelLimitControl()
         {
             InitializeComponent();
         }

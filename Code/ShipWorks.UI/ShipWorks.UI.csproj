@@ -47,10 +47,6 @@
       <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37224, Culture=neutral, PublicKeyToken=f46ff315b1088208, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.Extras.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -97,8 +93,8 @@
     <Compile Include="Controls\ChannelConfirmDelete\IChannelConfirmDeleteDlg.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\IChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\IConfirmChannelDeleteViewModel.cs" />
-    <Compile Include="Controls\ChannelLimit\ChannelLimit.xaml.cs">
-      <DependentUpon>ChannelLimit.xaml</DependentUpon>
+    <Compile Include="Controls\ChannelLimit\ChannelLimitControl.xaml.cs">
+      <DependentUpon>ChannelLimitControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ChannelLimit\ChannelLimitDlg.xaml.cs">
       <DependentUpon>ChannelLimitDlg.xaml</DependentUpon>
@@ -169,7 +165,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ChannelLimit\ChannelLimit.xaml">
+    <Page Include="Controls\ChannelLimit\ChannelLimitControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
