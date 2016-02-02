@@ -9,7 +9,9 @@ using ShipWorks.Users.Audit;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using System.Collections.Generic;
 using System;
-using GalaSoft.MvvmLight.Command;
+using System.Windows;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -48,10 +50,6 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             SelectedStoreType = StoreTypeCode.Invalid;
 
             log = logFactory(typeof (ChannelLimitViewModel));
-            
-            // use MVVMLightExtras to troubleshooting purposes
-            var foo = new EventToCommand();
-            foo.Invoke();
         }
 
         /// <summary>
