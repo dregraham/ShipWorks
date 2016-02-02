@@ -8,7 +8,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Exposes license capabilities from tango XML.
     /// </summary>
-    public class LicenseCapabilities
+    public class LicenseCapabilities : ILicenseCapabilities
     {
         /// <summary>
         /// Constructor - Sets capabilities based on the xml response.
@@ -82,8 +82,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             Crm = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='Crm']/Value", string.Empty) == "Yes";
             CustomDataSources = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='CustomDataSources']/Value", string.Empty) == "Yes";
             TemplateCustomization = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='TemplateCustomization']/Value", string.Empty) == "Yes";
-            NumberOfChannels = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='NumberOfChannels']/Value", 0);
-            NumberOfShipments = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='NumberOfShipments']/Value", 0);
+            ChannelLimit = XPathUtility.Evaluate(xpath, "//UserCapabilities/NameValuePair[Name ='NumberOfChannels']/Value", 0);
+            ShipmentLimit = XPathUtility.Evaluate(xpath, "//UserCapabilities/NameValuePair[Name ='NumberOfShipments']/Value", 0);
+
+            ActiveChannels = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfChannels']/Value", 0);
+            ProcessedShipments = XPathUtility.Evaluate(xpath, "//UserLevels/NameValuePair[Name ='NumberOfShipments']/Value", 0);
         }
 
         /// <summary>
@@ -296,12 +299,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Number of selling channels the license allows
         /// </summary>
-        public int NumberOfChannels { get; set; }
+        public int ChannelLimit { get; set; }
 
         /// <summary>
         ///Number of shipments the license allows
         /// </summary>
-        public int NumberOfShipments { get; set; }
+        public int ShipmentLimit { get; set; }
 
         /// <summary>
         /// Gets or sets the billing end date.
@@ -312,5 +315,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Gets or sets a value indicating whether this instance is in trial.
         /// </summary>
         public bool IsInTrial { get; set; }
+
+        /// <summary>
+        /// The number of Active Channels in tango
+        /// </summary>
+        public int ActiveChannels { get; private set; }
+
+        /// <summary>
+        /// The number of processed shipments in tango
+        /// </summary>
+        public int ProcessedShipments { get; private set; }
     }
 }

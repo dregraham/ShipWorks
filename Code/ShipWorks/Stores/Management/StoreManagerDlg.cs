@@ -25,6 +25,9 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Users.Audit;
 using ShipWorks.Data.Model.FactoryClasses;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using Autofac;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Stores.Management
 {
@@ -371,7 +374,12 @@ namespace ShipWorks.Stores.Management
             // We don't audit anything for deleting a store
             using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditState.Disabled))
             {
-                DeletionService.DeleteStore(state.Store);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    // Delete the store using the license service
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    licenseService.GetLicense(state.Store).DeleteStore(state.Store);
+                }
             }
 
             state.ProgressProvider.ProgressItems[0].Completed();

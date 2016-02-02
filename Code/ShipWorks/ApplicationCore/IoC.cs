@@ -2,6 +2,7 @@
 using System.Reflection;
 using Autofac;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Pdf;
 using log4net;
@@ -50,20 +51,8 @@ namespace ShipWorks.ApplicationCore
         public static void Initialize(params Assembly[] assemblies)
         {
             var builder = new ContainerBuilder();
-
-            builder.RegisterType<StoreManagerWrapper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<ShippingSettingsWrapper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
+            
             builder.RegisterType<OrderManager>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<DataResourceManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -84,20 +73,39 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterAssemblyModules(assemblies);
-
-            builder.RegisterType<EditionManagerWrapper>()
-                .AsImplementedInterfaces();
-
+            
             builder.RegisterType<LogEntryFactory>()
                 .AsImplementedInterfaces()
                 .AsSelf();
-
-            builder.RegisterType<TangoWebClientWrapper>()
-                .AsImplementedInterfaces();
-
+            
             builder.RegisterType<UserService>()
                 .AsImplementedInterfaces();
 
+            builder.Register(c => Program.MainForm)
+                .As<Control>()
+                .As<IWin32Window>()
+                .ExternallyOwned();
+
+            builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
+
+            builder.RegisterType<DatabaseIdentifier>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<PdfDocument>()
+                .AsImplementedInterfaces();
+
+            RegisterWrappers(builder);
+            RegisterLicenseTypes(builder);
+
+            current = builder.Build();
+        }
+
+        /// <summary>
+        /// Registers the license types.
+        /// </summary>
+        private static void RegisterLicenseTypes(ContainerBuilder builder)
+        {
             builder.RegisterType<CustomerLicense>()
                 .AsImplementedInterfaces()
                 .AsSelf();
@@ -115,31 +123,42 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<StoreLicense>()
                 .AsSelf();
 
-            builder.Register(c => Program.MainForm)
-                .As<Control>()
-                .As<IWin32Window>()
-                .ExternallyOwned();
-
-            builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
-
-            builder.RegisterType<UserSessionWrapper>()
-                .AsImplementedInterfaces();
-
             builder.RegisterType<LicenseEncryptionProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+        }
 
-            builder.RegisterType<DatabaseIdentifier>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+        /// <summary>
+        /// Registers the wrappers.
+        /// </summary>
+        private static void RegisterWrappers(ContainerBuilder builder)
+        {
+            builder.RegisterType<DeletionServiceWrapper>()
+                .AsImplementedInterfaces();
+
             builder.RegisterType<ObjectReferenceManagerWrapper>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<PdfDocument>()
+            builder.RegisterType<TangoWebClientWrapper>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<StoreManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
-            current = builder.Build();
+            builder.RegisterType<ShippingSettingsWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<DataResourceManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<EditionManagerWrapper>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UserSessionWrapper>()
+                .AsImplementedInterfaces();
         }
     }
 }

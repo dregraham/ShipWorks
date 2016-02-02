@@ -2,6 +2,7 @@
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -41,6 +42,22 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsLegacy => true;
 
         /// <summary>
+        /// Store licenses do not have channel limits
+        /// </summary>
+        /// <remarks>
+        /// Always returns false
+        /// </remarks>
+        public bool IsOverChannelLimit => false;
+
+        /// <summary>
+        /// Store license do not have channel limits
+        /// </summary>
+        /// <remarks>
+        /// Always return 0
+        /// </remarks>
+        public int NumberOfChannelsOverLimit => 0;
+
+        /// <summary>
         /// Activate a new store
         /// </summary>
         /// <remarks>
@@ -53,6 +70,13 @@ namespace ShipWorks.ApplicationCore.Licensing
             return license.IsTrial ? 
                 new EnumResult<LicenseActivationState>(LicenseActivationState.Active) : 
                 LicenseActivationHelper.ActivateAndSetLicense(newStore, newStore.License);
+        }
+
+        /// <summary>
+        /// Nothing to enforce
+        /// </summary>
+        public void EnforceChannelLimit()
+        {
         }
 
         /// <summary>
@@ -71,6 +95,15 @@ namespace ShipWorks.ApplicationCore.Licensing
                 log.Warn(ex.Message, ex);
                 DisabledReason = ex.Message;
             }
+        }
+
+        /// <summary>
+        /// Deletes the store
+        /// </summary>
+        /// <param name="store"></param>
+        public void DeleteStore(StoreEntity store)
+        {
+            DeletionService.DeleteStore(store);
         }
     }
 }

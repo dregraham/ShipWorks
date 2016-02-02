@@ -3,7 +3,7 @@ using System.Linq;
 using ShipWorks.UI.Controls.MultiValueBinders;
 using Xunit;
 
-namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
+namespace ShipWorks.UI.Tests.Controls.MultiValueBinders
 {
     public class GenericMultiValueBinderDto<TProperty1, TProperty2>
     {

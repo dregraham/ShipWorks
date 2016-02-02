@@ -35,8 +35,29 @@ namespace ShipWorks.ApplicationCore.Licensing
         bool IsLegacy { get; }
 
         /// <summary>
+        /// Is the user over their channel limit
+        /// </summary>
+        bool IsOverChannelLimit { get; }
+
+        /// <summary>
+        /// The number of licenses needed to be deleted to be in compliance
+        /// </summary>
+        int NumberOfChannelsOverLimit { get; }
+
+        /// <summary>
         /// Activate a new store
         /// </summary>
         EnumResult<LicenseActivationState> Activate(StoreEntity store);
+
+        /// <summary>
+        /// If License is over the channel limit prompt user to delete channels
+        /// </summary>
+        void EnforceChannelLimit();
+
+        /// <summary>
+        /// Deletes a store
+        /// </summary>
+        /// <param name="store"></param>
+        void DeleteStore(StoreEntity store);
     }
 }

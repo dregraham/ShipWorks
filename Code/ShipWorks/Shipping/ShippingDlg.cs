@@ -45,6 +45,7 @@ using log4net;
 using ShipWorks.Shipping.Policies;
 using Timer = System.Windows.Forms.Timer;
 using System.Reactive.Linq;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping
 {
@@ -1627,16 +1628,23 @@ namespace ShipWorks.Shipping
 
             foreach (ShipmentEntity shipment in shipments)
             {
-                if (!shipment.Processed)
+                try
                 {
-                    ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
-                    ShipmentTypeManager.GetType(shipment).UpdateTotalWeight(shipment);
-
-                    // If the there is a specific shipment type selected, set it
-                    if (!comboShipmentType.MultiValued)
+                    if (!shipment.Processed)
                     {
-                        shipment.ShipmentType = (int)(ShipmentTypeCode)comboShipmentType.SelectedValue;
+                        ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
+                        ShipmentTypeManager.GetType(shipment).UpdateTotalWeight(shipment);
+
+                        // If the there is a specific shipment type selected, set it
+                        if (!comboShipmentType.MultiValued)
+                        {
+                            shipment.ShipmentType = (int)(ShipmentTypeCode)comboShipmentType.SelectedValue;
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.Message);
                 }
             }
         }
@@ -2383,6 +2391,10 @@ namespace ShipWorks.Shipping
         {
             Cursor.Current = Cursors.WaitCursor;
             cancelProcessing = false;
+
+            LicenseService licenseService = lifetimeScope.Resolve<LicenseService>();
+
+            licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
 
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
             SaveChangesToUIDisplayedShipments();

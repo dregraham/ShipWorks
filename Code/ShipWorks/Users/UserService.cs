@@ -3,6 +3,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Logon;
 using System;
+using System.Linq;
 
 namespace ShipWorks.Users
 {

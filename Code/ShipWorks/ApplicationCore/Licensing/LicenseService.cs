@@ -17,7 +17,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly Func<StoreEntity, StoreLicense> storeLicenseFactory;
         private readonly IStoreManager storeManager;
 
-
         /// <summary>
         /// Constructor
         /// </summary>
