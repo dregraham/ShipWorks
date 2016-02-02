@@ -40,7 +40,7 @@ namespace ShipWorks.UI
             builder.RegisterType<CustomerLicenseActivationDlg>()
                 .Named<IDialog>("CustomerLicenseActivationDlg");
 
-            builder.RegisterType<CustomerLicenseActivartionDlgViewModel>()
+            builder.RegisterType<CustomerLicenseActivationDlgViewModel>()
                 .AsImplementedInterfaces();
 
         }

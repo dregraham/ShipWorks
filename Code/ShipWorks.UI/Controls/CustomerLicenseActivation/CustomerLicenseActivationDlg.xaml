@@ -8,7 +8,7 @@
              d:DesignHeight="261" d:DesignWidth="434" 
              Height="180" Width="450"
              ResizeMode="NoResize"
-             d:DataContext="{d:DesignInstance local:CustomerLicenseActivartionDlgViewModel}"
+             d:DataContext="{d:DesignInstance local:CustomerLicenseActivationDlgViewModel}"
              WindowStyle="ToolWindow" Title="Activation Required">
 
     <Grid>

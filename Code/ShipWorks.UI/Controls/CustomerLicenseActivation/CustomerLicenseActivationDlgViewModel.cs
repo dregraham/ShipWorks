@@ -10,7 +10,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
     /// <summary>
     /// View model for the CustomerLicenseActivationDlg
     /// </summary>
-    public class CustomerLicenseActivartionDlgViewModel : INotifyPropertyChanged, ICustomerLicenseActivartionDlgViewModel
+    public class CustomerLicenseActivationDlgViewModel : INotifyPropertyChanged, ICustomerLicenseActivartionDlgViewModel
     {
         private readonly PropertyChangedHandler handler;
         private ICustomerLicenseActivationViewModel licenseActivationViewModel;
@@ -20,7 +20,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivartionDlgViewModel(ICustomerLicenseActivationViewModel customerLicenseActivationViewModel, IMessageHelper messageHelper)
+        public CustomerLicenseActivationDlgViewModel(ICustomerLicenseActivationViewModel customerLicenseActivationViewModel, IMessageHelper messageHelper)
         {
             this.licenseActivationViewModel = customerLicenseActivationViewModel;
             this.messageHelper = messageHelper;
@@ -52,13 +52,15 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// </summary>
         public void ActivateShipWorks(Window window)
         {
-            GenericResult<ICustomerLicense> result = licenseActivationViewModel.Save();
+            GenericResult<ICustomerLicense> result = licenseActivationViewModel.Save(false);
 
             if (!result.Success)
             {
                 messageHelper.ShowError(result.Message);
                 return;
             }
+
+            window.DialogResult = true;
             window.Close();
         }
     }
