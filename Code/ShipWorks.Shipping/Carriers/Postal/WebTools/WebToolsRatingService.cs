@@ -3,6 +3,7 @@ using Autofac.Features.Indexed;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -27,6 +28,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         {
             List<RateResult> rates = PostalWebClientRates.GetRates(shipment, new LogEntryFactory());
             return new RateGroup(FilterRatesByExcludedServices(shipment, rates));
+        }
+
+        /// <summary>
+        /// Is the rate for the specified shipment
+        /// </summary>
+        public override bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
+        {
+            if (rateResult.ShipmentType != ShipmentTypeCode.PostalWebTools ||
+                shipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.PostalWebTools)
+            {
+                return false;
+            }
+
+            PostalRateSelection rateSelection = rateResult.Tag as PostalRateSelection;
+            if (rateSelection == null)
+            {
+                return false;
+            }
+
+            return shipmentAdapter.ServiceType == (int) rateSelection.ServiceType &&
+                shipmentAdapter.Shipment?.Postal?.Confirmation == (int) rateSelection.ConfirmationType;
         }
     }
 }

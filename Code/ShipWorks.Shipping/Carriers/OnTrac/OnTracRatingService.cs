@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Rates;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 return rateRequest.GetRates(shipment,
                     onTracShipmentType.GetAvailableServiceTypes()
                         .Cast<OnTracServiceType>()
-                        .Union(new List<OnTracServiceType> {(OnTracServiceType) shipment.OnTrac.Service}));
+                        .Union(new List<OnTracServiceType> { (OnTracServiceType) shipment.OnTrac.Service }));
             }
             catch (OnTracException ex)
             {
@@ -51,6 +52,20 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
                 throw new ShippingException(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Is the rate for the specified shipment
+        /// </summary>
+        public bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
+        {
+            if (rateResult.ShipmentType != ShipmentTypeCode.OnTrac ||
+                shipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.OnTrac)
+            {
+                return false;
+            }
+
+            return shipmentAdapter.ServiceType == (int) rateResult.Tag;
         }
     }
 }

@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -99,6 +100,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             tasks.ForEach(t => t.Wait());
 
             return tasks.Select(x => x.Result);
+        }
+
+        /// <summary>
+        /// Is the rate for the specified shipment
+        /// </summary>
+        public bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
+        {
+            throw new NotImplementedException("Best Rates is not yet supported");
         }
 
         /// <summary>

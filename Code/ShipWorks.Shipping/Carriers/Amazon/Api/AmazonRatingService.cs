@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using Interapptive.Shared.Collections;
-using Interapptive.Shared.Utility;
+﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 
@@ -26,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// Initializes a new instance of the <see cref="AmazonRatingService"/> class.
         /// </summary>
         public AmazonRatingService(IAmazonShippingWebClient webClient,
-            IOrderManager orderManager, 
+            IOrderManager orderManager,
             IAmazonShipmentRequestDetailsFactory requestFactory,
             IAmazonRateGroupFactory amazonRateGroupFactory,
             IAmazonMwsWebClientSettingsFactory settingsFactory)
@@ -61,6 +58,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
 
             return amazonRateGroupFactory.GetRateGroupFromResponse(response);
+        }
+
+        /// <summary>
+        /// Is the rate for the specified shipment
+        /// </summary>
+        public bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
+        {
+            throw new NotImplementedException("Amazon is not yet supported");
         }
     }
 }

@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -30,6 +31,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Gets the rates.
         /// </summary>
         public abstract RateGroup GetRates(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Is the rate for the specified shipment
+        /// </summary>
+        public abstract bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter);
 
         /// <summary>
         /// Gets counter rates for a postal shipment

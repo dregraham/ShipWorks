@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// </summary>
     public partial class ShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging, IDataErrorInfo
     {
+        private readonly IMessenger messenger;
         private readonly IRateSelectionFactory rateSelectionFactory;
         private readonly IDisposable subscriptions;
         private readonly PropertyChangedHandler handler;
@@ -62,6 +63,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             this.dimensionsManager = dimensionsManager;
             this.customsManager = customsManager;
+            this.messenger = messenger;
 
             InsuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
 
@@ -69,6 +71,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
                 messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage),
                 messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage));
+            //,
+            //PropertyChangeStream.Where(x => x == nameof(ServiceType))
+            //    .Subscribe(x => messenger.Send(new SelectedRateChangedMessage(this, );
         }
 
         /// <summary>

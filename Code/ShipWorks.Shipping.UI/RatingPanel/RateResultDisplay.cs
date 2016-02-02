@@ -1,11 +1,14 @@
 ﻿using System.Drawing;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
     public class RateResultDisplay
     {
+        RateResult rateResult;
+
         public RateResultDisplay()
         {
 
@@ -20,6 +23,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             Taxes = SetAuxiliaryAmount(rate, rate.Taxes);
             Duties = SetAuxiliaryAmount(rate, rate.Duties);
             Rate = rate.Selectable ? rate.FormattedAmount : ""; //, rate.AmountFootnote
+            rateResult = rate;
         }
 
         /// <summary>
@@ -38,5 +42,10 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         public string Shipping { get; set; }
         public string Taxes { get; set; }
         public Image ProviderLogo { get; set; }
+
+        public bool AppliesToService(IRatingService ratingService, ICarrierShipmentAdapter shipmentAdapter)
+        {
+            return ratingService.IsRateSelectedByShipment(rateResult, shipmentAdapter);
+        }
     }
 }
