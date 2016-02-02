@@ -49,6 +49,7 @@ namespace ShipWorks.Shipping.Services
                 .Select(x => new { ShipmentAdapter = x.Message.ShipmentAdapter, RatingHash = x.HashingService.GetRatingHash(x.Message.ShipmentAdapter.Shipment) })
                 .Do(x => messenger.Send(new RatesRetrievingMessage(this, x.RatingHash)))
                 .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
+                .ObserveOn(schedulerProvider.TaskPool)
                 .Select(x => new { x.ShipmentAdapter, x.RatingHash, Rates = ratesRetriever.GetRates(x.ShipmentAdapter.Shipment) })
                 .SubscribeWithRetry(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)), HandleException);
         }

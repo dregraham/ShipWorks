@@ -76,13 +76,23 @@ namespace ShipWorks.Shipping.Services
 
             IRatingService ratingService = ratingServiceLookup[shipment.ShipmentTypeCode];
 
-            // Check to see if the rate is cached, if not call the rating service
-            RateGroup rateResults = cachedRateService.GetCachedRates<ShippingException>(clonedShipment, ratingService.GetRates);
+            try
+            {
+                // Check to see if the rate is cached, if not call the rating service
+                RateGroup rateResults = cachedRateService.GetCachedRates<ShippingException>(clonedShipment, ratingService.GetRates);
 
-            // Copy back any best rate events that were set on the clone
-            shipment.BestRateEvents |= clonedShipment.BestRateEvents;
+                // Copy back any best rate events that were set on the clone
+                shipment.BestRateEvents |= clonedShipment.BestRateEvents;
 
-            return GenericResult.FromSuccess(rateResults);
+                return GenericResult.FromSuccess(rateResults);
+            }
+            catch (ShippingException ex)
+            {
+                RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
+                rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipment.ShipmentTypeCode, ex));
+
+                return GenericResult.FromError("ShipWorks could not get rates for this shipment", rateGroup);
+            }
         }
     }
 }

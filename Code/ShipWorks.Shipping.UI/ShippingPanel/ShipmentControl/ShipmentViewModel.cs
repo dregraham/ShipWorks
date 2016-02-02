@@ -6,21 +6,16 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
-using ShipWorks.UI;
-using ShipWorks.UI.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 {
@@ -75,6 +70,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage),
                 messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage));
         }
+
+        /// <summary>
+        /// Stream of property change events
+        /// </summary>
+        public IObservable<string> PropertyChangeStream => handler;
 
         /// <summary>
         /// Load the shipment
@@ -313,7 +313,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             ShipmentContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
             RedistributeContentWeight(originalShipmentcontentWeight);
 
-            TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
+            TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
         }
 
         /// <summary>
@@ -324,7 +324,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.UnitValue), StringComparison.OrdinalIgnoreCase) ||
                 e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Quantity), StringComparison.OrdinalIgnoreCase))
             {
-                TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
+                TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
             }
 
             if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Weight), StringComparison.OrdinalIgnoreCase) ||
@@ -338,7 +338,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
         /// <summary>
         /// Redistribute the ContentWeight from the shipment to each package in the shipment.  This only does something
-        /// if the ContentWeight is different from the total Content.  
+        /// if the ContentWeight is different from the total Content.
         /// </summary>
         public void RedistributeContentWeight(double originalShipmentcontentWeight)
         {
@@ -347,7 +347,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             {
                 foreach (IPackageAdapter packageAdapter in PackageAdapters)
                 {
-                    packageAdapter.Weight = ShipmentContentWeight/PackageAdapters.Count();
+                    packageAdapter.Weight = ShipmentContentWeight / PackageAdapters.Count();
                 }
             }
         }

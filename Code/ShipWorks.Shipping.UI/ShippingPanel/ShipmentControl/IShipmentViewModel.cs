@@ -32,6 +32,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         bool CustomsAllowed { get; set; }
 
         /// <summary>
+        /// Stream of property changes
+        /// </summary>
+        IObservable<string> PropertyChangeStream { get; }
+
+        /// <summary>
         /// Load customs into the view model
         /// </summary>
         void LoadCustoms();
