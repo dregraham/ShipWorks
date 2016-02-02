@@ -277,6 +277,8 @@
     <ObfuscationExcludedAssemblies Include="ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e" />
     <ObfuscationExcludedAssemblies Include="Divelements.SandGrid, Version=2.2.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
     <ObfuscationExcludedAssemblies Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
+    <ObfuscationExcludedAssemblies Include="GalaSoft.MvvmLight, Version=5.2.0.37223, Culture=neutral, PublicKeyToken=0e453835af4ee6ce" />
+    <ObfuscationExcludedAssemblies Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37224, Culture=neutral, PublicKeyToken=f46ff315b1088208" />
     <ObfuscationExcludedAssemblies Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a" />
     <ObfuscationExcludedAssemblies Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <ObfuscationExcludedAssemblies Include="NAudio, Version=1.6.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
