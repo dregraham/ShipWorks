@@ -3,6 +3,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
 using ShipWorks.UI.Controls.CustomerLicenseActivation;
+using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.UI.Services;
 
 namespace ShipWorks.UI
@@ -43,6 +44,8 @@ namespace ShipWorks.UI
             builder.RegisterType<CustomerLicenseActivationDlgViewModel>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<WebBrowserDlgViewModel>()
+                .AsImplementedInterfaces();
         }
     }
 }

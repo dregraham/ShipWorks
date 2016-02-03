@@ -115,6 +115,8 @@
       <DependentUpon>CustomerLicenseActivationDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\IWebBrowserDlgViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\WebBrowserDlgViewModel.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IMessageHelper.cs" />

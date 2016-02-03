@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace ShipWorks.UI.Controls.WebBrowser
+{
+    /// <summary>
+    /// ViewModel for WebBrowserDlg
+    /// </summary>
+    public class WebBrowserDlgViewModel : IWebBrowserDlgViewModel
+    {
+        /// <summary>
+        /// Gets the URL.
+        /// </summary>
+        public Uri Url { get; private set; }
+
+        /// <summary>
+        /// Loads the specified URL.
+        /// </summary>
+        public void Load(Uri url) => Url = url;
+    }
+}
