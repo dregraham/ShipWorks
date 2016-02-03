@@ -216,6 +216,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentDeletedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentsProcessedPipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\RateSelectedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\WindowUnloadingPipeline.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\IShipmentViewModel.cs" />

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Configuration;
-using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -46,12 +40,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 return true;
             }
         }
-        
+
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>
         public override bool SupportsPackageTypes => true;
-        
+
         /// <summary>
         /// Service type selected
         /// </summary>
@@ -107,6 +101,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     packageEntity.InsurancePennyOne = shippingSettings.UpsInsurancePennyOne;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected override void UpdateServiceFromRate(RateResult rate)
+        {
+            if (rate.Tag is int)
+            {
+                Shipment.Ups.Service = (int) rate.Tag;
             }
         }
     }

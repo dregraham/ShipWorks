@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -42,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 return true;
             }
         }
-        
+
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>
@@ -56,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             get { return Shipment.Postal.Service; }
             set { Shipment.Postal.Service = value; }
         }
-        
+
         /// <summary>
         /// List of package adapters for the shipment
         /// </summary>
@@ -71,6 +69,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
             Shipment.InsuranceProvider = shippingSettings.UspsInsuranceProvider;
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected override void UpdateServiceFromRate(RateResult rate)
+        {
+            PostalRateSelection rateSelection = rate.Tag as PostalRateSelection;
+
+            if (rateSelection != null)
+            {
+                Shipment.Postal.Service = (int) rateSelection.ServiceType;
+                Shipment.Postal.Confirmation = (int) rateSelection.ConfirmationType;
+            }
         }
     }
 }

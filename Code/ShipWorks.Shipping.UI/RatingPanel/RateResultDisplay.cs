@@ -7,8 +7,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
 {
     public class RateResultDisplay
     {
-        RateResult rateResult;
-
         public RateResultDisplay()
         {
 
@@ -22,8 +20,8 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             Shipping = SetAuxiliaryAmount(rate, rate.Shipping);
             Taxes = SetAuxiliaryAmount(rate, rate.Taxes);
             Duties = SetAuxiliaryAmount(rate, rate.Duties);
-            Rate = rate.Selectable ? rate.FormattedAmount : ""; //, rate.AmountFootnote
-            rateResult = rate;
+            Amount = rate.Selectable ? rate.FormattedAmount : ""; //, rate.AmountFootnote
+            Rate = rate;
         }
 
         /// <summary>
@@ -38,14 +36,22 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         public string Days { get; set; }
         public string Description { get; set; }
         public string Duties { get; set; }
-        public string Rate { get; set; }
+        public string Amount { get; set; }
         public string Shipping { get; set; }
         public string Taxes { get; set; }
         public Image ProviderLogo { get; set; }
 
+        /// <summary>
+        /// Rate that is displayed
+        /// </summary>
+        public RateResult Rate { get; private set; }
+
+        /// <summary>
+        /// Get whether the rate applies to a given service
+        /// </summary>
         public bool AppliesToService(IRatingService ratingService, ICarrierShipmentAdapter shipmentAdapter)
         {
-            return ratingService.IsRateSelectedByShipment(rateResult, shipmentAdapter);
+            return ratingService.IsRateSelectedByShipment(Rate, shipmentAdapter);
         }
     }
 }

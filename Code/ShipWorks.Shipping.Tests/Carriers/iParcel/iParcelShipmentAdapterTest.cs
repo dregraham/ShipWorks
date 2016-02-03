@@ -6,6 +6,7 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -207,6 +208,38 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             testObject.ServiceType = (int) iParcelServiceType.Preferred;
 
             Assert.Equal(shipment.IParcel.Service, testObject.ServiceType);
+        }
+
+        [Theory]
+        [InlineData(iParcelServiceType.Immediate)]
+        [InlineData(iParcelServiceType.Preferred)]
+        [InlineData(iParcelServiceType.SaverDeferred)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValid(iParcelServiceType serviceType)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, (int) serviceType)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.iParcel
+            });
+            Assert.Equal((int) serviceType, shipment.IParcel.Service);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("Foo")]
+        public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            shipment.IParcel.Service = (int) iParcelServiceType.SaverDeferred;
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, value)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.iParcel
+            });
+            Assert.Equal((int) iParcelServiceType.SaverDeferred, shipment.IParcel.Service);
         }
     }
 }

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
@@ -30,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             get { return Shipment.OnTrac.OnTracAccountID; }
             set { Shipment.OnTrac.OnTracAccountID = value.GetValueOrDefault(); }
         }
-        
+
         /// <summary>
         /// Does this shipment type support accounts?
         /// </summary>
@@ -41,12 +39,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 return true;
             }
         }
-        
+
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>
         public override bool SupportsPackageTypes => true;
-        
+
         /// <summary>
         /// Service type selected
         /// </summary>
@@ -55,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             get { return Shipment.OnTrac.Service; }
             set { Shipment.OnTrac.Service = value; }
         }
-        
+
         /// <summary>
         /// List of package adapters for the shipment
         /// </summary>
@@ -82,6 +80,17 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             if (Shipment.OnTrac.InsurancePennyOne != shippingSettings.OnTracInsurancePennyOne)
             {
                 Shipment.OnTrac.InsurancePennyOne = shippingSettings.OnTracInsurancePennyOne;
+            }
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected override void UpdateServiceFromRate(RateResult rate)
+        {
+            if (rate.Tag is int)
+            {
+                Shipment.OnTrac.Service = (int) rate.Tag;
             }
         }
     }

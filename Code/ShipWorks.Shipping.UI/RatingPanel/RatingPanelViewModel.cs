@@ -67,7 +67,10 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     .Subscribe(LoadRates),
                 messenger.OfType<ShipmentChangedMessage>()
                     .Where(x => x.ChangedField == "ServiceType")
-                    .Subscribe(x => SelectRate(x.ShipmentAdapter))
+                    .Subscribe(x => SelectRate(x.ShipmentAdapter)),
+                handler.Where(x => nameof(SelectedRate).Equals(x, StringComparison.Ordinal))
+                    .Where(_ => SelectedRate != null)
+                    .Subscribe(_ => messenger.Send(new SelectedRateChangedMessage(this, SelectedRate.Rate)))
             );
         }
 

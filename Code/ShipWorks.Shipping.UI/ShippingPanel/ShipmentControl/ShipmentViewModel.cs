@@ -171,6 +171,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         }
 
         /// <summary>
+        /// Select the given rate
+        /// </summary>
+        public void SelectRate(RateResult rateResult)
+        {
+            shipmentAdapter.SelectServiceFromRate(rateResult);
+            ServiceType = shipmentAdapter.ServiceType;
+        }
+
+        /// <summary>
         /// Called when the shipment service type has changed.
         /// </summary>
         private void HandleSelectedRateChangedMessage(SelectedRateChangedMessage message)

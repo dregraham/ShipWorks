@@ -1,12 +1,11 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Moq;
-using ShipWorks.AddressValidation;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx
@@ -31,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
                 Insurance = true,
                 FedEx = new FedExShipmentEntity()
                 {
-                    Service = (int)FedExServiceType.FedEx2DayAM
+                    Service = (int) FedExServiceType.FedEx2DayAM
                 }
             };
 
@@ -200,6 +199,38 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             testObject.ServiceType = (int) FedExServiceType.FedEx2Day;
 
             Assert.Equal(shipment.FedEx.Service, testObject.ServiceType);
+        }
+
+        [Theory]
+        [InlineData(FedExServiceType.FedEx2DayAM)]
+        [InlineData(FedExServiceType.FirstFreight)]
+        [InlineData(FedExServiceType.SmartPost)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValid(FedExServiceType serviceType)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, (int) serviceType)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.FedEx
+            });
+            Assert.Equal((int) serviceType, shipment.FedEx.Service);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("Foo")]
+        public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            shipment.FedEx.Service = (int) FedExServiceType.GroundHomeDelivery;
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, value)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.FedEx
+            });
+            Assert.Equal((int) FedExServiceType.GroundHomeDelivery, shipment.FedEx.Service);
         }
     }
 }

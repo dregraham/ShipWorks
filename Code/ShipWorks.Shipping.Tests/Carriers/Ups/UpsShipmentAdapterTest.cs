@@ -1,10 +1,11 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Moq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using Xunit;
 
@@ -30,7 +31,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
                 Insurance = true,
                 Ups = new UpsShipmentEntity()
                 {
-                    Service = (int)UpsServiceType.Ups2DayAirAM
+                    Service = (int) UpsServiceType.Ups2DayAirAM
                 }
             };
 
@@ -201,10 +202,42 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         {
             ICarrierShipmentAdapter testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
-            shipment.Ups.Service = (int)UpsServiceType.UpsGround;
-            testObject.ServiceType = (int)UpsServiceType.Ups2DayAir;
+            shipment.Ups.Service = (int) UpsServiceType.UpsGround;
+            testObject.ServiceType = (int) UpsServiceType.Ups2DayAir;
 
             Assert.Equal(shipment.Ups.Service, testObject.ServiceType);
+        }
+
+        [Theory]
+        [InlineData(UpsServiceType.Ups2DayAir)]
+        [InlineData(UpsServiceType.UpsNextDayAir)]
+        [InlineData(UpsServiceType.WorldwideExpressPlus)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValid(UpsServiceType serviceType)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, (int) serviceType)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.UpsOnLineTools
+            });
+            Assert.Equal((int) serviceType, shipment.Ups.Service);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("Foo")]
+        public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            shipment.Ups.Service = (int) UpsServiceType.UpsSurePost1LbOrGreater;
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, value)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.UpsOnLineTools
+            });
+            Assert.Equal((int) UpsServiceType.UpsSurePost1LbOrGreater, shipment.Ups.Service);
         }
     }
 }

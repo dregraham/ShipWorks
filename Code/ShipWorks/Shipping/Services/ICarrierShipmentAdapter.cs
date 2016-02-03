@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.ShipSense.Packaging;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -97,5 +96,10 @@ namespace ShipWorks.Shipping.Services
         /// Update the insurance fields on the shipment
         /// </summary>
         void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings);
+
+        /// <summary>
+        /// Select the service from the given rate
+        /// </summary>
+        void SelectServiceFromRate(RateResult rate);
     }
 }

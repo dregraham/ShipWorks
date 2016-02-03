@@ -10,6 +10,9 @@ using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
+    /// <summary>
+    /// Rating service for FedEx
+    /// </summary>
     public class FedExRatingService : IRatingService
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FedExRatingService));
@@ -18,6 +21,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private readonly FedExShipmentType fedExShipmentType;
         private readonly FedExShippingClerkFactory shippingClerkFactory;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public FedExRatingService(FedExAccountRepository fedExAccountRepository,
             FedExShipmentType fedExShipmentType,
             FedExShippingClerkFactory shippingClerkFactory)

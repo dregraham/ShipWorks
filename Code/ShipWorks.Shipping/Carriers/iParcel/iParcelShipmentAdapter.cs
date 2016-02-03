@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -32,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             get { return Shipment.IParcel.IParcelAccountID; }
             set { Shipment.IParcel.IParcelAccountID = value.GetValueOrDefault(); }
         }
-        
+
         /// <summary>
         /// Does this shipment type support accounts?
         /// </summary>
@@ -43,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 return true;
             }
         }
-        
+
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>
@@ -57,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             get { return Shipment.IParcel.Service; }
             set { Shipment.IParcel.Service = value; }
         }
-        
+
         /// <summary>
         /// List of package adapters for the shipment
         /// </summary>
@@ -104,6 +103,17 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 {
                     packageEntity.InsurancePennyOne = shippingSettings.IParcelInsurancePennyOne;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected override void UpdateServiceFromRate(RateResult rate)
+        {
+            if (rate.Tag is int)
+            {
+                Shipment.IParcel.Service = (int) rate.Tag;
             }
         }
     }

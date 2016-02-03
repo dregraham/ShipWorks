@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
@@ -40,5 +41,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Load customs into the view model
         /// </summary>
         void LoadCustoms();
+
+        /// <summary>
+        /// Select the given rate
+        /// </summary>
+        void SelectRate(RateResult selectedRate);
     }
 }

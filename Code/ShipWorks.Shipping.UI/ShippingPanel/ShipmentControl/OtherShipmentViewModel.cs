@@ -8,6 +8,7 @@ using System.Linq;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
@@ -226,6 +227,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public void RefreshPackageTypes()
         {
             // Other shipment type does not support packages
+        }
+
+        /// <summary>
+        /// Select the given rate
+        /// </summary>
+        public void SelectRate(RateResult selectedRate)
+        {
+            // Other shipment type does not support service types
         }
     }
 }

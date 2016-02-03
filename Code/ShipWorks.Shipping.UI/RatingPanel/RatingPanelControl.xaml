@@ -113,7 +113,7 @@
                     <DataGridTextColumn Header="Rate"
                                         CellStyle="{StaticResource SpacingStyle}"
                                         ElementStyle="{StaticResource AmountStyle}"
-                                        Binding="{Binding Rate}" />
+                                        Binding="{Binding Amount}" />
                 </DataGrid.Columns>
             </DataGrid>
 

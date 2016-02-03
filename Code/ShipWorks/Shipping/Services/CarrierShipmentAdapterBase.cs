@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Web.Routing;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -252,5 +251,28 @@ namespace ShipWorks.Shipping.Services
         /// Update the insurance fields on the shipment and packages
         /// </summary>
         public abstract void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings);
+
+        /// <summary>
+        /// Select the service from the given rate result
+        /// </summary>
+        public void SelectServiceFromRate(RateResult rate)
+        {
+            if (shipmentType.SupportsGetRates &&
+                rate != null &&
+                rate.Selectable &&
+                rate.ShipmentType == ShipmentTypeCode)
+            {
+                UpdateServiceFromRate(rate);
+            }
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected virtual void UpdateServiceFromRate(RateResult rate)
+        {
+            // Setting the service from a rate is carrier specific, but this is not abstract because a few
+            // shipment types don't support rating
+        }
     }
 }

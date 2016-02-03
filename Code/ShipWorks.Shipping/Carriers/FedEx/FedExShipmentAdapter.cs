@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -106,6 +101,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     packageEntity.InsurancePennyOne = shippingSettings.FedExInsurancePennyOne;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected override void UpdateServiceFromRate(RateResult rate)
+        {
+            if (rate.Tag is int)
+            {
+                Shipment.FedEx.Service = (int) rate.Tag;
             }
         }
     }
