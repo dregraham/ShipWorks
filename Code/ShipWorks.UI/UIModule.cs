@@ -46,6 +46,9 @@ namespace ShipWorks.UI
 
             builder.RegisterType<WebBrowserDlgViewModel>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<WebBrowserDlg>()
+                .Named<IDialog>("WebBrowserDlg");
         }
     }
 }

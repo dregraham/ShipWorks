@@ -16,8 +16,17 @@ namespace ShipWorks.UI.Controls.WebBrowser
         public Uri Url { get; private set; }
 
         /// <summary>
+        /// Gets the title.
+        /// </summary>
+        public string Title { get; private set; }
+
+        /// <summary>
         /// Loads the specified URL.
         /// </summary>
-        public void Load(Uri url) => Url = url;
+        public void Load(Uri url, string title)
+        {
+            Url = url;
+            Title = title;
+        }
     }
 }

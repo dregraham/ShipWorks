@@ -116,6 +116,9 @@
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
     <Compile Include="Controls\WebBrowser\IWebBrowserDlgViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\WebBrowserDlg.xaml.cs">
+      <DependentUpon>WebBrowserDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\WebBrowser\WebBrowserDlgViewModel.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -180,6 +183,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WebBrowser\WebBrowserDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
