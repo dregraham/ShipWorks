@@ -550,9 +550,31 @@ namespace ShipWorks
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    IUserService userService = lifetimeScope.Resolve<IUserService>();
 
-                    EnumResult<UserServiceLogonResultType> logonResult = userService.Logon();
+                    IUserService userService = lifetimeScope.Resolve<IUserService>();
+                    EnumResult<UserServiceLogonResultType> logonResult;
+
+                    try
+                    {
+                        logonResult = userService.Logon();
+                    }
+                    catch (EncryptionException ex)
+                    {
+                        log.Error("Error logging in", ex);
+
+                        IDialog customerLicenseActivation = lifetimeScope.ResolveNamed<IDialog>("CustomerLicenseActivationDlg");
+                        customerLicenseActivation.DataContext =
+                            lifetimeScope.Resolve<ICustomerLicenseActivartionDlgViewModel>();
+
+                        if (customerLicenseActivation.ShowDialog() ?? false)
+                        {
+                            logonResult = userService.Logon();
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
 
                     if (logonResult.Value == UserServiceLogonResultType.TangoAccountDisabled)
                     {
