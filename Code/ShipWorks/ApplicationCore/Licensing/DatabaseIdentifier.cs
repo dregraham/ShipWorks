@@ -5,11 +5,11 @@ using ShipWorks.Data.Connection;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
+    /// <summary>
+    /// Used to retrieve the database identifier guid from sproc GetDatabaseGuid.
+    /// </summary>
     public class DatabaseIdentifier : IDatabaseIdentifier
     {
-
-        private Guid? identifier;
-
         /// <summary>
         /// Returns DatabaseGuid from database.
         /// </summary>
@@ -17,17 +17,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-
-
-                if (identifier == null)
+                using (SqlConnection con = SqlSession.Current.OpenConnection())
                 {
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
-                    {
-                        identifier = SqlCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
-                    }
+                    return SqlCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
                 }
-
-                return identifier.Value;
             }
             catch (Exception ex)
             {

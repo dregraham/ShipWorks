@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.Properties.cs" />
+    <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlgViewModel.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml.cs">
       <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
     </Compile>
@@ -109,6 +110,9 @@
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.Designer.cs">
       <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlg.xaml.cs">
+      <DependentUpon>CustomerLicenseActivationDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
@@ -172,6 +176,10 @@
     <Page Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
