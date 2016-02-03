@@ -964,6 +964,7 @@ namespace ShipWorks.Stores.Management
 
                 if (license.IsLegacy)
                 {
+                    MessageHelper.ShowError(this, activateResult.Message);
                     e.SkipToPage = wizardPageAlreadyActive;
                 }
                 else
