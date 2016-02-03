@@ -595,9 +595,11 @@
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
+    <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivartionDlgViewModel.cs" />
     <Compile Include="ApplicationCore\IInitializeForCurrentSession.cs" />
     <Compile Include="ApplicationCore\IoC.cs" />
     <Compile Include="ApplicationCore\Licensing\ActivationResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\ActiveStore.cs" />
     <Compile Include="ApplicationCore\Licensing\AddStoreResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseReader.cs" />
@@ -606,6 +608,8 @@
     <Compile Include="ApplicationCore\Licensing\DisabledLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\EncryptionException.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
+    <Compile Include="ApplicationCore\Licensing\IDialog.cs" />
+    <Compile Include="ApplicationCore\Licensing\IChannelLimitDlg.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivation.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationViewModel.cs" />
@@ -613,6 +617,7 @@
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseWriter.cs" />
     <Compile Include="ApplicationCore\Licensing\IDatabaseIdentifier.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicense.cs" />
+    <Compile Include="ApplicationCore\Licensing\ILicenseCapabilities.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicenseService.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
@@ -736,7 +741,9 @@
     <Compile Include="Data\Connection\ISqlSession.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
+    <Compile Include="Data\DeletionServiceWrapper.cs" />
     <Compile Include="Data\IDataResourceManager.cs" />
+    <Compile Include="Data\IDeletionService.cs" />
     <Compile Include="Data\IObjectReferenceManager.cs" />
     <Compile Include="Data\ObjectReferenceManagerWrapper.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
@@ -10090,7 +10097,7 @@
     <None Include="Resources\data_disk.png" />
     <None Include="Resources\data_into.png" />
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\DropAssembly.sql" />
-    <None Include="Resources\delete2.png" />
+    <Resource Include="Resources\delete2.png" />
     <None Include="Resources\arrow_down_blue.png" />
     <None Include="Resources\arrow_up_blue.png" />
     <None Include="Resources\funnel_add.png" />
@@ -10347,7 +10354,7 @@
     <None Include="Resources\document_dirty1.png" />
     <None Include="Resources\branch1.png" />
     <None Include="Resources\nav_redo_yellow.png" />
-    <None Include="Resources\school_delete32.png" />
+    <Resource Include="Resources\school_delete32.png" />
     <None Include="Resources\hourglass_11.png" />
     <None Include="Resources\currency_dollar_green16.png" />
     <None Include="Resources\logo_sdc.png" />

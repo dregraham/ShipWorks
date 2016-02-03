@@ -97,9 +97,8 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Saves the user to the database
         /// </summary>
-        public GenericResult<ICustomerLicense> Save()
+        public GenericResult<ICustomerLicense> Save(bool createCustomer)
         {
-            // Create an empty result
             GenericResult<ICustomerLicense> result = ValidateCredentials();
             
             // if the username and password passed our data validation 
@@ -110,7 +109,11 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
                 {
                     // Activate the software using an empty license with the given username/password
                     customerLicense.Activate(Email, DecryptedPassword);
-                    userManager.CreateUser(Email, DecryptedPassword, true);
+
+                    if (createCustomer)
+                    {
+                        userManager.CreateUser(Email, DecryptedPassword, true); 
+                    }
                 }
                 catch (Exception ex)
                 {

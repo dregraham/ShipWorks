@@ -111,6 +111,7 @@ namespace ShipWorks.Data.Administration
 
         // The user setup wizard page
         private ICustomerLicenseActivation tangoUserControlHost;
+        private ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Let's consumers control what the user is allowed to do in the wizard
@@ -134,8 +135,8 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Constructor.
         /// </summary>
-        public DetailedDatabaseSetupWizard()
-            : this(SetupMode.Default)
+        public DetailedDatabaseSetupWizard(ILifetimeScope lifetimeScope)
+            : this(SetupMode.Default, lifetimeScope)
         {
 
         }
@@ -144,7 +145,7 @@ namespace ShipWorks.Data.Administration
         /// Constructor.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public DetailedDatabaseSetupWizard(SetupMode setupMode)
+        public DetailedDatabaseSetupWizard(SetupMode setupMode, ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
@@ -192,8 +193,10 @@ namespace ShipWorks.Data.Administration
             // Event not available in the designer
             comboSqlServers.MouseWheel += new MouseEventHandler(OnSqlServerMouseWheel);
 
+            this.lifetimeScope = lifetimeScope;
+
             // Resolve the user control
-            tangoUserControlHost = IoC.UnsafeGlobalLifetimeScope.Resolve<ICustomerLicenseActivation>();
+            tangoUserControlHost = lifetimeScope.Resolve<ICustomerLicenseActivation>();
             tangoUserControlHost.StepNext += OnStepNextShipWorksAdmin;
             tangoUserControlHost.SteppingInto += OnSteppingIntoShipWorksAdmin;
 
@@ -2249,7 +2252,7 @@ namespace ShipWorks.Data.Administration
                 // If we created the admin user, go ahead and log that user in
                 if (adminUserCreated)
                 {
-                    IUserService userService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUserService>();
+                    IUserService userService = lifetimeScope.Resolve<IUserService>();
 
                     EnumResult<UserServiceLogonResultType> logonResult = userService.Logon(new LogonCredentials(tangoUserControlHost.ViewModel.Email, tangoUserControlHost.ViewModel.DecryptedPassword, true));
 

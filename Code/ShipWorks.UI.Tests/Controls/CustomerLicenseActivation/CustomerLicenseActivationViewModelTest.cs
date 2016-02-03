@@ -9,12 +9,11 @@ using ShipWorks.UI.Controls.CustomerLicenseActivation;
 using ShipWorks.Users;
 using Xunit;
 
-namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
+namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
 {
     public class CustomerLicenseActivationViewModelTest
     {
         [Theory]
-        [CLSCompliant(false)]
         [InlineData("username", "TestPassword", false)]
         [InlineData("support@shipworks.com", "TestPassword", true)]
         [InlineData("", "TestPassword", false)]
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
 
                 testObject.Password = securePassword;
 
-                GenericResult<ICustomerLicense> result = testObject.Save();
+                GenericResult<ICustomerLicense> result = testObject.Save(true);
                 
                 Assert.Equal(isValid, result.Success);
                 Assert.Equal(isValid ? string.Empty : "Please enter a valid email for the username.", result.Message);
@@ -43,7 +42,6 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
         }
 
         [Theory]
-        [CLSCompliant(false)]
         [InlineData("support@shipworks.com", "TestPassword", true)]
         [InlineData("support@shipworks.com", "", false)]
         public void Save_Validates_Password(string username, string password, bool isValid)
@@ -60,7 +58,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
 
                 testObject.Password = securePassword;
 
-                GenericResult<ICustomerLicense> result = testObject.Save();
+                GenericResult<ICustomerLicense> result = testObject.Save(true);
 
                 Assert.Equal(isValid, result.Success);
                 Assert.Equal(isValid ? string.Empty : "Please enter a password.", result.Message);
@@ -84,14 +82,14 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 viewModel.Email = username;
                 viewModel.Password = securePassword;
 
-                viewModel.Save();
+                viewModel.Save(true);
 
                 testObject.Verify(l => l.Activate(username, password), Times.Once);
             }
         }
 
         [Fact]
-        public void SaveCalls_IUserManagerWrapperCreateUser_WithUsername_AndDecriptedPassword()
+        public void SaveCalls_IUserManagerWrapperCreateUser_WithUsername_AndDecryptedPassword()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -107,9 +105,32 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 viewModel.Email = username;
                 viewModel.Password = securePassword;
 
-                viewModel.Save();
+                viewModel.Save(true);
 
                 testObject.Verify(l => l.CreateUser(username, password, true), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void SaveCalls_IUserManagerWrapperDoesNotCreateUser_WhenFalseIsPassedIn()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string username = "support@shipworks.com";
+                string password = "TestPassword";
+
+                var testObject = mock.Mock<IUserService>();
+
+                CustomerLicenseActivationViewModel viewModel = mock.Create<CustomerLicenseActivationViewModel>();
+                SecureString securePassword = new SecureString();
+                password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
+
+                viewModel.Email = username;
+                viewModel.Password = securePassword;
+
+                viewModel.Save(false);
+
+                testObject.Verify(l => l.CreateUser(username, password, true), Times.Never);
             }
         }
 
@@ -130,7 +151,7 @@ namespace ShipWorks.Tests.UI.Controls.CustomerLicenseActivation
                 viewModel.Email = username;
                 viewModel.Password = securePassword;
 
-                GenericResult<ICustomerLicense> testObject = viewModel.Save();
+                GenericResult<ICustomerLicense> testObject = viewModel.Save(true);
                 
                 Assert.Equal(false, testObject.Success);
                 Assert.Equal("Random Exception", testObject.Message);

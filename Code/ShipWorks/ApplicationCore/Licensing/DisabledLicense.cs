@@ -1,3 +1,4 @@
+using System;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -35,6 +36,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsDisabled => true;
 
         /// <summary>
+        /// Disabled licenses do not have channel limits
+        /// </summary>
+        /// <remarks>
+        /// Always return 0
+        /// </remarks>
+        public int NumberOfChannelsOverLimit => 0;
+
+        /// <summary>
         /// Throws - We shouldn't try to access the key if the license is disabled.
         /// </summary>
         public string Key
@@ -51,11 +60,33 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsLegacy => false;
 
         /// <summary>
+        /// Not over limit, but I did debate throwing for this...
+        /// </summary>
+        public bool IsOverChannelLimit => false;
+
+        /// <summary>
         /// Throws - We shouldn't try to activate a disabled license.
         /// </summary>
         public EnumResult<LicenseActivationState> Activate(StoreEntity store)
         {
-            throw new System.NotImplementedException();
+            throw new ShipWorksLicenseException("Activate not valid for a disabled license.");
+        }
+
+        /// <summary>
+        /// Trhows - We shouldn't enforce a channel limit on a disabled store.
+        /// </summary>
+        public void EnforceChannelLimit()
+        {
+            throw new ShipWorksLicenseException("Channel Limit not valid for a disabled license.");
+        }
+
+        /// <summary>
+        /// Throws we should not try to delete a disabled license
+        /// </summary>
+        /// <param name="store"></param>
+        public void DeleteStore(StoreEntity store)
+        {
+            throw new ShipWorksLicenseException("Cannot delete a store using a disabled store license");
         }
     }
 }

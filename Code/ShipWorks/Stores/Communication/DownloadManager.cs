@@ -523,13 +523,23 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private static void CheckLicense(StoreEntity store)
         {
-            LicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<LicenseService>();
-            ILicense license = licenseService.GetLicense(store);
-            license.Refresh();
-
-            if (license.IsDisabled)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                throw new ShipWorksLicenseException(license.DisabledReason);
+                LicenseService licenseService = lifetimeScope.Resolve<LicenseService>();
+                ILicense license = licenseService.GetLicense(store);
+                license.Refresh();
+
+                if (license.IsDisabled)
+                {
+                    throw new ShipWorksLicenseException(license.DisabledReason);
+                }
+
+                if (license.IsOverChannelLimit)
+                {
+                    string plural = license.NumberOfChannelsOverLimit > 1 ? "s" : string.Empty;
+                    throw new ShipWorksLicenseException(
+                        $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to download orders.");
+                }
             }
         }
 

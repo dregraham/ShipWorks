@@ -1146,7 +1146,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the license capabilities.
         /// </summary>
-        public static LicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
+        public static ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
@@ -1190,6 +1190,92 @@ namespace ShipWorks.ApplicationCore.Licensing
             catch (ShipWorksLicenseException ex)
             {
                 throw new TangoException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets the active stores from Tango
+        /// </summary>
+        public static IEnumerable<ActiveStore> GetActiveStores(ICustomerLicense license)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "getactivestores");
+            postRequest.Variables.Add("custlicense", license.Key);
+            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
+
+            CheckResponseForErrors(xmlResponse);
+
+            List<ActiveStore> activeStores = new List<ActiveStore>();
+
+            XPathNamespaceNavigator navigator = new XPathNamespaceNavigator(xmlResponse);
+
+            foreach (XPathNavigator tempXpath in navigator.Select("//ActiveStore"))
+            {
+                XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(tempXpath, navigator.Namespaces);
+
+                ActiveStore activeStore = new ActiveStore()
+                {
+                    Name = XPathUtility.Evaluate(xpath, "//storeInfo", string.Empty),
+                    StoreLicenseKey = XPathUtility.Evaluate(xpath, "//license", string.Empty),
+                };
+
+                activeStores.Add(activeStore);
+            }
+
+            return activeStores;
+        }
+
+        /// <summary>
+        /// Deletes a store from Tango
+        /// </summary>
+        public static void DeleteStore(ICustomerLicense customerLicense, string storeLicenseKey)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "deletestore");
+            postRequest.Variables.Add("custlicense", customerLicense.Key);
+            postRequest.Variables.Add("storelicensekey[]", storeLicenseKey);
+            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
+
+            CheckResponseForErrors(xmlResponse);
+        }
+
+        /// <summary>
+        /// Deletes a stores from Tango
+        /// </summary>
+        public static void DeleteStores(ICustomerLicense customerLicense, IEnumerable<string> storeLicenseKeys)
+        {
+            string licenseKeyParam = string.Join(",", storeLicenseKeys);
+
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "deletestore");
+            postRequest.Variables.Add("custlicense", customerLicense.Key);
+            postRequest.Variables.Add("storelicensekey[]", licenseKeyParam);
+            postRequest.Variables.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
+
+            CheckResponseForErrors(xmlResponse);
+        }
+
+        /// <summary>
+        /// Checks the response for errors.
+        /// </summary>
+        private static void CheckResponseForErrors(XmlDocument xmlResponse)
+        {
+            XPathNamespaceNavigator navigator = new XPathNamespaceNavigator(xmlResponse);
+
+            string error = XPathUtility.Evaluate(navigator, "//Error", string.Empty);
+
+            if (!error.Equals(string.Empty))
+            {
+                throw new TangoException(error);
             }
         }
     }
