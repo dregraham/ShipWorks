@@ -71,9 +71,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
                 messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage),
                 messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage));
-            //,
-            //PropertyChangeStream.Where(x => x == nameof(ServiceType))
-            //    .Subscribe(x => messenger.Send(new SelectedRateChangedMessage(this, );
         }
 
         /// <summary>

@@ -10,6 +10,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -24,6 +25,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private readonly IDisposable subscriptions;
         private readonly IMessenger messenger;
         private RateResultDisplay selectedRate;
+        private readonly IIndex<ShipmentTypeCode, IRatingService> ratingServiceLookup;
 
         /// <summary>
         /// Constructor just for tests
@@ -51,6 +53,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceLookup) : this()
         {
             this.messenger = messenger;
+            this.ratingServiceLookup = ratingServiceLookup;
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<RatesRetrievingMessage>()
@@ -64,9 +67,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     .Subscribe(LoadRates),
                 messenger.OfType<ShipmentChangedMessage>()
                     .Where(x => x.ChangedField == "ServiceType")
-                    .Select(x => Rates.FirstOrDefault(rate => rate.AppliesToService(ratingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode], x.ShipmentAdapter)))
-                    .Where(x => x != null)
-                    .Subscribe(x => SelectedRate = x)
+                    .Subscribe(x => SelectRate(x.ShipmentAdapter))
             );
         }
 
@@ -88,16 +89,33 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 ShowEmptyMessage = true;
             }
 
-            Footnotes = message.Results.Value.FootnoteFactories
+            Footnotes = message.Results.Value?.FootnoteFactories
                 .Select(x => x.CreateViewModel(message.ShipmentAdapter))
-                .ToList();
+                .ToList() ?? Enumerable.Empty<object>();
             ShowFootnotes = Footnotes.Any();
 
             ShowDuties = Rates.Any(x => !string.IsNullOrEmpty(x.Duties));
             ShowTaxes = Rates.Any(x => !string.IsNullOrEmpty(x.Taxes));
             ShowShipping = Rates.Any(x => !string.IsNullOrEmpty(x.Shipping));
 
+            SelectRate(message.ShipmentAdapter);
+
             IsLoading = false;
+        }
+
+        /// <summary>
+        /// Set the selected rate for the shipment
+        /// </summary>
+        private void SelectRate(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            if (shipmentAdapter == null)
+            {
+                SelectedRate = null;
+                return;
+            }
+
+            SelectedRate = Rates.FirstOrDefault(rate =>
+                rate.AppliesToService(ratingServiceLookup[shipmentAdapter.ShipmentTypeCode], shipmentAdapter));
         }
 
         /// <summary>
