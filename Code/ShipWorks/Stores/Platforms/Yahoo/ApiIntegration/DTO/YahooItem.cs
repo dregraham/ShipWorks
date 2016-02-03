@@ -17,10 +17,31 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO
         public string ItemCode { get; set; }
 
         [XmlElement(ElementName = "Quantity")]
-        public double Quantity { get; set; }
+        public string QuantityTransport { get; set; }
+
+        [XmlIgnore]
+        public double Quantity {
+            get
+            {
+                double result;
+                double.TryParse(QuantityTransport, out result);
+                return result;
+            }
+        }
 
         [XmlElement(ElementName = "UnitPrice")]
-        public decimal UnitPrice { get; set; }
+        public string UnitPriceTransport { get; set; }
+
+        [XmlIgnore]
+        public decimal UnitPrice
+        {
+            get
+            {
+                decimal result;
+                decimal.TryParse(UnitPriceTransport, out result);
+                return result;
+            }
+        }
 
         [XmlElement(ElementName = "Description")]
         public string Description { get; set; }
