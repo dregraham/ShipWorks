@@ -1218,8 +1218,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 ActiveStore activeStore = new ActiveStore()
                 {
-                    Name = XPathUtility.Evaluate(xpath, "//storeInfo", string.Empty),
-                    StoreLicenseKey = XPathUtility.Evaluate(xpath, "//license", string.Empty),
+                    Name = XPathUtility.Evaluate(xpath, "storeInfo", string.Empty),
+                    StoreLicenseKey = XPathUtility.Evaluate(xpath, "license", string.Empty),
                 };
 
                 activeStores.Add(activeStore);

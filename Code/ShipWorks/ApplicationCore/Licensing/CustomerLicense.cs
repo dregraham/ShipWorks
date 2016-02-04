@@ -6,7 +6,9 @@ using ShipWorks.Stores;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using System.Linq;
+using System.Windows.Interop;
 using Interapptive.Shared;
+using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -18,6 +20,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
         private readonly Func<IChannelLimitDlg> channelLimitDlgFactory;
+        private readonly IWin32Window owner;
         private readonly ILog log;
         private readonly IDeletionService deletionService;
 
@@ -31,6 +34,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
 			this.channelLimitDlgFactory = channelLimitDlgFactory;
+            this.owner = owner;
             log = logFactory(typeof(CustomerLicense));
             this.deletionService = deletionService;
         }
@@ -144,7 +148,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 try
                 {
-                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory();
+                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory();                  
                     channelLimitDlg.ShowDialog();
                 }
                 catch (ShipWorksLicenseException ex)

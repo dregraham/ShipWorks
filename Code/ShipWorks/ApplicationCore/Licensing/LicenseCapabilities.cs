@@ -38,7 +38,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             PurchasePostage = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='PurchasePostage']/Value", 0) == 1;
             RateDiscountMessaging = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='RateDiscountMessaging']/Value", 0) == 1;
             ShippingAccountConversion = XPathUtility.Evaluate(xpath, "//NameValuePair[Name ='ShippingAccountConversion']/Value", 0) == 1;
-
+            IsInTrial = XPathUtility.Evaluate(xpath, "//IsInTrial", false);
+            
             SetPricingPlanCapabilties(xpath);
             SetStampsCapabilities(xpath);
             SetEndiciaCapabilities(xpath);
