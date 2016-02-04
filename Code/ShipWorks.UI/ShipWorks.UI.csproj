@@ -100,6 +100,7 @@
     <Compile Include="Controls\ChannelLimit\ChannelLimitDlg.xaml.cs">
       <DependentUpon>ChannelLimitDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ChannelLimit\ChannelLimitFactory.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.Properties.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlgViewModel.cs" />

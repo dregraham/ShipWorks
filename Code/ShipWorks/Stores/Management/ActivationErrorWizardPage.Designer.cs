@@ -31,7 +31,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.errorMessage = new System.Windows.Forms.Label();
-            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.elementHost = new System.Windows.Forms.Integration.ElementHost();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,25 +64,25 @@
             this.errorMessage.TabIndex = 2;
             this.errorMessage.Text = "An error has occurred";
             // 
-            // elementHost1
+            // elementHost
             // 
-            this.elementHost1.Location = new System.Drawing.Point(25, 55);
-            this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(400, 250);
-            this.elementHost1.TabIndex = 3;
-            this.elementHost1.Text = "elementHost";
-            this.elementHost1.Child = null;
+            this.elementHost.Location = new System.Drawing.Point(20, 129);
+            this.elementHost.Name = "elementHost";
+            this.elementHost.Size = new System.Drawing.Size(400, 250);
+            this.elementHost.TabIndex = 3;
+            this.elementHost.Text = "elementHost";
+            this.elementHost.Child = null;
             // 
             // ActivationErrorWizardPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.elementHost1);
+            this.Controls.Add(this.elementHost);
             this.Controls.Add(this.errorMessage);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.Name = "ActivationErrorWizardPage";
-            this.Size = new System.Drawing.Size(451, 324);
+            this.Size = new System.Drawing.Size(451, 410);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -94,6 +94,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label errorMessage;
-        private System.Windows.Forms.Integration.ElementHost elementHost1;
+        private System.Windows.Forms.Integration.ElementHost elementHost;
     }
 }

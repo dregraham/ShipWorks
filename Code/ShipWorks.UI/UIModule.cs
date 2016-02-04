@@ -28,6 +28,11 @@ namespace ShipWorks.UI
 
             builder.RegisterType<ChannelLimitViewModel>();
 
+            builder.RegisterType<ChannelLimitFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ChannelLimitControl>();
+
             builder.RegisterType<ChannelLimitDlg>()
                 .AsImplementedInterfaces();
 
@@ -68,6 +73,9 @@ namespace ShipWorks.UI
                 .AsImplementedInterfaces();
 
             builder.RegisterType<UpgradePlanDlg>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpgradePlanDlgFactory>()
                 .AsImplementedInterfaces();
         }
     }
