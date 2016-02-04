@@ -102,6 +102,15 @@ namespace ShipWorks.Data
 
             deletingStore = true;
 
+            // Disable the store to ensure that no one else downloads while we are removing the store
+            using (SqlAdapter adapter = new SqlAdapter(true))
+            {
+                adapter.FetchEntity(store);
+                store.Enabled = false;
+                adapter.SaveAndRefetch(store);
+                adapter.Commit();
+            }
+
             try
             {
                 SqlAdapter adapterWithNoTimeout = new SqlAdapter(SqlSession.Current.OpenConnection(0));
