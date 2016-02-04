@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 messenger.OfType<RatesRetrievedMessage>().Subscribe(x => Assert.True(false, "Message should not have been sent"));
 
                 messenger.Send(new ShipmentChangedMessage(this, mock.Create<ICarrierShipmentAdapter>()));
-                schedulerProvider.Default.AdvanceBy(TimeSpan.FromMilliseconds(249).Ticks);
+                schedulerProvider.Default.AdvanceBy(TimeSpan.FromMilliseconds(499).Ticks);
             }
         }
 
@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 messenger.OfType<RatesRetrievedMessage>().Subscribe(x => message = x);
 
                 messenger.Send(new ShipmentChangedMessage(this, mock.Create<ICarrierShipmentAdapter>()));
-                schedulerProvider.Default.AdvanceBy(TimeSpan.FromMilliseconds(250).Ticks);
+                schedulerProvider.Default.AdvanceBy(TimeSpan.FromMilliseconds(500).Ticks);
                 schedulerProvider.TaskPool.Start();
 
                 Assert.NotNull(message);

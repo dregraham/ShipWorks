@@ -94,7 +94,7 @@
                         Width="125" HorizontalAlignment="Left"
                         Margin="4 0 0 0"
                         Style="{DynamicResource DatePickerErrorTemplate}"
-                        SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                        SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
             <TextBlock Grid.Row="2" Grid.Column="0"
@@ -121,10 +121,10 @@
                 DisplayMemberPath="Name" />
 
             <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource GridLabel}">Weight:</TextBlock>
-            <weight:WeightControl Grid.Row="5" Grid.Column="1" 
+            <weight:WeightControl Grid.Row="5" Grid.Column="1"
                 Margin="0,0,0,0"
                 HorizontalAlignment="Left"
-				Weight="{Binding SelectedPackageAdapter.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                Weight="{Binding SelectedPackageAdapter.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
             <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource GridLabel}">Dimensions:</TextBlock>
@@ -175,7 +175,7 @@
                 </StackPanel.IsEnabled>
                 <TextBlock Margin="3 1 0 0">L:</TextBlock>
                 <TextBox Width="40" Margin="1 0 5 0" x:Name="dimsLength" Style="{DynamicResource TextBoxErrorTemplate}"
-					Text="{Binding SelectedPackageAdapter.DimsLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                    Text="{Binding DimsLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
                     <i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="" MaxLength="3" />
@@ -183,7 +183,7 @@
                 </TextBox>
                 <TextBlock Margin="10 1 0 0">W:</TextBlock>
                 <TextBox Width="40" Margin="1 0 5 0" Style="{DynamicResource TextBoxErrorTemplate}"
-					Text="{Binding SelectedPackageAdapter.DimsWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                    Text="{Binding DimsWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}">
                     <i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="0" MaxLength="3" />
@@ -191,7 +191,7 @@
                 </TextBox>
                 <TextBlock Margin="10 1 0 0">H:</TextBlock>
                 <TextBox Width="40" Margin="1 0 5 0" Style="{DynamicResource TextBoxErrorTemplate}"
-					Text="{Binding SelectedPackageAdapter.DimsHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                    Text="{Binding DimsHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}" >
                     <i:Interaction.Behaviors>
                         <ui:TextBoxInputRegExBehavior RegularExpression="^-?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" EmptyValue="0" MaxLength="3" />
@@ -238,7 +238,7 @@
                            Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insured Value:'}"></TextBlock>
                 <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"
                          IsEnabled="{Binding InsuranceViewModel.InsuranceChoice.Insured, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Text="{Binding InsuranceViewModel.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat=c, FallbackValue='50.50', 
+                         Text="{Binding InsuranceViewModel.InsuranceValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat=c, FallbackValue='50.50',
                          Converter={StaticResource EmptyMoney},
                          TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 

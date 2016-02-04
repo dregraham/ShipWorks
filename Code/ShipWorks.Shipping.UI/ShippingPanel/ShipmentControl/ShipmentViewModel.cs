@@ -168,6 +168,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
 
             shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
+            if (SelectedPackageAdapter != null)
+            {
+                SelectedPackageAdapter.DimsLength = DimsLength;
+                SelectedPackageAdapter.DimsWidth = DimsWidth;
+                SelectedPackageAdapter.DimsHeight = DimsHeight;
+            }
         }
 
         /// <summary>
@@ -216,9 +222,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void UpdateSelectedDimensionsProfile()
         {
-            SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID)
-                    ? DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID)
-                    : DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0);
+            SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) ?
+                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == SelectedPackageAdapter?.DimsProfileID) :
+                DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0);
         }
 
         /// <summary>

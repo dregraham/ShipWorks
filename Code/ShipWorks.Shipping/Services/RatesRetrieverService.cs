@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public class RatesRetrieverService : IInitializeForCurrentSession, IDisposable
     {
+        const double ThrottleTime = 250;
         private readonly IMessenger messenger;
         private readonly IRatesRetriever ratesRetriever;
         private readonly IIndex<ShipmentTypeCode, IRateHashingService> rateHashingServiceLookup;
@@ -48,7 +49,7 @@ namespace ShipWorks.Shipping.Services
                 .Where(x => string.IsNullOrEmpty(x.Message.ChangedField) || x.HashingService.IsRatingField(x.Message.ChangedField))
                 .Select(x => new { x.Message.ShipmentAdapter, RatingHash = x.HashingService.GetRatingHash(x.Message.ShipmentAdapter.Shipment) })
                 .Do(x => messenger.Send(new RatesRetrievingMessage(this, x.RatingHash)))
-                .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
+                .Throttle(TimeSpan.FromMilliseconds(ThrottleTime), schedulerProvider.Default)
                 .ObserveOn(schedulerProvider.TaskPool)
                 .Select(x => new { x.ShipmentAdapter, x.RatingHash, Rates = ratesRetriever.GetRates(x.ShipmentAdapter.Shipment) })
                 .SubscribeWithRetry(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)), HandleException);

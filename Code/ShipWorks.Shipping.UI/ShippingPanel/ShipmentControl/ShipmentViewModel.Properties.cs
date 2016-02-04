@@ -28,6 +28,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private ObservableCollection<DimensionsProfileEntity> dimensionsProfiles;
         private DimensionsProfileEntity selectedDimensionsProfile;
         private IInsuranceViewModel insuranceViewModel;
+        private double dimsLength;
+        private double dimsWidth;
+        private double dimsHeight;
 
         /// <summary>
         /// The insurance view model to use.
@@ -134,9 +137,19 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             get { return selectedPackageAdapter; }
             set
             {
-                handler.Set(nameof(SelectedPackageAdapter), ref selectedPackageAdapter, value, true);
-                InsuranceViewModel.SelectedPackageAdapter = SelectedPackageAdapter;
-                UpdateSelectedDimensionsProfile();
+                if (handler.Set(nameof(SelectedPackageAdapter), ref selectedPackageAdapter, value, true))
+                {
+                    InsuranceViewModel.SelectedPackageAdapter = SelectedPackageAdapter;
+
+                    if (SelectedPackageAdapter != null)
+                    {
+                        DimsLength = selectedPackageAdapter.DimsLength;
+                        DimsWidth = selectedPackageAdapter.DimsWidth;
+                        DimsHeight = selectedPackageAdapter.DimsHeight;
+                    }
+
+                    UpdateSelectedDimensionsProfile();
+                }
             }
         }
 
@@ -193,9 +206,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                     else
                     {
                         SelectedPackageAdapter.DimsProfileID = SelectedDimensionsProfile.DimensionsProfileID;
-                        SelectedPackageAdapter.DimsLength = SelectedDimensionsProfile.Length;
-                        SelectedPackageAdapter.DimsWidth = SelectedDimensionsProfile.Width;
-                        SelectedPackageAdapter.DimsHeight = SelectedDimensionsProfile.Height;
+                        DimsLength = SelectedDimensionsProfile.Length;
+                        DimsWidth = SelectedDimensionsProfile.Width;
+                        DimsHeight = SelectedDimensionsProfile.Height;
                         SelectedPackageAdapter.AdditionalWeight = SelectedDimensionsProfile.Weight;
                     }
                 }
@@ -208,11 +221,38 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public ObservableCollection<DimensionsProfileEntity> DimensionsProfiles
         {
-            get
-            {
-                return dimensionsProfiles;
-            }
+            get { return dimensionsProfiles; }
             set { handler.Set(nameof(DimensionsProfiles), ref dimensionsProfiles, value, true); }
+        }
+
+        /// <summary>
+        /// Length of the current package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double DimsLength
+        {
+            get { return dimsLength; }
+            set { handler.Set(nameof(DimsLength), ref dimsLength, value, true); }
+        }
+
+        /// <summary>
+        /// Width of the current package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double DimsWidth
+        {
+            get { return dimsWidth; }
+            set { handler.Set(nameof(DimsWidth), ref dimsWidth, value, true); }
+        }
+
+        /// <summary>
+        /// Height of the current package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double DimsHeight
+        {
+            get { return dimsHeight; }
+            set { handler.Set(nameof(DimsHeight), ref dimsHeight, value, true); }
         }
     }
 }
