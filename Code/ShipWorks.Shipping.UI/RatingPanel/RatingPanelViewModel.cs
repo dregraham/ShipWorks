@@ -10,6 +10,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
 
         private readonly IDisposable subscriptions;
         private readonly IMessenger messenger;
-        private RateResultDisplay selectedRate;
+        private RateResult selectedRate;
         private readonly IIndex<ShipmentTypeCode, IRatingService> ratingServiceLookup;
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Currently selected rate
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public RateResultDisplay SelectedRate
+        public RateResult SelectedRate
         {
             get { return selectedRate; }
             set { handler.Set(nameof(SelectedRate), ref selectedRate, value); }
@@ -70,7 +71,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                     .Subscribe(x => SelectRate(x.ShipmentAdapter)),
                 handler.Where(x => nameof(SelectedRate).Equals(x, StringComparison.Ordinal))
                     .Where(_ => SelectedRate != null)
-                    .Subscribe(_ => messenger.Send(new SelectedRateChangedMessage(this, SelectedRate.Rate)))
+                    .Subscribe(_ => messenger.Send(new SelectedRateChangedMessage(this, SelectedRate)))
             );
         }
 
@@ -81,13 +82,13 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             if (message.Results.Success)
             {
-                Rates = message.Results.Value.Rates.Select(x => new RateResultDisplay(x)).ToArray();
+                Rates = message.Results.Value.Rates.ToArray();
                 ShowEmptyMessage = false;
                 EmptyMessage = string.Empty;
             }
             else
             {
-                Rates = Enumerable.Empty<RateResultDisplay>();
+                Rates = Enumerable.Empty<RateResult>();
                 EmptyMessage = message.Results.Message;
                 ShowEmptyMessage = true;
             }
@@ -97,9 +98,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 .ToList() ?? Enumerable.Empty<object>();
             ShowFootnotes = Footnotes.Any();
 
-            ShowDuties = Rates.Any(x => !string.IsNullOrEmpty(x.Duties));
-            ShowTaxes = Rates.Any(x => !string.IsNullOrEmpty(x.Taxes));
-            ShowShipping = Rates.Any(x => !string.IsNullOrEmpty(x.Shipping));
+            ShowDuties = Rates.Any(x => x.Duties.HasValue);
+            ShowTaxes = Rates.Any(x => x.Taxes.HasValue);
+            ShowShipping = Rates.Any(x => x.Shipping.HasValue);
 
             SelectRate(message.ShipmentAdapter);
 
@@ -118,7 +119,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             }
 
             SelectedRate = Rates.FirstOrDefault(rate =>
-                rate.AppliesToService(ratingServiceLookup[shipmentAdapter.ShipmentTypeCode], shipmentAdapter));
+                ratingServiceLookup[shipmentAdapter.ShipmentTypeCode].IsRateSelectedByShipment(rate, shipmentAdapter));
         }
 
         /// <summary>

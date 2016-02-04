@@ -183,7 +183,6 @@
     <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteViewModel.cs" />
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
-    <Compile Include="RatingPanel\RateResultDisplay.cs" />
     <Compile Include="RatingPanel\RatingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

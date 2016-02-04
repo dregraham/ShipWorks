@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
 #if DEBUG
     public class TestRatingPanelViewModel : RatingPanelViewModel
     {
-        public TestRatingPanelViewModel() : base()
+        public TestRatingPanelViewModel()
         {
-            Rates = new List<RateResultDisplay>
+            Rates = new List<RateResult>
             {
-                new RateResultDisplay { Description = "Foo", Days = "1", Amount = "$5.60" },
-                new RateResultDisplay { Description = "Bar", Days = "1-2", Amount = "$23.60",
-                    Duties = "$1.23", Taxes = "$4.56", Shipping = "$9.12" },
-                new RateResultDisplay { Description = "Baz", Days = "2-8", Amount = "$15.60" },
+                new RateResult("Foo", "1", 5.6M, null),
+                new RateResult("Bar", "1-2", 23.605M, new RateAmountComponents(1.23M, 4.56M, 9.12M), null),
+                new RateResult("Baz", "2-8", 15.6M, null),
             };
 
             ShowShipping = true;

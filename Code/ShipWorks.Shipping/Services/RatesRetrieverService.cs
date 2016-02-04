@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Services
             subscription = messenger.OfType<ShipmentChangedMessage>()
                 .Select(x => new { Message = x, HashingService = rateHashingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode] })
                 .Where(x => string.IsNullOrEmpty(x.Message.ChangedField) || x.HashingService.IsRatingField(x.Message.ChangedField))
-                .Select(x => new { ShipmentAdapter = x.Message.ShipmentAdapter, RatingHash = x.HashingService.GetRatingHash(x.Message.ShipmentAdapter.Shipment) })
+                .Select(x => new { x.Message.ShipmentAdapter, RatingHash = x.HashingService.GetRatingHash(x.Message.ShipmentAdapter.Shipment) })
                 .Do(x => messenger.Send(new RatesRetrievingMessage(this, x.RatingHash)))
                 .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
                 .ObserveOn(schedulerProvider.TaskPool)

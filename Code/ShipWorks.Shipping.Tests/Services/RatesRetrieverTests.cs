@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Tests.Services
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             shipmentType = mock.CreateMock<ShipmentType>();
+            shipmentType.Setup(x => x.SupportsGetRates).Returns(true);
             ratingService = mock.CreateMock<IRatingService>();
 
             mock.Mock<IStoreTypeManager>()

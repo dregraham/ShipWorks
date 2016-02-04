@@ -8,7 +8,7 @@
              d:DataContext="{d:DesignInstance local:TestRatingPanelViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
              FontFamily="Tahoma"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,6 +18,7 @@
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:ImageToBitmapSourceConverter x:Key="ImageToBitmapSource" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+            <ui:HalfCentCurrencyConverter x:Key="HalfCentCurrency" />
             <ui:TypeBasedTemplateSelector x:Key="TypeBasedTemplateSelector" />
 
             <FrameworkElement x:Key="ProxyElement"
@@ -95,25 +96,25 @@
                                         Visibility="{Binding DataContext.ShowShipping,
                                             Source={StaticResource ProxyElement},
                                             Converter={StaticResource BooleanToVisibility}}"
-                                        Binding="{Binding Shipping}" />
+                                        Binding="{Binding Shipping, Converter={StaticResource HalfCentCurrency}}" />
                     <DataGridTextColumn Header="Tax"
                                         CellStyle="{StaticResource SpacingStyle}"
                                         ElementStyle="{StaticResource AmountStyle}"
                                         Visibility="{Binding DataContext.ShowTaxes,
                                             Source={StaticResource ProxyElement},
                                             Converter={StaticResource BooleanToVisibility}}"
-                                        Binding="{Binding Taxes}" />
+                                        Binding="{Binding Taxes, Converter={StaticResource HalfCentCurrency}}" />
                     <DataGridTextColumn Header="Duty"
                                         CellStyle="{StaticResource SpacingStyle}"
                                         ElementStyle="{StaticResource AmountStyle}"
                                         Visibility="{Binding DataContext.ShowDuties,
                                             Source={StaticResource ProxyElement},
                                             Converter={StaticResource BooleanToVisibility}}"
-                                        Binding="{Binding Duties}" />
+                                        Binding="{Binding Duties, Converter={StaticResource HalfCentCurrency}}" />
                     <DataGridTextColumn Header="Rate"
                                         CellStyle="{StaticResource SpacingStyle}"
                                         ElementStyle="{StaticResource AmountStyle}"
-                                        Binding="{Binding Amount}" />
+                                        Binding="{Binding Amount, Converter={StaticResource HalfCentCurrency}}" />
                 </DataGrid.Columns>
             </DataGrid>
 

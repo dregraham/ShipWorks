@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
@@ -16,14 +17,14 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         private bool showEmptyMessage;
         private string emptyMessage;
 
-        private IEnumerable<RateResultDisplay> rates;
+        private IEnumerable<RateResult> rates;
         private IEnumerable<object> footnotes;
 
         /// <summary>
         /// List of rates that should be displayed
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<RateResultDisplay> Rates
+        public IEnumerable<RateResult> Rates
         {
             get { return rates; }
             set { handler.Set(nameof(Rates), ref rates, value); }

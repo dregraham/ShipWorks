@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shared
         public TestScheduler Immediate => immediate;
         public TestScheduler NewThread => newThread;
         public TestScheduler ThreadPool => threadPool;
-        public TestScheduler TaskPool => threadPool;
+        public TestScheduler TaskPool => taskPool;
         public TestScheduler Default => @default;
     }
 }

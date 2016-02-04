@@ -525,7 +525,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void Save_DelegatesToShipmentViewModelFactory_Test()
         {
-            Mock<ShipmentViewModel> shipmentViewModel = new Mock<ShipmentViewModel>();
+            Mock<ShipmentViewModel> shipmentViewModel = mock.CreateMock<ShipmentViewModel>();
 
             mock.Mock<IShippingViewModelFactory>()
                 .SetupSequence(s => s.GetShipmentViewModel(It.IsAny<ShipmentTypeCode>()))
