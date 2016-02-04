@@ -39,6 +39,10 @@ namespace ShipWorks.UI.Controls.UpgradePlan
             }
         }
 
+        /// <summary>
+        /// Loads the message to be displayed
+        /// </summary>
+        /// <param name="message">The message.</param>
         public void Load(string message)
         {
             Message = message;
