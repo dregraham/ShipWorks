@@ -116,6 +116,11 @@
       <DependentUpon>CustomerLicenseActivationDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
+    <Compile Include="Controls\UpgradePlan\IUpgradePlanDlgViewModel.cs" />
+    <Compile Include="Controls\UpgradePlan\UpgradePlanDlg.xaml.cs">
+      <DependentUpon>UpgradePlanDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UpgradePlan\UpgradePlanDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\IWebBrowserDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\WebBrowserDlg.xaml.cs">
       <DependentUpon>WebBrowserDlg.xaml</DependentUpon>
@@ -192,14 +197,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\UpgradePlan\UpgradePlanDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.resx">
       <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

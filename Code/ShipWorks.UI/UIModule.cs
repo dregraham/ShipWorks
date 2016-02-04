@@ -4,6 +4,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
 using ShipWorks.UI.Controls.CustomerLicenseActivation;
+using ShipWorks.UI.Controls.UpgradePlan;
 using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.UI.Services;
 
@@ -59,6 +60,12 @@ namespace ShipWorks.UI
                     IComponentContext resolved = componentContext.Resolve<IComponentContext>();
                     return named => resolved.ResolveNamed<IDialog>(named);
                 });
+
+            builder.RegisterType<UpgradePlanDlg>()
+                .Named<IDialog>("UpgradePlanDlg");
+
+            builder.RegisterType<UpgradePlanDlgViewModel>()
+                .AsImplementedInterfaces();
         }
     }
 }
