@@ -232,5 +232,67 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             });
             Assert.Equal((int) FedExServiceType.GroundHomeDelivery, shipment.FedEx.Service);
         }
+
+        [Fact]
+        public void AddPackage_AddsNewPackageToList()
+        {
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.AddPackage();
+
+            Assert.Equal(1, shipment.FedEx.Packages.Count);
+        }
+
+        [Fact]
+        public void AddPackage_ReturnsPackageAdapter_ForNewPackage()
+        {
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var newPackage = testObject.AddPackage();
+
+            Assert.NotNull(newPackage);
+        }
+
+        [Fact]
+        public void DeletePackage_RemovesPackageAssociatedWithAdapter()
+        {
+            var package = new FedExPackageEntity(2);
+
+            shipment.FedEx.Packages.Add(new FedExPackageEntity(1));
+            shipment.FedEx.Packages.Add(package);
+            shipment.FedEx.Packages.Add(new FedExPackageEntity(3));
+
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new FedExPackageAdapter(shipment, package, 1));
+
+            Assert.DoesNotContain(package, shipment.FedEx.Packages);
+        }
+
+        [Fact]
+        public void DeletePackage_DoesNotRemovePackage_WhenShipmentHasSinglePackage()
+        {
+            var package = new FedExPackageEntity(2);
+
+            shipment.FedEx.Packages.Add(package);
+
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new FedExPackageAdapter(shipment, package, 1));
+
+            Assert.Contains(package, shipment.FedEx.Packages);
+        }
+
+        [Fact]
+        public void DeletePackage_DoesNotRemovePackage_WhenPackageDoesNotExist()
+        {
+            var package = new FedExPackageEntity(2);
+            var package2 = new FedExPackageEntity(2);
+
+            shipment.FedEx.Packages.Add(package);
+            shipment.FedEx.Packages.Add(package2);
+
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new FedExPackageAdapter(shipment, new FedExPackageEntity(12), 1));
+
+            Assert.Contains(package, shipment.FedEx.Packages);
+            Assert.Contains(package2, shipment.FedEx.Packages);
+        }
     }
 }

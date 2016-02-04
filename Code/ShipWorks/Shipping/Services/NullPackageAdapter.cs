@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Services
 {
     /// <summary>
     /// A package adapter that amounts to an implementation of the null object
-    /// pattern. 
+    /// pattern.
     /// </summary>
     public class NullPackageAdapter : IPackageAdapter
     {
@@ -18,6 +18,11 @@ namespace ShipWorks.Shipping.Services
 #pragma warning disable CS0067
         public virtual event PropertyChangedEventHandler PropertyChanged;
 #pragma warning restore CS0067
+
+        /// <summary>
+        /// Id of the underlying package
+        /// </summary>
+        public long PackageId => -1;
 
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.

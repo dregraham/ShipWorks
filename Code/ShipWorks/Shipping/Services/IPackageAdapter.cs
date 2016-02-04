@@ -1,6 +1,5 @@
 ﻿
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 
@@ -11,6 +10,8 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public interface IPackageAdapter : INotifyPropertyChanged, IDataErrorInfo
     {
+        long PackageId { get; }
+
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.
         /// </summary>
@@ -20,7 +21,7 @@ namespace ShipWorks.Shipping.Services
         /// Gets or sets the weight.
         /// </summary>
         double Weight { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the additional weight.
         /// </summary>

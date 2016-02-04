@@ -80,6 +80,36 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Add a new package to the shipment
+        /// </summary>
+        public override IPackageAdapter AddPackage()
+        {
+            FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
+            Shipment.FedEx.Packages.Add(package);
+
+            return new FedExPackageAdapter(Shipment, package, Shipment.FedEx.Packages.IndexOf(package) + 1);
+        }
+
+        /// <summary>
+        /// Delete a package from the shipment
+        /// </summary>
+        public override void DeletePackage(IPackageAdapter packageAdapter)
+        {
+            if (Shipment.FedEx.Packages.Count < 2)
+            {
+                return;
+            }
+
+            FedExPackageEntity package = Shipment.FedEx.Packages
+                .FirstOrDefault(x => x.FedExPackageID == packageAdapter.PackageId);
+
+            if (package != null)
+            {
+                Shipment.FedEx.Packages.Remove(package);
+            }
+        }
+
+        /// <summary>
         /// Update the insurance fields on the shipment and packages
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
