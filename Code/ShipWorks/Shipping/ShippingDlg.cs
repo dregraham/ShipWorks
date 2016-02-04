@@ -1999,7 +1999,7 @@ namespace ShipWorks.Shipping
                     anyAttempted = true;
                     using (ILifetimeScope ratesScope = lifetimeScope.BeginLifetimeScope())
                     {
-                        _e.Result = ratesScope.Resolve<IRatesRetriever>().GetRates(shipment);
+                        _e.Result = ratesScope.Resolve<IRatesRetriever>().GetRates(shipment).Value;
                     }
 
                     // Just in case it used to have an error remove it
