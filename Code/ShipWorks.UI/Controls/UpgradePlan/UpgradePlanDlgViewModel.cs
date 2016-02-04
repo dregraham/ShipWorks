@@ -26,7 +26,7 @@ namespace ShipWorks.UI.Controls.UpgradePlan
         /// Message to display
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Message => "To access this feature, you must upgrade your plan";
+        public string Message { get; set; }
 
         /// <summary>
         /// Command for clicking Upgrade Plan
@@ -37,6 +37,11 @@ namespace ShipWorks.UI.Controls.UpgradePlan
             {
                 return new RelayCommand(UpgradeAccount);
             }
+        }
+
+        public void Load(string message)
+        {
+            Message = message;
         }
 
         /// <summary>
