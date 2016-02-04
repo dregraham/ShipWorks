@@ -31,6 +31,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.errorMessage = new System.Windows.Forms.Label();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,14 +60,24 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.errorMessage.Location = new System.Drawing.Point(44, 37);
             this.errorMessage.Name = "errorMessage";
-            this.errorMessage.Size = new System.Drawing.Size(395, 267);
+            this.errorMessage.Size = new System.Drawing.Size(395, 18);
             this.errorMessage.TabIndex = 2;
             this.errorMessage.Text = "An error has occurred";
+            // 
+            // elementHost1
+            // 
+            this.elementHost1.Location = new System.Drawing.Point(25, 55);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(400, 250);
+            this.elementHost1.TabIndex = 3;
+            this.elementHost1.Text = "elementHost";
+            this.elementHost1.Child = null;
             // 
             // ActivationErrorWizardPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.elementHost1);
             this.Controls.Add(this.errorMessage);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
@@ -83,5 +94,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label errorMessage;
+        private System.Windows.Forms.Integration.ElementHost elementHost1;
     }
 }
