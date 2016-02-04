@@ -33,12 +33,12 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                     password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
 
                     testObject.Password = securePassword;
-                }
 
-                GenericResult<ICustomerLicense> result = testObject.Save(true);
-                
-                Assert.Equal(isValid, result.Success);
-                Assert.Equal(isValid ? string.Empty : "Please enter a valid email for the username.", result.Message);
+                    GenericResult<ICustomerLicense> result = testObject.Save(true);
+
+                    Assert.Equal(isValid, result.Success);
+                    Assert.Equal(isValid ? string.Empty : "Please enter a valid email for the username.", result.Message);
+                }
             }
         }
 
@@ -58,12 +58,10 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                     password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
 
                     testObject.Password = securePassword;
+                    GenericResult<ICustomerLicense> result = testObject.Save(true);
+                    Assert.Equal(isValid, result.Success);
+                    Assert.Equal(isValid ? string.Empty : "Please enter a password.", result.Message);
                 }
-
-                GenericResult<ICustomerLicense> result = testObject.Save(true);
-
-                Assert.Equal(isValid, result.Success);
-                Assert.Equal(isValid ? string.Empty : "Please enter a password.", result.Message);
             }
         }
 
@@ -75,7 +73,7 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                 string username = "support@shipworks.com";
                 string password = "TestPassword";
 
-                var testObject = mock.Mock<ICustomerLicense>();
+                var customerLicense = mock.Mock<ICustomerLicense>();
 
                 CustomerLicenseActivationViewModel viewModel = mock.Create<CustomerLicenseActivationViewModel>();
                 using (SecureString securePassword = new SecureString())
@@ -84,11 +82,10 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
 
                     viewModel.Email = username;
                     viewModel.Password = securePassword;
+                    viewModel.Save(true);
+
+                    customerLicense.Verify(l => l.Activate(username, password), Times.Once);
                 }
-
-                viewModel.Save(true);
-
-                testObject.Verify(l => l.Activate(username, password), Times.Once);
             }
         }
 
@@ -109,11 +106,10 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
 
                     viewModel.Email = username;
                     viewModel.Password = securePassword;
+                    viewModel.Save(true);
                 }
-
-                viewModel.Save(true);
-
                 testObject.Verify(l => l.CreateUser(username, password, true), Times.Once);
+                
             }
         }
 
@@ -134,9 +130,8 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
 
                     viewModel.Email = username;
                     viewModel.Password = securePassword;
+                    viewModel.Save(false);
                 }
-
-                viewModel.Save(false);
 
                 testObject.Verify(l => l.CreateUser(username, password, true), Times.Never);
             }
@@ -159,12 +154,11 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
 
                     viewModel.Email = username;
                     viewModel.Password = securePassword;
-                }
+                    GenericResult<ICustomerLicense> testObject = viewModel.Save(true);
 
-                GenericResult<ICustomerLicense> testObject = viewModel.Save(true);
-                
-                Assert.Equal(false, testObject.Success);
-                Assert.Equal("Random Exception", testObject.Message);
+                    Assert.Equal(false, testObject.Success);
+                    Assert.Equal("Random Exception", testObject.Message);
+                }
             }
         }
     }

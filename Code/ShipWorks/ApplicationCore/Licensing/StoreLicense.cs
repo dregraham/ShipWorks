@@ -55,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <remarks>
         /// Always returns false
         /// </remarks>
-        public bool IsOverShipmentLimit => false;
+        public bool IsShipmentLimitReached => false;
 
         /// <summary>
         /// Store license do not have channel limits

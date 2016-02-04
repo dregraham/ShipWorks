@@ -6,7 +6,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Response from TangoWebClient.AddStore 
     /// </summary>
-    public class AddStoreResponse
+    public class AddStoreResponse : IAddStoreResponse
     {
         /// <summary>
         /// Constructor

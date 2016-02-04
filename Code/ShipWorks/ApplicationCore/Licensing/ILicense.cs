@@ -47,7 +47,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Is the user over their shipment limit
         /// </summary>
-        bool IsOverShipmentLimit { get; }
+        bool IsShipmentLimitReached { get; }
 
         /// <summary>
         /// Activate a new store

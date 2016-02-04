@@ -120,6 +120,7 @@
     <Compile Include="Controls\UpgradePlan\UpgradePlanDlg.xaml.cs">
       <DependentUpon>UpgradePlanDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UpgradePlan\UpgradePlanDlgFactory.cs" />
     <Compile Include="Controls\UpgradePlan\UpgradePlanDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\IWebBrowserDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\WebBrowserDlg.xaml.cs">

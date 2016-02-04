@@ -1093,7 +1093,7 @@ namespace ShipWorks.Shipping
                     $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to create labels.");
             }
 
-            if (license.IsOverShipmentLimit)
+            if (license.IsShipmentLimitReached)
             {
                 throw new ShippingException("You have reached your shipment limit for this billing cycle. Please upgrade your plan to process shipments.");
             }

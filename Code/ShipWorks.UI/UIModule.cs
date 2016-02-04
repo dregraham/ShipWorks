@@ -66,6 +66,9 @@ namespace ShipWorks.UI
 
             builder.RegisterType<UpgradePlanDlgViewModel>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<UpgradePlanDlg>()
+                .AsImplementedInterfaces();
         }
     }
 }
