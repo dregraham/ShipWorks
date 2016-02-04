@@ -55,6 +55,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         void EnforceChannelLimit();
 
         /// <summary>
+        /// If license is at shipment limit, prompt user to upgrade
+        /// when attempting to process a shipment
+        /// </summary>
+        void EnforceShipmentLimit();
+
+        /// <summary>
         /// Deletes a store
         /// </summary>
         /// <param name="store"></param>
