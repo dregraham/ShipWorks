@@ -28,6 +28,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Stores.Management
 {
@@ -267,6 +268,20 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnDelete(object sender, EventArgs e)
         {
+            try
+            {
+                // We open a lock that will stay open for the duration of the store delete,
+                // which will serve to lock out any other running instance of ShipWorks from downloading
+                // for this store.
+                using (new SqlEntityLock(SelectedStore.StoreID, "Deleting")){}
+            }
+            catch (SqlAppResourceLockException)
+            {
+                MessageHelper.ShowError(this,
+                    $"Another machine is currently downloading orders for {SelectedStore.StoreName}. Please wait for the download to complete before trying to delete the store.");
+                return;
+            }
+
             using (StoreConfirmDeleteDlg dlg = new StoreConfirmDeleteDlg(SelectedStore.StoreName))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)

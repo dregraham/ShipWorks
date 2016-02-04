@@ -103,36 +103,44 @@ namespace ShipWorks.Data
 
             deletingStore = true;
 
-            // We open a lock that will stay open for the duration of the store delete,
-            // which will serve to lock out any other running instance of ShipWorks from downloading
-            // for this store.
-            using (new SqlEntityLock(store.StoreID, "Download"))
+            try
             {
-                // Disable the store to ensure that no one else downloads while we are removing the store
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                // We open a lock that will stay open for the duration of the store delete,
+                // which will serve to lock out any other running instance of ShipWorks from downloading
+                // for this store.
+                using (new SqlEntityLock(store.StoreID, "Download"))
                 {
-                    adapter.FetchEntity(store);
-                    store.Enabled = false;
-                    adapter.SaveAndRefetch(store);
-                    adapter.Commit();
-                }
+                    // Disable the store to ensure that no one else downloads while we are removing the store
+                    using (SqlAdapter adapter = new SqlAdapter(true))
+                    {
+                        adapter.FetchEntity(store);
+                        store.Enabled = false;
+                        adapter.SaveAndRefetch(store);
+                        adapter.Commit();
+                    }
 
-                try
-                {
-                    SqlAdapter adapterWithNoTimeout = new SqlAdapter(SqlSession.Current.OpenConnection(0));
-                    SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, $"DeletionService.DeleteStore for store {store.StoreName}");
-                    sqlDeadlockRetry.ExecuteWithRetry(() => DeleteStore(store, adapterWithNoTimeout));
-                }
-                finally
-                {
-                    deletingStore = false;
+                    try
+                    {
+                        SqlAdapter adapterWithNoTimeout = new SqlAdapter(SqlSession.Current.OpenConnection(0));
+                        SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, $"DeletionService.DeleteStore for store {store.StoreName}");
+                        sqlDeadlockRetry.ExecuteWithRetry(() => DeleteStore(store, adapterWithNoTimeout));
+                    }
+                    finally
+                    {
+                        deletingStore = false;
+                    }
                 }
             }
-            
-            // Refresh the nudges, just in case there were any that shouldn't be displayed now due to the deletion of this store.
-            // Ask the store manager to check for changes so that it doesn't return the store we just deleted.  The heart beat may
-            // not have run to force the check yet.
-            StoreManager.CheckForChanges();
+            catch (SqlAppResourceLockException ex)
+            {
+                log.Error("Could not obtain download lock for store to delete, someone must be downloading orders on another machine.", ex);
+                throw;
+            }
+
+    // Refresh the nudges, just in case there were any that shouldn't be displayed now due to the deletion of this store.
+    // Ask the store manager to check for changes so that it doesn't return the store we just deleted.  The heart beat may
+    // not have run to force the check yet.
+    StoreManager.CheckForChanges();
             NudgeManager.Refresh(StoreManager.GetAllStores());
         }
 
