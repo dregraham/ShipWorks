@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Input;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Stores;
-using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
 using Xunit;
 
@@ -68,6 +68,21 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 testObject.Load();
 
                 customerLicense.Verify(c => c.Refresh(), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void UpgradeAccount_ShowsDialog()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var dialog = mock.Mock<IDialog>();
+
+                var testObject = mock.Create<ChannelLimitViewModel>();
+                ICommand upgradeClickCommand = testObject.UpgradeClickCommand;
+                upgradeClickCommand.Execute(null);
+
+                dialog.Verify(d=>d.ShowDialog(), Times.Once);
             }
         }
     }
