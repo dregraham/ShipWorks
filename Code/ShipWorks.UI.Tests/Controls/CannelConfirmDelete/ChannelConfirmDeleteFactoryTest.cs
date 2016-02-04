@@ -13,7 +13,7 @@ namespace ShipWorks.UI.Tests.Controls.CannelConfirmDelete
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<IChannelConfirmDeleteDlg> dlg = mock.Mock<IChannelConfirmDeleteDlg>();
+                mock.Mock<IChannelConfirmDeleteDlg>();
 
                 Mock<IConfirmChannelDeleteViewModel> viewModel = mock.Mock<IConfirmChannelDeleteViewModel>();
 

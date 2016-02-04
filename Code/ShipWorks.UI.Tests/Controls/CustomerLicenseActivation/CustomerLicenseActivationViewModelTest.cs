@@ -28,11 +28,12 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
 
                 testObject.Email = username;
 
-                SecureString securePassword = new SecureString();
+                using (SecureString securePassword = new SecureString())
+                {
+                    password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
 
-                password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
-
-                testObject.Password = securePassword;
+                    testObject.Password = securePassword;
+                }
 
                 GenericResult<ICustomerLicense> result = testObject.Save(true);
                 
@@ -52,11 +53,12 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
 
                 testObject.Email = username;
 
-                SecureString securePassword = new SecureString();
+                using (SecureString securePassword = new SecureString())
+                {
+                    password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
 
-                password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
-
-                testObject.Password = securePassword;
+                    testObject.Password = securePassword;
+                }
 
                 GenericResult<ICustomerLicense> result = testObject.Save(true);
 
@@ -76,11 +78,13 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                 var testObject = mock.Mock<ICustomerLicense>();
 
                 CustomerLicenseActivationViewModel viewModel = mock.Create<CustomerLicenseActivationViewModel>();
-                SecureString securePassword = new SecureString();
-                password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
+                using (SecureString securePassword = new SecureString())
+                {
+                    password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
 
-                viewModel.Email = username;
-                viewModel.Password = securePassword;
+                    viewModel.Email = username;
+                    viewModel.Password = securePassword;
+                }
 
                 viewModel.Save(true);
 
@@ -99,11 +103,13 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                 var testObject = mock.Mock<IUserService>();
 
                 CustomerLicenseActivationViewModel viewModel = mock.Create<CustomerLicenseActivationViewModel>();
-                SecureString securePassword = new SecureString();
-                password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
+                using (SecureString securePassword = new SecureString())
+                {
+                    password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
 
-                viewModel.Email = username;
-                viewModel.Password = securePassword;
+                    viewModel.Email = username;
+                    viewModel.Password = securePassword;
+                }
 
                 viewModel.Save(true);
 
@@ -122,11 +128,13 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                 var testObject = mock.Mock<IUserService>();
 
                 CustomerLicenseActivationViewModel viewModel = mock.Create<CustomerLicenseActivationViewModel>();
-                SecureString securePassword = new SecureString();
-                password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
+                using (SecureString securePassword = new SecureString())
+                {
+                    password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
 
-                viewModel.Email = username;
-                viewModel.Password = securePassword;
+                    viewModel.Email = username;
+                    viewModel.Password = securePassword;
+                }
 
                 viewModel.Save(false);
 
@@ -145,11 +153,13 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                 mock.Mock<IUserService>().Setup(u => u.CreateUser(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).Throws(new Exception("Random Exception"));
 
                 CustomerLicenseActivationViewModel viewModel = mock.Create<CustomerLicenseActivationViewModel>();
-                SecureString securePassword = new SecureString();
-                password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
+                using (SecureString securePassword = new SecureString())
+                {
+                    password.ToCharArray().ToList().ForEach(p => securePassword.AppendChar(p));
 
-                viewModel.Email = username;
-                viewModel.Password = securePassword;
+                    viewModel.Email = username;
+                    viewModel.Password = securePassword;
+                }
 
                 GenericResult<ICustomerLicense> testObject = viewModel.Save(true);
                 
