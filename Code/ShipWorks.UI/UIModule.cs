@@ -51,6 +51,8 @@ namespace ShipWorks.UI
             builder.RegisterType<WebBrowserDlg>()
                 .Named<IDialog>("WebBrowserDlg");
 
+            builder.RegisterType<WebBrowserFactory>();
+
             builder.Register<Func<string, IDialog>>(
                 componentContext =>
                 {

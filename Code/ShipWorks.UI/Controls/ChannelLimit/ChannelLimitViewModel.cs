@@ -30,24 +30,24 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly ICustomerLicense license;
         private string errorMessage;
         private readonly IStoreManager storeManager;
-        private readonly Func<IChannelConfirmDeleteFactory> confirmDeleteFactory;
-        private readonly IMessageHelper messageHelper;
-        private readonly Func<string, IDialog> webBrowserDlgFactory;
-        private readonly IWebBrowserDlgViewModel webBrowserDlgViewModel;
+        private readonly IChannelConfirmDeleteFactory confirmDelete;
+        private readonly WebBrowserFactory webBrowserFactory;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelLimitViewModel(ILicenseService licenseService, IStoreManager storeManager,
-            Func<IChannelConfirmDeleteFactory> confirmDeleteFactory, Func<Type, ILog> logFactory, IMessageHelper messageHelper, Func<string, IDialog> webBrowserDlgFactory, IWebBrowserDlgViewModel webBrowserDlgViewModel)
+        public ChannelLimitViewModel(
+            ILicenseService licenseService, 
+            IStoreManager storeManager,
+            IChannelConfirmDeleteFactory confirmDelete, 
+            Func<Type, ILog> logFactory,
+            WebBrowserFactory webBrowserFactory)
         {
             license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
             this.storeManager = storeManager;
-            this.confirmDeleteFactory = confirmDeleteFactory;
-            this.messageHelper = messageHelper;
-            this.webBrowserDlgFactory = webBrowserDlgFactory;
-            this.webBrowserDlgViewModel = webBrowserDlgViewModel;
+            this.confirmDelete = confirmDelete;
+            this.webBrowserFactory = webBrowserFactory;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -130,9 +130,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private void UpgradeAccount()
         {
             Uri uri = new Uri("https://www.interapptive.com/account/changeplan.php");
-            webBrowserDlgViewModel.Load(uri, "Upgrade your account");
-            var browserDlg = webBrowserDlgFactory("WebBrowserDlg");
-            browserDlg.DataContext = webBrowserDlgViewModel;
+            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account");
             browserDlg.ShowDialog();
         }
 
@@ -153,7 +151,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 return;
             }
 
-            IChannelConfirmDeleteDlg deleteDlg = confirmDeleteFactory().GetConfirmDeleteDlg(selectedStoreType);
+            IChannelConfirmDeleteDlg deleteDlg = confirmDelete.GetConfirmDeleteDlg(selectedStoreType);
 
             deleteDlg.ShowDialog();
 
