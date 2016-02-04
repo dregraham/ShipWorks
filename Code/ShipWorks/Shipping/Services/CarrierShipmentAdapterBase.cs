@@ -240,6 +240,22 @@ namespace ShipWorks.Shipping.Services
         public abstract IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages);
 
         /// <summary>
+        /// Add a new package
+        /// </summary>
+        public virtual IPackageAdapter AddPackage()
+        {
+            throw new InvalidOperationException($"Adding a package is not supported");
+        }
+
+        /// <summary>
+        /// Delete a package
+        /// </summary>
+        public virtual void DeletePackage(IPackageAdapter package)
+        {
+            throw new InvalidOperationException($"Deleting a package is not supported");
+        }
+
+        /// <summary>
         /// Are customs allowed?
         /// </summary>
         public virtual bool CustomsAllowed

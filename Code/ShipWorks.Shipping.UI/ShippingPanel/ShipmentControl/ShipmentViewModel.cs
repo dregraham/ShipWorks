@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using GalaSoft.MvvmLight.Command;
 using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
@@ -67,10 +68,42 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             InsuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
 
+            AddPackageCommand = new RelayCommand(AddPackageAction);
+            DeletePackageCommand = new RelayCommand(DeletePackageAction, () => SelectedPackageAdapter != null);
+
             subscriptions = new CompositeDisposable(
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
                 messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage),
                 messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage));
+        }
+
+        private void DeletePackageAction()
+        {
+            if (!shipmentAdapter.SupportsMultiplePackages || PackageAdapters.Count < 2)
+            {
+                return;
+            }
+
+            IPackageAdapter packageAdapter = SelectedPackageAdapter;
+            int location = PackageAdapters.IndexOf(packageAdapter);
+            SelectedPackageAdapter = PackageAdapters.Last() == packageAdapter ?
+                PackageAdapters.ElementAt(location - 1) :
+                PackageAdapters.ElementAt(location + 1);
+
+            PackageAdapters.Remove(packageAdapter);
+            shipmentAdapter.DeletePackage(packageAdapter);
+        }
+
+        private void AddPackageAction()
+        {
+            if (!shipmentAdapter.SupportsMultiplePackages)
+            {
+                return;
+            }
+
+            IPackageAdapter packageAdapter = shipmentAdapter.AddPackage();
+            PackageAdapters.Add(packageAdapter);
+            SelectedPackageAdapter = packageAdapter;
         }
 
         /// <summary>
@@ -94,8 +127,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             RefreshServiceTypes();
             RefreshPackageTypes();
 
-            PackageAdapters = shipmentAdapter.GetPackageAdapters();
-            NumberOfPackages = PackageAdapters.Count();
+            PackageAdapters = new ObservableCollection<IPackageAdapter>(shipmentAdapter.GetPackageAdapters());
+            //NumberOfPackages = PackageAdapters.Count();
 
             RefreshDimensionsProfiles();
 
@@ -393,6 +426,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// IDataErrorInfo Error implementation
         /// </summary>
         public string Error => null;
+
+        /// <summary>
+        /// Command to add a new package
+        /// </summary>
+        public RelayCommand AddPackageCommand { get; }
+
+        /// <summary>
+        /// Command to delete a package
+        /// </summary>
+        public RelayCommand DeletePackageCommand { get; }
 
         /// <summary>
         /// List of all validation errors

@@ -121,35 +121,35 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             Assert.Equal(25, testObject.PackageCountList.Count());
         }
 
-        [Fact]
-        public void NumberOfPackages_AddsPackageAdapters_WhenNumberRequestedGreaterThanCurrentCount_Test()
-        {
-            CreateDefaultShipmentAdapter(mock, 2);
+        //[Fact]
+        //public void NumberOfPackages_AddsPackageAdapters_WhenNumberRequestedGreaterThanCurrentCount_Test()
+        //{
+        //    CreateDefaultShipmentAdapter(mock, 2);
 
-            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
-            testObject.Load(shipmentAdapter.Object);
+        //    ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+        //    testObject.Load(shipmentAdapter.Object);
 
-            int numOfPackages = testObject.NumberOfPackages;
-            numOfPackages++;
-            testObject.NumberOfPackages = numOfPackages;
+        //    int numOfPackages = testObject.NumberOfPackages;
+        //    numOfPackages++;
+        //    testObject.NumberOfPackages = numOfPackages;
 
-            Assert.Equal(numOfPackages, packageAdapters.Count);
-        }
+        //    Assert.Equal(numOfPackages, packageAdapters.Count);
+        //}
 
-        [Fact]
-        public void NumberOfPackages_RemovesPackageAdapters_WhenNumberRequestedLessThanCurrentCount_Test()
-        {
-            CreateDefaultShipmentAdapter(mock, 2);
+        //[Fact]
+        //public void NumberOfPackages_RemovesPackageAdapters_WhenNumberRequestedLessThanCurrentCount_Test()
+        //{
+        //    CreateDefaultShipmentAdapter(mock, 2);
 
-            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
-            testObject.Load(shipmentAdapter.Object);
+        //    ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+        //    testObject.Load(shipmentAdapter.Object);
 
-            int numOfPackages = testObject.NumberOfPackages;
-            numOfPackages--;
-            testObject.NumberOfPackages = numOfPackages;
+        //    int numOfPackages = testObject.NumberOfPackages;
+        //    numOfPackages--;
+        //    testObject.NumberOfPackages = numOfPackages;
 
-            Assert.Equal(numOfPackages, packageAdapters.Count);
-        }
+        //    Assert.Equal(numOfPackages, packageAdapters.Count);
+        //}
 
         [Fact]
         public void SelectedPackageAdapter_DefaultsToFirstInList_Test()
@@ -377,10 +377,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             testObject.Load(shipmentAdapter.Object);
             testObject.SelectedDimensionsProfile = dimsProfileEntity;
 
-            Assert.Equal(dimsProfileEntity.DimensionsProfileID, testObject.SelectedPackageAdapter.DimsProfileID);
-            Assert.Equal(dimsProfileEntity.Length, testObject.SelectedPackageAdapter.DimsLength);
-            Assert.Equal(dimsProfileEntity.Width, testObject.SelectedPackageAdapter.DimsWidth);
-            Assert.Equal(dimsProfileEntity.Height, testObject.SelectedPackageAdapter.DimsHeight);
+            Assert.Equal(dimsProfileEntity.DimensionsProfileID, testObject.DimsProfileID);
+            Assert.Equal(dimsProfileEntity.Length, testObject.DimsLength);
+            Assert.Equal(dimsProfileEntity.Width, testObject.DimsWidth);
+            Assert.Equal(dimsProfileEntity.Height, testObject.DimsHeight);
         }
 
         [Fact]
@@ -847,6 +847,157 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             testObject.Load(shipmentAdapter.Object);
 
             Assert.Null(testObject.Error);
+        }
+
+        [Fact]
+        public void AddPackage_DoesNotDelegateToShipmentAdapter_WhenMultiplePackagesAreNotSupported()
+        {
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(false);
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.AddPackageCommand.Execute(null);
+
+            shipmentAdapter.Verify(x => x.AddPackage(), Times.Never);
+        }
+
+        [Fact]
+        public void AddPackage_DelegatesToShipmentAdapter_WhenMultiplePackagesAreSupported()
+        {
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.AddPackageCommand.Execute(null);
+
+            shipmentAdapter.Verify(x => x.AddPackage(), Times.Once);
+        }
+
+        [Fact]
+        public void AddPackage_AddsNewPackageToEndOfCollection_WhenMultiplePackagesAreSupported()
+        {
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            IPackageAdapter packageAdapter = mock.Create<IPackageAdapter>();
+            shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
+            shipmentAdapter.Setup(x => x.AddPackage()).Returns(packageAdapter);
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.AddPackageCommand.Execute(null);
+
+            Assert.Equal(packageAdapter, testObject.PackageAdapters.Last());
+        }
+
+        [Fact]
+        public void AddPackage_SelectsNewPackageAdapter_WhenMultiplePackagesAreSupported()
+        {
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            IPackageAdapter packageAdapter = mock.Create<IPackageAdapter>();
+            shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
+            shipmentAdapter.Setup(x => x.AddPackage()).Returns(packageAdapter);
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.AddPackageCommand.Execute(null);
+
+            Assert.Equal(packageAdapter, testObject.SelectedPackageAdapter);
+        }
+
+        [Fact]
+        public void DeletePackage_DoesNotDelegateToShipmentAdapter_WhenMultiplePackagesAreNotSupported()
+        {
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(false);
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.DeletePackageCommand.Execute(null);
+
+            shipmentAdapter.Verify(x => x.DeletePackage(It.IsAny<IPackageAdapter>()), Times.Never);
+        }
+
+        [Fact]
+        public void DeletePackage_DelegatesToShipmentAdapter_WhenMultiplePackagesAreSupported()
+        {
+            IPackageAdapter packageAdapter = mock.CreateMock<IPackageAdapter>().Object;
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(x => x.GetPackageAdapters())
+                .Returns(new[] { packageAdapter, mock.CreateMock<IPackageAdapter>().Object });
+            shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.DeletePackageCommand.Execute(null);
+
+            shipmentAdapter.Verify(x => x.DeletePackage(packageAdapter), Times.Once);
+        }
+
+        [Fact]
+        public void DeletePackage_RemovesPackageFromList_WhenMultiplePackagesAreSupported()
+        {
+            IPackageAdapter packageAdapter = mock.CreateMock<IPackageAdapter>().Object;
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(x => x.GetPackageAdapters())
+                .Returns(new[] { packageAdapter, mock.CreateMock<IPackageAdapter>().Object });
+            shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.DeletePackageCommand.Execute(null);
+
+            Assert.DoesNotContain(packageAdapter, testObject.PackageAdapters);
+        }
+
+        [Fact]
+        public void AddPackage_DoesNotDelegateToShipmentAdapter_WhenShipmentHasOnePackageAdapter()
+        {
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            //IPackageAdapter packageAdapter = mock.Create<IPackageAdapter>();
+            shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
+            //shipmentAdapter.Setup(x => x.AddPackage()).Returns(packageAdapter);
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.DeletePackageCommand.Execute(null);
+
+            shipmentAdapter.Verify(x => x.DeletePackage(It.IsAny<IPackageAdapter>()), Times.Never);
+        }
+
+        [Fact]
+        public void DeletePackage_SelectsSubsequentPackageAdapter_WhenPackageIsDeleted()
+        {
+            IPackageAdapter packageAdapter = mock.CreateMock<IPackageAdapter>().Object;
+            IPackageAdapter expectedPackageAdapter = mock.CreateMock<IPackageAdapter>().Object;
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(x => x.GetPackageAdapters())
+                .Returns(new[] { packageAdapter, expectedPackageAdapter, mock.CreateMock<IPackageAdapter>().Object });
+            shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            testObject.DeletePackageCommand.Execute(null);
+
+            Assert.Equal(expectedPackageAdapter, testObject.SelectedPackageAdapter);
+        }
+
+        [Fact]
+        public void DeletePackage_SelectsPreviousPackageAdapter_WhenDeletedPackageIsAtTheEndOfTheList()
+        {
+            IPackageAdapter packageAdapter = mock.CreateMock<IPackageAdapter>().Object;
+            IPackageAdapter expectedPackageAdapter = mock.CreateMock<IPackageAdapter>().Object;
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(x => x.GetPackageAdapters())
+                .Returns(new[] { mock.CreateMock<IPackageAdapter>().Object, expectedPackageAdapter, packageAdapter });
+            shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+            testObject.SelectedPackageAdapter = packageAdapter;
+
+            testObject.DeletePackageCommand.Execute(null);
+
+            Assert.Equal(expectedPackageAdapter, testObject.SelectedPackageAdapter);
         }
 
         private Dictionary<int, string> CreateDefaultShipmentAdapter(AutoMock autoMock, int numberOfPackages)

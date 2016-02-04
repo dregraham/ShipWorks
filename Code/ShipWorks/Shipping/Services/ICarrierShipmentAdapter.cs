@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Services
         IEnumerable<IPackageAdapter> GetPackageAdapters();
 
         /// <summary>
-        /// Gets specific number of package adapters for the shipment.  
+        /// Gets specific number of package adapters for the shipment.
         /// </summary>
         IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages);
 
@@ -101,5 +101,15 @@ namespace ShipWorks.Shipping.Services
         /// Select the service from the given rate
         /// </summary>
         void SelectServiceFromRate(RateResult rate);
+
+        /// <summary>
+        /// Add a new package adapter
+        /// </summary>
+        IPackageAdapter AddPackage();
+
+        /// <summary>
+        /// Delete the specified package from the shipment
+        /// </summary>
+        void DeletePackage(IPackageAdapter package);
     }
 }

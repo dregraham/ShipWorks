@@ -70,13 +70,12 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Style="{StaticResource SupportsMultiplePackagesRowStyle}" />
-                <RowDefinition Style="{StaticResource SupportsMultiplePackagesRowStyle}" />
-                <RowDefinition Style="{StaticResource SupportsPackageTypesRowStyle}" />
+                <RowDefinition Style="{StaticResource SupportsMultiplePackagesRowStyle}" Height="22*" />
+                <RowDefinition Style="{StaticResource SupportsPackageTypesRowStyle}" Height="13*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" />
-                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" />
-                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" />
+                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" Height="13*" />
+                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" Height="9*" />
+                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" Height="14*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -99,36 +98,67 @@
 
             <TextBlock Grid.Row="2" Grid.Column="0"
                 Style="{StaticResource GridLabel}">Packages:</TextBlock>
-            <ComboBox  Grid.Row="2" Grid.Column="1"
-                ItemsSource="{Binding PackageCountList}"
-                SelectedValue="{Binding NumberOfPackages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <ListView x:Name="PackagesList" Grid.Row="3" Grid.Column="1" Margin="4 0 0 0"
-                ItemsSource="{Binding PackageAdapters}"
-                SelectedValue ="{Binding SelectedPackageAdapter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Packages (Select to Edit)" Width="Auto"
+            <Grid Grid.Row="2" Grid.Column="1" Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ListView x:Name="PackagesList" Margin="4 0 0 0"
+                        ItemsSource="{Binding PackageAdapters}"
+                        SelectedValue ="{Binding SelectedPackageAdapter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Packages (Select to Edit)" Width="Auto"
                             DisplayMemberBinding="{Binding Index, StringFormat=Package \{0\}}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
 
-            <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource GridLabel}">Packaging:</TextBlock>
-            <ComboBox Grid.Row="4" Grid.Column="1"
+                <StackPanel Grid.Column="1">
+                    <StackPanel.Resources>
+                        <Style TargetType="Image">
+                            <Setter Property="Width" Value="16" />
+                            <Setter Property="Height" Value="16" />
+                            <Setter Property="Margin" Value="0,0,5,0" />
+                        </Style>
+                        <Style TargetType="Button">
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            <Setter Property="Padding" Value="4,2,6,2" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Command="{Binding AddPackageCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/ShipWorks.Core;component/Resources/add2.png" />
+                            <TextBlock>Add</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding DeletePackageCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/ShipWorks.Core;component/Resources/delete2.png"/>
+                            <TextBlock>Delete</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource GridLabel}">Packaging:</TextBlock>
+            <ComboBox Grid.Row="3" Grid.Column="1"
                 ItemsSource ="{Binding PackageTypes, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValue="{Binding SelectedPackageAdapter.PackagingType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 DisplayMemberPath="Name" />
 
-            <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource GridLabel}">Weight:</TextBlock>
-            <weight:WeightControl Grid.Row="5" Grid.Column="1"
+            <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource GridLabel}">Weight:</TextBlock>
+            <weight:WeightControl Grid.Row="4" Grid.Column="1"
                 Margin="0,0,0,0"
                 HorizontalAlignment="Left"
                 Weight="{Binding SelectedPackageAdapter.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
-            <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource GridLabel}">Dimensions:</TextBlock>
-            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
+            <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource GridLabel}">Dimensions:</TextBlock>
+            <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
                 <ComboBox MinWidth="139"
                     ItemsSource ="{Binding DimensionsProfiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedValue="{Binding SelectedDimensionsProfile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -165,7 +195,7 @@
             <!--
                 Dimensions
             -->
-            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
                 <StackPanel.IsEnabled>
                     <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
                         <Binding.ConverterParameter>
@@ -203,15 +233,15 @@
             <!--
                 Add Weight
             -->
-            <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" Margin="4 5 0 0">
+            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" Margin="4 5 0 0">
                 <TextBlock Margin="0 4 0 0" Style="{StaticResource GridLabel}">Add to weight</TextBlock>
                 <CheckBox Margin="4 4 0 0"
-                    IsChecked="{Binding SelectedPackageAdapter.ApplyAdditionalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    IsChecked="{Binding ApplyAdditionalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <weight:WeightInput
                     Margin="0,1,0,0"
                     HorizontalAlignment="Left"
                     Width="60"
-                    Weight="{Binding SelectedPackageAdapter.AdditionalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    Weight="{Binding AdditionalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <weight:WeightInput.IsEnabled>
                         <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
                             <Binding.ConverterParameter>
@@ -225,15 +255,15 @@
             <!--
                 Insurance
             -->
-            <TextBlock Grid.Row="9" Grid.Column="0" Style="{StaticResource GridLabel}"
+            <TextBlock Grid.Row="8" Grid.Column="0" Style="{StaticResource GridLabel}"
                        Text="{Binding InsuranceViewModel.InsuranceLabelDisplayText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance:'}"></TextBlock>
-            <StackPanel  Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel  Grid.Row="8" Grid.Column="1" Orientation="Horizontal">
                 <CheckBox Margin="4 4 0 0" Name="IsInsured"
                     Content="{Binding InsuranceViewModel.InsuranceTypeLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance Type'}"
                     IsChecked="{Binding InsuranceViewModel.InsuranceChoice.Insured, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
-            <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
                 <TextBlock Style="{StaticResource GridLabel}"
                            Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insured Value:'}"></TextBlock>
                 <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"
