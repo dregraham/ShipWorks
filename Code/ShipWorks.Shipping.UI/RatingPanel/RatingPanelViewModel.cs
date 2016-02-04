@@ -80,20 +80,20 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         public void LoadRates(RatesRetrievedMessage message)
         {
-            if (message.Results.Success)
+            if (message.Success)
             {
-                Rates = message.Results.Value.Rates.ToArray();
+                Rates = message.RateGroup.Rates.ToArray();
                 ShowEmptyMessage = false;
                 EmptyMessage = string.Empty;
             }
             else
             {
                 Rates = Enumerable.Empty<RateResult>();
-                EmptyMessage = message.Results.Message;
+                EmptyMessage = message.ErrorMessage;
                 ShowEmptyMessage = true;
             }
 
-            Footnotes = message.Results.Value?.FootnoteFactories
+            Footnotes = message.RateGroup.FootnoteFactories
                 .Select(x => x.CreateViewModel(message.ShipmentAdapter))
                 .ToList() ?? Enumerable.Empty<object>();
             ShowFootnotes = Footnotes.Any();

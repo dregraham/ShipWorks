@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -17,7 +18,9 @@ namespace ShipWorks.Messaging.Messages.Shipping
         {
             Sender = sender;
             RatingHash = ratingHash;
-            Results = rates;
+            RateGroup = rates.Value ?? new RateGroup(Enumerable.Empty<RateResult>());
+            Success = rates.Success;
+            ErrorMessage = rates.Message;
             ShipmentAdapter = shipmentAdapter;
         }
 
@@ -34,7 +37,17 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Retrieved rates
         /// </summary>
-        public GenericResult<RateGroup> Results { get; }
+        public RateGroup RateGroup { get; }
+
+        /// <summary>
+        /// Was the rates retrieval successful
+        /// </summary>
+        public bool Success { get; }
+
+        /// <summary>
+        /// Message that is set when rate retrieval is not successful
+        /// </summary>
+        public string ErrorMessage { get; }
 
         /// <summary>
         /// Shipment for which the rates have been retrieved

@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             rateHashingService.Setup(x => x.GetRatingHash(It.IsAny<ShipmentEntity>())).Returns("Foo");
 
-            var results = GenericResult.FromError<RateGroup>("Foo");
+            var results = GenericResult.FromError<RateGroup>("Bar");
             mock.Mock<IRatesRetriever>()
                 .Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
                 .Returns(results);
@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
                 Assert.Equal(testObject, message.Sender);
                 Assert.Equal("Foo", message.RatingHash);
-                Assert.Equal(results, message.Results);
+                Assert.Equal("Bar", message.ErrorMessage);
                 Assert.Equal(shipmentAdapter, message.ShipmentAdapter);
             }
         }
