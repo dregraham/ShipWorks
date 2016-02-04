@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -23,6 +24,17 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         public CustomerLicenseActivationDlg()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public CustomerLicenseActivationDlg(IWin32Window owner) : this()
+        {
+            new WindowInteropHelper(this)
+            {
+                Owner = owner.Handle
+            };
         }
 
         private void OnClickCancel(object sender, RoutedEventArgs e)
