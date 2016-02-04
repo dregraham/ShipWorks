@@ -155,6 +155,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
         }
 
+        public void EnforceShipmentLimit()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Refresh the License capabilities from Tango
         /// </summary>

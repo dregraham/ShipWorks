@@ -11,18 +11,15 @@ namespace ShipWorks.UI.Controls.UpgradePlan
     /// </summary>
     public class UpgradePlanDlgViewModel : IUpgradePlanDlgViewModel
     {
-        private readonly IWebBrowserDlgViewModel webBrowserDlgViewModel;
-        private readonly Func<string, IDialog> webBrowserDlgFactory;
+        private readonly WebBrowserFactory webBrowserFactory;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpgradePlanDlgViewModel"/> class.
         /// </summary>
-        /// <param name="webBrowserDlgFactory">The web browser dialog factory.</param>
-        /// <param name="webBrowserDlgViewModel">The web browser dialog view model.</param>
-        public UpgradePlanDlgViewModel(Func<string, IDialog> webBrowserDlgFactory, IWebBrowserDlgViewModel webBrowserDlgViewModel)
+        public UpgradePlanDlgViewModel(WebBrowserFactory webBrowserFactory)
         {
-            this.webBrowserDlgFactory = webBrowserDlgFactory;
-            this.webBrowserDlgViewModel = webBrowserDlgViewModel;
+            this.webBrowserFactory = webBrowserFactory;
         }
 
         /// <summary>
@@ -48,9 +45,7 @@ namespace ShipWorks.UI.Controls.UpgradePlan
         private void UpgradeAccount()
         {
             Uri uri = new Uri("https://www.interapptive.com/account/changeplan.php");
-            webBrowserDlgViewModel.Load(uri, "Upgrade your account");
-            IDialog browserDlg = webBrowserDlgFactory("WebBrowserDlg");
-            browserDlg.DataContext = webBrowserDlgViewModel;
+            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account");
             browserDlg.ShowDialog();
         }
     }

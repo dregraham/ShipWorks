@@ -55,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Not Legacy. 
+        /// Not Legacy.
         /// </summary>
         public bool IsLegacy => false;
 
@@ -78,6 +78,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         public void EnforceChannelLimit()
         {
             throw new ShipWorksLicenseException("Channel Limit not valid for a disabled license.");
+        }
+
+        public void EnforceShipmentLimit()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
