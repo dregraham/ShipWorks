@@ -147,16 +147,6 @@
                         <TextBlock TextAlignment="Center" Margin="-14 0 0 0">Delete</TextBlock>
                     </DockPanel>
             </Button>
-
-            <Button
-                Grid.Row="2"
-                VerticalAlignment="Bottom"
-                x:Name="close" 
-                Content="Close" 
-                Margin="0 0 0 10"
-                Height="20" Width="128"
-                Command="{Binding CloseClickCommand, Mode=OneWay}"
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
         </Grid>
 
 

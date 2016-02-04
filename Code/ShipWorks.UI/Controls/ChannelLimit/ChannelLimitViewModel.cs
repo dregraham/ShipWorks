@@ -14,6 +14,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.UI.Controls.WebBrowser;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
@@ -31,18 +32,22 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly IStoreManager storeManager;
         private readonly Func<IChannelConfirmDeleteFactory> confirmDeleteFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly Func<string, IDialog> webBrowserDlgFactory;
+        private readonly IWebBrowserDlgViewModel webBrowserDlgViewModel;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ChannelLimitViewModel(ILicenseService licenseService, IStoreManager storeManager,
-            Func<IChannelConfirmDeleteFactory> confirmDeleteFactory, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
+            Func<IChannelConfirmDeleteFactory> confirmDeleteFactory, Func<Type, ILog> logFactory, IMessageHelper messageHelper, Func<string, IDialog> webBrowserDlgFactory, IWebBrowserDlgViewModel webBrowserDlgViewModel)
         {
             license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
             this.storeManager = storeManager;
             this.confirmDeleteFactory = confirmDeleteFactory;
             this.messageHelper = messageHelper;
+            this.webBrowserDlgFactory = webBrowserDlgFactory;
+            this.webBrowserDlgViewModel = webBrowserDlgViewModel;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -124,18 +129,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void UpgradeAccount()
         {
-            string upgradeAccountLink = "www.shipworks.com";
-
-            try
-            {
-                System.Diagnostics.Process.Start(upgradeAccountLink);
-            }
-            catch (Win32Exception ex)
-            {
-                log.Error($"Failed to open URL '{upgradeAccountLink}'", ex);
-                messageHelper.ShowError($"ShipWorks could not open the URL '{upgradeAccountLink}'.\n\n({ex.Message})");
-                throw;
-            }   
+            Uri uri = new Uri("https://www.interapptive.com/account/changeplan.php");
+            webBrowserDlgViewModel.Load(uri, "Upgrade your account");
+            var browserDlg = webBrowserDlgFactory("WebBrowserDlg");
+            browserDlg.DataContext = webBrowserDlgViewModel;
+            browserDlg.ShowDialog();
         }
 
         /// <summary>

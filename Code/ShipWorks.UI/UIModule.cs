@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
@@ -49,6 +50,13 @@ namespace ShipWorks.UI
 
             builder.RegisterType<WebBrowserDlg>()
                 .Named<IDialog>("WebBrowserDlg");
+
+            builder.Register<Func<string, IDialog>>(
+                componentContext =>
+                {
+                    IComponentContext resolved = componentContext.Resolve<IComponentContext>();
+                    return named => resolved.ResolveNamed<IDialog>(named);
+                });
         }
     }
 }

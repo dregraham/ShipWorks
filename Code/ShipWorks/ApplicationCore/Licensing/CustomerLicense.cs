@@ -6,6 +6,7 @@ using ShipWorks.Stores;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared;
 
 namespace ShipWorks.ApplicationCore.Licensing

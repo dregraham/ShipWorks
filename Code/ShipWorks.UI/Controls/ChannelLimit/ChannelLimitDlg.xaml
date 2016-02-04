@@ -1,17 +1,24 @@
 ﻿<Window x:Class="ShipWorks.UI.Controls.ChannelLimit.ChannelLimitDlg"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ShipWorks.UI.Controls.ChannelLimit"
-             mc:Ignorable="d" 
-             d:DesignHeight="261" d:DesignWidth="434" 
-             Height="261" Width="450"
-             ResizeMode="NoResize"
-             Closing="OnClosing" 
-             WindowStyle="ToolWindow" 
-             Title="Channel Limit Exceeded">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:ShipWorks.UI.Controls.ChannelLimit"
+        mc:Ignorable="d"
+        d:DesignHeight="261" d:DesignWidth="434"
+        Height="261" Width="450"
+        ResizeMode="NoResize"
+        Closing="OnClosing"
+        WindowStyle="ToolWindow"
+        Title="Channel Limit Exceeded">
     <Grid>
         <local:ChannelLimitControl x:Name="ChannelLimitControl" />
+        <Button
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Right"
+            Content="Close"
+            Margin="0 0 10 10"
+            Height="20" Width="128" 
+            Click="OnClickClose" />
     </Grid>
 </Window>

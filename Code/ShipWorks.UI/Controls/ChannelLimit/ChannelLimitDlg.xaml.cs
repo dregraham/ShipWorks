@@ -47,5 +47,13 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             viewModel.Dismiss();
         }
+
+        /// <summary>
+        /// Called when [click close].
+        /// </summary>
+        private void OnClickClose(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
