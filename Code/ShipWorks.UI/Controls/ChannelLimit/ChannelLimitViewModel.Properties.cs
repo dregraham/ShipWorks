@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Stores;
 
@@ -11,6 +12,16 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     /// </summary>
     public partial class ChannelLimitViewModel
     {
+        /// <summary>
+        /// Used to indicate if we are deleting a store
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsDeleting
+        {
+            get { return isDeleting; }
+            set { handler.Set(nameof(IsDeleting), ref isDeleting, value); }
+        }
+
         /// <summary>
         /// The error message displayed to the user
         /// </summary>
@@ -35,10 +46,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// Delete Store ClickCommand
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public RelayCommand DeleteStoreClickCommand
-        {
-            get { return new RelayCommand(DeleteChannel, CanExecuteDeleteStore); }
-        }
+        public ICommand DeleteStoreClickCommand { get; }
 
         /// <summary>
         /// Upgrade Account ClickCommand

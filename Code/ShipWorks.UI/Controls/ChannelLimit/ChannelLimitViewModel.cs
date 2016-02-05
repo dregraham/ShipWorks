@@ -9,9 +9,8 @@ using ShipWorks.Users.Audit;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using System.Collections.Generic;
 using System;
-using System.Windows;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.UI;
+using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -32,6 +31,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly Func<IChannelConfirmDeleteFactory> confirmDeleteFactory;
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
+        private bool isDeleting;
 
         /// <summary>
         /// Constructor
@@ -50,6 +50,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             SelectedStoreType = StoreTypeCode.Invalid;
 
             log = logFactory(typeof (ChannelLimitViewModel));
+
+            DeleteStoreClickCommand = new RelayCommand(DeleteChannel, CanExecuteDeleteStore);
         }
 
         /// <summary>
@@ -141,8 +143,10 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Delete the selected store
         /// </summary>
-        private void DeleteChannel()
+        private async void DeleteChannel()
         {
+            IsDeleting = true;
+
             List<StoreTypeCode> localStoreTypeCodes =
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
 
@@ -166,7 +170,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                     // Delete the channel
                     try
                     {
-                        license.DeleteChannel(selectedStoreType);
+                        await DeleteChannelAsync();
                     }
                     catch (ShipWorksLicenseException ex)
                     {
@@ -186,6 +190,16 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 log.Error("Error getting channels to reload dialog", ex);
                 ErrorMessage += "\n\nError getting channels from server.";
             }
+
+            IsDeleting = false;
+        }
+
+        /// <summary>
+        /// Deletes all of the stores for the selected channel
+        /// </summary>
+        private Task DeleteChannelAsync()
+        {
+            return TaskEx.Run(() => license.DeleteChannel(selectedStoreType));
         }
     }
 }
