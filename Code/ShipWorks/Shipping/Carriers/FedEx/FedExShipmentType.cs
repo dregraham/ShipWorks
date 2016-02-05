@@ -373,6 +373,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
             shipment.FedEx.Packages.Add(package);
+            shipment.FedEx.Packages.RemovedEntitiesTracker = new FedExPackageCollection();
 
             // Weight of the first package equals the total shipment content weight
             package.Weight = shipment.ContentWeight;
