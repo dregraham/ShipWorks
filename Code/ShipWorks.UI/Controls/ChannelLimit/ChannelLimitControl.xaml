@@ -8,11 +8,12 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance local:ChannelLimitViewModel}"
              d:DesignHeight="300" d:DesignWidth="450"
-             FontFamily="Tahoma" FontSize="8.25pt">
+             FontFamily="Tahoma" FontSize="8.25pt" Cursor="{Binding Cursor}">
     <UserControl.Resources>
         <valueConverters:EnumImageConverter x:Key="EnumImageConverter" />
         <valueConverters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
-    </UserControl.Resources> 
+        <valueConverters:InverseBoolean x:Key="InverseBooleanConverter" />
+    </UserControl.Resources>
 
     <Grid>
         <Grid.Resources>
