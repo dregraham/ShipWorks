@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
@@ -54,14 +53,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Service type selected
         /// </summary>
         public override int ServiceType { get; set; } = 0;
-
-        /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            return GetPackageAdapters();
-        }
 
         /// <summary>
         /// Update the insurance fields on the shipment and packages

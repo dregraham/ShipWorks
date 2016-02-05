@@ -144,12 +144,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 {
                     InsuranceViewModel.SelectedPackageAdapter = SelectedPackageAdapter;
 
-                    if (SelectedPackageAdapter != null)
-                    {
-                        DimsLength = selectedPackageAdapter.DimsLength;
-                        DimsWidth = selectedPackageAdapter.DimsWidth;
-                        DimsHeight = selectedPackageAdapter.DimsHeight;
-                    }
+                    //if (SelectedPackageAdapter != null)
+                    //{
+                    //    DimsLength = selectedPackageAdapter.DimsLength;
+                    //    DimsWidth = selectedPackageAdapter.DimsWidth;
+                    //    DimsHeight = selectedPackageAdapter.DimsHeight;
+                    //}
 
                     UpdateSelectedDimensionsProfile();
                 }

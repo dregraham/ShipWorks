@@ -38,6 +38,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public event PropertyChangingEventHandler PropertyChanging;
 
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentViewModel));
+        private bool suppressExternalChangeNotifications;
 
         /// <summary>
         /// Constructor for use by tests and WPF designer
@@ -74,7 +75,43 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             subscriptions = new CompositeDisposable(
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
                 messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage),
-                messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage));
+                messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage),
+                handler.PropertyChangingStream
+                    .Where(x => nameof(SelectedPackageAdapter).Equals(x, StringComparison.Ordinal))
+                    .Subscribe(_ => SaveDimensionsToSelectedPackageAdapter()),
+                handler.Where(x => nameof(SelectedPackageAdapter).Equals(x, StringComparison.Ordinal))
+                    .Subscribe(_ => LoadDimensionsFromSelectedPackageAdapter()));
+        }
+
+        private void LoadDimensionsFromSelectedPackageAdapter()
+        {
+            if (SelectedPackageAdapter != null)
+            {
+                using (Disposable.Create(() => suppressExternalChangeNotifications = false))
+                {
+                    suppressExternalChangeNotifications = true;
+
+                    ApplyAdditionalWeight = SelectedPackageAdapter.ApplyAdditionalWeight;
+                    AdditionalWeight = SelectedPackageAdapter.AdditionalWeight;
+                    DimsLength = SelectedPackageAdapter.DimsLength;
+                    DimsWidth = SelectedPackageAdapter.DimsWidth;
+                    DimsHeight = SelectedPackageAdapter.DimsHeight;
+                    DimsProfileID = SelectedPackageAdapter.DimsProfileID;
+                }
+            }
+        }
+
+        private void SaveDimensionsToSelectedPackageAdapter()
+        {
+            if (SelectedPackageAdapter != null)
+            {
+                SelectedPackageAdapter.ApplyAdditionalWeight = ApplyAdditionalWeight;
+                SelectedPackageAdapter.AdditionalWeight = AdditionalWeight;
+                SelectedPackageAdapter.DimsLength = DimsLength;
+                SelectedPackageAdapter.DimsWidth = DimsWidth;
+                SelectedPackageAdapter.DimsHeight = DimsHeight;
+                SelectedPackageAdapter.DimsProfileID = DimsProfileID;
+            }
         }
 
         private void DeletePackageAction()
@@ -109,7 +146,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Stream of property change events
         /// </summary>
-        public IObservable<string> PropertyChangeStream => handler;
+        public IObservable<string> PropertyChangeStream => handler.Where(_ => !suppressExternalChangeNotifications);
 
         /// <summary>
         /// Load the shipment
@@ -201,12 +238,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
 
             shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
-            if (SelectedPackageAdapter != null)
-            {
-                SelectedPackageAdapter.DimsLength = DimsLength;
-                SelectedPackageAdapter.DimsWidth = DimsWidth;
-                SelectedPackageAdapter.DimsHeight = DimsHeight;
-            }
+            SaveDimensionsToSelectedPackageAdapter();
         }
 
         /// <summary>

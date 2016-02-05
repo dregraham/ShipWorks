@@ -8,7 +8,8 @@
              xmlns:weight="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Weight"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:insurancePromoControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.InsurancePromoControl"
-             mc:Ignorable="d">
+             mc:Ignorable="d"
+             Grid.IsSharedSizeScope="True">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -64,18 +65,10 @@
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="75" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="75" SharedSizeGroup="Label" />
+                <ColumnDefinition Width="*" SharedSizeGroup="Value" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Style="{StaticResource SupportsMultiplePackagesRowStyle}" Height="22*" />
-                <RowDefinition Style="{StaticResource SupportsPackageTypesRowStyle}" Height="13*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" Height="13*" />
-                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" Height="9*" />
-                <RowDefinition Style="{StaticResource SupportsDimensionsRowStyle}" Height="14*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -95,11 +88,17 @@
                         Style="{DynamicResource DatePickerErrorTemplate}"
                         SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+        </Grid>
+        <Grid Visibility="{Binding SupportsMultiplePackages,Converter={StaticResource BooleanToVisibility}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Label" />
+                <ColumnDefinition SharedSizeGroup="Value" />
+            </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="2" Grid.Column="0"
+            <TextBlock Grid.Column="0"
                 Style="{StaticResource GridLabel}">Packages:</TextBlock>
 
-            <Grid Grid.Row="2" Grid.Column="1" Margin="0,0,0,4">
+            <Grid Grid.Column="1" Margin="0,0,0,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -143,22 +142,45 @@
                     </Button>
                 </StackPanel>
             </Grid>
+        </Grid>
+        <Grid Visibility="{Binding SupportsPackageTypes,Converter={StaticResource BooleanToVisibility}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Label" />
+                <ColumnDefinition SharedSizeGroup="Value" />
+            </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource GridLabel}">Packaging:</TextBlock>
-            <ComboBox Grid.Row="3" Grid.Column="1"
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}">Packaging:</TextBlock>
+            <ComboBox Grid.Row="0" Grid.Column="1"
                 ItemsSource ="{Binding PackageTypes, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValue="{Binding SelectedPackageAdapter.PackagingType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 DisplayMemberPath="Name" />
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Label" />
+                <ColumnDefinition SharedSizeGroup="Value" />
+            </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource GridLabel}">Weight:</TextBlock>
-            <weight:WeightControl Grid.Row="4" Grid.Column="1"
+            <TextBlock Grid.Column="0" Style="{StaticResource GridLabel}">Weight:</TextBlock>
+            <weight:WeightControl Grid.Column="1"
                 Margin="0,0,0,0"
                 HorizontalAlignment="Left"
                 Weight="{Binding SelectedPackageAdapter.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+        </Grid>
+        <Grid Visibility="{Binding SupportsDimensions,Converter={StaticResource BooleanToVisibility}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Label" />
+                <ColumnDefinition SharedSizeGroup="Value" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource GridLabel}">Dimensions:</TextBlock>
-            <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}">Dimensions:</TextBlock>
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                 <ComboBox MinWidth="139"
                     ItemsSource ="{Binding DimensionsProfiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedValue="{Binding SelectedDimensionsProfile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -189,13 +211,12 @@
                 <Button Margin="5"
                         Content="Manage..."
                         Style="{StaticResource LinkButtonStyle}"
-                        Click="OnManageDimensionsProfiles"
-                        />
+                        Click="OnManageDimensionsProfiles" />
             </StackPanel>
             <!--
                 Dimensions
             -->
-            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                 <StackPanel.IsEnabled>
                     <Binding Path="SelectedDimensionsProfile.DimensionsProfileID" Converter="{StaticResource ValueEqualToParameter}">
                         <Binding.ConverterParameter>
@@ -233,7 +254,7 @@
             <!--
                 Add Weight
             -->
-            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" Margin="4 5 0 0">
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="4 5 0 0">
                 <TextBlock Margin="0 4 0 0" Style="{StaticResource GridLabel}">Add to weight</TextBlock>
                 <CheckBox Margin="4 4 0 0"
                     IsChecked="{Binding ApplyAdditionalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -251,19 +272,26 @@
                     </weight:WeightInput.IsEnabled>
                 </weight:WeightInput>
             </StackPanel>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Label" />
+                <ColumnDefinition SharedSizeGroup="Value" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <!--
-                Insurance
-            -->
-            <TextBlock Grid.Row="8" Grid.Column="0" Style="{StaticResource GridLabel}"
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}"
                        Text="{Binding InsuranceViewModel.InsuranceLabelDisplayText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance:'}"></TextBlock>
-            <StackPanel  Grid.Row="8" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel  Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                 <CheckBox Margin="4 4 0 0" Name="IsInsured"
                     Content="{Binding InsuranceViewModel.InsuranceTypeLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insurance Type'}"
                     IsChecked="{Binding InsuranceViewModel.InsuranceChoice.Insured, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
-            <StackPanel Grid.Row="9" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                 <TextBlock Style="{StaticResource GridLabel}"
                            Text="{Binding InsuranceViewModel.InsuranceValueLabelDisplayText, UpdateSourceTrigger=PropertyChanged, FallbackValue='Insured Value:'}"></TextBlock>
                 <TextBox Width="80"  Margin="4 4 0 0" Style="{DynamicResource TextBoxErrorTemplate}"

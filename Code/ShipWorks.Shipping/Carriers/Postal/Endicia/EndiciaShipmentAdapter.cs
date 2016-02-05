@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -53,14 +52,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             get { return Shipment.Postal.Service; }
             set { Shipment.Postal.Service = value; }
-        }
-
-        /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            return GetPackageAdapters();
         }
 
         /// <summary>

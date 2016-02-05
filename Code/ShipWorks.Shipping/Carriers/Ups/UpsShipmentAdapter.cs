@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -56,27 +55,36 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// List of package adapters for the shipment
+        /// Add a new package to the shipment
         /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
+        public override IPackageAdapter AddPackage()
         {
-            UpsShipmentEntity carrierShipment = Shipment.Ups;
+            UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
+            Shipment.Ups.Packages.Add(package);
 
-            // Need more
-            while (carrierShipment.Packages.Count < numberOfPackages)
+            UpdateDynamicData();
+
+            return new UpsPackageAdapter(Shipment, package, Shipment.Ups.Packages.IndexOf(package) + 1);
+        }
+
+        /// <summary>
+        /// Delete a package from the shipment
+        /// </summary>
+        public override void DeletePackage(IPackageAdapter packageAdapter)
+        {
+            if (Shipment.Ups.Packages.Count < 2)
             {
-                UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
-                carrierShipment.Packages.Add(package);
+                return;
             }
 
-            // Need less
-            while (carrierShipment.Packages.Count > numberOfPackages)
-            {
-                UpsPackageEntity package = carrierShipment.Packages[carrierShipment.Packages.Count - 1];
-                carrierShipment.Packages.Remove(package);
-            }
+            UpsPackageEntity package = Shipment.Ups.Packages
+                .FirstOrDefault(x => x.UpsPackageID == packageAdapter.PackageId);
 
-            return GetPackageAdapters();
+            if (package != null)
+            {
+                Shipment.Ups.Packages.Remove(package);
+                UpdateDynamicData();
+            }
         }
 
         /// <summary>

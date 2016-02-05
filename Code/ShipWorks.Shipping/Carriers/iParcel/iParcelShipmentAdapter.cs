@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -58,27 +58,35 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// List of package adapters for the shipment
+        /// Add a new package to the shipment
         /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
+        public override IPackageAdapter AddPackage()
         {
-            IParcelShipmentEntity iParcel = Shipment.IParcel;
+            IParcelPackageEntity package = iParcelShipmentType.CreateDefaultPackage();
+            Shipment.IParcel.Packages.Add(package);
+            UpdateDynamicData();
 
-            // Need more
-            while (iParcel.Packages.Count < numberOfPackages)
+            return new iParcelPackageAdapter(Shipment, package, Shipment.IParcel.Packages.IndexOf(package) + 1);
+        }
+
+        /// <summary>
+        /// Delete a package from the shipment
+        /// </summary>
+        public override void DeletePackage(IPackageAdapter packageAdapter)
+        {
+            if (Shipment.IParcel.Packages.Count < 2)
             {
-                IParcelPackageEntity package = iParcelShipmentType.CreateDefaultPackage();
-                iParcel.Packages.Add(package);
+                return;
             }
 
-            // Need less
-            while (iParcel.Packages.Count > numberOfPackages)
-            {
-                IParcelPackageEntity package = iParcel.Packages[iParcel.Packages.Count - 1];
-                iParcel.Packages.Remove(package);
-            }
+            IParcelPackageEntity package = Shipment.IParcel.Packages
+                .FirstOrDefault(x => x.IParcelPackageID == packageAdapter.PackageId);
 
-            return GetPackageAdapters();
+            if (package != null)
+            {
+                Shipment.IParcel.Packages.Remove(package);
+                UpdateDynamicData();
+            }
         }
 
         /// <summary>

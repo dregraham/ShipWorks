@@ -765,7 +765,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
                     new Mock<IPackageAdapter>()
                 };
 
-            shipmentAdapter.Setup(sa => sa.GetPackageAdapters(It.IsAny<int>())).Returns(mockPackageAdapters.Select(mpa => mpa.Object));
             shipmentAdapter.Setup(sa => sa.GetPackageAdapters()).Returns(mockPackageAdapters.Select(mpa => mpa.Object));
 
             ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
@@ -1025,11 +1024,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             shipmentAdapter.Setup(sa => sa.SupportsAccounts).Returns(true);
             shipmentAdapter.Setup(sa => sa.SupportsMultiplePackages).Returns(true);
             shipmentAdapter.Setup(sa => sa.GetPackageAdapters()).Returns(packageAdapters);
-            shipmentAdapter.Setup(sa => sa.GetPackageAdapters(It.IsAny<int>())).Returns((int x) =>
-                {
-                    CreatePackageAdapters(x);
-                    return packageAdapters;
-                });
 
             shipmentAdapter.Setup(sa => sa.CustomsAllowed).Returns(false);
             shipmentAdapter.Setup(sa => sa.CustomsItems).Returns(new EntityCollection<ShipmentCustomsItemEntity>());

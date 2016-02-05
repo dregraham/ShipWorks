@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -56,36 +55,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            FedExShipmentEntity carrierShipment = Shipment.FedEx;
-
-            // Need more
-            while (carrierShipment.Packages.Count < numberOfPackages)
-            {
-                FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
-                carrierShipment.Packages.Add(package);
-            }
-
-            // Need less
-            while (carrierShipment.Packages.Count > numberOfPackages)
-            {
-                FedExPackageEntity package = carrierShipment.Packages[carrierShipment.Packages.Count - 1];
-                carrierShipment.Packages.Remove(package);
-            }
-
-            return GetPackageAdapters();
-        }
-
-        /// <summary>
         /// Add a new package to the shipment
         /// </summary>
         public override IPackageAdapter AddPackage()
         {
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
             Shipment.FedEx.Packages.Add(package);
+            UpdateDynamicData();
 
             return new FedExPackageAdapter(Shipment, package, Shipment.FedEx.Packages.IndexOf(package) + 1);
         }
@@ -106,6 +82,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             if (package != null)
             {
                 Shipment.FedEx.Packages.Remove(package);
+                UpdateDynamicData();
             }
         }
 

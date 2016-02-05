@@ -239,5 +239,115 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
             });
             Assert.Equal((int) UpsServiceType.UpsSurePost1LbOrGreater, shipment.Ups.Service);
         }
+
+        [Fact]
+        public void AddPackage_AddsNewPackageToList()
+        {
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.AddPackage();
+
+            Assert.Equal(1, shipment.Ups.Packages.Count);
+        }
+
+        [Fact]
+        public void AddPackage_ReturnsPackageAdapter_ForNewPackage()
+        {
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var newPackage = testObject.AddPackage();
+
+            Assert.NotNull(newPackage);
+        }
+
+        [Fact]
+        public void AddPackage_DelegatesToShipmentType_WhenNewPackageIsAdded()
+        {
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.AddPackage();
+
+            shipmentTypeMock.Verify(x => x.UpdateDynamicShipmentData(shipment));
+            shipmentTypeMock.Verify(x => x.UpdateTotalWeight(shipment));
+        }
+
+        [Fact]
+        public void AddPackage_DelegatesToCustomsManager_WhenNewPackageIsAdded()
+        {
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.AddPackage();
+
+            customsManager.Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+        }
+
+        [Fact]
+        public void DeletePackage_RemovesPackageAssociatedWithAdapter()
+        {
+            var package = new UpsPackageEntity(2);
+
+            shipment.Ups.Packages.Add(new UpsPackageEntity(1));
+            shipment.Ups.Packages.Add(package);
+            shipment.Ups.Packages.Add(new UpsPackageEntity(3));
+
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new UpsPackageAdapter(shipment, package, 1));
+
+            Assert.DoesNotContain(package, shipment.Ups.Packages);
+        }
+
+        [Fact]
+        public void DeletePackage_DoesNotRemovePackage_WhenShipmentHasSinglePackage()
+        {
+            var package = new UpsPackageEntity(2);
+
+            shipment.Ups.Packages.Add(package);
+
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new UpsPackageAdapter(shipment, package, 1));
+
+            Assert.Contains(package, shipment.Ups.Packages);
+        }
+
+        [Fact]
+        public void DeletePackage_DoesNotRemovePackage_WhenPackageDoesNotExist()
+        {
+            var package = new UpsPackageEntity(2);
+            var package2 = new UpsPackageEntity(2);
+
+            shipment.Ups.Packages.Add(package);
+            shipment.Ups.Packages.Add(package2);
+
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new UpsPackageAdapter(shipment, new UpsPackageEntity(12), 1));
+
+            Assert.Contains(package, shipment.Ups.Packages);
+            Assert.Contains(package2, shipment.Ups.Packages);
+        }
+
+        [Fact]
+        public void DeletePackage_DelegatesToShipmentType_WhenPackageIsRemoved()
+        {
+            var package = new UpsPackageEntity(2);
+
+            shipment.Ups.Packages.Add(package);
+            shipment.Ups.Packages.Add(new UpsPackageEntity(3));
+
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new UpsPackageAdapter(shipment, package, 1));
+
+            shipmentTypeMock.Verify(x => x.UpdateDynamicShipmentData(shipment));
+            shipmentTypeMock.Verify(x => x.UpdateTotalWeight(shipment));
+        }
+
+        [Fact]
+        public void DeletePackage_DelegatesToCustomsManager_WhenPackageIsRemoved()
+        {
+            var package = new UpsPackageEntity(2);
+
+            shipment.Ups.Packages.Add(package);
+            shipment.Ups.Packages.Add(new UpsPackageEntity(3));
+
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new UpsPackageAdapter(shipment, package, 1));
+
+            customsManager.Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+        }
     }
 }

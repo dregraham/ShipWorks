@@ -252,6 +252,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         }
 
         [Fact]
+        public void AddPackage_DelegatesToShipmentType_WhenNewPackageIsAdded()
+        {
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.AddPackage();
+
+            shipmentTypeMock.Verify(x => x.UpdateDynamicShipmentData(shipment));
+            shipmentTypeMock.Verify(x => x.UpdateTotalWeight(shipment));
+        }
+
+        [Fact]
+        public void AddPackage_DelegatesToCustomsManager_WhenNewPackageIsAdded()
+        {
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.AddPackage();
+
+            customsManager.Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+        }
+
+        [Fact]
         public void DeletePackage_RemovesPackageAssociatedWithAdapter()
         {
             var package = new FedExPackageEntity(2);
@@ -293,6 +312,35 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 
             Assert.Contains(package, shipment.FedEx.Packages);
             Assert.Contains(package2, shipment.FedEx.Packages);
+        }
+
+        [Fact]
+        public void DeletePackage_DelegatesToShipmentType_WhenPackageIsRemoved()
+        {
+            var package = new FedExPackageEntity(2);
+
+            shipment.FedEx.Packages.Add(package);
+            shipment.FedEx.Packages.Add(new FedExPackageEntity(3));
+
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new FedExPackageAdapter(shipment, package, 1));
+
+            shipmentTypeMock.Verify(x => x.UpdateDynamicShipmentData(shipment));
+            shipmentTypeMock.Verify(x => x.UpdateTotalWeight(shipment));
+        }
+
+        [Fact]
+        public void DeletePackage_DelegatesToCustomsManager_WhenPackageIsRemoved()
+        {
+            var package = new FedExPackageEntity(2);
+
+            shipment.FedEx.Packages.Add(package);
+            shipment.FedEx.Packages.Add(new FedExPackageEntity(3));
+
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new FedExPackageAdapter(shipment, package, 1));
+
+            customsManager.Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
         }
     }
 }

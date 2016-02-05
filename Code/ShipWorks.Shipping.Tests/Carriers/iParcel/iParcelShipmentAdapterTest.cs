@@ -241,5 +241,115 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             });
             Assert.Equal((int) iParcelServiceType.SaverDeferred, shipment.IParcel.Service);
         }
+
+        [Fact]
+        public void AddPackage_AddsNewPackageToList()
+        {
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.AddPackage();
+
+            Assert.Equal(1, shipment.IParcel.Packages.Count);
+        }
+
+        [Fact]
+        public void AddPackage_ReturnsPackageAdapter_ForNewPackage()
+        {
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            var newPackage = testObject.AddPackage();
+
+            Assert.NotNull(newPackage);
+        }
+
+        [Fact]
+        public void AddPackage_DelegatesToShipmentType_WhenNewPackageIsAdded()
+        {
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.AddPackage();
+
+            shipmentTypeMock.Verify(x => x.UpdateDynamicShipmentData(shipment));
+            shipmentTypeMock.Verify(x => x.UpdateTotalWeight(shipment));
+        }
+
+        [Fact]
+        public void AddPackage_DelegatesToCustomsManager_WhenNewPackageIsAdded()
+        {
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.AddPackage();
+
+            customsManager.Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+        }
+
+        [Fact]
+        public void DeletePackage_RemovesPackageAssociatedWithAdapter()
+        {
+            var package = new IParcelPackageEntity(2);
+
+            shipment.IParcel.Packages.Add(new IParcelPackageEntity(1));
+            shipment.IParcel.Packages.Add(package);
+            shipment.IParcel.Packages.Add(new IParcelPackageEntity(3));
+
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
+
+            Assert.DoesNotContain(package, shipment.IParcel.Packages);
+        }
+
+        [Fact]
+        public void DeletePackage_DoesNotRemovePackage_WhenShipmentHasSinglePackage()
+        {
+            var package = new IParcelPackageEntity(2);
+
+            shipment.IParcel.Packages.Add(package);
+
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
+
+            Assert.Contains(package, shipment.IParcel.Packages);
+        }
+
+        [Fact]
+        public void DeletePackage_DoesNotRemovePackage_WhenPackageDoesNotExist()
+        {
+            var package = new IParcelPackageEntity(2);
+            var package2 = new IParcelPackageEntity(2);
+
+            shipment.IParcel.Packages.Add(package);
+            shipment.IParcel.Packages.Add(package2);
+
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new iParcelPackageAdapter(shipment, new IParcelPackageEntity(12), 1));
+
+            Assert.Contains(package, shipment.IParcel.Packages);
+            Assert.Contains(package2, shipment.IParcel.Packages);
+        }
+
+        [Fact]
+        public void DeletePackage_DelegatesToShipmentType_WhenPackageIsRemoved()
+        {
+            var package = new IParcelPackageEntity(2);
+
+            shipment.IParcel.Packages.Add(package);
+            shipment.IParcel.Packages.Add(new IParcelPackageEntity(3));
+
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
+
+            shipmentTypeMock.Verify(x => x.UpdateDynamicShipmentData(shipment));
+            shipmentTypeMock.Verify(x => x.UpdateTotalWeight(shipment));
+        }
+
+        [Fact]
+        public void DeletePackage_DelegatesToCustomsManager_WhenPackageIsRemoved()
+        {
+            var package = new IParcelPackageEntity(2);
+
+            shipment.IParcel.Packages.Add(package);
+            shipment.IParcel.Packages.Add(new IParcelPackageEntity(3));
+
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
+
+            customsManager.Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+        }
     }
 }

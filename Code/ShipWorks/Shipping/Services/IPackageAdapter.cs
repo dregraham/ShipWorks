@@ -10,6 +10,9 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public interface IPackageAdapter : INotifyPropertyChanged, IDataErrorInfo
     {
+        /// <summary>
+        /// Id of the packge to which this adapter applies
+        /// </summary>
         long PackageId { get; }
 
         /// <summary>

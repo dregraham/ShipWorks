@@ -45,6 +45,7 @@ namespace ShipWorks.Shipping.Services
         public void InitializeForCurrentSession()
         {
             subscription = messenger.OfType<ShipmentChangedMessage>()
+                .Where(x => x.ShipmentAdapter != null)
                 .Select(x => new { Message = x, HashingService = rateHashingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode] })
                 .Where(x => string.IsNullOrEmpty(x.Message.ChangedField) || x.HashingService.IsRatingField(x.Message.ChangedField))
                 .Select(x => new { x.Message.ShipmentAdapter, RatingHash = x.HashingService.GetRatingHash(x.Message.ShipmentAdapter.Shipment) })

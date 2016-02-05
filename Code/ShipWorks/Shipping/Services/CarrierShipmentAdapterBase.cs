@@ -235,11 +235,6 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// Gets specific number of package adapters for the shipment.
-        /// </summary>
-        public abstract IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages);
-
-        /// <summary>
         /// Add a new package
         /// </summary>
         public virtual IPackageAdapter AddPackage()

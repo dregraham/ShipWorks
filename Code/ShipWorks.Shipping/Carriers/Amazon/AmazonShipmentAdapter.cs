@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -63,14 +62,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             get { return new EntityCollection<ShipmentCustomsItemEntity>(); }
             set { throw new NotImplementedException(); }
-        }
-
-        /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            return GetPackageAdapters();
         }
 
         /// <summary>
