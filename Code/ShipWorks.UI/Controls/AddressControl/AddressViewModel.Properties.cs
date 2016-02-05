@@ -29,16 +29,19 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// <summary>
         /// Validate address command
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ValidateCommand { get; private set; }
 
         /// <summary>
         /// Show the validation message
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ShowValidationMessageCommand { get; private set; }
 
         /// <summary>
         /// Select a validated address suggestion
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand SelectAddressSuggestionCommand { get; private set; }
 
         /// <summary>

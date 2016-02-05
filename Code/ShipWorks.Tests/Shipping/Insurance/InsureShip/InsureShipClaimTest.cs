@@ -299,7 +299,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             catch (InsureShipException)
             { }
 
-            log.Verify(l => l.Error("An error occurred trying to submit a claim to InsureShip on shipment 100031. A(n) MissingRequiredParameter response code was received from InsureShip.", responseException), Times.Once());
+            log.Verify(l => l.Error($"An error occurred trying to submit a claim to InsureShip on shipment 100031. A(n) {InsureShipResponseCode.MissingRequiredParameter} response code was received from InsureShip.", responseException), Times.Once());
         }
 
         [Fact]
@@ -401,7 +401,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             catch (InsureShipException)
             { }
 
-            log.Verify(l => l.Error("An error occurred trying to check the claim status with InsureShip on shipment 100031. A(n) MissingRequiredParameter response code was received from InsureShip.", responseException), Times.Once());
+            log.Verify(l => l.Error($"An error occurred trying to check the claim status with InsureShip on shipment 100031. A(n) {InsureShipResponseCode.MissingRequiredParameter} response code was received from InsureShip.", responseException), Times.Once());
         }
 
         [Fact]

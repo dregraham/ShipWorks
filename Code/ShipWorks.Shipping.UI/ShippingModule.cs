@@ -123,9 +123,6 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ShipmentTypeManagerWrapper>()
-                .AsImplementedInterfaces();
-
             builder.RegisterType<ShipmentTypeProvider>();
 
             builder.RegisterType<ShippingAccountListProvider>()

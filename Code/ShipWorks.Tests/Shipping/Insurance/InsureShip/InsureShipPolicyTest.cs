@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Insurance.InsureShip.Net;
 using log4net;
 using Xunit;
@@ -146,7 +147,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             catch (InsureShipException)
             { }
 
-            log.Verify(l => l.Error("An error occurred trying to insure shipment 100031 with InsureShip. A(n) UnknownFailure response code was received from InsureShip.", responseException), Times.Once());
+            log.Verify(l => l.Error($"An error occurred trying to insure shipment 100031 with InsureShip. A(n) {InsureShipResponseCode.UnknownFailure} response code was received from InsureShip.", responseException), Times.Once());
         }
 
 

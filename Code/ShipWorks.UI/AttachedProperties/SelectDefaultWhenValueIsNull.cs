@@ -1,15 +1,23 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 namespace ShipWorks.UI.AttachedProperties
 {
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public enum RelativeIndex
     {
+        [Description("None")]
         None,
+
+        [Description("First")]
         First,
+
+        [Description("Last")]
         Last
     }
 

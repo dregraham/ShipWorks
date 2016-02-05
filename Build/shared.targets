@@ -1,6 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <UsingTask TaskName="Wiseowl.Build.Tasks.Obfuscate" AssemblyFile="$(MSBuildExtensionsPath)\Wise Owl, Inc\Demeanor for .NET, Enterprise Edition\v5.0\WiseOwl.Build.Tasks.dll"/>
 
   <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
   <Import Project="Interapptive.MSBuild.Tasks.Targets"/>
@@ -13,6 +12,7 @@
     <SourceMonitorExe>C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe</SourceMonitorExe>
     <VaultExe>C:\Program Files (x86)\SourceGear\Vault Client\vault.exe</VaultExe>
     <MsTestExe>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\MSTest.exe</MsTestExe>
+    <ObfuscationCommand>C:\DotfuscatorProfessionalEditionEvaluation4.18.1\dotfuscator.exe "..\ShipWorksDotfuscator.xml"</ObfuscationCommand>
   </PropertyGroup>
 
   <PropertyGroup>

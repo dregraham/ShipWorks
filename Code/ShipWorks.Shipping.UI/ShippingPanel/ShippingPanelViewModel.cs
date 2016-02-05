@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Business;
@@ -87,6 +88,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Command that triggers processing of the current shipment
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand CreateLabelCommand { get; }
 
         /// <summary>
