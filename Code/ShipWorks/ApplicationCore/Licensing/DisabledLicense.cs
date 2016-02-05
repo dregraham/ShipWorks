@@ -82,7 +82,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void EnforceChannelLimit()
         {
-            throw new ShipWorksLicenseException("Channel Limit not valid for a disabled license.");
+            throw new ShipWorksLicenseException("Shipment Limit not valid for a disabled license.");
         }
 
         public void EnforceShipmentLimit()

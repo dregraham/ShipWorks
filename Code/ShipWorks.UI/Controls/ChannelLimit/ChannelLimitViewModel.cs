@@ -30,7 +30,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly ICustomerLicense license;
         private string errorMessage;
         private readonly IStoreManager storeManager;
-        private readonly IChannelConfirmDeleteFactory confirmDelete;
+        private readonly IChannelConfirmDeleteFactory confirmDeleteFactory;
         private readonly WebBrowserFactory webBrowserFactory;
         private readonly ILog log;
 
@@ -40,13 +40,13 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         public ChannelLimitViewModel(
             ILicenseService licenseService, 
             IStoreManager storeManager,
-            IChannelConfirmDeleteFactory confirmDelete, 
+            IChannelConfirmDeleteFactory confirmDeleteFactory, 
             Func<Type, ILog> logFactory,
             WebBrowserFactory webBrowserFactory)
         {
             license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
             this.storeManager = storeManager;
-            this.confirmDelete = confirmDelete;
+            this.confirmDeleteFactory = confirmDeleteFactory;
             this.webBrowserFactory = webBrowserFactory;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -151,7 +151,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 return;
             }
 
-            IChannelConfirmDeleteDlg deleteDlg = confirmDelete.GetConfirmDeleteDlg(selectedStoreType);
+            IChannelConfirmDeleteDlg deleteDlg = confirmDeleteFactory.GetConfirmDeleteDlg(selectedStoreType);
 
             deleteDlg.ShowDialog();
 

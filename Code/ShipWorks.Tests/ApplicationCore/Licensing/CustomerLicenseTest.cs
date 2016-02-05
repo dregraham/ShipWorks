@@ -306,6 +306,93 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
+        public void NumberOfChannelsOverLimit_Returns0_WhenActiveChannelsLessThanChannelLimitAndNotInTrial()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities
+                    .Setup(lc => lc.ActiveChannels)
+                    .Returns(5);
+
+                licenseCapabilities
+                    .Setup(lc => lc.ChannelLimit)
+                    .Returns(5);
+
+                licenseCapabilities
+                    .Setup(lc => lc.IsInTrial)
+                    .Returns(false);
+
+                mock.Mock<ITangoWebClient>()
+                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Returns(licenseCapabilities.Object);
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+                testObject.Refresh();
+                Assert.Equal(0, testObject.NumberOfChannelsOverLimit);
+            }
+        }
+
+        [Fact]
+        public void NumberOfChannelsOverLimit_Returns0_WhenActiveChannelsMoreThanChannelLimitAndInTrial()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities
+                    .Setup(lc => lc.ActiveChannels)
+                    .Returns(10);
+
+                licenseCapabilities
+                    .Setup(lc => lc.ChannelLimit)
+                    .Returns(5);
+
+                licenseCapabilities
+                    .Setup(lc => lc.IsInTrial)
+                    .Returns(true);
+
+                mock.Mock<ITangoWebClient>()
+                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Returns(licenseCapabilities.Object);
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+                testObject.Refresh();
+                Assert.Equal(0, testObject.NumberOfChannelsOverLimit);
+            }
+        }
+
+        [Fact]
+        public void NumberOfChannelsOverLimit_ReturnsNumberOverLimit_WhenActiveChannelsMoreThanChannelLimitAndNotInTrial()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+
+                licenseCapabilities
+                    .Setup(lc => lc.ActiveChannels)
+                    .Returns(10);
+
+                licenseCapabilities
+                    .Setup(lc => lc.ChannelLimit)
+                    .Returns(5);
+
+                licenseCapabilities
+                    .Setup(lc => lc.IsInTrial)
+                    .Returns(false);
+
+                mock.Mock<ITangoWebClient>()
+                    .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
+                    .Returns(licenseCapabilities.Object);
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+                testObject.Refresh();
+                Assert.Equal(5, testObject.NumberOfChannelsOverLimit);
+            }
+        }
+
+        [Fact]
         public void EnforceChannelLimit_DialogShown_WhenLicenseOverChannelLimit()
         {
             using (var mock = AutoMock.GetLoose())
@@ -509,7 +596,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         [Fact]
         public void Activate_ReturnsActive_WhenTangoReturnsSuccess()
         {
-            using (var mock=AutoMock.GetLoose())
+            using (var mock = AutoMock.GetLoose())
             {
                 var response = mock.Mock<IAddStoreResponse>();
                 response.SetupGet(r => r.Success)
