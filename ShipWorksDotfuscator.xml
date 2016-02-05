@@ -3,7 +3,6 @@
 <dotfuscator version="2.3">
   <global>
     <option>error</option>
-    <option>pdb</option>
     <option>verbose</option>
   </global>
   <input>
@@ -56,7 +55,7 @@
         <option>transformxaml</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.UI.dll" />
       </inputassembly>
-	  <inputassembly refid="85e2c5d9-a458-4821-bb82-3a1455850bd2">
+      <inputassembly refid="85e2c5d9-a458-4821-bb82-3a1455850bd2">
         <option>honoroas</option>
         <option>library</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.ThirdPartyApi.dll" />
@@ -95,6 +94,7 @@
       <namespace name="SD\.LLBLGen\.*.*" regex="true" />
       <namespace name="*\.Tests\.*.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.LemonStand\.DTO\.*.*" regex="true" />
+      <namespace name="ShipWorks\.UI\.Controls\.Html\..*" regex="true" />
       <type name=".*" regex="true">
         <customattribute name="ShipWorks.Filters.Content.ConditionElementAttribute" />
       </type>
@@ -130,7 +130,6 @@
       </type>
       <type name="Interapptive.Shared.IO.Text.Csv.Resources.ExceptionMessage" />
       <type name="Interapptive.Shared.Properties.Flags" />
-	  <namespace name="ShipWorks\.UI\.Controls\.Html\..*" regex="true" />
     </excludelist>
     <mapping>
       <mapoutput overwrite="true">
@@ -147,7 +146,7 @@
   </sos>
   <smartobfuscation>
     <smartobfuscationreport verbosity="all" overwrite="true">
-      <file dir="${configdir}\Artifacts\Application\Obfuscated" name="SmartObfuscationReportMap.xml" />
+      <file dir="${configdir}\Artifacts\Logs" name="SmartObfuscationReportMap.xml" />
     </smartobfuscationreport>
   </smartobfuscation>
 </dotfuscator>
