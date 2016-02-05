@@ -27,11 +27,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         [NDependIgnoreTooManyParams]
         public CustomerLicense(
-            string key, 
-            ITangoWebClient tangoWebClient, 
-            ICustomerLicenseWriter licenseWriter, 
-            Func<Type, ILog> logFactory, 
-            IDeletionService deletionService, 
+            string key,
+            ITangoWebClient tangoWebClient,
+            ICustomerLicenseWriter licenseWriter,
+            Func<Type, ILog> logFactory,
+            IDeletionService deletionService,
             Func<IChannelLimitDlg> channelLimitDlgFactory,
             IUpgradePlanDlgFactory upgradePlanDlgFactory)
         {
@@ -77,7 +77,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             get
             {
                 return (LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit) &&
-                    !LicenseCapabilities.IsInTrial; 
+                    !LicenseCapabilities.IsInTrial;
             }
         }
 
@@ -106,7 +106,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 {
                     numberOfChannelsOverLimit = LicenseCapabilities.ActiveChannels - LicenseCapabilities.ChannelLimit;
                 }
-                
+
                 return numberOfChannelsOverLimit;
             }
         }
@@ -175,7 +175,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 try
                 {
-                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory();                  
+                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory();
                     channelLimitDlg.ShowDialog();
                 }
                 catch (ShipWorksLicenseException ex)
@@ -195,7 +195,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             if (IsShipmentLimitReached)
             {
-                IDialog dialog = upgradePlanDlgFactory.Create("You have reached your shipment limit for this billing cycle. Please upgrade your plan to process shipments.");
+                IDialog dialog = upgradePlanDlgFactory.Create("You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.");
                 dialog.ShowDialog();
             }
         }
