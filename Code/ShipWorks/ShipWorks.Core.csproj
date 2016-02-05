@@ -10102,7 +10102,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\DropAssembly.sql" />
     <Resource Include="Resources\delete2.png" />
     <None Include="Resources\arrow_down_blue.png" />
-    <None Include="Resources\arrow_up_blue.png" />
+    <Resource Include="Resources\arrow_up_blue.png" />
     <None Include="Resources\funnel_add.png" />
     <None Include="Resources\folderclosed_add.png" />
     <None Include="Resources\edit.png" />

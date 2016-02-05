@@ -12,7 +12,7 @@
         WindowStyle="ToolWindow"
         Title="Channel Limit Exceeded">
     <Grid>
-        <local:ChannelLimitControl x:Name="ChannelLimitControl" />
+        <local:ChannelLimitControl x:Name="ChannelLimitControl" Padding="7 10 0 0" />
         <Button
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right"

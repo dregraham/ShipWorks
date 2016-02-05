@@ -12,7 +12,7 @@
     <UserControl.Resources>
         <valueConverters:EnumImageConverter x:Key="EnumImageConverter" />
         <valueConverters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
-    </UserControl.Resources>
+    </UserControl.Resources> 
 
     <Grid>
         <Grid.Resources>
@@ -83,7 +83,7 @@
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -94,7 +94,7 @@
         <TextBlock  
             Grid.ColumnSpan="2" 
             TextWrapping="WrapWithOverflow"
-            Margin="10 10 10 0"
+            Margin="3 0 10 10"
             Text="{Binding ErrorMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <ListView 
@@ -104,7 +104,7 @@
             VerticalAlignment="Stretch"
             ItemsSource="{Binding ChannelCollection}" 
             SelectedValue="{Binding SelectedStoreType}"
-            Margin="10 0 0 10">
+            Margin="3 0 0 10">
 
             <ListView.View>
                 <GridView>
@@ -130,11 +130,15 @@
 
             <Button
                 Grid.Row="0"
-                x:Name="upgrade" 
-                Content="Upgrade Plan" 
+                x:Name="upgrade"
                 Margin="0 0 0 10"
                 Height="20" Width="128"
-                Command="{Binding UpgradeClickCommand}"/>
+                Command="{Binding UpgradeClickCommand}">
+                <DockPanel Width="125">
+                    <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/arrow_up_blue.png"/>
+                    <TextBlock TextAlignment="Center" Margin="-14 0 0 0">Upgrade</TextBlock>
+                </DockPanel>
+            </Button>
 
             <Button
                 Grid.Row="1"

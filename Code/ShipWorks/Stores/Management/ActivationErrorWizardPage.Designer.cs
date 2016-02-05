@@ -58,7 +58,7 @@
             // 
             this.errorMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.errorMessage.Location = new System.Drawing.Point(44, 37);
+            this.errorMessage.Location = new System.Drawing.Point(41, 38);
             this.errorMessage.Name = "errorMessage";
             this.errorMessage.Size = new System.Drawing.Size(395, 18);
             this.errorMessage.TabIndex = 2;
@@ -66,6 +66,7 @@
             // 
             // elementHost
             // 
+            this.elementHost.BackColor = System.Drawing.Color.Transparent;
             this.elementHost.Location = new System.Drawing.Point(20, 129);
             this.elementHost.Name = "elementHost";
             this.elementHost.Size = new System.Drawing.Size(400, 250);
