@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
-using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Logging;
@@ -14,13 +11,12 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
-using ShipWorks.Shipping.ShipSense;
-using ShipWorks.Shipping.ShipSense.Population;
 using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
+using Xunit;
 
 namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
 {
@@ -50,7 +46,7 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
 
                 DataProvider.InitializeForApplication(executionMode.Object);
                 AuditProcessor.InitializeForApplication();
-                
+
                 ShippingSettings.InitializeForCurrentDatabase();
                 ShippingProfileManager.InitializeForCurrentSession();
                 ShippingDefaultsRuleManager.InitializeForCurrentSession();
@@ -59,7 +55,7 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
                 StoreManager.InitializeForCurrentSession();
 
                 UserManager.InitializeForCurrentUser();
-                
+
                 UserSession.InitializeForCurrentDatabase(executionMode.Object);
 
                 if (!UserSession.Logon("shipworks", "shipworks", true))
@@ -103,8 +99,8 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
                     case "MSTest-vm":
                         instance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
                         break;
-                    case "benz-pc":
-                        instance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
+                    case "benz-pc3":
+                        instance = Guid.Parse("{A74AED9C-0AB8-4649-B233-8DFBE774D9F8}");
                         break;
                     case "berger-pc":
                         instance = Guid.Parse("{AABB7285-a889-46af-87b8-69c10cdbAABB}");
@@ -157,10 +153,10 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
             using (SqlConnection sqlConnection = new SqlConnection(SqlAdapter.Default.ConnectionString))
             {
                 sqlConnection.Open();
-                
+
                 SqlCommand cmd = sqlConnection.CreateCommand();
                 cmd.CommandText = string.Format("exec RebuildTableIndex {0}, {1}", tableName, indexName);
-                
+
                 cmd.ExecuteNonQuery();
             }
         }
@@ -207,7 +203,7 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
 	            [TestRebuildingIndexesID] [bigint] IDENTITY(1,1) NOT NULL,
 	            [SmallNvarchar] nvarchar(500) NOT NULL,
 	            [LargeNvarchar] nvarchar(500) NOT NULL,
-             CONSTRAINT [PK_TestRebuildingIndexes] PRIMARY KEY CLUSTERED 
+             CONSTRAINT [PK_TestRebuildingIndexes] PRIMARY KEY CLUSTERED
             (
 	            [TestRebuildingIndexesID] ASC
             )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -224,26 +220,26 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
 	            [LargeNvarchar] ASC
             )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 
-            DECLARE @RowCount INT 
-            DECLARE @RowString VARCHAR(10) 
-            DECLARE @Random INT 
-            DECLARE @Upper INT 
-            DECLARE @Lower INT 
-            DECLARE @InsertDate DATETIME 
-            SET @Lower = -730 
-            SET @Upper = -1 
-            SET @RowCount = 0 
+            DECLARE @RowCount INT
+            DECLARE @RowString VARCHAR(10)
+            DECLARE @Random INT
+            DECLARE @Upper INT
+            DECLARE @Lower INT
+            DECLARE @InsertDate DATETIME
+            SET @Lower = -730
+            SET @Upper = -1
+            SET @RowCount = 0
 
-            WHILE @RowCount < 1000 
-            BEGIN 
-	            SET @RowString = CAST(@RowCount AS VARCHAR(10)) 
-	            SELECT @Random = ROUND(((@Upper - @Lower -1) * RAND() + @Lower), 0) 
-	            SET @InsertDate = DATEADD(dd, @Random, GETDATE()) 
-	
-	            INSERT INTO [TestRebuildingIndexes] ([SmallNvarchar], [LargeNvarchar]) 
-	            VALUES (REPLICATE('0', 10 - DATALENGTH(@RowString)) + @RowString , @InsertDate ) 
-	
-	            SET @RowCount = @RowCount + 1 
+            WHILE @RowCount < 1000
+            BEGIN
+	            SET @RowString = CAST(@RowCount AS VARCHAR(10))
+	            SELECT @Random = ROUND(((@Upper - @Lower -1) * RAND() + @Lower), 0)
+	            SET @InsertDate = DATEADD(dd, @Random, GETDATE())
+
+	            INSERT INTO [TestRebuildingIndexes] ([SmallNvarchar], [LargeNvarchar])
+	            VALUES (REPLICATE('0', 10 - DATALENGTH(@RowString)) + @RowString , @InsertDate )
+
+	            SET @RowCount = @RowCount + 1
             END
 
             update [TestRebuildingIndexes] set SmallNvarchar = cast(TestRebuildingIndexesID as nvarchar(50)) + SmallNvarchar
