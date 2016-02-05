@@ -18,7 +18,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private DateTime shipDate;
         private double totalWeight;
         private int serviceType;
-        //private int numberOfPackages;
         private ObservableCollection<IPackageAdapter> packageAdapters;
         private IPackageAdapter selectedPackageAdapter;
         private bool supportsMultiplePackages;
@@ -97,25 +96,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             get { return Enumerable.Range(1, 25); }
         }
-
-        ///// <summary>
-        ///// Number of packages the shipment has
-        ///// </summary>
-        //[Obfuscation(Exclude = true)]
-        //public int NumberOfPackages
-        //{
-        //    get { return numberOfPackages; }
-        //    set
-        //    {
-        //        if (numberOfPackages != value && numberOfPackages != 0 && value != 0)
-        //        {
-        //            PackageAdapters = shipmentAdapter.GetPackageAdapters(value);
-        //            SelectedPackageAdapter = PackageAdapters.First();
-        //        }
-
-        //        handler.Set(nameof(NumberOfPackages), ref numberOfPackages, value, true);
-        //    }
-        //}
 
         /// <summary>
         /// List of package adapters for the shipment
@@ -198,13 +178,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
             set
             {
-                handler.Set(nameof(SelectedDimensionsProfile), ref selectedDimensionsProfile, value, true);
-
-                if (SelectedDimensionsProfile != null && SelectedPackageAdapter != null)
+                if (handler.Set(nameof(SelectedDimensionsProfile), ref selectedDimensionsProfile, value, true))
                 {
+                    if (SelectedDimensionsProfile == null)
+                    {
+                        return;
+                    }
+
                     if (SelectedDimensionsProfile.DimensionsProfileID == 0)
                     {
-                        SelectedPackageAdapter.DimsProfileID = 0;
+                        DimsProfileID = 0;
                     }
                     else
                     {

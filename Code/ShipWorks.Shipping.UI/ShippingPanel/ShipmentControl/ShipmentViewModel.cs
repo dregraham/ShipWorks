@@ -97,6 +97,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                     DimsWidth = SelectedPackageAdapter.DimsWidth;
                     DimsHeight = SelectedPackageAdapter.DimsHeight;
                     DimsProfileID = SelectedPackageAdapter.DimsProfileID;
+                    TotalWeight = SelectedPackageAdapter.Weight;
                 }
             }
         }
@@ -111,6 +112,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 SelectedPackageAdapter.DimsWidth = DimsWidth;
                 SelectedPackageAdapter.DimsHeight = DimsHeight;
                 SelectedPackageAdapter.DimsProfileID = DimsProfileID;
+                SelectedPackageAdapter.Weight = TotalWeight;
             }
         }
 
@@ -146,7 +148,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Stream of property change events
         /// </summary>
-        public IObservable<string> PropertyChangeStream => handler.Where(_ => !suppressExternalChangeNotifications);
+        public IObservable<string> PropertyChangeStream
+        {
+            get
+            {
+                return handler.Merge(InsuranceViewModel.PropertyChangeStream)
+                    .Where(_ => !suppressExternalChangeNotifications);
+            }
+        }
 
         /// <summary>
         /// Load the shipment
@@ -165,7 +174,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             RefreshPackageTypes();
 
             PackageAdapters = new ObservableCollection<IPackageAdapter>(shipmentAdapter.GetPackageAdapters());
-            //NumberOfPackages = PackageAdapters.Count();
 
             RefreshDimensionsProfiles();
 
