@@ -3,6 +3,7 @@
 <dotfuscator version="2.3">
   <global>
     <option>error</option>
+    <option>debug</option>
     <option>verbose</option>
   </global>
   <input>
@@ -136,9 +137,53 @@
         <file dir="${configdir}\Artifacts\Logs" name="ObfuscationReport.xml" />
       </mapoutput>
     </mapping>
-    <referencerulelist />
+    <referencerulelist>
+      <referencerule rulekey="{2B7E7C8C-A39A-4db8-9DFC-6AFD38509061}" />
+      <referencerule rulekey="{229FD6F8-5BCC-427b-8F72-A7A413ECDF1A}" />
+      <referencerule rulekey="{6655B10A-FD58-462d-8D4F-5B1316DFF0FF}" />
+      <referencerule rulekey="{D97286EB-CF80-4ae8-94D4-E90131E6D0D7}" />
+    </referencerulelist>
   </renaming>
-  <stringencrypt />
+  <stringencrypt>
+    <includelist>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.SqlServer.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Core.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Adapter.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Model.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.exe" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="Interapptive.Shared.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shared.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.UI.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Stores.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Stores.UI.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.UI.dll" />
+      </assembly>
+    </includelist>
+  </stringencrypt>
   <sos mergeruntime="true">
     <option>version:v4</option>
     <option>disable</option>
