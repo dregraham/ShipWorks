@@ -10,7 +10,9 @@
         ResizeMode="NoResize"
         Closing="OnClosing"
         WindowStyle="ToolWindow"
-        Title="Channel Limit Exceeded">
+        Title="Channel Limit Exceeded"
+        FontFamily="Tahoma" FontSize="8.25pt"
+        >
     <Grid>
         <local:ChannelLimitControl x:Name="ChannelLimitControl" Padding="7 10 0 0" />
         <Button
@@ -18,7 +20,7 @@
             HorizontalAlignment="Right"
             Content="Close"
             Margin="0 0 10 10"
-            Height="20" Width="128" 
+            Height="20" Width="128"
             Click="OnClickClose" />
     </Grid>
 </Window>
