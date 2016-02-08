@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePaymentInfo_ReturnsNoErrors_WhenValuesValid_Test()
+        public void ValidatePaymentInfo_ReturnsNoErrors_WhenValuesValid()
         {
             testObject = new Express1AchPaymentValidator();
 
@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePaymentInfo_ReturnsError_WhenPaymentTypeIsInvalid_Test()
+        public void ValidatePaymentInfo_ReturnsError_WhenPaymentTypeIsInvalid()
         {
             IEnumerable<Express1ValidationError> errors;
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
         
         [Fact]
-        public void ValidatePaymentInfo_ReturnsError_WhenAchAccountHolderNameIsInvalid_Test()
+        public void ValidatePaymentInfo_ReturnsError_WhenAchAccountHolderNameIsInvalid()
         {
             IEnumerable<Express1ValidationError> errors;
 
@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePaymentInfo_ReturnsError_WhenAchAccountNumberIsInvalid_Test()
+        public void ValidatePaymentInfo_ReturnsError_WhenAchAccountNumberIsInvalid()
         {
             IEnumerable<Express1ValidationError> errors;
 
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePaymentInfo_ReturnsError_WhenAchBankNameIsInvalid_Test()
+        public void ValidatePaymentInfo_ReturnsError_WhenAchBankNameIsInvalid()
         {
             IEnumerable<Express1ValidationError> errors;
 
@@ -140,7 +140,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePaymentInfo_ReturnsError_WhenAchRoutingIdIsInvalid_Test()
+        public void ValidatePaymentInfo_ReturnsError_WhenAchRoutingIdIsInvalid()
         {
             IEnumerable<Express1ValidationError> errors;
 
@@ -167,7 +167,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         [Fact]
-        public void ValidatePaymentInfo_ReturnsError_WhenAchAccountNameIsInvalid_Test()
+        public void ValidatePaymentInfo_ReturnsError_WhenAchAccountNameIsInvalid()
         {
             IEnumerable<Express1ValidationError> errors;
 

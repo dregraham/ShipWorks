@@ -45,19 +45,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
         }
 
         [Fact]
-        public void CarrierAccountEntity_IsNotNull_Test()
+        public void CarrierAccountEntity_IsNotNull()
         {
             Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         [Fact]
-        public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
+        public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor()
         {
             Assert.Equal(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         [Fact]
-        public void Submit_ManipulatesManipulators_HasTwoManipulators_Test()
+        public void Submit_ManipulatesManipulators_HasTwoManipulators()
         {
             testObject.Submit();
 
@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
         }
 
         [Fact]
-        public void Submit_GatewayCalled_UponSubmit_Test()
+        public void Submit_GatewayCalled_UponSubmit()
         {
             testObject.Submit();
 

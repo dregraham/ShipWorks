@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Stores.Etsy
         }
 
         [Fact]
-        public void GetEtsyCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed_Test()
+        public void GetEtsyCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Stores.Etsy
         }
 
         [Fact]
-        public void GetEtsyCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed_Test()
+        public void GetEtsyCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Stores.Etsy
         }
 
         [Fact]
-        public void GetEtsyCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed_Test()
+        public void GetEtsyCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Stores.Etsy
         }
 
         [Fact]
-        public void GetEtsyCarrierCode_ReturnsUsps_WhenUspsAndFirstClassServiceUsed_Test()
+        public void GetEtsyCarrierCode_ReturnsUsps_WhenUspsAndFirstClassServiceUsed()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Stores.Etsy
         }
 
         [Fact]
-        public void GetEtsyCarrierCode_ReturnsUsps_WhenOther_Test()
+        public void GetEtsyCarrierCode_ReturnsUsps_WhenOther()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
 

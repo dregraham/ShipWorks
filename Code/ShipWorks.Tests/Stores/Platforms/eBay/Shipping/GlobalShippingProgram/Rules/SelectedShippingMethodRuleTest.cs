@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Stores.eBay.Shipping.GlobalShippingProgram.Rules
         }
 
         [Fact]
-        public void Evaluate_ReturnsTrue_WhenSelectedShippingMethodIsGSP_Test()
+        public void Evaluate_ReturnsTrue_WhenSelectedShippingMethodIsGSP()
         {
             EbayOrderEntity ebayOrder = new EbayOrderEntity();
             ebayOrder.SelectedShippingMethod = (int)EbayShippingMethod.GlobalShippingProgram;
@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Stores.eBay.Shipping.GlobalShippingProgram.Rules
         }
 
         [Fact]
-        public void Evaluate_ReturnsFalse_WhenSelectedShippingMethodIsDirectToBuyer_Test()
+        public void Evaluate_ReturnsFalse_WhenSelectedShippingMethodIsDirectToBuyer()
         {
             EbayOrderEntity ebayOrder = new EbayOrderEntity();
             ebayOrder.SelectedShippingMethod = (int)EbayShippingMethod.DirectToBuyer;
@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Stores.eBay.Shipping.GlobalShippingProgram.Rules
         }
 
         [Fact]
-        public void Evaluate_ReturnsFalse_WhenOrderIsNull_Test()
+        public void Evaluate_ReturnsFalse_WhenOrderIsNull()
         {
             EbayOrderEntity ebayOrder = null;
             Assert.False(testObject.Evaluate(ebayOrder));

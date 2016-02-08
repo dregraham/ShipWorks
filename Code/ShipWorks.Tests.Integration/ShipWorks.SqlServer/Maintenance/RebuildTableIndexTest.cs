@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
 
         [Fact]
         [Trait("Category", "SqlServer.Maintenance")]
-        public void RebuildTableIndex_RebuildAllIndexes_Succeeds_Test()
+        public void RebuildTableIndex_RebuildAllIndexes_Succeeds()
         {
             // This assumes it is being run against the "seeded" database (see SeedDatabase.sql script
             // in solution directory)

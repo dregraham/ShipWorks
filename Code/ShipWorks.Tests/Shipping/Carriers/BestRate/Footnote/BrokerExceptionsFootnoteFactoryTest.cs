@@ -19,13 +19,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
         private BrokerExceptionsRateFootnoteFactory testObject;
 
         [Fact]
-        public void Constructor_ThrowsInvalidOperationException_WhenCollectionOfBrokerExceptionsIsEmpty_Test()
+        public void Constructor_ThrowsInvalidOperationException_WhenCollectionOfBrokerExceptionsIsEmpty()
         {
             Assert.Throws<InvalidOperationException>(() => new BrokerExceptionsRateFootnoteFactory(new OtherShipmentType(), new List<BrokerException>()));
         }
 
         [Fact]
-        public void CreateFootnote_ReturnsBrokerExceptionsRateFootnoteControl_Test()
+        public void CreateFootnote_ReturnsBrokerExceptionsRateFootnoteControl()
         {
             List<BrokerException> brokerExceptions = new List<BrokerException>
             {
@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
         }
 
         [Fact]
-        public void CreateFootnote_ReturnsBrokerExceptionsRateFootnoteControl_WithBrokerExceptions_Test()
+        public void CreateFootnote_ReturnsBrokerExceptionsRateFootnoteControl_WithBrokerExceptions()
         {
             List<BrokerException> brokerExceptions = new List<BrokerException>
             {

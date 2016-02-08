@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed_Test()
+        public void GetCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed_Test()
+        public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndConsolidatorServiceUsed_Test()
+        public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndConsolidatorServiceUsed()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.ConsolidatorDomestic;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed_Test()
+        public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenUspsAndFirstClassServiceUsed_Test()
+        public void GetCarrierCode_ReturnsUsps_WhenUspsAndFirstClassServiceUsed()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsEmptyString_WhenOtherAndNotSupportedCarrier_Test()
+        public void GetCarrierCode_ReturnsEmptyString_WhenOtherAndNotSupportedCarrier()
         {
             otherShipmentEntity.Carrier = "something else";
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUps_WhenOtherAndUps_Test()
+        public void GetCarrierCode_ReturnsUps_WhenOtherAndUps()
         {
             otherShipmentEntity.Carrier = "Ups";
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
@@ -122,7 +122,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsFedex_WhenOtherAndFedEx_Test()
+        public void GetCarrierCode_ReturnsFedex_WhenOtherAndFedEx()
         {
             otherShipmentEntity.Carrier = "fedex";
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
@@ -134,7 +134,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsDhl_WhenOtherAndDhl_Test()
+        public void GetCarrierCode_ReturnsDhl_WhenOtherAndDhl()
         {
             otherShipmentEntity.Carrier = "dhl";
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
@@ -146,7 +146,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenUpsAndMi_Test()
+        public void GetCarrierCode_ReturnsUsps_WhenUpsAndMi()
         {
             upsEntity.Service = (int)UpsServiceType.UpsMailInnovationsFirstClass;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
@@ -158,7 +158,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUps_WhenUpsAndGround_Test()
+        public void GetCarrierCode_ReturnsUps_WhenUpsAndGround()
         {
             upsEntity.Service = (int)UpsServiceType.UpsGround;
             upsEntity.UspsTrackingNumber = "usps tracking num";

@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
     public class UpsUtilityTest
     {
         [Fact]
-        public void CorrectSmartPickupError_ChangesStToSaint_WhenCityStartsWithSt_Test()
+        public void CorrectSmartPickupError_ChangesStToSaint_WhenCityStartsWithSt()
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("St Louis");
 
@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [Fact]
-        public void CorrectSmartPickupError_ChangesSteToSaint_WhenCityStartsWithSte_Test()
+        public void CorrectSmartPickupError_ChangesSteToSaint_WhenCityStartsWithSte()
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("Ste Genevieve");
 
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [Fact]
-        public void CorrectSmartPickupError_ChangesStPeriodToSaint_WhenCityStartsWithStPeriod_Test()
+        public void CorrectSmartPickupError_ChangesStPeriodToSaint_WhenCityStartsWithStPeriod()
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("St. Paul");
 
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [Fact]
-        public void CorrectSmartPickupError_ChangesSaintToSt_WhenCityStartsWithSaint_Test()
+        public void CorrectSmartPickupError_ChangesSaintToSt_WhenCityStartsWithSaint()
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("Saint Paul");
 

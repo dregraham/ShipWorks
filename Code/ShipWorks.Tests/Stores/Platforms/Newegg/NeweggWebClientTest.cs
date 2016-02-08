@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
         
         [Fact]
-        public void AreCredentialsValid_ReturnsTrue_WhenAValidResponseIsReceived_Test()
+        public void AreCredentialsValid_ReturnsTrue_WhenAValidResponseIsReceived()
         {
             // The initialization method has configured our test object (NeweggWebClient)
             // to always return a valid response (via our mocked request factory) regardless 
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void AreCredentialsValid_ReturnsFalse_WhenAnInvalidResponseIsReceived_Test()
+        public void AreCredentialsValid_ReturnsFalse_WhenAnInvalidResponseIsReceived()
         {
             // We're going to override the default configuration that was setup in the 
             // initialize method since we're testing for failures
@@ -72,7 +72,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed_Test()
+        public void GetCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
             postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed_Test()
+        public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClass_Test()
+        public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClass()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsConsolidator_WhenEndiciaAndConsolidator_Test()
+        public void GetCarrierCode_ReturnsConsolidator_WhenEndiciaAndConsolidator()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
             postalShipmentEntity.Service = (int)PostalServiceType.ConsolidatorDomestic;
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenUspsAndFirstClass_Test()
+        public void GetCarrierCode_ReturnsUsps_WhenUspsAndFirstClass()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsSpecifiedCarrier_WhenOtherShipmentType_Test()
+        public void GetCarrierCode_ReturnsSpecifiedCarrier_WhenOtherShipmentType()
         {
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Other);
 
@@ -135,7 +135,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUps_WhenUpsAndGround_Test()
+        public void GetCarrierCode_ReturnsUps_WhenUpsAndGround()
         {
             shipmentEntity.Ups = upsEntity;
 
@@ -149,7 +149,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUpsMi_WhenUpsAndUpsMiService_Test()
+        public void GetCarrierCode_ReturnsUpsMi_WhenUpsAndUpsMiService()
         {
             upsEntity.Service = (int) UpsServiceType.UpsMailInnovationsFirstClass;
             shipmentEntity.Ups = upsEntity;

@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
         }
 
         [Fact]
-        public void HasAccounts_DelegatesToAccountRepository_Test()
+        public void HasAccounts_DelegatesToAccountRepository()
         {
             bool hasAccounts = testObject.HasAccounts;
 
@@ -112,7 +112,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
         }
 
         [Fact]
-        public void HasAccounts_ReturnsTrue_WhenRepositoryHasMoreThanZeroAccounts_Test()
+        public void HasAccounts_ReturnsTrue_WhenRepositoryHasMoreThanZeroAccounts()
         {
             genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UpsAccountEntity> { new UpsAccountEntity() });
 
@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
         }
 
         [Fact]
-        public void HasAccounts_ReturnsFalse_WhenRepositoryHasZeroAccounts_Test()
+        public void HasAccounts_ReturnsFalse_WhenRepositoryHasZeroAccounts()
         {
             genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UpsAccountEntity>());
 
@@ -240,7 +240,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             Assert.Equal(upsShipment, testShipment.Ups);
         }
-        public void GetBestRates_NoRatesAreReturned_WhenShippingExceptionIsThrown_Test()
+        public void GetBestRates_NoRatesAreReturned_WhenShippingExceptionIsThrown()
         {
             testObject.GetRatesAction = (shipment, type) => { throw new ShippingException(); };
 

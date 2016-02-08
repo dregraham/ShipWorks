@@ -8,7 +8,7 @@ namespace ShipWorks.Tests.Shipping.Policies
     public class ShippingPolicyTypeEnumFactoryTest
     {
         [Fact]
-        public void Create_CreatesRateResultCountPolicy_WithRateResultCountString_WhenShipmentTypeIsBestRate_Test()
+        public void Create_CreatesRateResultCountPolicy_WithRateResultCountString_WhenShipmentTypeIsBestRate()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.BestRate, "RateResultCount");
@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         }
 
         [Fact]
-        public void Create_CreatesNullShippingPolicy_WhenShipmentTypeIsNotBestRate_Test()
+        public void Create_CreatesNullShippingPolicy_WhenShipmentTypeIsNotBestRate()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.Usps, "RateResultCount");
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         }
 
         [Fact]
-        public void Create_CreatesBestRateUpsRestrictionPolicy_WithBestRateUpsRestrictionString_WhenShipmentTypeIsBestRate_Test()
+        public void Create_CreatesBestRateUpsRestrictionPolicy_WithBestRateUpsRestrictionString_WhenShipmentTypeIsBestRate()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.BestRate, "BestRateUpsRestriction");
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         }
 
         [Fact]
-        public void Create_CreatesBestRateUpsRestrictionPolicy_WithBestRateUpsRestrictionString_WhenShipmentTypeIsNotBestRate_Test()
+        public void Create_CreatesBestRateUpsRestrictionPolicy_WithBestRateUpsRestrictionString_WhenShipmentTypeIsNotBestRate()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.FedEx, "BestRateUpsRestriction");

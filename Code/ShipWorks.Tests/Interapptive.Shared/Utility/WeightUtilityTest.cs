@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
     {
         // Verify that a one to one conversion works correctly
         [Fact]
-        public void Convert_OneToOne_ConvertsCorrectly_Test()
+        public void Convert_OneToOne_ConvertsCorrectly()
         {
             // Grams to X
             Assert.Equal(1.0, WeightUtility.Convert(WeightUnitOfMeasure.Grams, WeightUnitOfMeasure.Grams, 1.0));
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
 
         // Verify no rounding errors occur for a double greater than 1.0
         [Fact]
-        public void Convert_MultipleOfDoubleGreaterThan1_ConvertsCorrectly_Test()
+        public void Convert_MultipleOfDoubleGreaterThan1_ConvertsCorrectly()
         {
             double multiplier = 3.291773;
 
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
 
         // Verify no rounding errors occur for a double less than 1.0
         [Fact]
-        public void Convert_MultipleOfDoubleLessThan1_ConvertsCorrectly_Test()
+        public void Convert_MultipleOfDoubleLessThan1_ConvertsCorrectly()
         {
             double multiplier = 0.137529;
 

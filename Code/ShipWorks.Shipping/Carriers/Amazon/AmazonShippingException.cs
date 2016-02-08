@@ -41,7 +41,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             { "regionnotsupported",
                 "The order specified is from a marketplace where the Merchant Fulfillment API section is not supported." },
             { "shippingservicenotavailable",
-                "The shipping service specified does not exist or is not available for the specified parameters (for example, Weight)." }
+                "The shipping service specified does not exist or is not available for the specified parameters (for example, Weight)." },
+            { "resourcenotfound",
+                "The resource specified (such as ShipmentId or AmazonOrderId) does not exist." }
         };
 
         /// <summary>
@@ -111,6 +113,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     return TransformValidationErrors(message);
                 }
 
+                // Sometimes Amazon does not give us an error message
+                // If the error message is empty then we will provide
+                // our own message based on the code.
                 string lowerCaseCode = Code?.ToLower();
                 return lowerCaseCode != null && errorTranslation.ContainsKey(lowerCaseCode) ?
                     errorTranslation[lowerCaseCode] :

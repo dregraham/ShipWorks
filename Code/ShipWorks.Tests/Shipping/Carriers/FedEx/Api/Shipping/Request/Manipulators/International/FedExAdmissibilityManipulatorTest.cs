@@ -44,13 +44,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullRequestedShipment_Test()
+        public void Manipulate_AccountsForNullRequestedShipment()
         {
             // setup the test by setting the requested shipment to null
             nativeRequest.RequestedShipment = null;
@@ -80,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullPackageLineItemArray_Test()
+        public void Manipulate_AccountsForNullPackageLineItemArray()
         {
             // setup the test by setting the line item array to null
             nativeRequest.RequestedShipment.RequestedPackageLineItems = null;
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForEmptyPackageLineItemArray_Test()
+        public void Manipulate_AccountsForEmptyPackageLineItemArray()
         {
             // setup the test by setting the line item array to null
             nativeRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[0];
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullElementInPackageLineItemArray_Test()
+        public void Manipulate_AccountsForNullElementInPackageLineItemArray()
         {
             // setup the test by setting the line item array to null
             nativeRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[] { null };
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeSpecifiedIsFalse_WhenShipCountryCodeIsUS_Test()
+        public void Manipulate_PhysicalPackagingTypeSpecifiedIsFalse_WhenShipCountryCodeIsUS()
         {
             shipmentEntity.ShipCountryCode = "US";
 
@@ -126,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeSpecifiedIsTrue_WhenShipCountryCodeIsCA_Test()
+        public void Manipulate_PhysicalPackagingTypeSpecifiedIsTrue_WhenShipCountryCodeIsCA()
         {
             shipmentEntity.ShipCountryCode = "CA";
 
@@ -136,7 +136,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsBag_WhenShipCountryCodeIsCA_AndFedExTypeIsBag_Test()
+        public void Manipulate_PhysicalPackagingTypeIsBag_WhenShipCountryCodeIsCA_AndFedExTypeIsBag()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Bag;
@@ -147,7 +147,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsBarrel_WhenShipCountryCodeIsCA_AndFedExTypeIsBarrel_Test()
+        public void Manipulate_PhysicalPackagingTypeIsBarrel_WhenShipCountryCodeIsCA_AndFedExTypeIsBarrel()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Barrel;
@@ -158,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsBasket_WhenShipCountryCodeIsCA_AndFedExTypeIsBasketOrHamper_Test()
+        public void Manipulate_PhysicalPackagingTypeIsBasket_WhenShipCountryCodeIsCA_AndFedExTypeIsBasketOrHamper()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.BasketOrHamper;
@@ -169,7 +169,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsBox_WhenShipCountryCodeIsCA_AndFedExTypeIsBox_Test()
+        public void Manipulate_PhysicalPackagingTypeIsBox_WhenShipCountryCodeIsCA_AndFedExTypeIsBox()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Box;
@@ -180,7 +180,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsBucket_WhenShipCountryCodeIsCA_AndFedExTypeIsBucket_Test()
+        public void Manipulate_PhysicalPackagingTypeIsBucket_WhenShipCountryCodeIsCA_AndFedExTypeIsBucket()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Bucket;
@@ -191,7 +191,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsBundle_WhenShipCountryCodeIsCA_AndFedExTypeIsBundle_Test()
+        public void Manipulate_PhysicalPackagingTypeIsBundle_WhenShipCountryCodeIsCA_AndFedExTypeIsBundle()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Bundle;
@@ -202,7 +202,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsCarton_WhenShipCountryCodeIsCA_AndFedExTypeIsCarton_Test()
+        public void Manipulate_PhysicalPackagingTypeIsCarton_WhenShipCountryCodeIsCA_AndFedExTypeIsCarton()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Carton;
@@ -213,7 +213,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsCase_WhenShipCountryCodeIsCA_AndFedExTypeIsCase_Test()
+        public void Manipulate_PhysicalPackagingTypeIsCase_WhenShipCountryCodeIsCA_AndFedExTypeIsCase()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Case;
@@ -224,7 +224,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsContainer_WhenShipCountryCodeIsCA_AndFedExTypeIsContainer_Test()
+        public void Manipulate_PhysicalPackagingTypeIsContainer_WhenShipCountryCodeIsCA_AndFedExTypeIsContainer()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Container;
@@ -235,7 +235,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsCrate_WhenShipCountryCodeIsCA_AndFedExTypeIsCrate_Test()
+        public void Manipulate_PhysicalPackagingTypeIsCrate_WhenShipCountryCodeIsCA_AndFedExTypeIsCrate()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Crate;
@@ -246,7 +246,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsCylinder_WhenShipCountryCodeIsCA_AndFedExTypeIsCylinder_Test()
+        public void Manipulate_PhysicalPackagingTypeIsCylinder_WhenShipCountryCodeIsCA_AndFedExTypeIsCylinder()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Cylinder;
@@ -257,7 +257,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsDrum_WhenShipCountryCodeIsCA_AndFedExTypeIsDrum_Test()
+        public void Manipulate_PhysicalPackagingTypeIsDrum_WhenShipCountryCodeIsCA_AndFedExTypeIsDrum()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Drum;
@@ -268,7 +268,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsEnvelope_WhenShipCountryCodeIsCA_AndFedExTypeIsEnvelope_Test()
+        public void Manipulate_PhysicalPackagingTypeIsEnvelope_WhenShipCountryCodeIsCA_AndFedExTypeIsEnvelope()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Envelope;
@@ -279,7 +279,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsPail_WhenShipCountryCodeIsCA_AndFedExTypeIsPail_Test()
+        public void Manipulate_PhysicalPackagingTypeIsPail_WhenShipCountryCodeIsCA_AndFedExTypeIsPail()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Pail;
@@ -290,7 +290,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsPallet_WhenShipCountryCodeIsCA_AndFedExTypeIsPallet_Test()
+        public void Manipulate_PhysicalPackagingTypeIsPallet_WhenShipCountryCodeIsCA_AndFedExTypeIsPallet()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Pallet;
@@ -301,7 +301,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsPieces_WhenShipCountryCodeIsCA_AndFedExTypeIsPieces_Test()
+        public void Manipulate_PhysicalPackagingTypeIsPieces_WhenShipCountryCodeIsCA_AndFedExTypeIsPieces()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Pieces;
@@ -312,7 +312,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsReel_WhenShipCountryCodeIsCA_AndFedExTypeIsReel_Test()
+        public void Manipulate_PhysicalPackagingTypeIsReel_WhenShipCountryCodeIsCA_AndFedExTypeIsReel()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Reel;
@@ -323,7 +323,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsRoll_WhenShipCountryCodeIsCA_AndFedExTypeIsRoll_Test()
+        public void Manipulate_PhysicalPackagingTypeIsRoll_WhenShipCountryCodeIsCA_AndFedExTypeIsRoll()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Roll;
@@ -334,7 +334,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsSkid_WhenShipCountryCodeIsCA_AndFedExTypeIsSkid_Test()
+        public void Manipulate_PhysicalPackagingTypeIsSkid_WhenShipCountryCodeIsCA_AndFedExTypeIsSkid()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Skid;
@@ -345,7 +345,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsTank_WhenShipCountryCodeIsCA_AndFedExTypeIsTank_Test()
+        public void Manipulate_PhysicalPackagingTypeIsTank_WhenShipCountryCodeIsCA_AndFedExTypeIsTank()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Tank;
@@ -356,7 +356,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PhysicalPackagingTypeIsTube_WhenShipCountryCodeIsCA_AndFedExTypeIsTube_Test()
+        public void Manipulate_PhysicalPackagingTypeIsTube_WhenShipCountryCodeIsCA_AndFedExTypeIsTube()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Tube;
@@ -367,7 +367,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenShipCountryCodeIsCA_AndFedExTypeIsUnknown_Test()
+        public void Manipulate_ThrowsFedExException_WhenShipCountryCodeIsCA_AndFedExTypeIsUnknown()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = 67;

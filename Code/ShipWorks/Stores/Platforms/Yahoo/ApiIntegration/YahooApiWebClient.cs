@@ -184,31 +184,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
-        /// Creates a search item range request. Currently only used to validate credentials
-        /// because it doesn't throw an error for an invalid start and end range like getting a
-        /// range of orders does.
-        /// </summary>
-        /// <param name="start">The starting Yahoo Item ID.</param>
-        /// <param name="end">The ending Yahoo Item ID</param>
-        /// <param name="keyword">The keyword to search for</param>
-        /// <returns></returns>
-        private HttpTextPostRequestSubmitter CreateSearchItemRangeRequest(int start, int end, string keyword)
-        {
-            string body = RequestBodyIntro + GetRequestBodyIntro +
-                "<CatalogQuery>" +
-                "<SimpleSearch>" +
-                $"<StartIndex>{start}</StartIndex>" +
-                $"<EndIndex>{end}</EndIndex>" +
-                $"<Keyword>{keyword}</Keyword>" +
-                "</SimpleSearch>" +
-                "</CatalogQuery>" +
-                "</ResourceList>" +
-                "</ystorewsRequest>";
-
-            return CreateCatalogRequestSubmitter(body);
-        }
-
-        /// <summary>
         /// Creates the order request submitter.
         /// </summary>
         /// <param name="xmlBody">The XML body</param>
@@ -242,7 +217,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Cleans the response.
         /// </summary>
         /// <param name="response">The response to clean</param>
-        private string CleanResponse(string response)
+        private static string CleanResponse(string response)
         {
             response = response.Replace("<ystorews:ystorewsResponse xmlns:ystorews=\"urn:yahoo:sbs:ystorews\" >", "<ystorewsResponse>");
             response = response.Replace("</ystorews:ystorewsResponse>", "</ystorewsResponse>");
@@ -291,7 +266,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");
 
-                    return DeserializeResponse<YahooResponse>(CleanResponse(responseData));
+                    return DeserializeResponse<YahooResponse>(responseData);
                 }
             }
             // Unfortunately if any error occurs on Yahoo's side, they throw 400 errors causing
@@ -310,7 +285,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 using (StreamReader reader = new StreamReader(webEx.Response.GetResponseStream()))
                 {
-                    return DeserializeResponse<YahooResponse>(CleanResponse(reader.ReadToEnd()));
+                    return DeserializeResponse<YahooResponse>(reader.ReadToEnd());
                 }
             }
         }
@@ -322,7 +297,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             try
             {
-                return SerializationUtility.DeserializeFromXml<T>(xml);
+                return SerializationUtility.DeserializeFromXml<T>(CleanResponse(xml));
             }
             catch (InvalidOperationException ex)
             {

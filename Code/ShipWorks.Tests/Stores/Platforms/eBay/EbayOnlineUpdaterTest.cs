@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Stores.eBay
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsFedEx_Test()
+        public void GetCarrierCode_ReturnsFedEx()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.FedEx;
             shipmentEntity.FedEx = fedExShipmentEntity;
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Stores.eBay
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsFedEx_WhenOtherCarrierIsFedEx_Test()
+        public void GetCarrierCode_ReturnsFedEx_WhenOtherCarrierIsFedEx()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Other;
             otherShipmentEntity.Carrier = "FedEx";
@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Stores.eBay
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUps_WhenOtherCarrierIsUps_Test()
+        public void GetCarrierCode_ReturnsUps_WhenOtherCarrierIsUps()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Other;
             otherShipmentEntity.Carrier = "Ups";
@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Stores.eBay
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenOtherCarrierIsUsps_Test()
+        public void GetCarrierCode_ReturnsUsps_WhenOtherCarrierIsUsps()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Other;
             otherShipmentEntity.Carrier = "Usps";
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Stores.eBay
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsDhl_WhenOtherCarrierIsDhl_Test()
+        public void GetCarrierCode_ReturnsDhl_WhenOtherCarrierIsDhl()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Other;
             otherShipmentEntity.Carrier = "Dhl";
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Stores.eBay
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsOther_WhenOtherCarrierIsOther_Test()
+        public void GetCarrierCode_ReturnsOther_WhenOtherCarrierIsOther()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Other;
             otherShipmentEntity.Carrier = "Other";
@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Stores.eBay
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUps_WhenUpsAndServiceIsGround_Test()
+        public void GetCarrierCode_ReturnsUps_WhenUpsAndServiceIsGround()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.UpsOnLineTools;
             upsShipmentEntity.Service = (int) UpsServiceType.UpsGround;
@@ -121,7 +121,7 @@ namespace ShipWorks.Tests.Stores.eBay
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsOther_WhenUpsAndMiServiceAndNoUspsTrackingNumber_Test()
+        public void GetCarrierCode_ReturnsOther_WhenUpsAndMiServiceAndNoUspsTrackingNumber()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.UpsOnLineTools;
             upsShipmentEntity.Service = (int) UpsServiceType.UpsMailInnovationsExpedited;
@@ -136,7 +136,7 @@ namespace ShipWorks.Tests.Stores.eBay
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenUspsAndFirstClassService_Test()
+        public void GetCarrierCode_ReturnsUsps_WhenUspsAndFirstClassService()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Usps;
             postalShipmentEntity.Service = (int) PostalServiceType.FirstClass;
@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Stores.eBay
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlService_Test()
+        public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlService()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Usps;
             postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelExpedited;
@@ -156,7 +156,7 @@ namespace ShipWorks.Tests.Stores.eBay
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsOther_WhenUspsAndConsolidatorService_Test()
+        public void GetCarrierCode_ReturnsOther_WhenUspsAndConsolidatorService()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Usps;
             postalShipmentEntity.Service = (int) PostalServiceType.ConsolidatorDomestic;

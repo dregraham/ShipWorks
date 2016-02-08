@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         }
 
         [Fact]
-        public void GetCarrierName_ReturnsUsps_WhenUspsAndFirstClass_Test()
+        public void GetCarrierName_ReturnsUsps_WhenUspsAndFirstClass()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         }
 
         [Fact]
-        public void GetCarrierName_ReturnsUsps_WhenEndiciaAndFirstClass_Test()
+        public void GetCarrierName_ReturnsUsps_WhenEndiciaAndFirstClass()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         }
 
         [Fact]
-        public void GetCarrierName_ReturnsDhlGlobalMail_WhenEndiciaAndDhl_Test()
+        public void GetCarrierName_ReturnsDhlGlobalMail_WhenEndiciaAndDhl()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         }
 
         [Fact]
-        public void GetCarrierName_ReturnsDhlGlobalMail_WhenUspsAndDhl_Test()
+        public void GetCarrierName_ReturnsDhlGlobalMail_WhenUspsAndDhl()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         }
 
         [Fact]
-        public void GetCarrierName_ReturnsConsolidator_WhenEndiciaAndConsolidator_Test()
+        public void GetCarrierName_ReturnsConsolidator_WhenEndiciaAndConsolidator()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Endicia;
             postalShipmentEntity.Service = (int)PostalServiceType.ConsolidatorDomestic;
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         }
 
         [Fact]
-        public void GetCarrierName_ReturnsOtherCarrierDesc_WhenOther_Test()
+        public void GetCarrierName_ReturnsOtherCarrierDesc_WhenOther()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
             shipmentEntity.Other = otherShipmentEntity;
