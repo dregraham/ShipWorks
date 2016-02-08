@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -350,6 +351,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
 
             customsManager.Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+        }
+
+        [Fact]
+        public void DeletePackage_AddsPackageToRemovedEntityCollection_WhenPackageIsRemoved()
+        {
+            var package = new IParcelPackageEntity(2);
+
+            shipment.IParcel.Packages.Add(package);
+            shipment.IParcel.Packages.Add(new IParcelPackageEntity(3));
+
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
+
+            Assert.Contains(package, shipment.IParcel.Packages.RemovedEntitiesTracker.OfType<IParcelPackageEntity>());
         }
     }
 }

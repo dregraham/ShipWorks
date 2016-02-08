@@ -72,19 +72,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override void DeletePackage(IPackageAdapter packageAdapter)
         {
-            if (Shipment.Ups.Packages.Count < 2)
-            {
-                return;
-            }
-
-            UpsPackageEntity package = Shipment.Ups.Packages
-                .FirstOrDefault(x => x.UpsPackageID == packageAdapter.PackageId);
-
-            if (package != null)
-            {
-                Shipment.Ups.Packages.Remove(package);
-                UpdateDynamicData();
-            }
+            DeletePackageFromCollection(Shipment.Ups.Packages, x => x.UpsPackageID == packageAdapter.PackageId);
         }
 
         /// <summary>

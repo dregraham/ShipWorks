@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -85,6 +86,13 @@ namespace ShipWorks.Shipping.Services
                 shipment.BestRateEvents |= clonedShipment.BestRateEvents;
 
                 return GenericResult.FromSuccess(rateResults);
+            }
+            catch (ORMEntityOutOfSyncException ex)
+            {
+                RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
+                rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipment.ShipmentTypeCode, ex));
+
+                return GenericResult.FromError("ShipWorks could not get rates for this shipment", rateGroup);
             }
             catch (ShippingException ex)
             {

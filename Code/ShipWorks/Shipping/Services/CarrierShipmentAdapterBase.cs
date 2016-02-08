@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -284,6 +285,32 @@ namespace ShipWorks.Shipping.Services
         {
             // Setting the service from a rate is carrier specific, but this is not abstract because a few
             // shipment types don't support rating
+        }
+
+        /// <summary>
+        /// Delete a package from the shipment
+        /// </summary>
+        protected void DeletePackageFromCollection<TPackage>(EntityCollection<TPackage> packageCollection,
+            Func<TPackage, bool> packagePredicate) where TPackage : EntityBase2
+        {
+            if (packageCollection.Count < 2)
+            {
+                return;
+            }
+
+            TPackage package = packageCollection.FirstOrDefault(packagePredicate);
+
+            if (package != null)
+            {
+                // If this isn't set, removing packages won't actually remove them from the database
+                if (packageCollection.RemovedEntitiesTracker == null)
+                {
+                    packageCollection.RemovedEntitiesTracker = new EntityCollection<TPackage>();
+                }
+
+                packageCollection.Remove(package);
+                UpdateDynamicData();
+            }
         }
     }
 }

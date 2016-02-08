@@ -71,19 +71,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override void DeletePackage(IPackageAdapter packageAdapter)
         {
-            if (Shipment.FedEx.Packages.Count < 2)
-            {
-                return;
-            }
-
-            FedExPackageEntity package = Shipment.FedEx.Packages
-                .FirstOrDefault(x => x.FedExPackageID == packageAdapter.PackageId);
-
-            if (package != null)
-            {
-                Shipment.FedEx.Packages.Remove(package);
-                UpdateDynamicData();
-            }
+            DeletePackageFromCollection(Shipment.FedEx.Packages, x => x.FedExPackageID == packageAdapter.PackageId);
         }
 
         /// <summary>

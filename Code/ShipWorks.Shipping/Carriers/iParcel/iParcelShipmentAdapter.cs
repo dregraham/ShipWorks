@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -74,19 +73,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public override void DeletePackage(IPackageAdapter packageAdapter)
         {
-            if (Shipment.IParcel.Packages.Count < 2)
-            {
-                return;
-            }
-
-            IParcelPackageEntity package = Shipment.IParcel.Packages
-                .FirstOrDefault(x => x.IParcelPackageID == packageAdapter.PackageId);
-
-            if (package != null)
-            {
-                Shipment.IParcel.Packages.Remove(package);
-                UpdateDynamicData();
-            }
+            DeletePackageFromCollection(Shipment.IParcel.Packages, x => x.IParcelPackageID == packageAdapter.PackageId);
         }
 
         /// <summary>

@@ -301,7 +301,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             IPackageAdapter nonExistentPackageAdapter = new TestPackageAdapter() { DimsProfileID = 999 };
             testObject.SelectedPackageAdapter = nonExistentPackageAdapter;
 
-            Assert.Equal(0, testObject.SelectedPackageAdapter.DimsProfileID);
+            Assert.Equal(0, testObject.DimsProfileID);
         }
 
         [Fact]
@@ -578,34 +578,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             shipmentAdapter.VerifySet(sa => sa.ShipDate = testObject.ShipDate, Times.Once());
             shipmentAdapter.VerifySet(sa => sa.ServiceType = testObject.ServiceType);
-        }
-
-        [Fact]
-        public void SelectedRateChangedMessage_DelegatesTo_HandleSelectedRateChangedMessageAndUpdatesServiceType_Test()
-        {
-            messenger = new TestMessenger();
-
-            mock.Provide<IMessenger>(messenger);
-
-            Mock<IRateSelection> rateSelection = mock.Mock<IRateSelection>();
-            rateSelection.Setup(rs => rs.ServiceType).Returns(99);
-
-            rateSelectionFactory = mock.Mock<IRateSelectionFactory>();
-            rateSelectionFactory.Setup(r => r.CreateRateSelection(It.IsAny<RateResult>()))
-                .Returns(rateSelection.Object);
-
-            CreateDefaultShipmentAdapter(mock, 2);
-
-            shipmentAdapter.SetupSet(sa => sa.ServiceType = rateSelection.Object.ServiceType);
-
-            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
-            testObject.Load(shipmentAdapter.Object);
-
-            SelectedRateChangedMessage message = new SelectedRateChangedMessage(this, new RateResult("test message", "1", 1, "test"));
-            messenger.Send(message);
-
-            shipmentAdapter.Verify(sa => sa.ServiceType);
-            Assert.Equal(rateSelection.Object.ServiceType, testObject.ServiceType);
         }
 
         [Fact]

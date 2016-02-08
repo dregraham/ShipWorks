@@ -14,7 +14,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
@@ -26,7 +25,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     public partial class ShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging, IDataErrorInfo
     {
         private readonly IMessenger messenger;
-        private readonly IRateSelectionFactory rateSelectionFactory;
         private readonly IDisposable subscriptions;
         private readonly PropertyChangedHandler handler;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
@@ -55,13 +53,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory, IMessenger messenger,
-            IRateSelectionFactory rateSelectionFactory,
             IDimensionsManager dimensionsManager,
             IShippingViewModelFactory shippingViewModelFactory,
             ICustomsManager customsManager) : this()
         {
             this.shipmentPackageTypesBuilderFactory = shipmentPackageTypesBuilderFactory;
-            this.rateSelectionFactory = rateSelectionFactory;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             this.dimensionsManager = dimensionsManager;
             this.customsManager = customsManager;
@@ -74,7 +70,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<DimensionsProfilesChangedMessage>().Subscribe(ManageDimensionsProfiles),
-                messenger.OfType<SelectedRateChangedMessage>().Subscribe(HandleSelectedRateChangedMessage),
                 messenger.OfType<ShippingSettingsChangedMessage>().Subscribe(HandleShippingSettingsChangedMessage),
                 handler.PropertyChangingStream
                     .Where(x => nameof(SelectedPackageAdapter).Equals(x, StringComparison.Ordinal))
@@ -83,39 +78,56 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                     .Subscribe(_ => LoadDimensionsFromSelectedPackageAdapter()));
         }
 
+        /// <summary>
+        /// Load dimensions into the UI from the selected package adapter
+        /// </summary>
         private void LoadDimensionsFromSelectedPackageAdapter()
         {
-            if (SelectedPackageAdapter != null)
+            if (SelectedPackageAdapter == null)
             {
-                using (Disposable.Create(() => suppressExternalChangeNotifications = false))
-                {
-                    suppressExternalChangeNotifications = true;
+                return;
+            }
 
-                    ApplyAdditionalWeight = SelectedPackageAdapter.ApplyAdditionalWeight;
-                    AdditionalWeight = SelectedPackageAdapter.AdditionalWeight;
-                    DimsLength = SelectedPackageAdapter.DimsLength;
-                    DimsWidth = SelectedPackageAdapter.DimsWidth;
-                    DimsHeight = SelectedPackageAdapter.DimsHeight;
-                    DimsProfileID = SelectedPackageAdapter.DimsProfileID;
-                    TotalWeight = SelectedPackageAdapter.Weight;
-                }
+            using (Disposable.Create(() => suppressExternalChangeNotifications = false))
+            {
+                suppressExternalChangeNotifications = true;
+
+                ApplyAdditionalWeight = SelectedPackageAdapter.ApplyAdditionalWeight;
+                AdditionalWeight = SelectedPackageAdapter.AdditionalWeight;
+                DimsLength = SelectedPackageAdapter.DimsLength;
+                DimsWidth = SelectedPackageAdapter.DimsWidth;
+                DimsHeight = SelectedPackageAdapter.DimsHeight;
+                DimsProfileID = SelectedPackageAdapter.DimsProfileID;
+                TotalWeight = SelectedPackageAdapter.Weight;
+
+                UpdateSelectedDimensionsProfile();
+
+                InsuranceViewModel.SelectedPackageAdapter = SelectedPackageAdapter;
             }
         }
 
+        /// <summary>
+        /// Save dimensions from the UI into the selected package adapter
+        /// </summary>
         private void SaveDimensionsToSelectedPackageAdapter()
         {
-            if (SelectedPackageAdapter != null)
+            if (SelectedPackageAdapter == null)
             {
-                SelectedPackageAdapter.ApplyAdditionalWeight = ApplyAdditionalWeight;
-                SelectedPackageAdapter.AdditionalWeight = AdditionalWeight;
-                SelectedPackageAdapter.DimsLength = DimsLength;
-                SelectedPackageAdapter.DimsWidth = DimsWidth;
-                SelectedPackageAdapter.DimsHeight = DimsHeight;
-                SelectedPackageAdapter.DimsProfileID = DimsProfileID;
-                SelectedPackageAdapter.Weight = TotalWeight;
+                return;
             }
+
+            SelectedPackageAdapter.ApplyAdditionalWeight = ApplyAdditionalWeight;
+            SelectedPackageAdapter.AdditionalWeight = AdditionalWeight;
+            SelectedPackageAdapter.DimsLength = DimsLength;
+            SelectedPackageAdapter.DimsWidth = DimsWidth;
+            SelectedPackageAdapter.DimsHeight = DimsHeight;
+            SelectedPackageAdapter.DimsProfileID = DimsProfileID;
+            SelectedPackageAdapter.Weight = TotalWeight;
         }
 
+        /// <summary>
+        /// Delete a package
+        /// </summary>
         private void DeletePackageAction()
         {
             if (!shipmentAdapter.SupportsMultiplePackages || PackageAdapters.Count < 2)
@@ -133,6 +145,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             shipmentAdapter.DeletePackage(packageAdapter);
         }
 
+        /// <summary>
+        /// Add a package
+        /// </summary>
         private void AddPackageAction()
         {
             if (!shipmentAdapter.SupportsMultiplePackages)
@@ -181,8 +196,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             InsuranceViewModel.Load(PackageAdapters, packageAdapter, shipmentAdapter);
             SelectedPackageAdapter = packageAdapter;
 
-            UpdateSelectedDimensionsProfile();
-
             LoadCustoms();
         }
 
@@ -219,7 +232,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public void RefreshPackageTypes()
         {
             Dictionary<int, string> packageTypes = shipmentPackageTypesBuilderFactory.Get(shipmentAdapter.ShipmentTypeCode)
-                   .BuildPackageTypeDictionary(new[] { shipmentAdapter.Shipment });
+                .BuildPackageTypeDictionary(new[] { shipmentAdapter.Shipment });
 
             PackageTypes.Clear();
             foreach (KeyValuePair<int, string> entry in packageTypes)
@@ -256,17 +269,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             shipmentAdapter.SelectServiceFromRate(rateResult);
             ServiceType = shipmentAdapter.ServiceType;
-        }
-
-        /// <summary>
-        /// Called when the shipment service type has changed.
-        /// </summary>
-        private void HandleSelectedRateChangedMessage(SelectedRateChangedMessage message)
-        {
-            IRateSelection rateSelection = rateSelectionFactory.CreateRateSelection(message.RateResult);
-
-            // Set the newly selected service type
-            ServiceType = rateSelection.ServiceType;
         }
 
         /// <summary>

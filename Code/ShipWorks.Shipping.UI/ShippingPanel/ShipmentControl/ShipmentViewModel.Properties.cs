@@ -118,22 +118,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public IPackageAdapter SelectedPackageAdapter
         {
             get { return selectedPackageAdapter; }
-            set
-            {
-                if (handler.Set(nameof(SelectedPackageAdapter), ref selectedPackageAdapter, value, true))
-                {
-                    InsuranceViewModel.SelectedPackageAdapter = SelectedPackageAdapter;
-
-                    //if (SelectedPackageAdapter != null)
-                    //{
-                    //    DimsLength = selectedPackageAdapter.DimsLength;
-                    //    DimsWidth = selectedPackageAdapter.DimsWidth;
-                    //    DimsHeight = selectedPackageAdapter.DimsHeight;
-                    //}
-
-                    UpdateSelectedDimensionsProfile();
-                }
-            }
+            set { handler.Set(nameof(SelectedPackageAdapter), ref selectedPackageAdapter, value, true); }
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -348,6 +349,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
             testObject.DeletePackage(new UpsPackageAdapter(shipment, package, 1));
 
             customsManager.Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+        }
+
+        [Fact]
+        public void DeletePackage_AddsPackageToRemovedEntityCollection_WhenPackageIsRemoved()
+        {
+            var package = new UpsPackageEntity(2);
+
+            shipment.Ups.Packages.Add(package);
+            shipment.Ups.Packages.Add(new UpsPackageEntity(3));
+
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new UpsPackageAdapter(shipment, package, 1));
+
+            Assert.Contains(package, shipment.Ups.Packages.RemovedEntitiesTracker.OfType<UpsPackageEntity>());
         }
     }
 }

@@ -30,6 +30,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly PropertyChangedHandler handler;
         private OrderSelectionLoaded orderSelectionLoaded;
 
+        private readonly HashSet<string> internalFields = new HashSet<string> { nameof(AllowEditing) };
+
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
         private readonly IDisposable subscriptions;
@@ -101,7 +103,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Expose a stream of property changes
         /// </summary>
-        public IObservable<string> PropertyChangeStream => handler;
+        public virtual IObservable<string> PropertyChangeStream => handler.Where(x => !internalFields.Contains(x));
 
         /// <summary>
         /// Gets the shipment from the current adapter

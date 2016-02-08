@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -341,6 +342,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             testObject.DeletePackage(new FedExPackageAdapter(shipment, package, 1));
 
             customsManager.Verify(x => x.EnsureCustomsLoaded(new[] { shipment }));
+        }
+
+        [Fact]
+        public void DeletePackage_AddsPackageToRemovedEntityCollection_WhenPackageIsRemoved()
+        {
+            var package = new FedExPackageEntity(2);
+
+            shipment.FedEx.Packages.Add(package);
+            shipment.FedEx.Packages.Add(new FedExPackageEntity(3));
+
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.DeletePackage(new FedExPackageAdapter(shipment, package, 1));
+
+            Assert.Contains(package, shipment.FedEx.Packages.RemovedEntitiesTracker.OfType<FedExPackageEntity>());
         }
     }
 }
