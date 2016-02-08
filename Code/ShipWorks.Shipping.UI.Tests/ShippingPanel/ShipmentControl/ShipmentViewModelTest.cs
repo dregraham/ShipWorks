@@ -845,6 +845,24 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
+        public void AddPackage_DoesNotAddPackage_WhenShipmentAlreadyHas25Packages()
+        {
+            shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);
+            ShipmentViewModel testObject = mock.Create<ShipmentViewModel>();
+            testObject.Load(shipmentAdapter.Object);
+
+            for (int i = 0; i < 25; i++)
+            {
+                testObject.PackageAdapters.Add(mock.CreateMock<IPackageAdapter>().Object);
+            }
+
+            testObject.AddPackageCommand.Execute(null);
+
+            Assert.Equal(25, testObject.PackageAdapters.Count);
+        }
+
+        [Fact]
         public void DeletePackage_DoesNotDelegateToShipmentAdapter_WhenMultiplePackagesAreNotSupported()
         {
             shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
@@ -890,7 +908,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         }
 
         [Fact]
-        public void AddPackage_DoesNotDelegateToShipmentAdapter_WhenShipmentHasOnePackageAdapter()
+        public void DeletePackage_DoesNotDelegateToShipmentAdapter_WhenShipmentHasOnePackageAdapter()
         {
             shipmentAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
             shipmentAdapter.Setup(x => x.SupportsMultiplePackages).Returns(true);

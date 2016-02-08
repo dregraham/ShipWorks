@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// </summary>
     public partial class ShipmentViewModel : IShipmentViewModel, INotifyPropertyChanged, INotifyPropertyChanging, IDataErrorInfo
     {
+        private const int MaxPackages = 25;
         private readonly IMessenger messenger;
         private readonly IDisposable subscriptions;
         private readonly PropertyChangedHandler handler;
@@ -150,7 +151,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void AddPackageAction()
         {
-            if (!shipmentAdapter.SupportsMultiplePackages)
+            if (!shipmentAdapter.SupportsMultiplePackages || PackageAdapters.Count >= MaxPackages)
             {
                 return;
             }
