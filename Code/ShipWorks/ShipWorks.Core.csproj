@@ -595,6 +595,7 @@
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
+    <Compile Include="ApplicationCore\Licensing\CustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivartionDlgViewModel.cs" />
@@ -610,6 +611,7 @@
     <Compile Include="ApplicationCore\Licensing\DisabledLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\EncryptionException.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
+    <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\IDialog.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitDlg.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicense.cs" />
