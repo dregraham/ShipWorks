@@ -2306,6 +2306,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
+            getRatesTimer.Stop();
+
             // Disable the ShipSense timer and make one final call to synchronize to make sure we have
             // everything matching that should be matching; otherwise changing a value and closing
             // the dialog before the timer kicks would result in shipments being out of sync
