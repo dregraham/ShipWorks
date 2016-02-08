@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Data;
+using System.Windows.Markup;
 
 namespace ShipWorks.UI.ValueConverters
 {
@@ -9,7 +10,7 @@ namespace ShipWorks.UI.ValueConverters
     /// Convert an enum to an description
     /// </summary>
     [Obfuscation(Exclude = true)]
-    public class InverseBoolean : IValueConverter
+    public class InverseBooleanConverter : MarkupExtension, IValueConverter
     {
         /// <summary>
         /// Converts a bool to its inverse 
@@ -31,6 +32,15 @@ namespace ShipWorks.UI.ValueConverters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// This is so that we dont need to define the converter as a static resource in xaml
+        /// </summary>
+        /// <returns></returns>
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return new InverseBooleanConverter();
         }
     }
 }

@@ -8,11 +8,12 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance local:ChannelLimitViewModel}"
              d:DesignHeight="300" d:DesignWidth="450"
-             FontFamily="Tahoma" FontSize="8.25pt" Cursor="{Binding Cursor}">
+             FontFamily="Tahoma" FontSize="8.25pt" 
+             IsEnabled="{Binding IsDeleting, Converter={valueConverters:InverseBooleanConverter}}">
+    
     <UserControl.Resources>
         <valueConverters:EnumImageConverter x:Key="EnumImageConverter" />
         <valueConverters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
-        <valueConverters:InverseBoolean x:Key="InverseBooleanConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -119,7 +120,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                   </GridView>
+                </GridView>
             </ListView.View>
         </ListView>
         <Grid Grid.Column="1" Grid.Row="1">
@@ -147,16 +148,11 @@
                 Margin="0 0 0 10"
                 Height="20" Width="128" 
                 Command="{Binding DeleteStoreClickCommand}">
-                    <DockPanel Width="125">
-                        <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/delete2.png"/>
-                        <TextBlock TextAlignment="Center" Margin="-14 0 0 0">Delete</TextBlock>
-                    </DockPanel>
+                <DockPanel Width="125">
+                    <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/delete2.png"/>
+                    <TextBlock TextAlignment="Center" Margin="-14 0 0 0">Delete</TextBlock>
+                </DockPanel>
             </Button>
         </Grid>
-
-
-
     </Grid>
-
-
 </UserControl>
