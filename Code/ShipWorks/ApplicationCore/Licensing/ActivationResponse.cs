@@ -22,11 +22,17 @@ namespace ShipWorks.ApplicationCore.Licensing
             xpath.Namespaces.AddNamespace("", "http://stamps.com/xml/namespace/2015/09/shipworks/activationv1");
 
             Key = XPathUtility.Evaluate(xpath, "//a:CustomerLicenseKey", string.Empty);
+            StampsUsername = XPathUtility.Evaluate(xpath, "//a:StampsUserName", string.Empty);
         }
 
         /// <summary>
         /// The customer Key
         /// </summary>
         public string Key { get; set; }
+
+        /// <summary>
+        /// The Stamps.com username.
+        /// </summary>
+        public string StampsUsername { get; set; }
     }
 }
