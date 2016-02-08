@@ -5,7 +5,6 @@ using ShipWorks.Stores;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using ShipWorks.Users.Audit;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using System.Collections.Generic;
 using System;
@@ -218,22 +217,19 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             if (deleteDlg.DialogResult == true)
             {
-                using (new AuditBehaviorScope(AuditState.Disabled))
+                // Delete the channel
+                try
                 {
-                    // Delete the channel
-                    try
-                    {
-                        await DeleteChannelAsync();
-                    }
-                    catch (ShipWorksLicenseException ex)
-                    {
-                        log.Error("Error deleting channel", ex);
-                        messagdHelper.ShowError("Error deleting Channel. Please try again.");
-                    }
-                    catch (SqlAppResourceLockException)
-                    {
-                        messagdHelper.ShowError("Unable to delete store while it is in the process of a download.");
-                    }
+                    await DeleteChannelAsync();
+                }
+                catch (ShipWorksLicenseException ex)
+                {
+                    log.Error("Error deleting channel", ex);
+                    messagdHelper.ShowError("Error deleting Channel. Please try again.");
+                }
+                catch (SqlAppResourceLockException)
+                {
+                    messagdHelper.ShowError("Unable to delete store while it is in the process of a download.");
                 }
             }
 
