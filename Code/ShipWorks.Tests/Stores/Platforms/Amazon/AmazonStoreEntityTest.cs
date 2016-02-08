@@ -8,7 +8,7 @@ namespace ShipWorks.Tests.Stores.Amazon
     {
 
         [Fact]
-        public void AmazonStoreEntity_Implements_IAmazonCredentials_Test()
+        public void AmazonStoreEntity_Implements_IAmazonCredentials()
         {
             IAmazonCredentials testObject = new AmazonStoreEntity() as IAmazonCredentials;
 

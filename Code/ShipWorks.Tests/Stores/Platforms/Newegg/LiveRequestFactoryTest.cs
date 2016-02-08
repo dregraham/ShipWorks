@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void CreateReportStatusRequest_ReturnsStatusRequest_Test()
+        public void CreateReportStatusRequest_ReturnsStatusRequest()
         {
             Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
             Assert.IsAssignableFrom<StatusRequest>(testObject.CreateReportStatusRequest(credentials));
@@ -32,35 +32,35 @@ namespace ShipWorks.Tests.Stores.Newegg
 
 
         [Fact]
-        public void CreateCheckCredentialRequest_ReturnsCheckCredentialRequest_Test()
+        public void CreateCheckCredentialRequest_ReturnsCheckCredentialRequest()
         {
             Assert.IsAssignableFrom<CheckCredentialsRequest>(testObject.CreateCheckCredentialRequest());
         }
 
 
         [Fact]
-        public void CreateDownloadOrderRequest_ReturnsOrdersRequest_Test()
+        public void CreateDownloadOrderRequest_ReturnsOrdersRequest()
         {
             Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
             Assert.IsAssignableFrom<DownloadOrdersRequest>(testObject.CreateDownloadOrderRequest(credentials));
         }
 
         [Fact]
-        public void CreateCancelOrderRequest_ReturnsCancelOrdersRequest_Test()
+        public void CreateCancelOrderRequest_ReturnsCancelOrdersRequest()
         {
             Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
             Assert.IsAssignableFrom<CancelOrderRequest>(testObject.CreateCancelOrderRequest(credentials));
         }
 
         [Fact]
-        public void CreateShippingRequest_ReturnsShippingRequest_Test()
+        public void CreateShippingRequest_ReturnsShippingRequest()
         {
             Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
             Assert.IsAssignableFrom<ShippingRequest>(testObject.CreateShippingRequest(credentials));
         }
 
         [Fact]
-        public void CreateRemoveItemsRequest_ReturnsRemoveItemsRequest_Test()
+        public void CreateRemoveItemsRequest_ReturnsRemoveItemsRequest()
         {
             Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
             Assert.IsAssignableFrom<RemoveItemRequest>(testObject.CreateRemoveItemRequest(credentials));

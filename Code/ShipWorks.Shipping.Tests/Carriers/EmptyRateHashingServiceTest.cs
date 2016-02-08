@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Tests.Carriers
         }
 
         [Fact]
-        public void GetRatingHashReturns_EmptyString_Test()
+        public void GetRatingHashReturns_EmptyString()
         {
             string testObject = emptyRatingHashingService.GetRatingHash(shipment);
 

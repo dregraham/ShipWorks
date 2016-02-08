@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void CheckRestriction_ReturnsEnforcementFailureWithMessage_WhenAmazonShippingTokenIsToday_Test()
+        public void CheckRestriction_ReturnsEnforcementFailureWithMessage_WhenAmazonShippingTokenIsToday()
         {
             store.SetShippingToken(new AmazonShippingToken
             {
@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void CheckRestriction_ThrowsShippingException_WhenGivenNonAmazonShipment_Test()
+        public void CheckRestriction_ThrowsShippingException_WhenGivenNonAmazonShipment()
         {
             mock.Mock<IStoreManager>()
                 .Setup(x => x.GetRelatedStore(It.IsAny<ShipmentEntity>()))
@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void VerifyShipment_ThrowsShippingException_WhenGivenNonAmazonShipment_Test()
+        public void VerifyShipment_ThrowsShippingException_WhenGivenNonAmazonShipment()
         {
             mock.Mock<IStoreManager>()
                 .Setup(x => x.GetRelatedStore(It.IsAny<ShipmentEntity>()))

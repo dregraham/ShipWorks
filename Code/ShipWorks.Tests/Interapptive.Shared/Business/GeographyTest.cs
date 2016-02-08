@@ -11,67 +11,67 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
     public class GeographyTest
     {
         [Fact]
-        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStates_Test()
+        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStates()
         {
             Assert.Equal("US", Geography.GetCountryCode("United States"));
         }
 
         [Fact]
-        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInLowerCase_Test()
+        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInLowerCase()
         {
             Assert.Equal("US", Geography.GetCountryCode("united states"));
         }
 
         [Fact]
-        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInUpperCase_Test()
+        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInUpperCase()
         {
             Assert.Equal("US", Geography.GetCountryCode("UNITED STATES"));
         }
 
         [Fact]
-        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInMixedCase_Test()
+        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInMixedCase()
         {
             Assert.Equal("US", Geography.GetCountryCode("UnItEd StAtEs"));
         }
 
         [Fact]
-        public void GetCountryCode_ReturnsUS_WhenNameIsUSA_Test()
+        public void GetCountryCode_ReturnsUS_WhenNameIsUSA()
         {
             Assert.Equal("US", Geography.GetCountryCode("USA"));
         }
 
         [Fact]
-        public void GetCountryCode_ReturnsUS_WhenNameIsUSAInLowerCase_Test()
+        public void GetCountryCode_ReturnsUS_WhenNameIsUSAInLowerCase()
         {
             Assert.Equal("US", Geography.GetCountryCode("usa"));
         }
 
         [Fact]
-        public void GetCountryCode_ReturnsUS_WhenNameIsUSAInMixedCase_Test()
+        public void GetCountryCode_ReturnsUS_WhenNameIsUSAInMixedCase()
         {
             Assert.Equal("US", Geography.GetCountryCode("UsA"));
         }
 
         [Fact]
-        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmerica_Test()
+        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmerica()
         {
             Assert.Equal("US", Geography.GetCountryCode("United States of America"));
         }
 
         [Fact]
-        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInLowerCase_Test()
+        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInLowerCase()
         {
             Assert.Equal("US", Geography.GetCountryCode("united states of america"));
         }
 
         [Fact]
-        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInUpperCase_Test()
+        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInUpperCase()
         {
             Assert.Equal("US", Geography.GetCountryCode("UNITED STATES OF AMERICA"));
         }
 
         [Fact]
-        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInMixedCase_Test()
+        public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInMixedCase()
         {
             Assert.Equal("US", Geography.GetCountryCode("uNiTeD StAtEs Of AmErIcA"));
         }

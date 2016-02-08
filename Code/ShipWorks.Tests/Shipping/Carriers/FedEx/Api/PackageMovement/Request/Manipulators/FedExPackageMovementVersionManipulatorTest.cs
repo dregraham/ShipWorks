@@ -26,13 +26,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Ma
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Ma
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new ServiceAvailabilityRequest());
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Ma
         }
 
         [Fact]
-        public void Manipulate_SetsServiceIdToPmis_Test()
+        public void Manipulate_SetsServiceIdToPmis()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Ma
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo5_Test()
+        public void Manipulate_SetsMajorTo5()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Ma
         }
 
         [Fact]
-        public void Manipulate_SetsMinorTo0_Test()
+        public void Manipulate_SetsMinorTo0()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Ma
         }
 
         [Fact]
-        public void Manipulate_SetsIntermediateTo0_Test()
+        public void Manipulate_SetsIntermediateTo0()
         {
             testObject.Manipulate(carrierRequest.Object);
 

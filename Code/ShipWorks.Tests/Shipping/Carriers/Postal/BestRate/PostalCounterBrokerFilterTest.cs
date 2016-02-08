@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
     public class PostalCounterBrokerFilterTest
     {
         [Fact]
-        public void Filter_WithMultipleUspsBrokers_ReturnsFirst_Test()
+        public void Filter_WithMultipleUspsBrokers_ReturnsFirst()
         {
             var testBroker1 = new UspsCounterRatesBroker(new Mock<ICarrierAccountRepository<UspsAccountEntity>>().Object);
             var testBroker2 = new UspsCounterRatesBroker(new Mock<ICarrierAccountRepository<UspsAccountEntity>>().Object);
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
         }
 
         [Fact]
-        public void Filter_WithNoPostalBrokers_ReturnsCopyOfOriginalList_Test()
+        public void Filter_WithNoPostalBrokers_ReturnsCopyOfOriginalList()
         {
             var testBroker1 = new UpsBestRateBroker();
             var testBroker2 = new Mock<IBestRateShippingBroker>().Object;

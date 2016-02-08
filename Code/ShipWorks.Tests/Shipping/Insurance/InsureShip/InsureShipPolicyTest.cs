@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Insure_LogsMessge_WhenSubmittingShipmentInformation_Test()
+        public void Insure_LogsMessge_WhenSubmittingShipmentInformation()
         {
             testObject.Insure(shipment);
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Insure_DelegatesToRequestFactory_Test()
+        public void Insure_DelegatesToRequestFactory()
         {
             testObject.Insure(shipment);
 
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Insure_DelegatesToRequest_Test()
+        public void Insure_DelegatesToRequest()
         {
             testObject.Insure(shipment);
 
@@ -100,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Insure_LogsMessage_WhenProcessingResponse_Test()
+        public void Insure_LogsMessage_WhenProcessingResponse()
         {
             testObject.Insure(shipment);
 
@@ -108,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Insure_DelegatesToResponse_Test()
+        public void Insure_DelegatesToResponse()
         {
             testObject.Insure(shipment);
 
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Insure_LogsMessage_WhenPolicyIsInsuredSuccessfully_Test()
+        public void Insure_LogsMessage_WhenPolicyIsInsuredSuccessfully()
         {
             testObject.Insure(shipment);
 
@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Insure_LogsMessage_WhenPolicyIsNotInsuredSuccessfully_Test()
+        public void Insure_LogsMessage_WhenPolicyIsNotInsuredSuccessfully()
         {
             response.Setup(r => r.Process()).Returns(InsureShipResponseCode.Conflict);
 
@@ -135,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Insure_LogsMessage_WhenInsureShipResponseExceptionIsCaught_Test()
+        public void Insure_LogsMessage_WhenInsureShipResponseExceptionIsCaught()
         {
             InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.UnknownFailure);
             response.Setup(r => r.Process()).Throws(responseException);
@@ -152,7 +152,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
 
         [Fact]
-        public void Void_DoesNotMakeRequest_WhenShipmentIsNotProcessed_Test()
+        public void Void_DoesNotMakeRequest_WhenShipmentIsNotProcessed()
         {
             shipmentForVoiding.Processed = false;
 
@@ -163,7 +163,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_LogsMessage_WhenShipmentIsNotProcessed_Test()
+        public void Void_LogsMessage_WhenShipmentIsNotProcessed()
         {
             shipmentForVoiding.Processed = false;
 
@@ -173,7 +173,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_DoesNotMakeRequest_WhenShipmentFailedToInsureWithApi_Test()
+        public void Void_DoesNotMakeRequest_WhenShipmentFailedToInsureWithApi()
         {
             shipmentForVoiding.InsurancePolicy.CreatedWithApi = false;
 
@@ -184,7 +184,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_LogsMessage_WhenShipmentFailedToInsureWithApi_Test()
+        public void Void_LogsMessage_WhenShipmentFailedToInsureWithApi()
         {
             shipmentForVoiding.InsurancePolicy.CreatedWithApi = false;
 
@@ -194,7 +194,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_DoesNotMakeRequest_WhenShipmentWasNotInsuredWithApi_Test()
+        public void Void_DoesNotMakeRequest_WhenShipmentWasNotInsuredWithApi()
         {
             shipmentForVoiding.InsurancePolicy = null;
 
@@ -205,7 +205,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_LogsMessage_WhenShipmentWasNotInsuredWithApi_Test()
+        public void Void_LogsMessage_WhenShipmentWasNotInsuredWithApi()
         {
             shipmentForVoiding.InsurancePolicy = null;
 
@@ -215,7 +215,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_DoesNotMakeRequest_WhenPolicyAgeExceedsGracePeriodForVoiding_Test()
+        public void Void_DoesNotMakeRequest_WhenPolicyAgeExceedsGracePeriodForVoiding()
         {
             // Grace period set to 24 hours in the initialize method above
             shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
@@ -227,7 +227,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_LogsMessage_WhenPolicyAgeExceedsGracePeriodForVoiding_Test()
+        public void Void_LogsMessage_WhenPolicyAgeExceedsGracePeriodForVoiding()
         {
             // Grace period set to 24 hours in the initialize method above
             shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
@@ -238,7 +238,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_UsesInsureShipSettings_ToDetermineEligibility_Test()
+        public void Void_UsesInsureShipSettings_ToDetermineEligibility()
         {
             // Grace period set to 24 hours in the initialize method above
             shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
@@ -249,7 +249,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_LogsMessage_WhenShipmentIsEligibleForVoiding_Test()
+        public void Void_LogsMessage_WhenShipmentIsEligibleForVoiding()
         {
             testObject.Void(shipmentForVoiding);
 
@@ -257,7 +257,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_DelegatesToRequestFactory_WhenShipmentIsEligibleForVoiding_Test()
+        public void Void_DelegatesToRequestFactory_WhenShipmentIsEligibleForVoiding()
         {
             testObject.Void(shipmentForVoiding);
 
@@ -265,7 +265,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_DelegatesToRequest_WhenShipmentIsEligibleForVoiding_Test()
+        public void Void_DelegatesToRequest_WhenShipmentIsEligibleForVoiding()
         {
             testObject.Void(shipmentForVoiding);
 
@@ -273,7 +273,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_LogsMessage_WhenSubmittingRequest_Test()
+        public void Void_LogsMessage_WhenSubmittingRequest()
         {
             testObject.Void(shipmentForVoiding);
 
@@ -281,7 +281,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_LogsMessage_WhenProcessingResponse_Test()
+        public void Void_LogsMessage_WhenProcessingResponse()
         {
             testObject.Void(shipmentForVoiding);
 
@@ -289,7 +289,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_DelegatesToResponse_WhenShipmentIsEligibleForVoiding_Test()
+        public void Void_DelegatesToResponse_WhenShipmentIsEligibleForVoiding()
         {
             testObject.Void(shipmentForVoiding);
 
@@ -297,7 +297,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_LogsMessage_WhenPolicyIsVoidedSuccessfully_Test()
+        public void Void_LogsMessage_WhenPolicyIsVoidedSuccessfully()
         {
             testObject.Void(shipmentForVoiding);
 
@@ -306,7 +306,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_LogsMessage_WhenPolicyIsNotVoidedSuccessfully_Test()
+        public void Void_LogsMessage_WhenPolicyIsNotVoidedSuccessfully()
         {
             response.Setup(r => r.Process()).Returns(InsureShipResponseCode.Conflict);
 
@@ -316,7 +316,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_ThrowsInsureShipException_WhenInsureShipResponseExceptionIsCaught_Test()
+        public void Void_ThrowsInsureShipException_WhenInsureShipResponseExceptionIsCaught()
         {
             response.Setup(r => r.Process()).Throws(new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter));
 
@@ -324,7 +324,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Void_LogsException_WhenInsureShipResponseExceptionIsCaught_Test()
+        public void Void_LogsException_WhenInsureShipResponseExceptionIsCaught()
         {
             response.Setup(r => r.Process()).Throws(new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter));
 

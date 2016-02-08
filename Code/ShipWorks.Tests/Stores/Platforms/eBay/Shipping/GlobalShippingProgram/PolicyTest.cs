@@ -136,7 +136,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void DefaultConstructor_AddsEligibilityRule_Test()
+        public void DefaultConstructor_AddsEligibilityRule()
         {
             // Testing the default constructor so just create a new Policy object for testing
             Policy policy = new Policy();
@@ -144,7 +144,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void DefaultConstructor_AddsSelectedShippingMethodRule_Test()
+        public void DefaultConstructor_AddsSelectedShippingMethodRule()
         {
             // Testing the default constructor so just create a new Policy object for testing
             Policy policy = new Policy();
@@ -152,7 +152,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void DefaultConstructor_AddsTwoRules_Test()
+        public void DefaultConstructor_AddsTwoRules()
         {
             // Testing the default constructor so just create a new Policy object for testing
             Policy policy = new Policy();
@@ -160,7 +160,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void EligibleForGlobalShippingProgram_DelegatesToEachRule_WhenAllRulesPass_Test()
+        public void EligibleForGlobalShippingProgram_DelegatesToEachRule_WhenAllRulesPass()
         {
             // test object is already configured in the Initialize method with all passing rules
             testObject = new Policy(mockedAllPassingRules);
@@ -177,7 +177,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void EligibleForGlobalShippingProgram_ReturnsTrue_WhenAllRulesPass_Test()
+        public void EligibleForGlobalShippingProgram_ReturnsTrue_WhenAllRulesPass()
         {
             testObject = new Policy(mockedAllPassingRules);
                         
@@ -185,7 +185,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void EligibleForGlobalShippingProgram_ReturnsFalse_WhenSomeRulesFail_Test()
+        public void EligibleForGlobalShippingProgram_ReturnsFalse_WhenSomeRulesFail()
         {
             // configure the test object to have a rule set where some rules pass and some fail
             testObject = new Policy(mockedMixtureOfRules);
@@ -194,7 +194,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void EligibleForGlobalShippingProgram_ReturnsFalse_WhenAllRulesFail_Test()
+        public void EligibleForGlobalShippingProgram_ReturnsFalse_WhenAllRulesFail()
         {
             // configure the test object to have a rule set where all rules fail
             testObject = new Policy(mockedAllFailingRules);
@@ -203,14 +203,14 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void EligibleForGlobalShippingProgram_ReturnsFalse_WhenEbayOrderIsNull_Test()
+        public void EligibleForGlobalShippingProgram_ReturnsFalse_WhenEbayOrderIsNull()
         {
             Assert.False(testObject.IsEligibleForGlobalShippingProgram(null));
         }
 
         
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_ShipCompanyIsReferenceID_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_ShipCompanyIsReferenceID()
         {
             // Nothing specific about the reference ID based on the carrier, so just use any carrier
             testObject.ConfigureShipmentForGlobalShippingProgram(endiciaShipment, shipmentOrder);
@@ -219,7 +219,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_ShippingAddressIsSwapped_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_ShippingAddressIsSwapped()
         {
             // Nothing specific about the address based on the carrier, so just use any carrier
             testObject.ConfigureShipmentForGlobalShippingProgram(endiciaShipment, shipmentOrder);
@@ -235,7 +235,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_ContactInfoIsWiped_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_ContactInfoIsWiped()
         {
             // Nothing specific about the phone/email based on the carrier, so just use any carrier
             testObject.ConfigureShipmentForGlobalShippingProgram(endiciaShipment, shipmentOrder);
@@ -245,7 +245,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_RecipientNameIsWiped_WhenShippingWithEndicia_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_RecipientNameIsWiped_WhenShippingWithEndicia()
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(endiciaShipment, shipmentOrder);
 
@@ -255,7 +255,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_RecipientNameIsWiped_WhenShippingWithExpress1_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_RecipientNameIsWiped_WhenShippingWithExpress1()
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(express1Shipment, shipmentOrder);
 
@@ -265,7 +265,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_RecipientNameIsReplacedWithGspId_WhenShippingWithUpsSurePost_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_RecipientNameIsReplacedWithGspId_WhenShippingWithUpsSurePost()
         {
             foreach (UpsServiceType service in UpsUtility.SurePostShipmentTypes)
             {
@@ -281,7 +281,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_RecipientNameIsGSPName_WhenShippingWithCarrierOtherThanExpress1Endicia_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_RecipientNameIsGSPName_WhenShippingWithCarrierOtherThanExpress1Endicia()
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
@@ -291,7 +291,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_AddressVerificationIsNotRequired_WhenShippingWithUsps_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_AddressVerificationIsNotRequired_WhenShippingWithUsps()
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
@@ -299,7 +299,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_PhoneNumberIsNotWiped_WhenShippingWithFedEx_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_PhoneNumberIsNotWiped_WhenShippingWithFedEx()
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(fedexShipment, shipmentOrder);
 
@@ -307,7 +307,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_PhoneNumberIsWiped_WhenNotShippingWithFedEx_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_PhoneNumberIsWiped_WhenNotShippingWithFedEx()
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
@@ -315,7 +315,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_EmailIsWiped_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_EmailIsWiped()
         {
             // This is not carrier specific, so any carrier will do
             testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
@@ -324,21 +324,21 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_ReturnsCorrectModifiedFieldCount_WhenNotFedExShipment_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_ReturnsCorrectModifiedFieldCount_WhenNotFedExShipment()
         {
             List<ShipmentFieldIndex> modifiedFields = testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
             Assert.Equal(13, modifiedFields.Count);
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_ReturnsCorrectModifiedFieldCount_WhenFedExShipment_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_ReturnsCorrectModifiedFieldCount_WhenFedExShipment()
         {
             List<ShipmentFieldIndex> modifiedFields = testObject.ConfigureShipmentForGlobalShippingProgram(fedexShipment, shipmentOrder);
             Assert.Equal(12, modifiedFields.Count);
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_ShipPostalCodeIsFiveDigits_WhenGspPostalCodeValueExceedsFiveDigits_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_ShipPostalCodeIsFiveDigits_WhenGspPostalCodeValueExceedsFiveDigits()
         {
             shipmentOrder.GspPostalCode = "41018-3190";
 
@@ -349,7 +349,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         }
 
         [Fact]
-        public void ConfigureShipmentForGlobalShippingProgram_ShipPostalCodeIsFiveDigits_WhenGspPostalCodeValueExceedsFiveDigits_AndIsInvalidPostalCode_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_ShipPostalCodeIsFiveDigits_WhenGspPostalCodeValueExceedsFiveDigits_AndIsInvalidPostalCode()
         {
             // This was an actual postal code that eBay sent down in responses, so test it out here
             shipmentOrder.GspPostalCode = "41018-319";

@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void ProcessShipment_ThrowsArgumentNullException_WhenShipmentEntityIsNull_Test()
+        public void ProcessShipment_ThrowsArgumentNullException_WhenShipmentEntityIsNull()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void ProcessShipment_ThermalTypeIsZPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsZPL_Test()
+        public void ProcessShipment_ThermalTypeIsZPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsZPL()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void ProcessShipment_ThermalTypeIsEPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsEPL_Test()
+        public void ProcessShipment_ThermalTypeIsEPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsEPL()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void ProcessShipment_ThermalTypeIsNull_WhenThermalTypeSettingIsFalse_Test()
+        public void ProcessShipment_ThermalTypeIsNull_WhenThermalTypeSettingIsFalse()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void ProcessShipment_DelegatesToRepositoryForAccount_Test()
+        public void ProcessShipment_DelegatesToRepositoryForAccount()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void ProcessShipment_DelegatesToRepositoryForOrderDetails_Test()
+        public void ProcessShipment_DelegatesToRepositoryForOrderDetails()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -154,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void ProcessShipment_DelegatesToServiceGateway_Test()
+        public void ProcessShipment_DelegatesToServiceGateway()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -170,7 +170,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void ProcessShipment_DelegatesToRepositoryToSaveLabel_Test()
+        public void ProcessShipment_DelegatesToRepositoryToSaveLabel()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -186,7 +186,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void ProcessShipment_DelegatesToRepositoryToSaveTracking_Test()
+        public void ProcessShipment_DelegatesToRepositoryToSaveTracking()
         {
             using (var mock = AutoMock.GetLoose())
             {

@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         }
 
         [Fact]
-        public void GetRates_AddsRatesComparedEventToShipment_Test()
+        public void GetRates_AddsRatesComparedEventToShipment()
         {
             BestRateRatingService testObject = mock.Create<BestRateRatingService>();
             ShipmentEntity shipment = new ShipmentEntity { BestRateEvents = 0 };
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         }
 
         [Fact]
-        public void GetRates_DoesNotRemoveOtherBestRateEvents_Test()
+        public void GetRates_DoesNotRemoveOtherBestRateEvents()
         {
             BestRateRatingService testObject = mock.Create<BestRateRatingService>();
             ShipmentEntity shipment = new ShipmentEntity { BestRateEvents = (int) BestRateEventTypes.RateSelected };
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         }
 
         [Fact]
-        public void GetRates_ReturnsRateGroup_WhenFactoryCreatesZeroBrokers_Test()
+        public void GetRates_ReturnsRateGroup_WhenFactoryCreatesZeroBrokers()
         {
             mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker>());
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         }
 
         [Fact]
-        public void GetRates_RateGroupHasExceptionFootnoteFactory_WhenFactoryCreatesZeroBrokers_Test()
+        public void GetRates_RateGroupHasExceptionFootnoteFactory_WhenFactoryCreatesZeroBrokers()
         {
             mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker>());
 
@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         }
 
         [Fact]
-        public void GetRates_DelegatesToBrokerFactory_Test()
+        public void GetRates_DelegatesToBrokerFactory()
         {
             Mock<IBestRateShippingBrokerFactory> brokerFactory = mock.Mock<IBestRateShippingBrokerFactory>();
             BestRateRatingService testObject = mock.Create<BestRateRatingService>();
@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         }
 
         [Fact]
-        public void GetRates_ReturnsEmptyRateGroup_WhenNoRatesAreFound_Test()
+        public void GetRates_ReturnsEmptyRateGroup_WhenNoRatesAreFound()
         {
             // Setup the broker to return an empty list of rate results
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<List<BrokerException>>())).Returns(new RateGroup(new List<RateResult>()));
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         }
 
         [Fact]
-        public void GetRates_AddsFootnote_WhenMultipleBrokerExceptionsAreEncountered_Test()
+        public void GetRates_AddsFootnote_WhenMultipleBrokerExceptionsAreEncountered()
         {
             // Use the fake broker for simulating the exception handler being called multiple times; a fake broker is used
             // because we couldn't get this functionality with Moq
@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         }
 
         [Fact]
-        public void GetRates_AddsFootnote_WithExceptionsOrderedFromHighestToLowestSeverityLevel_WhenMultipleBrokerExceptionsAreEncountered_Test()
+        public void GetRates_AddsFootnote_WithExceptionsOrderedFromHighestToLowestSeverityLevel_WhenMultipleBrokerExceptionsAreEncountered()
         {
             // Use the fake broker for simulating the exception handler being called multiple times; a fake broker is used
             // because we couldn't get this functionality with Moq

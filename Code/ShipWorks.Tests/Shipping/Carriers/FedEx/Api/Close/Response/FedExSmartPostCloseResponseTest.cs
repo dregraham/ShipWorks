@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         }
 
         [Fact]
-        public void Request_ReturnsCarrierRequest_Test()
+        public void Request_ReturnsCarrierRequest()
         {
             CarrierRequest request = testObject.Request;
 
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         }
 
         [Fact]
-        public void NativeResponse_ReturnsSmartPostCloseReply_Test()
+        public void NativeResponse_ReturnsSmartPostCloseReply()
         {
             object nativeRespose = testObject.NativeResponse;
 
@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenReplyContainsError_Test()
+        public void Process_ThrowsFedExApiException_WhenReplyContainsError()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.ERROR;
             nativeSmartPostResponse.Notifications = new Notification[] { new Notification { Message = "some message", Code = "23" } };
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenReplyContainsFailure_Test()
+        public void Process_ThrowsFedExApiException_WhenReplyContainsFailure()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.FAILURE;
             nativeSmartPostResponse.Notifications = new Notification[] { new Notification { Message = "some message", Code = "23" } };
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         }
 
         [Fact]
-        public void Process_DelegatesToManipulators_WhenNotificationsIsNull_Test()
+        public void Process_DelegatesToManipulators_WhenNotificationsIsNull()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
             nativeSmartPostResponse.Notifications = null;
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         }
 
         [Fact]
-        public void Process_DelegatesToManipulators_WhenNotificationsDoesNotContainCode9804_Test()
+        public void Process_DelegatesToManipulators_WhenNotificationsDoesNotContainCode9804()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
             nativeSmartPostResponse.Notifications = new Notification[] { new Notification { Code = "8" } };
@@ -101,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         }
 
         [Fact]
-        public void Process_DoesNotDelegatesToManipulators_WhenNotificationsContainsCode9804_Test()
+        public void Process_DoesNotDelegatesToManipulators_WhenNotificationsContainsCode9804()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
             nativeSmartPostResponse.Notifications = new Notification[] { new Notification { Code = "9804" } };
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         }
 
         [Fact]
-        public void Process_CloseEntityIsNotNull_WhenCloseIsSuccessful_Test()
+        public void Process_CloseEntityIsNotNull_WhenCloseIsSuccessful()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
             nativeSmartPostResponse.Notifications = new Notification[] { new Notification { Code = "0" } };
@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         }
 
         [Fact]
-        public void Process_CloseEntityIsNull_WhenNotificationsContainsCode9804_Test()
+        public void Process_CloseEntityIsNull_WhenNotificationsContainsCode9804()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
             nativeSmartPostResponse.Notifications = new Notification[] { new Notification { Code = "9804" } };
@@ -137,7 +137,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         }
 
         [Fact]
-        public void Process_CloseEntityIsNotNull_WhenNotificationsIsNull_Test()
+        public void Process_CloseEntityIsNotNull_WhenNotificationsIsNull()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
             nativeSmartPostResponse.Notifications = null;

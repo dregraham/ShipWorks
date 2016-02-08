@@ -17,14 +17,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void DeserializeResponse_ReturnsPopulatedYahooResponseDto_WhenGivenValidXml_Test()
+        public void DeserializeResponse_ReturnsPopulatedYahooResponseDto_WhenGivenValidXml()
         {
-            Assert.IsAssignableFrom<YahooResponse>(YahooApiWebClient.DeserializeResponse<YahooResponse>(validXml));
-            Assert.NotNull(YahooApiWebClient.DeserializeResponse<YahooResponse>(validXml));
+            YahooResponse response = YahooApiWebClient.DeserializeResponse<YahooResponse>(validXml);
+
+            Assert.IsAssignableFrom<YahooResponse>(response);
+            Assert.NotNull(response);
         }
 
         [Fact]
-        public void DeserializeResponse_ThrowsYahooException_WhenGivenInvalidXml_Test()
+        public void DeserializeResponse_ThrowsYahooException_WhenGivenInvalidXml()
         {
             Assert.Throws<YahooException>(() => YahooApiWebClient.DeserializeResponse<YahooResponse>(invalidXml));
         }

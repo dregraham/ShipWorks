@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         [InlineData("OriginStreet1", "456 something else street")]
         [InlineData("InsuranceProvider", 1)]
         [InlineData("TotalWeight", 5)]
-        public void GetRatingHash_ReturnsDifferentHash_WhenBaseShipmentRatingFieldChanges_Test(string field, object value)
+        public void GetRatingHash_ReturnsDifferentHash_WhenBaseShipmentRatingFieldChanges(string field, object value)
         {
             string before = testObject.GetRatingHash(shipment);
 
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         [InlineData("CodPaymentType", 1)]
         [InlineData("Service", 1)]
         [InlineData("DeliveryConfirmation", 1)]
-        public void GetRatingHash_ReturnsDifferentHash_WhenUpsShipmentRatingFieldChanges_Test(string field, object value)
+        public void GetRatingHash_ReturnsDifferentHash_WhenUpsShipmentRatingFieldChanges(string field, object value)
         {
             string before = testObject.GetRatingHash(shipment);
 
@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         [InlineData("DryIceEnabled", true)]
         [InlineData("VerbalConfirmationEnabled", true)]
         [InlineData("PackagingType", 1)]
-        public void GetRatingHash_ReturnsDifferentHash_WhenPackageRatingFieldChanges_Test(string field, object value)
+        public void GetRatingHash_ReturnsDifferentHash_WhenPackageRatingFieldChanges(string field, object value)
         {
             string before = testObject.GetRatingHash(shipment);
 

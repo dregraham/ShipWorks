@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ReturnNotAddedToRequest_ShipmentNotAReturn_Test()
+        public void Manipulate_ReturnNotAddedToRequest_ShipmentNotAReturn()
         {
             shipmentEntity.ReturnShipment = false;
 
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ReturnTypePending_ShipmentEmailReturnLabel_Test()
+        public void Manipulate_ReturnTypePending_ShipmentEmailReturnLabel()
         {
             testObject.Manipulate(shipRequest);
 
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ReturnTypePrintReturnLabel_ShipmentPrintReturnLabel_Test()
+        public void Manipulate_ReturnTypePrintReturnLabel_ShipmentPrintReturnLabel()
         {
             shipmentEntity.FedEx.ReturnType = (int) FedExReturnType.PrintReturnLabel;
 
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_RmaReasonSet_ShipmentHasRmaReason_Test()
+        public void Manipulate_RmaReasonSet_ShipmentHasRmaReason()
         {
             string rmaReason = "test rma reason";
 
@@ -91,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_RmaReasonNotSet_ShipmentHasNoRmaReason_Test()
+        public void Manipulate_RmaReasonNotSet_ShipmentHasNoRmaReason()
         {
             testObject.Manipulate(shipRequest);
 
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_RmaNumberSet_ShipmentHasRmaNumber_Test()
+        public void Manipulate_RmaNumberSet_ShipmentHasRmaNumber()
         {
             string rmaNumber = "test rma number";
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_NoCustomerReferences_ShipmentHasNoRmaNumber_Test()
+        public void Manipulate_NoCustomerReferences_ShipmentHasNoRmaNumber()
         {
             testObject.Manipulate(shipRequest);
 
@@ -119,7 +119,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_NoEmailDetails_ShipmentPrintReturnLabel_Test()
+        public void Manipulate_NoEmailDetails_ShipmentPrintReturnLabel()
         {
             shipmentEntity.FedEx.ReturnType = (int) FedExReturnType.PrintReturnLabel;
 
@@ -129,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_NoPendingShipmentDetail_ShipmentPrintReturnLabel_Test()
+        public void Manipulate_NoPendingShipmentDetail_ShipmentPrintReturnLabel()
         {
             shipmentEntity.FedEx.ReturnType = (int) FedExReturnType.PrintReturnLabel;
 
@@ -139,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_MerchantPhoneNumberSet_ShipmentEmailReturnLabel_Test()
+        public void Manipulate_MerchantPhoneNumberSet_ShipmentEmailReturnLabel()
         {
             testObject.Manipulate(shipRequest);
 
@@ -149,7 +149,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PendingShipmentTypeSetToEmail_ShipmentEmailReturnLabel_Test()
+        public void Manipulate_PendingShipmentTypeSetToEmail_ShipmentEmailReturnLabel()
         {
             testObject.Manipulate(shipRequest);
 
@@ -159,7 +159,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PendingShipmentExpirationSetToThirtyDaysOut_ShipmentEmailReturnLabel_Test()
+        public void Manipulate_PendingShipmentExpirationSetToThirtyDaysOut_ShipmentEmailReturnLabel()
         {
             testObject.Manipulate(shipRequest);
 
@@ -168,18 +168,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 processShipmentRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail.ExpirationDate);
         }
 
-        //[Fact]
-        //public void Manipulate_PendingShipmentEmailSet_ShipmentEmailReturnLabel_Test()
-        //{
-        //    testObject.Manipulate(shipRequest);
-
-        //    Assert.Equal(
-        //        shipmentEntity.ShipEmail,
-        //        processShipmentRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail.EmailLabelDetail.NotificationEMailAddress);
-        //}
-
         [Fact]
-        public void Manipulate_SautrdayPickupSet_ShipmentEmailReturnLabelWithSaturdayPickup_Test()
+        public void Manipulate_SautrdayPickupSet_ShipmentEmailReturnLabelWithSaturdayPickup()
         {
             shipmentEntity.FedEx.ReturnSaturdayPickup = true;
 
@@ -191,7 +181,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SautrdayPickupNotSet_ShipmentEmailReturnLabelWithNoSaturdayPickup_Test()
+        public void Manipulate_SautrdayPickupNotSet_ShipmentEmailReturnLabelWithNoSaturdayPickup()
         {
             shipmentEntity.FedEx.ReturnSaturdayPickup = false;
 

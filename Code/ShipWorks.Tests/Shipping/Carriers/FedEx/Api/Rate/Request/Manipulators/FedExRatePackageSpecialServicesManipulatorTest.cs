@@ -74,13 +74,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new RateReply());
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenNoSignature_AndPackageDeclaredValueGreaterThan500_Test()
+        public void Manipulate_ThrowsFedExException_WhenNoSignature_AndPackageDeclaredValueGreaterThan500()
         {
             shipmentEntity.FedEx.Signature = (int)FedExSignatureType.NoSignature;
             shipmentEntity.FedEx.Packages[1].DeclaredValue = 500.01M;
@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SignatureOptionIsNull_WhenUsingServiceDefault_Test()
+        public void Manipulate_SignatureOptionIsNull_WhenUsingServiceDefault()
         {
             shipmentEntity.FedEx.Signature = (int)FedExSignatureType.ServiceDefault;
 
@@ -117,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SignatureOptionIsNotNull_WhenNotUsingServiceDefaultSignature_Test()
+        public void Manipulate_SignatureOptionIsNotNull_WhenNotUsingServiceDefaultSignature()
         {
             shipmentEntity.FedEx.Signature = (int)FedExSignatureType.NoSignature;
 
@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_OptionTypeIsIndirect_WhenFedExPackageIsUsingIndirectSignature_Test()
+        public void Manipulate_OptionTypeIsIndirect_WhenFedExPackageIsUsingIndirectSignature()
         {
             shipmentEntity.FedEx.Signature = (int)FedExSignatureType.Indirect;
 
@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_OptionTypeIsDirect_WhenFedExPackageIsUsingDirectSignature_Test()
+        public void Manipulate_OptionTypeIsDirect_WhenFedExPackageIsUsingDirectSignature()
         {
             shipmentEntity.FedEx.Signature = (int)FedExSignatureType.Direct;
 
@@ -149,7 +149,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_OptionTypeIsAdult_WhenFedExPackageIsUsingAdultSignature_Test()
+        public void Manipulate_OptionTypeIsAdult_WhenFedExPackageIsUsingAdultSignature()
         {
             shipmentEntity.FedEx.Signature = (int)FedExSignatureType.Adult;
 
@@ -160,7 +160,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_OptionTypeIsNone_WhenFedExPackageIsUsingNoneRequiredSignature_Test()
+        public void Manipulate_OptionTypeIsNone_WhenFedExPackageIsUsingNoneRequiredSignature()
         {
             shipmentEntity.FedEx.Signature = (int)FedExSignatureType.NoSignature;
 
@@ -171,7 +171,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SignatureReleaseNumberMatchesFedExAccount_WhenNotUsingServiceDefault_Test()
+        public void Manipulate_SignatureReleaseNumberMatchesFedExAccount_WhenNotUsingServiceDefault()
         {
             shipmentEntity.FedEx.Signature = (int)FedExSignatureType.NoSignature;
 
@@ -182,7 +182,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SpecialServicesContainsSignatureOption_WhenNotUsingServiceDefault_Test()
+        public void Manipulate_SpecialServicesContainsSignatureOption_WhenNotUsingServiceDefault()
         {
             shipmentEntity.FedEx.Signature = (int)FedExSignatureType.NoSignature;
 
@@ -193,7 +193,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SpecialServicesContainsNonStandardContainer_WhenShipmentIsHomeDelivery_AndNonStandardContainer_Test()
+        public void Manipulate_SpecialServicesContainsNonStandardContainer_WhenShipmentIsHomeDelivery_AndNonStandardContainer()
         {
             shipmentEntity.FedEx.NonStandardContainer = true;
             shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
@@ -205,7 +205,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SpecialServicesContainsNonStandardContainer_WhenShipmentIsGround_AndNonStandardContainer_Test()
+        public void Manipulate_SpecialServicesContainsNonStandardContainer_WhenShipmentIsGround_AndNonStandardContainer()
         {
             shipmentEntity.FedEx.NonStandardContainer = true;
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
@@ -217,7 +217,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SpecialServicesDoesNotContainNonStandardContainer_WhenShipmentIsNotGroundOrHomeDelivery_Test()
+        public void Manipulate_SpecialServicesDoesNotContainNonStandardContainer_WhenShipmentIsNotGroundOrHomeDelivery()
         {
             shipmentEntity.FedEx.NonStandardContainer = true;
             shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
@@ -229,7 +229,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SpecialServicesDoesNotContainNonStandardContainer_WhenShipmentIsGround_WithoutNonStandardContainer_Test()
+        public void Manipulate_SpecialServicesDoesNotContainNonStandardContainer_WhenShipmentIsGround_WithoutNonStandardContainer()
         {
             shipmentEntity.FedEx.NonStandardContainer = false;
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
@@ -241,7 +241,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SpecialServicesDoesNotContainNonStandardContainer_WhenShipmentIsHomeDelivery_WithoutNonStandardContainer_Test()
+        public void Manipulate_SpecialServicesDoesNotContainNonStandardContainer_WhenShipmentIsHomeDelivery_WithoutNonStandardContainer()
         {
             shipmentEntity.FedEx.NonStandardContainer = false;
             shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
@@ -253,7 +253,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SpecialServicesContainsAlcohol_WhenOnePackageContainsAlcohol_Test()
+        public void Manipulate_SpecialServicesContainsAlcohol_WhenOnePackageContainsAlcohol()
         {
             shipmentEntity.FedEx.Packages[0].ContainsAlcohol = true;
             shipmentEntity.FedEx.Packages[1].ContainsAlcohol = false;
@@ -265,7 +265,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SpecialServicesContainsAlcohol_WhenAllPackagesContainsAlcohol_Test()
+        public void Manipulate_SpecialServicesContainsAlcohol_WhenAllPackagesContainsAlcohol()
         {
             foreach (FedExPackageEntity package in shipmentEntity.FedEx.Packages)
             {
@@ -279,7 +279,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SpecialServicesDoesNotContainAlcohol_WhenZeroPackagesContainAlcohol_Test()
+        public void Manipulate_SpecialServicesDoesNotContainAlcohol_WhenZeroPackagesContainAlcohol()
         {
             foreach (FedExPackageEntity package in shipmentEntity.FedEx.Packages)
             {

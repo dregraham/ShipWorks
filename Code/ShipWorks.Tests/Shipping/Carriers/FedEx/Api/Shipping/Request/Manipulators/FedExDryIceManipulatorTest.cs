@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_DryIceInPackageSpecialServiceType_WhenNotUsingGroundService_ShipmentEntityHasThreeKgOfDryIce_Test()
+        public void Manipulate_DryIceInPackageSpecialServiceType_WhenNotUsingGroundService_ShipmentEntityHasThreeKgOfDryIce()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
 
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HasOnePackageSpecialServiceType_WhenNotUsingGroundService_ShipmentEntityHasThreeKgOfDryIce_Test()
+        public void Manipulate_HasOnePackageSpecialServiceType_WhenNotUsingGroundService_ShipmentEntityHasThreeKgOfDryIce()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
 
@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_WeightOfPackageIsOne_WhenNotUsingGroundService_ShipmentEntityHasThreeKgOfDryIce_Test()
+        public void Manipulate_WeightOfPackageIsOne_WhenNotUsingGroundService_ShipmentEntityHasThreeKgOfDryIce()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
 
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_WeightOfPackageIsInKg_FirstPackageHasDryIceWeight_WhenNotUsingGroundService_Test()
+        public void Manipulate_WeightOfPackageIsInKg_FirstPackageHasDryIceWeight_WhenNotUsingGroundService()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
 
@@ -86,49 +86,49 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsingFedExBoxPackagingType_Test()
+        public void Manipulate_ThrowsFedExException_WhenUsingFedExBoxPackagingType()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box;
             Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsingEnvelopePackagingType_Test()
+        public void Manipulate_ThrowsFedExException_WhenUsingEnvelopePackagingType()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Envelope;
             Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsingPakPackagingType_Test()
+        public void Manipulate_ThrowsFedExException_WhenUsingPakPackagingType()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Pak;
             Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsingTubePackagingType_Test()
+        public void Manipulate_ThrowsFedExException_WhenUsingTubePackagingType()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Tube;
             Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsing10KgBoxPackagingType_Test()
+        public void Manipulate_ThrowsFedExException_WhenUsing10KgBoxPackagingType()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box10Kg;
             Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsing25KgBoxPackagingType_Test()
+        public void Manipulate_ThrowsFedExException_WhenUsing25KgBoxPackagingType()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box25Kg;
             Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
         }
 
         [Fact]
-        public void Manipulate_DryIceNotAdded_WhenDryIceAmountIs0AndCustomPackagingType_Test()
+        public void Manipulate_DryIceNotAdded_WhenDryIceAmountIs0AndCustomPackagingType()
         {
             shipmentEntity.FedEx.Packages[0].DryIceWeight = 0;
             shipmentEntity.FedEx.Packages[1].DryIceWeight = 0;
@@ -139,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_DryIceNotAdded_WhenDryIceAmountIs0AndUsing25KgBoxPackageType_Test()
+        public void Manipulate_DryIceNotAdded_WhenDryIceAmountIs0AndUsing25KgBoxPackageType()
         {
             shipmentEntity.FedEx.Packages[0].DryIceWeight = 0;
             shipmentEntity.FedEx.Packages[1].DryIceWeight = 0;

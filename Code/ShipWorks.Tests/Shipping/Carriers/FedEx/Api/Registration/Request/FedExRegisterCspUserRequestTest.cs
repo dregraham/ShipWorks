@@ -52,19 +52,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
 
 
         [Fact]
-        public void CarrierAccountEntity_IsNotNull_Test()
+        public void CarrierAccountEntity_IsNotNull()
         {
             Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         [Fact]
-        public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
+        public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor()
         {
             Assert.Equal(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         [Fact]
-        public void Submit_DelegatesToManipulators_Test()
+        public void Submit_DelegatesToManipulators()
         {
             // No additional setup needed since it was performed in Initialize()
             ICarrierResponse response = testObject.Submit();
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
         }
 
         [Fact]
-        public void Submit_DelegatesToFedExService_Test()
+        public void Submit_DelegatesToFedExService()
         {
             // No additional setup needed since it was performed in Initialize()
             ICarrierResponse response = testObject.Submit();
@@ -85,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
         }
 
         [Fact]
-        public void Submit_DelegatesToResponseFactory_WhenCreatingGroundCloseResponse_Test()
+        public void Submit_DelegatesToResponseFactory_WhenCreatingGroundCloseResponse()
         {
             // No additional setup needed since it was performed in Initialize()
             ICarrierResponse response = testObject.Submit();

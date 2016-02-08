@@ -189,14 +189,14 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_ThrowsNeweggException_WhenErrorResponseIsReceived_Test()
+        public void Ship_ThrowsNeweggException_WhenErrorResponseIsReceived()
         {
             testObject = new ShippingRequest(credentials, errorRequest);
             Assert.Throws<NeweggException>(() => testObject.Ship(shipment));
         }
 
         [Fact]
-        public void Ship_ReturnsCorrectPackageSummary_WhenAllSuccessful_Test()
+        public void Ship_ReturnsCorrectPackageSummary_WhenAllSuccessful()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
@@ -208,7 +208,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_ReturnsCorrectPackageSummary_WhenContainingSuccessesAndFailures_Test()
+        public void Ship_ReturnsCorrectPackageSummary_WhenContainingSuccessesAndFailures()
         {
             testObject = new ShippingRequest(credentials, successAndFailureRequest);
 
@@ -220,7 +220,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_ReturnsCorrectPackageSummary_WhenAllFailures_Test()
+        public void Ship_ReturnsCorrectPackageSummary_WhenAllFailures()
         {
             testObject = new ShippingRequest(credentials, allFailuresRequest);
 
@@ -232,7 +232,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_ContainsPackageList_WhenSuccessResponse_Test()
+        public void Ship_ContainsPackageList_WhenSuccessResponse()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
@@ -242,7 +242,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_ContainsItemList_WhenSuccessResponse_Test()
+        public void Ship_ContainsItemList_WhenSuccessResponse()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
@@ -252,7 +252,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_ContainsSellerId_WhenSuccessResponse_Test()
+        public void Ship_ContainsSellerId_WhenSuccessResponse()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
@@ -262,7 +262,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_ContainsOrderNumber_WhenSuccessResponse_Test()
+        public void Ship_ContainsOrderNumber_WhenSuccessResponse()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
@@ -272,7 +272,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_FormatsUrlWithOrderNumberAndSellerId_Test()
+        public void Ship_FormatsUrlWithOrderNumberAndSellerId()
         {
             string expectedUrl = string.Format("https://api.newegg.com/marketplace/ordermgmt/orderstatus/orders/{0}?sellerid={1}", shipment.Header.OrderNumber, sellerId);
 
@@ -286,7 +286,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_BuildsRequestBody_WithActionValueOfTwo_Test()
+        public void Ship_BuildsRequestBody_WithActionValueOfTwo()
         {
             const int expectedActionValue = 2;
             testObject = new ShippingRequest(credentials, allSuccessRequest);
@@ -303,7 +303,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_BuildsRequestBody_WithSerializedShipmentXml_Test()
+        public void Ship_BuildsRequestBody_WithSerializedShipmentXml()
         {
             string expectedValue = SerializationUtility.SerializeToXml(shipment);
             expectedValue = expectedValue.Replace("<ItemDes>", "<Item>");
@@ -337,7 +337,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_UsesPutRequestMethod_Test()
+        public void Ship_UsesPutRequestMethod()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
             testObject.Ship(shipment);

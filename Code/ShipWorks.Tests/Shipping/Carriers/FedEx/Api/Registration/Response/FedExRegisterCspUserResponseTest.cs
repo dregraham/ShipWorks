@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_SetsFedExUserName_ToCredentialKey_Test()
+        public void Process_SetsFedExUserName_ToCredentialKey()
         {
             testObject.Process();
 
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_SetsFedExPassword_Test()
+        public void Process_SetsFedExPassword()
         {
             testObject.Process();
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_EncryptsPassword_Test()
+        public void Process_EncryptsPassword()
         {
             testObject.Process();
 
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_DelegatesToRepository_ToGetShippingSettings_Test()
+        public void Process_DelegatesToRepository_ToGetShippingSettings()
         {
             testObject.Process();
 
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_DelegatesToRepository_ToSaveShippingSettings_Test()
+        public void Process_DelegatesToRepository_ToSaveShippingSettings()
         {
             testObject.Process();
 
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenReceivingErrorSeverity_Test()
+        public void Process_ThrowsFedExApiException_WhenReceivingErrorSeverity()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
             nativeResponse.Notifications = new Notification[] { new Notification { Message = "message" } };
@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenReceivingFailureSeverity_Test()
+        public void Process_ThrowsFedExApiException_WhenReceivingFailureSeverity()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
             nativeResponse.Notifications = new Notification[] { new Notification { Message = "message" } };

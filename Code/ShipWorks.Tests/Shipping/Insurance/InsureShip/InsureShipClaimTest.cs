@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_ThrowsInsureShipException_WhenClaimHasAlreadyBeenMade_Test()
+        public void Submit_ThrowsInsureShipException_WhenClaimHasAlreadyBeenMade()
         {
             shipment.InsurancePolicy.ClaimID = 1;
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_LogsMessage_WhenClaimHasAlreadyBeenMade_Test()
+        public void Submit_LogsMessage_WhenClaimHasAlreadyBeenMade()
         {
             shipment.InsurancePolicy.ClaimID = 1;
 
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_ThrowsInsureShipException_WhenShipmentIsProcessed_Test()
+        public void Submit_ThrowsInsureShipException_WhenShipmentIsProcessed()
         {
             shipment.Processed = false;
 
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_LogsMessage_WhenShipmentIsProcessed_Test()
+        public void Submit_LogsMessage_WhenShipmentIsProcessed()
         {
             shipment.Processed = false;
 
@@ -120,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_ThrowsInsureShipException_WhenShipDateDoesNotExceedWaitPeriod_Test()
+        public void Submit_ThrowsInsureShipException_WhenShipDateDoesNotExceedWaitPeriod()
         {
             // Set the ship date to be a day short of the wait period
             shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
@@ -129,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_DoesNotThrowInsureShipException_WhenShipDateDoesNotExceedWaitPeriod_Test()
+        public void Submit_DoesNotThrowInsureShipException_WhenShipDateDoesNotExceedWaitPeriod()
         {
             // Set the ship date to be a day short of the wait period
             shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_LogsMessage_WhenShipDateDoesNotExceedWaitPeriod_Test()
+        public void Submit_LogsMessage_WhenShipDateDoesNotExceedWaitPeriod()
         {
             // Set the ship date to be a day short of the wait period
             shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
@@ -154,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_LogsSuccessMessage_WhenClaimTypeIsDamageAndShipDateDoesNotExceedWaitPeriod_Test()
+        public void Submit_LogsSuccessMessage_WhenClaimTypeIsDamageAndShipDateDoesNotExceedWaitPeriod()
         {
             // Set the ship date to be a day short of the wait period
             shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
@@ -171,7 +171,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_LogsMessage_WhenShipmentIsEligible_Test()
+        public void Submit_LogsMessage_WhenShipmentIsEligible()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
@@ -179,7 +179,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_SetsClaimType_WhenShipmentIsEligible_Test()
+        public void Submit_SetsClaimType_WhenShipmentIsEligible()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
@@ -187,7 +187,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_SetsItemName_WhenShipmentIsEligible_Test()
+        public void Submit_SetsItemName_WhenShipmentIsEligible()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
@@ -195,7 +195,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_SetsDamageValue_WhenShipmentIsEligible_Test()
+        public void Submit_SetsDamageValue_WhenShipmentIsEligible()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
@@ -203,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_SetsSubmissionDate_WhenShipmentIsEligible_Test()
+        public void Submit_SetsSubmissionDate_WhenShipmentIsEligible()
         {
             DateTime testBegin = DateTime.UtcNow;
 
@@ -221,7 +221,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_SetsEmail_WhenShipmentIsEligible_Test()
+        public void Submit_SetsEmail_WhenShipmentIsEligible()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
@@ -229,7 +229,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_LogsMessage_WhenSubmittingRequest_Test()
+        public void Submit_LogsMessage_WhenSubmittingRequest()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
@@ -237,7 +237,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_DelegatesToRequestFactory_WhenShipmentIsEligible_Test()
+        public void Submit_DelegatesToRequestFactory_WhenShipmentIsEligible()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
@@ -245,7 +245,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_DelegatesToRequest_WhenShipmentIsEligible_Test()
+        public void Submit_DelegatesToRequest_WhenShipmentIsEligible()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
@@ -253,7 +253,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_LogsMessage_WhenProcessingResponse_Test()
+        public void Submit_LogsMessage_WhenProcessingResponse()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
@@ -261,7 +261,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_DelegatesToResponse_WhenShipmentIsEligible_Test()
+        public void Submit_DelegatesToResponse_WhenShipmentIsEligible()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
@@ -269,7 +269,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_LogsMessage_WhenProcessingIsSuccessful_Test()
+        public void Submit_LogsMessage_WhenProcessingIsSuccessful()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
@@ -278,7 +278,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_CatchesInsureShipResponseException_AndThrowsInsureShipException_Test()
+        public void Submit_CatchesInsureShipResponseException_AndThrowsInsureShipException()
         {
             InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter);
             response.Setup(r => r.Process()).Throws(responseException);
@@ -287,7 +287,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Submit_LogsErrorMessage_WhenInsureShipResponseExceptionIsCaught_Test()
+        public void Submit_LogsErrorMessage_WhenInsureShipResponseExceptionIsCaught()
         {
             InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter);
             response.Setup(r => r.Process()).Throws(responseException);
@@ -303,7 +303,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void CheckStatus_ThrowsException_WhenClaimIDIsNull_Test()
+        public void CheckStatus_ThrowsException_WhenClaimIDIsNull()
         {
             shipment.InsurancePolicy.ClaimID = null;
 
@@ -311,7 +311,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void CheckStatus_LogsMessage_WhenClaimIDIsNull_Test()
+        public void CheckStatus_LogsMessage_WhenClaimIDIsNull()
         {
             shipment.InsurancePolicy.ClaimID = null;
 
@@ -326,7 +326,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void CheckStatus_LogsMessage_WhenMakingRequest_Test()
+        public void CheckStatus_LogsMessage_WhenMakingRequest()
         {
             shipment.InsurancePolicy.ClaimID = 939;
 
@@ -336,7 +336,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void CheckStatus_DelegatesToRequestFactory_Test()
+        public void CheckStatus_DelegatesToRequestFactory()
         {
             shipment.InsurancePolicy.ClaimID = 939;
 
@@ -346,7 +346,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void CheckStatus_DelegatesToClaimStatusRequest_Test()
+        public void CheckStatus_DelegatesToClaimStatusRequest()
         {
             shipment.InsurancePolicy.ClaimID = 939;
 
@@ -356,7 +356,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void CheckStatus_LogsMessage_WhenProcessingResponse_Test()
+        public void CheckStatus_LogsMessage_WhenProcessingResponse()
         {
             shipment.InsurancePolicy.ClaimID = 939;
 
@@ -366,7 +366,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void CheckStatus_DelegatesToResponse_Test()
+        public void CheckStatus_DelegatesToResponse()
         {
             shipment.InsurancePolicy.ClaimID = 939;
 
@@ -376,7 +376,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void CheckStatus_LogsMessage_WhenProcessingIsSuccessful_Test()
+        public void CheckStatus_LogsMessage_WhenProcessingIsSuccessful()
         {
             shipment.InsurancePolicy.ClaimID = 939;
 
@@ -387,7 +387,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void CheckStatus_LogsErrorMessage_WhenInsureShipResponseExceptionIsCaught_Test()
+        public void CheckStatus_LogsErrorMessage_WhenInsureShipResponseExceptionIsCaught()
         {
             shipment.InsurancePolicy.ClaimID = 939;
 
@@ -405,7 +405,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void CheckStatus_CatchesInsureShipResponseException_AndThrowsInsureShipException_Test()
+        public void CheckStatus_CatchesInsureShipResponseException_AndThrowsInsureShipException()
         {
             shipment.InsurancePolicy.ClaimID = 939;
 
@@ -416,7 +416,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void CheckStatus_ReturnsClaimStatusOnPolicy_Test()
+        public void CheckStatus_ReturnsClaimStatusOnPolicy()
         {
             shipment.InsurancePolicy.ClaimID = 939;
             shipment.InsurancePolicy.ClaimStatus = "Created";

@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void Filter_RemovesFootnoteFactories_ForShipmentTypesNotInRates_Test()
+        public void Filter_RemovesFootnoteFactories_ForShipmentTypesNotInRates()
         {
             List<RateResult> rates = new List<RateResult>
             {
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
 
         [Fact]
-        public void Filter_RetainsFootnoteFactories_ForShipmentTypesInRates_Test()
+        public void Filter_RetainsFootnoteFactories_ForShipmentTypesInRates()
         {
             List<RateResult> rates = new List<RateResult>
             {

@@ -98,12 +98,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             if (useCounterRates)
             {
                 settingsRepository = new FedExCounterRateAccountRepository(TangoCredentialStore.Instance);
-                certificateInspector = new TrustingCertificateInspector();
+                certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.FedExCertificateVerificationData);
             }
             else
             {
                 settingsRepository = new FedExSettingsRepository();
-                certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.FedExCertificateVerificationData);
+                certificateInspector = new TrustingCertificateInspector();
             }
 
             return CreateShippingClerk(shipment, settingsRepository, certificateInspector);

@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
         }
 
         [Fact]
-        public void Manipulate_AccountUserIDSet_Test()
+        public void Manipulate_AccountUserIDSet()
         {
             testObject.Manipulate(upsInvoiceRegistrationResponse);
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
         }
 
         [Fact]
-        public void Manipulate_AccountPasswordSet_Test()
+        public void Manipulate_AccountPasswordSet()
         {
             testObject.Manipulate(upsInvoiceRegistrationResponse);
 

@@ -15,35 +15,35 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void IsSellerIdValid_ReturnsFalse_WhenEmptyString_Test()
+        public void IsSellerIdValid_ReturnsFalse_WhenEmptyString()
         {
             string sellerId = string.Empty;
             Assert.False(NeweggAccountSettingsValidator.IsSellerIdValid(sellerId));
         }
                 
         [Fact]
-        public void IsSellerIdValid_ReturnsFalse_WhenOnlyWhitespace_Test()
+        public void IsSellerIdValid_ReturnsFalse_WhenOnlyWhitespace()
         {
             string sellerId = "        ";
             Assert.False(NeweggAccountSettingsValidator.IsSellerIdValid(sellerId));
         }
 
         [Fact]
-        public void IsSellerIdValid_ReturnsTrue_WhenNoWhiteSpaceCharacters_Test()
+        public void IsSellerIdValid_ReturnsTrue_WhenNoWhiteSpaceCharacters()
         {
             string sellerId = "MySellerId";
             Assert.True(NeweggAccountSettingsValidator.IsSellerIdValid(sellerId));
         }
 
         [Fact]
-        public void IsSellerIdValid_ReturnsTrue_WhenAlphaNumericAndWhiteSpaceCharacters_Test()
+        public void IsSellerIdValid_ReturnsTrue_WhenAlphaNumericAndWhiteSpaceCharacters()
         {
             string sellerId = "My Seller ID";
             Assert.True(NeweggAccountSettingsValidator.IsSellerIdValid(sellerId));
         }
 
         [Fact]
-        public void IsSellerIdValid_ReturnsTrue_WhenUsingSandboxedSellerId_Test()
+        public void IsSellerIdValid_ReturnsTrue_WhenUsingSandboxedSellerId()
         {
             // This test uses the actual seller ID that Newegg provided to us
             // for our sandboxed seller account. This test is similar to the 
@@ -55,35 +55,35 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void IsSecretKeyValid_ReturnsFalse_WhenEmptyString_Test()
+        public void IsSecretKeyValid_ReturnsFalse_WhenEmptyString()
         {
             string secretKey = string.Empty;
             Assert.False(NeweggAccountSettingsValidator.IsSecretKeyValid(secretKey));
         }
 
         [Fact]
-        public void IsSecretKeyValid_ReturnsFalse_WhenOnlyWhitespace_Test()
+        public void IsSecretKeyValid_ReturnsFalse_WhenOnlyWhitespace()
         {
             string secretKey = "        ";
             Assert.False(NeweggAccountSettingsValidator.IsSecretKeyValid(secretKey));
         }
 
         [Fact]
-        public void IsSecretKeyValid_ReturnsTrue_WhenNoWhiteSpaceCharacters_Test()
+        public void IsSecretKeyValid_ReturnsTrue_WhenNoWhiteSpaceCharacters()
         {
             string secretKey = "MySecretKeyValue";
             Assert.True(NeweggAccountSettingsValidator.IsSecretKeyValid(secretKey));
         }
 
         [Fact]
-        public void IsSecretKeyValid_ReturnsTrue_WhenAlphaNumericAndWhiteSpaceCharacters_Test()
+        public void IsSecretKeyValid_ReturnsTrue_WhenAlphaNumericAndWhiteSpaceCharacters()
         {
             string secretKey = "My Secret Key Value";
             Assert.True(NeweggAccountSettingsValidator.IsSecretKeyValid(secretKey));
         }
 
         [Fact]
-        public void IsSecretKeyValid_ReturnsTrue_WhenInGuidFormat_Test()
+        public void IsSecretKeyValid_ReturnsTrue_WhenInGuidFormat()
         {
             // Since the secret key value appears to be a GUID based on Newegg documentation, 
             // this test is to confirm that a GUID string is a valid secret key
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void IsSecretKeyValid_ReturnsTrue_WhenUsingSandboxedSecretKey_Test()
+        public void IsSecretKeyValid_ReturnsTrue_WhenUsingSandboxedSecretKey()
         {
             // This test uses the actual secret key that Newegg provided to us
             // for our sandboxed seller account. This test is similar to the 
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
 
         [Fact]
-        public void Validate_ReturnsValidationError_WhenSellerIdIsInvalid_Test()
+        public void Validate_ReturnsValidationError_WhenSellerIdIsInvalid()
         {
             NeweggStoreEntity storeEntity = new NeweggStoreEntity();
             storeEntity.SellerID = string.Empty;
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Validate_ReturnsValidationError_WhenSecretKeyIsInvalid_Test()
+        public void Validate_ReturnsValidationError_WhenSecretKeyIsInvalid()
         {
             NeweggStoreEntity storeEntity = new NeweggStoreEntity();
             storeEntity.SellerID = "A09V";
@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Validate_ValidationErrorListIsEmpty_WhenStoreEntityIsValid_Test()
+        public void Validate_ValidationErrorListIsEmpty_WhenStoreEntityIsValid()
         {
             NeweggStoreEntity storeEntity = new NeweggStoreEntity();
             storeEntity.SellerID = "A09V";
@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Validate_ReturnsMultipleValidationErrors_WhenSecretKeyAndSellerIdAreInvalid_Test()
+        public void Validate_ReturnsMultipleValidationErrors_WhenSecretKeyAndSellerIdAreInvalid()
         {
             NeweggStoreEntity storeEntity = new NeweggStoreEntity();
             storeEntity.SellerID = string.Empty;
@@ -150,7 +150,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
 
         [Fact]
-        public void Validate_ReturnsValidationError_WhenStoreIsNull_Test()
+        public void Validate_ReturnsValidationError_WhenStoreIsNull()
         {
             List<ValidationError> errors = new List<ValidationError>(NeweggAccountSettingsValidator.Validate(null));
 

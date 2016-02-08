@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Stores.eBay.Shipping.GlobalShippingProgram.Rules
         }
 
         [Fact]
-        public void Evaluate_ReturnsTrue_WhenIsEligibleForGlobalShippingIsTrue_Test()
+        public void Evaluate_ReturnsTrue_WhenIsEligibleForGlobalShippingIsTrue()
         {
             EbayOrderEntity ebayOrder = new EbayOrderEntity();
             ebayOrder.GspEligible = true;
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Stores.eBay.Shipping.GlobalShippingProgram.Rules
         }
 
         [Fact]
-        public void Evaluate_ReturnsFalse_WhenIsEligibleForGlobalShippingIsFalse_Test()
+        public void Evaluate_ReturnsFalse_WhenIsEligibleForGlobalShippingIsFalse()
         {
             EbayOrderEntity ebayOrder = new EbayOrderEntity();
             ebayOrder.GspEligible = false;
@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Stores.eBay.Shipping.GlobalShippingProgram.Rules
         }
 
         [Fact]
-        public void Evaluate_ReturnsFalse_WhenOrderIsNull_Test()
+        public void Evaluate_ReturnsFalse_WhenOrderIsNull()
         {
             EbayOrderEntity ebayOrder = null;
             Assert.False(testObject.Evaluate(ebayOrder));

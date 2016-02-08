@@ -43,37 +43,37 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         }
 
         [Fact]
-        public void ShippingCarrierName_ReturnsUsps_Test()
+        public void ShippingCarrierName_ReturnsUsps()
         {
             Assert.Equal("USPS", testObject.ShippingCarrierName);
         }
 
         [Fact]
-        public void ShipmentTypeCode_Test()
+        public void ShipmentTypeCode_IsUsps()
         {
             Assert.Equal(ShipmentTypeCode.Usps, testObject.ShipmentTypeCode);
         }
 
         [Fact]
-        public void GetDescription_Test()
+        public void GetDescription()
         {
             Assert.Equal("USPS - testUsername", testObject.GetDescription());
         }
 
         [Fact]
-        public void GetGateway_ReturnsUspsScanFormGateway_Test()
+        public void GetGateway_ReturnsUspsScanFormGateway()
         {
             Assert.IsAssignableFrom<UspsScanFormGateway>(testObject.GetGateway());
         }
 
         [Fact]
-        public void GetPrinter_ReturnsDefaultScanFormPrinter_Test()
+        public void GetPrinter_ReturnsDefaultScanFormPrinter()
         {
             Assert.IsAssignableFrom<DefaultScanFormPrinter>(testObject.GetPrinter());
         }
 
         [Fact]
-        public void GetExistingScanFormBatches_DelegatesToRepository_Test()
+        public void GetExistingScanFormBatches_DelegatesToRepository()
         {
             testObject.GetExistingScanFormBatches();
 
@@ -81,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         }
 
         [Fact]
-        public void GetEligibleShipmentIDs_DelegatesToRepository_Test()
+        public void GetEligibleShipmentIDs_DelegatesToRepository()
         {
             testObject.GetEligibleShipmentIDs();
 
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         }
 
         [Fact]
-        public void GetEligibleShipmentIDs_Bucket_Test()
+        public void GetEligibleShipmentIDs_Bucket()
         {
             testObject.GetEligibleShipmentIDs();
 
@@ -108,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         }
 
         [Fact]
-        public void Save_DelegatesToRepository_Test()
+        public void Save_DelegatesToRepository()
         {
             ScanFormBatch batch = new ScanFormBatch(null, null, null);
             testObject.Save(batch);
@@ -117,13 +117,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         }
 
         [Fact]
-        public void Save_ThrowsShippingException_WhenScanFormBatchIsNull_Test()
+        public void Save_ThrowsShippingException_WhenScanFormBatchIsNull()
         {
             Assert.Throws<ShippingException>(() => testObject.Save(null));
         }
 
         [Fact]
-        public void Save_LogsMessage_WhenScanFormBatchIsNull_Test()
+        public void Save_LogsMessage_WhenScanFormBatchIsNull()
         {
             try
             {
