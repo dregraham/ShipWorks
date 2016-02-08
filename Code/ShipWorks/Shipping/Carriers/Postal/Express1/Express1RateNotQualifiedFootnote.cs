@@ -1,5 +1,4 @@
-﻿using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
+﻿using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -15,6 +14,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         {
             InitializeComponent();
         }
-
     }
 }

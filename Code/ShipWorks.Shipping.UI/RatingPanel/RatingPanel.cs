@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
@@ -9,7 +8,6 @@ using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
@@ -24,11 +22,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
     public partial class RatingPanel : UserControl, IDockingPanelContent
     {
         private readonly RatingPanelViewModel viewModel;
-        private RateGroup rateGroup;
-        private bool showAllRates;
-        private bool showSpinner;
-        private bool actionLinkVisible;
-        private string errorMessage;
+        private RatingPanelControl control;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RatingPanel"/> class.
@@ -43,107 +37,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             }
 
             viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<RatingPanelViewModel>();
-
-            DataBindings.Add(nameof(RateGroup), viewModel, nameof(viewModel.RateGroup));
-            DataBindings.Add(nameof(ErrorMessage), viewModel, nameof(viewModel.ErrorMessage));
-            DataBindings.Add(nameof(ActionLinkVisible), viewModel, nameof(viewModel.ActionLinkVisible));
-            DataBindings.Add(nameof(ShowAllRates), viewModel, nameof(viewModel.ShowAllRates));
-            DataBindings.Add(nameof(ShowSpinner), viewModel, nameof(viewModel.ShowSpinner));
-        }
-
-        /// <summary>
-        /// Gets/Sets the rate group
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public RateGroup RateGroup
-        {
-            get { return rateGroup; }
-            set
-            {
-                if (!Equals(rateGroup, value))
-                {
-                    rateGroup = value;
-
-                    rateControl.InvokeIfRequired(() => rateControl.LoadRates(rateGroup), true);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets/Sets any error message
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string ErrorMessage
-        {
-            get { return errorMessage; }
-            set
-            {
-                if (!value.Equals(errorMessage, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    errorMessage = value;
-
-                    rateControl.InvokeIfRequired(() => rateControl.ClearRates(errorMessage), true);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets/Sets whether to show all rates
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool ShowAllRates
-        {
-            get { return showAllRates; }
-            set
-            {
-                if (!Equals(showAllRates, value))
-                {
-                    showAllRates = value;
-                    rateControl.InvokeIfRequired(() => rateControl.ShowAllRates = showAllRates, true);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets/Sets whether to show the action link
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool ActionLinkVisible
-        {
-            get { return actionLinkVisible; }
-            set
-            {
-                if (!Equals(actionLinkVisible, value))
-                {
-                    actionLinkVisible = value;
-                    rateControl.InvokeIfRequired(() => rateControl.ActionLinkVisible = actionLinkVisible, true);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets/Sets whether to show the spinner
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool ShowSpinner
-        {
-            get { return showSpinner; }
-            set
-            {
-                if (!Equals(showSpinner, value))
-                {
-                    showSpinner = value;
-                    rateControl.InvokeIfRequired(() =>
-                    {
-                        if (showSpinner)
-                        {
-                            rateControl.ClearRates(string.Empty);
-                        }
-
-                        rateControl.ShowSpinner = showSpinner;
-                    }, true);
-                }
-            }
         }
 
         /// <summary>
@@ -153,23 +46,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             base.OnLoad(e);
 
-            // Force the rates to be refreshed when the rate control tells us
-            rateControl.ReloadRatesRequired += (sender, args) =>
-            {
-                viewModel.RefreshRates(true);
-            };
+            control = new RatingPanelControl(viewModel);
 
-            rateControl.Initialize(new FootnoteParameters(() => viewModel.RefreshRates(false), () => viewModel.Store));
-
-            rateControl.RateSelected += OnRateControlRateSelected;
-        }
-
-        /// <summary>
-        /// Event handler for rate selection chaning on the rate control
-        /// </summary>
-        private void OnRateControlRateSelected(object sender, RateSelectedEventArgs e)
-        {
-            viewModel.SelectedRateResult = e.Rate;
+            elementHost1.Child = control;
         }
 
         /// <summary>
@@ -186,7 +65,6 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// Supports multiple selections
         /// </summary>
         public bool SupportsMultiSelect => false;
-
 
         #region IDockingPanelContent
         /// <summary>

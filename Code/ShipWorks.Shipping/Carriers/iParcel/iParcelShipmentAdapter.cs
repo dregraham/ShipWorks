@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -32,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             get { return Shipment.IParcel.IParcelAccountID; }
             set { Shipment.IParcel.IParcelAccountID = value.GetValueOrDefault(); }
         }
-        
+
         /// <summary>
         /// Does this shipment type support accounts?
         /// </summary>
@@ -43,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 return true;
             }
         }
-        
+
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>
@@ -57,29 +55,25 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             get { return Shipment.IParcel.Service; }
             set { Shipment.IParcel.Service = value; }
         }
-        
+
         /// <summary>
-        /// List of package adapters for the shipment
+        /// Add a new package to the shipment
         /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
+        public override IPackageAdapter AddPackage()
         {
-            IParcelShipmentEntity iParcel = Shipment.IParcel;
+            IParcelPackageEntity package = iParcelShipmentType.CreateDefaultPackage();
+            Shipment.IParcel.Packages.Add(package);
+            UpdateDynamicData();
 
-            // Need more
-            while (iParcel.Packages.Count < numberOfPackages)
-            {
-                IParcelPackageEntity package = iParcelShipmentType.CreateDefaultPackage();
-                iParcel.Packages.Add(package);
-            }
+            return new iParcelPackageAdapter(Shipment, package, Shipment.IParcel.Packages.IndexOf(package) + 1);
+        }
 
-            // Need less
-            while (iParcel.Packages.Count > numberOfPackages)
-            {
-                IParcelPackageEntity package = iParcel.Packages[iParcel.Packages.Count - 1];
-                iParcel.Packages.Remove(package);
-            }
-
-            return GetPackageAdapters();
+        /// <summary>
+        /// Delete a package from the shipment
+        /// </summary>
+        public override void DeletePackage(IPackageAdapter packageAdapter)
+        {
+            DeletePackageFromCollection(Shipment.IParcel.Packages, x => x.IParcelPackageID == packageAdapter.PackageId);
         }
 
         /// <summary>
@@ -104,6 +98,17 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 {
                     packageEntity.InsurancePennyOne = shippingSettings.IParcelInsurancePennyOne;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected override void UpdateServiceFromRate(RateResult rate)
+        {
+            if (rate.Tag is int)
+            {
+                Shipment.IParcel.Service = (int) rate.Tag;
             }
         }
     }

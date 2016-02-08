@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Web.Routing;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -236,9 +236,20 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// Gets specific number of package adapters for the shipment.
+        /// Add a new package
         /// </summary>
-        public abstract IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages);
+        public virtual IPackageAdapter AddPackage()
+        {
+            throw new InvalidOperationException($"Adding a package is not supported");
+        }
+
+        /// <summary>
+        /// Delete a package
+        /// </summary>
+        public virtual void DeletePackage(IPackageAdapter package)
+        {
+            throw new InvalidOperationException($"Deleting a package is not supported");
+        }
 
         /// <summary>
         /// Are customs allowed?
@@ -252,5 +263,54 @@ namespace ShipWorks.Shipping.Services
         /// Update the insurance fields on the shipment and packages
         /// </summary>
         public abstract void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings);
+
+        /// <summary>
+        /// Select the service from the given rate result
+        /// </summary>
+        public void SelectServiceFromRate(RateResult rate)
+        {
+            if (shipmentType.SupportsGetRates &&
+                rate != null &&
+                rate.Selectable &&
+                rate.ShipmentType == ShipmentTypeCode)
+            {
+                UpdateServiceFromRate(rate);
+            }
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected virtual void UpdateServiceFromRate(RateResult rate)
+        {
+            // Setting the service from a rate is carrier specific, but this is not abstract because a few
+            // shipment types don't support rating
+        }
+
+        /// <summary>
+        /// Delete a package from the shipment
+        /// </summary>
+        protected void DeletePackageFromCollection<TPackage>(EntityCollection<TPackage> packageCollection,
+            Func<TPackage, bool> packagePredicate) where TPackage : EntityBase2
+        {
+            if (packageCollection.Count < 2)
+            {
+                return;
+            }
+
+            TPackage package = packageCollection.FirstOrDefault(packagePredicate);
+
+            if (package != null)
+            {
+                // If this isn't set, removing packages won't actually remove them from the database
+                if (packageCollection.RemovedEntitiesTracker == null)
+                {
+                    packageCollection.RemovedEntitiesTracker = new EntityCollection<TPackage>();
+                }
+
+                packageCollection.Remove(package);
+                UpdateDynamicData();
+            }
+        }
     }
 }

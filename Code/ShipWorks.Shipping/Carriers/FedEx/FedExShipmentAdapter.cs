@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -61,27 +55,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// List of package adapters for the shipment
+        /// Add a new package to the shipment
         /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
+        public override IPackageAdapter AddPackage()
         {
-            FedExShipmentEntity carrierShipment = Shipment.FedEx;
+            FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
+            Shipment.FedEx.Packages.Add(package);
+            UpdateDynamicData();
 
-            // Need more
-            while (carrierShipment.Packages.Count < numberOfPackages)
-            {
-                FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
-                carrierShipment.Packages.Add(package);
-            }
+            return new FedExPackageAdapter(Shipment, package, Shipment.FedEx.Packages.IndexOf(package) + 1);
+        }
 
-            // Need less
-            while (carrierShipment.Packages.Count > numberOfPackages)
-            {
-                FedExPackageEntity package = carrierShipment.Packages[carrierShipment.Packages.Count - 1];
-                carrierShipment.Packages.Remove(package);
-            }
-
-            return GetPackageAdapters();
+        /// <summary>
+        /// Delete a package from the shipment
+        /// </summary>
+        public override void DeletePackage(IPackageAdapter packageAdapter)
+        {
+            DeletePackageFromCollection(Shipment.FedEx.Packages, x => x.FedExPackageID == packageAdapter.PackageId);
         }
 
         /// <summary>
@@ -106,6 +96,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     packageEntity.InsurancePennyOne = shippingSettings.FedExInsurancePennyOne;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected override void UpdateServiceFromRate(RateResult rate)
+        {
+            if (rate.Tag is int)
+            {
+                Shipment.FedEx.Service = (int) rate.Tag;
             }
         }
     }

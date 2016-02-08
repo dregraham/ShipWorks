@@ -69,5 +69,10 @@ namespace ShipWorks.Shipping
         {
             return RatingFields.GetRatingHash(shipment);
         }
+
+        /// <summary>
+        /// Is the given field a rating field
+        /// </summary>
+        public bool IsRatingField(string changedField) => RatingFields.FieldsContainName(changedField);
     }
 }

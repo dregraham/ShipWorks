@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using GalaSoft.MvvmLight.Command;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -26,6 +26,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             InsuranceInfoTipCaptionText = "ShipWorks Insurance";
+            ShowInsurancePromoDialogCommand = new RelayCommand(ShowInsurancePromoDialog);
         }
 
         /// <summary>
@@ -36,6 +37,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.shippingManager = shippingManager;
             this.insuranceUtility = insuranceUtility;
         }
+
+        /// <summary>
+        /// Stream of property change events
+        /// </summary>
+        public IObservable<string> PropertyChangeStream => handler;
 
         /// <summary>
         /// Load based on package adapters for a shipment
@@ -49,7 +55,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             if (InsuranceChoice != null)
             {
-                InsuranceValue = InsuranceChoice.InsuranceValue;
+                DeclaredValue = InsuranceChoice.InsuranceValue;
+                Insurance = InsuranceChoice.Insured;
             }
 
             UpdateCostDisplay();
@@ -60,7 +67,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private void UpdateCostDisplay()
         {
-            if (InsuranceChoice == null ||PackageAdapters.Count() > 1)
+            if (InsuranceChoice == null || PackageAdapters.Count() > 1)
             {
                 InfoTipVisibility = Visibility.Collapsed;
                 CostVisibility = Visibility.Collapsed;
@@ -68,7 +75,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return;
             }
 
-            // Get the cost 
+            // Get the cost
             InsuranceCost = insuranceUtility.GetInsuranceCost(shipmentAdapter.Shipment, InsuranceChoice.InsuranceValue);
 
             if (InsuranceChoice.InsuranceProvider != InsuranceProvider.ShipWorks)
@@ -159,7 +166,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 LinkVisibility = Visibility.Visible;
                 InsuranceLinkDisplayText = "Add coverage for the first $100";
-                InsuranceLinkTag = (ShipmentTypeCode)ShipmentAdapter.Shipment.ShipmentType;
+                InsuranceLinkTag = (ShipmentTypeCode) ShipmentAdapter.Shipment.ShipmentType;
             }
         }
 
@@ -236,7 +243,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 if (AllDelcaredValueType(choices))
                 {
                     string carrierName = shippingManager.GetCarrierName(ShipmentAdapter.ShipmentTypeCode);
-                    
+
                     value = $"{carrierName} Declared Value";
                 }
 

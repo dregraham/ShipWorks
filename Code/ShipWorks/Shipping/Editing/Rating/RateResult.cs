@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             get
             {
                 // Account for the rate being a previously cached rate where the tag is already a best rate tag
-                return Tag is BestRateResultTag ? ((BestRateResultTag)Tag).OriginalTag : Tag;
+                return Tag is BestRateResultTag ? ((BestRateResultTag) Tag).OriginalTag : Tag;
             }
         }
 

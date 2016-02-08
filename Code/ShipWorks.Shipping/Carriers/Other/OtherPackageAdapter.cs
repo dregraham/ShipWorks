@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
@@ -17,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Other
     /// <summary>
     /// The OtherShipmentType only supports the weight field of the package adapter.
     /// </summary>
-    [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used", 
+    [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used",
         Justification = "This package adapter does not set much data, so the value parameter is not needed")]
     public class OtherPackageAdapter : IPackageAdapter
     {
@@ -41,6 +39,11 @@ namespace ShipWorks.Shipping.Carriers.Other
             this.shipment = shipment;
             this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Other, null);
         }
+
+        /// <summary>
+        /// Id of the underlying package
+        /// </summary>
+        public long PackageId => -1;
 
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.

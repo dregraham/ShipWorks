@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
@@ -11,7 +8,6 @@ using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping
@@ -67,25 +63,6 @@ namespace ShipWorks.Shipping
             EnsureShipmentLoaded(shipment);
             return shipment;
         }
-
-        /// <summary>
-        /// Get rates for the given shipment using the appropriate ShipmentType
-        /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
-        {
-            if (!shipment.Processed)
-            {
-                ShippingManager.GetRates(shipment, shipmentType);
-            }
-
-            return new RateGroup(Enumerable.Empty<RateResult>());
-        }
-
-        /// <summary>
-        /// Get rates for the given shipment using the appropriate ShipmentType
-        /// </summary>
-        public Task<RateGroup> GetRatesAsync(ShipmentEntity shipment, ShipmentType shipmentType, CancellationToken token) =>
-            TaskEx.Run(() => GetRates(shipment, shipmentType), token);
 
         /// <summary>
         /// Removes the specified shipment from the cache
@@ -173,11 +150,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         public bool IsShipmentTypeEnabled(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.IsShipmentTypeEnabled(shipmentTypeCode);
-
-        /// <summary>
-        /// Get rates for the given shipment using the appropriate ShipmentType
-        /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment) => ShippingManager.GetRates(shipment);
 
         /// <summary>
         /// Void the given shipment.  If the shipment is already voided, then no action is taken and no error is reported.  The fact that

@@ -147,6 +147,9 @@
     <Compile Include="Controls\AddressControl\AddressViewModel.cs" />
     <Compile Include="Controls\AddressControl\AddressViewModel.Properties.cs" />
     <Compile Include="Controls\AlignmentWrapPanel.cs" />
+    <Compile Include="Controls\TypeBasedTemplateSelector\Template.cs" />
+    <Compile Include="Controls\TypeBasedTemplateSelector\TemplateCollection.cs" />
+    <Compile Include="Controls\TypeBasedTemplateSelector\TypeBasedTemplateSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
@@ -158,10 +161,12 @@
     <Compile Include="ValueConverters\EmptyDoubleConverter.cs" />
     <Compile Include="ValueConverters\EmptyMoneyConverter.cs" />
     <Compile Include="ValueConverters\EnumDescriptionConverter.cs" />
+    <Compile Include="ValueConverters\ImageToBitmapSourceConverter.cs" />
     <Compile Include="ValueConverters\EnumImageConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
     <Compile Include="ValueConverters\StateProvinceConverter.cs" />
     <Compile Include="ValueConverters\StringEmptyWhenEqualToParameterConverter.cs" />
+    <Compile Include="ValueConverters\HalfCentCurrencyConverter.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />

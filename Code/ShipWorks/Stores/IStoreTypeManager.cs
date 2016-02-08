@@ -27,5 +27,10 @@ namespace ShipWorks.Stores
         /// Get the ShipmentType based on the given type code
         /// </summary>
         StoreType GetType(StoreTypeCode typeCode, StoreEntity store);
+
+        /// <summary>
+        /// Get the store type from the shipment
+        /// </summary>
+        StoreType GetType(ShipmentEntity shipment);
     }
 }

@@ -20,6 +20,14 @@ namespace ShipWorks.Shipping.Carriers.Express1
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<Express1DiscountedRateFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
+            builder.RegisterType<Express1RatePromotionFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
             builder.RegisterType<Express1UspsShipmentType>()
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Express1Usps);

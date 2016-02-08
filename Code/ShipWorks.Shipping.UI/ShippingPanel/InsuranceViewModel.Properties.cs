@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reflection;
-using System.Text;
 using System.Windows;
-using GalaSoft.MvvmLight.Command;
-using ShipWorks.Core.Messaging;
+using System.Windows.Input;
 using ShipWorks.Core.UI;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
     /// <summary>
     /// View model for displaying and saving shipment insurance information
     /// </summary>
-    public partial class InsuranceViewModel 
+    public partial class InsuranceViewModel
     {
         private readonly PropertyChangedHandler handler;
         private readonly IShippingManager shippingManager;
@@ -29,8 +23,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private string insuranceLabelDisplayText;
         private string insuranceTypeLabelDisplayText;
         private string insuranceValueLabelDisplayText;
-        private decimal insuranceValue;
+        private decimal declaredValue;
         private readonly IInsuranceUtility insuranceUtility;
+        private string insuranceInfoTipCaptionText;
+        private string insuranceCostDisplayText;
+        private string insuranceInfoTipDisplayText;
+        private string insuranceLinkDisplayText;
+        private object insuranceLinkTag;
+        private Visibility infoTipVisibility;
+        private Visibility costVisibility;
+        private Visibility linkVisibility;
+        private bool insurance;
 
         /// <summary>
         /// Shipment adapter
@@ -69,13 +72,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Shipment selected package adapter insurance value
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public decimal InsuranceValue
+        public decimal DeclaredValue
         {
-            get { return insuranceValue; }
+            get { return declaredValue; }
             set
             {
-                handler.Set(nameof(InsuranceValue), ref insuranceValue, value, true);
-                InsuranceChoice.InsuranceValue = insuranceValue;
+                handler.Set(nameof(DeclaredValue), ref declaredValue, value, true);
+                InsuranceChoice.InsuranceValue = declaredValue;
                 UpdateCostDisplay();
             }
         }
@@ -130,8 +133,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             set { handler.Set(nameof(InsuranceValueLabelDisplayText), ref insuranceValueLabelDisplayText, value, true); }
         }
 
-        
-        private string insuranceInfoTipCaptionText;
         /// <summary>
         /// Sets the insurance caption text
         /// </summary>
@@ -142,8 +143,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             set { handler.Set(nameof(InsuranceInfoTipCaptionText), ref insuranceInfoTipCaptionText, value); }
         }
 
-
-        private string insuranceCostDisplayText;
         /// <summary>
         /// Sets the insurance cost label text
         /// </summary>
@@ -154,7 +153,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             set { handler.Set(nameof(InsuranceCostDisplayText), ref insuranceCostDisplayText, value); }
         }
 
-        private string insuranceInfoTipDisplayText;
         /// <summary>
         /// Sets the insurance type label text value
         /// </summary>
@@ -165,7 +163,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             set { handler.Set(nameof(InsuranceInfoTipDisplayText), ref insuranceInfoTipDisplayText, value); }
         }
 
-        private string insuranceLinkDisplayText;
         /// <summary>
         /// Sets the insurance cost label text
         /// </summary>
@@ -176,7 +173,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             set { handler.Set(nameof(InsuranceLinkDisplayText), ref insuranceLinkDisplayText, value); }
         }
 
-        private object insuranceLinkTag;
         /// <summary>
         /// Sets the insurance link tag
         /// </summary>
@@ -187,7 +183,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             set { handler.Set(nameof(InsuranceLinkTag), ref insuranceLinkTag, value); }
         }
 
-        private Visibility infoTipVisibility;
         /// <summary>
         /// Sets the visibility of the InfoTip
         /// </summary>
@@ -198,7 +193,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             set { handler.Set(nameof(InfoTipVisibility), ref infoTipVisibility, value); }
         }
 
-        private Visibility costVisibility;
         /// <summary>
         /// Sets the visibility of the cost
         /// </summary>
@@ -209,7 +203,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             set { handler.Set(nameof(CostVisibility), ref costVisibility, value); }
         }
 
-        private Visibility linkVisibility;
         /// <summary>
         /// Sets the visibility of the cost
         /// </summary>
@@ -221,17 +214,34 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
+        /// Is the package insured
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Insurance
+        {
+            get { return insurance; }
+            set
+            {
+                if (handler.Set(nameof(Insurance), ref insurance, value) &&
+                    SelectedPackageAdapter?.InsuranceChoice != null)
+                {
+                    SelectedPackageAdapter.InsuranceChoice.Insured = value;
+                }
+            }
+        }
+
+        /// <summary>
         /// RelayCommand for showing the insurance promo dialog
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public RelayCommand ShowInsurancePromoDialogCommand => new RelayCommand(ShowInsurancePromoDialog);
-        
+        public ICommand ShowInsurancePromoDialogCommand { get; }
+
         /// <summary>
         /// Are all the insurance shipments FedEx?
         /// </summary>
         private bool AllFedExShipments(IEnumerable<IInsuranceChoice> choices)
         {
-            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.FedEx);
+            return choices.All(c => (c.Shipment.ShipmentTypeCode) == ShipmentTypeCode.FedEx);
         }
 
         /// <summary>
@@ -239,8 +249,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private bool AllUpsShipments(IEnumerable<IInsuranceChoice> choices)
         {
-            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType == ShipmentTypeCode.UpsOnLineTools ||
-                                     (ShipmentTypeCode)c.Shipment.ShipmentType == ShipmentTypeCode.UpsWorldShip));
+            return choices.All(c => c.Shipment.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools ||
+                                     c.Shipment.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip);
         }
 
         /// <summary>
@@ -248,7 +258,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private bool AllOnTracShipments(IEnumerable<IInsuranceChoice> choices)
         {
-            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.OnTrac);
+            return choices.All(c => c.Shipment.ShipmentTypeCode == ShipmentTypeCode.OnTrac);
         }
 
         /// <summary>
@@ -256,7 +266,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private bool AlliParcelShipments(IEnumerable<IInsuranceChoice> choices)
         {
-            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.iParcel);
+            return choices.All(c => c.Shipment.ShipmentTypeCode == ShipmentTypeCode.iParcel);
         }
 
         /// <summary>
@@ -264,7 +274,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private bool AllEndiciaShipments(IEnumerable<IInsuranceChoice> choices)
         {
-            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.Endicia);
+            return choices.All(c => c.Shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia);
         }
 
         /// <summary>
@@ -272,7 +282,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         private bool AllUspsShipments(IEnumerable<IInsuranceChoice> choices)
         {
-            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.Usps);
+            return choices.All(c => c.Shipment.ShipmentTypeCode == ShipmentTypeCode.Usps);
         }
 
         /// <summary>

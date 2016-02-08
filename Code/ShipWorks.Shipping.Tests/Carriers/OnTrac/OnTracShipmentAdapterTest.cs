@@ -1,12 +1,11 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.OnTrac;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Moq;
-using ShipWorks.AddressValidation;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
@@ -31,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
                 Insurance = true,
                 OnTrac = new OnTracShipmentEntity()
                 {
-                    Service = (int)OnTracServiceType.Ground
+                    Service = (int) OnTracServiceType.Ground
                 }
             };
 
@@ -202,10 +201,42 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         {
             ICarrierShipmentAdapter testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
-            shipment.OnTrac.Service = (int)OnTracServiceType.Sunrise;
-            testObject.ServiceType = (int)OnTracServiceType.SunriseGold;
+            shipment.OnTrac.Service = (int) OnTracServiceType.Sunrise;
+            testObject.ServiceType = (int) OnTracServiceType.SunriseGold;
 
             Assert.Equal(shipment.OnTrac.Service, testObject.ServiceType);
+        }
+
+        [Theory]
+        [InlineData(OnTracServiceType.Ground)]
+        [InlineData(OnTracServiceType.PalletizedFreight)]
+        [InlineData(OnTracServiceType.SunriseGold)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValid(OnTracServiceType serviceType)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, (int) serviceType)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.OnTrac
+            });
+            Assert.Equal((int) serviceType, shipment.OnTrac.Service);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("Foo")]
+        public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            shipment.OnTrac.Service = (int) OnTracServiceType.PalletizedFreight;
+            var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, value)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.OnTrac
+            });
+            Assert.Equal((int) OnTracServiceType.PalletizedFreight, shipment.OnTrac.Service);
         }
     }
 }

@@ -4,12 +4,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
@@ -43,6 +42,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             InsuranceViewModel = shippingViewModelFactory.GetInsuranceViewModel();
         }
+
+        /// <summary>
+        /// Stream of property change events
+        /// </summary>
+        public IObservable<string> PropertyChangeStream => handler;
 
         /// <summary>
         /// Load the shipment
@@ -80,7 +84,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
             shipmentAdapter.Shipment.ShipmentCost = Cost;
             shipmentAdapter.Shipment.TrackingNumber = TrackingNumber;
-            
+
             OtherShipmentEntity otherShipment = shipmentAdapter.Shipment.Other;
             Debug.Assert(otherShipment != null);
 
@@ -155,7 +159,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.UnitValue), StringComparison.OrdinalIgnoreCase) ||
                 e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Quantity), StringComparison.OrdinalIgnoreCase))
             {
-                TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal)ci.Quantity);
+                TotalCustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
             }
 
             if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Weight), StringComparison.OrdinalIgnoreCase) ||
@@ -223,6 +227,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public void RefreshPackageTypes()
         {
             // Other shipment type does not support packages
+        }
+
+        /// <summary>
+        /// Select the given rate
+        /// </summary>
+        public void SelectRate(RateResult selectedRate)
+        {
+            // Other shipment type does not support service types
         }
     }
 }

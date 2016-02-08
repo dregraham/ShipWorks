@@ -407,6 +407,7 @@
     <Compile Include="Utility\DateTimeUtility.cs" />
     <Compile Include="Utility\DeprecatedAttribute.cs" />
     <Compile Include="Utility\CallbackDescriptionAttribute.cs" />
+    <Compile Include="Utility\GenericResult.cs" />
     <Compile Include="Utility\GuidHelper.cs" />
     <Compile Include="Utility\HiddenAttribute.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -18,7 +13,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        public BestRateShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
+        public BestRateShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) :
+            base(shipment, shipmentTypeManager, customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.BestRate, nameof(shipment.BestRate));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
@@ -56,15 +52,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Service type selected
         /// </summary>
-        public override int ServiceType { get; set;} = 0;
-
-        /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            return GetPackageAdapters();
-        }
+        public override int ServiceType { get; set; } = 0;
 
         /// <summary>
         /// Update the insurance fields on the shipment and packages

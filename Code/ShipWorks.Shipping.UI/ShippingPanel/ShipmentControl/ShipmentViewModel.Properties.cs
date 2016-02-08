@@ -18,8 +18,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private DateTime shipDate;
         private double totalWeight;
         private int serviceType;
-        private int numberOfPackages;
-        private IEnumerable<IPackageAdapter> packageAdapters;
+        private ObservableCollection<IPackageAdapter> packageAdapters;
         private IPackageAdapter selectedPackageAdapter;
         private bool supportsMultiplePackages;
         private bool supportsPackageTypes;
@@ -28,6 +27,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private ObservableCollection<DimensionsProfileEntity> dimensionsProfiles;
         private DimensionsProfileEntity selectedDimensionsProfile;
         private IInsuranceViewModel insuranceViewModel;
+        private double dimsLength;
+        private double dimsWidth;
+        private double dimsHeight;
+        private long dimsProfileID;
+        private double additionalWeight;
+        private bool applyAdditionalWeight;
 
         /// <summary>
         /// The insurance view model to use.
@@ -93,29 +98,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         }
 
         /// <summary>
-        /// Number of packages the shipment has
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public int NumberOfPackages
-        {
-            get { return numberOfPackages; }
-            set
-            {
-                if (numberOfPackages != value && numberOfPackages != 0 && value != 0)
-                {
-                    PackageAdapters = shipmentAdapter.GetPackageAdapters(value);
-                    SelectedPackageAdapter = PackageAdapters.First();
-                }
-
-                handler.Set(nameof(NumberOfPackages), ref numberOfPackages, value, true);
-            }
-        }
-
-        /// <summary>
         /// List of package adapters for the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<IPackageAdapter> PackageAdapters
+        public ObservableCollection<IPackageAdapter> PackageAdapters
         {
             get { return packageAdapters; }
             set
@@ -132,12 +118,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         public IPackageAdapter SelectedPackageAdapter
         {
             get { return selectedPackageAdapter; }
-            set
-            {
-                handler.Set(nameof(SelectedPackageAdapter), ref selectedPackageAdapter, value, true);
-                InsuranceViewModel.SelectedPackageAdapter = SelectedPackageAdapter;
-                UpdateSelectedDimensionsProfile();
-            }
+            set { handler.Set(nameof(SelectedPackageAdapter), ref selectedPackageAdapter, value, true); }
         }
 
         /// <summary>
@@ -182,21 +163,24 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
             set
             {
-                handler.Set(nameof(SelectedDimensionsProfile), ref selectedDimensionsProfile, value, true);
-
-                if (SelectedDimensionsProfile != null && SelectedPackageAdapter != null)
+                if (handler.Set(nameof(SelectedDimensionsProfile), ref selectedDimensionsProfile, value, true))
                 {
+                    if (SelectedDimensionsProfile == null)
+                    {
+                        return;
+                    }
+
                     if (SelectedDimensionsProfile.DimensionsProfileID == 0)
                     {
-                        SelectedPackageAdapter.DimsProfileID = 0;
+                        DimsProfileID = 0;
                     }
                     else
                     {
-                        SelectedPackageAdapter.DimsProfileID = SelectedDimensionsProfile.DimensionsProfileID;
-                        SelectedPackageAdapter.DimsLength = SelectedDimensionsProfile.Length;
-                        SelectedPackageAdapter.DimsWidth = SelectedDimensionsProfile.Width;
-                        SelectedPackageAdapter.DimsHeight = SelectedDimensionsProfile.Height;
-                        SelectedPackageAdapter.AdditionalWeight = SelectedDimensionsProfile.Weight;
+                        DimsProfileID = SelectedDimensionsProfile.DimensionsProfileID;
+                        DimsLength = SelectedDimensionsProfile.Length;
+                        DimsWidth = SelectedDimensionsProfile.Width;
+                        DimsHeight = SelectedDimensionsProfile.Height;
+                        AdditionalWeight = SelectedDimensionsProfile.Weight;
                     }
                 }
             }
@@ -208,11 +192,68 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public ObservableCollection<DimensionsProfileEntity> DimensionsProfiles
         {
-            get
-            {
-                return dimensionsProfiles;
-            }
+            get { return dimensionsProfiles; }
             set { handler.Set(nameof(DimensionsProfiles), ref dimensionsProfiles, value, true); }
+        }
+
+        /// <summary>
+        /// Length of the current package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double DimsLength
+        {
+            get { return dimsLength; }
+            set { handler.Set(nameof(DimsLength), ref dimsLength, value, true); }
+        }
+
+        /// <summary>
+        /// Width of the current package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double DimsWidth
+        {
+            get { return dimsWidth; }
+            set { handler.Set(nameof(DimsWidth), ref dimsWidth, value, true); }
+        }
+
+        /// <summary>
+        /// Height of the current package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double DimsHeight
+        {
+            get { return dimsHeight; }
+            set { handler.Set(nameof(DimsHeight), ref dimsHeight, value, true); }
+        }
+
+        /// <summary>
+        /// ProfileID of the current package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public long DimsProfileID
+        {
+            get { return dimsProfileID; }
+            set { handler.Set(nameof(DimsProfileID), ref dimsProfileID, value, true); }
+        }
+
+        /// <summary>
+        /// Additional weight of the package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double AdditionalWeight
+        {
+            get { return additionalWeight; }
+            set { handler.Set(nameof(AdditionalWeight), ref additionalWeight, value, true); }
+        }
+
+        /// <summary>
+        /// Apply additional weight to the package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ApplyAdditionalWeight
+        {
+            get { return applyAdditionalWeight; }
+            set { handler.Set(nameof(ApplyAdditionalWeight), ref applyAdditionalWeight, value, true); }
         }
     }
 }

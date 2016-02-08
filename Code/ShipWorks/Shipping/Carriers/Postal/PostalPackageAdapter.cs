@@ -9,8 +9,6 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -42,9 +40,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
             packagingType = new PackageTypeBinding()
             {
                 PackageTypeID = shipment.Postal.PackagingType,
-                Name = EnumHelper.GetDescription((PostalPackagingType)shipment.Postal.PackagingType)
+                Name = EnumHelper.GetDescription((PostalPackagingType) shipment.Postal.PackagingType)
             };
         }
+
+        /// <summary>
+        /// Id of the underlying package
+        /// </summary>
+        public long PackageId => -1;
 
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.

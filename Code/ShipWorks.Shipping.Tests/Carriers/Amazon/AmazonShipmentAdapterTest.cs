@@ -1,10 +1,10 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using Xunit;
 
@@ -32,6 +32,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             };
 
             shipmentTypeMock = new Mock<AmazonShipmentType>(MockBehavior.Strict);
+            shipmentTypeMock.Setup(b => b.SupportsGetRates).Returns(true);
             shipmentTypeMock.Setup(b => b.UpdateDynamicShipmentData(shipment)).Verifiable();
             shipmentTypeMock.Setup(b => b.UpdateTotalWeight(shipment)).Verifiable();
             shipmentTypeMock.Setup(b => b.SupportsMultiplePackages).Returns(() => false);
@@ -161,6 +162,53 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValid()
+        {
+            AmazonRateTag rateTag = new AmazonRateTag
+            {
+                Description = "Foo",
+                ShippingServiceId = "Bar",
+                ShippingServiceOfferId = "Baz",
+                CarrierName = "Quux"
+            };
+
+            var testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, rateTag)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.Amazon
+            });
+
+            Assert.Equal("Foo", shipment.Amazon.ShippingServiceName);
+            Assert.Equal("Bar", shipment.Amazon.ShippingServiceID);
+            Assert.Equal("Baz", shipment.Amazon.ShippingServiceOfferID);
+            Assert.Equal("Quux", shipment.Amazon.CarrierName);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("Foo")]
+        public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
+        {
+            shipment.Amazon.ShippingServiceName = "A";
+            shipment.Amazon.ShippingServiceID = "B";
+            shipment.Amazon.ShippingServiceOfferID = "C";
+            shipment.Amazon.CarrierName = "D";
+
+            var testObject = new AmazonShipmentAdapter(shipment, shipmentTypeManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, value)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.Amazon
+            });
+
+            Assert.Equal("A", shipment.Amazon.ShippingServiceName);
+            Assert.Equal("B", shipment.Amazon.ShippingServiceID);
+            Assert.Equal("C", shipment.Amazon.ShippingServiceOfferID);
+            Assert.Equal("D", shipment.Amazon.CarrierName);
         }
     }
 }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Other
@@ -50,19 +46,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Other
         /// Does this shipment type support package Types?
         /// </summary>
         public override bool SupportsPackageTypes => false;
-        
+
         /// <summary>
         /// Service type selected
         /// </summary>
         public override int ServiceType { get; set; } = 0;
-        
-        /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            return GetPackageAdapters();
-        }
 
         /// <summary>
         /// Update the insurance fields on the shipment and packages

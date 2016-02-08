@@ -37,5 +37,10 @@ namespace ShipWorks.Stores
         /// Saves the store.
         /// </summary>
         void SaveStore(StoreEntity store);
+
+        /// <summary>
+        /// Notify the underlying data manager that there may have been changes
+        /// </summary>
+        void CheckForChanges();
     }
 }

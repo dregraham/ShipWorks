@@ -779,6 +779,8 @@
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messaging\Messages\ShippingSettingsChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\RatesRetrievedMessage.cs" />
+    <Compile Include="Messaging\Messages\Shipping\RatesRetrievingMessage.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
@@ -912,17 +914,28 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingToken.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensions.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateConsolidatePostalRates.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\IBrokerExceptionsRateFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\ICounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1RatePromotionFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Discounted\IUspsRateDiscountedFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Promotion\IUspsRatePromotionFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
+    <Compile Include="Shipping\Editing\Rating\IExceptionsRateFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceUtility.cs" />
     <Compile Include="Shipping\Insurance\InsuranceUtilityWrapper.cs" />
+    <Compile Include="Shipping\IRatesRetriever.cs" />
     <Compile Include="Shipping\IShipmentFactory.cs" />
     <Compile Include="Shipping\Services\CarrierShipmentAdapterBase.cs" />
     <Compile Include="Shipping\IShippingOriginManager.cs" />
@@ -10097,7 +10110,7 @@
     <None Include="Resources\cancelled.png" />
     <None Include="Resources\cancelled1.png" />
     <None Include="Resources\cancelled2.png" />
-    <None Include="Resources\information2.png" />
+    <Resource Include="Resources\information2.png" />
     <None Include="Resources\Progress\indiciator_green.gif" />
     <None Include="Resources\Progress\indicator_lite.gif" />
     <EmbeddedResource Include="Data\Administration\UpdateFrom2x\Database\Scripts\Rename2xTables.sql" />
@@ -10608,7 +10621,7 @@
     <None Include="Resources\brightpearl.png" />
     <None Include="Resources\amazon_large.jpg" />
     <None Include="Resources\building.png" />
-    <Content Include="Resources\check2.png" />
+    <Resource Include="Resources\check2.png" />
     <None Include="Resources\colors32.png" />
     <None Include="Resources\component.png" />
     <None Include="Resources\headset.png" />
@@ -10632,7 +10645,7 @@
     <None Include="Resources\EquashipLogo.png" />
     <None Include="Resources\flag_blue.png" />
     <None Include="Resources\flag_green.png" />
-    <None Include="Resources\flag_red.png" />
+    <Resource Include="Resources\flag_red.png" />
     <None Include="Resources\flag_yellow.png" />
     <None Include="Resources\help2_16.png" />
     <None Include="Resources\iparcelLogo.jpg" />
@@ -10701,7 +10714,7 @@
     <None Include="Resources\loadedcommerce.png" />
     <None Include="Resources\groupon.png" />
     <None Include="Resources\globe16.png" />
-    <None Include="Resources\information2_16.png" />
+    <Resource Include="Resources\information2_16.png" />
     <None Include="Resources\help16.png" />
     <None Include="Resources\earth16.png" />
     <None Include="Resources\instastore.png" />
@@ -10807,7 +10820,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Resources\shoppingcart_full.png" />
-    <None Include="Resources\star_green.png" />
+    <Resource Include="Resources\star_green.png" />
     <None Include="Resources\start_shipworks_service.png" />
     <None Include="Resources\workstation_network.png" />
     <None Include="Resources\workplace_add.png" />

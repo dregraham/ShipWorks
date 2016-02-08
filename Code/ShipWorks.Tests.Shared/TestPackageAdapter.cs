@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
@@ -16,6 +12,7 @@ namespace ShipWorks.Tests.Shared
         [SuppressMessage("CSharp", "CS0067: ", Justification = "For now, we're fine with fire and forget here")]
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public long PackageId => -1;
         public int Index { get; set; }
         public double Weight { get; set; }
         public double AdditionalWeight { get; set; }

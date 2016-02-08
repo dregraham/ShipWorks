@@ -30,6 +30,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly PropertyChangedHandler handler;
         private OrderSelectionLoaded orderSelectionLoaded;
 
+        private readonly HashSet<string> internalFields = new HashSet<string> { nameof(AllowEditing) };
+
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
         private readonly IDisposable subscriptions;
@@ -37,6 +39,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IShippingViewModelFactory shippingViewModelFactory;
 
         private bool isLoadingShipment;
+        private IDisposable shipmentChangedSubscription;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -77,8 +80,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                     LoadCustomsWhenAddressChanges(Destination, x => ShipmentAdapter?.Shipment?.ShipPerson)
                 }));
 
-            WireUpObservables();
-
             PropertyChanging += OnPropertyChanging;
 
             CreateLabelCommand = new RelayCommand(ProcessShipment);
@@ -102,7 +103,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Expose a stream of property changes
         /// </summary>
-        public IObservable<string> PropertyChangeStream => handler;
+        public virtual IObservable<string> PropertyChangeStream => handler.Where(x => !internalFields.Contains(x));
 
         /// <summary>
         /// Gets the shipment from the current adapter
@@ -118,43 +119,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Is the current shipment processed
         /// </summary>
         public virtual bool? IsProcessed => ShipmentAdapter?.Shipment?.Processed;
-
-        /// <summary>
-        /// Wire up any Observable patterns
-        /// </summary>
-        private void WireUpObservables()
-        {
-
-
-#pragma warning disable S125 // Sections of code should not be "commented out"
-            //// Wire up the rate criteria obseravable throttling for the PropertyChanged event.
-            //Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
-            //    // We only listen if listenForRateCriteriaChanged is true.
-            //    .Where(evt => listenForRateCriteriaChanged)
-            //    // Only fire the event if we have a shipment and it is a rating field.
-            //    .Where(evt =>
-            //    {
-            //        bool hasShipment = orderSelectionLoaded?.Shipment != null;
-            //        bool isRatingField = IsRatingField(evt.EventArgs.PropertyName);
-
-            //        // forceRateCriteriaChanged is used for race conditions:
-            //        // For example, ShipmentType property changes, and then before the throttle time, SupportsMultipleShipments changes.
-            //        // Since SupportsMultipleShipments isn't a rating field, the event would not be fired, even though
-            //        // ShipmentType changed and the event needs to be raised.
-            //        // So keep track that during the throttling a rate criteria was changed.
-            //        forceRateCriteriaChanged = forceRateCriteriaChanged || (hasShipment && isRatingField);
-
-            //        return forceRateCriteriaChanged;
-            //    })
-            //    .Throttle(TimeSpan.FromMilliseconds(250))
-            //    .Subscribe(evt =>
-            //    {
-            //        // Reset forceRateCriteriaChanged so that we don't force it on the next round.
-            //        forceRateCriteriaChanged = false;
-            //        OnRateCriteriaPropertyChanged(null, evt.EventArgs);
-            //    });
-        }
-#pragma warning restore S125 // Sections of code should not be "commented out"
 
         /// <summary>
         /// Load customs when address properties change
@@ -256,6 +220,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         public virtual void Populate(ICarrierShipmentAdapter fromShipmentAdapter)
         {
+            shipmentChangedSubscription?.Dispose();
             isLoadingShipment = true;
 
             ShipmentAdapter = fromShipmentAdapter;
@@ -293,6 +258,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ShipmentViewModel.Load(ShipmentAdapter);
 
             isLoadingShipment = false;
+
+            shipmentChangedSubscription = PropertyChangeStream
+                .Merge(ShipmentViewModel.PropertyChangeStream)
+                .Merge(Origin.PropertyChangeStream.Select(x => $"Origin{x}"))
+                .Merge(Destination.PropertyChangeStream.Select(x => $"Ship{x}"))
+                .Do(_ => Save())
+                .Subscribe(x => messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, x)));
+
+            messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter));
         }
 
         /// <summary>
@@ -344,24 +318,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
-        /// Called when [need to update services].
-        /// </summary>
-        private void OnNeedToUpdateServices(object sender, PropertyChangedEventArgs e)
-        {
-            Save();
-            UpdateServices();
-        }
-
-        /// <summary>
-        /// Called when [need to update packages].
-        /// </summary>
-        private void OnNeedToUpdatePackages(object sender, PropertyChangedEventArgs e)
-        {
-            Save();
-            UpdatePackages();
-        }
-
-        /// <summary>
         /// Updates the service types.
         /// </summary>
         private void UpdateServices() => ShipmentViewModel?.RefreshServiceTypes();
@@ -370,83 +326,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Updates the package types.
         /// </summary>
         private void UpdatePackages() => ShipmentViewModel?.RefreshPackageTypes();
-
-        /// <summary>
-        /// Enables the need to update packages.
-        /// </summary>
-        private void EnableNeedToUpdatePackages()
-        {
-            Origin.PropertyChanged += OnNeedToUpdatePackages;
-            Destination.PropertyChanged += OnNeedToUpdatePackages;
-        }
-
-        /// <summary>
-        /// Enables NeedToUpdateServices event
-        /// </summary>
-        private void EnableNeedToUpdateServices()
-        {
-            Origin.PropertyChanged += OnNeedToUpdateServices;
-            Destination.PropertyChanged += OnNeedToUpdateServices;
-        }
-
-        /// <summary>
-        /// Disables the need to update packages.
-        /// </summary>
-        private void DisableNeedToUpdatePackages()
-        {
-            Origin.PropertyChanged -= OnNeedToUpdatePackages;
-            Destination.PropertyChanged -= OnNeedToUpdatePackages;
-        }
-
-        /// <summary>
-        /// Disables NeedToUpdateServices event
-        /// </summary>
-        private void DisableNeedToUpdateServices()
-        {
-            Origin.PropertyChanged -= OnNeedToUpdateServices;
-            Destination.PropertyChanged -= OnNeedToUpdateServices;
-        }
-
-        /// <summary>
-        /// Raised when a view model field changes so that rates may be updated.
-        /// </summary>
-        private void OnRateCriteriaPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (ShipmentAdapter.Shipment == null)
-            {
-                return;
-            }
-
-            // Save UI values to the shipment so we can send the new values to the rates panel
-            Save();
-
-            messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter));
-        }
-
-
-        /// <summary>
-        /// Determines if a view model field is used for the shipment's rating criteria.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S125:Sections of code should not be \"commented out\"", Justification = "<Pending>")]
-        private bool IsRatingField(string propertyname)
-        {
-            return false;
-
-            //// Only send the ShipmentChangedMessage message if the field that changed is a rating field.
-            //ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentType);
-
-            //// Since we have a generic AddressViewModel whose properties do not match entity feild names,
-            //// we need to translate the Ship, Origin, and Street properties to know if the changed field
-            //// is one rating cares about.
-            //string name = propertyname;
-            //string shipName = string.Format("Ship{0}", name);
-            //string origName = string.Format("Origin{0}", name);
-
-            //return shipmentType.RatingFields.FieldsContainName(name) ||
-            //       shipmentType.RatingFields.FieldsContainName(shipName) ||
-            //       shipmentType.RatingFields.FieldsContainName(origName) ||
-            //       name.Equals("Street", StringComparison.InvariantCultureIgnoreCase);
-        }
 
         /// <summary>
         /// Handle a property change before it actually happens
@@ -532,6 +411,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public void Dispose()
         {
             subscriptions.Dispose();
+            shipmentChangedSubscription?.Dispose();
         }
     }
 }
