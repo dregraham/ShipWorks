@@ -23,8 +23,6 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
         /// <summary>
         /// Creates a ChannelConfirmationDeleteDlg using the given store type
         /// </summary>
-        /// <param name="storeType"></param>
-        /// <returns></returns>
         public IChannelConfirmDeleteDlg GetConfirmDeleteDlg(StoreTypeCode storeType)
         {
             // Get a new Dialog

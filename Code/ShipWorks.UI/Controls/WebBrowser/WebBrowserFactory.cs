@@ -9,7 +9,7 @@ namespace ShipWorks.UI.Controls.WebBrowser
     /// <summary>
     /// Creates a WebBrowser
     /// </summary>
-    public class WebBrowserFactory
+    public class WebBrowserFactory : IWebBrowserFactory
     {
         private readonly Func<string, IDialog> webBrowserDlgFactory;
         private readonly IWebBrowserDlgViewModel webBrowserDlgViewModel;
@@ -31,7 +31,7 @@ namespace ShipWorks.UI.Controls.WebBrowser
         public IDialog Create(Uri uri, string title)
         {
             webBrowserDlgViewModel.Load(uri, title);
-            var browserDlg = webBrowserDlgFactory("WebBrowserDlg");
+            IDialog browserDlg = webBrowserDlgFactory("WebBrowserDlg");
             browserDlg.DataContext = webBrowserDlgViewModel;
 
             return browserDlg;

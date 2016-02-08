@@ -1,9 +1,13 @@
-﻿using System.Windows.Controls;
-
-namespace ShipWorks.ApplicationCore.Licensing
+﻿namespace ShipWorks.ApplicationCore.Licensing
 {
+    /// <summary>
+    /// Interface for ChannelLimitFactory
+    /// </summary>
     public interface IChannelLimitFactory
     {
-        Control CreateControl();
+        /// <summary>
+        /// Creates the control
+        /// </summary>
+        IChannelLimitControl CreateControl(ICustomerLicense customerLicense);
     }
 }

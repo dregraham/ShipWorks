@@ -9,7 +9,9 @@ using ShipWorks.Users.Audit;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using System.Collections.Generic;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -21,17 +23,17 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     /// <summary>
     /// ViewModel for the ChannelLimitDlg
     /// </summary>
-    public partial class ChannelLimitViewModel : INotifyPropertyChanged
+    public class ChannelLimitViewModel : INotifyPropertyChanged, IChannelLimitViewModel
     {
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private StoreTypeCode selectedStoreType;
         private ObservableCollection<StoreTypeCode> channelCollection;
-        private readonly ICustomerLicense license;
+        private ICustomerLicense license;
         private string errorMessage;
         private readonly IStoreManager storeManager;
         private readonly IChannelConfirmDeleteFactory confirmDeleteFactory;
-        private readonly WebBrowserFactory webBrowserFactory;
+        private readonly IWebBrowserFactory webBrowserFactory;
         private readonly IMessageHelper messagdHelper;
         private readonly ILog log;
         private bool isDeleting;
@@ -40,14 +42,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// Constructor
         /// </summary>
         public ChannelLimitViewModel(
-            ILicenseService licenseService, 
             IStoreManager storeManager,
             IChannelConfirmDeleteFactory confirmDeleteFactory, 
             Func<Type, ILog> logFactory,
-            WebBrowserFactory webBrowserFactory,
+            IWebBrowserFactory webBrowserFactory,
             IMessageHelper messagdHelper)
         {
-            license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
             this.storeManager = storeManager;
             this.confirmDeleteFactory = confirmDeleteFactory;
             this.webBrowserFactory = webBrowserFactory;
@@ -61,13 +61,68 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             log = logFactory(typeof (ChannelLimitViewModel));
 
             DeleteStoreClickCommand = new RelayCommand(DeleteChannel, CanExecuteDeleteStore);
+            UpgradeClickCommand = new RelayCommand(UpgradeAccount);
+        }
+
+        /// <summary>
+        /// Used to indicate if we are deleting a store
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsDeleting
+        {
+            get { return isDeleting; }
+            set { handler.Set(nameof(IsDeleting), ref isDeleting, value); }
+        }
+
+        /// <summary>
+        /// The error message displayed to the user
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ErrorMessage
+        {
+            get { return errorMessage; }
+            set { handler.Set(nameof(ErrorMessage), ref errorMessage, value); }
+        }
+
+        /// <summary>
+        /// The selected store
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public StoreTypeCode SelectedStoreType
+        {
+            get { return selectedStoreType; }
+            set { handler.Set(nameof(SelectedStoreType), ref selectedStoreType, value); }
+        }
+
+        /// <summary>
+        /// Delete Store ClickCommand
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand DeleteStoreClickCommand { get; }
+
+        /// <summary>
+        /// Upgrade Account ClickCommand
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand UpgradeClickCommand { get; }
+
+        /// <summary>
+        /// Collection of stores
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ObservableCollection<StoreTypeCode> ChannelCollection
+        {
+            get { return channelCollection; }
+            set { handler.Set(nameof(ChannelCollection), ref channelCollection, value); }
         }
 
         /// <summary>
         /// Loads the list of active stores
         /// </summary>
-        public void Load()
+        public void Load(ICustomerLicense customerLicense)
         {
+            license = customerLicense;
+
             // Check to make sure we are getting a CustomerLicense
             if (license == null)
             {
@@ -185,7 +240,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             try
             {
                 // call load to refresh everything
-                Load();
+                Load(license);
             }
             catch (ShipWorksLicenseException ex)
             {

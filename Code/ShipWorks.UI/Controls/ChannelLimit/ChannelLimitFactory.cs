@@ -13,12 +13,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     public class ChannelLimitFactory : IChannelLimitFactory
     {
         private readonly Func<ChannelLimitControl> channelLimitControlFactory;
-        private readonly ChannelLimitViewModel viewModel;
+        private readonly IChannelLimitViewModel viewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelLimitFactory"/> class.
         /// </summary>
-        public ChannelLimitFactory(Func<ChannelLimitControl> channelLimitControlFactory, ChannelLimitViewModel viewModel)
+        public ChannelLimitFactory(Func<ChannelLimitControl> channelLimitControlFactory, IChannelLimitViewModel viewModel)
         {
             this.channelLimitControlFactory = channelLimitControlFactory;
             this.viewModel = viewModel;
@@ -27,11 +27,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Creates the ChannelLimitControl.
         /// </summary>
-        public Control CreateControl()
+        public IChannelLimitControl CreateControl(ICustomerLicense customerLicense)
         {
             ChannelLimitControl channelLimitControl = channelLimitControlFactory();
             channelLimitControl.DataContext = viewModel;
-            viewModel.Load();
+            viewModel.Load(customerLicense);
 
             return channelLimitControl;
         }

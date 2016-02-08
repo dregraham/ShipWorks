@@ -26,7 +26,8 @@ namespace ShipWorks.UI
             builder.RegisterType<MessageHelperWrapper>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<ChannelLimitViewModel>();
+            builder.RegisterType<ChannelLimitViewModel>()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<ChannelLimitFactory>()
                 .AsImplementedInterfaces();
@@ -57,7 +58,8 @@ namespace ShipWorks.UI
             builder.RegisterType<WebBrowserDlg>()
                 .Named<IDialog>("WebBrowserDlg");
 
-            builder.RegisterType<WebBrowserFactory>();
+            builder.RegisterType<WebBrowserFactory>()
+                .AsImplementedInterfaces();
 
             builder.Register<Func<string, IDialog>>(
                 componentContext =>
@@ -76,6 +78,9 @@ namespace ShipWorks.UI
                 .AsImplementedInterfaces();
 
             builder.RegisterType<UpgradePlanDlgFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ChannelLimitDlgFactory>()
                 .AsImplementedInterfaces();
         }
     }

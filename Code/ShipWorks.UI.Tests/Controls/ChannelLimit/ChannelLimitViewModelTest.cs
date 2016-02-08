@@ -24,7 +24,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 
                 // The constructor of ChannelLimitViewModel checks to see if the license is a ICustomerLicense
                 // Creating the concrete class will throw the exception
-                ShipWorksLicenseException ex = Assert.Throws<ShipWorksLicenseException>(() => testObject.Load());
+                ShipWorksLicenseException ex = Assert.Throws<ShipWorksLicenseException>(() => testObject.Load((ICustomerLicense)storeLicense.Object));
 
                 // Check to make sure the right message is thrown
                 Assert.Equal("Store licenses do not have channel limits.", ex.Message);
@@ -46,7 +46,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 testObject.SelectedStoreType = StoreTypeCode.Amazon;
                 
                 // Call load
-                testObject.Load();
+                testObject.Load(customerLicense.Object);
 
                 // check the SelectedStoreType and ensure it is set to invalid
                 Assert.Equal(StoreTypeCode.Invalid, testObject.SelectedStoreType);
@@ -65,7 +65,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 ChannelLimitViewModel testObject = mock.Create<ChannelLimitViewModel>();
 
                 // Call load
-                testObject.Load();
+                testObject.Load(customerLicense.Object);
 
                 customerLicense.Verify(c => c.Refresh(), Times.Once);
             }
