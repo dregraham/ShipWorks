@@ -56,6 +56,15 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         }
 
         /// <summary>
+        /// Updates the enabled state of the dlg based on the controls state
+        /// </summary>
+        private void OnEnabledChanged(object sender, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            close.IsEnabled = (bool)dependencyPropertyChangedEventArgs.NewValue;
+            Cursor = (bool)dependencyPropertyChangedEventArgs.NewValue ? Cursors.Arrow : Cursors.Wait;
+        }
+        
+        /// <summary>
         /// Called when [click close].
         /// </summary>
         private void OnClickClose(object sender, RoutedEventArgs e)

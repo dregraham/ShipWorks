@@ -14,8 +14,13 @@
         FontFamily="Tahoma" FontSize="8.25pt"
         >
     <Grid>
-        <local:ChannelLimitControl x:Name="ChannelLimitControl" Padding="7 10 0 0" />
+        <local:ChannelLimitControl 
+            x:Name="ChannelLimitControl" 
+            Padding="7 10 0 0" 
+            IsEnabledChanged="OnEnabledChanged"/>
+        
         <Button
+            x:Name="close"
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right"
             Content="Close"

@@ -141,8 +141,6 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private async void DeleteChannel()
         {
-            IsDeleting = true;
-
             List<StoreTypeCode> localStoreTypeCodes =
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
 
@@ -154,6 +152,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                     $"\n \nYou cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.";
                 return;
             }
+
+            IsDeleting = true;
 
             IChannelConfirmDeleteDlg deleteDlg = confirmDeleteFactory.GetConfirmDeleteDlg(selectedStoreType);
 

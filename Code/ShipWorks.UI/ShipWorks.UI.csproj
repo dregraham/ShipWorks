@@ -149,6 +149,7 @@
     <Compile Include="Services\IMessageHelper.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
     <Compile Include="UIModule.cs" />
+    <Compile Include="ValueConverters\BooleanToWaitCursorConverter.cs" />
     <Compile Include="ValueConverters\InverseBooleanConverter.cs" />
     <Compile Include="ValueConverters\EnumDescriptionConverter.cs" />
     <Compile Include="ValueConverters\EnumImageConverter.cs" />
