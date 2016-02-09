@@ -50,22 +50,17 @@ namespace ShipWorks.ApplicationCore.Licensing
                 throw new ShipWorksLicenseException(activateLicenseResponse.Message);
             }
 
-            if (!uspsAccountRepository.Accounts.Any())
+            if (!uspsAccountRepository.Accounts.Any() && !activateLicenseResponse.Context.StampsUsername.IsNullOrWhiteSpace())
             {
-                string responseUsername = activateLicenseResponse.Context.StampsUsername;
-
-                if (!responseUsername.IsNullOrWhiteSpace())
+                UspsAccountEntity uspsAccount = new UspsAccountEntity()
                 {
-                    UspsAccountEntity uspsAccount = new UspsAccountEntity()
-                    {
-                        Username = responseUsername,
-                        Password = password
-                    };
+                    Username = activateLicenseResponse.Context.StampsUsername,
+                    Password = password
+                };
 
-                    uspsWebClient.PopulateUspsAccountEntity(uspsAccount);
+                uspsWebClient.PopulateUspsAccountEntity(uspsAccount);
 
-                    uspsAccountRepository.Save(uspsAccount);
-                }
+                uspsAccountRepository.Save(uspsAccount);
             }
 
             ICustomerLicense license = licenseFactory(activateLicenseResponse.Context.Key);
