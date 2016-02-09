@@ -138,7 +138,10 @@
                 Command="{Binding UpgradeClickCommand}">
                 <DockPanel Width="125">
                     <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/arrow_up_blue.png"/>
-                    <TextBlock TextAlignment="Center" Margin="-14 0 0 0">Upgrade</TextBlock>
+                    <TextBlock 
+                        TextAlignment="Center" 
+                        Margin="-14 0 0 0" 
+                        Text="Upgrade Plan" />
                 </DockPanel>
             </Button>
 
