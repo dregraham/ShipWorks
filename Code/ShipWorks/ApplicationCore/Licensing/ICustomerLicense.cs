@@ -14,11 +14,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         void Save();
 
         /// <summary>
-        /// Activate a customer license
-        /// </summary>
-        void Activate(string email, string password);
-
-        /// <summary>
         /// IEnumerable of ActiveStores for the license
         /// </summary>
         IEnumerable<ActiveStore> GetActiveStores();
