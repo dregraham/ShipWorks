@@ -19,5 +19,10 @@ namespace ShipWorks.Shipping
         /// </summary>
         public string GetRatingHash(ShipmentEntity shipment) =>
             string.Empty;
+
+        /// <summary>
+        /// Is the given field a rating field
+        /// </summary>
+        public bool IsRatingField(string changedField) => false;
     }
 }

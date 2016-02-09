@@ -9,8 +9,6 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -47,6 +45,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
+        /// Id of the underlying package
+        /// </summary>
+        public long PackageId => packageEntity.IParcelPackageID;
+
+        /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -68,8 +71,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             get
             {
-                // The shipment's content weight is updated when one of the customs items' quantity or weight changes 
-                // when there is a only single package. When there are multiple packages, the weight differences are 
+                // The shipment's content weight is updated when one of the customs items' quantity or weight changes
+                // when there is a only single package. When there are multiple packages, the weight differences are
                 // distributed evenly across packages, so the content weight does not have to be modified via the package adapter.
                 return shipmentEntity.IParcel.Packages.Count == 1 ? shipmentEntity.ContentWeight : packageEntity.Weight;
             }

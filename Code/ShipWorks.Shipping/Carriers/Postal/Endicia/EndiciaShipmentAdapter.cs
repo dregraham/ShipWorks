@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -47,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Does this shipment type support package Types?
         /// </summary>
         public override bool SupportsPackageTypes => true;
-        
+
         /// <summary>
         /// Service type selected
         /// </summary>
@@ -56,14 +53,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             get { return Shipment.Postal.Service; }
             set { Shipment.Postal.Service = value; }
         }
-        
-        /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            return GetPackageAdapters();
-        }
 
         /// <summary>
         /// Update the insurance fields on the shipment and packages
@@ -71,6 +60,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
             Shipment.InsuranceProvider = shippingSettings.EndiciaInsuranceProvider;
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected override void UpdateServiceFromRate(RateResult rate)
+        {
+            PostalRateSelection rateSelection = rate.Tag as PostalRateSelection;
+
+            if (rateSelection != null)
+            {
+                Shipment.Postal.Service = (int) rateSelection.ServiceType;
+                Shipment.Postal.Confirmation = (int) rateSelection.ConfirmationType;
+            }
         }
     }
 }

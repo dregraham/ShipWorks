@@ -23,6 +23,11 @@ namespace ShipWorks.Stores.Services
         }
 
         /// <summary>
+        /// Check for any changes that may have been made
+        /// </summary>
+        public void CheckForChanges() => StoreManager.CheckForChanges();
+
+        /// <summary>
         /// Initialize StoreManager
         /// </summary>
         public void InitializeForCurrentSession() =>

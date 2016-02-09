@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// <summary>
         /// Register a panel with the dock manager
         /// </summary>
-        [SuppressMessage("SonarQube", "S1848:Objects should not be created to be dropped immediately without being used", 
+        [SuppressMessage("SonarQube", "S1848:Objects should not be created to be dropped immediately without being used",
             Justification = "The DockableWindow is used by the dockManager")]
         [SuppressMessage("SonarQube", "S2930:\"IDisposables\" should be disposed",
             Justification = "The dock manager owns the panel, so we can't dispose it")]

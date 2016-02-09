@@ -12,11 +12,16 @@
         /// If the PermissionType is related to orders, then the ObjectID will be automatically translated
         /// to a StoreID, such as an OrderItemID would be translated to its order's StoreID.
         /// </remarks>
-        void DemandPermission(PermissionType shipmentsCreateEditProcess, long? objectID);
+        void DemandPermission(PermissionType permission, long? objectID);
 
         /// <summary>
         /// Checks whether the current user has the specified permission
         /// </summary>
-        bool HasPermission(PermissionType shipmentsCreateEditProcess, long? objectID);
+        bool HasPermission(PermissionType permission);
+
+        /// <summary>
+        /// Checks whether the current user has the specified permission
+        /// </summary>
+        bool HasPermission(PermissionType permission, long? objectID);
     }
 }

@@ -20,11 +20,11 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Originator of the message
         /// </summary>
-        public object Sender { get; private set; }
+        public object Sender { get; }
 
         /// <summary>
         /// Shipment that has changed
         /// </summary>
-        public RateResult RateResult { get; private set; }
+        public RateResult RateResult { get; }
     }
 }

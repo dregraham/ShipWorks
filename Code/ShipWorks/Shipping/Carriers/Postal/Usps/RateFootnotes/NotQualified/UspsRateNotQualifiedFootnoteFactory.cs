@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.NotQualified
 {
@@ -11,9 +12,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.NotQualified
         /// Construct a new UspsRateNotQualifiedFootnoteFactory object
         /// </summary>
         /// <param name="shipmentType">Type of shipment that instantiated this factory</param>
-        public UspsRateNotQualifiedFootnoteFactory(ShipmentType shipmentType)
+        public UspsRateNotQualifiedFootnoteFactory(ShipmentTypeCode shipmentTypeCode)
         {
-            ShipmentTypeCode = shipmentType.ShipmentTypeCode;
+            ShipmentTypeCode = shipmentTypeCode;
         }
 
         /// <summary>
@@ -36,5 +37,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.NotQualified
         {
             return new UspsRateNotQualifiedFootnote();
         }
+
+        /// <summary>
+        /// Get a view model that represents this footnote
+        /// </summary>
+        public object CreateViewModel(ICarrierShipmentAdapter shipmentAdapter) =>
+            new UspsRateNotQualifiedFootnoteViewModel();
     }
 }

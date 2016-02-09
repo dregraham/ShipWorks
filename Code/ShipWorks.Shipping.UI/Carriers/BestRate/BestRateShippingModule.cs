@@ -3,6 +3,7 @@ using System.Linq;
 using Autofac;
 using Autofac.Core;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
@@ -27,6 +28,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             builder.RegisterType<BestRateShipmentType>()
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.BestRate);
+
+            builder.RegisterType<BrokerExceptionsRateFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
+            builder.RegisterType<CounterRatesInvalidStoreAddressFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
 
             builder.RegisterType<NullAccountRepository>()
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.BestRate)

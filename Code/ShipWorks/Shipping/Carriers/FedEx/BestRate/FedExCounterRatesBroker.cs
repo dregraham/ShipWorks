@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
                 {
                     // There was a problem with the origin address, so add the invalid store address footer factory
                     // to the rate group and eat the exception
-                    bestRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentType));
+                    bestRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentType.ShipmentTypeCode));
                 }
                 else
                 {

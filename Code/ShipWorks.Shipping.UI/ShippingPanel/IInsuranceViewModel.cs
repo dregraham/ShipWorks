@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
-using GalaSoft.MvvmLight.Command;
+using System.Windows.Input;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
@@ -13,6 +13,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     /// </summary>
     public interface IInsuranceViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
     {
+        /// <summary>
+        /// Stream of property change events
+        /// </summary>
+        IObservable<string> PropertyChangeStream { get; }
+
         /// <summary>
         /// Shipment adapter
         /// </summary>
@@ -91,7 +96,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// RelayCommand for showing the insurance promo dialog
         /// </summary>
-        RelayCommand ShowInsurancePromoDialogCommand { get; }
+        ICommand ShowInsurancePromoDialogCommand { get; }
 
         /// <summary>
         /// Load based on package adapters for a shipment
@@ -101,6 +106,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Shipment selected package adapter insurance value
         /// </summary>
-        decimal InsuranceValue { get; set; }
+        decimal DeclaredValue { get; set; }
+
+        /// <summary>
+        /// Is the package insured
+        /// </summary>
+        bool Insurance { get; set; }
     }
 }

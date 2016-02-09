@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Configuration;
-using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -46,12 +39,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 return true;
             }
         }
-        
+
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>
         public override bool SupportsPackageTypes => true;
-        
+
         /// <summary>
         /// Service type selected
         /// </summary>
@@ -62,27 +55,24 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// List of package adapters for the shipment
+        /// Add a new package to the shipment
         /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
+        public override IPackageAdapter AddPackage()
         {
-            UpsShipmentEntity carrierShipment = Shipment.Ups;
+            UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
+            Shipment.Ups.Packages.Add(package);
 
-            // Need more
-            while (carrierShipment.Packages.Count < numberOfPackages)
-            {
-                UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
-                carrierShipment.Packages.Add(package);
-            }
+            UpdateDynamicData();
 
-            // Need less
-            while (carrierShipment.Packages.Count > numberOfPackages)
-            {
-                UpsPackageEntity package = carrierShipment.Packages[carrierShipment.Packages.Count - 1];
-                carrierShipment.Packages.Remove(package);
-            }
+            return new UpsPackageAdapter(Shipment, package, Shipment.Ups.Packages.IndexOf(package) + 1);
+        }
 
-            return GetPackageAdapters();
+        /// <summary>
+        /// Delete a package from the shipment
+        /// </summary>
+        public override void DeletePackage(IPackageAdapter packageAdapter)
+        {
+            DeletePackageFromCollection(Shipment.Ups.Packages, x => x.UpsPackageID == packageAdapter.PackageId);
         }
 
         /// <summary>
@@ -107,6 +97,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     packageEntity.InsurancePennyOne = shippingSettings.UpsInsurancePennyOne;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected override void UpdateServiceFromRate(RateResult rate)
+        {
+            if (rate.Tag is int)
+            {
+                Shipment.Ups.Service = (int) rate.Tag;
             }
         }
     }

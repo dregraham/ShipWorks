@@ -1,16 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
+using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Shipping.ShipSense.Packaging;
-using System.ComponentModel.DataAnnotations;
-using Shared.System.ComponentModel.DataAnnotations;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -42,6 +40,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
+        /// Id of the underlying package
+        /// </summary>
+        public long PackageId => -1;
+
+        /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -51,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 #pragma warning disable S3237 // "value" parameters should be used
             set { /* Not applicable */ }
 #pragma warning restore S3237 // "value" parameters should be used
-        } 
+        }
 
         /// <summary>
         /// Gets or sets the length.

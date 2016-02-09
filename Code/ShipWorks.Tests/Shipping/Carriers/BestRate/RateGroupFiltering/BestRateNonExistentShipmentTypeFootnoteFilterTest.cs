@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Xunit;
 using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 {
@@ -39,12 +37,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
                 rate.ShipmentType = ShipmentTypeCode.Usps;
             }
 
-            // Setup our rate group to have footnote factories for shipment types other than the ones in the rate results 
+            // Setup our rate group to have footnote factories for shipment types other than the ones in the rate results
             RateGroup rateGroup = new RateGroup(rates);
 
-            rateGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(new EndiciaShipmentType(), rates, rates));
-            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new EndiciaShipmentType(), settings.Object));
-            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new UspsShipmentType(), settings.Object));
+            rateGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(ShipmentTypeCode.Endicia, rates, rates));
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(ShipmentTypeCode.Endicia, settings.Object));
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(ShipmentTypeCode.Usps, settings.Object));
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
@@ -69,12 +67,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
                 rate.ShipmentType = ShipmentTypeCode.Usps;
             }
 
-            // Setup our rate group to have footnote factories for shipment types other than the ones in the rate results 
+            // Setup our rate group to have footnote factories for shipment types other than the ones in the rate results
             RateGroup rateGroup = new RateGroup(rates);
 
-            rateGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(new EndiciaShipmentType(), rates, rates));
-            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new EndiciaShipmentType(), settings.Object));
-            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new UspsShipmentType(), settings.Object));
+            rateGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(ShipmentTypeCode.Endicia, rates, rates));
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(ShipmentTypeCode.Endicia, settings.Object));
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(ShipmentTypeCode.Usps, settings.Object));
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Interapptive.Shared.Utility;
@@ -7,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 
@@ -47,8 +47,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 // Provide a message with additional context
                 throw new ShippingException("An i-parcel account is required to view rates.");
             }
-            
-            // Check all the packages to ensure that they filled out the 
+
+            // Check all the packages to ensure that they filled out the
             // sku and quantity that is required by iparcel
             int packageIndex = 0;
             foreach (IParcelPackageEntity package in shipment.IParcel.Packages)
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     throw new ShippingException($"Package {packageIndex} cannot have a blank SKU and Quantity. The expected format is '[SKU],[Quantity]'.");
                 }
             }
-            
+
             // i-parcel requires that we upload item information, so fetch the order and order items
             orderManager.PopulateOrderDetails(shipment);
 
@@ -84,6 +84,26 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
+        /// Is the rate for the specified shipment
+        /// </summary>
+        public bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
+        {
+            if (rateResult.ShipmentType != ShipmentTypeCode.iParcel ||
+                shipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.iParcel)
+            {
+                return false;
+            }
+
+            iParcelRateSelection rateSelection = rateResult.Tag as iParcelRateSelection;
+            if (rateSelection == null)
+            {
+                return false;
+            }
+
+            return shipmentAdapter.ServiceType == (int) rateSelection.ServiceType;
+        }
+
+        /// <summary>
         /// Builds the RateResult for iParcel
         /// </summary>
         private void BuildRateResult(ShipmentEntity shipment, DataSet ratesResult, List<RateResult> results)
@@ -102,7 +122,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             IEnumerable<iParcelServiceType> disabledServices = iParcelShipmentType.GetExcludedServiceTypes(
                 excludedServiceTypeRepository)
                 .Select(s => (iParcelServiceType) s);
-
 
             // Filter out the excluded service types before creating rate results
             foreach (iParcelServiceType serviceType in supportedServiceTypes.Except(disabledServices.Where(s => s != (iParcelServiceType) shipment.IParcel.Service)))

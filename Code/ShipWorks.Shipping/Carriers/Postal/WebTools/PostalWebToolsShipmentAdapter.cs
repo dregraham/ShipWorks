@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Diagnostics.CodeAnalysis;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
-using System.Diagnostics.CodeAnalysis;
-using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -22,11 +18,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal, nameof(shipment.Postal));
             MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
         }
-        
+
         /// <summary>
         /// Id of the WebTools account associated with this shipment
         /// </summary>
-        [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used", 
+        [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used",
             Justification = "WebTools shipment types don't have accounts")]
         [SuppressMessage("SonarQube", "S108:Nested blocks of code should not be left empty",
             Justification = "WebTools shipment types don't have accounts")]
@@ -46,12 +42,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>
         public override bool SupportsPackageTypes => true;
-        
+
         /// <summary>
         /// Service type selected
         /// </summary>
@@ -59,14 +55,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         {
             get { return Shipment.Postal.Service; }
             set { Shipment.Postal.Service = value; }
-        }
-        
-        /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            return GetPackageAdapters();
         }
 
         /// <summary>

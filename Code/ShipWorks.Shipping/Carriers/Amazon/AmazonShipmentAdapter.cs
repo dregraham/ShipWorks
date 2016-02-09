@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -64,14 +65,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            return GetPackageAdapters();
-        }
-
-        /// <summary>
         /// Are customs allowed?
         /// </summary>
         public override bool CustomsAllowed => false;
@@ -82,6 +75,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
             // Nothing to do as Amazon is only allowed to use ShipWorks insurance
+        }
+
+        /// <summary>
+        /// Perform the service update
+        /// </summary>
+        protected override void UpdateServiceFromRate(RateResult rate)
+        {
+            AmazonRateTag rateTag = rate.Tag as AmazonRateTag;
+
+            if (rateTag != null)
+            {
+                Shipment.Amazon.ShippingServiceName = rateTag.Description ?? string.Empty;
+                Shipment.Amazon.ShippingServiceID = rateTag.ShippingServiceId ?? string.Empty;
+                Shipment.Amazon.ShippingServiceOfferID = rateTag.ShippingServiceOfferId ?? string.Empty;
+                Shipment.Amazon.CarrierName = rateTag.CarrierName ?? string.Empty;
+            }
         }
     }
 }

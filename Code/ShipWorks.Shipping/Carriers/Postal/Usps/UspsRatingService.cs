@@ -22,6 +22,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 
@@ -82,7 +83,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 throw new ShippingException(ex.Message, ex);
             }
+        }
 
+        /// <summary>
+        /// Is the rate for the specified shipment
+        /// </summary>
+        public override bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
+        {
+            if (rateResult.ShipmentType != ShipmentTypeCode.Usps ||
+                shipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.Usps)
+            {
+                return false;
+            }
+
+            PostalRateSelection rateSelection = rateResult.Tag as PostalRateSelection;
+            if (rateSelection == null)
+            {
+                return false;
+            }
+
+            return shipmentAdapter.ServiceType == (int) rateSelection.ServiceType &&
+                shipmentAdapter.Shipment?.Postal?.Confirmation == (int) rateSelection.ConfirmationType;
         }
 
         /// <summary>
@@ -105,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(Enumerable.Empty<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentTypeManager[ShipmentTypeCode.Usps]));
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode.Usps));
 
                 return errorRates;
             }

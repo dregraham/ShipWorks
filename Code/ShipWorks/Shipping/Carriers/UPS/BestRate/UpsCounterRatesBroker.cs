@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Autofac.Core.Lifetime;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -15,7 +12,6 @@ using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
@@ -29,13 +25,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </remarks>
         public UpsCounterRatesBroker()
             : this(new UpsOltShipmentType(), new UpsCounterRateAccountRepository(TangoCredentialStore.Instance), new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance))
-        {}
+        { }
 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsCounterRatesBroker"/> class.
         /// </summary>
-        public UpsCounterRatesBroker(UpsShipmentType upsShipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository) 
+        public UpsCounterRatesBroker(UpsShipmentType upsShipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
             : base(upsShipmentType, accountRepository, settingsRepository)
         {
 
@@ -53,8 +49,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             ShipmentType.CertificateInspector = new CertificateInspector(certificateVerificationData);
 
             RateGroup rates = new RateGroup(new List<RateResult>());
-            ((UpsShipmentType)ShipmentType).SettingsRepository = SettingsRepository;
-            ((UpsShipmentType)ShipmentType).AccountRepository = AccountRepository;
+            ((UpsShipmentType) ShipmentType).SettingsRepository = SettingsRepository;
+            ((UpsShipmentType) ShipmentType).AccountRepository = AccountRepository;
 
             // The dummy account wouldn't have an account number if we couldn't get one from Tango
             UpsAccountEntity account = AccountRepository.GetAccount(0);
@@ -72,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 // information and then call the exception handler provided.
                 rates = base.GetBestRates(shipment, brokerExceptions);
 
-                foreach (BestRateResultTag bestRateResultTag in rates.Rates.Select(rate => (BestRateResultTag)rate.Tag))
+                foreach (BestRateResultTag bestRateResultTag in rates.Rates.Select(rate => (BestRateResultTag) rate.Tag))
                 {
                     // We want the UPS account setup wizard to show when a rate is selected so the user 
                     // can create their own UPS account since these rates are just counter rates 
@@ -92,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 {
                     // There was a problem with the origin address, so add the invalid store address footer factory 
                     // to the rate group and eat the exception
-                    rates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentType));
+                    rates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentType.ShipmentTypeCode));
                 }
                 else
                 {
@@ -136,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                         // We also want to ensure sure that the provider is no longer excluded in
                         // the global settings
                         ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                        settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int)ShipmentType.ShipmentTypeCode).ToArray();
+                        settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int) ShipmentType.ShipmentTypeCode).ToArray();
 
                         ShippingSettings.Save(settings);
                     }
@@ -145,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets the first account from the repository and returns the ID.
         /// </summary>

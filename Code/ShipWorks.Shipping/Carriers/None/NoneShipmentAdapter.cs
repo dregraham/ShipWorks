@@ -65,19 +65,11 @@ namespace ShipWorks.Shipping.Carriers.None
         public override int ServiceType { get; set; } = 0;
 
         /// <summary>
-        /// List of package adapters for the shipment
-        /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(int numberOfPackages)
-        {
-            return GetPackageAdapters();
-        }
-
-        /// <summary>
         /// Update the insurance fields on the shipment and packages
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
-            // Nothing to do as None has no insurance 
+            // Nothing to do as None has no insurance
         }
     }
 }

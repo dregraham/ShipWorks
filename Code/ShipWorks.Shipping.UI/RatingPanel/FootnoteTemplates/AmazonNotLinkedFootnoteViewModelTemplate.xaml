@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://schemas.shipworks.com/ui"
+                    xmlns:local="clr-namespace:ShipWorks.Shipping.UI.RatingPanel.FootnoteTemplates">
+    <ui:EnumDescriptionConverter x:Key="EnumDescription" />
+
+    <DataTemplate x:Key="AmazonNotLinkedFootnoteViewModelTemplate">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Image Source="/Shipworks.Core;component/Resources/information2.png"
+                    Width="16"
+                    Height="16"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+            <TextBlock Margin="6,1,0,0">
+                ShipWorks could not retrieve
+                <Run Text="{Binding ShipmentTypeCode, Converter={StaticResource EnumDescription}, Mode=OneWay}" />
+                rates. For more info,
+                <Hyperlink Command="{Binding ShowDialog}">click here</Hyperlink>.
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

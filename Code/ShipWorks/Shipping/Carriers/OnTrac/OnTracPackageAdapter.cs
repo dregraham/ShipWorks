@@ -10,8 +10,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -44,9 +42,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             packagingType = new PackageTypeBinding()
             {
                 PackageTypeID = shipment.OnTrac.PackagingType,
-                Name = EnumHelper.GetDescription((OnTracPackagingType)shipment.OnTrac.PackagingType)
+                Name = EnumHelper.GetDescription((OnTracPackagingType) shipment.OnTrac.PackagingType)
             };
         }
+
+        /// <summary>
+        /// Id of the underlying package
+        /// </summary>
+        public long PackageId => -1;
 
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.

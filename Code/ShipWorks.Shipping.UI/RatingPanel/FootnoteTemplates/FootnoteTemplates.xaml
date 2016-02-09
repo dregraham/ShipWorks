@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="AmazonNotLinkedFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="BrokerExceptionsRateFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="CounterRatesInvalidStoreAddressFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="ExceptionsRateFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="Express1DiscountedRateFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="Express1RateNotQualifiedFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="Express1RatePromotionFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="InformationFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="UspsRateDiscountedFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="UspsRateNotQualifiedFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="UspsRatePromotionFootnoteViewModelTemplate.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

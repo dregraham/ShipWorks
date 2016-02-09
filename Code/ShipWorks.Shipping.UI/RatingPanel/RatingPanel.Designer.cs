@@ -12,34 +12,32 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         private void InitializeComponent()
         {
-            this.rateControl = new ShipWorks.Shipping.Editing.Rating.RateControl();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.SuspendLayout();
             // 
-            // rateControl
+            // elementHost1
             // 
-            this.rateControl.ActionLinkVisible = false;
-            this.rateControl.AutoHeight = true;
-            this.rateControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rateControl.Location = new System.Drawing.Point(0, 0);
-            this.rateControl.Name = "rateControl";
-            this.rateControl.ShowAllRates = true;
-            this.rateControl.Size = new System.Drawing.Size(476, 165);
-            this.rateControl.TabIndex = 0;
+            this.elementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.elementHost1.Location = new System.Drawing.Point(0, 0);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(476, 184);
+            this.elementHost1.TabIndex = 0;
+            this.elementHost1.Text = "elementHost1";
+            this.elementHost1.Child = null;
             // 
-            // RatesPanel
+            // RatingPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.rateControl);
+            this.Controls.Add(this.elementHost1);
             this.Name = "RatingPanel";
             this.Size = new System.Drawing.Size(476, 184);
             this.ResumeLayout(false);
-            this.PerformLayout();
+
         }
 
         #endregion
 
-        private RateControl rateControl;
+        private System.Windows.Forms.Integration.ElementHost elementHost1;
     }
 }

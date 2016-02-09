@@ -1,15 +1,15 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Moq;
-using ShipWorks.AddressValidation;
-using ShipWorks.Tests.Shared;
-using Xunit;
 using Autofac;
 using Autofac.Extras.Moq;
+using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
 {
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
                 Insurance = true,
                 Postal = new PostalShipmentEntity
                 {
-                    Service = (int)PostalServiceType.FirstClass,
+                    Service = (int) PostalServiceType.FirstClass,
                     Endicia = new EndiciaShipmentEntity()
                 }
             };
@@ -217,10 +217,46 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         {
             ICarrierShipmentAdapter testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
 
-            shipment.Postal.Service = (int)PostalServiceType.FirstClass;
-            testObject.ServiceType = (int)PostalServiceType.ParcelSelect;
+            shipment.Postal.Service = (int) PostalServiceType.FirstClass;
+            testObject.ServiceType = (int) PostalServiceType.ParcelSelect;
 
             Assert.Equal(shipment.Postal.Service, testObject.ServiceType);
+        }
+
+        [Theory]
+        [InlineData(PostalServiceType.AsendiaIpa, PostalConfirmationType.AdultSignatureRequired)]
+        [InlineData(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)]
+        [InlineData(PostalServiceType.ExpressMail, PostalConfirmationType.None)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValid(PostalServiceType serviceType, PostalConfirmationType confirmationType)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, new PostalRateSelection(serviceType, confirmationType))
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.Endicia
+            });
+            Assert.Equal((int) serviceType, shipment.Postal.Service);
+            Assert.Equal((int) confirmationType, shipment.Postal.Confirmation);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("Foo")]
+        public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            shipment.Postal.Service = (int) PostalServiceType.PriorityMail;
+            shipment.Postal.Confirmation = (int) PostalConfirmationType.AdultSignatureRestricted;
+
+            var testObject = new EndiciaShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, value)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.Endicia
+            });
+            Assert.Equal((int) PostalServiceType.PriorityMail, shipment.Postal.Service);
+            Assert.Equal((int) PostalConfirmationType.AdultSignatureRestricted, shipment.Postal.Confirmation);
         }
     }
 }

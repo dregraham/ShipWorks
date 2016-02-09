@@ -10,6 +10,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -99,6 +100,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             return express1Group;
+        }
+
+        /// <summary>
+        /// Is the rate for the specified shipment
+        /// </summary>
+        public override bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
+        {
+            if (rateResult.ShipmentType != ShipmentTypeCode.Endicia ||
+                shipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.Endicia)
+            {
+                return false;
+            }
+
+            PostalRateSelection rateSelection = rateResult.Tag as PostalRateSelection;
+            if (rateSelection == null)
+            {
+                return false;
+            }
+
+            return shipmentAdapter.ServiceType == (int) rateSelection.ServiceType &&
+                shipmentAdapter.Shipment?.Postal?.Confirmation == (int) rateSelection.ConfirmationType;
         }
 
         /// <summary>

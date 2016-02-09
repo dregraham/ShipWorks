@@ -4,4 +4,5 @@
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Behaviors")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Controls")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Controls.AddressControl")]
+[assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Controls.TypeBasedTemplateSelector")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.ValueConverters")]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Shipping.UI.ShippingPanel;
@@ -27,11 +28,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
                 v.Setup(x => x.AccountId).Returns(102);
                 v.Setup(x => x.ShipmentType).Returns(ShipmentTypeCode.Usps);
             });
+            viewModelMock.Setup(x => x.PropertyChangeStream)
+                .Returns(new[] { nameof(viewModelMock.Object.OriginAddressType) }.ToObservable());
 
             var testObject = mock.Create<ChangeOriginAddressFromTypePipeline>();
             testObject.Register(viewModelMock.Object);
-
-            viewModelMock.RaisePropertyChanged(nameof(viewModelMock.Object.OriginAddressType));
 
             viewModelMock.Verify(x => x.Origin.SetAddressFromOrigin(23, 92, 102, ShipmentTypeCode.Usps));
         }
@@ -39,16 +40,12 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_SendsZeroAsOrderId_WhenOrderIdIsNull()
         {
-            var viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v =>
-            {
-                v.Setup(x => x.OrderID).Returns((long?) null);
-            });
-            var viewModel = viewModelMock.Object;
+            var viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v => v.Setup(x => x.OrderID).Returns((long?) null));
+            viewModelMock.Setup(x => x.PropertyChangeStream)
+                .Returns(new[] { nameof(viewModelMock.Object.OriginAddressType) }.ToObservable());
 
             var testObject = mock.Create<ChangeOriginAddressFromTypePipeline>();
-            testObject.Register(viewModel);
-
-            viewModelMock.RaisePropertyChanged(nameof(viewModelMock.Object.OriginAddressType));
+            testObject.Register(viewModelMock.Object);
 
             viewModelMock.Verify(x => x.Origin.SetAddressFromOrigin(It.IsAny<long>(), 0,
                 It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()));
@@ -58,12 +55,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         public void Register_DoesNotCallSetAddress_WhenPropertyIsNotOriginAddressType()
         {
             var viewModelMock = mock.CreateMock<ShippingPanelViewModel>();
-            var viewModel = viewModelMock.Object;
+            viewModelMock.Setup(x => x.PropertyChangeStream).Returns(new[] { "Foo" }.ToObservable());
 
             var testObject = mock.Create<ChangeOriginAddressFromTypePipeline>();
-            testObject.Register(viewModel);
-
-            viewModelMock.RaisePropertyChanged("Foo");
+            testObject.Register(viewModelMock.Object);
 
             viewModelMock.Verify(x => x.Origin.SetAddressFromOrigin(It.IsAny<long>(), It.IsAny<long>(),
                 It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()), Times.Never);

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         /// </summary>
         public AmazonNotLinkedFootnoteFactory(ShipmentTypeCode shipmentTypeCode)
         {
-            Debug.Assert(shipmentTypeCode==ShipmentTypeCode.Usps || shipmentTypeCode == ShipmentTypeCode.UpsOnLineTools);
+            Debug.Assert(shipmentTypeCode == ShipmentTypeCode.Usps || shipmentTypeCode == ShipmentTypeCode.UpsOnLineTools);
             this.shipmentTypeCode = shipmentTypeCode;
         }
 
@@ -31,6 +32,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         /// </summary>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters) =>
             new AmazonNotLinkedFootnoteControl(shipmentTypeCode);
+
+        /// <summary>
+        /// Get a view model that represents this footnote
+        /// </summary>
+        public object CreateViewModel(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            return new AmazonNotLinkedFootnoteViewModel(shipmentTypeCode);
+        }
 
         /// <summary>
         /// Notes that this factory should or should not be used in BestRate

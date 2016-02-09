@@ -6,7 +6,7 @@ using ShipWorks.Shipping;
 namespace ShipWorks.Data.Model.Custom
 {
     /// <summary>
-    /// Allow carrier accounts to be used interchangably
+    /// Allow carrier accounts to be used interchangeably
     /// </summary>
     public interface ICarrierAccount : IEntity2
     {
