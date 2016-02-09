@@ -43,6 +43,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             GenericResult<ActivationResponse> activateLicenseResponse = tangoWebClient.ActivateLicense(username, password);
 
+            // Check to see if something went wrong and if so we throw
+            if (!activateLicenseResponse.Success)
+            {
+                throw new ShipWorksLicenseException(activateLicenseResponse.Message);
+            }
+
             if (!uspsAccountRepository.Accounts.Any())
             {
                 UspsAccountEntity uspsAccount = new UspsAccountEntity()
@@ -56,7 +62,11 @@ namespace ShipWorks.ApplicationCore.Licensing
                 uspsAccountRepository.Save(uspsAccount);
             }
 
-            return licenseFactory(activateLicenseResponse.Context.Key);
+            ICustomerLicense license = licenseFactory(activateLicenseResponse.Context.Key);
+
+            license.Save();
+
+            return license;
         }
     }
 }

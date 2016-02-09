@@ -202,6 +202,7 @@
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
     <Compile Include="ApplicationCore\Licensing\ActivationResponseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\AddStoreResponseTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\CustomerLicenseActivationServiceTest.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\DisabledLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseServiceTest.cs" />
