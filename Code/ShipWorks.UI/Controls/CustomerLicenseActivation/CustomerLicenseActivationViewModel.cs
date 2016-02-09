@@ -16,7 +16,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
     /// </summary>
     public class CustomerLicenseActivationViewModel : ICustomerLicenseActivationViewModel
     {
-        private readonly ICustomerLicense customerLicense;
+        private readonly ICustomerLicenseActivationService activationService;
         private readonly IUserService userManager;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -26,9 +26,9 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(Func<string, ICustomerLicense> customerLicenseFactory, IUserService userManager)
+        public CustomerLicenseActivationViewModel(ICustomerLicenseActivationService activationService, IUserService userManager)
         {
-            this.customerLicense = customerLicenseFactory(string.Empty);
+            this.activationService = activationService;
             this.userManager = userManager;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
@@ -107,13 +107,18 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
             {
                 try
                 {
-                    // Activate the software using an empty license with the given username/password
-                    customerLicense.Activate(Email, DecryptedPassword);
+                    ICustomerLicense customerLicense = activationService.Activate(email, DecryptedPassword);           
 
                     if (createCustomer)
                     {
                         userManager.CreateUser(Email, DecryptedPassword, true); 
                     }
+
+                    result = new GenericResult<ICustomerLicense>(customerLicense)
+                    {
+                        Message = string.Empty,
+                        Success = true
+                    };
                 }
                 catch (Exception ex)
                 {
@@ -128,9 +133,15 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Validates that the credentials
         /// </summary>
+        /// <remarks>
+        /// The context of the returning Generic Result will be null
+        /// as we don't have a context yet.  If the result is successful,
+        /// we are ready to download
+        /// </remarks>
         private GenericResult<ICustomerLicense> ValidateCredentials()
         {
-            GenericResult<ICustomerLicense> result = new GenericResult<ICustomerLicense>(customerLicense)
+            // we don't have a license yet...
+            GenericResult<ICustomerLicense> result = new GenericResult<ICustomerLicense>(null)
             {
                 Success = true,
                 Message = string.Empty
