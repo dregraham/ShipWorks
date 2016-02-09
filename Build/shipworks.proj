@@ -300,6 +300,7 @@
     <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
     <ObfuscationExcludedAssemblies Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
     <ObfuscationExcludedAssemblies Include="SpreadsheetGear, Version=6.0.3.190, Culture=neutral, PublicKeyToken=39c186f5904944ec" />
+    <ObfuscationExcludedAssemblies Include="System.IO, Version=2.6.10.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <ObfuscationExcludedAssemblies Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <ObfuscationExcludedAssemblies Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <ObfuscationExcludedAssemblies Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
