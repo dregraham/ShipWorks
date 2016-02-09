@@ -33,43 +33,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     public partial class UspsSetupWizard : ShipmentTypeSetupWizardForm
     {
         private readonly UspsRegistration uspsRegistration;
-        private readonly ShipmentTypeCode shipmentTypeCode;
+        private readonly ShipmentTypeCode shipmentTypeCode = ShipmentTypeCode.Usps;
         private readonly Dictionary<long, long> profileMap = new Dictionary<long, long>();
 
         bool registrationComplete;
         private readonly bool allowRegisteringExistingAccount;
         private readonly int initialPersonControlHeight;
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsSetupWizard"/> class.
         /// </summary>
-        /// <param name="promotion">The promotion.</param>
-        /// <param name="allowRegisteringExistingAccount">if set to <c>true</c> [allow registering existing account].</param>
-        public UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount) :
-            this(promotion, allowRegisteringExistingAccount, ShipmentTypeCode.Usps)
+        public UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount):
+            this(promotion, allowRegisteringExistingAccount, null)
         {
-            
         }
 
         /// <summary>
-        /// Gets or sets the initial account address that to use when adding an account.
-        /// </summary>
-        public PersonAdapter InitialAccountAddress { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="UspsSetupWizard"/> class.
         /// </summary>
-        /// <param name="promotion">The promotion.</param>
-        /// <param name="allowRegisteringExistingAccount">if set to <c>true</c> [allow registering an existing account].</param>
-        /// <param name="shipmentTypeCode">The shipment type code.</param>
-        /// <exception cref="UspsRegistrationException">There weren't any registration types provided to the USPS setup wizard.</exception>
-        protected UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, ShipmentTypeCode shipmentTypeCode)
+        public UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, UspsAccountEntity uspsAccount) 
         {
+            UspsAccount = uspsAccount;
+
             InitializeComponent();
 
             initialPersonControlHeight = personControl.Height;
 
-            this.shipmentTypeCode = shipmentTypeCode;
             UspsResellerType resellerType = UspsResellerType.None;
 
             // Load up a registration object using the USPS validator and the gateway to 
@@ -86,6 +76,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // label type gets persisted to the correct profile
             optionsControl.ShipmentTypeCode = this.shipmentTypeCode;
         }
+
+        /// <summary>
+        /// Gets or sets the initial account address that to use when adding an account.
+        /// </summary>
+        public PersonAdapter InitialAccountAddress { get; set; }
 
         /// <summary>
         /// Gets the USPS account.
@@ -111,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Hide the panel that lets the customer select to register a new account or use an existing account
             // until USPS has enabled ShipWorks to register new accounts
-            accountTypePanel.Visible = allowRegisteringExistingAccount;
+            accountTypePanel.Visible = allowRegisteringExistingAccount && !UspsAccount.PendingInitialAccount;
             
             if (!allowRegisteringExistingAccount)
             {
@@ -119,6 +114,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // been hidden from the user)
                 radioNewAccount.Checked = true;
                 radioExistingAccount.Checked = false;
+            }
+            else if (UspsAccount.PendingInitialAccount)
+            {
+                radioNewAccount.Checked = false;
+                radioExistingAccount.Checked = true;
             }
 
             Pages.Add(new ShippingWizardPageOrigin(shipmentType));
@@ -136,18 +136,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 wizardPageOptions.StepNext += OnPageOptionsStepNext;
             }
 
-            // Set default values on the USPS account and load the person control. Now the stampsAccount will
-            // can be referred to throughout the wizard via the personControl
-            UspsAccount = new UspsAccountEntity
+            if (UspsAccount==null)
             {
-                CountryCode = "US",
-                ContractType = (int)UspsAccountContractType.Unknown,
-                CreatedDate = DateTime.UtcNow
-            };
+                // Set default values on the USPS account and load the person control. Now the stampsAccount will
+                // can be referred to throughout the wizard via the personControl
+                UspsAccount = new UspsAccountEntity
+                {
+                    CountryCode = "US",
+                    ContractType = (int)UspsAccountContractType.Unknown,
+                    CreatedDate = DateTime.UtcNow
+                };
 
-            UspsAccount.InitializeNullsToDefault();
+                UspsAccount.InitializeNullsToDefault();
 
-            personControl.LoadEntity(new PersonAdapter(UspsAccount, string.Empty));
+                personControl.LoadEntity(new PersonAdapter(UspsAccount, string.Empty));
+            }
 
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
@@ -308,13 +311,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Called when [step next registration credentials].
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ShipWorks.UI.Wizard.WizardStepEventArgs"/> instance containing the event data.</param>
         private void OnStepNextRegistrationCredentials(object sender, WizardStepEventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            IEnumerable<RegistrationValidationError> validationErrors = uspsRegistrationSecuritySettingsControl.ValidateRegistrationSettings();
+            IEnumerable<RegistrationValidationError> validationErrors = uspsRegistrationSecuritySettingsControl
+                .ValidateRegistrationSettings()
+                .ToList();
             
             if (validationErrors.Any())
             {
@@ -344,8 +347,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Called when [step next new account payment].
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ShipWorks.UI.Wizard.WizardStepEventArgs"/> instance containing the event data.</param>
         private void OnStepNextNewAccountPayment(object sender, WizardStepEventArgs e)
         {
             try
@@ -421,8 +422,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Called when [stepping into credentials].
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs"/> instance containing the event data.</param>
         private void OnSteppingIntoExistingCredentials(object sender, WizardSteppingIntoEventArgs e)
         {
             // account registration is enabled (i.e. USPS has allowed ShipWorks to register accounts)
@@ -527,7 +526,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         protected virtual void OnFormClosing(object sender, FormClosingEventArgs e)
         {
-            if (DialogResult != DialogResult.OK && UspsAccount != null && !UspsAccount.IsNew)
+            if (DialogResult != DialogResult.OK &&
+                UspsAccount != null &&
+                !UspsAccount.IsNew &&
+                !UspsAccount.PendingInitialAccount)
             {
                 UspsAccountManager.DeleteAccount(UspsAccount);
             }
@@ -537,7 +539,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // that a new account has been added.
                 RateCache.Instance.Clear();
 
-                UspsShipmentType shipmentType = (UspsShipmentType)ShipmentTypeManager.GetType(shipmentTypeCode);
+                UspsShipmentType shipmentType = (UspsShipmentType) ShipmentTypeManager.GetType(shipmentTypeCode);
 
                 // If this is the only account, update this shipment type profiles with this account
                 List<UspsAccountEntity> accounts = shipmentType.AccountRepository.Accounts.ToList();
@@ -549,13 +551,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     // in the system. This is to account for the situation where there a multiple
                     // profiles that may be associated with a previous account that has since
                     // been deleted. 
-                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)shipmentTypeCode))
+                    IEnumerable<ShippingProfileEntity> shippingProfileEntities = ShippingProfileManager.Profiles
+                        .Where(p => p.ShipmentType == (int) shipmentTypeCode)
+                        .Where(shippingProfileEntity => shippingProfileEntity.Postal.Usps.UspsAccountID.HasValue);
+
+                    foreach (ShippingProfileEntity shippingProfileEntity in shippingProfileEntities)
                     {
-                        if (shippingProfileEntity.Postal.Usps.UspsAccountID.HasValue)
-                        {
-                            shippingProfileEntity.Postal.Usps.UspsAccountID = accountEntity.UspsAccountID;
-                            ShippingProfileManager.SaveProfile(shippingProfileEntity);
-                        }
+                        shippingProfileEntity.Postal.Usps.UspsAccountID = accountEntity.UspsAccountID;
+                        ShippingProfileManager.SaveProfile(shippingProfileEntity);
                     }
                 }
 
@@ -687,7 +690,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             ShippingProfileEntity profile = ShippingProfileManager.GetProfile(profileId);
 
-            // If we can't find the requested profile (or it's not set in the original rule), we'll just set the new rule to (none).
+            // If we can't find the requested profile (or it's not set in the original rule), 
+            // we'll just set the new rule to (none).
             if (profile == null)
             {
                 return 0;
@@ -695,7 +699,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             
             ShippingProfileEntity newProfile = CreateCopy(profile);
 
-            newProfile.Name = string.Format("{0} (from {1})", profile.Name, EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType));
+            newProfile.Name =
+                $"{profile.Name} (from {EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType)})";
             newProfile.ShipmentType = (int)ShipmentTypeCode.Usps;
             newProfile.ShipmentTypePrimary = false;
 
@@ -748,6 +753,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             newObject.Fields.IsDirty = true;
 
             return newObject;
+        }
+
+        /// <summary>
+        /// Called when [step next welcome].
+        /// </summary>
+        private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
+        {
+            if (UspsAccount.PendingInitialAccount)
+            {
+                e.NextPage = wizardPageOptions;
+            }
         }
     }
 }
