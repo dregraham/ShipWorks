@@ -279,6 +279,28 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
+        /// Does the given rate match the service selected for the shipment
+        /// </summary>
+        public virtual bool DoesRateMatchSelectedService(RateResult rate)
+        {
+            if (ShipmentTypeCode != rate.ShipmentType)
+            {
+                return false;
+            }
+
+            int? service = GetServiceTypeAsIntFromTag(rate.Tag);
+            return service.HasValue && service.Value == ServiceType;
+        }
+
+        /// <summary>
+        /// Get the service type as an integer from the given tag
+        /// </summary>
+        protected virtual int? GetServiceTypeAsIntFromTag(object tag)
+        {
+            return tag as int?;
+        }
+
+        /// <summary>
         /// Perform the service update
         /// </summary>
         protected virtual void UpdateServiceFromRate(RateResult rate)

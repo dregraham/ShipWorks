@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
@@ -102,13 +103,24 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
+        /// Get the service type as an integer from the given tag
+        /// </summary>
+        protected override int? GetServiceTypeAsIntFromTag(object tag)
+        {
+            iParcelServiceType? service = tag as iParcelServiceType? ?? (tag as iParcelRateSelection)?.ServiceType;
+
+            return service.HasValue ? (int?) service.Value : base.GetServiceTypeAsIntFromTag(tag);
+        }
+
+        /// <summary>
         /// Perform the service update
         /// </summary>
         protected override void UpdateServiceFromRate(RateResult rate)
         {
-            if (rate.Tag is int)
+            int? service = GetServiceTypeAsIntFromTag(rate.Tag);
+            if (service.HasValue)
             {
-                Shipment.IParcel.Service = (int) rate.Tag;
+                Shipment.IParcel.Service = service.Value;
             }
         }
     }

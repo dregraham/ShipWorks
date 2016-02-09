@@ -106,5 +106,10 @@ namespace ShipWorks.Shipping.Services
         /// Delete the specified package from the shipment
         /// </summary>
         void DeletePackage(IPackageAdapter package);
+
+        /// <summary>
+        /// Does the given rate match the service selected for the shipment
+        /// </summary>
+        bool DoesRateMatchSelectedService(RateResult rate);
     }
 }

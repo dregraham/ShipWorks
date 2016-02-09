@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
+using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 {
-    public class UspsShipmentAdapterTest
+    public class UspsShipmentAdapterTest : IDisposable
     {
+        readonly AutoMock mock;
         readonly ShipmentEntity shipment;
         private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICustomsManager> customsManager;
@@ -20,6 +24,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 
         public UspsShipmentAdapterTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shipmentType = new UspsShipmentType();
             shipment = new ShipmentEntity
             {
@@ -31,6 +36,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 Postal = new PostalShipmentEntity
                 {
                     Service = (int) PostalServiceType.FirstClass,
+                    Confirmation = (int) PostalConfirmationType.Delivery,
                     Usps = new UspsShipmentEntity()
                 }
             };
@@ -248,6 +254,92 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             });
             Assert.Equal((int) PostalServiceType.PriorityMail, shipment.Postal.Service);
             Assert.Equal((int) PostalConfirmationType.AdultSignatureRestricted, shipment.Postal.Confirmation);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateShipmentTypeDoesNotMatch()
+        {
+            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, 1) { ShipmentType = ShipmentTypeCode.None };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceAndConfirmationDoNotMatch()
+        {
+            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Signature))
+            {
+                ShipmentType = ShipmentTypeCode.Usps
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceDoesNotMatch()
+        {
+            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Delivery))
+            {
+                ShipmentType = ShipmentTypeCode.Usps
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenConfirmationDoesNotMatch()
+        {
+            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.FirstClass, PostalConfirmationType.Signature))
+            {
+                ShipmentType = ShipmentTypeCode.Usps
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateTagIsOtherObject()
+        {
+            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, "NOT A RATE")
+            {
+                ShipmentType = ShipmentTypeCode.Usps
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenServiceAndConfirmationMatches()
+        {
+            var testObject = mock.Create<UspsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.FirstClass, PostalConfirmationType.Delivery))
+            {
+                ShipmentType = ShipmentTypeCode.Usps
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }

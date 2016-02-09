@@ -6,7 +6,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 
@@ -81,26 +80,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             return new RateGroup(results);
-        }
-
-        /// <summary>
-        /// Is the rate for the specified shipment
-        /// </summary>
-        public bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
-        {
-            if (rateResult.ShipmentType != ShipmentTypeCode.iParcel ||
-                shipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.iParcel)
-            {
-                return false;
-            }
-
-            iParcelRateSelection rateSelection = rateResult.Tag as iParcelRateSelection;
-            if (rateSelection == null)
-            {
-                return false;
-            }
-
-            return shipmentAdapter.ServiceType == (int) rateSelection.ServiceType;
         }
 
         /// <summary>
