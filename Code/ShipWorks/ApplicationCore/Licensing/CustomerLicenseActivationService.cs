@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Interapptive.Shared.Utility;
+using Quartz.Util;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -51,15 +52,20 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             if (!uspsAccountRepository.Accounts.Any())
             {
-                UspsAccountEntity uspsAccount = new UspsAccountEntity()
+                string responseUsername = activateLicenseResponse.Context.StampsUsername;
+
+                if (!responseUsername.IsNullOrWhiteSpace())
                 {
-                    Username = activateLicenseResponse.Context.StampsUsername,
-                    Password = password
-                };
+                    UspsAccountEntity uspsAccount = new UspsAccountEntity()
+                    {
+                        Username = responseUsername,
+                        Password = password
+                    };
 
-                uspsWebClient.PopulateUspsAccountEntity(uspsAccount);
+                    uspsWebClient.PopulateUspsAccountEntity(uspsAccount);
 
-                uspsAccountRepository.Save(uspsAccount);
+                    uspsAccountRepository.Save(uspsAccount);
+                }
             }
 
             ICustomerLicense license = licenseFactory(activateLicenseResponse.Context.Key);
