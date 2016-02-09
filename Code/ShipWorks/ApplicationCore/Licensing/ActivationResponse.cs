@@ -23,6 +23,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             Key = XPathUtility.Evaluate(xpath, "//a:CustomerLicenseKey", string.Empty);
             StampsUsername = XPathUtility.Evaluate(xpath, "//a:StampsUserName", string.Empty);
+            AssociatedStampsUserName = XPathUtility.Evaluate(xpath, "//a:AssociatedStampsUserName", string.Empty);
         }
 
         /// <summary>
@@ -34,5 +35,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The Stamps.com username.
         /// </summary>
         public string StampsUsername { get; set; }
+
+        /// <summary>
+        /// The associated stamps username. If empty, do not create new Stamps account in ShipWorks
+        /// </summary>
+        public string AssociatedStampsUserName { get; set; }
     }
 }

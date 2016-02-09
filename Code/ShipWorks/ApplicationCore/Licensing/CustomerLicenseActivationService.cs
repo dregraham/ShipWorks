@@ -51,11 +51,12 @@ namespace ShipWorks.ApplicationCore.Licensing
                 throw new ShipWorksLicenseException(activateLicenseResponse.Message);
             }
 
-            if (!uspsAccountRepository.Accounts.Any() && !activateLicenseResponse.Context.StampsUsername.IsNullOrWhiteSpace())
+            if (!uspsAccountRepository.Accounts.Any() &&
+                !activateLicenseResponse.Context.AssociatedStampsUserName.IsNullOrWhiteSpace())
             {
                 UspsAccountEntity uspsAccount = new UspsAccountEntity()
                 {
-                    Username = activateLicenseResponse.Context.StampsUsername,
+                    Username = activateLicenseResponse.Context.AssociatedStampsUserName,
                     Password = password
                 };
 
