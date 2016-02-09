@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -105,20 +104,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 throw new ShippingException(ex.Message, ex);
             }
-        }
-
-        /// <summary>
-        /// Is the rate for the specified shipment
-        /// </summary>
-        public bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
-        {
-            if (rateResult.ShipmentType != ShipmentTypeCode.UpsOnLineTools ||
-                shipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.UpsOnLineTools)
-            {
-                return false;
-            }
-
-            return shipmentAdapter.ServiceType == (int) rateResult.Tag;
         }
 
         /// <summary>

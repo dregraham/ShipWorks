@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
@@ -55,6 +56,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         {
             get { return Shipment.Postal.Service; }
             set { Shipment.Postal.Service = value; }
+        }
+
+        /// <summary>
+        /// Does the given rate match the service selected for the shipment
+        /// </summary>
+        public override bool DoesRateMatchSelectedService(RateResult rate)
+        {
+            if (ShipmentTypeCode != rate.ShipmentType)
+            {
+                return false;
+            }
+
+            PostalRateSelection selection = rate.Tag as PostalRateSelection;
+
+            return selection != null &&
+                (int) selection.ServiceType == ServiceType &&
+                (int) selection.ConfirmationType == Shipment.Postal.Confirmation;
         }
 
         /// <summary>

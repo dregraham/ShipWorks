@@ -13,8 +13,9 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
 {
-    public class EndiciaShipmentAdapterTest
+    public class EndiciaShipmentAdapterTest : IDisposable
     {
+        readonly AutoMock mock;
         readonly ShipmentEntity shipment;
         private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICustomsManager> customsManager;
@@ -23,6 +24,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
 
         public EndiciaShipmentAdapterTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shipmentType = new EndiciaShipmentType();
             shipment = new ShipmentEntity
             {
@@ -34,6 +36,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
                 Postal = new PostalShipmentEntity
                 {
                     Service = (int) PostalServiceType.FirstClass,
+                    Confirmation = (int) PostalConfirmationType.Delivery,
                     Endicia = new EndiciaShipmentEntity()
                 }
             };
@@ -257,6 +260,92 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
             });
             Assert.Equal((int) PostalServiceType.PriorityMail, shipment.Postal.Service);
             Assert.Equal((int) PostalConfirmationType.AdultSignatureRestricted, shipment.Postal.Confirmation);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateShipmentTypeDoesNotMatch()
+        {
+            var testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, 1) { ShipmentType = ShipmentTypeCode.None };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceAndConfirmationDoNotMatch()
+        {
+            var testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Signature))
+            {
+                ShipmentType = ShipmentTypeCode.Endicia
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceDoesNotMatch()
+        {
+            var testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Delivery))
+            {
+                ShipmentType = ShipmentTypeCode.Endicia
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenConfirmationDoesNotMatch()
+        {
+            var testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.FirstClass, PostalConfirmationType.Signature))
+            {
+                ShipmentType = ShipmentTypeCode.Endicia
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateTagIsOtherObject()
+        {
+            var testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, "NOT A RATE")
+            {
+                ShipmentType = ShipmentTypeCode.Endicia
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenServiceAndConfirmationMatches()
+        {
+            var testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.FirstClass, PostalConfirmationType.Delivery))
+            {
+                ShipmentType = ShipmentTypeCode.Endicia
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }

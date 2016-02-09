@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -8,12 +10,14 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Ups
 {
-    public class UpsShipmentAdapterTest
+    public class UpsShipmentAdapterTest : IDisposable
     {
+        readonly AutoMock mock;
         readonly ShipmentEntity shipment;
         private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICustomsManager> customsManager;
@@ -22,6 +26,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
 
         public UpsShipmentAdapterTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shipmentType = new UpsOltShipmentType();
             shipment = new ShipmentEntity
             {
@@ -226,6 +231,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         }
 
         [Theory]
+        [InlineData(UpsServiceType.Ups2DayAir)]
+        [InlineData(UpsServiceType.UpsNextDayAir)]
+        [InlineData(UpsServiceType.WorldwideExpressPlus)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValidServiceType(UpsServiceType serviceType)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            var testObject = new UpsShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, serviceType)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.UpsOnLineTools
+            });
+            Assert.Equal((int) serviceType, shipment.Ups.Service);
+        }
+
+        [Theory]
         [InlineData(null)]
         [InlineData("Foo")]
         public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
@@ -363,6 +384,92 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
             testObject.DeletePackage(new UpsPackageAdapter(shipment, package, 1));
 
             Assert.Contains(package, shipment.Ups.Packages.RemovedEntitiesTracker.OfType<UpsPackageEntity>());
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateShipmentTypeDoesNotMatch()
+        {
+            var testObject = mock.Create<UpsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, 1) { ShipmentType = ShipmentTypeCode.None };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateServiceAsIntDoesNotMatch()
+        {
+            var testObject = mock.Create<UpsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, (int) UpsServiceType.UpsGround)
+            {
+                ShipmentType = ShipmentTypeCode.UpsOnLineTools
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateServiceAsServiceTypeDoesNotMatch()
+        {
+            var testObject = mock.Create<UpsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, UpsServiceType.UpsGround)
+            {
+                ShipmentType = ShipmentTypeCode.UpsOnLineTools
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateTagIsOtherObject()
+        {
+            var testObject = mock.Create<UpsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, "NOT A RATE")
+            {
+                ShipmentType = ShipmentTypeCode.UpsOnLineTools
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenRateServiceAsIntMatches()
+        {
+            var testObject = mock.Create<UpsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, (int) UpsServiceType.Ups2DayAirAM)
+            {
+                ShipmentType = ShipmentTypeCode.UpsOnLineTools
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenRateServiceAsServiceTypeMatches()
+        {
+            var testObject = mock.Create<UpsShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, UpsServiceType.Ups2DayAirAM)
+            {
+                ShipmentType = ShipmentTypeCode.UpsOnLineTools
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }

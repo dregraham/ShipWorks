@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
 {
     [SuppressMessage("SonarLint", "S101:Class names should comply with a naming convention",
         Justification = "Class is names to match iParcel's naming convention")]
-    public class iParcelShipmentAdapterTest
+    public class iParcelShipmentAdapterTest : IDisposable
     {
         readonly ShipmentEntity shipment;
         private readonly AutoMock mock;
@@ -228,6 +229,38 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         }
 
         [Theory]
+        [InlineData(iParcelServiceType.Immediate)]
+        [InlineData(iParcelServiceType.Preferred)]
+        [InlineData(iParcelServiceType.SaverDeferred)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValidServiceType(iParcelServiceType serviceType)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, serviceType)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.iParcel
+            });
+            Assert.Equal((int) serviceType, shipment.IParcel.Service);
+        }
+
+        [Theory]
+        [InlineData(iParcelServiceType.Immediate)]
+        [InlineData(iParcelServiceType.Preferred)]
+        [InlineData(iParcelServiceType.SaverDeferred)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValidRateSelection(iParcelServiceType serviceType)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            var testObject = new iParcelShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, new iParcelRateSelection(serviceType))
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.iParcel
+            });
+            Assert.Equal((int) serviceType, shipment.IParcel.Service);
+        }
+
+        [Theory]
         [InlineData(null)]
         [InlineData("Foo")]
         public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
@@ -365,6 +398,120 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
             testObject.DeletePackage(new iParcelPackageAdapter(shipment, package, 1));
 
             Assert.Contains(package, shipment.IParcel.Packages.RemovedEntitiesTracker.OfType<IParcelPackageEntity>());
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateShipmentTypeDoesNotMatch()
+        {
+            var testObject = mock.Create<iParcelShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, 1) { ShipmentType = ShipmentTypeCode.None };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateServiceAsIntDoesNotMatch()
+        {
+            var testObject = mock.Create<iParcelShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, (int) iParcelServiceType.Saver)
+            {
+                ShipmentType = ShipmentTypeCode.iParcel
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateServiceAsServiceTypeDoesNotMatch()
+        {
+            var testObject = mock.Create<iParcelShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, iParcelServiceType.Saver)
+            {
+                ShipmentType = ShipmentTypeCode.iParcel
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateServiceAsRateSelectionDoesNotMatch()
+        {
+            var testObject = mock.Create<iParcelShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new iParcelRateSelection(iParcelServiceType.Saver))
+            {
+                ShipmentType = ShipmentTypeCode.iParcel
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateTagIsOtherObject()
+        {
+            var testObject = mock.Create<iParcelShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, "NOT A RATE")
+            {
+                ShipmentType = ShipmentTypeCode.iParcel
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenRateServiceAsIntMatches()
+        {
+            var testObject = mock.Create<iParcelShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, (int) iParcelServiceType.Immediate)
+            {
+                ShipmentType = ShipmentTypeCode.iParcel
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenRateServiceAsServiceTypeMatches()
+        {
+            var testObject = mock.Create<iParcelShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, iParcelServiceType.Immediate)
+            {
+                ShipmentType = ShipmentTypeCode.iParcel
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenRateServiceAsRateSelectionMatches()
+        {
+            var testObject = mock.Create<iParcelShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new iParcelRateSelection(iParcelServiceType.Immediate))
+            {
+                ShipmentType = ShipmentTypeCode.iParcel
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }

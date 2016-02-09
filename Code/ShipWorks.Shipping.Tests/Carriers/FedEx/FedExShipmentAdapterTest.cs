@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 {
-    public class FedExShipmentAdapterTest
+    public class FedExShipmentAdapterTest : IDisposable
     {
+        readonly AutoMock mock;
         readonly ShipmentEntity shipment;
         private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICustomsManager> customsManager;
@@ -21,6 +26,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 
         public FedExShipmentAdapterTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shipmentType = new FedExShipmentType();
             shipment = new ShipmentEntity
             {
@@ -219,6 +225,38 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         }
 
         [Theory]
+        [InlineData(FedExServiceType.FedEx2DayAM)]
+        [InlineData(FedExServiceType.FirstFreight)]
+        [InlineData(FedExServiceType.SmartPost)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValidServiceType(FedExServiceType serviceType)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, serviceType)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.FedEx
+            });
+            Assert.Equal((int) serviceType, shipment.FedEx.Service);
+        }
+
+        [Theory]
+        [InlineData(FedExServiceType.FedEx2DayAM)]
+        [InlineData(FedExServiceType.FirstFreight)]
+        [InlineData(FedExServiceType.SmartPost)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValidRateSelection(FedExServiceType serviceType)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            var testObject = new FedExShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, new FedExRateSelection(serviceType))
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.FedEx
+            });
+            Assert.Equal((int) serviceType, shipment.FedEx.Service);
+        }
+
+        [Theory]
         [InlineData(null)]
         [InlineData("Foo")]
         public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
@@ -356,6 +394,120 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             testObject.DeletePackage(new FedExPackageAdapter(shipment, package, 1));
 
             Assert.Contains(package, shipment.FedEx.Packages.RemovedEntitiesTracker.OfType<FedExPackageEntity>());
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateShipmentTypeDoesNotMatch()
+        {
+            var testObject = mock.Create<FedExShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, 1) { ShipmentType = ShipmentTypeCode.None };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateServiceAsIntDoesNotMatch()
+        {
+            var testObject = mock.Create<FedExShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, (int) FedExServiceType.FedExEconomyCanada)
+            {
+                ShipmentType = ShipmentTypeCode.FedEx
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateServiceAsServiceTypeDoesNotMatch()
+        {
+            var testObject = mock.Create<FedExShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, FedExServiceType.FedExEconomyCanada)
+            {
+                ShipmentType = ShipmentTypeCode.FedEx
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateServiceAsRateSelectionDoesNotMatch()
+        {
+            var testObject = mock.Create<FedExShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new FedExRateSelection(FedExServiceType.FedExEconomyCanada))
+            {
+                ShipmentType = ShipmentTypeCode.FedEx
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateTagIsOtherObject()
+        {
+            var testObject = mock.Create<FedExShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, "NOT A RATE")
+            {
+                ShipmentType = ShipmentTypeCode.FedEx
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenRateServiceAsIntMatches()
+        {
+            var testObject = mock.Create<FedExShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, (int) FedExServiceType.FedEx2DayAM)
+            {
+                ShipmentType = ShipmentTypeCode.FedEx
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenRateServiceAsServiceTypeMatches()
+        {
+            var testObject = mock.Create<FedExShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, FedExServiceType.FedEx2DayAM)
+            {
+                ShipmentType = ShipmentTypeCode.FedEx
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenRateServiceAsRateSelectionMatches()
+        {
+            var testObject = mock.Create<FedExShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, new FedExRateSelection(FedExServiceType.FedEx2DayAM))
+            {
+                ShipmentType = ShipmentTypeCode.FedEx
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }
