@@ -77,6 +77,9 @@ namespace ShipWorks.UI
 
             builder.RegisterType<UpgradePlanDlgFactory>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<CustomerLicenseActivationService>()
+                .AsImplementedInterfaces();
         }
     }
 }

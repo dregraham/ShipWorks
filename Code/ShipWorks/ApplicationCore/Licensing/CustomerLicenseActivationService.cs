@@ -4,6 +4,7 @@ using Interapptive.Shared.Utility;
 using Quartz.Util;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 
@@ -23,13 +24,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Initializes a new instance of the <see cref="CustomerLicenseActivationService"/> class.
         /// </summary>
         /// <param name="tangoWebClient">The tango web client.</param>
-        /// <param name="uspsWebClient">The usps web client.</param>
+        /// <param name="uspsWebClientFactory"></param>
         /// <param name="uspsAccountRepository">The usps account repository.</param>
         /// <param name="licenseFactory">The license factory.</param>
-        public CustomerLicenseActivationService(ITangoWebClient tangoWebClient, IUspsWebClient uspsWebClient, ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository, Func<string, ICustomerLicense> licenseFactory)
+        public CustomerLicenseActivationService(ITangoWebClient tangoWebClient, Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory, ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository, Func<string, ICustomerLicense> licenseFactory)
         {
             this.tangoWebClient = tangoWebClient;
-            this.uspsWebClient = uspsWebClient;
+            this.uspsWebClient = uspsWebClientFactory(UspsResellerType.None);
             this.uspsAccountRepository = uspsAccountRepository;
             this.licenseFactory = licenseFactory;
         }

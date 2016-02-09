@@ -57,7 +57,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <param name="uspsResellerType">Type of the USPS reseller.</param>
         public UspsWebClient(UspsResellerType uspsResellerType)
             : this(new UspsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector(), uspsResellerType)
-        { }
+        {
+        }
+
+        public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository,
+            ILogEntryFactory logEntryFactory, Func<string, ICertificateInspector> certificateInspectorFactory,
+            UspsResellerType uspsResellerType)
+            : this(accountRepository, logEntryFactory, certificateInspectorFactory(string.Empty), uspsResellerType)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsWebClient" /> class.
