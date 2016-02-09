@@ -500,6 +500,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("CreatedDate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("PendingInitialAccount", fieldHashtable);
 		}
 		#endregion
 
@@ -816,6 +819,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.DateTime)GetValue((int)UspsAccountFieldIndex.CreatedDate, true); }
 			set	{ SetValue((int)UspsAccountFieldIndex.CreatedDate, value); }
+		}
+
+		/// <summary> The PendingInitialAccount property of the Entity UspsAccount<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UspsAccount"."PendingInitialAccount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean PendingInitialAccount
+		{
+			get { return (System.Boolean)GetValue((int)UspsAccountFieldIndex.PendingInitialAccount, true); }
+			set	{ SetValue((int)UspsAccountFieldIndex.PendingInitialAccount, value); }
 		}
 
 

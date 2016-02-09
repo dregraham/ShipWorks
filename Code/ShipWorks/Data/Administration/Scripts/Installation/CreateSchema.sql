@@ -472,7 +472,7 @@ CREATE TABLE [dbo].[Order]
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [ShipSenseRecognitionStatus] int NOT NULL,
-[ShipAddressType] [int] NOT NULL 
+[ShipAddressType] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -4729,7 +4729,8 @@ CREATE TABLE [dbo].[UspsAccount]
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UspsReseller] [int] NOT NULL,
 [ContractType] [int] NOT NULL,
-[CreatedDate] [datetime] NOT NULL
+[CreatedDate] [datetime] NOT NULL,
+[PendingInitialAccount] [bit] NOT NULL DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'
