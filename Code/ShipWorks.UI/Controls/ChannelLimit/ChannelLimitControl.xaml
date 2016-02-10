@@ -8,12 +8,15 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance local:ChannelLimitViewModel}"
              d:DesignHeight="300" d:DesignWidth="450"
-             FontFamily="Tahoma" FontSize="8.25pt" 
+             FontFamily="Tahoma" 
+	     FontSize="8.25pt" 
+	      Cursor="{Binding Cursor}"
              IsEnabled="{Binding IsDeleting, Converter={valueConverters:InverseBooleanConverter}}">
     
     <UserControl.Resources>
         <valueConverters:EnumImageConverter x:Key="EnumImageConverter" />
         <valueConverters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+        <valueConverters:InverseBoolean x:Key="InverseBooleanConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -135,6 +138,7 @@
                 x:Name="upgrade"
                 Margin="0 0 0 10"
                 Height="20" Width="128"
+		IsEnabled="{Binding IsDeleting, Converter={StaticResource InverseBooleanConverter}}"
                 Command="{Binding UpgradeClickCommand}">
                 <DockPanel Width="125">
                     <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/arrow_up_blue.png"/>
@@ -147,7 +151,8 @@
                 x:Name="delete" 
                 Margin="0 0 0 10"
                 Height="20" Width="128" 
-                Command="{Binding DeleteStoreClickCommand}">
+                Command="{Binding DeleteStoreClickCommand}"
+                IsEnabled="{Binding IsDeleting, Converter={StaticResource InverseBooleanConverter}}">
                 <DockPanel Width="125">
                     <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/delete2.png"/>
                     <TextBlock TextAlignment="Center" Margin="-14 0 0 0">Delete</TextBlock>
