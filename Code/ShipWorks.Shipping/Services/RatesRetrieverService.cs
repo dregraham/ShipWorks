@@ -48,7 +48,12 @@ namespace ShipWorks.Shipping.Services
                 .Where(x => x.ShipmentAdapter != null)
                 .Select(x => new { Message = x, HashingService = rateHashingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode] })
                 .Where(x => string.IsNullOrEmpty(x.Message.ChangedField) || x.HashingService.IsRatingField(x.Message.ChangedField))
-                .Select(x => new { x.Message.ShipmentAdapter, RatingHash = x.HashingService.GetRatingHash(x.Message.ShipmentAdapter.Shipment) })
+                .Select(x => new
+                {
+                    //TODO: Clone shipment and adapter because I got a concurrency error
+                    x.Message.ShipmentAdapter,
+                    RatingHash = x.HashingService.GetRatingHash(x.Message.ShipmentAdapter.Shipment)
+                })
                 .Do(x => messenger.Send(new RatesRetrievingMessage(this, x.RatingHash)))
                 .Throttle(TimeSpan.FromMilliseconds(ThrottleTime), schedulerProvider.Default)
                 .ObserveOn(schedulerProvider.TaskPool)
