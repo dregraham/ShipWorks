@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Controls;
-using ShipWorks.Data.Connection;
-using System.Diagnostics;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
@@ -80,9 +77,9 @@ namespace ShipWorks.Shipping.Editing
         [DefaultValue(false)]
         public WeightControl ShipmentWeightBox
         {
-            get 
-            { 
-                return shipmentWeightBox; 
+            get
+            {
+                return shipmentWeightBox;
             }
             set
             {
@@ -287,7 +284,7 @@ namespace ShipWorks.Shipping.Editing
         {
             Debug.Assert(!profiles.MultiValued);
 
-            // We don't need to call OnDimensionsChanged 4 times (length, width, height, weight), 
+            // We don't need to call OnDimensionsChanged 4 times (length, width, height, weight),
             // so suspend change events until they are updated.
             suspendChangedEvent = true;
 
@@ -369,10 +366,16 @@ namespace ShipWorks.Shipping.Editing
                 return;
             }
 
-            if (DimensionsChanged != null)
-            {
-                DimensionsChanged(this, EventArgs.Empty);
-            }
+            DimensionsChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public void FlushChanges()
+        {
+            weight.FlushChanges();
         }
     }
 }

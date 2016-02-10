@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
-using Autofac;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -39,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <param name="shipmentTypeCode"></param>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        protected PostalServiceControlBase(ShipmentTypeCode shipmentTypeCode, RateControl rateControl) 
+        protected PostalServiceControlBase(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
             : base(shipmentTypeCode, rateControl)
         {
             InitializeComponent();
@@ -67,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         private void UpdateAvailablePackageTypes(IEnumerable<ShipmentEntity> shipments)
         {
             Dictionary<int, string> availablePackagingTypes = ShipmentTypeManager.GetType(ShipmentTypeCode).BuildPackageTypeDictionary(shipments.ToList());
-            
+
             packagingType.SelectedIndexChanged -= OnChangePackaging;
             packagingType.BindToEnumAndPreserveSelection<PostalPackagingType>(p => availablePackagingTypes.ContainsKey((int) p));
             packagingType.SelectedIndexChanged += OnChangePackaging;
@@ -131,7 +130,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
                 // See if all have confirmation as an option or not
                 availableConfirmations = availableConfirmations.Intersect(
-                    postalShipmentType.GetAvailableConfirmationTypes(shipment.ShipCountryCode, postalServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
+                    postalShipmentType.GetAvailableConfirmationTypes(shipment.ShipCountryCode, postalServiceType, (PostalPackagingType) shipment.Postal.PackagingType))
                         .ToList();
 
                 if (postalServiceType != PostalServiceType.ExpressMail)
@@ -152,9 +151,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
                 // Bind the drop down to the international services
                 service.DataSource = ActiveEnumerationBindingSource
-                    .Create(services.Select(type => new KeyValuePair<string, PostalServiceType>(type.Value, (PostalServiceType)type.Key)).ToList());
+                    .Create(services.Select(type => new KeyValuePair<string, PostalServiceType>(type.Value, (PostalServiceType) type.Key)).ToList());
             }
-           
+
             service.DisplayMember = "Key";
             service.ValueMember = "Value";
 
@@ -348,10 +347,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private void OnServiceChanged(object sender, EventArgs e)
         {
-            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType)service.SelectedValue;
+            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType) service.SelectedValue;
 
             // Update the available confirmation types based on the shipping provider
-            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;            
+            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;
             UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode, serviceType, (PostalPackagingType?) packagingType.SelectedValue));
 
             // Only show express options for express
@@ -364,14 +363,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             SyncSelectedRate();
         }
-        
+
         /// <summary>
         /// Synchronizes the selected rate in the rate control.
         /// </summary>
         public override void SyncSelectedRate()
         {
-            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType)service.SelectedValue;
-            PostalConfirmationType confirmationType = confirmation.SelectedValue == null ? PostalConfirmationType.None : (PostalConfirmationType)confirmation.SelectedValue;
+            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType) service.SelectedValue;
+            PostalConfirmationType confirmationType = confirmation.SelectedValue == null ? PostalConfirmationType.None : (PostalConfirmationType) confirmation.SelectedValue;
 
             if (!service.MultiValued && !confirmation.MultiValued)
             {
@@ -419,7 +418,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
                 UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode, serviceType, (PostalPackagingType) packagingType.SelectedValue));
 
-                UpdateAvailableShipmentOptions((PostalPackagingType)packagingType.SelectedValue);
+                UpdateAvailableShipmentOptions((PostalPackagingType) packagingType.SelectedValue);
             }
         }
 
@@ -488,6 +487,18 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 confirmation.SelectedIndex = 0;
             }
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public override void FlushChanges()
+        {
+            base.FlushChanges();
+
+            dimensionsControl.FlushChanges();
+            weight.FlushChanges();
         }
     }
 }

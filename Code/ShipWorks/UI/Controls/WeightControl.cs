@@ -412,6 +412,17 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
+        /// Finish editing so that the weight can be updated and saved
+        /// </summary>
+        public void FlushChanges()
+        {
+            if (!MultiValued)
+            {
+                SetParsedWeight();
+            }
+        }
+
+        /// <summary>
         /// Set the value of the current weight to the given value.
         /// </summary>
         private void SetCurrentWeight(double newWeight)
@@ -452,10 +463,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         protected override void OnLeave(EventArgs e)
         {
-            if (!MultiValued)
-            {
-                SetParsedWeight();
-            }
+            FlushChanges();
 
             base.OnLeave(e);
         }

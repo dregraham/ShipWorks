@@ -114,6 +114,17 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public override void FlushChanges()
+        {
+            base.FlushChanges();
+
+            weight.FlushChanges();
+        }
+
+        /// <summary>
         /// Origin data has changed
         /// </summary>
         private void OnOriginChanged(object sender, EventArgs e)
