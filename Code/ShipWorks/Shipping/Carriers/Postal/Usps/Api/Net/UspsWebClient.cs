@@ -233,19 +233,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 webService.GetAccountInfo(GetCredentials(account), out accountInfo, out address, out email);
 
-                account.FirstName = address.FirstName;
-                account.MiddleName = address.MiddleName;
-                account.LastName = address.LastName;
-                account.Street1 = address.Address1;
-                account.Street2 = address.Address2;
-                account.Street3 = address.Address3;
-                account.City = address.City;
-                account.StateProvCode = Geography.GetStateProvCode(address.State);
-                account.PostalCode = address.ZIPCode;
-                account.CountryCode = Geography.GetCountryCode(address.Country);
-                account.Email = email;
-                account.Phone = address.PhoneNumber;
-                account.Company = address.Company;
+                account.UspsAccountID = accountInfo.AccountId;
+                account.Description = UspsAccountManager.GetDefaultDescription(account) ?? string.Empty;
+                account.FirstName = address.FirstName ?? string.Empty;
+                account.MiddleName = address.MiddleName ?? string.Empty;
+                account.LastName = address.LastName ?? string.Empty;
+                account.Company = address.Company ?? string.Empty;
+                account.Street1 = address.Address1 ?? string.Empty;
+                account.Street2 = address.Address2 ?? string.Empty;
+                account.Street3 = address.Address3 ?? string.Empty;
+                account.City = address.City ?? string.Empty;
+                account.StateProvCode = Geography.GetStateProvCode(address.State) ?? string.Empty;
+                account.PostalCode = address.PostalCode ?? string.Empty;
+                account.CountryCode = Geography.GetCountryCode(address.Country) ?? string.Empty;
+                account.Phone = address.PhoneNumber ?? string.Empty;
+                account.Email = email ?? string.Empty;
+                account.Website = string.Empty;
+                account.MailingPostalCode = address.PostalCode ?? string.Empty;
+                account.UspsReseller = (int) UspsResellerType.None;
+                account.ContractType = (int) GetUspsAccountContractType(accountInfo.RatesetType);
+                account.CreatedDate = DateTime.UtcNow;
+                account.PendingInitialAccount = true;
             }
 
             return account;
@@ -1402,7 +1410,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private UspsAccountContractType InternalGetContractType(UspsAccountEntity account)
         {
-            UspsAccountContractType contract = UspsAccountContractType.Unknown;
             AccountInfo accountInfo;
 
             using (SwsimV49 webService = CreateWebService("GetContractType"))
@@ -1417,28 +1424,43 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             RatesetType? rateset = accountInfo.RatesetType;
-            if (rateset.HasValue)
+
+            return GetUspsAccountContractType(rateset);
+        }
+
+        /// <summary>
+        /// Gets the UspsAccountContractType enum value
+        /// </summary>
+        /// <param name="rateset">The rateset.</param>
+        /// <returns></returns>
+        private UspsAccountContractType GetUspsAccountContractType(RatesetType? rateset)
+        {
+            UspsAccountContractType contract = UspsAccountContractType.Unknown;
+
+            if (!rateset.HasValue)
             {
-                switch (rateset)
-                {
-                    case RatesetType.CBP:
-                    case RatesetType.Retail:
-                        contract = UspsAccountContractType.Commercial;
-                        break;
+                return contract;
+            }
 
-                    case RatesetType.CPP:
-                    case RatesetType.NSA:
-                        contract = UspsAccountContractType.CommercialPlus;
-                        break;
+            switch (rateset)
+            {
+                case RatesetType.CBP:
+                case RatesetType.Retail:
+                    contract = UspsAccountContractType.Commercial;
+                    break;
 
-                    case RatesetType.STMP:
-                        contract = UspsAccountContractType.Reseller;
-                        break;
+                case RatesetType.CPP:
+                case RatesetType.NSA:
+                    contract = UspsAccountContractType.CommercialPlus;
+                    break;
 
-                    default:
-                        contract = UspsAccountContractType.Unknown;
-                        break;
-                }
+                case RatesetType.STMP:
+                    contract = UspsAccountContractType.Reseller;
+                    break;
+
+                default:
+                    contract = UspsAccountContractType.Unknown;
+                    break;
             }
 
             return contract;
