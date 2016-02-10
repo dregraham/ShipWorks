@@ -11,7 +11,7 @@ end
 
 Albacore.configure do |config|
 	config.msbuild do |msbuild|
-		msbuild.parameters = "/m:3 /p:DebugType=pdbonly "
+		msbuild.parameters = "/m:3"
 		msbuild.solution = "ShipWorks.sln"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 		msbuild.command = "#{program_files}/MSBuild/14.0/Bin/msbuild.exe"
 		#msbuild.properties = { TreatWarningsAsErrors: true }
@@ -124,7 +124,7 @@ namespace :build do
 
 		# NOTE: The ReleaseType=Internal parameter will cause the assemblies/installer to
 		# be signed; this will fail without the correct certificate
-		msb.parameters = "/p:DebugType=pdbonly /p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:ProjectRevisionFile=" + @revisionFilePath + " /p:CCNetLabel=" + labelForBuild
+		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:ProjectRevisionFile=" + @revisionFilePath + " /p:CCNetLabel=" + labelForBuild
 	end
 
 	desc "Build ShipWorks and generate a public installer"
@@ -154,7 +154,7 @@ namespace :build do
 
 		# Use the revisionNumber extracted from the file and pass the revision filename
 		# so the build will increment the version in preparation for the next run
-		msb.parameters = "/p:DebugType=pdbonly /p:CreateInstaller=True /p:PackageModules=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:BuildType=Automated /p:ProjectRevisionFile=#{@revisionFilePath} /p:CCNetLabel=#{labelForBuild}"
+		msb.parameters = "/p:CreateInstaller=True /p:PackageModules=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:BuildType=Automated /p:ProjectRevisionFile=#{@revisionFilePath} /p:CCNetLabel=#{labelForBuild}"
 	end
 end
 
@@ -174,7 +174,7 @@ namespace :test do
 		print "Executing ShipWorks unit tests...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 
-		msbuild.parameters = "/m:4 /p:DebugType=pdbonly"
+		msbuild.parameters = "/m:4"
 		msbuild.solution = "tests.msbuild"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 		msbuild.properties :configuration => :Debug
 		msbuild.targets :Units
@@ -187,7 +187,7 @@ namespace :test do
 
 		# We need the integration tests to run in parallel so that the correct synchronization context gets set.
 		# If they are not run in parallel, some async tests will deadlock
-		msbuild.parameters = "/m:4 /p:DebugType=pdbonly"
+		msbuild.parameters = "/m:4"
 
 		unless args.categoryFilter.nil? or args.categoryFilter.empty?
 			# We need to filter the tests based on the categories provided
@@ -198,7 +198,7 @@ namespace :test do
 
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
 
-		#msbuild.parameters = "/m:1 /p:DebugType=pdbonly"
+		#msbuild.parameters = "/m:1"
 		msbuild.solution = "tests.msbuild"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 		msbuild.properties :configuration => :Debug
 		msbuild.targets :Integration

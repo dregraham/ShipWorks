@@ -3,7 +3,7 @@
 <dotfuscator version="2.3">
   <global>
     <option>error</option>
-    <option>debug</option>
+    <option>nodotfuscatorattribute</option>
     <option>verbose</option>
   </global>
   <input>

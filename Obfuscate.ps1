@@ -12,11 +12,3 @@ copy Artifacts\Application\Interapptive.* Artifacts\Application\Original\
 
 copy Artifacts\Application\Obfuscated\*.* Artifacts\Application\
 
-
-copy Artifacts\Application\*.* D:\Projects\ShipWorks\Code\ShipWorks.Tests\bin\Debug
-copy Artifacts\Application\*.* D:\Projects\ShipWorks\Code\Interapptive.Shared.Tests\bin\Debug
-copy Artifacts\Application\*.* D:\Projects\ShipWorks\Code\ShipWorks.Data.Modal.Tests\bin\Debug
-copy Artifacts\Application\*.* D:\Projects\ShipWorks\Code\ShipWorks.Shipping.Tests\bin\Debug
-copy Artifacts\Application\*.* D:\Projects\ShipWorks\Code\ShipWorks.Shipping.UI.Tests\bin\Debug
-copy Artifacts\Application\*.* D:\Projects\ShipWorks\Code\ShipWorks.Stores.Tests\bin\Debug
-copy Artifacts\Application\*.* D:\Projects\ShipWorks\Code\ShipWorks.UI.Tests\bin\Debug
