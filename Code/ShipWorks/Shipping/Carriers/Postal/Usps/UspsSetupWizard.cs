@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsSetupWizard"/> class.
         /// </summary>
-        public UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, UspsAccountEntity uspsAccount) 
+        public UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, UspsAccountEntity uspsAccount)
         {
             UspsAccount = uspsAccount;
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             UspsResellerType resellerType = UspsResellerType.None;
 
-            // Load up a registration object using the USPS validator and the gateway to 
+            // Load up a registration object using the USPS validator and the gateway to
             // the USPS API
             uspsRegistration = new UspsRegistration(new UspsRegistrationValidator(), new UspsRegistrationGateway(resellerType), promotion);
             this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 RemoveMonthlyFeeText();
             }
 
-            // Set the shipment type is set correctly (could be USPS), so the 
+            // Set the shipment type is set correctly (could be USPS), so the
             // label type gets persisted to the correct profile
             optionsControl.ShipmentTypeCode = this.shipmentTypeCode;
         }
@@ -104,10 +104,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             optionsControl.LoadSettings();
 
-            // Hide the panel that lets the customer select to register a new account or use an existing account
-            // until USPS has enabled ShipWorks to register new accounts
-            accountTypePanel.Visible = allowRegisteringExistingAccount && !UspsAccount.PendingInitialAccount;
-            
+
+
             if (!allowRegisteringExistingAccount)
             {
                 // Registering an existing account is not allowed, so choose new account (since the options have
@@ -151,6 +149,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 personControl.LoadEntity(new PersonAdapter(UspsAccount, string.Empty));
             }
+
+            // Hide the panel that lets the customer select to register a new account or use an existing account
+            // until USPS has enabled ShipWorks to register new accounts
+            accountTypePanel.Visible = allowRegisteringExistingAccount && !UspsAccount.PendingInitialAccount;
 
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
@@ -196,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             WebHelper.OpenUrl("http://www.stamps.com/conditions/terms.html", this);
         }
-        
+
         /// <summary>
         /// Open the Stamps.com privacy policy
         /// </summary>
@@ -244,7 +246,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 e.NextPage = CurrentPage;
                 return;
             }
-            
+
             if (HasAcceptedTermsConditions() && IsContactInfoComplete())
             {
                 // We have the necessary information, so update our USPS registration
@@ -318,7 +320,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             IEnumerable<RegistrationValidationError> validationErrors = uspsRegistrationSecuritySettingsControl
                 .ValidateRegistrationSettings()
                 .ToList();
-            
+
             if (validationErrors.Any())
             {
                 string validationMessage = "ShipWorks cannot create a USPS account with the information provided. Stamps.com requires that the following field(s) be corrected:"
@@ -370,7 +372,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     {
                         uspsRegistration.AchAccount = uspsPaymentControl.BankAccount;
                     }
-                                        
+
                     uspsRegistration.Submit();
 
                     // Save the USPS account now that it has been succesfully created
@@ -427,7 +429,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // account registration is enabled (i.e. USPS has allowed ShipWorks to register accounts)
             if (radioNewAccount.Checked)
             {
-                // The customer opted to create a new USPS account, so we'll skip the page 
+                // The customer opted to create a new USPS account, so we'll skip the page
                 // asking for existing credentials
                 e.Skip = true;
                 BackEnabled = false;
@@ -550,7 +552,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     // Update any profiles to use this account if this is the only account
                     // in the system. This is to account for the situation where there a multiple
                     // profiles that may be associated with a previous account that has since
-                    // been deleted. 
+                    // been deleted.
                     IEnumerable<ShippingProfileEntity> shippingProfileEntities = ShippingProfileManager.Profiles
                         .Where(p => p.ShipmentType == (int) shipmentTypeCode)
                         .Where(shippingProfileEntity => shippingProfileEntity.Postal.Usps.UspsAccountID.HasValue);
@@ -575,7 +577,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            // We also need to exclude Endicia, and Express1 from the list 
+            // We also need to exclude Endicia, and Express1 from the list
             // of active providers since the customer agreed to use USPS
             ExcludeShipmentType(settings, ShipmentTypeCode.Endicia);
             ExcludeShipmentType(settings, ShipmentTypeCode.Express1Endicia);
@@ -625,9 +627,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     using (SqlAdapter sqlAdapter = new SqlAdapter())
                     {
                         sqlAdapter.DeleteEntity(profile);
-                    }    
+                    }
                 }
-                
+
                 ShippingDefaultsRuleManager.DeleteRule(rule);
             }
         }
@@ -690,13 +692,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             ShippingProfileEntity profile = ShippingProfileManager.GetProfile(profileId);
 
-            // If we can't find the requested profile (or it's not set in the original rule), 
+            // If we can't find the requested profile (or it's not set in the original rule),
             // we'll just set the new rule to (none).
             if (profile == null)
             {
                 return 0;
             }
-            
+
             ShippingProfileEntity newProfile = CreateCopy(profile);
 
             newProfile.Name =
