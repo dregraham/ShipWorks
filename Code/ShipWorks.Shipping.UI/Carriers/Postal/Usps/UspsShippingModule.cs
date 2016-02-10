@@ -43,6 +43,9 @@ namespace ShipWorks.Shipping.Carriers.Usps
 
             builder.RegisterType<UspsResellerType>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<UspsAccountManagerWrapper>()
+                .AsImplementedInterfaces();
         }
     }
 }
