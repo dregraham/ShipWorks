@@ -11,6 +11,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Other
     public class OtherShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private OtherShipmentAdapter(OtherShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public OtherShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
@@ -59,5 +67,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Other
         {
             // Nothing to do as Other is only allowed to use ShipWorks insurance
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        /// <returns></returns>
+        public override ICarrierShipmentAdapter Clone() => new OtherShipmentAdapter(this);
     }
 }

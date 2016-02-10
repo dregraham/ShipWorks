@@ -15,6 +15,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     public class iParcelShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private iParcelShipmentAdapter(iParcelShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public iParcelShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
@@ -123,5 +131,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 Shipment.IParcel.Service = service.Value;
             }
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        /// <returns></returns>
+        public override ICarrierShipmentAdapter Clone() => new iParcelShipmentAdapter(this);
     }
 }

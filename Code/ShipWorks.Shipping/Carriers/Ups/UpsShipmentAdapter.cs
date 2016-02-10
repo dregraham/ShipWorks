@@ -13,6 +13,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
     public class UpsShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private UpsShipmentAdapter(UpsShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public UpsShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
@@ -122,5 +130,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Shipment.Ups.Service = service.Value;
             }
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        /// <returns></returns>
+        public override ICarrierShipmentAdapter Clone() => new UpsShipmentAdapter(this);
     }
 }

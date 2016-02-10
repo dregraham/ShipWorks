@@ -11,6 +11,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     public class UspsShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private UspsShipmentAdapter(UspsShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public UspsShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
@@ -92,5 +100,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 Shipment.Postal.Confirmation = (int) rateSelection.ConfirmationType;
             }
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        /// <returns></returns>
+        public override ICarrierShipmentAdapter Clone() => new UspsShipmentAdapter(this);
     }
 }

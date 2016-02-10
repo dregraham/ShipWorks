@@ -78,6 +78,11 @@ namespace ShipWorks.Shipping.Services
         EntityCollection<ShipmentCustomsItemEntity> CustomsItems { get; set; }
 
         /// <summary>
+        /// Clone the shipment adapter and shipment
+        /// </summary>
+        ICarrierShipmentAdapter Clone();
+
+        /// <summary>
         /// List of package adapters for the shipment
         /// </summary>
         IEnumerable<IPackageAdapter> GetPackageAdapters();

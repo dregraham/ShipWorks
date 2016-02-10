@@ -11,6 +11,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class BestRateShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private BestRateShipmentAdapter(BestRateShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public BestRateShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) :
@@ -61,5 +69,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             // Nothing to do as BestRate is only allowed to use ShipWorks insurance
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        /// <returns></returns>
+        public override ICarrierShipmentAdapter Clone() => new BestRateShipmentAdapter(this);
     }
 }

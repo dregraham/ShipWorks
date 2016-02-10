@@ -11,9 +11,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public class EndiciaShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private EndiciaShipmentAdapter(EndiciaShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
+        public EndiciaShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) :
+            base(shipment, shipmentTypeManager, customsManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal, nameof(shipment.Postal));
             MethodConditions.EnsureArgumentIsNotNull(shipment.Postal.Endicia, nameof(shipment.Postal.Endicia));
@@ -92,5 +101,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 Shipment.Postal.Confirmation = (int) rateSelection.ConfirmationType;
             }
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        /// <returns></returns>
+        public override ICarrierShipmentAdapter Clone() => new EndiciaShipmentAdapter(this);
     }
 }

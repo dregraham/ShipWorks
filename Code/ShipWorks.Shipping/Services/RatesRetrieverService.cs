@@ -46,18 +46,26 @@ namespace ShipWorks.Shipping.Services
         {
             subscription = messenger.OfType<ShipmentChangedMessage>()
                 .Where(x => x.ShipmentAdapter != null)
-                .Select(x => new { Message = x, HashingService = rateHashingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode] })
+                .Select(x => new
+                {
+                    Message = x,
+                    HashingService = rateHashingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode]
+                })
                 .Where(x => string.IsNullOrEmpty(x.Message.ChangedField) || x.HashingService.IsRatingField(x.Message.ChangedField))
                 .Select(x => new
                 {
-                    //TODO: Clone shipment and adapter because I got a concurrency error
-                    x.Message.ShipmentAdapter,
+                    ShipmentAdapter = x.Message.ShipmentAdapter.Clone(),
                     RatingHash = x.HashingService.GetRatingHash(x.Message.ShipmentAdapter.Shipment)
                 })
                 .Do(x => messenger.Send(new RatesRetrievingMessage(this, x.RatingHash)))
                 .Throttle(TimeSpan.FromMilliseconds(ThrottleTime), schedulerProvider.Default)
                 .ObserveOn(schedulerProvider.TaskPool)
-                .Select(x => new { x.ShipmentAdapter, x.RatingHash, Rates = ratesRetriever.GetRates(x.ShipmentAdapter.Shipment) })
+                .Select(x => new
+                {
+                    x.ShipmentAdapter,
+                    x.RatingHash,
+                    Rates = ratesRetriever.GetRates(x.ShipmentAdapter.Shipment)
+                })
                 .SubscribeWithRetry(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)), HandleException);
         }
 

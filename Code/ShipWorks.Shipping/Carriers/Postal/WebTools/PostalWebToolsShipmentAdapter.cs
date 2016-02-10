@@ -12,6 +12,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
     public class PostalWebToolsShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private PostalWebToolsShipmentAdapter(PostalWebToolsShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public PostalWebToolsShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
@@ -82,5 +90,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         {
             Shipment.InsuranceProvider = shippingSettings.UspsInsuranceProvider;
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        /// <returns></returns>
+        public override ICarrierShipmentAdapter Clone() => new PostalWebToolsShipmentAdapter(this);
     }
 }

@@ -15,6 +15,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public class AmazonShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private AmazonShipmentAdapter(AmazonShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public AmazonShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager) :
@@ -63,6 +71,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             get { return new EntityCollection<ShipmentCustomsItemEntity>(); }
             set { throw new NotImplementedException(); }
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        /// <returns></returns>
+        public override ICarrierShipmentAdapter Clone() => new AmazonShipmentAdapter(this);
 
         /// <summary>
         /// Are customs allowed?
