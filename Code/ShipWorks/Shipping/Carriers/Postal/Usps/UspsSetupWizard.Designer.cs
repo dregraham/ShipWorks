@@ -124,6 +124,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageWelcome.Size = new System.Drawing.Size(733, 540);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup Stamps.com Shipping";
+            this.wizardPageWelcome.StepNext += OnStepNextWelcome;
             // 
             // accountTypePanel
             // 
