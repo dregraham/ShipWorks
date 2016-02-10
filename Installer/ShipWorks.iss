@@ -104,8 +104,6 @@ Source: {#AppArtifacts}\GalaSoft.MvvmLight.dll; DestDir: {app}; Flags: overwrite
 Source: {#AppArtifacts}\Interapptive.Shared.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\log4net.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Microsoft.Threading.Tasks.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\Microsoft.Threading.Tasks.Extensions.Desktop.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\Microsoft.Threading.Tasks.Extensions.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Microsoft.Web.Services3.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\NAudio.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Newtonsoft.Json.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
