@@ -43,7 +43,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <returns></returns>
         public ICustomerLicense Activate(string username, string password)
         {
-            GenericResult<ActivationResponse> activateLicenseResponse = tangoWebClient.ActivateLicense(username, password);
+            GenericResult<IActivationResponse> activateLicenseResponse = tangoWebClient.ActivateLicense(username, password);
 
             // Check to see if something went wrong and if so we throw
             if (!activateLicenseResponse.Success)

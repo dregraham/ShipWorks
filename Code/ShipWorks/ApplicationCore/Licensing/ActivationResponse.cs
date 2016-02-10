@@ -6,7 +6,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Contains customer activation response
     /// </summary>
-    public class ActivationResponse
+    public class ActivationResponse : IActivationResponse
     {
         /// <summary>
         /// Constructor
@@ -22,7 +22,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             xpath.Namespaces.AddNamespace("", "http://stamps.com/xml/namespace/2015/09/shipworks/activationv1");
 
             Key = XPathUtility.Evaluate(xpath, "//a:CustomerLicenseKey", string.Empty);
-            StampsUsername = XPathUtility.Evaluate(xpath, "//a:StampsUserName", string.Empty);
             AssociatedStampsUserName = XPathUtility.Evaluate(xpath, "//a:AssociatedStampsUserName", string.Empty);
         }
 
@@ -30,11 +29,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The customer Key
         /// </summary>
         public string Key { get; set; }
-
-        /// <summary>
-        /// The Stamps.com username.
-        /// </summary>
-        public string StampsUsername { get; set; }
 
         /// <summary>
         /// The associated stamps username. If empty, do not create new Stamps account in ShipWorks

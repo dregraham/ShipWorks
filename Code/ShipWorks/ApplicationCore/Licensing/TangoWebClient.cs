@@ -1112,9 +1112,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets license information for the given email and password
         /// </summary>
-        public static GenericResult<ActivationResponse> ActivateLicense(string email, string password)
+        public static GenericResult<IActivationResponse> ActivateLicense(string email, string password)
         {
-            GenericResult<ActivationResponse> result = new GenericResult<ActivationResponse>(null);
+            GenericResult<IActivationResponse> result = new GenericResult<IActivationResponse>(null);
 
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter { Verb = HttpVerb.Post };
 

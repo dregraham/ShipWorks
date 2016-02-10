@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Xml;
+using System.Collections.Generic;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
@@ -14,21 +15,21 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
     public class CustomerLicenseActivationServiceTest
     {
         [Fact]
-        public void Activate_ThrowsShipWorksLicenseException_IfTangoActivationFails()
+        public void Activate_ThrowsShipWorksLicenseException_WhenTangoActivationFails()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<ITangoWebClient>().Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(new GenericResult<ActivationResponse>(null)
+                    .Returns(new GenericResult<IActivationResponse>(null)
                     {
                         Success = false,
                         Message = "something went wrong",
                         Context = null
                     });
 
-                CustomerLicenseActivationService testObject = mock.Create<CustomerLicenseActivationService>();
+                var testObject = mock.Create<CustomerLicenseActivationService>();
 
-                ShipWorksLicenseException ex =
+                var ex =
                     Assert.Throws<ShipWorksLicenseException>(
                         () => testObject.Activate("some@email.com", "randompassword"));
                 Assert.Equal("something went wrong", ex.Message);
@@ -40,32 +41,16 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
-
-                XmlDocument responseData = new XmlDocument();
-                responseData.LoadXml(@"<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"">
-                                       <s:Body>
-                                          <GetCustomerLicenseInfoResponse xmlns=""http://stamps.com/xml/namespace/2015/09/shipworks/activationv1"">
-                                             <GetCustomerLicenseInfoResult xmlns:a=""http://schemas.datacontract.org/2004/07/Sdc.Server.ShipWorksNet.Protocol.CustomerLicenseInfo"" xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"">
-                                                <a:AssociatedStampsUserName/>
-                                                <a:CustomerLicenseKey>38-75-5D-E7-88-FA-E9-DE-D6-72-8D-FC-62-4F-DD-6A-AE-C3-1D-6F-3F-DD-7E-69-62-F2-60-43-91-D8-A2-1B-BA-5E-A7-1E-20-34-9D-E6-01-E4-50-8B-F8-16-D0-00-05-79-89-AE-16-8E-6B-4B-F4-F1-46-8A-C3-AD-58-05-FA-F9-D6-EE-D7-AB-25-9D-2B-5B-FF-78-2C-FC-AB-8B-62-6A-F5-44-BC-E6-A7-AC-0A-39-8B-27-AE-F5-FC-0A-8D-06-42-1E-B8-DE-94-26-E6-37-93-91-51-A3-40-37-E4-35-9F-C3-41-62-9E-B4-9E-2D-B3-A4-66-5E-AB-E6-6B-E4-87-39-CE-F3-B2-C0-30-88-9C-A5-C3-99-29-C5-40-5C-10-DE-57-5F-96-16-0B-12-4D-87-D3-E7-B2-36-1A-7C-9F-9E-94-DA-8B-4E-2B-1B-3C-B9-83-40-E9-4A-4F-D4-4F-89-67-6D-64-6A-9D-6B-73-13-83-18-C9-8D-C4-F6-8E-15-97-02-E8-1F-CA-93-3F-7E-B7-74-68-76-F4-DA-F5-AE-D3-BF-1A-03-12-13-BF-10-0F-41-87-02-35-BB-D8-8B-0E-D7-D0-13-C9-F5-D2-A6-56-55-29-16-4C-31-7C-E5-AE-62-1B-BE-D4-3A-23-E0-78-28-37-B0-00-90-2F-2E-0A-7E-16-1F-98-3B-69-19-4B-D4-2B-0F-BA-B1-0D-4B-CD-76-29-42-9B-A1-8F-65-6A-6A-EC-5D-85-3C-BB-78-6E-26-7B-5A-9C-51-8E-10-31-F1-CB-98-10-D4-65-F8-5F-51-12-83-A4-76-53-C2-F7-5E-CD-9E-9C-F8-63-9D-B0-B4-8C-1C-74-68-48-2C-65-3F-62-2A-B7-4C-56-32-82-92-21-72-F3-70-8E-EA-71-29-AB-26</a:CustomerLicenseKey>
-                                                <a:IsLegacyUser>false</a:IsLegacyUser>
-                                                <a:StampsUserName>mh_sw_b__0</a:StampsUserName>
-                                             </GetCustomerLicenseInfoResult>
-                                          </GetCustomerLicenseInfoResponse>
-                                       </s:Body>
-                                    </s:Envelope>");
-
-                ActivationResponse activationResponse = new ActivationResponse(responseData);
+                var tangoWebClient = mock.Mock<ITangoWebClient>();
 
                 tangoWebClient.Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(new GenericResult<ActivationResponse>(null)
+                    .Returns(new GenericResult<IActivationResponse>(null)
                     {
-                        Context = activationResponse,
-                        Success = true,
+                        Context = MockActivateLicense(mock, "key", "user"),
+                        Success = true
                     });
 
-                CustomerLicenseActivationService testObject = mock.Create<CustomerLicenseActivationService>();
+                var testObject = mock.Create<CustomerLicenseActivationService>();
                 testObject.Activate("some@email.com", "randompassword");
 
                 tangoWebClient.Verify(w => w.ActivateLicense("some@email.com", "randompassword"), Times.Once);
@@ -73,51 +58,54 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Activate_CallsLicenseWriterSave_WithCustomerLicense()
+        public void Activate_CallsSave_WithCustomerLicense()
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
-
-                XmlDocument responseData = new XmlDocument();
-                responseData.LoadXml(@"<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"">
-                                       <s:Body>
-                                          <GetCustomerLicenseInfoResponse xmlns=""http://stamps.com/xml/namespace/2015/09/shipworks/activationv1"">
-                                             <GetCustomerLicenseInfoResult xmlns:a=""http://schemas.datacontract.org/2004/07/Sdc.Server.ShipWorksNet.Protocol.CustomerLicenseInfo"" xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"">
-                                                <a:AssociatedStampsUserName/>
-                                                <a:CustomerLicenseKey>38-75-5D-E7-88-FA-E9-DE-D6-72-8D-FC-62-4F-DD-6A-AE-C3-1D-6F-3F-DD-7E-69-62-F2-60-43-91-D8-A2-1B-BA-5E-A7-1E-20-34-9D-E6-01-E4-50-8B-F8-16-D0-00-05-79-89-AE-16-8E-6B-4B-F4-F1-46-8A-C3-AD-58-05-FA-F9-D6-EE-D7-AB-25-9D-2B-5B-FF-78-2C-FC-AB-8B-62-6A-F5-44-BC-E6-A7-AC-0A-39-8B-27-AE-F5-FC-0A-8D-06-42-1E-B8-DE-94-26-E6-37-93-91-51-A3-40-37-E4-35-9F-C3-41-62-9E-B4-9E-2D-B3-A4-66-5E-AB-E6-6B-E4-87-39-CE-F3-B2-C0-30-88-9C-A5-C3-99-29-C5-40-5C-10-DE-57-5F-96-16-0B-12-4D-87-D3-E7-B2-36-1A-7C-9F-9E-94-DA-8B-4E-2B-1B-3C-B9-83-40-E9-4A-4F-D4-4F-89-67-6D-64-6A-9D-6B-73-13-83-18-C9-8D-C4-F6-8E-15-97-02-E8-1F-CA-93-3F-7E-B7-74-68-76-F4-DA-F5-AE-D3-BF-1A-03-12-13-BF-10-0F-41-87-02-35-BB-D8-8B-0E-D7-D0-13-C9-F5-D2-A6-56-55-29-16-4C-31-7C-E5-AE-62-1B-BE-D4-3A-23-E0-78-28-37-B0-00-90-2F-2E-0A-7E-16-1F-98-3B-69-19-4B-D4-2B-0F-BA-B1-0D-4B-CD-76-29-42-9B-A1-8F-65-6A-6A-EC-5D-85-3C-BB-78-6E-26-7B-5A-9C-51-8E-10-31-F1-CB-98-10-D4-65-F8-5F-51-12-83-A4-76-53-C2-F7-5E-CD-9E-9C-F8-63-9D-B0-B4-8C-1C-74-68-48-2C-65-3F-62-2A-B7-4C-56-32-82-92-21-72-F3-70-8E-EA-71-29-AB-26</a:CustomerLicenseKey>
-                                                <a:IsLegacyUser>false</a:IsLegacyUser>
-                                                <a:StampsUserName>mh_sw_b__0</a:StampsUserName>
-                                             </GetCustomerLicenseInfoResult>
-                                          </GetCustomerLicenseInfoResponse>
-                                       </s:Body>
-                                    </s:Envelope>");
-
-                ActivationResponse activationResponse = new ActivationResponse(responseData);
+                var tangoWebClient = mock.Mock<ITangoWebClient>();
 
                 tangoWebClient.Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(new GenericResult<ActivationResponse>(null)
+                    .Returns(new GenericResult<IActivationResponse>(null)
                     {
-                        Context = activationResponse,
-                        Success = true,
+                        Context = MockActivateLicense(mock, "originalKey", "bob"),
+                        Success = true
                     });
 
-                Mock<ICustomerLicenseWriter> licenseWriter = mock.Mock<ICustomerLicenseWriter>();
+                var customerLicense = mock.Mock<ICustomerLicense>();
 
-                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "someKey"));
-
-                // Mock up the CustomerLicense constructor parameter Func<string, ICustomerLicense>
-                Mock<Func<string, ICustomerLicense>> repo = mock.MockRepository.Create<Func<string, ICustomerLicense>>();
-                repo.Setup(x => x(It.IsAny<string>()))
-                    .Returns(customerLicense);
-
-                mock.Provide(repo.Object);
-
-                CustomerLicenseActivationService testObject = mock.Create<CustomerLicenseActivationService>();
+                var testObject = mock.Create<CustomerLicenseActivationService>();
 
                 testObject.Activate("some@email.com", "randompassword");
 
-                licenseWriter.Verify(w => w.Write(customerLicense), Times.Once);
+                customerLicense.Verify(c => c.Save(), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void Activate_CustomerCreatedWithKey()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var tangoWebClient = mock.Mock<ITangoWebClient>();
+
+                tangoWebClient.Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
+                    .Returns(new GenericResult<IActivationResponse>(null)
+                    {
+                        Context = MockActivateLicense(mock, "originalKey", "bob"),
+                        Success = true
+                    });
+
+                // Mock up the CustomerLicense constructor parameter Func<string, ICustomerLicense> 
+                var repo = mock.MockRepository.Create<Func<string, ICustomerLicense>>();
+                repo.Setup(x => x(It.IsAny<string>()))
+                    .Returns(mock.Mock<ICustomerLicense>().Object);
+                mock.Provide(repo.Object);
+
+                var testObject = mock.Create<CustomerLicenseActivationService>();
+
+                testObject.Activate("some@email.com", "randompassword");
+
+                repo.Verify(r => r("originalKey"), Times.Once);
             }
         }
 
@@ -126,47 +114,191 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         {
             using (var mock = AutoMock.GetLoose())
             {
-                XmlDocument responseData = new XmlDocument();
-                responseData.LoadXml(@"<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"">
-                                       <s:Body>
-                                          <GetCustomerLicenseInfoResponse xmlns=""http://stamps.com/xml/namespace/2015/09/shipworks/activationv1"">
-                                             <GetCustomerLicenseInfoResult xmlns:a=""http://schemas.datacontract.org/2004/07/Sdc.Server.ShipWorksNet.Protocol.CustomerLicenseInfo"" xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"">
-                                                <a:AssociatedStampsUserName/>
-                                                <a:CustomerLicenseKey>38-75-5D-E7-88-FA-E9-DE-D6-72-8D-FC-62-4F-DD-6A-AE-C3-1D-6F-3F-DD-7E-69-62-F2-60-43-91-D8-A2-1B-BA-5E-A7-1E-20-34-9D-E6-01-E4-50-8B-F8-16-D0-00-05-79-89-AE-16-8E-6B-4B-F4-F1-46-8A-C3-AD-58-05-FA-F9-D6-EE-D7-AB-25-9D-2B-5B-FF-78-2C-FC-AB-8B-62-6A-F5-44-BC-E6-A7-AC-0A-39-8B-27-AE-F5-FC-0A-8D-06-42-1E-B8-DE-94-26-E6-37-93-91-51-A3-40-37-E4-35-9F-C3-41-62-9E-B4-9E-2D-B3-A4-66-5E-AB-E6-6B-E4-87-39-CE-F3-B2-C0-30-88-9C-A5-C3-99-29-C5-40-5C-10-DE-57-5F-96-16-0B-12-4D-87-D3-E7-B2-36-1A-7C-9F-9E-94-DA-8B-4E-2B-1B-3C-B9-83-40-E9-4A-4F-D4-4F-89-67-6D-64-6A-9D-6B-73-13-83-18-C9-8D-C4-F6-8E-15-97-02-E8-1F-CA-93-3F-7E-B7-74-68-76-F4-DA-F5-AE-D3-BF-1A-03-12-13-BF-10-0F-41-87-02-35-BB-D8-8B-0E-D7-D0-13-C9-F5-D2-A6-56-55-29-16-4C-31-7C-E5-AE-62-1B-BE-D4-3A-23-E0-78-28-37-B0-00-90-2F-2E-0A-7E-16-1F-98-3B-69-19-4B-D4-2B-0F-BA-B1-0D-4B-CD-76-29-42-9B-A1-8F-65-6A-6A-EC-5D-85-3C-BB-78-6E-26-7B-5A-9C-51-8E-10-31-F1-CB-98-10-D4-65-F8-5F-51-12-83-A4-76-53-C2-F7-5E-CD-9E-9C-F8-63-9D-B0-B4-8C-1C-74-68-48-2C-65-3F-62-2A-B7-4C-56-32-82-92-21-72-F3-70-8E-EA-71-29-AB-26</a:CustomerLicenseKey>
-                                                <a:IsLegacyUser>false</a:IsLegacyUser>
-                                                <a:StampsUserName>mh_sw_b__0</a:StampsUserName>
-                                             </GetCustomerLicenseInfoResult>
-                                          </GetCustomerLicenseInfoResponse>
-                                       </s:Body>
-                                    </s:Envelope>");
-
-                ActivationResponse activationResponse = new ActivationResponse(responseData);
-
                 mock.Mock<ITangoWebClient>()
                     .Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(new GenericResult<ActivationResponse>(null)
+                    .Returns(new GenericResult<IActivationResponse>(null)
                     {
                         Success = true,
-                        Context = activationResponse
+                        Context = MockActivateLicense(mock, "TheKey", "bob")
                     });
 
-                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "someKey"));
+                var customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "someKey"));
 
                 // Mock up the CustomerLicense constructor parameter Func<string, ICustomerLicense>
-                Mock<Func<string, ICustomerLicense>> repo = mock.MockRepository.Create<Func<string, ICustomerLicense>>();
+                var repo = mock.MockRepository.Create<Func<string, ICustomerLicense>>();
                 repo.Setup(x => x(It.IsAny<string>()))
                     .Returns(customerLicense);
-
                 mock.Provide(repo.Object);
 
-                CustomerLicenseActivationService testObject = mock.Create<CustomerLicenseActivationService>();
+                var testObject = mock.Create<CustomerLicenseActivationService>();
 
                 testObject.Activate("foo@bar.com", "baz");
 
-                repo.Verify(r => r("38-75-5D-E7-88-FA-E9-DE-D6-72-8D-FC-62-4F-DD-6A-AE-C3-1D-6F-3F-DD-7E-69-62-F2-60-43-91-D8-A2-1B-BA-5E-A7-1E-20-34-9D-E6-01-E4-50-8B-F8-16-D0-00-05-79-89-AE-16-8E-6B-4B-F4-F1-46-8A-C3-AD-58-05-FA-F9-D6-EE-D7-AB-25-9D-2B-5B-FF-78-2C-FC-AB-8B-62-6A-F5-44-BC-E6-A7-AC-0A-39-8B-27-AE-F5-FC-0A-8D-06-42-1E-B8-DE-94-26-E6-37-93-91-51-A3-40-37-E4-35-9F-C3-41-62-9E-B4-9E-2D-B3-A4-66-5E-AB-E6-6B-E4-87-39-CE-F3-B2-C0-30-88-9C-A5-C3-99-29-C5-40-5C-10-DE-57-5F-96-16-0B-12-4D-87-D3-E7-B2-36-1A-7C-9F-9E-94-DA-8B-4E-2B-1B-3C-B9-83-40-E9-4A-4F-D4-4F-89-67-6D-64-6A-9D-6B-73-13-83-18-C9-8D-C4-F6-8E-15-97-02-E8-1F-CA-93-3F-7E-B7-74-68-76-F4-DA-F5-AE-D3-BF-1A-03-12-13-BF-10-0F-41-87-02-35-BB-D8-8B-0E-D7-D0-13-C9-F5-D2-A6-56-55-29-16-4C-31-7C-E5-AE-62-1B-BE-D4-3A-23-E0-78-28-37-B0-00-90-2F-2E-0A-7E-16-1F-98-3B-69-19-4B-D4-2B-0F-BA-B1-0D-4B-CD-76-29-42-9B-A1-8F-65-6A-6A-EC-5D-85-3C-BB-78-6E-26-7B-5A-9C-51-8E-10-31-F1-CB-98-10-D4-65-F8-5F-51-12-83-A4-76-53-C2-F7-5E-CD-9E-9C-F8-63-9D-B0-B4-8C-1C-74-68-48-2C-65-3F-62-2A-B7-4C-56-32-82-92-21-72-F3-70-8E-EA-71-29-AB-26"), Times.Once);
-
-                //Assert.Equal("38-75-5D-E7-88-FA-E9-DE-D6-72-8D-FC-62-4F-DD-6A-AE-C3-1D-6F-3F-DD-7E-69-62-F2-60-43-91-D8-A2-1B-BA-5E-A7-1E-20-34-9D-E6-01-E4-50-8B-F8-16-D0-00-05-79-89-AE-16-8E-6B-4B-F4-F1-46-8A-C3-AD-58-05-FA-F9-D6-EE-D7-AB-25-9D-2B-5B-FF-78-2C-FC-AB-8B-62-6A-F5-44-BC-E6-A7-AC-0A-39-8B-27-AE-F5-FC-0A-8D-06-42-1E-B8-DE-94-26-E6-37-93-91-51-A3-40-37-E4-35-9F-C3-41-62-9E-B4-9E-2D-B3-A4-66-5E-AB-E6-6B-E4-87-39-CE-F3-B2-C0-30-88-9C-A5-C3-99-29-C5-40-5C-10-DE-57-5F-96-16-0B-12-4D-87-D3-E7-B2-36-1A-7C-9F-9E-94-DA-8B-4E-2B-1B-3C-B9-83-40-E9-4A-4F-D4-4F-89-67-6D-64-6A-9D-6B-73-13-83-18-C9-8D-C4-F6-8E-15-97-02-E8-1F-CA-93-3F-7E-B7-74-68-76-F4-DA-F5-AE-D3-BF-1A-03-12-13-BF-10-0F-41-87-02-35-BB-D8-8B-0E-D7-D0-13-C9-F5-D2-A6-56-55-29-16-4C-31-7C-E5-AE-62-1B-BE-D4-3A-23-E0-78-28-37-B0-00-90-2F-2E-0A-7E-16-1F-98-3B-69-19-4B-D4-2B-0F-BA-B1-0D-4B-CD-76-29-42-9B-A1-8F-65-6A-6A-EC-5D-85-3C-BB-78-6E-26-7B-5A-9C-51-8E-10-31-F1-CB-98-10-D4-65-F8-5F-51-12-83-A4-76-53-C2-F7-5E-CD-9E-9C-F8-63-9D-B0-B4-8C-1C-74-68-48-2C-65-3F-62-2A-B7-4C-56-32-82-92-21-72-F3-70-8E-EA-71-29-AB-26", customerLicense.Key);
+                repo.Verify(r => r("TheKey"), Times.Once);
             }
+        }
+
+        [Fact]
+        public void Activate_PopulateUspsAccountEntityIsCalled_WhenNoUspsAccountsAndActivateLicenseReturnsAssociatedStampsUsername()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                MockSuccessfullActivateLicense(mock, "bob");
+
+                mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>()
+                    .Setup(r => r.Accounts)
+                    .Returns(new List<UspsAccountEntity>());
+
+                var uspsWebClient = mock.Mock<IUspsWebClient>();
+
+                var testObject = mock.Create<CustomerLicenseActivationService>();
+
+                testObject.Activate("bob", "1234");
+
+                uspsWebClient.Verify(wc => wc.PopulateUspsAccountEntity(It.IsAny<UspsAccountEntity>()), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void Activate_NewUpsAccountCreated_WhenNoUspsAccountsAndActivateLicenseReturnsAssociatedStampsUsername()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                MockSuccessfullActivateLicense(mock, "bob");
+
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                repo.Setup(r => r.Accounts)
+                    .Returns(new List<UspsAccountEntity>());
+
+                var testObject = mock.Create<CustomerLicenseActivationService>();
+
+                testObject.Activate("bob", "1234");
+
+                repo.Verify(r=>r.Save(It.IsAny<UspsAccountEntity>()), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void Activate_AccountCreatedWithCorrectUsername()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string shipworksUsername = "bob";
+                string stampsUsername = "kevin";
+
+                MockSuccessfullActivateLicense(mock, stampsUsername);
+                
+                UspsAccountEntity createdAccount = null;
+
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                repo.Setup(r => r.Accounts)
+                    .Returns(new List<UspsAccountEntity>());
+                repo
+                    .Setup(r => r.Save(It.IsAny<UspsAccountEntity>()))
+                    .Callback((UspsAccountEntity account) => createdAccount = account);
+
+                var testObject = mock.Create<CustomerLicenseActivationService>();
+
+                testObject.Activate(shipworksUsername, "1234");
+
+                Assert.Equal(stampsUsername, createdAccount.Username);
+            }
+        }
+
+        [Fact]
+        public void Activate_AccountCreatedWithCorrectPassword()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                MockSuccessfullActivateLicense(mock, "bob");
+
+                string password = "1234";
+                UspsAccountEntity createdAccount = null;
+
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                repo.Setup(r => r.Accounts)
+                    .Returns(new List<UspsAccountEntity>());
+                repo
+                    .Setup(r => r.Save(It.IsAny<UspsAccountEntity>()))
+                    .Callback((UspsAccountEntity account) => createdAccount = account);
+
+                var testObject = mock.Create<CustomerLicenseActivationService>();
+
+                testObject.Activate("bob", password);
+
+                Assert.Equal(password, createdAccount.Password);
+            }
+        }
+
+        [Fact]
+        public void Activate_AccountNotCreated_WhenUspsAccountExists()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                MockSuccessfullActivateLicense(mock, "bob");
+
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                repo.Setup(r => r.Accounts)
+                    .Returns(new[] {new UspsAccountEntity()});
+
+                var testObject = mock.Create<CustomerLicenseActivationService>();
+
+                testObject.Activate("bob", "1234");
+
+                repo.Verify(r => r.Save(It.IsAny<UspsAccountEntity>()), Times.Never);
+            }
+        }
+
+        [Fact]
+        public void Activate_AccountNotCreated_WhenNoAssociatedStampsUsername()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                // Activate returns empty associated username
+                mock.Mock<ITangoWebClient>()
+                    .Setup(w => w.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
+                    .Returns(new GenericResult<IActivationResponse>(null)
+                    {
+                        Context = MockActivateLicense(mock, "originalKey", string.Empty),
+                        Success = true
+                    });
+
+                // No accounts exist
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                repo.Setup(r => r.Accounts)
+                    .Returns(new List<UspsAccountEntity>());
+
+                var testObject = mock.Create<CustomerLicenseActivationService>();
+
+                testObject.Activate("bob", "1234");
+
+                repo.Verify(r => r.Save(It.IsAny<UspsAccountEntity>()), Times.Never);
+            }
+        }
+
+        private void MockSuccessfullActivateLicense(AutoMock mock, string associatedUsername)
+        {
+            mock.Mock<ITangoWebClient>()
+                .Setup(c => c.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new GenericResult<IActivationResponse>(MockActivateLicense(mock, "key", associatedUsername))
+                {
+                    Success = true
+                });
+        }
+
+        private IActivationResponse MockActivateLicense(AutoMock mock, string key, string associatedUserName)
+        {
+            var activationResponseMock = mock.Mock<IActivationResponse>();
+
+            activationResponseMock
+                .Setup(r => r.Key)
+                .Returns(key);
+
+            activationResponseMock
+                .Setup(r => r.AssociatedStampsUserName)
+                .Returns(associatedUserName);
+
+            return activationResponseMock.Object;
         }
     }
 }
