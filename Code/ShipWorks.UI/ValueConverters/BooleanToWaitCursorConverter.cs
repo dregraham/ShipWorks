@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Reflection;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -9,6 +10,7 @@ namespace ShipWorks.UI.ValueConverters
     /// <summary>
     /// Converts a bool to a wait cursor
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class BooleanToWaitCursorConverter : MarkupExtension, IValueConverter
     {
         private static readonly BooleanToWaitCursorConverter instance = new BooleanToWaitCursorConverter();

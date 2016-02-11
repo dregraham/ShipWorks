@@ -58,6 +58,15 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         }
 
         /// <summary>
+        /// Closes the window
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public RelayCommand<Window> CloseClickCommand
+        {
+            get { return new RelayCommand<Window>(w => w.Close()); }
+        }
+
+        /// <summary>
         /// Collection of stores
         /// </summary>
         [Obfuscation(Exclude = true)]

@@ -11,12 +11,12 @@ namespace ShipWorks.UI.Controls.UpgradePlan
     /// </summary>
     public class UpgradePlanDlgViewModel : IUpgradePlanDlgViewModel
     {
-        private readonly WebBrowserFactory webBrowserFactory;
+        private readonly IWebBrowserFactory webBrowserFactory;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="UpgradePlanDlgViewModel"/> class.
         /// </summary>
-        public UpgradePlanDlgViewModel(WebBrowserFactory webBrowserFactory)
+        public UpgradePlanDlgViewModel(IWebBrowserFactory webBrowserFactory)
         {
             this.webBrowserFactory = webBrowserFactory;
         }

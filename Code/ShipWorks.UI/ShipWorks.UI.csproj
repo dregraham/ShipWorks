@@ -115,9 +115,9 @@
     <Compile Include="Controls\ChannelLimit\ChannelLimitDlg.xaml.cs">
       <DependentUpon>ChannelLimitDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ChannelLimit\ChannelLimitDlgFactory.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitFactory.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.cs" />
-    <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.Properties.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlgViewModel.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml.cs">
       <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
@@ -139,6 +139,7 @@
     <Compile Include="Controls\UpgradePlan\UpgradePlanDlgFactory.cs" />
     <Compile Include="Controls\UpgradePlan\UpgradePlanDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\IWebBrowserDlgViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\IWebBrowserFactory.cs" />
     <Compile Include="Controls\WebBrowser\WebBrowserDlg.xaml.cs">
       <DependentUpon>WebBrowserDlg.xaml</DependentUpon>
     </Compile>

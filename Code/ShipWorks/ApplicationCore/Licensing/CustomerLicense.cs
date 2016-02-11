@@ -17,10 +17,10 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
-        private readonly Func<IChannelLimitDlg> channelLimitDlgFactory;
         private readonly IUpgradePlanDlgFactory upgradePlanDlgFactory;
         private readonly ILog log;
         private readonly IDeletionService deletionService;
+        private readonly IChannelLimitDlgFactory channelLimitDlgFactory;
 
         /// <summary>
         /// Constructor
@@ -32,16 +32,16 @@ namespace ShipWorks.ApplicationCore.Licensing
             ICustomerLicenseWriter licenseWriter,
             Func<Type, ILog> logFactory,
             IDeletionService deletionService,
-            Func<IChannelLimitDlg> channelLimitDlgFactory,
+            IChannelLimitDlgFactory channelLimitDlgFactory,
             IUpgradePlanDlgFactory upgradePlanDlgFactory)
         {
             Key = key;
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
-			this.channelLimitDlgFactory = channelLimitDlgFactory;
             this.upgradePlanDlgFactory = upgradePlanDlgFactory;
             log = logFactory(typeof(CustomerLicense));
             this.deletionService = deletionService;
+            this.channelLimitDlgFactory = channelLimitDlgFactory;
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 try
                 {
-                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory();
+                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(this);
                     channelLimitDlg.ShowDialog();
                 }
                 catch (ShipWorksLicenseException ex)

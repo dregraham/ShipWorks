@@ -2,6 +2,7 @@
 using ShipWorks.Stores;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Data
 {
@@ -20,8 +21,11 @@ namespace ShipWorks.Data
                 return;
             }
 
-            // Remove the store from ShipWorks
-            DeletionService.DeleteStore(store);
+            using (new AuditBehaviorScope(AuditState.Disabled))
+            {
+                // Remove the store from ShipWorks
+                DeletionService.DeleteStore(store);
+            }
         }
 
         /// <summary>

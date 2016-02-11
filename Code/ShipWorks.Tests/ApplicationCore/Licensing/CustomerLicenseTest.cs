@@ -271,8 +271,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                     .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
                     .Returns(licenseCapabilities.Object);
 
-                var channelLimitDlg = mock.Mock<IChannelLimitDlg>();
+                Mock<IChannelLimitDlg> channelLimitDlg = mock.Mock<IChannelLimitDlg>();
 
+                mock.Mock<IChannelLimitDlgFactory>()
+                    .Setup(c => c.GetChannelLimitDlg(It.IsAny<ICustomerLicense>()))
+                    .Returns(channelLimitDlg.Object);
+                
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
                 testObject.EnforceChannelLimit();
@@ -319,7 +323,11 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 Mock<ITangoWebClient> webClient = MockWebClientToReturnCapabilities(mock, licenseCapabilities);
 
-                mock.Mock<IChannelLimitDlg>();
+                Mock<IChannelLimitDlg> channelLimitDlg = mock.Mock<IChannelLimitDlg>();
+
+                mock.Mock<IChannelLimitDlgFactory>()
+                    .Setup(c => c.GetChannelLimitDlg(It.IsAny<ICustomerLicense>()))
+                    .Returns(channelLimitDlg.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 

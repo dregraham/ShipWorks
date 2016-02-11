@@ -162,10 +162,6 @@
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj">
-      <Project>{bbf456b8-8182-4fc1-8e59-3aafae5bfa53}</Project>
-      <Name>ShipWorks.Stores.UI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj">
       <Project>{c53624d5-5b3b-48a6-9729-52a573726de9}</Project>
       <Name>ShipWorks.Stores</Name>

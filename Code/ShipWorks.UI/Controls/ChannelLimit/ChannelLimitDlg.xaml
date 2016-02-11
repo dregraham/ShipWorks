@@ -8,7 +8,6 @@
         d:DesignHeight="261" d:DesignWidth="434"
         Height="261" Width="450"
         ResizeMode="NoResize"
-        Closing="OnClosing"
         WindowStyle="ToolWindow"
         Title="Channel Limit Exceeded"
         FontFamily="Tahoma" FontSize="8.25pt"

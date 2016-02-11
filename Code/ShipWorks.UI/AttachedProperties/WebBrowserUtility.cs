@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,6 +11,7 @@ namespace ShipWorks.UI.AttachedProperties
     /// <remarks>
     /// Code inspired by http://stackoverflow.com/questions/263551/databind-the-source-property-of-the-webbrowser-in-wpf
     /// </remarks>
+    [Obfuscation(Exclude = true)]
     public static class WebBrowserUtility
     {
         public static readonly DependencyProperty BindableSourceProperty;

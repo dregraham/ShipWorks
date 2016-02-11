@@ -627,10 +627,6 @@
       <Project>{0406ca21-03b7-4bf0-aeb3-993c7be208b9}</Project>
       <Name>ShipWorks.ThirdPartyApi</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
-      <Project>{1F6A1DC6-DD72-4279-8747-6789F83711FF}</Project>
-      <Name>ShipWorks.UI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
       <Name>ShipWorks.Core</Name>
