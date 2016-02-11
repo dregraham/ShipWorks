@@ -235,21 +235,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 account.UspsAccountID = accountInfo.AccountId;
                 account.Description = UspsAccountManager.GetDefaultDescription(account) ?? string.Empty;
-                account.FirstName = address.FirstName ?? string.Empty;
-                account.MiddleName = address.MiddleName ?? string.Empty;
-                account.LastName = address.LastName ?? string.Empty;
-                account.Company = address.Company ?? string.Empty;
-                account.Street1 = address.Address1 ?? string.Empty;
-                account.Street2 = address.Address2 ?? string.Empty;
-                account.Street3 = address.Address3 ?? string.Empty;
-                account.City = address.City ?? string.Empty;
-                account.StateProvCode = Geography.GetStateProvCode(address.State) ?? string.Empty;
-                account.PostalCode = address.PostalCode ?? string.Empty;
-                account.CountryCode = Geography.GetCountryCode(address.Country) ?? string.Empty;
-                account.Phone = address.PhoneNumber ?? string.Empty;
+
+                Address accountAddress = accountInfo.MeterPhysicalAddress ?? address;
+
+                account.FirstName = accountAddress.FirstName ?? string.Empty;
+                account.MiddleName = accountAddress.MiddleName ?? string.Empty;
+                account.LastName = accountAddress.LastName ?? string.Empty;
+                account.Company = accountAddress.Company ?? string.Empty;
+                account.Street1 = accountAddress.Address1 ?? string.Empty;
+                account.Street2 = accountAddress.Address2 ?? string.Empty;
+                account.Street3 = accountAddress.Address3 ?? string.Empty;
+                account.City = accountAddress.City ?? string.Empty;
+                account.StateProvCode = Geography.GetStateProvCode(accountAddress.State) ?? string.Empty;
+
+                account.PostalCode = accountAddress.ZIPCode ?? accountAddress.PostalCode ?? string.Empty;
+                account.MailingPostalCode = accountAddress.ZIPCode ?? accountAddress.PostalCode ?? string.Empty;
+
+                account.CountryCode = Geography.GetCountryCode(accountAddress.Country) ?? string.Empty;
+                account.Phone = accountAddress.PhoneNumber ?? string.Empty;
                 account.Email = email ?? string.Empty;
                 account.Website = string.Empty;
-                account.MailingPostalCode = address.PostalCode ?? string.Empty;
                 account.UspsReseller = (int) UspsResellerType.None;
                 account.ContractType = (int) GetUspsAccountContractType(accountInfo.RatesetType);
                 account.CreatedDate = DateTime.UtcNow;
