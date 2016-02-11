@@ -128,6 +128,9 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<LicenseEncryptionProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<CustomerLicenseActivationService>()
+                .AsImplementedInterfaces();
         }
 
         /// <summary>

@@ -42,7 +42,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_UspsAccount]
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_UspsAccount] ON
 GO
-INSERT INTO [dbo].[tmp_rg_xx_UspsAccount]([UspsAccountID], [Description], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], [UspsReseller], [ContractType], [CreatedDate]) SELECT [UspsAccountID], [Description], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], [UspsReseller], [ContractType], [CreatedDate], 0 FROM [dbo].[UspsAccount]
+INSERT INTO [dbo].[tmp_rg_xx_UspsAccount]([UspsAccountID], [Description], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], [UspsReseller], [ContractType], [CreatedDate], [PendingInitialAccount]) SELECT [UspsAccountID], [Description], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], [UspsReseller], [ContractType], [CreatedDate], 0 FROM [dbo].[UspsAccount]
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_UspsAccount] OFF
 GO
