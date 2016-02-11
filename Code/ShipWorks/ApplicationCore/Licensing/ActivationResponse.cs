@@ -28,11 +28,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The customer Key
         /// </summary>
-        public string Key { get; set; }
+        public string Key { get;  }
 
         /// <summary>
         /// The associated stamps username. If empty, do not create new Stamps account in ShipWorks
         /// </summary>
-        public string AssociatedStampsUserName { get; set; }
+        public string AssociatedStampsUserName { get; }
     }
 }
