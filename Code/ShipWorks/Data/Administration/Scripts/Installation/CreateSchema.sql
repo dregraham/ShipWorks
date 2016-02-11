@@ -4730,7 +4730,7 @@ CREATE TABLE [dbo].[UspsAccount]
 [UspsReseller] [int] NOT NULL,
 [ContractType] [int] NOT NULL,
 [CreatedDate] [datetime] NOT NULL,
-[PendingInitialAccount] [bit] NOT NULL DEFAULT ((0))
+[PendingInitialAccount] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'
