@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.Services.Protocols;
 using Autofac;
+using Autofac.Core;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
+using log4net;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using Xunit;
 
@@ -202,6 +206,97 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 testObject.Activate(shipworksUsername, "1234");
 
                 Assert.Equal(stampsUsername, createdAccount.Username);
+            }
+        }
+
+        [Fact]
+        public void Activate_LogException_WhenUspsWebClientThrowsUspsApiException()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                MockSuccessfullActivateLicense(mock, "username");
+
+                UspsApiException exception = new UspsApiException(new SoapException("Something Went Wrong", null));
+
+                mock.Mock<IUspsWebClient>()
+                    .Setup(w => w.PopulateUspsAccountEntity(It.IsAny<UspsAccountEntity>()))
+                    .Throws(exception);
+
+                Mock<ILog> logger = mock.Mock<ILog>();
+
+                Mock<Func<Type, ILog>> repo = mock.MockRepository.Create<Func<Type, ILog>>();
+                repo.Setup(x => x(It.IsAny<Type>()))
+                    .Returns(logger.Object);
+                mock.Provide(repo.Object);
+
+                CustomerLicenseActivationService testObject = mock.Create<CustomerLicenseActivationService>();
+
+                testObject.Activate("bob", "some password");
+
+                logger.Verify(l => l.Error($"Error when populating USPS account information: {exception.Message}"), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void Activate_LogException_WhenUspsWebClientThrowsUspsException()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                MockSuccessfullActivateLicense(mock, "username");
+
+                UspsException exception = new UspsException("Something Went Wrong");
+
+                mock.Mock<IUspsWebClient>()
+                    .Setup(w => w.PopulateUspsAccountEntity(It.IsAny<UspsAccountEntity>()))
+                    .Throws(exception);
+
+                Mock<ILog> logger = mock.Mock<ILog>();
+
+                Mock<Func<Type, ILog>> repo = mock.MockRepository.Create<Func<Type, ILog>>();
+                repo.Setup(x => x(It.IsAny<Type>()))
+                    .Returns(logger.Object);
+                mock.Provide(repo.Object);
+
+                CustomerLicenseActivationService testObject = mock.Create<CustomerLicenseActivationService>();
+
+                testObject.Activate("bob", "some password");
+
+                logger.Verify(l => l.Error($"Error when populating USPS account information: {exception.Message}"), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void Activate_Delegates_WhenUspsWebClientThrowsUspsException()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                MockSuccessfullActivateLicense(mock, "username");
+
+                UspsException exception = new UspsException("Something Went Wrong");
+
+                mock.Mock<IUspsWebClient>()
+                    .Setup(w => w.PopulateUspsAccountEntity(It.IsAny<UspsAccountEntity>()))
+                    .Throws(exception);
+
+                Mock<ICustomerLicense> customerLicense =
+                    mock.Mock<ICustomerLicense>(new TypedParameter(typeof (string), "key"));
+
+                Mock<Func<string, ICustomerLicense>> repo = mock.MockRepository.Create<Func<string, ICustomerLicense>>();
+                repo.Setup(x => x(It.IsAny<string>()))
+                    .Returns(customerLicense.Object);
+                mock.Provide(repo.Object);
+
+                CustomerLicenseActivationService testObject = mock.Create<CustomerLicenseActivationService>();
+
+                ICustomerLicense license = testObject.Activate("bob", "some password");
+
+                // verify that we are sending the key string from the response to the 
+                // factory that is creating the customer license object
+                repo.Verify(r => r("key"), Times.Once);
+                
+                // verify that the customer license we get back fromt he activation service 
+                // is the same one that the customer license factory created
+                Assert.Equal(customerLicense.Object, license);
             }
         }
 

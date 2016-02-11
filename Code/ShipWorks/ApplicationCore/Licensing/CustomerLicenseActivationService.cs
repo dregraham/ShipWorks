@@ -32,7 +32,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         public CustomerLicenseActivationService(ITangoWebClient tangoWebClient,
             Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory,
             ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository,
-            Func<string, ICustomerLicense> licenseFactory, Func<Type, ILog> logFactory)
+            Func<string, ICustomerLicense> licenseFactory, 
+            Func<Type, ILog> logFactory)
         {
             this.tangoWebClient = tangoWebClient;
             uspsWebClient = uspsWebClientFactory(UspsResellerType.None);
