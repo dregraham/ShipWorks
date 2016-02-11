@@ -63,6 +63,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Is the license Disabled
         /// </summary>
         public bool IsDisabled => (!string.IsNullOrEmpty(DisabledReason));
+        
+        /// <summary>
+        /// Gets or sets the user name of the SDC account associated with this license.
+        /// </summary>
+        public string AssociatedStampsUsername { get; set; }
 
         /// <summary>
         /// The license capabilities.

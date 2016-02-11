@@ -595,7 +595,11 @@
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
-    <Compile Include="ApplicationCore\Licensing\CustomerLicenseActivationService.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\IUspsAccountSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\Activation\UspsAccountSetupActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\IActivationResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitControl.cs" />

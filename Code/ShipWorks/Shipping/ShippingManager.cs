@@ -1501,7 +1501,7 @@ namespace ShipWorks.Shipping
         {
             ShippingProfileEntity defaultProfile = ShippingProfileManager.GetDefaultProfile(shipmentTypeCode);
 
-            if (!defaultProfile.RequestedLabelFormat.HasValue)
+            if (defaultProfile?.RequestedLabelFormat == null)
             {
                 // We don't need to do anything if the default profile is somehow null
                 return;

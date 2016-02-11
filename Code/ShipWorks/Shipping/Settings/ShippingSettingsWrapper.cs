@@ -29,5 +29,13 @@ namespace ShipWorks.Shipping.Settings
         {
             ShippingSettings.MarkAsConfigured(shipmentTypeCode);
         }
+
+        /// <summary>
+        /// Initialize for the currently logged on user
+        /// </summary>
+        public void InitializeForCurrentDatabase()
+        {
+            ShippingSettings.InitializeForCurrentDatabase();
+        }
     }
 }

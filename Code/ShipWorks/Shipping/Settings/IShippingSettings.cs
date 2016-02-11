@@ -8,6 +8,11 @@ namespace ShipWorks.Shipping.Settings
     public interface IShippingSettings
     {
         /// <summary>
+        /// Initialize for the currently logged on user
+        /// </summary>
+        void InitializeForCurrentDatabase();
+
+        /// <summary>
         /// Marks the given ShipmentTypeCode as completely configured
         /// </summary>
         void MarkAsConfigured(ShipmentTypeCode shipmentTypeCode);

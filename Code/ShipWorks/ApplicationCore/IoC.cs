@@ -7,6 +7,7 @@ using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Pdf;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common;
 using ShipWorks.Data;
@@ -113,6 +114,14 @@ namespace ShipWorks.ApplicationCore
                 .AsSelf();
 
             builder.RegisterType<LicenseService>()
+                .AsImplementedInterfaces()
+                .AsSelf();
+
+            builder.RegisterType<CustomerLicenseActivationActivity>()
+                .AsImplementedInterfaces()
+                .AsSelf();
+            
+            builder.RegisterType<UspsAccountSetupActivity>()
                 .AsImplementedInterfaces()
                 .AsSelf();
 

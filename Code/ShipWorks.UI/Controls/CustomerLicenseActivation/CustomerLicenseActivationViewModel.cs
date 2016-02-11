@@ -8,6 +8,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
 using ShipWorks.Email;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 
 namespace ShipWorks.UI.Controls.CustomerLicenseActivation
@@ -20,6 +21,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         private readonly ICustomerLicenseActivationService activationService;
         private readonly IUserService userManager;
         private readonly IUspsAccountManager uspsAccountManager;
+        private readonly IShippingSettings shippingSettings;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string email;
@@ -28,11 +30,12 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(ICustomerLicenseActivationService activationService, IUserService userManager, IUspsAccountManager uspsAccountManager)
+        public CustomerLicenseActivationViewModel(ICustomerLicenseActivationService activationService, IUserService userManager, IUspsAccountManager uspsAccountManager, IShippingSettings shippingSettings)
         {
             this.activationService = activationService;
             this.userManager = userManager;
             this.uspsAccountManager = uspsAccountManager;
+            this.shippingSettings = shippingSettings;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -111,6 +114,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
                 try
                 {
                     uspsAccountManager.InitializeForCurrentSession();
+                    shippingSettings.InitializeForCurrentDatabase();
 
                     ICustomerLicense customerLicense = activationService.Activate(email, DecryptedPassword);
 
