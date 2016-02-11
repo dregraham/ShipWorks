@@ -103,9 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
 
             optionsControl.LoadSettings();
-
-
-
+            
             if (!allowRegisteringExistingAccount)
             {
                 // Registering an existing account is not allowed, so choose new account (since the options have
@@ -113,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 radioNewAccount.Checked = true;
                 radioExistingAccount.Checked = false;
             }
-            else if (UspsAccount.PendingInitialAccount)
+            else if (UspsAccount != null && UspsAccount.PendingInitialAccount)
             {
                 radioNewAccount.Checked = false;
                 radioExistingAccount.Checked = true;
@@ -134,14 +132,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 wizardPageOptions.StepNext += OnPageOptionsStepNext;
             }
 
-            if (UspsAccount==null)
+            if (UspsAccount == null)
             {
                 // Set default values on the USPS account and load the person control. Now the stampsAccount will
                 // can be referred to throughout the wizard via the personControl
                 UspsAccount = new UspsAccountEntity
                 {
                     CountryCode = "US",
-                    ContractType = (int)UspsAccountContractType.Unknown,
+                    ContractType = (int) UspsAccountContractType.Unknown,
                     CreatedDate = DateTime.UtcNow
                 };
 
