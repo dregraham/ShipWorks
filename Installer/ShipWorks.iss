@@ -131,6 +131,7 @@ Source: {#AppArtifacts}\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll; DestDir: {ap
 Source: {#AppArtifacts}\ShipWorks.Core.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Data.Adapter.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Data.Model.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\ShipWorks.Res.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Shared.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Shipping.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Shipping.UI.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
