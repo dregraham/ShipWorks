@@ -266,7 +266,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Activate_Delegates_WhenUspsWebClientThrowsUspsException()
+        public void Activate_SavesCustomerLicense_WhenUspsWebClientThrowsUspsException()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -289,6 +289,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 CustomerLicenseActivationService testObject = mock.Create<CustomerLicenseActivationService>();
 
                 ICustomerLicense license = testObject.Activate("bob", "some password");
+
+                customerLicense.Verify(c => c.Save(), Times.Once);
 
                 // verify that we are sending the key string from the response to the 
                 // factory that is creating the customer license object
