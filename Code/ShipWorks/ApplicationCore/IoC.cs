@@ -86,6 +86,8 @@ namespace ShipWorks.ApplicationCore
                 .As<IWin32Window>()
                 .ExternallyOwned();
 
+            // Pass "Func<Type, ILog> logFactory" as a dependency and get your log with:
+            // log = logFactory(typeof (type))
             builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
 
             builder.RegisterType<DatabaseIdentifier>()

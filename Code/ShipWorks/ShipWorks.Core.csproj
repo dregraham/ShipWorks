@@ -595,6 +595,11 @@
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
+    <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\IChannelLimitControl.cs" />
+    <Compile Include="ApplicationCore\Licensing\IChannelLimitDlgFactory.cs" />
+    <Compile Include="ApplicationCore\Licensing\IChannelLimitFactory.cs" />
+    <Compile Include="ApplicationCore\Licensing\IChannelLimitViewModel.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivartionDlgViewModel.cs" />
     <Compile Include="ApplicationCore\IInitializeForCurrentSession.cs" />
     <Compile Include="ApplicationCore\IoC.cs" />
@@ -621,6 +626,7 @@
     <Compile Include="ApplicationCore\Licensing\ILicenseService.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
+    <Compile Include="ApplicationCore\Licensing\IUpgradePlanDlgFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilities.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseService.cs" />
@@ -10099,7 +10105,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\DropAssembly.sql" />
     <Resource Include="Resources\delete2.png" />
     <None Include="Resources\arrow_down_blue.png" />
-    <None Include="Resources\arrow_up_blue.png" />
+    <Resource Include="Resources\arrow_up_blue.png" />
     <None Include="Resources\funnel_add.png" />
     <None Include="Resources\folderclosed_add.png" />
     <None Include="Resources\edit.png" />

@@ -1,8 +1,11 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
 using ShipWorks.UI.Controls.CustomerLicenseActivation;
+using ShipWorks.UI.Controls.UpgradePlan;
+using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.UI.Services;
 
 namespace ShipWorks.UI
@@ -23,7 +26,13 @@ namespace ShipWorks.UI
             builder.RegisterType<MessageHelperWrapper>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<ChannelLimitViewModel>();
+            builder.RegisterType<ChannelLimitViewModel>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ChannelLimitFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ChannelLimitControl>();
 
             builder.RegisterType<ChannelLimitDlg>()
                 .AsImplementedInterfaces();
@@ -43,6 +52,36 @@ namespace ShipWorks.UI
             builder.RegisterType<CustomerLicenseActivationDlgViewModel>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<WebBrowserDlgViewModel>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<WebBrowserDlg>()
+                .Named<IDialog>("WebBrowserDlg");
+
+            builder.RegisterType<WebBrowserFactory>()
+                .AsImplementedInterfaces();
+
+            builder.Register<Func<string, IDialog>>(
+                componentContext =>
+                {
+                    IComponentContext resolved = componentContext.Resolve<IComponentContext>();
+                    return named => resolved.ResolveNamed<IDialog>(named);
+                });
+
+            builder.RegisterType<UpgradePlanDlg>()
+                .Named<IDialog>("UpgradePlanDlg");
+
+            builder.RegisterType<UpgradePlanDlgViewModel>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpgradePlanDlg>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpgradePlanDlgFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ChannelLimitDlgFactory>()
+                .AsImplementedInterfaces();
         }
     }
 }

@@ -5,44 +5,52 @@ using ShipWorks.Stores;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using ShipWorks.Users.Audit;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using System.Collections.Generic;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data.Utility;
+using ShipWorks.UI.Controls.WebBrowser;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
     /// <summary>
     /// ViewModel for the ChannelLimitDlg
     /// </summary>
-    public partial class ChannelLimitViewModel : INotifyPropertyChanged
+    public class ChannelLimitViewModel : INotifyPropertyChanged, IChannelLimitViewModel
     {
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private StoreTypeCode selectedStoreType;
         private ObservableCollection<StoreTypeCode> channelCollection;
-        private readonly ICustomerLicense license;
+        private ICustomerLicense license;
         private string errorMessage;
         private readonly IStoreManager storeManager;
-        private readonly Func<IChannelConfirmDeleteFactory> confirmDeleteFactory;
-        private readonly IMessageHelper messageHelper;
+        private readonly IChannelConfirmDeleteFactory confirmDeleteFactory;
+        private readonly IWebBrowserFactory webBrowserFactory;
+        private readonly IMessageHelper messagdHelper;
         private readonly ILog log;
         private bool isDeleting;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelLimitViewModel(ILicenseService licenseService, IStoreManager storeManager,
-            Func<IChannelConfirmDeleteFactory> confirmDeleteFactory, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
+        public ChannelLimitViewModel(
+            IStoreManager storeManager,
+            IChannelConfirmDeleteFactory confirmDeleteFactory, 
+            Func<Type, ILog> logFactory,
+            IWebBrowserFactory webBrowserFactory,
+            IMessageHelper messagdHelper)
         {
-            license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
             this.storeManager = storeManager;
             this.confirmDeleteFactory = confirmDeleteFactory;
-            this.messageHelper = messageHelper;
+            this.webBrowserFactory = webBrowserFactory;
+            this.messagdHelper = messagdHelper;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -52,13 +60,68 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             log = logFactory(typeof (ChannelLimitViewModel));
 
             DeleteStoreClickCommand = new RelayCommand(DeleteChannel, CanExecuteDeleteStore);
+            UpgradeClickCommand = new RelayCommand(UpgradeAccount);
+        }
+
+        /// <summary>
+        /// Used to indicate if we are deleting a store
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsDeleting
+        {
+            get { return isDeleting; }
+            set { handler.Set(nameof(IsDeleting), ref isDeleting, value); }
+        }
+
+        /// <summary>
+        /// The error message displayed to the user
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ErrorMessage
+        {
+            get { return errorMessage; }
+            set { handler.Set(nameof(ErrorMessage), ref errorMessage, value); }
+        }
+
+        /// <summary>
+        /// The selected store
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public StoreTypeCode SelectedStoreType
+        {
+            get { return selectedStoreType; }
+            set { handler.Set(nameof(SelectedStoreType), ref selectedStoreType, value); }
+        }
+
+        /// <summary>
+        /// Delete Store ClickCommand
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand DeleteStoreClickCommand { get; }
+
+        /// <summary>
+        /// Upgrade Account ClickCommand
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand UpgradeClickCommand { get; }
+
+        /// <summary>
+        /// Collection of stores
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ObservableCollection<StoreTypeCode> ChannelCollection
+        {
+            get { return channelCollection; }
+            set { handler.Set(nameof(ChannelCollection), ref channelCollection, value); }
         }
 
         /// <summary>
         /// Loads the list of active stores
         /// </summary>
-        public void Load()
+        public void Load(ICustomerLicense customerLicense)
         {
+            license = customerLicense;
+
             // Check to make sure we are getting a CustomerLicense
             if (license == null)
             {
@@ -126,18 +189,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void UpgradeAccount()
         {
-            string upgradeAccountLink = "www.shipworks.com";
-
-            try
-            {
-                System.Diagnostics.Process.Start(upgradeAccountLink);
-            }
-            catch (Win32Exception ex)
-            {
-                log.Error($"Failed to open URL '{upgradeAccountLink}'", ex);
-                messageHelper.ShowError($"ShipWorks could not open the URL '{upgradeAccountLink}'.\n\n({ex.Message})");
-                throw;
-            }   
+            Uri uri = new Uri("https://www.interapptive.com/account/changeplan.php");
+            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account");
+            browserDlg.ShowDialog();
         }
 
         /// <summary>
@@ -145,45 +199,44 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private async void DeleteChannel()
         {
-            IsDeleting = true;
-
             List<StoreTypeCode> localStoreTypeCodes =
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
 
             // If we are trying to delete the only store type in ShipWorks display an error and dont delete
             if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType))
             {
-                UpdateErrorMesssage();
-                ErrorMessage +=
-                    $"\n \nYou cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.";
+                messagdHelper.ShowError($"You cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.");
                 return;
             }
 
-            IChannelConfirmDeleteDlg deleteDlg = confirmDeleteFactory().GetConfirmDeleteDlg(selectedStoreType);
+            IsDeleting = true;
+
+            IChannelConfirmDeleteDlg deleteDlg = confirmDeleteFactory.GetConfirmDeleteDlg(selectedStoreType);
 
             deleteDlg.ShowDialog();
 
             if (deleteDlg.DialogResult == true)
             {
-                using (new AuditBehaviorScope(AuditState.Disabled))
+                // Delete the channel
+                try
                 {
-                    // Delete the channel
-                    try
-                    {
-                        await DeleteChannelAsync();
-                    }
-                    catch (ShipWorksLicenseException ex)
-                    {
-                        log.Error("Error deleting channel", ex);
-                        ErrorMessage += "\n\nError deleting Channel. Please try again.";
-                    }
+                    await DeleteChannelAsync();
+                }
+                catch (ShipWorksLicenseException ex)
+                {
+                    log.Error("Error deleting channel", ex);
+                    messagdHelper.ShowError("Error deleting Channel. Please try again.");
+                }
+                catch (SqlAppResourceLockException)
+                {
+                    messagdHelper.ShowError("Unable to delete store while it is in the process of a download.");
                 }
             }
 
             try
             {
                 // call load to refresh everything
-                Load();
+                Load(license);
             }
             catch (ShipWorksLicenseException ex)
             {

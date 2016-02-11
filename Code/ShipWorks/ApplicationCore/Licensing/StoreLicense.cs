@@ -50,6 +50,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         public bool IsOverChannelLimit => false;
 
         /// <summary>
+        /// Store licenses do not have shipment limits
+        /// </summary>
+        /// <remarks>
+        /// Always returns false
+        /// </remarks>
+        public bool IsShipmentLimitReached => false;
+
+        /// <summary>
         /// Store license do not have channel limits
         /// </summary>
         /// <remarks>
@@ -67,8 +75,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             ShipWorksLicense license = new ShipWorksLicense(store.License);
 
-            return license.IsTrial ? 
-                new EnumResult<LicenseActivationState>(LicenseActivationState.Active) : 
+            return license.IsTrial ?
+                new EnumResult<LicenseActivationState>(LicenseActivationState.Active) :
                 LicenseActivationHelper.ActivateAndSetLicense(newStore, newStore.License);
         }
 
@@ -76,6 +84,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Nothing to enforce
         /// </summary>
         public void EnforceChannelLimit()
+        {
+        }
+
+        /// <summary>
+        /// Nothing to enforce
+        /// </summary>
+        public void EnforceShipmentLimit()
         {
         }
 

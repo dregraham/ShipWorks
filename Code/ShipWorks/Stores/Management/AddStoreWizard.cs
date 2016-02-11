@@ -48,6 +48,7 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.ApplicationCore;
 using Autofac;
 using ShipWorks.Users.Logon;
+using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
 {
@@ -958,6 +959,7 @@ namespace ShipWorks.Stores.Management
 
             ILicense license = licenseService.GetLicense(store);
             EnumResult<LicenseActivationState> activateResult = license.Activate(store);
+
             if (activateResult.Value != LicenseActivationState.Active)
             {
                 e.Skip = true;
@@ -969,6 +971,13 @@ namespace ShipWorks.Stores.Management
                 }
                 else
                 {
+                    if (activateResult.Value == LicenseActivationState.OverChannelLimit)
+                    {
+                        IChannelLimitFactory factory = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitFactory>();
+                        Control channelLimitControl = (Control)factory.CreateControl((ICustomerLicense)license);
+                        wizardPageActivationError.SetElementHost(channelLimitControl);
+                    }
+
                     showActivationError = true;
                     wizardPageActivationError.ErrorMessage = activateResult.Message;
                     e.SkipToPage = wizardPageActivationError;

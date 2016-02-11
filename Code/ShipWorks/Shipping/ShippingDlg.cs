@@ -2393,8 +2393,8 @@ namespace ShipWorks.Shipping
             cancelProcessing = false;
 
             LicenseService licenseService = lifetimeScope.Resolve<LicenseService>();
-
             licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
+            licenseService.GetLicenses().FirstOrDefault()?.EnforceShipmentLimit();
 
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
             SaveChangesToUIDisplayedShipments();

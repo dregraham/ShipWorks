@@ -98,6 +98,7 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="AttachedProperties\Link.cs" />
+    <Compile Include="AttachedProperties\WebBrowserUtility.cs" />
     <Compile Include="Behaviors\PasswordBoxBindingBehavior.cs" />
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteFactory.cs" />
@@ -114,8 +115,9 @@
     <Compile Include="Controls\ChannelLimit\ChannelLimitDlg.xaml.cs">
       <DependentUpon>ChannelLimitDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ChannelLimit\ChannelLimitDlgFactory.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitFactory.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.cs" />
-    <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.Properties.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlgViewModel.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml.cs">
       <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
@@ -130,11 +132,25 @@
       <DependentUpon>CustomerLicenseActivationDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
+    <Compile Include="Controls\UpgradePlan\IUpgradePlanDlgViewModel.cs" />
+    <Compile Include="Controls\UpgradePlan\UpgradePlanDlg.xaml.cs">
+      <DependentUpon>UpgradePlanDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UpgradePlan\UpgradePlanDlgFactory.cs" />
+    <Compile Include="Controls\UpgradePlan\UpgradePlanDlgViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\IWebBrowserDlgViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\IWebBrowserFactory.cs" />
+    <Compile Include="Controls\WebBrowser\WebBrowserDlg.xaml.cs">
+      <DependentUpon>WebBrowserDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WebBrowser\WebBrowserDlgViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\WebBrowserFactory.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IMessageHelper.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
     <Compile Include="UIModule.cs" />
+    <Compile Include="ValueConverters\BooleanToWaitCursorConverter.cs" />
     <Compile Include="ValueConverters\InverseBooleanConverter.cs" />
     <Compile Include="ValueConverters\EnumDescriptionConverter.cs" />
     <Compile Include="ValueConverters\EnumImageConverter.cs" />
@@ -194,6 +210,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WebBrowser\WebBrowserDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UpgradePlan\UpgradePlanDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

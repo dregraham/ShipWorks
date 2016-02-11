@@ -8,11 +8,12 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance local:ChannelLimitViewModel}"
              d:DesignHeight="300" d:DesignWidth="450"
-             FontFamily="Tahoma" FontSize="8.25pt" Cursor="{Binding Cursor}">
+             FontFamily="Tahoma" FontSize="8.25pt" 
+             IsEnabled="{Binding IsDeleting, Converter={valueConverters:InverseBooleanConverter}}">
+    
     <UserControl.Resources>
         <valueConverters:EnumImageConverter x:Key="EnumImageConverter" />
         <valueConverters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
-        <valueConverters:InverseBoolean x:Key="InverseBooleanConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -84,7 +85,7 @@
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -95,7 +96,7 @@
         <TextBlock  
             Grid.ColumnSpan="2" 
             TextWrapping="WrapWithOverflow"
-            Margin="10 10 10 0"
+            Margin="3 0 10 10"
             Text="{Binding ErrorMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <ListView 
@@ -105,7 +106,7 @@
             VerticalAlignment="Stretch"
             ItemsSource="{Binding ChannelCollection}" 
             SelectedValue="{Binding SelectedStoreType}"
-            Margin="10 0 0 10">
+            Margin="3 0 0 10">
 
             <ListView.View>
                 <GridView>
@@ -119,7 +120,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                   </GridView>
+                </GridView>
             </ListView.View>
         </ListView>
         <Grid Grid.Column="1" Grid.Row="1">
@@ -131,40 +132,30 @@
 
             <Button
                 Grid.Row="0"
-                x:Name="upgrade" 
-                Content="Upgrade Plan" 
+                x:Name="upgrade"
                 Margin="0 0 0 10"
                 Height="20" Width="128"
-                Command="{Binding UpgradeClickCommand}"
-                IsEnabled="{Binding IsDeleting, Converter={StaticResource InverseBooleanConverter}}"/>
+                Command="{Binding UpgradeClickCommand}">
+                <DockPanel Width="125">
+                    <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/arrow_up_blue.png"/>
+                    <TextBlock 
+                        TextAlignment="Center" 
+                        Margin="-14 0 0 0" 
+                        Text="Upgrade Plan" />
+                </DockPanel>
+            </Button>
 
             <Button
                 Grid.Row="1"
                 x:Name="delete" 
                 Margin="0 0 0 10"
                 Height="20" Width="128" 
-                Command="{Binding DeleteStoreClickCommand}"
-                IsEnabled="{Binding IsDeleting, Converter={StaticResource InverseBooleanConverter}}">
-                    <DockPanel Width="125">
-                        <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/delete2.png"/>
-                        <TextBlock TextAlignment="Center" Margin="-14 0 0 0">Delete</TextBlock>
-                    </DockPanel>
+                Command="{Binding DeleteStoreClickCommand}">
+                <DockPanel Width="125">
+                    <Image DockPanel.Dock="Left" Width="14" HorizontalAlignment="Left" Source="/Shipworks.Core;component/Resources/delete2.png"/>
+                    <TextBlock TextAlignment="Center" Margin="-14 0 0 0">Delete</TextBlock>
+                </DockPanel>
             </Button>
-
-            <Button
-                Grid.Row="2"
-                VerticalAlignment="Bottom"
-                x:Name="close" 
-                Content="Close" 
-                Margin="0 0 0 10"
-                Height="20" Width="128"
-                Command="{Binding CloseClickCommand, Mode=OneWay}"
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
         </Grid>
-
-
-
     </Grid>
-
-
 </UserControl>

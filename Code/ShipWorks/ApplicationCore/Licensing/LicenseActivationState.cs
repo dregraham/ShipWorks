@@ -14,6 +14,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         ActiveNowhere,
         Deactivated,
         Canceled,
-        Invalid
+        Invalid,
+        OverChannelLimit
     }
 }

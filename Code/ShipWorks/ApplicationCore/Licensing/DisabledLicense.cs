@@ -44,6 +44,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         public int NumberOfChannelsOverLimit => 0;
 
         /// <summary>
+        /// Is the user over their shipment limit
+        /// </summary>
+        public bool IsShipmentLimitReached => true;
+
+        /// <summary>
         /// Throws - We shouldn't try to access the key if the license is disabled.
         /// </summary>
         public string Key
@@ -55,14 +60,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Not Legacy. 
+        /// Not Legacy.
         /// </summary>
         public bool IsLegacy => false;
 
         /// <summary>
         /// Not over limit, but I did debate throwing for this...
         /// </summary>
-        public bool IsOverChannelLimit => false;
+        public bool IsOverChannelLimit => true;
 
         /// <summary>
         /// Throws - We shouldn't try to activate a disabled license.
@@ -76,6 +81,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Trhows - We shouldn't enforce a channel limit on a disabled store.
         /// </summary>
         public void EnforceChannelLimit()
+        {
+            throw new ShipWorksLicenseException("Shipment Limit not valid for a disabled license.");
+        }
+
+        public void EnforceShipmentLimit()
         {
             throw new ShipWorksLicenseException("Channel Limit not valid for a disabled license.");
         }

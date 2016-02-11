@@ -52,11 +52,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Gets or sets the initial account address that to use when adding an account.
-        /// </summary>
-        public PersonAdapter InitialAccountAddress { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="UspsSetupWizard"/> class.
         /// </summary>
         /// <param name="promotion">The promotion.</param>
@@ -86,6 +81,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // label type gets persisted to the correct profile
             optionsControl.ShipmentTypeCode = this.shipmentTypeCode;
         }
+
+        /// <summary>
+        /// Gets or sets the initial account address that to use when adding an account.
+        /// </summary>
+        public PersonAdapter InitialAccountAddress { get; set; }
 
         /// <summary>
         /// Gets the USPS account.

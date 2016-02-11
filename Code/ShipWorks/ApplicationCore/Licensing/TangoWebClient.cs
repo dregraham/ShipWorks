@@ -1169,7 +1169,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Makes a request to Tango to add a store
         /// </summary>
-        public static AddStoreResponse AddStore(ICustomerLicense license, StoreEntity store)
+        public static IAddStoreResponse AddStore(ICustomerLicense license, StoreEntity store)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 

@@ -22,8 +22,6 @@ namespace ShipWorks.UI.Controls.ChannelLimit
     /// </summary>
     public partial class ChannelLimitDlg : IChannelLimitDlg
     {
-        private readonly ChannelLimitViewModel viewModel;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -35,24 +33,30 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelLimitDlg(ChannelLimitViewModel viewModel, IWin32Window owner) : this()
+        public ChannelLimitDlg(IWin32Window owner) : this()
         {
             new WindowInteropHelper(this)
             {
                 Owner = owner.Handle
             };
-
-            this.viewModel = viewModel;
-            ChannelLimitControl.DataContext = viewModel;
-            viewModel.Load();
+            
         }
 
         /// <summary>
-        /// Calls Dismiss on viewmodel
+        /// Updates the enabled state of the dlg based on the controls state
         /// </summary>
-        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void OnEnabledChanged(object sender, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            viewModel.Dismiss();
+            close.IsEnabled = (bool)dependencyPropertyChangedEventArgs.NewValue;
+            Cursor = (bool)dependencyPropertyChangedEventArgs.NewValue ? Cursors.Arrow : Cursors.Wait;
+        }
+        
+        /// <summary>
+        /// Called when [click close].
+        /// </summary>
+        private void OnClickClose(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

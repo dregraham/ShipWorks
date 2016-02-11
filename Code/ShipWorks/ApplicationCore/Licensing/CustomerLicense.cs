@@ -17,22 +17,31 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
-        private readonly Func<IChannelLimitDlg> channelLimitDlgFactory;
+        private readonly IUpgradePlanDlgFactory upgradePlanDlgFactory;
         private readonly ILog log;
         private readonly IDeletionService deletionService;
+        private readonly IChannelLimitDlgFactory channelLimitDlgFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         [NDependIgnoreTooManyParams]
-        public CustomerLicense(string key, ITangoWebClient tangoWebClient, ICustomerLicenseWriter licenseWriter, Func<Type, ILog> logFactory, IDeletionService deletionService, Func<IChannelLimitDlg> channelLimitDlgFactory)
+        public CustomerLicense(
+            string key,
+            ITangoWebClient tangoWebClient,
+            ICustomerLicenseWriter licenseWriter,
+            Func<Type, ILog> logFactory,
+            IDeletionService deletionService,
+            IChannelLimitDlgFactory channelLimitDlgFactory,
+            IUpgradePlanDlgFactory upgradePlanDlgFactory)
         {
             Key = key;
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
-			this.channelLimitDlgFactory = channelLimitDlgFactory;
+            this.upgradePlanDlgFactory = upgradePlanDlgFactory;
             log = logFactory(typeof(CustomerLicense));
             this.deletionService = deletionService;
+            this.channelLimitDlgFactory = channelLimitDlgFactory;
         }
 
         /// <summary>
@@ -68,7 +77,19 @@ namespace ShipWorks.ApplicationCore.Licensing
             get
             {
                 return (LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit) &&
-                    !LicenseCapabilities.IsInTrial; 
+                    !LicenseCapabilities.IsInTrial;
+            }
+        }
+
+        /// <summary>
+        /// Is the license over the ChannelLimit
+        /// </summary>
+        public bool IsShipmentLimitReached
+        {
+            get
+            {
+                return (LicenseCapabilities.ProcessedShipments >= LicenseCapabilities.ShipmentLimit) &&
+                    !LicenseCapabilities.IsInTrial;
             }
         }
 
@@ -85,7 +106,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 {
                     numberOfChannelsOverLimit = LicenseCapabilities.ActiveChannels - LicenseCapabilities.ChannelLimit;
                 }
-                
+
                 return numberOfChannelsOverLimit;
             }
         }
@@ -95,13 +116,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public EnumResult<LicenseActivationState> Activate(StoreEntity store)
         {
-            AddStoreResponse response = tangoWebClient.AddStore(this, store);
+            IAddStoreResponse response = tangoWebClient.AddStore(this, store);
 
-            store.License = response.Key;
+            // The license activation state will be one of three values: Active, Invalid,
+            // or OverChannelLimit. Rely on the success flag initially then dig into
+            // the response to determine if the license is over the channel limit.
+            LicenseActivationState activationState = response.Success ?
+                LicenseActivationState.Active : LicenseActivationState.Invalid;
 
-            return response.Success ?
-                new EnumResult<LicenseActivationState>(LicenseActivationState.Active) :
-                new EnumResult<LicenseActivationState>(LicenseActivationState.Invalid, response.Error);
+            if ((response.Error?.IndexOf("OverChannelLimit", StringComparison.Ordinal) ?? -1) >= 0)
+            {
+                // The response from Tango indicates the license will be over the channel limit
+                activationState = LicenseActivationState.OverChannelLimit;
+            }
+
+            return new EnumResult<LicenseActivationState>(activationState, response.Error);
         }
 
         /// <summary>
@@ -133,6 +162,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             licenseWriter.Write(this);
         }
 
+
         /// <summary>
         /// If License is over the channel limit prompt user to delete channels
         /// </summary>
@@ -144,13 +174,28 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 try
                 {
-                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory();                  
+                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(this);
                     channelLimitDlg.ShowDialog();
                 }
                 catch (ShipWorksLicenseException ex)
                 {
                     log.Error("Error thrown when displaying channel limit dialog", ex);
                 }
+            }
+        }
+
+        /// <summary>
+        /// If license is at shipment limit, prompt user to upgrade
+        /// when attempting to process a shipment
+        /// </summary>
+        public void EnforceShipmentLimit()
+        {
+            Refresh();
+
+            if (IsShipmentLimitReached)
+            {
+                IDialog dialog = upgradePlanDlgFactory.Create("You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.");
+                dialog.ShowDialog();
             }
         }
 
