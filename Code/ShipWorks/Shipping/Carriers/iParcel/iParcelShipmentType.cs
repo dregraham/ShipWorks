@@ -15,6 +15,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
@@ -24,9 +25,8 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Tracking;
-using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -72,10 +72,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             iParcelShipmentEntity.TrackBySMS = false;
             iParcelShipmentEntity.IsDeliveryDutyPaid = true;
 
-            iParcelShipmentEntity.RequestedLabelFormat = (int)ThermalLanguage.None;
+            iParcelShipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             IParcelPackageEntity package = CreateDefaultPackage();
             iParcelShipmentEntity.Packages.Add(package);
+            shipment.IParcel.Packages.RemovedEntitiesTracker = new IParcelPackageCollection();
 
             // Weight of the first package equals the total shipment content weight
             package.Weight = shipment.ContentWeight;
@@ -187,7 +188,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                         profile.IParcel.Packages.Remove(package);
                     }
 
-                        // If its deleted, delete it
+                    // If its deleted, delete it
                     else
                     {
                         package.Fields.State = EntityState.Fetched;
@@ -330,7 +331,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             bool existed = profile.IParcel != null;
 
-            ShipmentTypeDataService.LoadProfileData(profile, "IParcel", typeof (IParcelProfileEntity), refreshIfPresent);
+            ShipmentTypeDataService.LoadProfileData(profile, "IParcel", typeof(IParcelProfileEntity), refreshIfPresent);
 
             IParcelProfileEntity iParcelProfileEntityParcel = profile.IParcel;
 
@@ -429,7 +430,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 foreach (IParcelPackageEntity package in shipment.IParcel.Packages)
                 {
-                    package.Weight = shipment.ContentWeight/shipment.IParcel.Packages.Count;
+                    package.Weight = shipment.ContentWeight / shipment.IParcel.Packages.Count;
                 }
 
                 return true;
@@ -502,7 +503,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <param name="repository">The repository from which the service types are fetched.</param>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
-            IEnumerable<int> allServices = EnumHelper.GetEnumList<iParcelServiceType>().Select(e => (int)e.Value);
+            IEnumerable<int> allServices = EnumHelper.GetEnumList<iParcelServiceType>().Select(e => (int) e.Value);
             return allServices.Except(GetExcludedServiceTypes(repository));
         }
 
@@ -514,7 +515,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
         {
-            ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "IParcel", typeof (IParcelShipmentEntity), refreshIfPresent);
+            ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "IParcel", typeof(IParcelShipmentEntity), refreshIfPresent);
 
             IParcelShipmentEntity iParcelShipmentEntity = shipment.IParcel;
 
@@ -554,7 +555,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             return new iParcelShipmentProcessingSynchronizer();
         }
-        
+
         /// <summary>
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
@@ -720,7 +721,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
                 DataSet response = serviceGateway.TrackShipment(credentials, shipment);
 
-                TrackingResult trackingInfo = new TrackingResult {Summary = GetFormattedTrackingSummary(response)};
+                TrackingResult trackingInfo = new TrackingResult { Summary = GetFormattedTrackingSummary(response) };
                 BuildTrackingDetails(trackingInfo, response);
 
                 return trackingInfo;
@@ -887,7 +888,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             // There was a conscious decision made with input from Rich that for now we can assume the origin
             // country will always be US when the shipment is configured to ship from the account address
-            string originCountryCode = (ShipmentOriginSource)shipment.OriginOriginID == ShipmentOriginSource.Account ?
+            string originCountryCode = (ShipmentOriginSource) shipment.OriginOriginID == ShipmentOriginSource.Account ?
                                         "US" : shipment.AdjustedOriginCountryCode();
 
             // We only want to check i-parcel for international shipments originating in the US
@@ -921,7 +922,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             return requiresCustoms;
         }
-        
+
         /// <summary>
         /// Gets a value indicating whether multiple packages are supported by this shipment type.
         /// </summary>
@@ -937,7 +938,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             if (shipment.IParcel != null)
             {
-                shipment.IParcel.RequestedLabelFormat = (int)requestedLabelFormat;
+                shipment.IParcel.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
 
