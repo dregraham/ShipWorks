@@ -138,7 +138,6 @@
     </Compile>
     <Compile Include="AttachedProperties\EntityFieldLength.cs" />
     <Compile Include="AttachedProperties\PopupClickManager.cs" />
-    <Compile Include="AttachedProperties\SelectDefaultWhenValueIsNull.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
     <Compile Include="Controls\AddressControl\Address.xaml.cs">
@@ -147,6 +146,7 @@
     <Compile Include="Controls\AddressControl\AddressViewModel.cs" />
     <Compile Include="Controls\AddressControl\AddressViewModel.Properties.cs" />
     <Compile Include="Controls\AlignmentWrapPanel.cs" />
+    <Compile Include="Controls\NullSelectionComboBox.cs" />
     <Compile Include="Controls\TypeBasedTemplateSelector\Template.cs" />
     <Compile Include="Controls\TypeBasedTemplateSelector\TemplateCollection.cs" />
     <Compile Include="Controls\TypeBasedTemplateSelector\TypeBasedTemplateSelector.cs" />
