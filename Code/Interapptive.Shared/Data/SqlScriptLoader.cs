@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Interapptive.Shared.Data
@@ -11,11 +12,18 @@ namespace Interapptive.Shared.Data
     /// </summary>
     public class SqlScriptLoader
     {
-        string resourcePath;
-        DirectoryInfo folder;
+        private readonly string resourcePath;
+        private readonly DirectoryInfo folder;
 
-        // The assembly to load from
-        Assembly assembly;
+        // The calling assembly.  This has to be set in the constructor, otherwise, LoadAssemblies will
+        // use Interapptive.Shared as the calling assembly.
+        private Assembly callingAssembly;
+
+        // The assemblies from which to load
+        private readonly List<Assembly> assemblies;
+
+        // The manifest resource names from all of the assemblies.
+        private List<string> manifestResourceNames; 
 
         /// <summary>
         /// Initializes the loader to load scripts from the given resource path
@@ -27,7 +35,10 @@ namespace Interapptive.Shared.Data
                 throw new ArgumentNullException("resourcePath");
             }
 
-            this.assembly = Assembly.GetCallingAssembly();
+            callingAssembly = Assembly.GetCallingAssembly();
+            assemblies = new List<Assembly>();
+            LoadAssemblies();
+
             this.resourcePath = resourcePath;
         }
 
@@ -41,8 +52,35 @@ namespace Interapptive.Shared.Data
                 throw new ArgumentNullException("folder");
             }
 
-            this.assembly = Assembly.GetCallingAssembly();
+            assemblies = new List<Assembly>();
+            LoadAssemblies();
+
             this.folder = folder;
+        }
+
+        /// <summary>
+        /// Load needed assemblies and ManifestResourceNames
+        /// </summary>
+        private void LoadAssemblies()
+        {
+            assemblies.Add(callingAssembly);
+
+            Assembly resourcesAssembly = Assembly.Load("ShipWorks.Res");
+
+            if (resourcesAssembly != null)
+            {
+                assemblies.Add(resourcesAssembly);
+            }
+
+            manifestResourceNames = assemblies.SelectMany(a => a.GetManifestResourceNames()).ToList();
+        }
+
+        /// <summary>
+        /// All resource names from assemblies
+        /// </summary>
+        public List<string> ManifestResourceNames
+        {
+            get { return manifestResourceNames; }
         }
 
         /// <summary>
@@ -86,6 +124,9 @@ namespace Interapptive.Shared.Data
 
                 // Open the embedded stream
                 string resourceToLoad = resourcePath + "." + name;
+
+                Assembly assembly = assemblies.First(a => a.GetManifestResourceNames().Contains(resourceToLoad));
+
                 using (Stream stream = assembly.GetManifestResourceStream(resourceToLoad))
                 {
                     if (stream == null)

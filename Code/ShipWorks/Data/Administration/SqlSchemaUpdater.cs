@@ -31,7 +31,7 @@ namespace ShipWorks.Data.Administration
         static readonly ILog log = LogManager.GetLogger(typeof(SqlSchemaUpdater));
 
         // Used for executing scripts
-        static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Update");
+        static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Res.Data.Administration.Scripts.Update");
 
         /// <summary>
         /// Get the dabase schema version that is required by this version of ShipWorks
@@ -354,7 +354,7 @@ namespace ShipWorks.Data.Administration
         {
             List<SqlUpdateScript> scripts = new List<SqlUpdateScript>();
 
-            foreach (string resource in Assembly.GetExecutingAssembly().GetManifestResourceNames().Where(r => r.StartsWith(sqlLoader.ResourcePath)))
+            foreach (string resource in sqlLoader.ManifestResourceNames.Where(r => r.StartsWith(sqlLoader.ResourcePath)))
             {
                 scripts.Add(new SqlUpdateScript(resource));
             }
