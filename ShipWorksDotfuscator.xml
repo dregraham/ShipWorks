@@ -79,6 +79,9 @@
   <output>
     <file dir="${configdir}\Artifacts\Application\Obfuscated" />
   </output>
+  <tempdir>
+    <file dir="${configdir}\Artifacts\Temp" />
+  </tempdir>
   <renaming>
     <option>keephierarchy</option>
     <option>xmlserialization</option>
