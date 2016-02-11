@@ -1,15 +1,13 @@
 ﻿namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
-    ///
+    /// A service interface for activating customer licenses in ShipWorks.
     /// </summary>
     public interface ICustomerLicenseActivationService
     {
         /// <summary>
-        /// Activates a CustomerLicense
+        /// Attempts to use the email address and password provided to activate a customer license with Tango.
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        ICustomerLicense Activate(string username, string password);
+        ICustomerLicense Activate(string email, string password);
     }
 }

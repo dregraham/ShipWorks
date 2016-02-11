@@ -5,7 +5,6 @@ using ShipWorks.Stores;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,15 +20,36 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
         private readonly IStoreManager storeManager;
         private string message;
         private string intro;
-        
+
+
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ChannelConfirmDeleteViewModel"/> class.
         /// </summary>
-        /// <param name="storeType"></param>
+        /// <param name="storeManager">The IStoreManager to use for getting a list of all stores in ShipWorks.</param>
         public ChannelConfirmDeleteViewModel(IStoreManager storeManager)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             this.storeManager = storeManager;
+        }
+
+        /// <summary>
+        /// The intro message to display to the user
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string Intro
+        {
+            get { return intro; }
+            set { handler.Set(nameof(Intro), ref intro, value); }
+        }
+
+        /// <summary>
+        /// The delete message to display to the user
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string Message
+        {
+            get { return message; }
+            set { handler.Set(nameof(Message), ref message, value); }
         }
 
         /// <summary>
@@ -74,26 +94,6 @@ namespace ShipWorks.UI.Controls.ChannelConfirmDelete
             }
 
             return builder.ToString();
-        }
-
-        /// <summary>
-        /// The intro message to display to the user
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string Intro
-        {
-            get { return intro; }
-            set { handler.Set(nameof(Intro), ref intro, value); }
-        }
-        
-        /// <summary>
-        /// The delete message to display to the user
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string Message
-        {
-            get { return message; }
-            set { handler.Set(nameof(Message), ref message, value); }
         }
     }
 }

@@ -206,7 +206,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Activate_AccountCreatedWithCorrectPassword()
+        public void Activate_DelegatesToSecureText_WhenEncryptingUspsAccountPassword()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -218,15 +218,40 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
-                repo
-                    .Setup(r => r.Save(It.IsAny<UspsAccountEntity>()))
+
+                repo.Setup(r => r.Save(It.IsAny<UspsAccountEntity>()))
                     .Callback((UspsAccountEntity account) => createdAccount = account);
 
                 var testObject = mock.Create<CustomerLicenseActivationService>();
 
                 testObject.Activate("bob", password);
 
-                Assert.Equal(password, createdAccount.Password);
+                Assert.Equal(SecureText.Encrypt(password, createdAccount.Username), createdAccount.Password);
+            }
+        }
+
+        [Fact]
+        public void Activate_DelegatesToRepository_WhenSavingUspsAccount()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                MockSuccessfullActivateLicense(mock, "bob");
+
+                string password = "1234";
+                UspsAccountEntity createdAccount = null;
+
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                repo.Setup(r => r.Accounts)
+                    .Returns(new List<UspsAccountEntity>());
+
+                repo.Setup(r => r.Save(It.IsAny<UspsAccountEntity>()))
+                    .Callback((UspsAccountEntity account) => createdAccount = account);
+
+                var testObject = mock.Create<CustomerLicenseActivationService>();
+
+                testObject.Activate("bob", password);
+
+                repo.Verify(r => r.Save(createdAccount), Times.Once());
             }
         }
 

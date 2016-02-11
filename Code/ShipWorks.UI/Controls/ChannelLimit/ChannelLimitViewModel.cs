@@ -32,7 +32,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly IStoreManager storeManager;
         private readonly IChannelConfirmDeleteFactory confirmDeleteFactory;
         private readonly WebBrowserFactory webBrowserFactory;
-        private readonly IMessageHelper messagdHelper;
+        private readonly IMessageHelper messageHelper;
         private readonly ILog log;
         private bool isDeleting;
 
@@ -45,13 +45,13 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             IChannelConfirmDeleteFactory confirmDeleteFactory, 
             Func<Type, ILog> logFactory,
             WebBrowserFactory webBrowserFactory,
-            IMessageHelper messagdHelper)
+            IMessageHelper messageHelper)
         {
             license = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
             this.storeManager = storeManager;
             this.confirmDeleteFactory = confirmDeleteFactory;
             this.webBrowserFactory = webBrowserFactory;
-            this.messagdHelper = messagdHelper;
+            this.messageHelper = messageHelper;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -153,7 +153,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             // If we are trying to delete the only store type in ShipWorks display an error and dont delete
             if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType))
             {
-                messagdHelper.ShowError($"You cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.");
+                messageHelper.ShowError($"You cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.");
                 return;
             }
 
@@ -175,11 +175,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                     catch (ShipWorksLicenseException ex)
                     {
                         log.Error("Error deleting channel", ex);
-                        messagdHelper.ShowError("Error deleting Channel. Please try again.");
+                        messageHelper.ShowError("Error deleting Channel. Please try again.");
                     }
                     catch (SqlAppResourceLockException)
                     {
-                        messagdHelper.ShowError("Unable to delete store while it is in the process of a download.");
+                        messageHelper.ShowError("Unable to delete store while it is in the process of a download.");
                     }
                 }
             }

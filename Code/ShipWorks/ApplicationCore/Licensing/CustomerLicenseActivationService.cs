@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using Quartz.Util;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -39,14 +38,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Activates a CustomerLicense
+        /// Attempts to use the email address and password provided to activate a customer license with Tango.
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public ICustomerLicense Activate(string username, string password)
+        public ICustomerLicense Activate(string email, string password)
         {
-            GenericResult<IActivationResponse> activateLicenseResponse = tangoWebClient.ActivateLicense(username, password);
+            GenericResult<IActivationResponse> activateLicenseResponse = tangoWebClient.ActivateLicense(email, password);
 
             // Check to see if something went wrong and if so we throw
             if (!activateLicenseResponse.Success)
@@ -57,8 +53,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             uspsAccountManager.InitializeForCurrentSession();
 
             string associatedStampsUserName = activateLicenseResponse.Context.AssociatedStampsUserName;
-
-            if (!uspsAccountRepository.Accounts.Any() && !associatedStampsUserName.IsNullOrWhiteSpace())
+            if (!uspsAccountRepository.Accounts.Any() && !string.IsNullOrWhiteSpace(associatedStampsUserName))
             {
                 UspsAccountEntity uspsAccount = new UspsAccountEntity()
                 {
@@ -67,12 +62,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                 };
 
                 uspsWebClient.PopulateUspsAccountEntity(uspsAccount);
-
                 uspsAccountRepository.Save(uspsAccount);
             }
 
             ICustomerLicense license = licenseFactory(activateLicenseResponse.Context.Key);
-
             license.Save();
 
             return license;
