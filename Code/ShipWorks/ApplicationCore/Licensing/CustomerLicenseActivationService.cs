@@ -18,7 +18,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly IUspsWebClient uspsWebClient;
         private readonly ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository;
         private readonly Func<string, ICustomerLicense> licenseFactory;
-        private readonly IUspsAccountManager uspsAccountManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerLicenseActivationService"/> class.
@@ -27,14 +26,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="uspsWebClientFactory"></param>
         /// <param name="uspsAccountRepository">The usps account repository.</param>
         /// <param name="licenseFactory">The license factory.</param>
-        /// <param name="uspsAccountManager"></param>
-        public CustomerLicenseActivationService(ITangoWebClient tangoWebClient, Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory, ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository, Func<string, ICustomerLicense> licenseFactory, IUspsAccountManager uspsAccountManager)
+        public CustomerLicenseActivationService(ITangoWebClient tangoWebClient, Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory, ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository, Func<string, ICustomerLicense> licenseFactory)
         {
             this.tangoWebClient = tangoWebClient;
             this.uspsWebClient = uspsWebClientFactory(UspsResellerType.None);
             this.uspsAccountRepository = uspsAccountRepository;
             this.licenseFactory = licenseFactory;
-            this.uspsAccountManager = uspsAccountManager;
         }
 
         /// <summary>
@@ -49,8 +46,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new ShipWorksLicenseException(activateLicenseResponse.Message);
             }
-
-            uspsAccountManager.InitializeForCurrentSession();
 
             string associatedStampsUserName = activateLicenseResponse.Context.AssociatedStampsUserName;
             if (!uspsAccountRepository.Accounts.Any() && !string.IsNullOrWhiteSpace(associatedStampsUserName))
