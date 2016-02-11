@@ -41,7 +41,7 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Load needed assemblies and ManifestResourceNames
         /// </summary>
-        private IEnumerable<Assembly> LoadAssemblies()
+        private static IEnumerable<Assembly> LoadAssemblies()
         {
             return new[] { Assembly.Load("ShipWorks.Core"), Assembly.Load("ShipWorks.Res") };
         }
