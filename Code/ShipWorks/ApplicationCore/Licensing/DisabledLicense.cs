@@ -1,4 +1,4 @@
-using System;
+using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -80,12 +80,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Trhows - We shouldn't enforce a channel limit on a disabled store.
         /// </summary>
-        public void EnforceChannelLimit()
+        /// <param name="owner"></param>
+        public void EnforceChannelLimit(IWin32Window owner)
         {
             throw new ShipWorksLicenseException("Shipment Limit not valid for a disabled license.");
         }
 
-        public void EnforceShipmentLimit()
+        public void EnforceShipmentLimit(IWin32Window owner)
         {
             throw new ShipWorksLicenseException("Channel Limit not valid for a disabled license.");
         }

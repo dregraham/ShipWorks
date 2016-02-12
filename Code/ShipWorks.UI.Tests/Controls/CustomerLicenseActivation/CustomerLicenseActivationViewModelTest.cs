@@ -20,11 +20,14 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
         [InlineData(null, "TestPassword", false)]
         [InlineData("support@shipworkscom", "TestPassword", false)]
         [InlineData("supportshipworks.com", "TestPassword", false)]
-        public void Save_Validates_Username(string username, string password, bool isValid)
+        public void Save_ValidatesUsername(string username, string password, bool isValid)
         {
             using (var mock = AutoMock.GetLoose())
             {
                 CustomerLicenseActivationViewModel testObject = mock.Create<CustomerLicenseActivationViewModel>();
+
+                var activationService = mock.Mock<ICustomerLicenseActivationService>();
+                activationService.Setup(s => s.Activate(It.IsAny<string>(), It.IsAny<string>()));
 
                 testObject.Email = username;
 
@@ -45,11 +48,14 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
         [Theory]
         [InlineData("support@shipworks.com", "TestPassword", true)]
         [InlineData("support@shipworks.com", "", false)]
-        public void Save_Validates_Password(string username, string password, bool isValid)
+        public void Save_ValidatesPassword(string username, string password, bool isValid)
         {
             using (var mock = AutoMock.GetLoose())
             {
                 CustomerLicenseActivationViewModel testObject = mock.Create<CustomerLicenseActivationViewModel>();
+
+                var activationService = mock.Mock<ICustomerLicenseActivationService>();
+                activationService.Setup(s => s.Activate(It.IsAny<string>(), It.IsAny<string>()));
 
                 testObject.Email = username;
 
@@ -66,14 +72,15 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
         }
 
         [Fact]
-        public void SaveCalls_ICustomerLicenseActivate_WithUsername_AndDecriptedPassword()
+        public void SaveCalls_ICustomerLicenseActivate_WithUsernameAndDecryptedPassword()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 string username = "support@shipworks.com";
                 string password = "TestPassword";
 
-                var customerLicense = mock.Mock<ICustomerLicense>();
+                var activationService = mock.Mock<ICustomerLicenseActivationService>();
+                activationService.Setup(s => s.Activate(It.IsAny<string>(), It.IsAny<string>()));
 
                 CustomerLicenseActivationViewModel viewModel = mock.Create<CustomerLicenseActivationViewModel>();
                 using (SecureString securePassword = new SecureString())
@@ -84,7 +91,7 @@ namespace ShipWorks.UI.Tests.Controls.CustomerLicenseActivation
                     viewModel.Password = securePassword;
                     viewModel.Save(true);
 
-                    customerLicense.Verify(l => l.Activate(username, password), Times.Once);
+                    activationService.Verify(l => l.Activate(username, password), Times.Once);
                 }
             }
         }

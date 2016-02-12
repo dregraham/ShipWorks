@@ -44,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Activates ShipWorks using the given user
         /// </summary>
-        GenericResult<ActivationResponse> ActivateLicense(string email, string password);
+        GenericResult<IActivationResponse> ActivateLicense(string email, string password);
 
         /// <summary>
         /// Send the user their username using the specified email address

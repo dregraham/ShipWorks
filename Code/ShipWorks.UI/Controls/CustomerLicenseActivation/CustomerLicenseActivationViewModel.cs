@@ -7,6 +7,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
 using ShipWorks.Email;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 
 namespace ShipWorks.UI.Controls.CustomerLicenseActivation
@@ -16,8 +18,10 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
     /// </summary>
     public class CustomerLicenseActivationViewModel : ICustomerLicenseActivationViewModel
     {
-        private readonly ICustomerLicense customerLicense;
+        private readonly ICustomerLicenseActivationService activationService;
         private readonly IUserService userManager;
+        private readonly IUspsAccountManager uspsAccountManager;
+        private readonly IShippingSettings shippingSettings;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string email;
@@ -26,10 +30,12 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Constructor
         /// </summary>
-        public CustomerLicenseActivationViewModel(Func<string, ICustomerLicense> customerLicenseFactory, IUserService userManager)
+        public CustomerLicenseActivationViewModel(ICustomerLicenseActivationService activationService, IUserService userManager, IUspsAccountManager uspsAccountManager, IShippingSettings shippingSettings)
         {
-            this.customerLicense = customerLicenseFactory(string.Empty);
+            this.activationService = activationService;
             this.userManager = userManager;
+            this.uspsAccountManager = uspsAccountManager;
+            this.shippingSettings = shippingSettings;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -57,7 +63,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// The decrypted password
         /// </summary>
         /// <remarks>
-        /// We have to do this because the PasswordBox control in XAML 
+        /// We have to do this because the PasswordBox control in XAML
         /// does not give us access to the plain text password
         /// </remarks>
         public string DecryptedPassword
@@ -84,7 +90,7 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// The password reset link
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string PasswordResetLink => 
+        public string PasswordResetLink =>
             "https://www.interapptive.com/account/forgotpassword.php";
 
         /// <summary>
@@ -100,20 +106,28 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         public GenericResult<ICustomerLicense> Save(bool createCustomer)
         {
             GenericResult<ICustomerLicense> result = ValidateCredentials();
-            
-            // if the username and password passed our data validation 
+
+            // if the username and password passed our data validation
             // call activate and create the user
             if (result.Success)
             {
                 try
                 {
-                    // Activate the software using an empty license with the given username/password
-                    customerLicense.Activate(Email, DecryptedPassword);
+                    uspsAccountManager.InitializeForCurrentSession();
+                    shippingSettings.InitializeForCurrentDatabase();
+
+                    ICustomerLicense customerLicense = activationService.Activate(email, DecryptedPassword);
 
                     if (createCustomer)
                     {
-                        userManager.CreateUser(Email, DecryptedPassword, true); 
+                        userManager.CreateUser(Email, DecryptedPassword, true);
                     }
+
+                    result = new GenericResult<ICustomerLicense>(customerLicense)
+                    {
+                        Message = string.Empty,
+                        Success = true
+                    };
                 }
                 catch (Exception ex)
                 {
@@ -128,9 +142,15 @@ namespace ShipWorks.UI.Controls.CustomerLicenseActivation
         /// <summary>
         /// Validates that the credentials
         /// </summary>
+        /// <remarks>
+        /// The context of the returning Generic Result will be null
+        /// as we don't have a context yet.  If the result is successful,
+        /// we are ready to download
+        /// </remarks>
         private GenericResult<ICustomerLicense> ValidateCredentials()
         {
-            GenericResult<ICustomerLicense> result = new GenericResult<ICustomerLicense>(customerLicense)
+            // we don't have a license yet...
+            GenericResult<ICustomerLicense> result = new GenericResult<ICustomerLicense>(null)
             {
                 Success = true,
                 Message = string.Empty

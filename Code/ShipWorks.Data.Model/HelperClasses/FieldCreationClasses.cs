@@ -21452,6 +21452,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.CreatedDate);}
 		}
+		/// <summary>Creates a new UspsAccountEntity.PendingInitialAccount field instance</summary>
+		public static EntityField2 PendingInitialAccount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.PendingInitialAccount);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsProfileEntity</summary>

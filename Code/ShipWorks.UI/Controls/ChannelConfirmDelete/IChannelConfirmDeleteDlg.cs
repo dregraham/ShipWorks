@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.UI.Controls.ChannelConfirmDelete
+﻿using System.Windows;
+
+namespace ShipWorks.UI.Controls.ChannelConfirmDelete
 {
     /// <summary>
     /// Interface for Confirm channel delete dlg
@@ -21,5 +23,20 @@
         /// </summary>
         /// <returns></returns>
         bool? DialogResult { get; set; }
+
+        /// <summary>
+        /// Starting location of the window
+        /// </summary>
+        WindowStartupLocation WindowStartupLocation { get; set; }
+
+        /// <summary>
+        /// Topmost window or not
+        /// </summary>
+        bool Topmost { get; set; }
+
+        /// <summary>
+        /// The dialogs owner
+        /// </summary>
+        Window Owner { get; set; }
     }
 }

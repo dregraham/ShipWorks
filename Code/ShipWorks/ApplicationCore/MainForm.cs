@@ -632,7 +632,7 @@ namespace ShipWorks
             {
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
+                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit(this);
             }
             
             // If there are no stores, we need to make sure one is added before continuing
@@ -2339,7 +2339,7 @@ namespace ShipWorks
                 {
                     ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                    licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
+                    licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit(this);
                 }
                 
                 // Start the download
@@ -2365,7 +2365,7 @@ namespace ShipWorks
             {
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit();
+                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit(this);
             }
             // Start the download
             DownloadManager.StartDownload(new List<StoreEntity> { store }, DownloadInitiatedBy.User);

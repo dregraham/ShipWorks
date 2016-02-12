@@ -10,10 +10,12 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.UI.Controls.WebBrowser;
 
@@ -33,7 +35,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly IStoreManager storeManager;
         private readonly IChannelConfirmDeleteFactory confirmDeleteFactory;
         private readonly IWebBrowserFactory webBrowserFactory;
-        private readonly IMessageHelper messagdHelper;
+        private readonly IMessageHelper messageHelper;
         private readonly ILog log;
         private bool isDeleting;
 
@@ -42,15 +44,15 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         public ChannelLimitViewModel(
             IStoreManager storeManager,
-            IChannelConfirmDeleteFactory confirmDeleteFactory, 
+            IChannelConfirmDeleteFactory confirmDeleteFactory,
             Func<Type, ILog> logFactory,
             IWebBrowserFactory webBrowserFactory,
-            IMessageHelper messagdHelper)
+            IMessageHelper messageHelper)
         {
             this.storeManager = storeManager;
             this.confirmDeleteFactory = confirmDeleteFactory;
             this.webBrowserFactory = webBrowserFactory;
-            this.messagdHelper = messagdHelper;
+            this.messageHelper = messageHelper;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -59,8 +61,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             log = logFactory(typeof (ChannelLimitViewModel));
 
-            DeleteStoreClickCommand = new RelayCommand(DeleteChannel, CanExecuteDeleteStore);
-            UpgradeClickCommand = new RelayCommand(UpgradeAccount);
+            DeleteStoreClickCommand = new RelayCommand<Window>(DeleteChannel, CanExecuteDeleteStore);
+            UpgradeClickCommand = new RelayCommand<Window>(UpgradeAccount);
         }
 
         /// <summary>
@@ -106,6 +108,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         public ICommand UpgradeClickCommand { get; }
 
         /// <summary>
+        /// Channel being added
+        /// </summary>
+        public StoreTypeCode? ChannelToAdd { get; set; }
+
+        /// <summary>
         /// Collection of stores
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -141,19 +148,17 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             // clear the collection
             ChannelCollection.Clear();
 
-            // load the collection with the licenses active stores
-            license.GetActiveStores()
-                .ToList()
-                .ForEach(s => ChannelCollection.Add(new ShipWorksLicense(s.StoreLicenseKey).StoreTypeCode));
+            // Load the collection with the licenses active stores
+            // If ChannelToAdd is set, fitler out 
+            IEnumerable<StoreTypeCode> activeTangoChannels = license.GetActiveStores().Select(s=> new ShipWorksLicense(s.StoreLicenseKey).StoreTypeCode);
+            IEnumerable<StoreTypeCode> activeStoresInShipWorks = storeManager.GetAllStores().Select(s=>(StoreTypeCode)s.TypeCode);
 
-            foreach (StoreEntity store in storeManager.GetAllStores())
-            {
+            activeTangoChannels.Union(activeStoresInShipWorks)
+                .Distinct()
+                .Where(s => !ChannelToAdd.HasValue || s != ChannelToAdd.Value)
+                .ToList()
                 // if we did not find a match add it to the collection 
-                if (!ChannelCollection.Contains((StoreTypeCode) store.TypeCode))
-                {
-                    ChannelCollection.Add((StoreTypeCode) store.TypeCode);
-                }
-            }
+                .ForEach(s => ChannelCollection.Add(s));
 
             UpdateErrorMesssage();
         }
@@ -169,7 +174,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// True if a store is selected
         /// </summary>
-        private bool CanExecuteDeleteStore()
+        private bool CanExecuteDeleteStore(Window owner)
         {
             return SelectedStoreType != StoreTypeCode.Invalid;
         }
@@ -179,39 +184,54 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void UpdateErrorMesssage()
         {
-            string plural = license.NumberOfChannelsOverLimit > 1 ? "s" : string.Empty;
+            int channelsToDelete = license.NumberOfChannelsOverLimit;
+            if (ChannelToAdd != null)
+            {
+                channelsToDelete ++;
+            }
+
+            string plural = channelsToDelete > 1 ? "s" : string.Empty;
             ErrorMessage =
-                $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to continue downloading orders and creating shipment labels.";
+                $"You have exceeded your channel limit. Please upgrade your plan or delete {channelsToDelete} channel{plural} to continue downloading orders and creating shipment labels.";
         }
 
         /// <summary>
         /// Upgrade the account
         /// </summary>
-        private void UpgradeAccount()
+        private void UpgradeAccount(Window owner)
         {
             Uri uri = new Uri("https://www.interapptive.com/account/changeplan.php");
-            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account");
+            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account", owner);
             browserDlg.ShowDialog();
+
+            Load(license);
+
+            if (!license.IsOverChannelLimit)
+            {
+                owner?.Close();
+            }
         }
 
         /// <summary>
         /// Delete the selected store
         /// </summary>
-        private async void DeleteChannel()
+        private async void DeleteChannel(Window owner)
         {
             List<StoreTypeCode> localStoreTypeCodes =
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
 
-            // If we are trying to delete the only store type in ShipWorks display an error and dont delete
-            if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType))
+            // If we are trying to delete the only store type in ShipWorks and they are not trying to add another one
+            // display an error and dont delete
+            if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType) && ChannelToAdd == null)
             {
-                messagdHelper.ShowError($"You cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.");
+                messageHelper.ShowError($"You cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is " +
+                                        "the only channel in your ShipWorks database.");
                 return;
             }
 
             IsDeleting = true;
 
-            IChannelConfirmDeleteDlg deleteDlg = confirmDeleteFactory.GetConfirmDeleteDlg(selectedStoreType);
+            IChannelConfirmDeleteDlg deleteDlg = confirmDeleteFactory.GetConfirmDeleteDlg(selectedStoreType, owner);
 
             deleteDlg.ShowDialog();
 
@@ -225,11 +245,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 catch (ShipWorksLicenseException ex)
                 {
                     log.Error("Error deleting channel", ex);
-                    messagdHelper.ShowError("Error deleting Channel. Please try again.");
+                    messageHelper.ShowError("Error deleting Channel. Please try again.");
                 }
                 catch (SqlAppResourceLockException)
                 {
-                    messagdHelper.ShowError("Unable to delete store while it is in the process of a download.");
+                    messageHelper.ShowError("Unable to delete store while it is in the process of a download.");
                 }
             }
 
@@ -245,6 +265,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             }
 
             IsDeleting = false;
+
+            if (!license.IsOverChannelLimit)
+            {
+                owner?.Close();
+            }
         }
 
         /// <summary>

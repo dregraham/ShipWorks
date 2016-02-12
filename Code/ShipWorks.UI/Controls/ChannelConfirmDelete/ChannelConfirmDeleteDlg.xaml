@@ -1,14 +1,16 @@
 ﻿<Window x:Class="ShipWorks.UI.Controls.ChannelConfirmDelete.ChannelConfirmDeleteDlg"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ShipWorks.UI.Controls.ChannelConfirmDelete"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:ChannelConfirmDeleteViewModel}"
              d:DesignHeight="153" d:DesignWidth="458"
              ResizeMode="NoResize" FontFamily="Tahoma" FontSize="8.25pt" Height="153" Width="458"
-             WindowStyle="ToolWindow" Title="Channel Delete">
+             WindowStartupLocation="CenterOwner"
+             WindowStyle="ToolWindow" Title="Channel Delete"
+             ShowInTaskbar="False">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
@@ -32,10 +34,10 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="25" HorizontalAlignment="right">
-            <Button Width="55" Margin="0 0 10 0" IsEnabled="{Binding ElementName=ConfirmDelete, Path=IsChecked}"  Click="Delete_Click">
+            <Button Width="55" Margin="0 0 10 0" IsEnabled="{Binding ElementName=ConfirmDelete, Path=IsChecked}"  Click="DeleteClick">
                 Delete
             </Button>
-            <Button Width="55" Margin="0 0 10 0" Click="Cancel_Click">
+            <Button Width="55" Margin="0 0 10 0" Click="CancelClick">
                 Cancel
             </Button>
         </StackPanel>

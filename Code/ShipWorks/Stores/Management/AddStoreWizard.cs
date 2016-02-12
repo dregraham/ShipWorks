@@ -974,7 +974,7 @@ namespace ShipWorks.Stores.Management
                     if (activateResult.Value == LicenseActivationState.OverChannelLimit)
                     {
                         IChannelLimitFactory factory = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitFactory>();
-                        Control channelLimitControl = (Control)factory.CreateControl((ICustomerLicense)license);
+                        Control channelLimitControl = (Control)factory.CreateControl((ICustomerLicense)license, (StoreTypeCode) Store.TypeCode);
                         wizardPageActivationError.SetElementHost(channelLimitControl);
                     }
 

@@ -1,6 +1,6 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Web.UI.WebControls;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -57,13 +57,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// If License is over the channel limit prompt user to delete channels
         /// </summary>
-        void EnforceChannelLimit();
+        /// <param name="owner"></param>
+        void EnforceChannelLimit(IWin32Window owner);
 
         /// <summary>
         /// If license is at shipment limit, prompt user to upgrade
         /// when attempting to process a shipment
         /// </summary>
-        void EnforceShipmentLimit();
+        void EnforceShipmentLimit(IWin32Window owner);
 
         /// <summary>
         /// Deletes a store

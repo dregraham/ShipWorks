@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
 using Autofac.Extras.Moq;
 using Moq;
@@ -44,12 +44,12 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
                 Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
                 licenseService.Setup(l => l.GetLicenses()).Returns(new List<ILicense> { customerLicense.Object});
-                
+
                 ChannelLimitViewModel testObject = mock.Create<ChannelLimitViewModel>();
 
                 // Set the SelectedStoreType to something other than invalid
                 testObject.SelectedStoreType = StoreTypeCode.Amazon;
-                
+
                 // Call load
                 testObject.Load(customerLicense.Object);
 
@@ -83,9 +83,15 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
             {
                 var dialog = mock.Mock<IDialog>();
                 var webBrowserFactory = mock.Mock<IWebBrowserFactory>();
-                webBrowserFactory.Setup(w => w.Create(It.IsAny<Uri>(), It.IsAny<string>())).Returns(dialog.Object);
-                
+                webBrowserFactory.Setup(w => w.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<Window>())).Returns(dialog.Object);
+
+                Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
+                license.Setup(l => l.IsOverChannelLimit)
+                    .Returns(false);
+
                 var testObject = mock.Create<ChannelLimitViewModel>();
+                testObject.Load(license.Object);
+
                 ICommand upgradeClickCommand = testObject.UpgradeClickCommand;
                 upgradeClickCommand.Execute(null);
 
@@ -107,7 +113,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 Mock<IStoreManager> storeManager = mock.Mock<IStoreManager>();
                 storeManager.Setup(s => s.GetAllStores())
                     .Returns(stores);
-                
+
                 var testObject = mock.Create<ChannelLimitViewModel>();
                 testObject.SelectedStoreType = StoreTypeCode.Amazon;
 
@@ -127,7 +133,11 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 StoreEntity store = new StoreEntity {TypeCode = (int) StoreTypeCode.Amazon};
 
                 IEnumerable<StoreEntity> stores = new List<StoreEntity> {store};
-                
+
+                Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
+                license.Setup(l => l.IsOverChannelLimit)
+                    .Returns(false);
+
                 Mock<IStoreManager> storeManager = mock.Mock<IStoreManager>();
                 storeManager.Setup(s => s.GetAllStores())
                     .Returns(stores);
@@ -137,16 +147,17 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                     .Returns(false);
 
                 Mock<IChannelConfirmDeleteFactory> confirmDeleteFactgory = mock.Mock<IChannelConfirmDeleteFactory>();
-                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>()))
+                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<Window>()))
                     .Returns(confirmDelete.Object);
-                
+
                 // Test
                 var testObject = mock.Create<ChannelLimitViewModel>();
+                testObject.Load(license.Object);
                 testObject.SelectedStoreType = StoreTypeCode.Ebay;
 
                 ICommand deleteCommand = testObject.DeleteStoreClickCommand;
                 deleteCommand.Execute(null);
-                
+
                 // Verify
                 confirmDelete.Verify(d => d.ShowDialog(), Times.Once);
             }
@@ -171,7 +182,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                     .Returns(true);
 
                 Mock<IChannelConfirmDeleteFactory> confirmDeleteFactgory = mock.Mock<IChannelConfirmDeleteFactory>();
-                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>()))
+                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<Window>()))
                     .Returns(confirmDelete.Object);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
@@ -208,7 +219,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                     .Returns(false);
 
                 Mock<IChannelConfirmDeleteFactory> confirmDeleteFactgory = mock.Mock<IChannelConfirmDeleteFactory>();
-                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>()))
+                confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<Window>()))
                     .Returns(confirmDelete.Object);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -83,14 +84,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Nothing to enforce
         /// </summary>
-        public void EnforceChannelLimit()
+        /// <param name="owner"></param>
+        public void EnforceChannelLimit(IWin32Window owner)
         {
         }
 
         /// <summary>
         /// Nothing to enforce
         /// </summary>
-        public void EnforceShipmentLimit()
+        public void EnforceShipmentLimit(IWin32Window owner)
         {
         }
 

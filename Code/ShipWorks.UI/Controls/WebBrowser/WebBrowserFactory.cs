@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Windows;
 using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.UI.Controls.WebBrowser
@@ -28,10 +26,13 @@ namespace ShipWorks.UI.Controls.WebBrowser
         /// </summary>
         /// <param name="uri">The URI to navigate to.</param>
         /// <param name="title">The title of the dialog window.</param>
-        public IDialog Create(Uri uri, string title)
+        /// <param name="owner"></param>
+        public IDialog Create(Uri uri, string title, Window owner)
         {
             webBrowserDlgViewModel.Load(uri, title);
             IDialog browserDlg = webBrowserDlgFactory("WebBrowserDlg");
+            browserDlg.Owner = owner;
+
             browserDlg.DataContext = webBrowserDlgViewModel;
 
             return browserDlg;

@@ -45,9 +45,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.labelUsername = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.wizardPageStampsAccount = new ShipWorks.UI.Wizard.WizardPage();
-            this.uspsAccountInfo = new UspsAccountInfoControl();
+            this.uspsAccountInfo = new ShipWorks.Shipping.Carriers.Postal.Usps.UspsAccountInfoControl();
             this.wizardPageOptions = new ShipWorks.UI.Wizard.WizardPage();
-            this.optionsControl = new UspsOptionsControl();
+            this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Usps.UspsOptionsControl();
             this.wizardPageAccountAddress = new ShipWorks.UI.Wizard.WizardPage();
             this.panelTerms = new System.Windows.Forms.Panel();
             this.labelTerms2 = new System.Windows.Forms.Label();
@@ -61,9 +61,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.labelAccount = new System.Windows.Forms.Label();
             this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageNewAccountCredentials = new ShipWorks.UI.Wizard.WizardPage();
-            this.uspsRegistrationSecuritySettingsControl = new UspsRegistrationSecuritySettingsControl();
+            this.uspsRegistrationSecuritySettingsControl = new ShipWorks.Shipping.Carriers.Postal.Usps.Registration.UspsRegistrationSecuritySettingsControl();
             this.wizardPageNewAccountPayment = new ShipWorks.UI.Wizard.WizardPage();
-            this.uspsPaymentControl = new UspsPaymentControl();
+            this.uspsPaymentControl = new ShipWorks.Shipping.Carriers.Postal.Usps.Registration.UspsPaymentControl();
             this.linkStampsPrivacy = new ShipWorks.UI.Controls.LinkControl();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageWelcome);
+            this.mainPanel.Controls.Add(this.wizardPageNewAccountCredentials);
             this.mainPanel.Size = new System.Drawing.Size(733, 540);
             // 
             // etchBottom
@@ -124,6 +124,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageWelcome.Size = new System.Drawing.Size(733, 540);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup Stamps.com Shipping";
+            this.wizardPageWelcome.StepNext += OnStepNextWelcome;
             // 
             // accountTypePanel
             // 
@@ -276,7 +277,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageStampsAccount.Title = "Stamps.com Account";
             this.wizardPageStampsAccount.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoAccountInfo);
             // 
-            // stampsAccountInfo
+            // uspsAccountInfo
             // 
             this.uspsAccountInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uspsAccountInfo.Location = new System.Drawing.Point(23, 10);
@@ -452,7 +453,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageNewAccountCredentials.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageNewAccountCredentials.Location = new System.Drawing.Point(0, 0);
             this.wizardPageNewAccountCredentials.Name = "wizardPageNewAccountCredentials";
-            this.wizardPageNewAccountCredentials.Size = new System.Drawing.Size(542, 540);
+            this.wizardPageNewAccountCredentials.Size = new System.Drawing.Size(733, 540);
             this.wizardPageNewAccountCredentials.TabIndex = 0;
             this.wizardPageNewAccountCredentials.Title = "Account Registration";
             this.wizardPageNewAccountCredentials.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextRegistrationCredentials);
@@ -500,7 +501,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.linkStampsPrivacy.Text = "Stamps.com Privacy Policy";
             this.linkStampsPrivacy.Click += new System.EventHandler(this.OnLinkUspsPrivacyPolicy);
             // 
-            // StampsSetupWizard
+            // UspsSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

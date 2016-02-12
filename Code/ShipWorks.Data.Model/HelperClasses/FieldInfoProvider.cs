@@ -2753,6 +2753,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UspsAccountEntity", "UspsReseller", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.UspsReseller, 0, 0, 10);
 			base.AddElementFieldInfo("UspsAccountEntity", "ContractType", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.ContractType, 0, 0, 10);
 			base.AddElementFieldInfo("UspsAccountEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)UspsAccountFieldIndex.CreatedDate, 0, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "PendingInitialAccount", typeof(System.Boolean), false, false, false, false,  (int)UspsAccountFieldIndex.PendingInitialAccount, 0, 0, 0);
 		}
 		/// <summary>Inits UspsProfileEntity's FieldInfo objects</summary>
 		private void InitUspsProfileEntityInfos()

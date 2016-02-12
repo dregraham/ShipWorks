@@ -10006,6 +10006,8 @@ namespace ShipWorks.Data.Model
 		ContractType,
 		///<summary>CreatedDate. </summary>
 		CreatedDate,
+		///<summary>PendingInitialAccount. </summary>
+		PendingInitialAccount,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.UI.Controls.WebBrowser
@@ -11,6 +12,6 @@ namespace ShipWorks.UI.Controls.WebBrowser
         /// <summary>
         /// Creates an IDialog with the given URI and title
         /// </summary>
-        IDialog Create(Uri uri, string title);
+        IDialog Create(Uri uri, string title, Window owner);
     }
 }

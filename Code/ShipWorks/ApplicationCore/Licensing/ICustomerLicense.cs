@@ -9,14 +9,14 @@ namespace ShipWorks.ApplicationCore.Licensing
     public interface ICustomerLicense : ILicense
     {
         /// <summary>
+        /// Gets or sets the user name of the SDC account associated with this license.
+        /// </summary>
+        string AssociatedStampsUsername { get; set; }
+
+        /// <summary>
         /// Saves the license
         /// </summary>
         void Save();
-
-        /// <summary>
-        /// Activate a customer license
-        /// </summary>
-        void Activate(string email, string password);
 
         /// <summary>
         /// IEnumerable of ActiveStores for the license
