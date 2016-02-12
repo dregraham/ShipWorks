@@ -210,15 +210,9 @@ namespace ShipWorks.Shipping.Services
                 // Special case - could refactor to abstract if necessary
                 executionState.WorldshipExported |= shipment.ShipmentType == (int) ShipmentTypeCode.UpsWorldShip;
             }
-            catch (ORMConcurrencyException ex)
-            {
-                errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
-            }
-            catch (ObjectDeletedException ex)
-            {
-                errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
-            }
-            catch (SqlForeignKeyException ex)
+            catch (Exception ex) when (ex is ORMConcurrencyException ||
+                                       ex is ObjectDeletedException ||
+                                       ex is SqlForeignKeyException )
             {
                 errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
             }
