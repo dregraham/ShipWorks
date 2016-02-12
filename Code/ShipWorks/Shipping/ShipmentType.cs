@@ -1171,13 +1171,5 @@ namespace ShipWorks.Shipping
         {
             // Default will have nothing to update
         }
-
-        /// <summary>
-        /// Determines whether has pending initial account.
-        /// </summary>
-        public virtual bool HasPendingInitialAccount()
-        {
-            return false;
-        }
     }
 }
