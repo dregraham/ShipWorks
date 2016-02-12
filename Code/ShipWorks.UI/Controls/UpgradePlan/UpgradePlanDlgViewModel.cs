@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.UI.Controls.WebBrowser;
@@ -12,7 +13,7 @@ namespace ShipWorks.UI.Controls.UpgradePlan
     public class UpgradePlanDlgViewModel : IUpgradePlanDlgViewModel
     {
         private readonly IWebBrowserFactory webBrowserFactory;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpgradePlanDlgViewModel"/> class.
         /// </summary>
@@ -30,11 +31,11 @@ namespace ShipWorks.UI.Controls.UpgradePlan
         /// <summary>
         /// Command for clicking Upgrade Plan
         /// </summary>
-        public RelayCommand UpgradePlanClickCommand
+        public RelayCommand<Window> UpgradePlanClickCommand
         {
             get
             {
-                return new RelayCommand(UpgradeAccount);
+                return new RelayCommand<Window>(UpgradeAccount);
             }
         }
 
@@ -50,10 +51,10 @@ namespace ShipWorks.UI.Controls.UpgradePlan
         /// <summary>
         /// Clicking Upgrade Plan opens the browswer dlg with the upgrade url
         /// </summary>
-        private void UpgradeAccount()
+        private void UpgradeAccount(Window owner)
         {
             Uri uri = new Uri("https://www.interapptive.com/account/changeplan.php");
-            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account");
+            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account", owner);
             browserDlg.ShowDialog();
         }
     }

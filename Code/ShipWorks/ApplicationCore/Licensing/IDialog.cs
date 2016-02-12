@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.ApplicationCore.Licensing
+﻿using System.Windows;
+
+namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// Interface for displaying WPF Dialogs
@@ -21,7 +23,11 @@
         /// </summary>
         /// <returns></returns>
         bool? DialogResult { get; set; }
-    }
 
+        /// <summary>
+        /// The dialogs owner
+        /// </summary>
+        Window Owner { get; set; }
+    }
 }
 

@@ -1,26 +1,27 @@
 using System;
+using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
     public class ChannelLimitDlgFactory : IChannelLimitDlgFactory
     {
-        private readonly Func<IChannelLimitDlg> dlgFactory;
+        private readonly Func<IWin32Window, IChannelLimitDlg> dlgFactory;
         private readonly IChannelLimitViewModel viewModel;
 
-        public ChannelLimitDlgFactory(Func<IChannelLimitDlg> dlgFactory, IChannelLimitViewModel viewModel)
+        public ChannelLimitDlgFactory(Func<IWin32Window, IChannelLimitDlg> dlgFactory, IChannelLimitViewModel viewModel)
         {
             this.dlgFactory = dlgFactory;
             this.viewModel = viewModel;
         }
 
-        public IChannelLimitDlg GetChannelLimitDlg(ICustomerLicense customerLicense)
+        public IChannelLimitDlg GetChannelLimitDlg(ICustomerLicense customerLicense, IWin32Window owner)
         {
             // load the customer license into the view model
             viewModel.Load(customerLicense);
 
             // Get the dialog
-            IChannelLimitDlg dialog = dlgFactory();
+            IChannelLimitDlg dialog = dlgFactory(owner);
             dialog.DataContext = viewModel;
 
             return dialog;

@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.UI.Controls.WebBrowser;
 using Xunit;
 
@@ -23,7 +18,7 @@ namespace ShipWorks.UI.Tests.Controls.WebBrowser
                 var webBrowserFactory = mock.Create<WebBrowserFactory>();
 
                 Uri uri = new Uri("http://www.shipworks.com");
-                webBrowserFactory.Create(uri, "title");
+                webBrowserFactory.Create(uri, "title", null);
 
                 viewModel.Verify(v => v.Load(uri, "title"), Times.Once);
             }

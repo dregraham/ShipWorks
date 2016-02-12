@@ -19,7 +19,7 @@ namespace ShipWorks.UI.Tests.Controls.CannelConfirmDelete
 
                 IChannelConfirmDeleteFactory testObject = mock.Create<ChannelConfirmDeleteFactory>();
 
-                testObject.GetConfirmDeleteDlg(StoreTypeCode.Amazon);
+                testObject.GetConfirmDeleteDlg(StoreTypeCode.Amazon, null);
 
                 viewModel.Verify(v => v.Load(StoreTypeCode.Amazon), Times.Once);
             }

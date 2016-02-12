@@ -1,20 +1,18 @@
 ﻿using System.Xml;
 using Autofac;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using Xunit;
 using log4net;
 using System;
+using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
     public class CustomerLicenseTest
     {
-
-
         [Fact]
         public void Refresh_SetsLicenseCapabilities_GetLicenseCapabilitiesResponse()
         {
@@ -274,12 +272,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 Mock<IChannelLimitDlg> channelLimitDlg = mock.Mock<IChannelLimitDlg>();
 
                 mock.Mock<IChannelLimitDlgFactory>()
-                    .Setup(c => c.GetChannelLimitDlg(It.IsAny<ICustomerLicense>()))
+                    .Setup(c => c.GetChannelLimitDlg(It.IsAny<ICustomerLicense>(), It.IsAny<IWin32Window>()))
                     .Returns(channelLimitDlg.Object);
-                
+
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                testObject.EnforceChannelLimit();
+                testObject.EnforceChannelLimit(null);
 
                 channelLimitDlg.Verify(d => d.ShowDialog(), Times.Once);
             }
@@ -304,7 +302,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                testObject.EnforceChannelLimit();
+                testObject.EnforceChannelLimit(null);
 
                 channelLimitDlg.Verify(d => d.ShowDialog(), Times.Never);
             }
@@ -326,12 +324,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 Mock<IChannelLimitDlg> channelLimitDlg = mock.Mock<IChannelLimitDlg>();
 
                 mock.Mock<IChannelLimitDlgFactory>()
-                    .Setup(c => c.GetChannelLimitDlg(It.IsAny<ICustomerLicense>()))
+                    .Setup(c => c.GetChannelLimitDlg(It.IsAny<ICustomerLicense>(), It.IsAny<IWin32Window>()))
                     .Returns(channelLimitDlg.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                testObject.EnforceChannelLimit();
+                testObject.EnforceChannelLimit(null);
 
                 // The only way to verify that Refresh is called is by making sure
                 // GetLicenseCapabilities is called because that is all refresh does.
@@ -428,12 +426,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 var dlg = mock.Mock<IDialog>();
 
                 mock.Mock<IUpgradePlanDlgFactory>()
-                    .Setup(f => f.Create(It.IsAny<string>()))
+                    .Setup(f => f.Create(It.IsAny<string>(), It.IsAny<IWin32Window>()))
                     .Returns(dlg.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                testObject.EnforceShipmentLimit();
+                testObject.EnforceShipmentLimit(null);
 
                 dlg.Verify(d=>d.ShowDialog(), Times.Once);
             }
@@ -454,12 +452,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 var dlg = mock.Mock<IDialog>();
 
                 mock.Mock<IUpgradePlanDlgFactory>()
-                    .Setup(f => f.Create(It.IsAny<string>()))
+                    .Setup(f => f.Create(It.IsAny<string>(), It.IsAny<IWin32Window>()))
                     .Returns(dlg.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                testObject.EnforceShipmentLimit();
+                testObject.EnforceShipmentLimit(null);
 
                 dlg.Verify(d => d.ShowDialog(), Times.Never);
             }

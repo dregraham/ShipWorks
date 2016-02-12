@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+using System.Windows.Interop;
 using ShipWorks.ApplicationCore.Licensing;
+using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.UI.Controls.WebBrowser
 {
@@ -14,6 +16,18 @@ namespace ShipWorks.UI.Controls.WebBrowser
         public WebBrowserDlg()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public WebBrowserDlg(IWin32Window owner) : this()
+        {
+            new WindowInteropHelper(this)
+            {
+                Owner = owner.Handle
+            };
+
         }
 
         /// <summary>

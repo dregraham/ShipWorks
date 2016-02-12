@@ -6,6 +6,7 @@ using ShipWorks.Stores;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using System.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -153,7 +154,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// If License is over the channel limit prompt user to delete channels
         /// </summary>
-        public void EnforceChannelLimit()
+        /// <param name="owner"></param>
+        public void EnforceChannelLimit(IWin32Window owner)
         {
             Refresh();
 
@@ -161,7 +163,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 try
                 {
-                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(this);
+                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(this, owner);
                     channelLimitDlg.ShowDialog();
                 }
                 catch (ShipWorksLicenseException ex)
@@ -175,15 +177,24 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// If license is at shipment limit, prompt user to upgrade
         /// when attempting to process a shipment
         /// </summary>
-        public void EnforceShipmentLimit()
+        public void EnforceShipmentLimit(IWin32Window owner)
         {
             Refresh();
 
             if (IsShipmentLimitReached)
             {
-                IDialog dialog = upgradePlanDlgFactory.Create("You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.");
-                dialog.ShowDialog();
+                try
+                {
+                    IDialog dialog = upgradePlanDlgFactory.Create("You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.", owner);
+                    dialog.ShowDialog();
+                }
+                catch (ShipWorksLicenseException ex)
+                {
+                    log.Error("Error thrown when displaying shipment limit dialog", ex);
+                }
+
             }
+
         }
 
         /// <summary>

@@ -7,6 +7,7 @@
         xmlns:attachedProperties="clr-namespace:ShipWorks.UI.AttachedProperties"
         d:DataContext="{d:DesignInstance local:WebBrowserDlgViewModel}"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
         d:DesignHeight="305.989" d:DesignWidth="329.946" WindowStyle="ToolWindow" Title="{Binding Title, Mode=OneTime}">
     <Grid>
         <Grid.RowDefinitions>

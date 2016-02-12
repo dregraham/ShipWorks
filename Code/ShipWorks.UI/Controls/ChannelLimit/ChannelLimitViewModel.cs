@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
@@ -43,7 +44,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         public ChannelLimitViewModel(
             IStoreManager storeManager,
-            IChannelConfirmDeleteFactory confirmDeleteFactory, 
+            IChannelConfirmDeleteFactory confirmDeleteFactory,
             Func<Type, ILog> logFactory,
             IWebBrowserFactory webBrowserFactory,
             IMessageHelper messageHelper)
@@ -60,8 +61,8 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             log = logFactory(typeof (ChannelLimitViewModel));
 
-            DeleteStoreClickCommand = new RelayCommand(DeleteChannel, CanExecuteDeleteStore);
-            UpgradeClickCommand = new RelayCommand(UpgradeAccount);
+            DeleteStoreClickCommand = new RelayCommand<Window>(DeleteChannel, CanExecuteDeleteStore);
+            UpgradeClickCommand = new RelayCommand<Window>(UpgradeAccount);
         }
 
         /// <summary>
@@ -156,6 +157,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 .Distinct()
                 .Where(s => !ChannelToAdd.HasValue || s != ChannelToAdd.Value)
                 .ToList()
+                // if we did not find a match add it to the collection 
                 .ForEach(s => ChannelCollection.Add(s));
 
             UpdateErrorMesssage();
@@ -172,7 +174,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// True if a store is selected
         /// </summary>
-        private bool CanExecuteDeleteStore()
+        private bool CanExecuteDeleteStore(Window owner)
         {
             return SelectedStoreType != StoreTypeCode.Invalid;
         }
@@ -196,17 +198,24 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Upgrade the account
         /// </summary>
-        private void UpgradeAccount()
+        private void UpgradeAccount(Window owner)
         {
             Uri uri = new Uri("https://www.interapptive.com/account/changeplan.php");
-            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account");
+            IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account", owner);
             browserDlg.ShowDialog();
+
+            Load(license);
+
+            if (!license.IsOverChannelLimit)
+            {
+                owner?.Close();
+            }
         }
 
         /// <summary>
         /// Delete the selected store
         /// </summary>
-        private async void DeleteChannel()
+        private async void DeleteChannel(Window owner)
         {
             List<StoreTypeCode> localStoreTypeCodes =
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
@@ -222,7 +231,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             IsDeleting = true;
 
-            IChannelConfirmDeleteDlg deleteDlg = confirmDeleteFactory.GetConfirmDeleteDlg(selectedStoreType);
+            IChannelConfirmDeleteDlg deleteDlg = confirmDeleteFactory.GetConfirmDeleteDlg(selectedStoreType, owner);
 
             deleteDlg.ShowDialog();
 
@@ -256,6 +265,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             }
 
             IsDeleting = false;
+
+            if (!license.IsOverChannelLimit)
+            {
+                owner?.Close();
+            }
         }
 
         /// <summary>
