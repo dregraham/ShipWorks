@@ -123,6 +123,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             IAddStoreResponse response = tangoWebClient.AddStore(this, store);
 
+            store.License = response.Key;
+
             // The license activation state will be one of three values: Active, Invalid,
             // or OverChannelLimit. Rely on the success flag initially then dig into
             // the response to determine if the license is over the channel limit.
