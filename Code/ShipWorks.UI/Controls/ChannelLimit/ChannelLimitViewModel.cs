@@ -211,10 +211,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             List<StoreTypeCode> localStoreTypeCodes =
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
 
-            // If we are trying to delete the only store type in ShipWorks display an error and dont delete
-            if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType))
+            // If we are trying to delete the only store type in ShipWorks and they are not trying to add another one
+            // display an error and dont delete
+            if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType) && ChannelToAdd == null)
             {
-                messagdHelper.ShowError($"You cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is the only channel in your ShipWorks database.");
+                messagdHelper.ShowError($"You cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is " +
+                                        "the only channel in your ShipWorks database.");
                 return;
             }
 
