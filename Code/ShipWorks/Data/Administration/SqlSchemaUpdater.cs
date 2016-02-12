@@ -1,24 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
-using log4net;
-using System.Reflection;
 using Interapptive.Shared;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.Data;
-using ShipWorks.Common.Threading;
-using ShipWorks.Filters;
-using ShipWorks.Users.Audit;
-using ShipWorks.ApplicationCore.Interaction;
+using log4net;
 using NDesk.Options;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Data.Administration
 {
@@ -81,7 +80,7 @@ namespace ShipWorks.Data.Administration
                     // "Could not find stored procedure"
                     if (ex.Number == 2812 || ex.Number == 21343)
                     {
-                        return new Version(3,0);
+                        return new Version(3, 0);
                     }
 
                     throw;
@@ -153,7 +152,7 @@ namespace ShipWorks.Data.Administration
             ProgressItem progressFunctionality = new ProgressItem("Update Functionality");
             progressFunctionality.CanCancel = false;
             progressProvider.ProgressItems.Add(progressFunctionality);
-           
+
             // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
             // because reconnection to a very large database seems to take some time after running a big upgrade
             using (SingleUserModeScope singleUserScope = debuggingMode ? null : new SingleUserModeScope(TimeSpan.FromMinutes(1)))
@@ -284,14 +283,14 @@ namespace ShipWorks.Data.Administration
                                     cmd.ExecuteNonQuery();
                                 });
                             }
-                            
+
                             // If we were upgrading from this version, add AddressValidation filters.
                             if (installed < new Version(3, 12, 0, 0))
                             {
                                 AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
                                 ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
                             }
-                            
+
                             // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it everytime, even if not needed)
                             SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
 
@@ -308,7 +307,7 @@ namespace ShipWorks.Data.Administration
                             {
                                 // Grab all of the actions that are enabled and schedule based
                                 ActionManager.InitializeForCurrentSession();
-                                IEnumerable<ActionEntity> actions = ActionManager.Actions.Where(a => a.Enabled && a.TriggerType == (int)ActionTriggerType.Scheduled);
+                                IEnumerable<ActionEntity> actions = ActionManager.Actions.Where(a => a.Enabled && a.TriggerType == (int) ActionTriggerType.Scheduled);
                                 using (SqlAdapter adapter = new SqlAdapter())
                                 {
                                     foreach (ActionEntity action in actions)
@@ -316,7 +315,7 @@ namespace ShipWorks.Data.Administration
                                         // Some trigger's state depend on the enabledness of the action
                                         ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
 
-                                        if (scheduledTrigger?.Schedule != null )
+                                        if (scheduledTrigger?.Schedule != null)
                                         {
                                             // Check to see if the action is a One Time action and in the past, if so we disable it
                                             if (scheduledTrigger.Schedule.StartDateTimeInUtc < DateTime.UtcNow &&
@@ -329,7 +328,7 @@ namespace ShipWorks.Data.Administration
                                                 scheduledTrigger.SaveExtraState(action, adapter);
                                             }
                                         }
-                                        
+
                                         ActionManager.SaveAction(action, adapter);
                                     }
 
@@ -354,7 +353,7 @@ namespace ShipWorks.Data.Administration
         {
             List<SqlUpdateScript> scripts = new List<SqlUpdateScript>();
 
-            foreach (string resource in sqlLoader.ManifestResourceNames.Where(r => r.StartsWith(sqlLoader.ResourcePath)))
+            foreach (string resource in sqlLoader.ScriptResources)
             {
                 scripts.Add(new SqlUpdateScript(resource));
             }
@@ -377,7 +376,7 @@ namespace ShipWorks.Data.Administration
         {
             using (SqlCommand cmd = SqlCommandProvider.Create(con))
             {
-                UpdateSchemaVersionStoredProcedure(cmd, version);   
+                UpdateSchemaVersionStoredProcedure(cmd, version);
             }
         }
 
@@ -412,11 +411,11 @@ namespace ShipWorks.Data.Administration
                     DROP PROCEDURE [dbo].[{0}]", procedureName);
             SqlCommandProvider.ExecuteNonQuery(cmd);
 
-            #if DEBUG
-                string withEncryption = "";
-            #else
+#if DEBUG
+            string withEncryption = "";
+#else
                 string withEncryption = "WITH ENCRYPTION";
-            #endif
+#endif
 
             cmd.CommandText = string.Format(@"
                 CREATE PROCEDURE dbo.{2} 
@@ -472,7 +471,7 @@ namespace ShipWorks.Data.Administration
                 SqlScript executor = sqlLoader[script.ScriptName];
 
                 // Update the progress as we complete each bactch in the script
-                executor.BatchCompleted += delegate(object sender, SqlScriptBatchCompletedEventArgs args)
+                executor.BatchCompleted += delegate (object sender, SqlScriptBatchCompletedEventArgs args)
                 {
                     // Update the progress
                     progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.Batches.Count)));
@@ -482,7 +481,7 @@ namespace ShipWorks.Data.Administration
                 ExistingConnectionScope.ExecuteWithCommand(executor.Execute);
 
                 ExistingConnectionScope.ExecuteWithCommand(x => UpdateSchemaVersionStoredProcedure(x, script.SchemaVersion));
-                
+
                 ExistingConnectionScope.Commit();
             }
 
@@ -563,7 +562,7 @@ namespace ShipWorks.Data.Administration
             public void Execute(List<string> args)
             {
                 string type = null;
-                
+
                 // Need to extract the type
                 OptionSet optionSet = new OptionSet()
                     {
@@ -581,54 +580,54 @@ namespace ShipWorks.Data.Administration
                 switch (type)
                 {
                     case "required":
-                    {
-                        // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
-                        // a new int from the schema id
-                        int schemaID = GetSchemaID(GetRequiredSchemaVersion());
+                        {
+                            // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
+                            // a new int from the schema id
+                            int schemaID = GetSchemaID(GetRequiredSchemaVersion());
 
-                        log.InfoFormat("Required shcema version: {0}", schemaID);
-                        Environment.ExitCode = schemaID;
+                            log.InfoFormat("Required shcema version: {0}", schemaID);
+                            Environment.ExitCode = schemaID;
 
-                        break;
-                    }
+                            break;
+                        }
 
                     case "database":
-                    {
-                        // At the point in which this is called, SqlSession has not been setup
-                        SqlSession.Initialize();
-
-                        try
                         {
-                            if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
-                            {
-                                // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
-                                // a new int from the schema id
-                                int schemaID = GetSchemaID(GetInstalledSchemaVersion());
+                            // At the point in which this is called, SqlSession has not been setup
+                            SqlSession.Initialize();
 
-                                log.InfoFormat("Database schema version  {0}", schemaID);
-                                Environment.ExitCode = schemaID;
+                            try
+                            {
+                                if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
+                                {
+                                    // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
+                                    // a new int from the schema id
+                                    int schemaID = GetSchemaID(GetInstalledSchemaVersion());
+
+                                    log.InfoFormat("Database schema version  {0}", schemaID);
+                                    Environment.ExitCode = schemaID;
+                                }
+                                else
+                                {
+                                    log.Warn("Could not determine database schema ID since SqlSession is not configured.");
+
+                                    // We don't know
+                                    Environment.ExitCode = 0;
+                                }
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                log.Warn("Could not determine database schema ID since SqlSession is not configured.");
-
-                                // We don't know
+                                log.Error("Could not determine database schema ID", ex);
                                 Environment.ExitCode = 0;
                             }
+
+                            break;
                         }
-                        catch (Exception ex)
-                        {
-                            log.Error("Could not determine database schema ID", ex);
-                            Environment.ExitCode = 0;
-                        } 
-                        
-                        break;
-                    }
 
                     default:
-                    {
-                        throw new CommandLineCommandArgumentException(CommandName, "type", string.Format("Invalid value passed to 'type' parameter: {0}", type));
-                    }
+                        {
+                            throw new CommandLineCommandArgumentException(CommandName, "type", string.Format("Invalid value passed to 'type' parameter: {0}", type));
+                        }
                 }
             }
         }
