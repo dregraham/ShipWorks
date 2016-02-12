@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -58,6 +59,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <remarks>We need the logger, so the amount of dependencies is ok for now</remarks>
+        [NDependIgnoreTooManyParams]
         public ShippingPanelViewModel(
             IEnumerable<IShippingPanelObservableRegistration> registrations,
             IMessenger messenger,
