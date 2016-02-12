@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Stores;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
 {
@@ -34,6 +35,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             viewModel.Load(customerLicense);
 
             return channelLimitControl;
+        }
+
+        public IChannelLimitControl CreateControl(ICustomerLicense customerLicense, StoreTypeCode channelToAdd)
+        {
+            viewModel.ChannelToAdd = channelToAdd;
+            return CreateControl(customerLicense);
         }
     }
 }

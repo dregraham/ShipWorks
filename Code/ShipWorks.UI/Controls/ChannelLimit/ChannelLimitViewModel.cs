@@ -14,6 +14,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.UI.Controls.WebBrowser;
 
@@ -106,6 +107,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         public ICommand UpgradeClickCommand { get; }
 
         /// <summary>
+        /// Channel being added
+        /// </summary>
+        public StoreTypeCode? ChannelToAdd { get; set; }
+
+        /// <summary>
         /// Collection of stores
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -141,19 +147,16 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             // clear the collection
             ChannelCollection.Clear();
 
-            // load the collection with the licenses active stores
-            license.GetActiveStores()
-                .ToList()
-                .ForEach(s => ChannelCollection.Add(new ShipWorksLicense(s.StoreLicenseKey).StoreTypeCode));
+            // Load the collection with the licenses active stores
+            // If ChannelToAdd is set, fitler out 
+            IEnumerable<StoreTypeCode> activeTangoChannels = license.GetActiveStores().Select(s=> new ShipWorksLicense(s.StoreLicenseKey).StoreTypeCode);
+            IEnumerable<StoreTypeCode> activeStoresInShipWorks = storeManager.GetAllStores().Select(s=>(StoreTypeCode)s.TypeCode);
 
-            foreach (StoreEntity store in storeManager.GetAllStores())
-            {
-                // if we did not find a match add it to the collection 
-                if (!ChannelCollection.Contains((StoreTypeCode) store.TypeCode))
-                {
-                    ChannelCollection.Add((StoreTypeCode) store.TypeCode);
-                }
-            }
+            activeTangoChannels.Union(activeStoresInShipWorks)
+                .Distinct()
+                .Where(s => !ChannelToAdd.HasValue || s != ChannelToAdd.Value)
+                .ToList()
+                .ForEach(s => ChannelCollection.Add(s));
 
             UpdateErrorMesssage();
         }
@@ -179,9 +182,15 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void UpdateErrorMesssage()
         {
-            string plural = license.NumberOfChannelsOverLimit > 1 ? "s" : string.Empty;
+            int channelsToDelete = license.NumberOfChannelsOverLimit;
+            if (ChannelToAdd != null)
+            {
+                channelsToDelete ++;
+            }
+
+            string plural = channelsToDelete > 1 ? "s" : string.Empty;
             ErrorMessage =
-                $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to continue downloading orders and creating shipment labels.";
+                $"You have exceeded your channel limit. Please upgrade your plan or delete {channelsToDelete} channel{plural} to continue downloading orders and creating shipment labels.";
         }
 
         /// <summary>

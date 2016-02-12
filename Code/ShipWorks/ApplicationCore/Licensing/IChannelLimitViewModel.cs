@@ -40,6 +40,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         ICommand UpgradeClickCommand { get; }
 
         /// <summary>
+        /// Gets or sets the channel to add.
+        /// </summary>
+        StoreTypeCode? ChannelToAdd { get; set; }
+
+        /// <summary>
         /// Loads the given customer license 
         /// </summary>
         void Load(ICustomerLicense customerLicense);
