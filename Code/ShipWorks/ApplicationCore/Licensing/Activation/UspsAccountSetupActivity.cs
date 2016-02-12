@@ -55,13 +55,16 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
 
                 try
                 {
+                    log.Info($"Retreving account information for USPS account with username {uspsAccount.Username}...");
                     IUspsWebClient webClient = uspsWebClientFactory(UspsResellerType.None);
                     webClient.PopulateUspsAccountEntity(uspsAccount);
 
+                    log.Info($"Saving USPS account with username {uspsAccount.Username}...");
                     uspsAccountRepository.Save(uspsAccount);
 
                     log.Info("The USPS account has been saved. Marking USPS carrier as configured...");
                     shippingSettings.MarkAsConfigured(ShipmentTypeCode.Usps);
+                    log.Info("USPS has been configured.");
                 }
                 catch (Exception ex) when (ex is UspsApiException || ex is UspsException)
                 {

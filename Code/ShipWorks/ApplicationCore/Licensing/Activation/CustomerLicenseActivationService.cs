@@ -14,9 +14,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         /// </summary>
         /// <param name="uspsAccountSetupActivity"></param>
         /// <param name="licenseActivationActivity"></param>
-        public CustomerLicenseActivationService(ICustomerLicenseActivationActivity licenseActivationActivity,
-            IUspsAccountSetupActivity uspsAccountSetupActivity
-            )
+        public CustomerLicenseActivationService(ICustomerLicenseActivationActivity licenseActivationActivity, 
+            IUspsAccountSetupActivity uspsAccountSetupActivity)
         {
             this.licenseActivationActivity = licenseActivationActivity;
             this.uspsAccountSetupActivity = uspsAccountSetupActivity;

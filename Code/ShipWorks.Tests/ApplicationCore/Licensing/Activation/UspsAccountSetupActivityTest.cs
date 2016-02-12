@@ -7,9 +7,11 @@ using log4net;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Settings;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
@@ -26,8 +28,11 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                     .Returns(new List<UspsAccountEntity>());
 
                 Mock<IUspsWebClient> uspsWebClient = mock.Mock<IUspsWebClient>();
-                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
+                
+                Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
+                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
 
+                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", "1234");
 
                 uspsWebClient.Verify(wc => wc.PopulateUspsAccountEntity(It.IsAny<UspsAccountEntity>()), Times.Once);
@@ -43,8 +48,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
-                var testObject = mock.Create<UspsAccountSetupActivity>();
+                Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
+                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
 
+                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", "1234");
 
                 repo.Verify(r => r.Save(It.IsAny<UspsAccountEntity>()), Times.Once);
@@ -52,7 +59,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         }
 
         [Fact]
-        public void Exectue_AccountCreated_WithCorrectUsername()
+        public void Execute_AccountCreated_WithCorrectUsername()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -63,12 +70,15 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
+
                 repo
                     .Setup(r => r.Save(It.IsAny<UspsAccountEntity>()))
                     .Callback((UspsAccountEntity account) => createdAccount = account);
 
-                var testObject = mock.Create<UspsAccountSetupActivity>();
+                Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
+                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
 
+                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute(stampsUsername, "1234");
 
                 Assert.Equal(stampsUsername, createdAccount.Username);
@@ -93,8 +103,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                     .Returns(logger.Object);
                 mock.Provide(repo.Object);
 
-                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
+                Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
+                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
 
+                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", "some password");
 
                 logger.Verify(l => l.Error($"Error when populating USPS account information: {exception.Message}"), Times.Once);
@@ -102,7 +114,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         }
 
         [Fact]
-        public void Activate_LogsException_WhenUspsWebClientThrowsUspsException()
+        public void Execute_LogsException_WhenUspsWebClientThrowsUspsException()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -119,8 +131,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                     .Returns(logger.Object);
                 mock.Provide(repo.Object);
 
-                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
+                Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
+                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
 
+                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", "some password");
 
                 logger.Verify(l => l.Error($"Error when populating USPS account information: {exception.Message}"), Times.Once);
@@ -128,7 +142,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         }
 
         [Fact]
-        public void Activate_DelegatesToSecureText_WhenEncryptingUspsAccountPassword()
+        public void Execute_DelegatesToSecureText_WhenEncryptingUspsAccountPassword()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -142,8 +156,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 repo.Setup(r => r.Save(It.IsAny<UspsAccountEntity>()))
                     .Callback((UspsAccountEntity account) => createdAccount = account);
 
-                var testObject = mock.Create<UspsAccountSetupActivity>();
+                Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
+                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
 
+                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", password);
 
                 Assert.Equal(SecureText.Encrypt(password, createdAccount.Username), createdAccount.Password);
@@ -151,7 +167,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         }
 
         [Fact]
-        public void Activate_DelegatesToRepository_WhenSavingUspsAccount()
+        public void Execute_DelegatesToRepository_WhenSavingUspsAccount()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -165,8 +181,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 repo.Setup(r => r.Save(It.IsAny<UspsAccountEntity>()))
                     .Callback((UspsAccountEntity account) => createdAccount = account);
 
-                var testObject = mock.Create<UspsAccountSetupActivity>();
+                Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
+                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
 
+                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", password);
 
                 repo.Verify(r => r.Save(createdAccount), Times.Once());
@@ -174,7 +192,33 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         }
 
         [Fact]
-        public void Activate_AccountIsNotCreated_WhenUspsAccountExists()
+        public void Execute_DelegatesToShippingSetting_ToMarkUspsAsConfigured()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                string password = "1234";
+                UspsAccountEntity createdAccount = null;
+
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                repo.Setup(r => r.Accounts)
+                    .Returns(new List<UspsAccountEntity>());
+
+                repo.Setup(r => r.Save(It.IsAny<UspsAccountEntity>()))
+                    .Callback((UspsAccountEntity account) => createdAccount = account);
+
+                Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
+                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
+
+                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
+                testObject.Execute("bob", password);
+
+                shippingSettings.Verify(s => s.MarkAsConfigured(ShipmentTypeCode.Usps), Times.Once());
+            }
+        }
+
+
+        [Fact]
+        public void Execute_AccountIsNotCreated_WhenUspsAccountExists()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -182,8 +226,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 repo.Setup(r => r.Accounts)
                     .Returns(new[] { new UspsAccountEntity() });
 
-                var testObject = mock.Create<UspsAccountSetupActivity>();
-
+                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", "1234");
 
                 repo.Verify(r => r.Save(It.IsAny<UspsAccountEntity>()), Times.Never);
@@ -200,8 +243,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
-                var testObject = mock.Create<UspsAccountSetupActivity>();
-
+                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute(string.Empty, "1234");
 
                 repo.Verify(r => r.Save(It.IsAny<UspsAccountEntity>()), Times.Never);
@@ -218,22 +260,11 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
-                var testObject = mock.Create<UspsAccountSetupActivity>();
-
+                UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute(null, "1234");
 
                 repo.Verify(r => r.Save(It.IsAny<UspsAccountEntity>()), Times.Never);
             }
         }
-
-        //private void MockSuccessfullActivateLicense(AutoMock mock, string associatedUsername)
-        //{
-        //    mock.Mock<ITangoWebClient>()
-        //        .Setup(c => c.ActivateLicense(It.IsAny<string>(), It.IsAny<string>()))
-        //        .Returns(new GenericResult<IActivationResponse>(MockActivateLicense(mock, "key", associatedUsername))
-        //        {
-        //            Success = true
-        //        });
-        //}
     }
 }
