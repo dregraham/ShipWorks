@@ -120,7 +120,7 @@
                                     <ui:ShipWorksComboBox Grid.Row="0" Grid.Column="1"
                                         x:Name="AccountDropDown"
                                         Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
-                                        SelectedIndexWhenNull="First"
+                                        SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                                         ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
                                         SelectedValue="{Binding AccountId}"
                                         DisplayMemberPath="Description"
@@ -136,7 +136,7 @@
                                     <ui:ShipWorksComboBox Grid.Row="1" Grid.Column="1"
                                           DisplayMemberPath="Key"
                                           SelectedValuePath="Value"
-                                          SelectedIndexWhenNull="Last"
+                                          SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
                                           ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
                                           x:Name="OriginDropDown">
                                         <ComboBox.ItemsSource>
