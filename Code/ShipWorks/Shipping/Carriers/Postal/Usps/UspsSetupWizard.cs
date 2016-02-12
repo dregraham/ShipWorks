@@ -535,6 +535,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             else if (DialogResult == DialogResult.OK)
             {
+                if (UspsAccount != null && UspsAccount.PendingInitialAccount)
+                {
+                    // We need to denote that the account is completely configured/initialized
+                    UspsAccount.PendingInitialAccount = false;
+                    UspsAccountManager.SaveAccount(UspsAccount);
+                }
+
                 // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
                 // that a new account has been added.
                 RateCache.Instance.Clear();
