@@ -13,6 +13,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public class FedExShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private FedExShipmentAdapter(FedExShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public FedExShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
@@ -121,5 +129,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 Shipment.FedEx.Service = service.Value;
             }
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        /// <returns></returns>
+        public override ICarrierShipmentAdapter Clone() => new FedExShipmentAdapter(this);
     }
 }

@@ -308,13 +308,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void ManageDimensionsProfiles(DimensionsProfilesChangedMessage message)
         {
+            // For "Enter Dimensions" we need to capture entered values so that we can re-add them later.
             long originalDimensionsProfileID = SelectedDimensionsProfile?.DimensionsProfileID ?? 0;
+            double originalLength = DimsLength;
+            double originalWidth = DimsWidth;
+            double originalHeight = DimsHeight;
+            double originalWeight = AdditionalWeight;
 
             // Refresh the dimensions profiles.
             RefreshDimensionsProfiles();
 
             // Update the Dimensions combo box selected text.
-            UpdateDimensionsSelectedText(originalDimensionsProfileID);
+            UpdateDimensionsSelectedText(originalDimensionsProfileID, originalLength, originalWidth, originalHeight, originalWeight);
         }
 
         /// <summary>
@@ -329,16 +334,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             }
         }
 
-        /// <summary>
-        /// Updates the Dimensions selected item.
-        /// There's an issue with the combo box when updating it's data source where the items in the drop down will be updated
-        /// but the text displayed as the selected item, when the drop down items are not show, is still the old value.
-        ///
-        /// The hack to get it updated is to switch the selected item, SelectedDimensionsProfile, and then switch it back to the
-        /// real selected item.
-        /// </summary>
-        /// <param name="originalDimensionsProfileID"></param>
-        private void UpdateDimensionsSelectedText(long originalDimensionsProfileID)
+        ///  <summary>
+        ///  Updates the Dimensions selected item.
+        ///  There's an issue with the combo box when updating it's data source where the items in the drop down will be updated
+        ///  but the text displayed as the selected item, when the drop down items are not show, is still the old value.
+        /// 
+        ///  The hack to get it updated is to switch the selected item, SelectedDimensionsProfile, and then switch it back to the
+        ///  real selected item.
+        ///  </summary>
+        private void UpdateDimensionsSelectedText(long originalDimensionsProfileID, double originalLength, double originalWidth, double originalHeight, double originalWeight)
         {
             // First change to a different selected profile
             SelectedDimensionsProfile = originalDimensionsProfileID != 0 ?
@@ -349,6 +353,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == originalDimensionsProfileID) ?
                 DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == originalDimensionsProfileID) :
                 DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0);
+
+            // For "Enter Dimensions" we need to reset to the original entered values.
+            if (originalDimensionsProfileID == 0)
+            {
+                DimsLength = originalLength;
+                DimsWidth = originalWidth;
+                DimsHeight = originalHeight;
+                AdditionalWeight = originalWeight;
+            }
         }
 
         #endregion Dimensions

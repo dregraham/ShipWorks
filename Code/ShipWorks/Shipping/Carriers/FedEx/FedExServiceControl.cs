@@ -872,6 +872,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public override void FlushChanges()
+        {
+            base.FlushChanges();
+
+            packageControl?.FlushChanges();
+        }
+
+        /// <summary>
         /// Changing the payor transport account
         /// </summary>
         private void OnChangePayorTransport(object sender, EventArgs e)

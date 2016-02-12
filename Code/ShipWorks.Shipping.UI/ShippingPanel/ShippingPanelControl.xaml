@@ -117,10 +117,10 @@
                                     <TextBlock Grid.Row="0" Grid.Column="0"
                                         Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
                                         Style="{StaticResource GridLabel}">Account:</TextBlock>
-                                    <ComboBox Grid.Row="0" Grid.Column="1"
+                                    <ui:ShipWorksComboBox Grid.Row="0" Grid.Column="1"
                                         x:Name="AccountDropDown"
                                         Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
-                                        ui:SelectDefaultWhenValueIsNull.RelativeIndex="{x:Static ui:RelativeIndex.First}"
+                                        SelectedIndexWhenNull="First"
                                         ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
                                         SelectedValue="{Binding AccountId}"
                                         DisplayMemberPath="Description"
@@ -130,13 +130,13 @@
                                                 Converter="{StaticResource ShipmentTypeToAccountsConverter}"
                                                 Mode="OneWay" />
                                         </ComboBox.ItemsSource>
-                                    </ComboBox>
+                                    </ui:ShipWorksComboBox>
                                     <TextBlock Grid.Row="1" Grid.Column="0"
                                            Style="{StaticResource GridLabel}">Origin:</TextBlock>
-                                    <ComboBox Grid.Row="1" Grid.Column="1"
+                                    <ui:ShipWorksComboBox Grid.Row="1" Grid.Column="1"
                                           DisplayMemberPath="Key"
                                           SelectedValuePath="Value"
-                                          ui:SelectDefaultWhenValueIsNull.RelativeIndex="{x:Static ui:RelativeIndex.Last}"
+                                          SelectedIndexWhenNull="Last"
                                           ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
                                           x:Name="OriginDropDown">
                                         <ComboBox.ItemsSource>
@@ -145,7 +145,7 @@
                                         <ComboBox.SelectedValue>
                                             <Binding Path="OriginAddressType" />
                                         </ComboBox.SelectedValue>
-                                    </ComboBox>
+                                    </ui:ShipWorksComboBox>
                                 </Grid>
                                 <ui:Address DataContext="{Binding Origin}">
                                     <ui:Address.IsEnabled>

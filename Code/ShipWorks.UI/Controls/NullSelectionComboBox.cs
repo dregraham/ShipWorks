@@ -6,39 +6,66 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace ShipWorks.UI.AttachedProperties
+namespace ShipWorks.UI.Controls
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    /// Named locations in a list
+    /// </summary>
     public enum RelativeIndex
     {
         [Description("None")]
+        /// Don't select a location
+        /// </summary>
         None,
 
         [Description("First")]
+        /// Select the first item in a list
+        /// </summary>
         First,
 
         [Description("Last")]
+        /// Select the last item in a list
+        /// </summary>
         Last
     }
 
     /// <summary>
-    /// Update a binding when a specific message is received
+    /// Combo box that has ShipWorks customizations
     /// </summary>
-    public class SelectDefaultWhenValueIsNull : DependencyObject
+    public class ShipWorksComboBox : ComboBox
     {
-        static readonly PropertyMetadata existingMetadata = Selector.SelectedValueProperty.GetMetadata(typeof(Selector));
+        static readonly PropertyMetadata existingMetadata = SelectedValueProperty.GetMetadata(typeof(Selector));
+
+        /// <summary>
+        /// Message type dependency property
+        /// </summary>
+        public static readonly DependencyProperty SelectedIndexWhenNullProperty =
+            DependencyProperty.RegisterAttached("SelectedIndexWhenNull", typeof(RelativeIndex),
+                typeof(ShipWorksComboBox), new PropertyMetadata(RelativeIndex.None));
 
         /// <summary>
         /// Static constructor
         /// </summary>
-        static SelectDefaultWhenValueIsNull()
+        static ShipWorksComboBox()
         {
-            Selector.SelectedValueProperty.OverrideMetadata(typeof(SelectDefaultWhenValueIsNull),
+            SelectedValueProperty.OverrideMetadata(typeof(ShipWorksComboBox),
                 new FrameworkPropertyMetadata(null, new CoerceValueCallback(HandleValueCoercion)));
         }
 
         /// <summary>
-        /// Handle value coercion when the selected value of a combobox is changed
+        /// Get the current value of the property
+        /// </summary>
+        public static RelativeIndex GetSelectedIndexWhenNull(DependencyObject d) =>
+            (RelativeIndex) d.GetValue(SelectedIndexWhenNullProperty);
+
+        /// <summary>
+        /// Set the current value of the property
+        /// </summary>
+        public static void SetSelectedIndexWhenNull(DependencyObject d, RelativeIndex value) =>
+            d.SetValue(SelectedIndexWhenNullProperty, value);
+
+        /// <summary>
+        /// Handle value coercion when the selected value of a combo box is changed
         /// </summary>
         private static object HandleValueCoercion(DependencyObject d, object value)
         {
@@ -62,7 +89,7 @@ namespace ShipWorks.UI.AttachedProperties
                 return;
             }
 
-            RelativeIndex relativeIndex = GetRelativeIndex(combo);
+            RelativeIndex relativeIndex = GetSelectedIndexWhenNull(combo);
             if (relativeIndex == RelativeIndex.None || !combo.HasItems)
             {
                 return;
@@ -77,23 +104,5 @@ namespace ShipWorks.UI.AttachedProperties
                     combo.Items.OfType<object>().First();
             }), null);
         }
-
-        /// <summary>
-        /// Message type dependency property
-        /// </summary>
-        public static readonly DependencyProperty RelativeIndexProperty = DependencyProperty.RegisterAttached("RelativeIndex", typeof(RelativeIndex),
-                typeof(SelectDefaultWhenValueIsNull), new PropertyMetadata(RelativeIndex.None));
-
-        /// <summary>
-        /// Get the current value of the property
-        /// </summary>
-        public static RelativeIndex GetRelativeIndex(DependencyObject d) =>
-            (RelativeIndex) d.GetValue(RelativeIndexProperty);
-
-        /// <summary>
-        /// Set the current value of the property
-        /// </summary>
-        public static void SetRelativeIndex(DependencyObject d, RelativeIndex value) =>
-            d.SetValue(RelativeIndexProperty, value);
     }
 }

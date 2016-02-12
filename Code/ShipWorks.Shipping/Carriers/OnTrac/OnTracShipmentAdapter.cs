@@ -12,6 +12,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     public class OnTracShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private OnTracShipmentAdapter(OnTracShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public OnTracShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager) : base(shipment, shipmentTypeManager, customsManager)
@@ -96,5 +104,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 Shipment.OnTrac.Service = service.Value;
             }
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        public override ICarrierShipmentAdapter Clone() => new OnTracShipmentAdapter(this);
     }
 }

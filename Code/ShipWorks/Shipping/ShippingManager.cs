@@ -286,6 +286,24 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
+        private static ShipmentEntity EnsureShipmentIsLoadedWithOrder(ShipmentEntity shipment)
+        {
+            EnsureShipmentLoaded(shipment);
+
+            OrderEntity order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
+            if (order == null)
+            {
+                log.InfoFormat("Order {0} seems to be now deleted.", shipment.OrderID);
+            }
+
+            shipment.Order = order;
+
+            return shipment;
+        }
+
+        /// <summary>
+        /// Get the shipment of the specified ID.  The Order will be attached.
+        /// </summary>
         public static ShipmentEntity GetShipment(long shipmentID)
         {
             ShipmentEntity shipment = (ShipmentEntity) DataProvider.GetEntity(shipmentID);
@@ -311,7 +329,7 @@ namespace ShipWorks.Shipping
         /// Refresh the data for the given shipment, including the carrier specific data.  The order and the other siblings are not touched.
         /// If the shipment has been deleted, an ObjectDeletedException is thrown.
         /// </summary>
-        public static void RefreshShipment(ShipmentEntity shipment)
+        public static ShipmentEntity RefreshShipment(ShipmentEntity shipment)
         {
             if (shipment.DeletedFromDatabase)
             {
@@ -345,6 +363,8 @@ namespace ShipWorks.Shipping
 
                 adpater.Commit();
             }
+
+            return shipment;
         }
 
         /// <summary>
@@ -927,19 +947,19 @@ namespace ShipWorks.Shipping
         /// Processes the shipment.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void ProcessShipment(long shipmentID, IDictionary<long, Exception> licenseCheckCache, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
+        public static GenericResult<ShipmentEntity> ProcessShipment(ShipmentEntity shipment, IDictionary<long, Exception> licenseCheckCache, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
         {
-            log.InfoFormat("Shipment {0}  - Process Start", shipmentID);
+            log.InfoFormat("Shipment {0}  - Process Start", shipment.ShipmentID);
 
             lifetimeScope.Resolve<ISecurityContext>()
-                .DemandPermission(PermissionType.ShipmentsCreateEditProcess, shipmentID);
+                .DemandPermission(PermissionType.ShipmentsCreateEditProcess, shipment.ShipmentID);
 
             try
             {
                 // Ensure's we are the only one who processes this shipment, if other ShipWorks are running
-                using (new SqlEntityLock(shipmentID, "Process Shipment"))
+                using (new SqlEntityLock(shipment.ShipmentID, "Process Shipment"))
                 {
-                    ShipmentEntity shipment = GetShipment(shipmentID);
+                    EnsureShipmentIsLoadedWithOrder(shipment);
 
                     if (shipment == null)
                     {
@@ -970,7 +990,7 @@ namespace ShipWorks.Shipping
                     // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted
                     if (shipmentsToTryToProcess == null)
                     {
-                        return;
+                        return GenericResult.FromError("Processing was canceled", shipment);
                     }
 
                     bool success = false;
@@ -1010,11 +1030,13 @@ namespace ShipWorks.Shipping
                     // Log to the knowledge base after everything else has been successful, so an error logging
                     // to the knowledge base does not prevent the shipment from being actually processed.
                     LogToShipSenseKnowledgebase(ShipmentTypeManager.GetType(processedShipment), processedShipment);
+
+                    return GenericResult.FromSuccess(shipment);
                 }
             }
             catch (SqlAppResourceLockException ex)
             {
-                log.InfoFormat("Could not obtain lock for processing shipment {0}", shipmentID);
+                log.InfoFormat("Could not obtain lock for processing shipment {0}", shipment.ShipmentID);
                 throw new ShippingException("The shipment was being processed on another computer.", ex);
             }
         }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -19,6 +20,16 @@ namespace ShipWorks.Shipping.Services
         private ShipmentType shipmentType;
         private ICustomsManager customsManager;
         private EntityCollection<ShipmentCustomsItemEntity> customsItems;
+
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        protected CarrierShipmentAdapterBase(CarrierShipmentAdapterBase adapterToCopy)
+        {
+            shipment = EntityUtility.CloneEntity(adapterToCopy.shipment, true);
+            customsManager = adapterToCopy.customsManager;
+            shipmentType = adapterToCopy.shipmentType;
+        }
 
         /// <summary>
         /// Constructor
@@ -189,6 +200,11 @@ namespace ShipWorks.Shipping.Services
                 }
             }
         }
+
+        /// <summary>
+        /// Clone the shipment adapter and shipment
+        /// </summary>
+        public abstract ICarrierShipmentAdapter Clone();
 
         /// <summary>
         /// Add/Remove customs items

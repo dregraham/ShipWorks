@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(processResults.Shipment);
             viewModel.Populate(shipmentAdapter);
 
-            viewModel.AllowEditing = !processResults.IsSuccessful;
+            viewModel.AllowEditing = !processResults.Shipment?.Processed ?? true;
         }
     }
 }
