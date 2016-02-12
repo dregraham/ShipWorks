@@ -547,5 +547,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             return AccountRepository.Accounts.Any(a => a.PendingInitialAccount) ?
                 AccountRepository.Accounts.FirstOrDefault(a => a.PendingInitialAccount) : null;
         }
+
+        /// <summary>
+        /// Determines whether has pending initial account.
+        /// </summary>
+        public override bool HasPendingInitialAccount()
+        {
+            return AccountRepository.Accounts.Any(a => a.PendingInitialAccount);
+        }
     }
 }
