@@ -1,27 +1,29 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 namespace ShipWorks.UI.Controls
 {
-    /// <summary>
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     /// Named locations in a list
     /// </summary>
     public enum RelativeIndex
     {
-        /// <summary>
+        [Description("None")]
         /// Don't select a location
         /// </summary>
         None,
 
-        /// <summary>
+        [Description("First")]
         /// Select the first item in a list
         /// </summary>
         First,
 
-        /// <summary>
+        [Description("Last")]
         /// Select the last item in a list
         /// </summary>
         Last

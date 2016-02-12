@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Windows.Input;
+using log4net;
 using ShipWorks.Shipping.Loading;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.UI.Controls.AddressControl;
 
@@ -25,6 +27,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Command to open the shipping dialog
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand OpenShippingDialogCommand { get; }
 
         /// <summary>
@@ -140,11 +143,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// The origin address view model.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public virtual AddressViewModel Origin { get; }
 
         /// <summary>
         /// The destination address view model.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public virtual AddressViewModel Destination { get; }
 
         /// <summary>

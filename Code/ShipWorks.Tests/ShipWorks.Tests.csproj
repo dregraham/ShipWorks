@@ -35,7 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\..\Build\Interapptive.Strict.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -628,9 +628,17 @@
       <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
       <Name>ShipWorks.Data.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Executable\ShipWorks.csproj">
+      <Project>{fcd9a0e9-0954-4249-8bac-3bcbf93e6e10}</Project>
+      <Name>ShipWorks</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
       <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
       <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping.UI\ShipWorks.Shipping.UI.csproj">
+      <Project>{a93f195e-44bc-4c73-8f70-7714a040ea0e}</Project>
+      <Name>ShipWorks.Shipping.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
@@ -640,6 +648,14 @@
       <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj">
+      <Project>{bbf456b8-8182-4fc1-8e59-3aafae5bfa53}</Project>
+      <Name>ShipWorks.Stores.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj">
+      <Project>{c53624d5-5b3b-48a6-9729-52a573726de9}</Project>
+      <Name>ShipWorks.Stores</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
@@ -647,6 +663,10 @@
     <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
       <Project>{0406ca21-03b7-4bf0-aeb3-993c7be208b9}</Project>
       <Name>ShipWorks.ThirdPartyApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
+      <Project>{1f6a1dc6-dd72-4279-8747-6789f83711ff}</Project>
+      <Name>ShipWorks.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>

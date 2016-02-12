@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shared.Database
         Justification = "We're not disposing this class because some ShipWorks functions run a little after we" +
         "dispose of the sql session. This would cause the test runner to crash even though all tests" +
         "ran successfully")]
-    public class DatabaseFixture
+    public class DatabaseFixture : IDisposable
     {
         private readonly Checkpoint checkpoint;
         private readonly SqlSessionScope sqlSessionScope;
@@ -152,5 +152,14 @@ namespace ShipWorks.Tests.Shared.Database
         private const string enableChangeTrackingScript = @"ALTER DATABASE {0}
   SET CHANGE_TRACKING = ON
   (CHANGE_RETENTION = 1 DAYS, AUTO_CLEANUP = ON)";
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
+            sqlSessionScope.Dispose();
+            executionModeScope.Dispose();
+        }
     }
 }

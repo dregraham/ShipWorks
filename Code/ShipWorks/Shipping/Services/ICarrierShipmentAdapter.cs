@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -55,6 +56,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// DateTime of the shipment
         /// </summary>
+        [Obfuscation(Exclude = true)]
         DateTime ShipDate { get; set; }
 
         /// <summary>
@@ -70,6 +72,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Service type selected
         /// </summary>
+        [Obfuscation(Exclude = true)]
         int ServiceType { get; set; }
 
         /// <summary>
