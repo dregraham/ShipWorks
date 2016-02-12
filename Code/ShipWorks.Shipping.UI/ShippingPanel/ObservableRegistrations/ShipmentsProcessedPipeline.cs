@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
+using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Services;
@@ -17,17 +18,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private readonly IObservable<IShipWorksMessage> messageStream;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentsProcessedPipeline(IObservable<IShipWorksMessage> messageStream,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory,
-            ISchedulerProvider schedulerProvider)
+            ISchedulerProvider schedulerProvider,
+            Func<Type, ILog> logManager)
         {
             this.messageStream = messageStream;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.schedulerProvider = schedulerProvider;
+            log = logManager(typeof(ShipmentsProcessedMessage));
         }
 
         /// <summary>
@@ -39,7 +43,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Select(x => x.Shipments.FirstOrDefault(r => r.Shipment.ShipmentID == viewModel.Shipment.ShipmentID))
                 .Where(x => x.Shipment != null)
                 .ObserveOn(schedulerProvider.Dispatcher)
-                .SubscribeWithRetry(x => HandleShipmentsProcessed(viewModel, x));
+                .CatchAndContinue((Exception ex) => log.Error("An error occurred while handling processed shipment", ex))
+                .Subscribe(x => HandleShipmentsProcessed(viewModel, x));
         }
 
         /// <summary>

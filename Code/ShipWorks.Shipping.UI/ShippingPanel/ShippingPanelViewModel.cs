@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
@@ -38,6 +39,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IDisposable subscriptions;
         private readonly IMessageHelper messageHelper;
         private readonly IShippingViewModelFactory shippingViewModelFactory;
+        private readonly ILog log;
 
         private bool isLoadingShipment;
         private IDisposable shipmentChangedSubscription;
@@ -61,12 +63,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IMessenger messenger,
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
-            IShippingViewModelFactory shippingViewModelFactory) : this()
+            IShippingViewModelFactory shippingViewModelFactory,
+            Func<Type, ILog> logFactory) : this()
         {
             this.shippingManager = shippingManager;
             this.messenger = messenger;
             this.messageHelper = messageHelper;
             this.shippingViewModelFactory = shippingViewModelFactory;
+            log = logFactory(typeof(ShippingPanelViewModel));
 
             OpenShippingDialogCommand = new RelayCommand(SendShowShippingDlgMessage);
 
@@ -266,6 +270,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 .Merge(Origin.PropertyChangeStream.Select(x => $"Origin{x}"))
                 .Merge(Destination.PropertyChangeStream.Select(x => $"Ship{x}"))
                 .Do(_ => Save())
+                .CatchAndContinue((NullReferenceException ex) => log.Error("Error occurred while handling property changed", ex))
                 .Subscribe(x => messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, x)));
 
             messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter));

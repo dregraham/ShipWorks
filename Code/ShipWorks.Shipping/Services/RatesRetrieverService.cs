@@ -66,17 +66,8 @@ namespace ShipWorks.Shipping.Services
                     x.RatingHash,
                     Rates = ratesRetriever.GetRates(x.ShipmentAdapter.Shipment)
                 })
-                .SubscribeWithRetry(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)), HandleException);
-        }
-
-        /// <summary>
-        /// Handle exceptions generated while getting rates
-        /// </summary>
-        private bool HandleException(Exception ex)
-        {
-            log.Warn(ex);
-
-            return true;
+                .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
+                .Subscribe(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)));
         }
 
         /// <summary>

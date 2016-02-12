@@ -33,7 +33,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(x => x == nameof(viewModel.ShipmentType))
                 .Where(x => viewModel.IsProcessed.HasValue && !viewModel.IsProcessed.Value)
                 .Select(_ => ChangeShipmentType(viewModel))
-                .SubscribeWithRetry(x => viewModel.Populate(x), HandleException);
+                .CatchAndContinue((Exception ex) => log.Error("An error occurred while changing shipment types", ex))
+                .Subscribe(x => viewModel.Populate(x));
         }
 
         /// <summary>
@@ -41,14 +42,5 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private ICarrierShipmentAdapter ChangeShipmentType(ShippingPanelViewModel viewModel) =>
             shippingManager.ChangeShipmentType(viewModel.ShipmentType, viewModel.Shipment);
-
-        /// <summary>
-        /// Handle an exception raised while changing the shipment type
-        /// </summary>
-        private bool HandleException(Exception ex)
-        {
-            log.Error(ex);
-            return true;
-        }
     }
 }
