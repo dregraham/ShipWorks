@@ -4,7 +4,7 @@
   <global>
     <option>error</option>
     <option>nodotfuscatorattribute</option>
-    <option>verbose</option>
+    <option>quiet</option>
   </global>
   <input>
     <loadpaths>
@@ -83,7 +83,6 @@
     <file dir="${configdir}\Artifacts\Temp" />
   </tempdir>
   <renaming>
-    <option>keephierarchy</option>
     <option>xmlserialization</option>
     <excludelist>
       <namespace name="ShipWorks\.Filters\.Content\.Conditions\.*.*" regex="true" />
