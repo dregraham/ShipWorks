@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -24,9 +25,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </value>
         public bool HasAccounts
         {
-            get { return accountRepository.Accounts.Any(); }
+            get
+            {
+                // Checking for pending initial accounts here as well, so the 
+                // a label can't be processed with an account in the pending state.
+                return accountRepository.Accounts.Any() && accountRepository.Accounts.None(a => a.PendingInitialAccount);
+            }
         }
-
+        
         /// <summary>
         /// Saves the first account ID found to the shipment. The presumption here is that a new
         /// account was just created during the processing of a shipment, so we just want
