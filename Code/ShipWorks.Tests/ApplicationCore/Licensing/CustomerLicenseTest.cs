@@ -426,7 +426,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 var dlg = mock.Mock<IDialog>();
 
                 mock.Mock<IUpgradePlanDlgFactory>()
-                    .Setup(f => f.Create(It.IsAny<string>(), It.IsAny<IWin32Window>()))
+                    .Setup(f => f.Create(It.IsAny<string>(), It.IsAny<ICustomerLicense>(), It.IsAny<IWin32Window>()))
                     .Returns(dlg.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
@@ -452,7 +452,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 var dlg = mock.Mock<IDialog>();
 
                 mock.Mock<IUpgradePlanDlgFactory>()
-                    .Setup(f => f.Create(It.IsAny<string>(), It.IsAny<IWin32Window>()))
+                    .Setup(f => f.Create(It.IsAny<string>(), It.IsAny<ICustomerLicense>(), It.IsAny<IWin32Window>()))
                     .Returns(dlg.Object);
 
                 CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
