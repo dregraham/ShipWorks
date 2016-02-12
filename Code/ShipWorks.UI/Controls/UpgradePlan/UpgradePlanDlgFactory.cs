@@ -24,9 +24,9 @@ namespace ShipWorks.UI.Controls.UpgradePlan
         /// <summary>
         /// Creates an UpgradePlanDlg with the following message.
         /// </summary>
-        public IDialog Create(string message, IWin32Window owner)
+        public IDialog Create(string message, ICustomerLicense customerLicense, IWin32Window owner)
         {
-            viewModel.Load(message);
+            viewModel.Load(message, customerLicense);
             IDialog upgradePlanDlg = dialogFactory("UpgradePlanDlg", owner);
             upgradePlanDlg.DataContext = viewModel;
 

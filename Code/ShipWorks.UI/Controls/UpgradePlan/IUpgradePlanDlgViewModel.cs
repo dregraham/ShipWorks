@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using GalaSoft.MvvmLight.Command;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.UI.Controls.UpgradePlan
 {
@@ -9,6 +10,6 @@ namespace ShipWorks.UI.Controls.UpgradePlan
 
         RelayCommand<Window> UpgradePlanClickCommand { get; }
 
-        void Load(string message);
+        void Load(string message, ICustomerLicense customerLicense);
     }
 }

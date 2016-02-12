@@ -4,6 +4,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 {
     public interface IUpgradePlanDlgFactory
     {
-        IDialog Create(string message, IWin32Window owner);
+        IDialog Create(string message, ICustomerLicense customerLicense, IWin32Window owner);
     }
 }

@@ -64,7 +64,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Is the license Disabled
         /// </summary>
         public bool IsDisabled => (!string.IsNullOrEmpty(DisabledReason));
-        
+
         /// <summary>
         /// Gets or sets the user name of the SDC account associated with this license.
         /// </summary>
@@ -185,7 +185,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 try
                 {
-                    IDialog dialog = upgradePlanDlgFactory.Create("You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.", owner);
+                    IDialog dialog = upgradePlanDlgFactory.Create(
+                        "You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.",
+                        this,
+                        owner);
+
                     dialog.ShowDialog();
                 }
                 catch (ShipWorksLicenseException ex)
