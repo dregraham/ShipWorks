@@ -21,5 +21,10 @@ namespace ShipWorks.Shipping.Settings
         /// The list of shipment types that have been fully configured for use within ShipWorks
         /// </summary>
         IEnumerable<ShipmentTypeCode> GetConfiguredTypes();
+
+        /// <summary>
+        /// Sets the default shipping provider to the given shipment type code.
+        /// </summary>
+        void SetDefaultProvider(ShipmentTypeCode shimentTypeCode);
     }
 }

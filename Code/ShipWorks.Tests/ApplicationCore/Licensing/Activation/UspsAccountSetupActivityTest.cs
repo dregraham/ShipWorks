@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 Mock<IUspsWebClient> uspsWebClient = mock.Mock<IUspsWebClient>();
                 
                 Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
-                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
+                shippingSettings.Setup(s => s.SetDefaultProvider(It.IsAny<ShipmentTypeCode>()));
 
                 UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", "1234");
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                     .Returns(new List<UspsAccountEntity>());
 
                 Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
-                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
+                shippingSettings.Setup(s => s.SetDefaultProvider(It.IsAny<ShipmentTypeCode>()));
 
                 UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", "1234");
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                     .Callback((UspsAccountEntity account) => createdAccount = account);
 
                 Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
-                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
+                shippingSettings.Setup(s => s.SetDefaultProvider(It.IsAny<ShipmentTypeCode>()));
 
                 UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute(stampsUsername, "1234");
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 mock.Provide(repo.Object);
 
                 Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
-                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
+                shippingSettings.Setup(s => s.SetDefaultProvider(It.IsAny<ShipmentTypeCode>()));
 
                 UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", "some password");
@@ -132,7 +132,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 mock.Provide(repo.Object);
 
                 Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
-                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
+                shippingSettings.Setup(s => s.SetDefaultProvider(It.IsAny<ShipmentTypeCode>()));
 
                 UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", "some password");
@@ -157,7 +157,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                     .Callback((UspsAccountEntity account) => createdAccount = account);
 
                 Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
-                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
+                shippingSettings.Setup(s => s.SetDefaultProvider(It.IsAny<ShipmentTypeCode>()));
 
                 UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", password);
@@ -182,7 +182,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                     .Callback((UspsAccountEntity account) => createdAccount = account);
 
                 Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
-                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
+                shippingSettings.Setup(s => s.SetDefaultProvider(It.IsAny<ShipmentTypeCode>()));
 
                 UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", password);
@@ -207,12 +207,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                     .Callback((UspsAccountEntity account) => createdAccount = account);
 
                 Mock<IShippingSettings> shippingSettings = mock.Mock<IShippingSettings>();
-                shippingSettings.Setup(s => s.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()));
+                shippingSettings.Setup(s => s.SetDefaultProvider(It.IsAny<ShipmentTypeCode>()));
 
                 UspsAccountSetupActivity testObject = mock.Create<UspsAccountSetupActivity>();
                 testObject.Execute("bob", password);
 
-                shippingSettings.Verify(s => s.MarkAsConfigured(ShipmentTypeCode.Usps), Times.Once());
+                shippingSettings.Verify(s => s.SetDefaultProvider(ShipmentTypeCode.Usps), Times.Once());
             }
         }
 

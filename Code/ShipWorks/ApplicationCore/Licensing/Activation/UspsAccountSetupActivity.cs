@@ -62,9 +62,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
                     log.Info($"Saving USPS account with username {uspsAccount.Username}...");
                     uspsAccountRepository.Save(uspsAccount);
 
-                    log.Info("The USPS account has been saved. Marking USPS carrier as configured...");
-                    shippingSettings.MarkAsConfigured(ShipmentTypeCode.Usps);
-                    log.Info("USPS has been configured.");
+                    log.Info("The USPS account has been saved. Setting USPS as the default shipping provider.");
+                    shippingSettings.SetDefaultProvider(ShipmentTypeCode.Usps);
                 }
                 catch (Exception ex) when (ex is UspsApiException || ex is UspsException)
                 {
