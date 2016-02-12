@@ -69,11 +69,19 @@
         <option>honoroas</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.exe" />
       </inputassembly>
+      <inputassembly refid="74bb9c65-934a-4723-bb5c-054dfda14b6c">
+        <option>honoroas</option>
+        <option>transformxaml</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Res.dll" />
+      </inputassembly>
     </asmlist>
   </input>
   <output>
     <file dir="${configdir}\Artifacts\Application\Obfuscated" />
   </output>
+  <tempdir>
+    <file dir="${configdir}\Artifacts\Temp" />
+  </tempdir>
   <renaming>
     <option>keephierarchy</option>
     <option>xmlserialization</option>
