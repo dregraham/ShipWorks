@@ -600,6 +600,7 @@
     <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\IUspsAccountSetupActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\UspsAccountSetupActivity.cs" />
+    <Compile Include="ApplicationCore\Licensing\ComplianceLevel.cs" />
     <Compile Include="ApplicationCore\Licensing\IActivationResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitControl.cs" />
