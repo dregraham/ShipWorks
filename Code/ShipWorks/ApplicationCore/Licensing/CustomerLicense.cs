@@ -31,8 +31,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             ITangoWebClient tangoWebClient,
             ICustomerLicenseWriter licenseWriter,
             Func<Type, ILog> logFactory,
-            IDeletionService deletionService,
-            IUpgradePlanDlgFactory upgradePlanDlgFactory)
+            IDeletionService deletionService)
         {
             Key = key;
             this.tangoWebClient = tangoWebClient;
@@ -72,17 +71,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private ILicenseCapabilities LicenseCapabilities { get; set; }
 
-        /// <summary>
-        /// Is the license over the ChannelLimit
-        /// </summary>
-        public bool IsShipmentLimitReached
-        {
-            get
-            {
-                return (LicenseCapabilities.ProcessedShipments >= LicenseCapabilities.ShipmentLimit) &&
-                    !LicenseCapabilities.IsInTrial;
-            }
-        }
+
 
         /// <summary>
         /// Activate a new store
@@ -125,23 +114,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             Refresh();
 
-            if (IsShipmentLimitReached)
-            {
-                try
-                {
-                    IDialog dialog = upgradePlanDlgFactory.Create(
-                        "You have reached your shipment limit for this billing cycle. Please upgrade your plan to create labels.",
-                        this,
-                        owner);
 
-                    dialog.ShowDialog();
-                }
-                catch (ShipWorksLicenseException ex)
-                {
-                    log.Error("Error thrown when displaying shipment limit dialog", ex);
-                }
-
-            }
 
         }
 
@@ -229,5 +202,16 @@ namespace ShipWorks.ApplicationCore.Licensing
 
         public bool IsOverChannelLimit { get; }
         public int NumberOfChannelsOverLimit { get; }
+
+        /// <summary>
+        /// Is the license over the ChannelLimit
+        /// </summary>
+        public bool IsShipmentLimitReached
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }
