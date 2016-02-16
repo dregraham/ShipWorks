@@ -637,6 +637,7 @@
     <Compile Include="ApplicationCore\Licensing\IUpgradePlanDlgFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilities.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProvider.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\EnforcementContext.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseService.cs" />
     <Compile Include="ApplicationCore\Licensing\LogOnRestrictionLevel.cs" />
     <Compile Include="ApplicationCore\Licensing\StoreLicense.cs" />
