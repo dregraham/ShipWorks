@@ -11,16 +11,6 @@ namespace ShipWorks.ApplicationCore.Licensing
     public interface ILicenseEnforcer
     {
         /// <summary>
-        /// Enforces license capabilities
-        /// </summary>
-        void Enforce(ILicenseCapabilities capabilities, EnforcementContext context, IWin32Window owner);
-
-        /// <summary>
-        /// Enforces license capabilities
-        /// </summary>
-        EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context);
-
-        /// <summary>
         /// The priority for this enforcer
         /// </summary>
         int Priortity { get; }
@@ -29,5 +19,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The edition feature enforced
         /// </summary>
         EditionFeature EditionFeature { get; }
+
+        /// <summary>
+        /// Enforces license capabilities
+        /// </summary>
+        void Enforce(ILicenseCapabilities capabilities, EnforcementContext context, IWin32Window owner);
+
+        /// <summary>
+        /// Enforces license capabilities
+        /// </summary>
+        EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context);
     }
 }

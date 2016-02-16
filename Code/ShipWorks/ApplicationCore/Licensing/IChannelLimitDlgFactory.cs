@@ -4,6 +4,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 {
     public interface IChannelLimitDlgFactory
     {
-        IChannelLimitDlg GetChannelLimitDlg(ICustomerLicense customerLicense, IWin32Window owner);
+        IChannelLimitDlg GetChannelLimitDlg(IWin32Window owner);
     }
 }

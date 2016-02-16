@@ -21,7 +21,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly IUpgradePlanDlgFactory upgradePlanDlgFactory;
         private readonly ILog log;
         private readonly IDeletionService deletionService;
-        private readonly IChannelLimitDlgFactory channelLimitDlgFactory;
 
         /// <summary>
         /// Constructor
@@ -33,7 +32,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             ICustomerLicenseWriter licenseWriter,
             Func<Type, ILog> logFactory,
             IDeletionService deletionService,
-            IChannelLimitDlgFactory channelLimitDlgFactory,
             IUpgradePlanDlgFactory upgradePlanDlgFactory)
         {
             Key = key;
@@ -42,7 +40,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.upgradePlanDlgFactory = upgradePlanDlgFactory;
             log = logFactory(typeof(CustomerLicense));
             this.deletionService = deletionService;
-            this.channelLimitDlgFactory = channelLimitDlgFactory;
         }
 
         /// <summary>
@@ -78,42 +75,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Is the license over the ChannelLimit
         /// </summary>
-        public bool IsOverChannelLimit
-        {
-            get
-            {
-                return (LicenseCapabilities.ActiveChannels > LicenseCapabilities.ChannelLimit) &&
-                    !LicenseCapabilities.IsInTrial;
-            }
-        }
-
-        /// <summary>
-        /// Is the license over the ChannelLimit
-        /// </summary>
         public bool IsShipmentLimitReached
         {
             get
             {
                 return (LicenseCapabilities.ProcessedShipments >= LicenseCapabilities.ShipmentLimit) &&
                     !LicenseCapabilities.IsInTrial;
-            }
-        }
-
-        /// <summary>
-        /// The number of licenses needed to be deleted to be in compliance
-        /// </summary>
-        public int NumberOfChannelsOverLimit
-        {
-            get
-            {
-                int numberOfChannelsOverLimit = 0;
-
-                if (IsOverChannelLimit)
-                {
-                    numberOfChannelsOverLimit = LicenseCapabilities.ActiveChannels - LicenseCapabilities.ChannelLimit;
-                }
-
-                return numberOfChannelsOverLimit;
             }
         }
 
@@ -148,29 +115,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public void Save()
         {
             licenseWriter.Write(this);
-        }
-
-
-        /// <summary>
-        /// If License is over the channel limit prompt user to delete channels
-        /// </summary>
-        /// <param name="owner"></param>
-        public void EnforceChannelLimit(IWin32Window owner)
-        {
-            Refresh();
-
-            if (IsOverChannelLimit)
-            {
-                try
-                {
-                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(this, owner);
-                    channelLimitDlg.ShowDialog();
-                }
-                catch (ShipWorksLicenseException ex)
-                {
-                    log.Error("Error thrown when displaying channel limit dialog", ex);
-                }
-            }
         }
 
         /// <summary>
@@ -275,5 +219,15 @@ namespace ShipWorks.ApplicationCore.Licensing
             IEnumerable<string> licensesToDelete = GetActiveStores().Where(a => a.StoreType == storeType).Select(a => a.StoreLicenseKey);
             tangoWebClient.DeleteStores(this, licensesToDelete);
         }
+
+
+        //TODO: Delete everthing down here 
+        public void EnforceChannelLimit(IWin32Window owner)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsOverChannelLimit { get; }
+        public int NumberOfChannelsOverLimit { get; }
     }
 }

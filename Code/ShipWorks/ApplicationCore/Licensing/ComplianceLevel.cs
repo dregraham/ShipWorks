@@ -12,7 +12,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         [Description("Not Compliant")]
         NotCompliant = 0,
 
-        [Description("Not Compliant")]
+        [Description("Compliant")]
         Compliant = 1
     }
 }
