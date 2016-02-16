@@ -93,6 +93,7 @@ using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using Autofac;
 using Interapptive.Shared;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 
 namespace ShipWorks
 {
@@ -632,9 +633,9 @@ namespace ShipWorks
             {
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit(this);
+                licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.Login, this);
             }
-            
+
             // If there are no stores, we need to make sure one is added before continuing
             if (StoreManager.GetDatabaseStoreCount() == 0)
             {
@@ -2339,9 +2340,9 @@ namespace ShipWorks
                 {
                     ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                    licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit(this);
+                    licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.Download, this);
                 }
-                
+
                 // Start the download
                 DownloadManager.StartDownload(stores, DownloadInitiatedBy.User);
 
@@ -2365,7 +2366,7 @@ namespace ShipWorks
             {
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit(this);
+                licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.Download, this);
             }
             // Start the download
             DownloadManager.StartDownload(new List<StoreEntity> { store }, DownloadInitiatedBy.User);
