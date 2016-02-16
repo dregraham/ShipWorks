@@ -241,6 +241,9 @@ namespace ShipWorks.Editions
         [Description("Your Shipworks account does not support a Generic Module")]
         GenericModule,
 
+        /// <summary>
+        /// The generic file
+        /// </summary>
         [Description("Your ShipWorks account does not support a Generic File")]
         GenericFile,
     }
