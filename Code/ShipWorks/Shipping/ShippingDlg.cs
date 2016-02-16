@@ -46,6 +46,7 @@ using ShipWorks.Shipping.Policies;
 using Timer = System.Windows.Forms.Timer;
 using System.Reactive.Linq;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 
 namespace ShipWorks.Shipping
 {
@@ -2393,8 +2394,7 @@ namespace ShipWorks.Shipping
             cancelProcessing = false;
 
             LicenseService licenseService = lifetimeScope.Resolve<LicenseService>();
-            licenseService.GetLicenses().FirstOrDefault()?.EnforceChannelLimit(this);
-            licenseService.GetLicenses().FirstOrDefault()?.EnforceShipmentLimit(this);
+            licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.CreateLabel, this);
 
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
             SaveChangesToUIDisplayedShipments();

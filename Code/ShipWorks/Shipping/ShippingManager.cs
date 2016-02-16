@@ -45,6 +45,7 @@ using Autofac;
 using ShipWorks.AddressValidation.Enums;
 using Interapptive.Shared;
 using Interapptive.Shared.Messaging;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 
 namespace ShipWorks.Shipping
 {
@@ -1086,16 +1087,14 @@ namespace ShipWorks.Shipping
                 throw new ShippingException(license.DisabledReason);
             }
 
-            if (license.IsOverChannelLimit)
+            try
             {
-                string plural = license.NumberOfChannelsOverLimit > 1 ? "s" : string.Empty;
-                throw new ShippingException(
-                    $"You have exceeded your channel limit. Please upgrade your plan or delete {license.NumberOfChannelsOverLimit} channel{plural} to create labels.");
+                license.EnforceCapabilities(EnforcementContext.CreateLabel);
             }
-
-            if (license.IsShipmentLimitReached)
+            catch (ShipWorksLicenseException ex)
             {
-                throw new ShippingException("You have reached your shipment limit for this billing cycle. Please upgrade your plan to process shipments.");
+
+                throw new ShippingException(ex.Message);
             }
         }
 

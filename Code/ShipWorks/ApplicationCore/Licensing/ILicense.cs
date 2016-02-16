@@ -69,6 +69,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         /// <param name="feature">The feature.</param>
         /// <param name="context">The context.</param>
-        IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilites(EditionFeature feature, EnforcementContext context);
+        IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context);
     }
 }
