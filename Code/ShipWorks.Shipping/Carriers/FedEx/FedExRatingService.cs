@@ -6,7 +6,6 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -68,20 +67,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Switch the settings repository back to the original now that we have counter rates
                 shipment.FedEx.SmartPostHubID = originalHubID;
             }
-        }
-
-        /// <summary>
-        /// Is the rate for the specified shipment
-        /// </summary>
-        public bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
-        {
-            if (rateResult.ShipmentType != ShipmentTypeCode.FedEx ||
-                shipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.FedEx)
-            {
-                return false;
-            }
-
-            return shipmentAdapter.ServiceType == (int) rateResult.Tag;
         }
     }
 }

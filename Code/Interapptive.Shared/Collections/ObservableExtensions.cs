@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Reactive.Disposables;
+using System.Reactive.Linq;
 
 namespace Interapptive.Shared.Collections
 {
@@ -9,36 +9,16 @@ namespace Interapptive.Shared.Collections
     public static class ObservableExtensions
     {
         /// <summary>
-        /// Subscribe to an observable collection
+        /// Catch a specified exception, log it, and continue
         /// </summary>
-        /// <remarks>This will attempt to resubscribe on an error</remarks>
-        public static IDisposable SubscribeWithRetry<T>(this IObservable<T> source, Action<T> onNext) =>
-            source.SubscribeWithRetry(onNext, x => true);
-
-        /// <summary>
-        /// Subscribe to an observable collection
-        /// </summary>
-        /// <remarks>This will attempt to resubscribe on an error, if the onError function returns true</remarks>
-        public static IDisposable SubscribeWithRetry<T>(this IObservable<T> source, Action<T> onNext, Func<Exception, bool> onError) =>
-            CreateSubscription(source, onNext, onError);
-
-        /// <summary>
-        /// Create the subscription
-        /// </summary>
-        private static IDisposable CreateSubscription<T>(IObservable<T> source, Action<T> onNext, Func<Exception, bool> onError)
+        public static IObservable<T> CatchAndContinue<T, TException>(this IObservable<T> source,
+            Action<TException> handleException) where TException : Exception
         {
-            IDisposable disposable = null;
-
-            disposable = source.Subscribe(onNext, x =>
+            return source.Catch<T, TException>(ex =>
             {
-                disposable?.Dispose();
-                if (onError(x))
-                {
-                    CreateSubscription(source, onNext, onError);
-                }
+                handleException(ex);
+                return source.CatchAndContinue(handleException);
             });
-
-            return Disposable.Create(() => disposable?.Dispose());
         }
     }
 }

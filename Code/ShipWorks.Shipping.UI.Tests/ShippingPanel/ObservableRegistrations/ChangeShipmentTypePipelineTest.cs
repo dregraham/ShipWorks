@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             viewModel.ShipmentType = ShipmentTypeCode.Usps;
 
             mock.Mock<ILog>()
-                .Verify(x => x.Error(exception));
+                .Verify(x => x.Error(It.IsAny<string>(), exception));
         }
 
         public void Dispose()

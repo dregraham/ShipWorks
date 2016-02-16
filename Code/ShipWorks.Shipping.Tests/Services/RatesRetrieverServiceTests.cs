@@ -121,7 +121,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 Assert.Equal(testObject, message.Sender);
                 Assert.Equal("Foo", message.RatingHash);
                 Assert.Equal("Bar", message.ErrorMessage);
-                Assert.Equal(shipmentAdapter, message.ShipmentAdapter);
+                Assert.Equal(shipmentAdapter.Shipment.ShipmentID, message.ShipmentAdapter.Shipment.ShipmentID);
             }
         }
 

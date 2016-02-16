@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
@@ -11,6 +12,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public class FedExShipmentAdapter : CarrierShipmentAdapterBase
     {
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private FedExShipmentAdapter(FedExShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -100,14 +109,31 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Get the service type as an integer from the given tag
+        /// </summary>
+        protected override int? GetServiceTypeAsIntFromTag(object tag)
+        {
+            FedExServiceType? service = tag as FedExServiceType? ?? (tag as FedExRateSelection)?.ServiceType;
+
+            return service.HasValue ? (int?) service.Value : base.GetServiceTypeAsIntFromTag(tag);
+        }
+
+        /// <summary>
         /// Perform the service update
         /// </summary>
         protected override void UpdateServiceFromRate(RateResult rate)
         {
-            if (rate.Tag is int)
+            int? service = GetServiceTypeAsIntFromTag(rate.Tag);
+            if (service.HasValue)
             {
-                Shipment.FedEx.Service = (int) rate.Tag;
+                Shipment.FedEx.Service = service.Value;
             }
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        /// <returns></returns>
+        public override ICarrierShipmentAdapter Clone() => new FedExShipmentAdapter(this);
     }
 }

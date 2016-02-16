@@ -1,31 +1,30 @@
-﻿using Interapptive.Shared.Data;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading;
+using System.Windows.Forms;
+using ActiproSoftware.SyntaxEditor;
+using Autofac;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Connection;
-using ShipWorks.UI;
-using ShipWorks.Users;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Windows.Forms;
-using Interapptive.Shared.UI;
-using System.IO;
-using ShipWorks.UI.Controls;
-using ActiproSoftware.SyntaxEditor;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Stores;
-using Autofac;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Shipping;
-using System.Linq;
-using ShipWorks.Messaging.Messages;
-using TD.SandDock;
-using System.Reactive.Linq;
+using ShipWorks.UI;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -89,10 +88,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// <summary>
         /// Single instance of the running application
         /// </summary>
-        public MainForm MainForm 
-        { 
-            get; 
-            private set; 
+        public MainForm MainForm
+        {
+            get;
+            private set;
         }
 
         /// <summary>
@@ -132,16 +131,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             MainForm = new MainForm();
             MainForm.Load += new EventHandler(OnMainFormLoaded);
 
-            //var builder = new ContainerBuilder();
-            //builder.RegisterInstance(MainForm)
-            //    .As<Control>()
-            //    .ExternallyOwned();
-            //builder.Update((IContainer)IoC.UnsafeGlobalLifetimeScope);
-
             SplashScreen.Status = "Loading ShipWorks...";
             Application.Run(MainForm);
         }
-        
+
         /// <summary>
         /// Overridden to provide custom UI initialization
         /// </summary>
@@ -260,7 +253,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             if (MainForm.InvokeRequired)
             {
-                MainForm.Invoke((Action)(() => OpenShippingDialog(message)));
+                MainForm.Invoke((Action) (() => OpenShippingDialog(message)));
             }
             else
             {
@@ -275,13 +268,13 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope(ConfigureShippingDialogDependencies))
             {
-                // Show the shipping window.  
+                // Show the shipping window.
                 ShippingDlg dlg = lifetimeScope.Resolve<ShippingDlg>(new TypedParameter(typeof(OpenShippingDialogMessage), message));
-                
+
                 dlg.ShowDialog(Program.MainForm);
             }
         }
-		
+
         /// <summary>
         /// Configure extra dependencies for the shipping dialog
         /// </summary>

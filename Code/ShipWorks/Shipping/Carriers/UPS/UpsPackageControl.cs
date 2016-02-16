@@ -1,24 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
 using Interapptive.Shared;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.UI.Controls;
 using ShipWorks.Data.Grid.DetailView;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.UI.Utility;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -370,7 +361,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Something affecting rate critiera has changed
+        /// Something affecting rate criteria has changed
         /// </summary>
         private void OnRateCriteriaChanged(object sender, EventArgs e)
         {
@@ -415,6 +406,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 ShipSenseFieldChanged(this, EventArgs.Empty);
             }
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        internal void FlushChanges()
+        {
+            dimensionsControl.FlushChanges();
+            weight.FlushChanges();
         }
     }
 }

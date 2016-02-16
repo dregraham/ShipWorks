@@ -336,7 +336,8 @@
 
     <Message Text="Starting obfuscation..." />
 
-    <Obfuscate
+    <Exec Command='$(ObfuscationCommand) ' />
+    <!--<Obfuscate
 			RootAssembly="$(AppDirectory)\ShipWorks.exe"
 			All="true"
 			CompilerControlled="false"
@@ -360,7 +361,7 @@
 			NoResources="false"
 			NoSerializable="false"
 			NoTypes="false">
-    </Obfuscate>
+    </Obfuscate>-->
 
     <CreateItem Include="$(AppDirectory)\Obfuscated\*.*">
       <Output TaskParameter="Include" ItemName="ObfuscatedAssemblies" />
@@ -494,7 +495,7 @@
 
     <Zip Files="@(FilesToZip)"
 				WorkingDirectory="$(AppDirectory)\"
-				ZipFileName="$(AppDirectory)\ShipWorks$(CCNetLabel).zip" />
+				ZipFileName="$(AppDirectory)\ShipWorks$(CCNetLabel).zip" /> 
 
     --><!-- Delete all the files that went into the zip --><!--
     <Delete Files="@(FilesToZip)" />-->

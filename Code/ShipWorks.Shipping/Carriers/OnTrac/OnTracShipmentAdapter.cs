@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
@@ -10,6 +11,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// </summary>
     public class OnTracShipmentAdapter : CarrierShipmentAdapterBase
     {
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private OnTracShipmentAdapter(OnTracShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -75,14 +84,30 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Get the service type as an integer from the given tag
+        /// </summary>
+        protected override int? GetServiceTypeAsIntFromTag(object tag)
+        {
+            OnTracServiceType? service = tag as OnTracServiceType?;
+
+            return service.HasValue ? (int?) service.Value : base.GetServiceTypeAsIntFromTag(tag);
+        }
+
+        /// <summary>
         /// Perform the service update
         /// </summary>
         protected override void UpdateServiceFromRate(RateResult rate)
         {
-            if (rate.Tag is int)
+            int? service = GetServiceTypeAsIntFromTag(rate.Tag);
+            if (service.HasValue)
             {
-                Shipment.OnTrac.Service = (int) rate.Tag;
+                Shipment.OnTrac.Service = service.Value;
             }
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        public override ICarrierShipmentAdapter Clone() => new OnTracShipmentAdapter(this);
     }
 }

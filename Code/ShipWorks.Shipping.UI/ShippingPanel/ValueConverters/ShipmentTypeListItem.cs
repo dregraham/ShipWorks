@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
+﻿using System.Reflection;
+
+namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
 {
     /// <summary>
     /// Item to be used in a shipment type list
@@ -17,11 +19,13 @@
         /// <summary>
         /// Value of the item
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ShipmentTypeCode Value { get; }
 
         /// <summary>
         /// Description of the item
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Description { get; }
     }
 }

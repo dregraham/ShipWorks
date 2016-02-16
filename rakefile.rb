@@ -47,6 +47,22 @@ namespace :build do
 		msb.targets :Clean
 	end
 
+	desc "Zip the layout files"
+	zip :layout do |zip|
+		zip.dirs = ["./Code/ShipWorks/ApplicationCore/Appearance/WindowLayoutDefault"]
+		zip.output_path = "./Code/ShipWorks/ApplicationCore/Appearance/WindowLayoutDefault.swl"
+	end
+
+	desc "Zip the layout into an importable environment file"
+	zip :environment, [:environment_path] => "build:layout" do |zip, args|
+		dir = Dir.mktmpdir
+		window_path = dir + "/windows.swl"
+		FileUtils.cp "./Code/ShipWorks/ApplicationCore/Appearance/WindowLayoutDefault.swl", window_path
+
+		zip.files = [window_path]
+		zip.output_path = args.environment_path
+	end
+
 	desc "Build ShipWorks in the Debug configuration"
 	msbuild :debug, [:forCI] => "build:restore" do |msb, args|
 		if args != nil and args.forCI != nil and args.forCI == 'true'

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -243,7 +242,8 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
         public void SetsSelectedRate_WhenRatesAreRetrieved()
         {
             var testRateResult = new RateResult("Bar", "2") { Selectable = true };
-            var carrierAdapter = mock.Create<ICarrierShipmentAdapter>();
+            var carrierAdapter = mock.CreateMock<ICarrierShipmentAdapter>();
+            carrierAdapter.Setup(x => x.DoesRateMatchSelectedService(testRateResult)).Returns(true);
 
             var rateGroup = new RateGroup(new[]
             {
@@ -252,16 +252,10 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
                 new RateResult("Baz", "3") { Selectable = true }
             });
 
-            var ratingService = mock.CreateMock<IRatingService>();
-            ratingService.Setup(x => x.IsRateSelectedByShipment(testRateResult, carrierAdapter)).Returns(true);
-
-            mock.Override<IIndex<ShipmentTypeCode, IRatingService>>()
-                .Setup(x => x[It.IsAny<ShipmentTypeCode>()])
-                .Returns(ratingService.Object);
-
             var testObject = mock.Create<RatingPanelViewModel>();
             messenger.Send(new RatesRetrievingMessage(this, string.Empty));
-            messenger.Send(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(rateGroup), carrierAdapter));
+            messenger.Send(new RatesRetrievedMessage(this, string.Empty,
+                GenericResult.FromSuccess(rateGroup), carrierAdapter.Object));
 
             Assert.Equal(3, testObject.Rates.Count());
             Assert.Equal("Bar", testObject.SelectedRate.Description);

@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
+using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
 {
-    public class OnTracShipmentAdapterTest
+    public class OnTracShipmentAdapterTest : IDisposable
     {
+        readonly AutoMock mock;
         readonly ShipmentEntity shipment;
         private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
         private readonly Mock<ICustomsManager> customsManager;
@@ -20,6 +24,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
 
         public OnTracShipmentAdapterTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shipmentType = new OnTracShipmentType();
             shipment = new ShipmentEntity
             {
@@ -208,7 +213,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         }
 
         [Theory]
-        [InlineData(OnTracServiceType.Ground)]
+        [InlineData(OnTracServiceType.None)]
         [InlineData(OnTracServiceType.PalletizedFreight)]
         [InlineData(OnTracServiceType.SunriseGold)]
         public void UpdateServiceFromRate_SetsService_WhenTagIsValid(OnTracServiceType serviceType)
@@ -216,6 +221,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
             shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
             var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, (int) serviceType)
+            {
+                Selectable = true,
+                ShipmentType = ShipmentTypeCode.OnTrac
+            });
+            Assert.Equal((int) serviceType, shipment.OnTrac.Service);
+        }
+
+        [Theory]
+        [InlineData(OnTracServiceType.None)]
+        [InlineData(OnTracServiceType.PalletizedFreight)]
+        [InlineData(OnTracServiceType.SunriseGold)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValidServiceType(OnTracServiceType serviceType)
+        {
+            shipmentTypeManager.Setup(x => x.Get(shipment)).Returns(shipmentType);
+            var testObject = new OnTracShipmentAdapter(shipment, shipmentTypeManager.Object, customsManager.Object);
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, serviceType)
             {
                 Selectable = true,
                 ShipmentType = ShipmentTypeCode.OnTrac
@@ -237,6 +258,92 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
                 ShipmentType = ShipmentTypeCode.OnTrac
             });
             Assert.Equal((int) OnTracServiceType.PalletizedFreight, shipment.OnTrac.Service);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateShipmentTypeDoesNotMatch()
+        {
+            var testObject = mock.Create<OnTracShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, 1) { ShipmentType = ShipmentTypeCode.None };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateServiceAsIntDoesNotMatch()
+        {
+            var testObject = mock.Create<OnTracShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, (int) OnTracServiceType.PalletizedFreight)
+            {
+                ShipmentType = ShipmentTypeCode.OnTrac
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateServiceAsServiceTypeDoesNotMatch()
+        {
+            var testObject = mock.Create<OnTracShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, OnTracServiceType.PalletizedFreight)
+            {
+                ShipmentType = ShipmentTypeCode.OnTrac
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateTagIsOtherObject()
+        {
+            var testObject = mock.Create<OnTracShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, "NOT A RATE")
+            {
+                ShipmentType = ShipmentTypeCode.OnTrac
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenRateServiceAsIntMatches()
+        {
+            var testObject = mock.Create<OnTracShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, (int) OnTracServiceType.Ground)
+            {
+                ShipmentType = ShipmentTypeCode.OnTrac
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsTrue_WhenRateServiceAsServiceTypeMatches()
+        {
+            var testObject = mock.Create<OnTracShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
+            var rate = new RateResult("Foo", "1", 0, OnTracServiceType.Ground)
+            {
+                ShipmentType = ShipmentTypeCode.OnTrac
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.True(result);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }

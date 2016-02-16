@@ -763,7 +763,7 @@ namespace ShipWorks.Shipping
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    StoreEntity store = lifetimeScope.Resolve<IStoreManager>().GetStore(shipment.Order.StoreID);
+                    StoreEntity store = lifetimeScope.Resolve<IStoreManager>().GetRelatedStore(shipment);
 
                     PersonAdapter.Copy(store, "", person);
 

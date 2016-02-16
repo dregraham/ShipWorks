@@ -23,10 +23,10 @@
 #endif
 
 [Setup]
-AppName=ShipWorksï¿½
+AppName=ShipWorks®
 AppVersion={#= Version} {#= EditionName}
-AppVerName=ShipWorksï¿½ {#= Version} {#= EditionName}
-AppPublisher=Interapptiveï¿½, Inc.
+AppVerName=ShipWorks® {#= Version} {#= EditionName}
+AppPublisher=Interapptive®, Inc.
 AppPublisherURL=http://www.shipworks.com
 AppSupportURL=http://www.shipworks.com
 AppUpdatesURL=http://www.shipworks.com
@@ -54,10 +54,10 @@ AlwaysRestart=false
 ShowLanguageDialog=no
 AllowUNCPath=false
 VersionInfoVersion={#= Version}
-VersionInfoCompany=Interapptiveï¿½, Inc.
-VersionInfoDescription=Interapptiveï¿½ ShipWorksï¿½
-VersionInfoTextVersion=ShipWorksï¿½ {#= Version}
-VersionInfoCopyright=Copyright ï¿½ Interapptiveï¿½, Inc. 2003-2013
+VersionInfoCompany=Interapptive®, Inc.
+VersionInfoDescription=Interapptive® ShipWorks®
+VersionInfoTextVersion=ShipWorks® {#= Version}
+VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2013
 ArchitecturesInstallIn64BitMode=x64
 AppendDefaultDirName=false
 
@@ -131,6 +131,7 @@ Source: {#AppArtifacts}\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll; DestDir: {ap
 Source: {#AppArtifacts}\ShipWorks.Core.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Data.Adapter.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Data.Model.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\ShipWorks.Res.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Shared.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Shipping.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Shipping.UI.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion

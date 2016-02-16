@@ -118,8 +118,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 return;
             }
 
-            SelectedRate = Rates.FirstOrDefault(rate =>
-                ratingServiceLookup[shipmentAdapter.ShipmentTypeCode].IsRateSelectedByShipment(rate, shipmentAdapter));
+            SelectedRate = Rates.FirstOrDefault(rate => shipmentAdapter.DoesRateMatchSelectedService(rate));
         }
 
         /// <summary>

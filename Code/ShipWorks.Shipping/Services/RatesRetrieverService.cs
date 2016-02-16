@@ -46,24 +46,28 @@ namespace ShipWorks.Shipping.Services
         {
             subscription = messenger.OfType<ShipmentChangedMessage>()
                 .Where(x => x.ShipmentAdapter != null)
-                .Select(x => new { Message = x, HashingService = rateHashingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode] })
+                .Select(x => new
+                {
+                    Message = x,
+                    HashingService = rateHashingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode]
+                })
                 .Where(x => string.IsNullOrEmpty(x.Message.ChangedField) || x.HashingService.IsRatingField(x.Message.ChangedField))
-                .Select(x => new { x.Message.ShipmentAdapter, RatingHash = x.HashingService.GetRatingHash(x.Message.ShipmentAdapter.Shipment) })
+                .Select(x => new
+                {
+                    ShipmentAdapter = x.Message.ShipmentAdapter.Clone(),
+                    RatingHash = x.HashingService.GetRatingHash(x.Message.ShipmentAdapter.Shipment)
+                })
                 .Do(x => messenger.Send(new RatesRetrievingMessage(this, x.RatingHash)))
                 .Throttle(TimeSpan.FromMilliseconds(ThrottleTime), schedulerProvider.Default)
                 .ObserveOn(schedulerProvider.TaskPool)
-                .Select(x => new { x.ShipmentAdapter, x.RatingHash, Rates = ratesRetriever.GetRates(x.ShipmentAdapter.Shipment) })
-                .SubscribeWithRetry(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)), HandleException);
-        }
-
-        /// <summary>
-        /// Handle exceptions generated while getting rates
-        /// </summary>
-        private bool HandleException(Exception ex)
-        {
-            log.Warn(ex);
-
-            return true;
+                .Select(x => new
+                {
+                    x.ShipmentAdapter,
+                    x.RatingHash,
+                    Rates = ratesRetriever.GetRates(x.ShipmentAdapter.Shipment)
+                })
+                .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
+                .Subscribe(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)));
         }
 
         /// <summary>

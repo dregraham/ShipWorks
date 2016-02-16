@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -55,6 +56,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// DateTime of the shipment
         /// </summary>
+        [Obfuscation(Exclude = true)]
         DateTime ShipDate { get; set; }
 
         /// <summary>
@@ -70,12 +72,18 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Service type selected
         /// </summary>
+        [Obfuscation(Exclude = true)]
         int ServiceType { get; set; }
 
         /// <summary>
         /// Customs Items for the shipment
         /// </summary>
         EntityCollection<ShipmentCustomsItemEntity> CustomsItems { get; set; }
+
+        /// <summary>
+        /// Clone the shipment adapter and shipment
+        /// </summary>
+        ICarrierShipmentAdapter Clone();
 
         /// <summary>
         /// List of package adapters for the shipment
@@ -106,5 +114,10 @@ namespace ShipWorks.Shipping.Services
         /// Delete the specified package from the shipment
         /// </summary>
         void DeletePackage(IPackageAdapter package);
+
+        /// <summary>
+        /// Does the given rate match the service selected for the shipment
+        /// </summary>
+        bool DoesRateMatchSelectedService(RateResult rate);
     }
 }

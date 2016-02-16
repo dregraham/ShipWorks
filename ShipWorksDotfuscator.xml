@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE dotfuscator SYSTEM "http://www.preemptive.com/dotfuscator/dtd/dotfuscator_v2.3.dtd">
+<dotfuscator version="2.3">
+  <global>
+    <option>error</option>
+    <option>nodotfuscatorattribute</option>
+    <option>quiet</option>
+  </global>
+  <input>
+    <loadpaths>
+      <file dir="${configdir}\Artifacts\Application" />
+    </loadpaths>
+    <asmlist>
+      <inputassembly refid="35c973c1-057b-42a1-85db-4027ffdbea47">
+        <option>honoroas</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.SqlServer.dll" />
+      </inputassembly>
+      <inputassembly refid="4d173aa4-f5c5-426c-afc2-70ca3d0dac90">
+        <option>honoroas</option>
+        <file dir="${configdir}\Artifacts\Application" name="Interapptive.Shared.dll" />
+      </inputassembly>
+      <inputassembly refid="965b5f1e-54ab-460a-b986-7bd94cbd634d">
+        <option>honoroas</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shared.dll" />
+      </inputassembly>
+      <inputassembly refid="b2110ce9-5b8d-4c15-8fb4-1ac3980df323">
+        <option>honoroas</option>
+        <option>library</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Model.dll" />
+      </inputassembly>
+      <inputassembly refid="ad5fe300-b18d-4cf1-9d0f-767248018fa4">
+        <option>honoroas</option>
+        <option>library</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Adapter.dll" />
+      </inputassembly>
+      <inputassembly refid="0034febc-3a6b-4538-add5-799e66b68ec1">
+        <option>honoroas</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.dll" />
+      </inputassembly>
+      <inputassembly refid="643a42e7-521c-47d3-bfe5-5337ab860548">
+        <option>honoroas</option>
+        <option>transformxaml</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.UI.dll" />
+      </inputassembly>
+      <inputassembly refid="45615d23-f4db-4a1d-a920-6575f300598e">
+        <option>honoroas</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Stores.dll" />
+      </inputassembly>
+      <inputassembly refid="5cb01493-b915-430f-b248-d911cd62f32a">
+        <option>honoroas</option>
+        <option>transformxaml</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Stores.UI.dll" />
+      </inputassembly>
+      <inputassembly refid="1d3eeaa5-7cab-44eb-a80a-d58fd1ccf569">
+        <option>honoroas</option>
+        <option>transformxaml</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.UI.dll" />
+      </inputassembly>
+      <inputassembly refid="85e2c5d9-a458-4821-bb82-3a1455850bd2">
+        <option>honoroas</option>
+        <option>library</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.ThirdPartyApi.dll" />
+      </inputassembly>
+      <inputassembly refid="3c22b6ee-790e-4723-92d3-07cb15827833">
+        <option>honoroas</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Core.dll" />
+      </inputassembly>
+      <inputassembly refid="902a786d-9e8f-46c5-b0a6-ed29482f58a0">
+        <option>honoroas</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.exe" />
+      </inputassembly>
+      <inputassembly refid="74bb9c65-934a-4723-bb5c-054dfda14b6c">
+        <option>honoroas</option>
+        <option>transformxaml</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Res.dll" />
+      </inputassembly>
+    </asmlist>
+  </input>
+  <output>
+    <file dir="${configdir}\Artifacts\Application\Obfuscated" />
+  </output>
+  <tempdir>
+    <file dir="${configdir}\Artifacts\Temp" />
+  </tempdir>
+  <renaming>
+    <option>xmlserialization</option>
+    <excludelist>
+      <namespace name="ShipWorks\.Filters\.Content\.Conditions\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Actions\.Tasks\.Common\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Actions\.Triggers\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Actions\.Scheduling\.ActionSchedules\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Data\.Grid\.Columns\.DisplayTypes\.*.*" regex="true" />
+      <namespace name="*WebServices\.*(.*)?" regex="true" />
+      <namespace name="*WebServices\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Shipping\.Carriers\.OnTrac\.Schemas\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Stores\.Platforms\.Newegg\.Net.*Response\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Stores\.Platforms\.BigCommerce\.DTO\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Shipping\.Carriers\.Amazon\.Api\.DTOs\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Properties\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Stores\.Platforms\.Groupon\.DTO\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Stores\.Platforms\.Yahoo\.ApiIntegration\.DTO\.*.*" regex="true" />
+      <namespace name="SD\.LLBLGen\.*.*" regex="true" />
+      <namespace name="*\.Tests\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Stores\.Platforms\.LemonStand\.DTO\.*.*" regex="true" />
+      <namespace name="ShipWorks\.UI\.Controls\.Html\..*" regex="true" />
+      <type name=".*" regex="true">
+        <customattribute name="ShipWorks.Filters.Content.ConditionElementAttribute" />
+      </type>
+      <type name="^(Triggers|UserDefinedFunctions|StoredProcedures)" regex="true" excludetype="false">
+        <method name=".*" regex="true" />
+        <field name=".*" regex="true" />
+      </type>
+      <type name="ShipWorks\.SqlServer\.Data\.Auditing\.AuditService" regex="true" />
+      <type name=".*" regex="true" excludetype="false">
+        <method name=".*Trigger" regex="true">
+          <comment>Any method that ends in Trigger</comment>
+        </method>
+      </type>
+      <type name="ShipWorks\.SqlServer\.Filters\.FilterCountUpdater" regex="true" />
+      <type name=".*" regex="true" excludetype="false">
+        <method name=".*(CalculateUpdateFilterCounts|DebugMessage)" regex="true" />
+      </type>
+      <type name="ShipWorks\.SqlServer\.General\.UtilityFunctions" regex="true">
+        <method name=".*" speclist="+public" regex="true" />
+      </type>
+      <type name="Interapptive\.Shared\.Properties\.Flags" regex="true">
+        <propertymember name=".*" speclist="+public" regex="true" />
+      </type>
+      <type name="ShipWorks\.Shipping\.Carriers\.Amazon\.AmazonShippingToken" regex="true" />
+      <type name="Interapptive.Shared.Utility.SerializableObject" applytoderivedtypes="true">
+        <method name=".*" regex="true" />
+      </type>
+      <type name="ShipWorks.Data.Grid.Columns.GridColumnDisplayType">
+        <method name=".*" regex="true" />
+      </type>
+      <type name="ShipWorks.Data.Model.EntityClasses.PostalProfileEntity" excludetype="false">
+        <method name="get_Usps" signature="ShipWorks.Data.Model.EntityClasses.UspsProfileEntity()" />
+      </type>
+      <type name="Interapptive.Shared.IO.Text.Csv.Resources.ExceptionMessage" />
+      <type name="Interapptive.Shared.Properties.Flags" />
+    </excludelist>
+    <mapping>
+      <mapoutput overwrite="true">
+        <file dir="${configdir}\Artifacts\Logs" name="ObfuscationReport.xml" />
+      </mapoutput>
+    </mapping>
+    <referencerulelist>
+      <referencerule rulekey="{2B7E7C8C-A39A-4db8-9DFC-6AFD38509061}" />
+      <referencerule rulekey="{229FD6F8-5BCC-427b-8F72-A7A413ECDF1A}" />
+      <referencerule rulekey="{6655B10A-FD58-462d-8D4F-5B1316DFF0FF}" />
+      <referencerule rulekey="{D97286EB-CF80-4ae8-94D4-E90131E6D0D7}" />
+    </referencerulelist>
+  </renaming>
+  <stringencrypt>
+    <includelist>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.SqlServer.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Core.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Adapter.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Model.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.exe" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="Interapptive.Shared.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shared.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.UI.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Stores.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Stores.UI.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.UI.dll" />
+      </assembly>
+    </includelist>
+  </stringencrypt>
+  <sos mergeruntime="true">
+    <option>version:v4</option>
+    <option>disable</option>
+    <option>dontsendtamper</option>
+  </sos>
+  <smartobfuscation>
+    <smartobfuscationreport verbosity="all" overwrite="true">
+      <file dir="${configdir}\Artifacts\Logs" name="SmartObfuscationReportMap.xml" />
+    </smartobfuscationreport>
+  </smartobfuscation>
+</dotfuscator>

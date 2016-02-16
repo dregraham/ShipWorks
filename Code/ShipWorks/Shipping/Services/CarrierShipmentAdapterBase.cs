@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -19,6 +20,16 @@ namespace ShipWorks.Shipping.Services
         private ShipmentType shipmentType;
         private ICustomsManager customsManager;
         private EntityCollection<ShipmentCustomsItemEntity> customsItems;
+
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        protected CarrierShipmentAdapterBase(CarrierShipmentAdapterBase adapterToCopy)
+        {
+            shipment = EntityUtility.CloneEntity(adapterToCopy.shipment, true);
+            customsManager = adapterToCopy.customsManager;
+            shipmentType = adapterToCopy.shipmentType;
+        }
 
         /// <summary>
         /// Constructor
@@ -191,6 +202,11 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
+        /// Clone the shipment adapter and shipment
+        /// </summary>
+        public abstract ICarrierShipmentAdapter Clone();
+
+        /// <summary>
         /// Add/Remove customs items
         /// </summary>
         private void UpdateCustomsItemsForShipment(List<ShipmentCustomsItemEntity> objectIDsToAdd, List<Guid> objectIDsToDelete)
@@ -276,6 +292,28 @@ namespace ShipWorks.Shipping.Services
             {
                 UpdateServiceFromRate(rate);
             }
+        }
+
+        /// <summary>
+        /// Does the given rate match the service selected for the shipment
+        /// </summary>
+        public virtual bool DoesRateMatchSelectedService(RateResult rate)
+        {
+            if (ShipmentTypeCode != rate.ShipmentType)
+            {
+                return false;
+            }
+
+            int? service = GetServiceTypeAsIntFromTag(rate.Tag);
+            return service.HasValue && service.Value == ServiceType;
+        }
+
+        /// <summary>
+        /// Get the service type as an integer from the given tag
+        /// </summary>
+        protected virtual int? GetServiceTypeAsIntFromTag(object tag)
+        {
+            return tag as int?;
         }
 
         /// <summary>

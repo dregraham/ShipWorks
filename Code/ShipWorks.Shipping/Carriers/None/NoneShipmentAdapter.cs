@@ -13,6 +13,14 @@ namespace ShipWorks.Shipping.Carriers.None
     public class NoneShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
+        /// Copy constructor
+        /// </summary>
+        private NoneShipmentAdapter(NoneShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public NoneShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager, ICustomsManager customsManager)
@@ -71,5 +79,11 @@ namespace ShipWorks.Shipping.Carriers.None
         {
             // Nothing to do as None has no insurance
         }
+
+        /// <summary>
+        /// Perform the clone of the adapter using the cloned shipment
+        /// </summary>
+        /// <returns></returns>
+        public override ICarrierShipmentAdapter Clone() => new NoneShipmentAdapter(this);
     }
 }

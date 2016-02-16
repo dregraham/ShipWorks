@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -18,16 +19,19 @@ namespace ShipWorks.Shipping.Services
         private readonly IShipmentProcessor shipmentProcessor;
         private readonly Func<ICarrierConfigurationShipmentRefresher> shipmentRefresherFactory;
         private IDisposable subscription;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentProcessorService(IShipmentProcessor shipmentProcessor, IMessenger messenger,
-            Func<ICarrierConfigurationShipmentRefresher> shipmentRefresherFactory)
+            Func<ICarrierConfigurationShipmentRefresher> shipmentRefresherFactory,
+            Func<Type, ILog> logManager)
         {
             this.messenger = messenger;
             this.shipmentProcessor = shipmentProcessor;
             this.shipmentRefresherFactory = shipmentRefresherFactory;
+            log = logManager(typeof(ShipmentProcessorService));
         }
 
         /// <summary>
@@ -39,7 +43,8 @@ namespace ShipWorks.Shipping.Services
             subscription = messenger.OfType<ProcessShipmentsMessage>()
                 .Select(x => Observable.FromAsync(() => ProcessShipments(x)))
                 .Concat()
-                .SubscribeWithRetry(x => messenger.Send(x));
+                .CatchAndContinue((Exception ex) => log.Error("An error occurred while creating label", ex))
+                .Subscribe(messenger.Send);
         }
 
         /// <summary>

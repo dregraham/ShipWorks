@@ -102,6 +102,7 @@ namespace ShipWorks.Shipping
         private readonly ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ICustomsManager customsManager;
+        private bool closing;
 
         /// <summary>
         /// Constructor
@@ -260,6 +261,9 @@ namespace ShipWorks.Shipping
         /// </remarks>
         private void OnShown(object sender, EventArgs e) => Refresh();
 
+        /// <summary>
+        /// Update the requested shipping text
+        /// </summary>
         private void UpdateRequestedShipping(IEnumerable<ShipmentEntity> shipments)
         {
             string requestedShippingText = GetRequestedShippingLabel(shipments);
@@ -356,11 +360,13 @@ namespace ShipWorks.Shipping
                 if (ServiceControl != null)
                 {
                     ServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                    ServiceControl.FlushChanges();
                 }
 
                 if (CustomsControl != null)
                 {
                     CustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                    CustomsControl.FlushChanges();
                 }
 
                 // Save all changes from the UI to the previous entity selection
@@ -1939,7 +1945,10 @@ namespace ShipWorks.Shipping
                 clonedShipmentEntityForRates = EntityUtility.CloneEntity(uiShipment);
             }
 
-            getRatesTimer.Start();
+            if (!closing)
+            {
+                getRatesTimer.Start();
+            }
         }
 
         /// <summary>
@@ -2306,6 +2315,12 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
+            closing = true;
+            getRatesTimer.Stop();
+
+            ServiceControl?.FlushChanges();
+            CustomsControl?.FlushChanges();
+
             // Disable the ShipSense timer and make one final call to synchronize to make sure we have
             // everything matching that should be matching; otherwise changing a value and closing
             // the dialog before the timer kicks would result in shipments being out of sync

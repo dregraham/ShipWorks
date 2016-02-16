@@ -130,16 +130,38 @@ namespace ShipWorks.Shipping.Services
                 WorldShipUtility.LaunchWorldShip(owner);
             }
 
-            // Refresh/update the ShipSense status of any unprocessed shipments that are outside of the shipping dialog
-            Knowledgebase knowledgebase = new Knowledgebase();
-            foreach (string hash in executionState.OrderHashes.Distinct())
-            {
-                knowledgebase.RefreshShipSenseStatus(hash, shipmentRefresher.RetrieveShipments?.Invoke().Select(s => s.ShipmentID) ?? Enumerable.Empty<long>());
-            }
+            RefreshShipSensStatusForUnprocessedShipments(shipmentRefresher, shipmentsToProcess, executionState);
 
             shipmentRefresher.FinishProcessing();
 
-            return filteredShipments.Select(CreateResultFromShipment);
+            return filteredShipments
+                .Select(CreateResultFromShipment)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Refresh/update the ShipSense status of any unprocessed shipments that are outside of the current context
+        /// </summary>
+        /// <remarks>This was initially intended to apply ShipSense to all unprocessed shipments outside of
+        /// the shipping dialog, but now that we have the shipping panel it applies to more.</remarks>
+        private void RefreshShipSensStatusForUnprocessedShipments(ICarrierConfigurationShipmentRefresher shipmentRefresher,
+            IEnumerable<ShipmentEntity> shipmentsToProcess, ShipmentProcessorExecutionState executionState)
+        {
+            // Exclude shipments that are in the current context but are not being processed,
+            // like the list of shipments in the shipping dialog
+            IEnumerable<long> otherShipments = shipmentRefresher.RetrieveShipments?.Invoke().Select(s => s.ShipmentID) ??
+                Enumerable.Empty<long>();
+
+            // Exclude the shipments that are currently being processed, as well
+            List<long> shipmentIdsToIgnore = otherShipments
+                .Union(shipmentsToProcess.Select(x => x.ShipmentID))
+                .ToList();
+
+            Knowledgebase knowledgebase = new Knowledgebase();
+            foreach (string hash in executionState.OrderHashes.Distinct())
+            {
+                knowledgebase.RefreshShipSenseStatus(hash, shipmentIdsToIgnore);
+            }
         }
 
         /// <summary>
@@ -154,7 +176,7 @@ namespace ShipWorks.Shipping.Services
             {
                 return;
             }
-            
+
             long shipmentID = shipment.ShipmentID;
             string errorMessage = null;
 
@@ -172,25 +194,25 @@ namespace ShipWorks.Shipping.Services
                     (Func<CounterRatesProcessingArgs, DialogResult>) BestRateCounterRatesProcessing :
                     CounterRatesProcessing;
 
-                ShippingManager.ProcessShipment(shipmentID, executionState.LicenseCheckResults,
-                                    x => (DialogResult) owner.Invoke(ratesProcessing, x),
-                                    executionState.SelectedRate, lifetimeScope);
+                GenericResult<ShipmentEntity> result = ShippingManager.ProcessShipment(shipment,
+                    executionState.LicenseCheckResults,
+                    x => (DialogResult) owner.Invoke(ratesProcessing, x),
+                    executionState.SelectedRate, lifetimeScope);
 
                 // Clear any previous errors
                 errorManager.Remove(shipmentID);
 
+                if (!result.Success)
+                {
+                    errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, new Exception(result.Message), "processed");
+                }
+
                 // Special case - could refactor to abstract if necessary
                 executionState.WorldshipExported |= shipment.ShipmentType == (int) ShipmentTypeCode.UpsWorldShip;
             }
-            catch (ORMConcurrencyException ex)
-            {
-                errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
-            }
-            catch (ObjectDeletedException ex)
-            {
-                errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
-            }
-            catch (SqlForeignKeyException ex)
+            catch (Exception ex) when (ex is ORMConcurrencyException ||
+                                       ex is ObjectDeletedException ||
+                                       ex is SqlForeignKeyException )
             {
                 errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
             }

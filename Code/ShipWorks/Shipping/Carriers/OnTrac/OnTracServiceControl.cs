@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.Business.Geography;
+using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using ShipWorks.ApplicationCore;
-using Autofac;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -174,7 +173,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     Dictionary<int, string> availableServices = lifetimeScope.ResolveKeyed<IShipmentServicesBuilder>(ShipmentTypeCode.OnTrac)
                         .BuildServiceTypeDictionary(shipments);
 
-                    service.BindToEnumAndPreserveSelection<OnTracServiceType>(x => availableServices.ContainsKey((int)x));
+                    service.BindToEnumAndPreserveSelection<OnTracServiceType>(x => availableServices.ContainsKey((int) x));
                 }
             }
             else
@@ -286,7 +285,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             int oldIndex = service.SelectedIndex;
-            OnTracServiceType servicetype = (OnTracServiceType)e.Rate.OriginalTag;
+            OnTracServiceType servicetype = (OnTracServiceType) e.Rate.OriginalTag;
 
             service.SelectedValue = servicetype;
             if (service.SelectedIndex == -1 && oldIndex != -1)
@@ -347,7 +346,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             if (!service.MultiValued && service.SelectedValue != null)
             {
                 // Update the selected rate in the rate control to coincide with the service change
-                OnTracServiceType serviceType = (OnTracServiceType)service.SelectedValue;
+                OnTracServiceType serviceType = (OnTracServiceType) service.SelectedValue;
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
                 {
                     if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.OnTrac)
@@ -355,7 +354,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                         return false;
                     }
 
-                    return (OnTracServiceType)r.OriginalTag == serviceType;
+                    return (OnTracServiceType) r.OriginalTag == serviceType;
                 });
 
                 RateControl.SelectRate(matchingRate);
@@ -384,6 +383,18 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             // Start the dimensions control listening to weight changes
             dimensionsControl.ShipmentWeightBox = weight;
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public override void FlushChanges()
+        {
+            base.FlushChanges();
+
+            dimensionsControl.FlushChanges();
+            weight.FlushChanges();
         }
     }
 }
