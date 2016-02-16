@@ -1661,7 +1661,7 @@ namespace ShipWorks
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderInsuranceClaim, new System.Guid("ce0039b3-5b6e-4e8b-9a5d-d01ed5047a9e"));
             this.contextOrderInsuranceClaim.Name = "contextOrderInsuranceClaim";
             this.contextOrderInsuranceClaim.Size = new System.Drawing.Size(169, 22);
-            this.contextOrderInsuranceClaim.Text = "Insurance Claim";
+            this.contextOrderInsuranceClaim.Text = "File Claim";
             this.contextOrderInsuranceClaim.Click += new System.EventHandler(this.OnSubmitClaim);
             //
             // contextOrderSep3
@@ -2180,7 +2180,7 @@ namespace ShipWorks
             this.selectionDependentEnabler.SetEnabledWhen(this.buttonInsuranceClaim, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
             this.buttonInsuranceClaim.Guid = new System.Guid("e21c1c0c-938a-4f01-a9fe-0b02075221bd");
             this.buttonInsuranceClaim.Image = global::ShipWorks.Properties.Resources.message32;
-            this.buttonInsuranceClaim.Text = "Insurance Claim";
+            this.buttonInsuranceClaim.Text = "File Claim";
             this.buttonInsuranceClaim.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonInsuranceClaim.Activate += new System.EventHandler(this.OnSubmitClaim);
             // 
