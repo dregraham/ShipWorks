@@ -4,9 +4,9 @@ using System.Reflection;
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
-    /// Compliance state of a license
+    /// An enum representing the boolean value of compliance.
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ComplianceLevel
     {
         [Description("Not Compliant")]
