@@ -131,7 +131,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context)
         {
-
         }
 
         /// <summary>
@@ -139,7 +138,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
         {
-            
         }
 
         /// <summary>

@@ -11,6 +11,9 @@ using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
+    /// <summary>
+    /// Abstract class for a ChannelTypeEnforcer
+    /// </summary>
     public abstract class ChannelTypeEnforcer : ILicenseEnforcer
     {
         protected readonly IChannelLimitDlgFactory channelLimitDlgFactory;

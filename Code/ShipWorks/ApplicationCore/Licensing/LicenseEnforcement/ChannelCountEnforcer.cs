@@ -66,7 +66,9 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
                 string plural = numberOfChannelsOverLimit > 1 ? "s" : string.Empty;
 
                 string error =
-                    $"You have exceeded your channel limit. Please upgrade your plan or delete {numberOfChannelsOverLimit} channel{plural} to continue downloading orders and creating shipment labels.";
+                    "You have exceeded your channel limit. Please upgrade your plan or " +
+                    $"delete {numberOfChannelsOverLimit} channel{plural} to continue downloading " +
+                    "orders and creating shipment labels.";
 
                 // Return not compliant and an error to display to the user
                 return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant, error);
