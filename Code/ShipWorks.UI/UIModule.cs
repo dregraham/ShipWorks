@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
+using ShipWorks.Stores;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
 using ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior;
@@ -87,6 +89,12 @@ namespace ShipWorks.UI
 
             builder.RegisterType<OverChannelLimitBehavior>()
                 .Keyed<IChannelLimitBehavior>(EditionFeature.ChannelCount);
+
+            builder.RegisterType<GenericFileBehavior>()
+                .Keyed<IChannelLimitBehavior>(EditionFeature.GenericFile);
+
+            builder.RegisterType<GenericModuleBehavior>()
+                .Keyed<IChannelLimitBehavior>(EditionFeature.GenericModule);
         }
     }
 }

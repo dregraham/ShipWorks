@@ -1,38 +1,33 @@
-﻿using System.Windows.Forms;
-using Interapptive.Shared.Utility;
+﻿using System;
+using log4net;
 using ShipWorks.Editions;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
     /// <summary>
-    /// Ensure that, if customer has a GenericModule installed, they are allowed to by tango
+    /// Ensure that, if customer has a GenericModule installed, it is allowed by tango
     /// </summary>
-    public class GenericModuleEnforcer : ILicenseEnforcer
+    public class GenericModuleEnforcer : ChannelTypeEnforcer
     {
         /// <summary>
-        /// The priority for this enforcer
+        /// Initializes a new instance of the <see cref="GenericModuleEnforcer"/> class.
         /// </summary>
-        public int Priority => 3;
+        public GenericModuleEnforcer(IChannelLimitDlgFactory channelLimitDlgFactory,
+            Func<Type, ILog> logFactory,
+            IStoreManager storeManager)
+            : base(channelLimitDlgFactory, logFactory(typeof (GenericModuleEnforcer)), storeManager)
+        {
+        }
 
         /// <summary>
         /// The edition feature enforced
         /// </summary>
-        public EditionFeature EditionFeature => EditionFeature.GenericModule;
+        public override EditionFeature EditionFeature => EditionFeature.GenericModule;
 
         /// <summary>
-        /// Enforces license capabilities
+        /// Gets the store type code.
         /// </summary>
-        public void Enforce(ILicenseCapabilities capabilities, EnforcementContext context, IWin32Window owner)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// Enforces license capabilities
-        /// </summary>
-        public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
-        {
-            throw new System.NotImplementedException();
-        }
+        protected override StoreTypeCode StoreTypeCode => StoreTypeCode.GenericModule;
     }
 }
