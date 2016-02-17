@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
             {
                 ChannelCountEnforcer testObject = mock.Create<ChannelCountEnforcer>();
 
-                Assert.Equal(2, testObject.Priortity);
+                Assert.Equal(EnforcerPriority.Medium, testObject.Priortity);
             }
         }
 

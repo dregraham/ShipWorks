@@ -12,7 +12,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// The priority for this enforcer
         /// </summary>
-        int Priortity { get; }
+        EnforcerPriority Priortity { get; }
 
         /// <summary>
         /// The edition feature enforced
