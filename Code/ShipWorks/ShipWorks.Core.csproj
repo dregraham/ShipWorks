@@ -632,7 +632,6 @@
     <Compile Include="ApplicationCore\Licensing\IDatabaseIdentifier.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicense.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicenseCapabilities.cs" />
-    <Compile Include="ApplicationCore\Licensing\ILicenseEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicenseService.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
@@ -642,6 +641,8 @@
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\EnforcementContext.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\GenericModuleEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\GenericFileEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ILicenseEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ShipmentCountEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseService.cs" />
     <Compile Include="ApplicationCore\Licensing\LogOnRestrictionLevel.cs" />

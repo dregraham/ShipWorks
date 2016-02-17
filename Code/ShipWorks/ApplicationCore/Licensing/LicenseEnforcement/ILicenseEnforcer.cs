@@ -1,9 +1,8 @@
 ﻿using System.Windows.Forms;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
 
-namespace ShipWorks.ApplicationCore.Licensing
+namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
 {
     /// <summary>
     /// Interface for enforcing license capabilities
