@@ -15,8 +15,6 @@ namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
         /// Populates the channels.
         /// </summary>
         public void PopulateChannels(ObservableCollection<StoreTypeCode> channels,
-            ICustomerLicense license,
-            IStoreManager storeManager,
             StoreTypeCode? channelToAdd)
         {
             channels.Clear();

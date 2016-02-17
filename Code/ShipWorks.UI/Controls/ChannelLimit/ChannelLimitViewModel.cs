@@ -155,7 +155,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 ChannelCollection = new ObservableCollection<StoreTypeCode>();
             }
 
-            channelLimitBehavior.PopulateChannels(channelCollection, license, storeManager, ChannelToAdd);
+            channelLimitBehavior.PopulateChannels(channelCollection, ChannelToAdd);
 
             UpdateErrorMesssage();
         }
