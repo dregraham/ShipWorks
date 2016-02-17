@@ -8,6 +8,8 @@ using ShipWorks.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -18,7 +20,6 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly ITangoWebClient tangoWebClient;
         private readonly ICustomerLicenseWriter licenseWriter;
-        private readonly IUpgradePlanDlgFactory upgradePlanDlgFactory;
         private readonly ILog log;
         private readonly IDeletionService deletionService;
 
@@ -36,7 +37,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             Key = key;
             this.tangoWebClient = tangoWebClient;
             this.licenseWriter = licenseWriter;
-            this.upgradePlanDlgFactory = upgradePlanDlgFactory;
             log = logFactory(typeof(CustomerLicense));
             this.deletionService = deletionService;
         }
@@ -107,18 +107,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// If license is at shipment limit, prompt user to upgrade
-        /// when attempting to process a shipment
-        /// </summary>
-        public void EnforceShipmentLimit(IWin32Window owner)
-        {
-            Refresh();
-
-
-
-        }
-
-        /// <summary>
         /// Refresh the License capabilities from Tango
         /// </summary>
         public void Refresh()
@@ -173,6 +161,21 @@ namespace ShipWorks.ApplicationCore.Licensing
             tangoWebClient.DeleteStore(this, licenseKey);
         }
 
+        public void EnforceCapabilities(EnforcementContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Delete the given channel
         /// </summary>
@@ -191,27 +194,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             // but are not in ShipWorks and tell tango to delete them
             IEnumerable<string> licensesToDelete = GetActiveStores().Where(a => a.StoreType == storeType).Select(a => a.StoreLicenseKey);
             tangoWebClient.DeleteStores(this, licensesToDelete);
-        }
-
-
-        //TODO: Delete everthing down here 
-        public void EnforceChannelLimit(IWin32Window owner)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsOverChannelLimit { get; }
-        public int NumberOfChannelsOverLimit { get; }
-
-        /// <summary>
-        /// Is the license over the ChannelLimit
-        /// </summary>
-        public bool IsShipmentLimitReached
-        {
-            get
-            {
-                return true;
-            }
         }
     }
 }

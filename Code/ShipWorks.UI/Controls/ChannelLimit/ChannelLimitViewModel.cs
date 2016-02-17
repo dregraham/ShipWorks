@@ -16,7 +16,9 @@ using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Utility;
+using ShipWorks.Editions;
 using ShipWorks.UI.Controls.WebBrowser;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
@@ -184,15 +186,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void UpdateErrorMesssage()
         {
-            int channelsToDelete = license.NumberOfChannelsOverLimit;
-            if (ChannelToAdd != null)
-            {
-                channelsToDelete ++;
-            }
+            IEnumerable<EnumResult<ComplianceLevel>> channelCount = license.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified);
 
-            string plural = channelsToDelete > 1 ? "s" : string.Empty;
-            ErrorMessage =
-                $"You have exceeded your channel limit. Please upgrade your plan or delete {channelsToDelete} channel{plural} to continue downloading orders and creating shipment labels.";
+            ErrorMessage = channelCount.FirstOrDefault()?.Message ?? "";
         }
 
         /// <summary>
@@ -206,7 +202,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             Load(license);
 
-            if (!license.IsOverChannelLimit)
+            if (license.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
             {
                 owner?.Close();
             }
@@ -266,7 +262,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             IsDeleting = false;
 
-            if (!license.IsOverChannelLimit)
+            if (license.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
             {
                 owner?.Close();
             }

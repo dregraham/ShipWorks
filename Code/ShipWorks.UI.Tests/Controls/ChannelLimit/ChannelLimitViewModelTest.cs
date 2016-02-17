@@ -86,8 +86,6 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 webBrowserFactory.Setup(w => w.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<Window>())).Returns(dialog.Object);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
-                license.Setup(l => l.IsOverChannelLimit)
-                    .Returns(false);
 
                 var testObject = mock.Create<ChannelLimitViewModel>();
                 testObject.Load(license.Object);
@@ -135,8 +133,6 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 IEnumerable<StoreEntity> stores = new List<StoreEntity> {store};
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
-                license.Setup(l => l.IsOverChannelLimit)
-                    .Returns(false);
 
                 Mock<IStoreManager> storeManager = mock.Mock<IStoreManager>();
                 storeManager.Setup(s => s.GetAllStores())

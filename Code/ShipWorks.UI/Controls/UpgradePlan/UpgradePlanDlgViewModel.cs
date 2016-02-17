@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Editions;
 using ShipWorks.UI.Controls.WebBrowser;
 
 namespace ShipWorks.UI.Controls.UpgradePlan
@@ -51,7 +54,7 @@ namespace ShipWorks.UI.Controls.UpgradePlan
         }
 
         /// <summary>
-        /// Clicking Upgrade Plan opens the browswer dlg with the upgrade url
+        /// Clicking Upgrade Plan opens the browser dlg with the upgrade url
         /// </summary>
         private void UpgradeAccount(Window owner)
         {
@@ -59,7 +62,7 @@ namespace ShipWorks.UI.Controls.UpgradePlan
             IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account", owner);
             browserDlg.ShowDialog();
 
-            if (!license.IsOverChannelLimit)
+            if (license.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
             {
                 owner?.Close();
             }

@@ -9,13 +9,16 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum EnforcementContext
     {
+        [Description("No specific context")]
+        NotSpecified = 0,
+
         [Description("Logging into ShipWorks")]
-        Login = 0,
+        Login = 1,
 
         [Description("Creating a label")]
-        CreateLabel = 1,
+        CreateLabel = 2,
 
         [Description("Downloading orders")]
-        Download = 2
+        Download = 3
     }
 }
