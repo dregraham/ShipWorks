@@ -207,6 +207,7 @@
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationServiceTest.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\DisabledLicenseTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ShipmentCountEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseServiceTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProviderTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
