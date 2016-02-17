@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
             {
                 ShipmentCountEnforcer testObject = mock.Create<ShipmentCountEnforcer>();
 
-                Assert.Equal(1, testObject.Priortity);
+                Assert.Equal(EnforcerPriority.High, testObject.Priority);
             }
         }
 

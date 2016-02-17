@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac.Features.Indexed;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
 
@@ -11,12 +12,12 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly ILicenseService licenseService;
         private readonly Func<IWin32Window, IChannelLimitDlg> dlgFactory;
         private readonly IChannelLimitViewModel viewModel;
-        private readonly Func<EditionFeature, IChannelLimitBehavior> behaviorFactory;
+        private readonly IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory;
 
         public ChannelLimitDlgFactory(ILicenseService licenseService,
             Func<IWin32Window, IChannelLimitDlg> dlgFactory,
             IChannelLimitViewModel viewModel,
-            Func<EditionFeature, IChannelLimitBehavior> behaviorFactory)
+            IIndex<EditionFeature, IChannelLimitBehavior> behaviorFactory)
         {
             this.licenseService = licenseService;
             this.dlgFactory = dlgFactory;
@@ -27,7 +28,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         public IChannelLimitDlg GetChannelLimitDlg(IWin32Window owner, EditionFeature feature)
         {
             // load the customer license into the view model
-            viewModel.Load(licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense, behaviorFactory(feature));
+            viewModel.Load(licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense, behaviorFactory[feature]);
 
             // Get the dialog
             IChannelLimitDlg dialog = dlgFactory(owner);

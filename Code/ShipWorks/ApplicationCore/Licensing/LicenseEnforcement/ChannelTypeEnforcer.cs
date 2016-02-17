@@ -32,7 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// The priority for this enforcer
         /// </summary>
-        public virtual int Priority => 3;
+        public virtual EnforcerPriority Priority => EnforcerPriority.Medium;
 
         /// <summary>
         /// The edition feature being enforced

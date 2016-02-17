@@ -41,7 +41,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.licenseWriter = licenseWriter;
             log = logFactory(typeof(CustomerLicense));
             this.deletionService = deletionService;
-            this.licenseEnforcers = licenseEnforcers;
+            this.licenseEnforcers = licenseEnforcers.OrderByDescending(e => (int)e.Priority);
         }
 
         /// <summary>
@@ -73,9 +73,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The license capabilities.
         /// </summary>
         private ILicenseCapabilities LicenseCapabilities { get; set; }
-
-
-
+        
         /// <summary>
         /// Activate a new store
         /// </summary>
@@ -165,46 +163,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Enforces and throws ShipWorksLicenseException if any enforcer is not compliant
-        /// </summary>
-        public void EnforceCapabilities(EnforcementContext context)
-        {
-            EnumResult<ComplianceLevel> enforcerNotInCompliance =
-                licenseEnforcers
-                    .Select(enforcer => enforcer.Enforce(LicenseCapabilities, context))
-                    .FirstOrDefault(result => result.Value == ComplianceLevel.NotCompliant);
-            
-            if (enforcerNotInCompliance != null)
-            {
-                throw new ShipWorksLicenseException(enforcerNotInCompliance.Message);
-            }
-        }
-
-        /// <summary>
-        /// Enforces capabilities and shows dialog on the given owner
-        /// </summary>
-        public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
-        {
-            licenseEnforcers
-                .ToList()
-                .ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
-        }
-
-        /// <summary>
-        /// Enforces using the given feature
-        /// </summary>
-        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
-        {
-            List<EnumResult<ComplianceLevel>> result = new List<EnumResult<ComplianceLevel>>();
-
-            licenseEnforcers.Where(e => e.EditionFeature == feature)
-                .ToList()
-                .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
-
-            return result;
-        }
-
-        /// <summary>
         /// Delete the given channel
         /// </summary>
         public void DeleteChannel(StoreTypeCode storeType)
@@ -222,6 +180,61 @@ namespace ShipWorks.ApplicationCore.Licensing
             // but are not in ShipWorks and tell tango to delete them
             IEnumerable<string> licensesToDelete = GetActiveStores().Where(a => a.StoreType == storeType).Select(a => a.StoreLicenseKey);
             tangoWebClient.DeleteStores(this, licensesToDelete);
+        }
+
+        /// <summary>
+        /// Enforces and throws ShipWorksLicenseException if any enforcer is not compliant
+        /// </summary>
+        public void EnforceCapabilities(EnforcementContext context)
+        {
+            if (LicenseCapabilities == null)
+            {
+                Refresh();
+            }
+
+            EnumResult<ComplianceLevel> enforcerNotInCompliance =
+                licenseEnforcers
+                    .Select(enforcer => enforcer.Enforce(LicenseCapabilities, context))
+                    .FirstOrDefault(result => result.Value == ComplianceLevel.NotCompliant);
+
+            if (enforcerNotInCompliance != null)
+            {
+                throw new ShipWorksLicenseException(enforcerNotInCompliance.Message);
+            }
+        }
+
+        /// <summary>
+        /// Enforces capabilities and shows dialog on the given owner
+        /// </summary>
+        public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
+        {
+            if (LicenseCapabilities == null)
+            {
+                Refresh();
+            }
+
+            licenseEnforcers
+                .ToList()
+                .ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
+        }
+
+        /// <summary>
+        /// Enforces using the given feature
+        /// </summary>
+        public IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context)
+        {
+            if (LicenseCapabilities == null)
+            {
+                Refresh();
+            }
+
+            List<EnumResult<ComplianceLevel>> result = new List<EnumResult<ComplianceLevel>>();
+
+            licenseEnforcers.Where(e => e.EditionFeature == feature)
+                .ToList()
+                .ForEach(e => result.Add(e.Enforce(LicenseCapabilities, context)));
+
+            return result;
         }
     }
 }

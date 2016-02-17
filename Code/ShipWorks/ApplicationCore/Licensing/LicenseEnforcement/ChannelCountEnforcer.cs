@@ -26,7 +26,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// Medium Priority
         /// </summary>
-        public int Priority => 2;
+        public EnforcerPriority Priority => EnforcerPriority.Medium;
 
         /// <summary>
         /// Enforces the ChannelCount feature

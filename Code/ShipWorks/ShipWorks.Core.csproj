@@ -642,6 +642,7 @@
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelTypeEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\EnforcementContext.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\GenericModuleEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\EnforcerPriority.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\GenericFileEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ILicenseEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ShipmentCountEnforcer.cs" />
