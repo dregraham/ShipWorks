@@ -81,5 +81,27 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 Assert.Equal(ComplianceLevel.Compliant, enumResult.Value);
             }
         }
+
+
+        [Fact]
+        public void Enforce_ReturnStoreInErrorMessage_WhenStoreExistsAndItIsNotAllowed()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IStoreManager>()
+                    .Setup(s => s.GetAllStores())
+                    .Returns(new List<StoreEntity> { new StoreEntity { TypeCode = (int)StoreTypeCode.GenericFile } });
+
+                var licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+                licenseCapabilities.Setup(l => l.IsChannelAllowed(StoreTypeCode.GenericFile))
+                    .Returns(false);
+
+                var testObject = mock.Create<GenericFileEnforcer>();
+
+                var enumResult = testObject.Enforce(licenseCapabilities.Object, EnforcementContext.NotSpecified);
+
+                Assert.Contains(EnumHelper.GetDescription(StoreTypeCode.GenericFile), enumResult.Message);
+            }
+        }
     }
 }
