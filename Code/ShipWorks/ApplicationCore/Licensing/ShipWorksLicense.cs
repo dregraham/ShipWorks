@@ -6,7 +6,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Represents a license in ShipWorks
     /// </summary>
-    public class ShipWorksLicense
+    public class ShipWorksLicense : IShipWorksLicense
     {
         StoreTypeCode typeCode = StoreTypeCode.Invalid;
 

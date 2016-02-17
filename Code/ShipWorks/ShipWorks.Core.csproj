@@ -633,6 +633,7 @@
     <Compile Include="ApplicationCore\Licensing\ILicense.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicenseCapabilities.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicenseService.cs" />
+    <Compile Include="ApplicationCore\Licensing\IShipWorksLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseWriter.cs" />
     <Compile Include="ApplicationCore\Licensing\IUpgradePlanDlgFactory.cs" />

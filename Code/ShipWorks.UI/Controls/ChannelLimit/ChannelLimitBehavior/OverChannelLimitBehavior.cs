@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ShipWorks.ApplicationCore.Licensing;
@@ -11,14 +12,18 @@ namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
     {
         private readonly ICustomerLicense license;
         private readonly IStoreManager storeManager;
+        private readonly Func<string, IShipWorksLicense> shipWorksLicenseFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OverChannelLimitBehavior"/> class.
         /// </summary>
-        public OverChannelLimitBehavior(ILicenseService licenseService, IStoreManager storeManager)
+        public OverChannelLimitBehavior(ILicenseService licenseService, 
+            IStoreManager storeManager,
+            Func<string, IShipWorksLicense> shipWorksLicenseFactory)
         {
             license = licenseService.GetLicenses().First() as ICustomerLicense;
             this.storeManager = storeManager;
+            this.shipWorksLicenseFactory = shipWorksLicenseFactory;
         }
 
         /// <summary>
@@ -30,10 +35,10 @@ namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
             channels.Clear();
 
             // Load the collection with the licenses active stores
-            // If ChannelToAdd is set, fitler out 
+            // If ChannelToAdd is set, filter out 
             IEnumerable<StoreTypeCode> activeTangoChannels =
                 license.GetActiveStores()
-                    .Select(s => new ShipWorksLicense(s.StoreLicenseKey).StoreTypeCode);
+                    .Select(s => shipWorksLicenseFactory(s.StoreLicenseKey).StoreTypeCode);
 
             IEnumerable<StoreTypeCode> activeStoresInShipWorks =
                 storeManager.GetAllStores()

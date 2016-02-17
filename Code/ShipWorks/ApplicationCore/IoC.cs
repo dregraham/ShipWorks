@@ -142,6 +142,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<CustomerLicenseActivationService>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<ShipWorksLicense>()
+                .AsImplementedInterfaces();
         }
 
         /// <summary>
