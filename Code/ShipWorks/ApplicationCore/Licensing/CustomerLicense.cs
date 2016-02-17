@@ -41,7 +41,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.licenseWriter = licenseWriter;
             log = logFactory(typeof(CustomerLicense));
             this.deletionService = deletionService;
-            this.licenseEnforcers = licenseEnforcers.OrderBy(e => e.Priortity);
+            this.licenseEnforcers = licenseEnforcers.OrderByDescending(e => (int)e.Priortity);
         }
 
         /// <summary>
