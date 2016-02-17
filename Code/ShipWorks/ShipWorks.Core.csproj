@@ -603,6 +603,7 @@
     <Compile Include="ApplicationCore\Licensing\ComplianceLevel.cs" />
     <Compile Include="ApplicationCore\Licensing\IActivationResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\IAddStoreResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\IChannelLimitBehavior.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitControl.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitDlgFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\IChannelLimitFactory.cs" />
@@ -638,7 +639,9 @@
     <Compile Include="ApplicationCore\Licensing\LicenseCapabilities.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProvider.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcer.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelTypeEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\EnforcementContext.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\GenericModuleEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\EnforcerPriority.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\GenericFileEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ILicenseEnforcer.cs" />

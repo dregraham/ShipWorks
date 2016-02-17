@@ -26,7 +26,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// Medium Priority
         /// </summary>
-        public EnforcerPriority Priortity => EnforcerPriority.Medium;
+        public EnforcerPriority Priority => EnforcerPriority.Medium;
 
         /// <summary>
         /// Enforces the ChannelCount feature
@@ -42,7 +42,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
             {
                 try
                 {
-                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner);
+                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature);
                     channelLimitDlg.ShowDialog();
                 }
                 catch (ShipWorksLicenseException ex)

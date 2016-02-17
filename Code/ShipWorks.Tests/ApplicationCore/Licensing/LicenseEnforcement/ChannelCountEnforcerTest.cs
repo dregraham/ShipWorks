@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
             {
                 ChannelCountEnforcer testObject = mock.Create<ChannelCountEnforcer>();
 
-                Assert.Equal(EnforcerPriority.Medium, testObject.Priortity);
+                Assert.Equal(EnforcerPriority.Medium, testObject.Priority);
             }
         }
 
@@ -131,7 +131,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 Mock<IChannelLimitDlgFactory> dlgFactory = mock.Mock<IChannelLimitDlgFactory>();
                 Mock<IChannelLimitDlg> dlg = mock.Mock<IChannelLimitDlg>();
 
-                dlgFactory.Setup(f => f.GetChannelLimitDlg(It.IsAny<IWin32Window>())).Returns(dlg.Object);
+                dlgFactory.Setup(f => f.GetChannelLimitDlg(It.IsAny<IWin32Window>(), It.IsAny<EditionFeature>())).Returns(dlg.Object);
 
                 ChannelCountEnforcer testObject = mock.Create<ChannelCountEnforcer>();
 
@@ -154,7 +154,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
                 Mock<IChannelLimitDlgFactory> dlgFactory = mock.Mock<IChannelLimitDlgFactory>();
                 Mock<IChannelLimitDlg> dlg = mock.Mock<IChannelLimitDlg>();
 
-                dlgFactory.Setup(f => f.GetChannelLimitDlg(It.IsAny<IWin32Window>())).Returns(dlg.Object);
+                dlgFactory.Setup(f => f.GetChannelLimitDlg(It.IsAny<IWin32Window>(), It.IsAny<EditionFeature>())).Returns(dlg.Object);
 
                 ChannelCountEnforcer testObject = mock.Create<ChannelCountEnforcer>();
 
