@@ -119,7 +119,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_WhenNotCompliant_ReturnsNoErrorMessage()
+        public void Enforce_WhenNotCompliant_ReturnsErrorMessage()
         {
             using (var mock = AutoMock.GetLoose())
             {
