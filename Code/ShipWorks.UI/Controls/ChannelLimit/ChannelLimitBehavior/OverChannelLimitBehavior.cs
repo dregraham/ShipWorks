@@ -15,9 +15,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
         /// <summary>
         /// Initializes a new instance of the <see cref="OverChannelLimitBehavior"/> class.
         /// </summary>
-        public OverChannelLimitBehavior(ICustomerLicense license, IStoreManager storeManager)
+        public OverChannelLimitBehavior(ILicenseService licenseService, IStoreManager storeManager)
         {
-            this.license = license;
+            license = licenseService.GetLicenses().First() as ICustomerLicense;
             this.storeManager = storeManager;
         }
 
