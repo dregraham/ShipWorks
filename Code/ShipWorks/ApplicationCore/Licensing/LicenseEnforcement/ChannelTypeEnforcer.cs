@@ -67,8 +67,6 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// Ensures that the user does not have any generic file stores, if they are not allowed.
         /// </summary>
-        /// <param name="capabilities">The users license capabilities.</param>
-        /// <param name="context">The enforcement context.</param>
         public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
         {
             IEnumerable<StoreEntity> stores = storeManager.GetAllStores();
@@ -78,7 +76,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
                 string channelName = EnumHelper.GetDescription(StoreTypeCode);
                 string error =
                     $"Your plan does not support the {channelName} channel. " +
-                    "Please upgrade your plan or delete your generic file channel " +
+                    $"Please upgrade your plan or delete your {channelName} channel " +
                     "to continue downloading orders and creating shipment labels.";
 
                 return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant, error);

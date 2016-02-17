@@ -28,5 +28,10 @@ namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
         /// Gets the edition feature.
         /// </summary>
         public EditionFeature EditionFeature => EditionFeature.GenericModule;
+
+        /// <summary>
+        /// Title
+        /// </summary>
+        public string Title => "Generic Module not allowed";
     }
 }

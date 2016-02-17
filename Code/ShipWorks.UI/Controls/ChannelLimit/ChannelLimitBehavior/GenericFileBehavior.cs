@@ -13,10 +13,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
         /// <summary>
         /// Populates the channels.
         /// </summary>
-        public void PopulateChannels(ObservableCollection<StoreTypeCode> channels,
-            ICustomerLicense license,
-            IStoreManager storeManager,
-            StoreTypeCode? channelToAdd)
+        public void PopulateChannels(ObservableCollection<StoreTypeCode> channels, StoreTypeCode? channelToAdd)
         {
             channels.Clear();
 
@@ -27,5 +24,10 @@ namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
         /// Gets EditionFeature.GenericFile
         /// </summary>
         public EditionFeature EditionFeature => EditionFeature.GenericFile;
+
+        /// <summary>
+        /// Gets the title.
+        /// </summary>
+        public string Title => "Generic File not allowed";
     }
 }

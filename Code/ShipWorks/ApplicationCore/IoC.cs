@@ -157,6 +157,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<GenericFileEnforcer>()
                 .As<ILicenseEnforcer>();
+
+            builder.RegisterType<GenericModuleEnforcer>()
+                .As<ILicenseEnforcer>();
         }
 
         /// <summary>

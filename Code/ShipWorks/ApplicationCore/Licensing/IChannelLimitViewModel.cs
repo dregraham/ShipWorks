@@ -45,6 +45,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         StoreTypeCode? ChannelToAdd { get; set; }
 
         /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        string Title { get; }
+
+        /// <summary>
         /// Loads the given customer license 
         /// </summary>
         void Load(ICustomerLicense customerLicense, IChannelLimitBehavior channelLimitBehavior);

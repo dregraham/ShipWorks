@@ -127,6 +127,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         }
 
         /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title => channelLimitBehavior.Title;
+
+        /// <summary>
         /// Loads the list of active stores
         /// </summary>
         public void Load(ICustomerLicense customerLicense, IChannelLimitBehavior channelLimitBehavior)
