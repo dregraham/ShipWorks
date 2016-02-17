@@ -26,7 +26,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// High priority
         /// </summary>
-        public int Priortity => 1;
+        public int Priority => 1;
 
         /// <summary>
         /// Enforces the Shipment Count feature
