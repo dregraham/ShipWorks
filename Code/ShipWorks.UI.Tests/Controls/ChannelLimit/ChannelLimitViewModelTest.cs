@@ -6,6 +6,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Stores;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
@@ -24,12 +25,13 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 Mock<ILicense> storeLicense = mock.Mock<ILicense>();
                 Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
                 licenseService.Setup(l => l.GetLicenses()).Returns(new List<ILicense> { storeLicense.Object });
+                Mock<IChannelLimitBehavior> behavior = MockChannelLimitBehavior(mock);
 
                 ChannelLimitViewModel testObject = mock.Create<ChannelLimitViewModel>();
 
                 // The constructor of ChannelLimitViewModel checks to see if the license is a ICustomerLicense
                 // Creating the concrete class will throw the exception
-                ShipWorksLicenseException ex = Assert.Throws<ShipWorksLicenseException>(() => testObject.Load(storeLicense.Object as ICustomerLicense));
+                ShipWorksLicenseException ex = Assert.Throws<ShipWorksLicenseException>(() => testObject.Load(storeLicense.Object as ICustomerLicense, behavior.Object));
 
                 // Check to make sure the right message is thrown
                 Assert.Equal("Store licenses do not have channel limits.", ex.Message);
@@ -45,13 +47,15 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
                 licenseService.Setup(l => l.GetLicenses()).Returns(new List<ILicense> { customerLicense.Object});
 
+                var behavior = MockChannelLimitBehavior(mock);
+
                 ChannelLimitViewModel testObject = mock.Create<ChannelLimitViewModel>();
 
                 // Set the SelectedStoreType to something other than invalid
                 testObject.SelectedStoreType = StoreTypeCode.Amazon;
 
                 // Call load
-                testObject.Load(customerLicense.Object);
+                testObject.Load(customerLicense.Object, behavior.Object);
 
                 // check the SelectedStoreType and ensure it is set to invalid
                 Assert.Equal(StoreTypeCode.Invalid, testObject.SelectedStoreType);
@@ -66,11 +70,12 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 Mock<ICustomerLicense> customerLicense = mock.Mock<ICustomerLicense>();
                 Mock<ILicenseService> licenseService = mock.Mock<ILicenseService>();
                 licenseService.Setup(l => l.GetLicenses()).Returns(new List<ILicense> { customerLicense.Object });
+                var behavior = MockChannelLimitBehavior(mock);
 
                 ChannelLimitViewModel testObject = mock.Create<ChannelLimitViewModel>();
 
                 // Call load
-                testObject.Load(customerLicense.Object);
+                testObject.Load(customerLicense.Object, behavior.Object);
 
                 customerLicense.Verify(c => c.Refresh(), Times.Once);
             }
@@ -84,11 +89,12 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 var dialog = mock.Mock<IDialog>();
                 var webBrowserFactory = mock.Mock<IWebBrowserFactory>();
                 webBrowserFactory.Setup(w => w.Create(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<Window>())).Returns(dialog.Object);
+                var behavior = MockChannelLimitBehavior(mock);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
 
                 var testObject = mock.Create<ChannelLimitViewModel>();
-                testObject.Load(license.Object);
+                testObject.Load(license.Object, behavior.Object);
 
                 ICommand upgradeClickCommand = testObject.UpgradeClickCommand;
                 upgradeClickCommand.Execute(null);
@@ -146,9 +152,11 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 confirmDeleteFactgory.Setup(c => c.GetConfirmDeleteDlg(It.IsAny<StoreTypeCode>(), It.IsAny<Window>()))
                     .Returns(confirmDelete.Object);
 
+                var behavior = MockChannelLimitBehavior(mock);
+
                 // Test
                 var testObject = mock.Create<ChannelLimitViewModel>();
-                testObject.Load(license.Object);
+                testObject.Load(license.Object, behavior.Object);
                 testObject.SelectedStoreType = StoreTypeCode.Ebay;
 
                 ICommand deleteCommand = testObject.DeleteStoreClickCommand;
@@ -182,10 +190,11 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                     .Returns(confirmDelete.Object);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
+                var behavior = MockChannelLimitBehavior(mock);
 
                 // Test
                 var testObject = mock.Create<ChannelLimitViewModel>();
-                testObject.Load(license.Object);
+                testObject.Load(license.Object, behavior.Object);
                 testObject.SelectedStoreType = StoreTypeCode.Ebay;
 
                 ICommand deleteCommand = testObject.DeleteStoreClickCommand;
@@ -219,10 +228,11 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                     .Returns(confirmDelete.Object);
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();
+                var behavior = MockChannelLimitBehavior(mock);
 
                 // Test
                 var testObject = mock.Create<ChannelLimitViewModel>();
-                testObject.Load(license.Object);
+                testObject.Load(license.Object, behavior.Object);
                 testObject.SelectedStoreType = StoreTypeCode.Ebay;
 
                 ICommand deleteCommand = testObject.DeleteStoreClickCommand;
@@ -231,6 +241,14 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
                 // Verify
                 license.Verify(l => l.DeleteChannel(StoreTypeCode.Ebay), Times.Never);
             }
+        }
+
+        private static Mock<IChannelLimitBehavior> MockChannelLimitBehavior(AutoMock mock)
+        {
+            var behavior = mock.Mock<IChannelLimitBehavior>();
+            behavior.Setup(b => b.EditionFeature)
+                .Returns(EditionFeature.ChannelCount);
+            return behavior;
         }
     }
 }

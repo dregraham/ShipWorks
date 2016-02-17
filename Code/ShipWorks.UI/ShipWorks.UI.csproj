@@ -109,6 +109,7 @@
     <Compile Include="Controls\ChannelConfirmDelete\IChannelConfirmDeleteDlg.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\IChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\IConfirmChannelDeleteViewModel.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\OverChannelLimitBehavior.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitControl.xaml.cs">
       <DependentUpon>ChannelLimitControl.xaml</DependentUpon>
     </Compile>

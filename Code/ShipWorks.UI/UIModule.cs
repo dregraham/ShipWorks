@@ -1,8 +1,10 @@
 ﻿using System;
 using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Editions;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using ShipWorks.UI.Controls.ChannelLimit;
+using ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior;
 using ShipWorks.UI.Controls.CustomerLicenseActivation;
 using ShipWorks.UI.Controls.UpgradePlan;
 using ShipWorks.UI.Controls.WebBrowser;
@@ -82,6 +84,9 @@ namespace ShipWorks.UI
 
             builder.RegisterType<ChannelLimitDlgFactory>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<OverChannelLimitBehavior>()
+                .Keyed<IChannelLimitBehavior>(EditionFeature.ChannelCount);
         }
     }
 }

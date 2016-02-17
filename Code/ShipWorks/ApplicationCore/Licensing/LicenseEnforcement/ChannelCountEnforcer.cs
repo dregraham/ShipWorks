@@ -42,7 +42,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
             {
                 try
                 {
-                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner);
+                    IChannelLimitDlg channelLimitDlg = channelLimitDlgFactory.GetChannelLimitDlg(owner, EditionFeature);
                     channelLimitDlg.ShowDialog();
                 }
                 catch (ShipWorksLicenseException ex)

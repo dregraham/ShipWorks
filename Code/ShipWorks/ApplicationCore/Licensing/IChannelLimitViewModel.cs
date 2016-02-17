@@ -47,6 +47,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Loads the given customer license 
         /// </summary>
-        void Load(ICustomerLicense customerLicense);
+        void Load(ICustomerLicense customerLicense, IChannelLimitBehavior channelLimitBehavior);
     }
 }

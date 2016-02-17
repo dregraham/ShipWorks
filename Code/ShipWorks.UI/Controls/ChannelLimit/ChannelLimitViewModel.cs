@@ -19,6 +19,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Utility;
 using ShipWorks.Editions;
+using ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior;
 using ShipWorks.UI.Controls.WebBrowser;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
@@ -40,6 +41,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
         private bool isDeleting;
+        private IChannelLimitBehavior channelLimitBehavior;
 
         /// <summary>
         /// Constructor
@@ -127,9 +129,10 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Loads the list of active stores
         /// </summary>
-        public void Load(ICustomerLicense customerLicense)
+        public void Load(ICustomerLicense customerLicense, IChannelLimitBehavior channelLimitBehavior)
         {
             license = customerLicense;
+            this.channelLimitBehavior = channelLimitBehavior;
 
             // Check to make sure we are getting a CustomerLicense
             if (license == null)
@@ -147,22 +150,18 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 ChannelCollection = new ObservableCollection<StoreTypeCode>();
             }
 
-            // clear the collection
-            ChannelCollection.Clear();
-
-            // Load the collection with the licenses active stores
-            // If ChannelToAdd is set, fitler out 
-            IEnumerable<StoreTypeCode> activeTangoChannels = license.GetActiveStores().Select(s=> new ShipWorksLicense(s.StoreLicenseKey).StoreTypeCode);
-            IEnumerable<StoreTypeCode> activeStoresInShipWorks = storeManager.GetAllStores().Select(s=>(StoreTypeCode)s.TypeCode);
-
-            activeTangoChannels.Union(activeStoresInShipWorks)
-                .Distinct()
-                .Where(s => !ChannelToAdd.HasValue || s != ChannelToAdd.Value)
-                .ToList()
-                // if we did not find a match add it to the collection 
-                .ForEach(s => ChannelCollection.Add(s));
+            channelLimitBehavior.PopulateChannels(channelCollection, license, storeManager, ChannelToAdd);
 
             UpdateErrorMesssage();
+        }
+
+        /// <summary>
+        /// Since we already have a license and channelLimitBehavior internally,
+        /// we should just call this...
+        /// </summary>
+        private void Load()
+        {
+            Load(license, channelLimitBehavior);
         }
 
         /// <summary>
@@ -186,7 +185,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void UpdateErrorMesssage()
         {
-            IEnumerable<EnumResult<ComplianceLevel>> channelCount = license.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified);
+            IEnumerable<EnumResult<ComplianceLevel>> channelCount = license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext.NotSpecified);
 
             ErrorMessage = channelCount.FirstOrDefault()?.Message ?? "";
         }
@@ -200,9 +199,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             IDialog browserDlg = webBrowserFactory.Create(uri, "Upgrade your account", owner);
             browserDlg.ShowDialog();
 
-            Load(license);
+            Load();
 
-            if (license.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
+            if (license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext.NotSpecified).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
             {
                 owner?.Close();
             }
@@ -252,7 +251,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             try
             {
                 // call load to refresh everything
-                Load(license);
+                Load();
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -262,7 +261,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             IsDeleting = false;
 
-            if (license.EnforceCapabilities(EditionFeature.ChannelCount, EnforcementContext.NotSpecified).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
+            if (license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext.NotSpecified).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
             {
                 owner?.Close();
             }
