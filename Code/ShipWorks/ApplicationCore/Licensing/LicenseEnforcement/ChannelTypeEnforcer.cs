@@ -20,7 +20,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelTypeEnforcer(IChannelLimitDlgFactory channelLimitDlgFactory,
+        protected ChannelTypeEnforcer(IChannelLimitDlgFactory channelLimitDlgFactory,
             ILog log,
             IStoreManager storeManager)
         {
@@ -71,7 +71,8 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         {
             IEnumerable<StoreEntity> stores = storeManager.GetAllStores();
 
-            if (stores.Any(store => store.TypeCode == (int)StoreTypeCode))
+            if (!capabilities.IsChannelAllowed(StoreTypeCode) &&
+                stores.Any(store => store.TypeCode == (int) StoreTypeCode))
             {
                 string channelName = EnumHelper.GetDescription(StoreTypeCode);
                 string error =

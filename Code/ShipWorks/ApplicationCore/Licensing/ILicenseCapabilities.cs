@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -212,5 +213,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// The number of processed shipments in tango
         /// </summary>
         int ProcessedShipments { get; }
+
+        /// <summary>
+        /// Determines whether [is channel allowed] [the specified store type].
+        /// </summary>
+        bool IsChannelAllowed(StoreTypeCode storeType);
     }
 }
