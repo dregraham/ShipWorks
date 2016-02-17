@@ -65,7 +65,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         /// <summary>
-        /// Ensures that the user does not have any generic file stores, if they are not allowed.
+        /// Ensures that the user does not have any channels of StoreTypeCode, if they are not allowed.
         /// </summary>
         public EnumResult<ComplianceLevel> Enforce(ILicenseCapabilities capabilities, EnforcementContext context)
         {

@@ -208,6 +208,7 @@
     <Compile Include="ApplicationCore\Licensing\CustomerLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\DisabledLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelCountEnforcerTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ChannelTypeEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\ShipmentCountEnforcerTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseServiceTest.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseEncryptionProviderTest.cs" />
