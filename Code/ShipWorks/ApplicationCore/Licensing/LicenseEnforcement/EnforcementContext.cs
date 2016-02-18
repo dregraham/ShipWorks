@@ -10,15 +10,21 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
     public enum EnforcementContext
     {
         [Description("No specific context")]
-        NotSpecified = 0,
+        NotSpecified,
 
         [Description("Logging into ShipWorks")]
-        Login = 1,
+        Login,
 
         [Description("Creating a label")]
-        CreateLabel = 2,
+        CreateLabel,
 
         [Description("Downloading orders")]
-        Download = 3
+        Download, 
+
+        [Description("From StoreManagerDlg")]
+        StoreManagerDlg,
+
+        [Description("From AddStoreWizard")]
+        AddStoreWizard,
     }
 }
