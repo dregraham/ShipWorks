@@ -1250,7 +1250,7 @@ namespace ShipWorks
             }
 
             UpdateStatusBar();
-            UpdateComandState();
+            UpdateCommandState();
             UpdatePanelState();
 
             ribbonSecurityProvider.UpdateSecurityUI();
@@ -1268,42 +1268,53 @@ namespace ShipWorks
         /// <summary>
         /// Update the state of the ribbon buttons based on the current selection
         /// </summary>
-        private void UpdateComandState()
+        private void UpdateCommandState()
         {
+            int selectionCount = gridControl.Selection.Count;
+
             selectionDependentEnabler.UpdateCommandState(gridControl.Selection.Count, gridControl.ActiveFilterTarget);
 
-            //// Grab the Shipment Dock
-            DockControl shipmentDock = sandDockManager.GetDockControls().FirstOrDefault(d => d.Name == "dockableWindowShipment");
-            
-            // If the shipmentdoc is open set the EditingContextReference of the shipping ribbon tab to ORDERS
-            // Otherwise set the EditingContextRreference to HIDDEN so it never shows up
-            if (shipmentDock != null && shipmentDock.IsOpen == true)
-            {
-                ribbonTabShipping.EditingContextReference = "ORDERS";
-            }
-            else
-            {
-                ribbonTabShipping.EditingContextReference = "HIDDEN";
-            }
-
-            // set the ribbon editing context to orders or customers based on which filter tree is selected
-            // only do so if orders or customers are selected
-            if (gridControl.Selection.Count > 0)
-            {
-                switch (gridControl.ActiveFilterTarget)
-                {
-                    case FilterTarget.Customers:
-                        ribbon.SetEditingContext("CUSTOMERS");
-                        break;
-                    case FilterTarget.Orders:
-                        ribbon.SetEditingContext("ORDERS");
-                        break;
-                }
-            }
-            else
+            // Don't show the shipping context menu if we aren't in the Orders view
+            if (gridControl.ActiveFilterTarget != FilterTarget.Orders)
             {
                 ribbon.SetEditingContext(null);
+                return;
             }
+
+            // Don't show the shipping context menu if we have nothing selected
+            if (selectionCount <= 0)
+            {
+                ribbon.SetEditingContext(null);
+                return;
+            }
+
+            // Grab the Shipment Dock
+            DockControl shipmentDock = sandDockManager.GetDockControls().FirstOrDefault(d => d.Name == "dockableWindowShipment");
+
+            // Don't show the shipping context menu if the shipping panel doesn't exist or isn't open
+            if (shipmentDock == null || !shipmentDock.IsOpen)
+            {
+                ribbon.SetEditingContext(null);
+                return;
+            }
+
+            // Update state of each button based on it's criteria.
+            buttonCreateLabel.Enabled = selectionCount >= 1;
+            buttonVoid.Enabled = selectionCount >= 1;
+            buttonReturn.Enabled = selectionCount == 1;
+            buttonShipAgain.Enabled = selectionCount == 1;
+            buttonReprint.Enabled = selectionCount == 1;
+
+            // Set the 
+            ribbon.SetEditingContext("SHIPPINGMENU");
+        }
+
+        /// <summary>
+        /// Adds Editing Contexts to the ribbon
+        /// </summary>
+        private void ApplyEditingContext()
+        {
+            ribbon.EditingContexts.Add(new EditingContext("Shipping Tools", "SHIPPINGMENU", System.Drawing.Color.LightBlue));
         }
 
         /// <summary>
@@ -1337,16 +1348,7 @@ namespace ShipWorks
 
             return TaskUtility.CompletedTask;
         }
-
-        /// <summary>
-        /// Adds Editing Contexts to the ribbon
-        /// </summary>
-        private void ApplyEditingContext()
-        {
-            ribbon.EditingContexts.Add(new EditingContext("HIDDEN", "HIDDEN", System.Drawing.Color.Red));
-            ribbon.EditingContexts.Add(new EditingContext("Order Tools", "ORDERS", System.Drawing.Color.LightBlue));
-        }
-
+        
         /// <summary>
         /// The popup window for displaying panels is opening
         /// </summary>
@@ -4224,6 +4226,5 @@ namespace ShipWorks
         #endregion
 
         #endregion
-
     }
 }
