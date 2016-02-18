@@ -1093,7 +1093,6 @@ namespace ShipWorks.Shipping
             }
             catch (ShipWorksLicenseException ex)
             {
-
                 throw new ShippingException(ex.Message);
             }
         }

@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_ReturnCompiant_WhenStoreDoesNotExistsAndItIsNotAllowed()
+        public void Enforce_ReturnCompliant_WhenStoreDoesNotExistsAndItIsNotAllowed()
         {
             using (var mock = AutoMock.GetLoose())
             {

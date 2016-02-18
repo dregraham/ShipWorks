@@ -38,6 +38,13 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             return channelLimitControl;
         }
 
+        /// <summary>
+        /// Creates the control
+        /// </summary>
+        /// <remarks>
+        /// This instance will take the store being added into account
+        /// It shouldn't be available to delete and be counted against the customer's limit.
+        /// </remarks>
         public IChannelLimitControl CreateControl(ICustomerLicense customerLicense, StoreTypeCode channelToAdd, EditionFeature feature)
         {
             viewModel.ChannelToAdd = channelToAdd;

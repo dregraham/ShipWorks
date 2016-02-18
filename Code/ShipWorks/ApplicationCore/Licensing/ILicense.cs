@@ -45,30 +45,24 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Deletes a store
         /// </summary>
-        /// <param name="store"></param>
         void DeleteStore(StoreEntity store);
 
         /// <summary>
         /// Enforces the capabilities for this license.
         /// Throws ShipWorksLicenseException when out of compliance
         /// </summary>
-        /// <param name="context">The context.</param>
         void EnforceCapabilities(EnforcementContext context);
 
         /// <summary>
         /// Enforces the capabilities for this license.
         /// Prompts user to take action when out of compliance
         /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="owner">The owner.</param>
         void EnforceCapabilities(EnforcementContext context, IWin32Window owner);
 
         /// <summary>
         /// Enforces the capabilites for this license,
         /// related to the given EditionFeature.
         /// </summary>
-        /// <param name="feature">The feature.</param>
-        /// <param name="context">The context.</param>
         IEnumerable<EnumResult<ComplianceLevel>> EnforceCapabilities(EditionFeature feature, EnforcementContext context);
     }
 }

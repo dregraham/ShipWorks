@@ -6,7 +6,6 @@ using ShipWorks.ApplicationCore.Licensing;
 using Xunit;
 using log4net;
 using System;
-using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
@@ -14,7 +13,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
     public class CustomerLicenseTest
     {
         [Fact]
-        public void Refresh_SetsLicenseCapabilities_GetLicenseCapabilitiesResponse()
+        public void Refresh_DefersGettingLicenseCapabilitiesToTangoWebClient()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Refresh_SetsDisabledReason_GetLicenseCapabilitiesResponse()
+        public void Refresh_SetsDisabledReasonFromLicenseCapabilitiesResponse()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -47,12 +46,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 customerLicense.Refresh();
 
-                Assert.Equal(customerLicense.DisabledReason, "Disabled for some reason");
+                Assert.Equal("Disabled for some reason", customerLicense.DisabledReason);
             }
         }
 
         [Fact]
-        public void Refresh_LogsDisabledReason_ActivationResponse()
+        public void Refresh_LogsDisabledReason_WhenTangoWebClientThrowsException()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Save_RethrowsException_FromLicenseWriter()
+        public void Save_RethrowsExceptionFromLicenseWriter()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -84,15 +83,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 var ex = Assert.Throws<Exception>(() => customerLicense.Save());
                 Assert.Equal("some random exception", ex.Message);
             }
-        }
-        
-        private static Mock<ITangoWebClient> MockWebClientToReturnCapabilities(AutoMock mock, Mock<ILicenseCapabilities> licenseCapabilities)
-        {
-            var webClient = mock.Mock<ITangoWebClient>();
-            webClient
-                .Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>()))
-                .Returns(licenseCapabilities.Object);
-            return webClient;
         }
         
         [Fact]

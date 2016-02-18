@@ -29,7 +29,13 @@ namespace ShipWorks.UI.Controls.UpgradePlan
         /// </summary>
         public IDialog Create(string message, IWin32Window owner)
         {
-            viewModel.Load(message, licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense);
+            ICustomerLicense customerLicense = licenseService.GetLicenses().FirstOrDefault() as ICustomerLicense;
+            if (customerLicense==null)
+            {
+                throw new InvalidCastException("Expected a ICustomerLicense from the LicenseService");
+            }
+
+            viewModel.Load(message, customerLicense);
             IDialog upgradePlanDlg = dialogFactory("UpgradePlanDlg", owner);
             upgradePlanDlg.DataContext = viewModel;
 

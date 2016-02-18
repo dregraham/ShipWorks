@@ -1,6 +1,5 @@
 ﻿using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,11 +14,8 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Utility;
-using ShipWorks.Editions;
-using ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior;
 using ShipWorks.UI.Controls.WebBrowser;
 
 namespace ShipWorks.UI.Controls.ChannelLimit
@@ -149,7 +145,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             license.Refresh();
 
-            // if we dont have a store collection make one
+            // if we don't have a store collection make one
             if (ChannelCollection == null)
             {
                 ChannelCollection = new ObservableCollection<StoreTypeCode>();
@@ -221,7 +217,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
                 storeManager.GetAllStores().Select(s => (StoreTypeCode) s.TypeCode).Distinct().ToList();
 
             // If we are trying to delete the only store type in ShipWorks and they are not trying to add another one
-            // display an error and dont delete
+            // display an error and don't delete
             if (localStoreTypeCodes.Count == 1 && localStoreTypeCodes.Contains(SelectedStoreType) && ChannelToAdd == null)
             {
                 messageHelper.ShowError($"You cannot remove {EnumHelper.GetDescription(selectedStoreType)} because it is " +

@@ -12,7 +12,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
     public class ShipmentCountEnforcerTest
     {
         [Fact]
-        public void Priortity_Returns_1()
+        public void Priority_Returns1()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void EditionFeature_Returns_ShipmentCount()
+        public void EditionFeature_ReturnsShipmentCount()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_WhenContextLogin_ReturnsCompliant()
+        public void Enforce_ReturnsCompliant_WhenContextLogin()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_WithProcessedShipmentsHigherThanShipmentLimit_ReturnsNotCompliant()
+        public void Enforce_ReturnsNotCompliant_WhenProcessedShipmentsHigherThanShipmentLimit()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_WithProcessedShipmentsEqualToShipmentLimit_ReturnsNotCompliant()
+        public void Enforce_ReturnsNotCompliant_WhenProcessedShipmentsEqualToShipmentLimit()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_WithProcessedShipmentsLessThanShipmentLimit_ReturnsCompliant()
+        public void Enforce_ReturnsCompliant_WhenProcessedShipmentsLessThanShipmentLimit()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -101,7 +101,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_WhenCompliant_ReturnsNoErrorMessage()
+        public void Enforce_ReturnsNoErrorMessage_WhenCompliant()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -119,7 +119,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_WhenNotCompliant_ReturnsErrorMessage()
+        public void Enforce_ReturnsErrorMessage_WhenNotCompliant()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -137,7 +137,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_WhenNotCompliant_ShowsDialog()
+        public void Enforce_ShowsDialog_WhenNotCompliant()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -160,7 +160,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_WhenCompliant_DoesNotShowsDialog()
+        public void Enforce_DoesNotShowsDialog_WhenCompliant()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -183,7 +183,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement
         }
 
         [Fact]
-        public void Enforce_WhenNotCompliant_CallsCreateOnDialogFactory_WithErrorMessage()
+        public void Enforce_CallsCreateOnDialogFactoryWithErrorMessage_WhenNotCompliant()
         {
             using (var mock = AutoMock.GetLoose())
             {

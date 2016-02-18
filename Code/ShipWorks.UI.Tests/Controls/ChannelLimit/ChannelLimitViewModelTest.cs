@@ -18,7 +18,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
     public class ChannelLimitViewModelTest
     {
         [Fact]
-        public void Load_WithStoreLicense_ThrowsShipWorksLicenseException()
+        public void Load_ThrowsShipWorksLicenseException_WhenLicenseServiceReturnsStoreLicense()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -104,7 +104,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         }
 
         [Fact]
-        public void Deletechannel_WithOneChannel_ShowsError()
+        public void Deletechannel_ShowsError_WhenOneChannel()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -168,7 +168,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         }
 
         [Fact]
-        public void Deletechannel_WithConfirmDeleteTrue_DoesDeleteChannel()
+        public void Deletechannel_DeletesChannel_WhenConfirmDeleteTrue()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -206,7 +206,7 @@ namespace ShipWorks.UI.Tests.Controls.ChannelLimit
         }
 
         [Fact]
-        public void Deletechannel_WithDeclindedConfirmDelete_DoesNotDeleteChannel()
+        public void Deletechannel_ChannelNotDeleted_WhenConfirmDeleteDeclined()
         {
             using (var mock = AutoMock.GetLoose())
             {

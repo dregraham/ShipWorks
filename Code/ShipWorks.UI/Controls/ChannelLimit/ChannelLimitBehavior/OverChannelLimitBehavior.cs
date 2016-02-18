@@ -46,8 +46,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior
 
             activeTangoChannels.Union(activeStoresInShipWorks)
                 .Distinct()
-                // exclude channelToAdd if it is set
-                .Where(s => !channelToAdd.HasValue || s != channelToAdd.Value)
+                .Where(s => !channelToAdd.HasValue || s != channelToAdd.Value) // exclude channelToAdd if it is set
                 .ToList()
                 .ForEach(channels.Add);
         }
