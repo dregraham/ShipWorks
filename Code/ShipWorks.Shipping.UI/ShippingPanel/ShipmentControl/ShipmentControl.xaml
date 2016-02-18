@@ -108,7 +108,7 @@
                           SelectionMode="Single"
                           MaxHeight="150"
                           ItemsSource="{Binding PackageAdapters}"
-                          SelectedValue ="{Binding SelectedPackageAdapter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                          SelectedValue ="{Binding SelectedPackageAdapter}" >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Packages (Select to Edit)" Width="Auto"
@@ -155,8 +155,8 @@
             <ComboBox Grid.Row="0" Grid.Column="1"
                       ItemsSource ="{Binding PackageTypes}"
                       SelectedValue="{Binding PackagingType}"
-                      SelectedValuePath="PackageTypeID"
-                      DisplayMemberPath="Name" />
+                      SelectedValuePath="Key"
+                      DisplayMemberPath="Value" />
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>

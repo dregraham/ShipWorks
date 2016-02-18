@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Observable collection of carrier package types
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<PackageTypeBinding> PackageTypes { get; }
+        public ObservableCollection<KeyValuePair<int, string>> PackageTypes { get; }
 
         /// <summary>
         /// Shipment ship date

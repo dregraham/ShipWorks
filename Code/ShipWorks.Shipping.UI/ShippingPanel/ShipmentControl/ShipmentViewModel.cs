@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             Services = new ObservableCollection<KeyValuePair<int, string>>();
-            PackageTypes = new ObservableCollection<PackageTypeBinding>();
+            PackageTypes = new ObservableCollection<KeyValuePair<int, string>>();
         }
 
         /// <summary>
@@ -241,11 +241,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             PackageTypes.Clear();
             foreach (KeyValuePair<int, string> entry in packageTypes)
             {
-                PackageTypes.Add(new PackageTypeBinding()
-                {
-                    PackageTypeID = entry.Key,
-                    Name = entry.Value
-                });
+                PackageTypes.Add(entry);
             }
         }
 
