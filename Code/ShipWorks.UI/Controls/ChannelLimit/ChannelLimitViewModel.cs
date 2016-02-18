@@ -59,6 +59,9 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             // Set the selected store type to invalid
             SelectedStoreType = StoreTypeCode.Invalid;
 
+            // Set the default enforcement context
+            EnforcementContext = EnforcementContext.NotSpecified;
+            
             log = logFactory(typeof (ChannelLimitViewModel));
 
             DeleteStoreClickCommand = new RelayCommand<Window>(DeleteChannel, CanExecuteDeleteStore);
