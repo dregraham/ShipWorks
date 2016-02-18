@@ -120,9 +120,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Gets or sets the packaging type.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public PackageTypeBinding PackagingType
+        public int PackagingType
         {
-            get { return null; }
+            get { return -1; }
             set { }
         }
 

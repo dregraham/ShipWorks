@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        PackageTypeBinding PackagingType { get; set; }
+        int PackagingType { get; set; }
 
         /// <summary>
         /// Gets or sets the insurance choice.

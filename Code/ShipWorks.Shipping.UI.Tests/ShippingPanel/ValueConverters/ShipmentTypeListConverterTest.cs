@@ -120,7 +120,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
                 ShipmentTypeCode.OnTrac,
                 ShipmentTypeCode.Endicia,
                 ShipmentTypeCode.Express1Usps,
-                ShipmentTypeCode.BestRate,
                 ShipmentTypeCode.Express1Endicia,
                 ShipmentTypeCode.None,
                 ShipmentTypeCode.UpsWorldShip,
@@ -130,19 +129,23 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
 
             IEnumerable<ShipmentTypeListItem> results = testObject.Convert(allTypes, null, null, null) as IEnumerable<ShipmentTypeListItem>;
 
-            Assert.Equal(ShipmentTypeCode.BestRate, results.ElementAt(0).Value);
-            Assert.Equal(ShipmentTypeCode.Usps, results.ElementAt(1).Value);
-            Assert.Equal(ShipmentTypeCode.PostalWebTools, results.ElementAt(2).Value);
-            Assert.Equal(ShipmentTypeCode.Express1Usps, results.ElementAt(3).Value);
-            Assert.Equal(ShipmentTypeCode.FedEx, results.ElementAt(4).Value);
-            Assert.Equal(ShipmentTypeCode.UpsOnLineTools, results.ElementAt(5).Value);
-            Assert.Equal(ShipmentTypeCode.UpsWorldShip, results.ElementAt(6).Value);
-            Assert.Equal(ShipmentTypeCode.Endicia, results.ElementAt(7).Value);
-            Assert.Equal(ShipmentTypeCode.Express1Endicia, results.ElementAt(8).Value);
-            Assert.Equal(ShipmentTypeCode.OnTrac, results.ElementAt(9).Value);
-            Assert.Equal(ShipmentTypeCode.iParcel, results.ElementAt(10).Value);
-            Assert.Equal(ShipmentTypeCode.Other, results.ElementAt(11).Value);
-            Assert.Equal(ShipmentTypeCode.None, results.ElementAt(12).Value);
+            var expectedList = new[]
+            {
+                ShipmentTypeCode.Usps,
+                ShipmentTypeCode.PostalWebTools,
+                ShipmentTypeCode.Express1Usps,
+                ShipmentTypeCode.FedEx,
+                ShipmentTypeCode.UpsOnLineTools,
+                ShipmentTypeCode.UpsWorldShip,
+                ShipmentTypeCode.Endicia,
+                ShipmentTypeCode.Express1Endicia,
+                ShipmentTypeCode.OnTrac,
+                ShipmentTypeCode.iParcel,
+                ShipmentTypeCode.Other,
+                ShipmentTypeCode.None
+            };
+
+            Assert.Equal(expectedList, results.Select(x => x.Value).ToArray());
         }
 
         [Theory]

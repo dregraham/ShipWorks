@@ -33,6 +33,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private long dimsProfileID;
         private double additionalWeight;
         private bool applyAdditionalWeight;
+        private int packagingType;
 
         /// <summary>
         /// The insurance view model to use.
@@ -254,6 +255,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             get { return applyAdditionalWeight; }
             set { handler.Set(nameof(ApplyAdditionalWeight), ref applyAdditionalWeight, value, true); }
+        }
+
+        /// <summary>
+        /// Type of packaging
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public int PackagingType
+        {
+            get { return packagingType; }
+            set { handler.Set(nameof(PackagingType), ref packagingType, value, true); }
         }
     }
 }

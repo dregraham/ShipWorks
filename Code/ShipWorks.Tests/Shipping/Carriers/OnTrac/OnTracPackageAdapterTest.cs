@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -35,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
 
             OnTracPackageAdapter testObject = new OnTracPackageAdapter(shipment)
             {
-                PackagingType = new PackageTypeBinding() { PackageTypeID = 999999 },
+                PackagingType = 999999,
                 AdditionalWeight = 3.1,
                 ApplyAdditionalWeight = true,
                 DimsHeight = 2.2,
@@ -46,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
 
             string firstTry = testObject.HashCode();
 
-            testObject.PackagingType = new PackageTypeBinding() { PackageTypeID = 0 };
+            testObject.PackagingType = 0;
             string secondTry = testObject.HashCode();
 
             // Make sure PackagingType WAS NOT PART OF THE HASH!
@@ -64,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
         [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
-            Assert.Equal(shipment.OnTrac.PackagingType, testObject.PackagingType.PackageTypeID);
+            Assert.Equal(shipment.OnTrac.PackagingType, testObject.PackagingType);
             Assert.Equal(1, testObject.Index);
             Assert.Equal(shipment.OnTrac.DimsLength, testObject.DimsLength);
             Assert.Equal(shipment.OnTrac.DimsWidth, testObject.DimsWidth);
@@ -109,20 +105,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
         [Fact]
         public void Changing_PackagingType_UpdatesCorrectly_WhenNotNull_Test()
         {
-            shipment.OnTrac.PackagingType = (int)OnTracPackagingType.Package;
-            testObject.PackagingType = new PackageTypeBinding() { PackageTypeID = (int)OnTracPackagingType.Letter };
+            shipment.OnTrac.PackagingType = (int) OnTracPackagingType.Package;
+            testObject.PackagingType = (int) OnTracPackagingType.Letter;
 
-            Assert.Equal(testObject.PackagingType.PackageTypeID, shipment.OnTrac.PackagingType);
-        }
-
-        [Fact]
-        public void Changing_PackagingType_UpdatesCorrectly_WhenNull_Test()
-        {
-            shipment.OnTrac.PackagingType = (int)OnTracPackagingType.Package;
-            testObject.PackagingType = null;
-
-            Assert.Null(testObject.PackagingType);
-            Assert.Equal((int)OnTracPackagingType.Package, shipment.OnTrac.PackagingType);
+            Assert.Equal((int) OnTracPackagingType.Letter, shipment.OnTrac.PackagingType);
         }
 
         [Fact]
@@ -197,7 +183,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
                 Insurance = false,
                 OnTrac = new OnTracShipmentEntity()
                 {
-                    PackagingType = (int)OnTracPackagingType.Package,
+                    PackagingType = (int) OnTracPackagingType.Package,
                     DimsLength = 6,
                     DimsWidth = 4,
                     DimsHeight = 1,

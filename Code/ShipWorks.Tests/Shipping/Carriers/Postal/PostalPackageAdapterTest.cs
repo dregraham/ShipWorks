@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Insurance;
@@ -34,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             PostalPackageAdapter testObject = new PostalPackageAdapter(shipment)
             {
-                PackagingType = new PackageTypeBinding() { PackageTypeID = 999999 },
+                PackagingType = 999999,
                 AdditionalWeight = 3.1,
                 ApplyAdditionalWeight = true,
                 DimsHeight = 2.2,
@@ -45,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             string firstTry = testObject.HashCode();
 
-            testObject.PackagingType = new PackageTypeBinding() { PackageTypeID = 0 };
+            testObject.PackagingType = 0;
             string secondTry = testObject.HashCode();
 
             // Make sure PackagingType WAS NOT PART OF THE HASH!
@@ -71,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
-            Assert.Equal(shipment.Postal.PackagingType, testObject.PackagingType.PackageTypeID);
+            Assert.Equal(shipment.Postal.PackagingType, testObject.PackagingType);
             Assert.Equal(1, testObject.Index);
             Assert.Equal(shipment.Postal.DimsLength, testObject.DimsLength);
             Assert.Equal(shipment.Postal.DimsWidth, testObject.DimsWidth);
@@ -108,20 +104,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void Changing_PackagingType_UpdatesCorrectly_WhenNotNull_Test()
         {
-            shipment.Postal.PackagingType = (int)PostalPackagingType.Package;
-            testObject.PackagingType = new PackageTypeBinding() { PackageTypeID = (int)PostalPackagingType.FlatRateLargeBox };
+            shipment.Postal.PackagingType = (int) PostalPackagingType.Package;
+            testObject.PackagingType = (int) PostalPackagingType.FlatRateLargeBox;
 
-            Assert.Equal(testObject.PackagingType.PackageTypeID, shipment.Postal.PackagingType);
-        }
-
-        [Fact]
-        public void Changing_PackagingType_UpdatesCorrectly_WhenNull_Test()
-        {
-            shipment.Postal.PackagingType = (int)PostalPackagingType.Package;
-            testObject.PackagingType = null;
-
-            Assert.Null(testObject.PackagingType);
-            Assert.Equal((int)PostalPackagingType.Package, shipment.Postal.PackagingType);
+            Assert.Equal((int) PostalPackagingType.FlatRateLargeBox, shipment.Postal.PackagingType);
         }
 
         [Fact]

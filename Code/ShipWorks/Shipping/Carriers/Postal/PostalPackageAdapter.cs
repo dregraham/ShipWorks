@@ -22,7 +22,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public event PropertyChangingEventHandler PropertyChanging;
         private readonly PropertyChangedHandler handler;
         private readonly ShipmentEntity shipment;
-        private PackageTypeBinding packagingType;
         private IInsuranceChoice insuranceChoice;
 
         /// <summary>
@@ -36,12 +35,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
             this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.Postal, null);
-
-            packagingType = new PackageTypeBinding()
-            {
-                PackageTypeID = shipment.Postal.PackagingType,
-                Name = EnumHelper.GetDescription((PostalPackagingType) shipment.Postal.PackagingType)
-            };
         }
 
         /// <summary>
@@ -105,23 +98,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Gets or sets the packaging type.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public PackageTypeBinding PackagingType
+        public int PackagingType
         {
-            get
-            {
-                return packagingType;
-            }
-            set
-            {
-                packagingType = value;
-
-                // value can be null when switching between shipments, so only update the underlying value
-                // if we have a valid packagingType.
-                if (packagingType != null)
-                {
-                    handler.Set(nameof(PackagingType), v => shipment.Postal.PackagingType = packagingType.PackageTypeID, shipment.Postal.PackagingType, packagingType.PackageTypeID, false);
-                }
-            }
+            get { return shipment.Postal.PackagingType; }
+            set { shipment.Postal.PackagingType = value; }
         }
 
         /// <summary>

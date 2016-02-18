@@ -7,7 +7,6 @@ using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
@@ -20,7 +19,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ShipmentEntity shipmentEntity;
         private readonly UpsPackageEntity packageEntity;
-        private PackageTypeBinding packagingType;
         private int index;
 
         [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", Justification = "Event is virtual to allow tests to fire it")]
@@ -44,12 +42,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.packageEntity = packageEntity;
             this.Index = packageIndex;
             this.insuranceChoice = new InsuranceChoice(shipmentEntity, packageEntity, packageEntity, packageEntity);
-
-            packagingType = new PackageTypeBinding()
-            {
-                PackageTypeID = packageEntity.PackagingType,
-                Name = EnumHelper.GetDescription((UpsPackagingType) packageEntity.PackagingType)
-            };
         }
 
         /// <summary>
@@ -128,23 +120,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Gets or sets the packaging type.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public PackageTypeBinding PackagingType
+        public int PackagingType
         {
-            get
-            {
-                return packagingType;
-            }
-            set
-            {
-                packagingType = value;
-
-                // value can be null when switching between shipments, so only update the underlying value
-                // if we have a valid packagingType.
-                if (packagingType != null)
-                {
-                    handler.Set(nameof(PackagingType), v => packageEntity.PackagingType = packagingType.PackageTypeID, packageEntity.PackagingType, packagingType.PackageTypeID);
-                }
-            }
+            get { return packageEntity.PackagingType; }
+            set { packageEntity.PackagingType = value; }
         }
 
         /// <summary>

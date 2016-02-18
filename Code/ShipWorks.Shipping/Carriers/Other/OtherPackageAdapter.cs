@@ -94,9 +94,9 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// Gets or sets the packaging type.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public PackageTypeBinding PackagingType
+        public int PackagingType
         {
-            get { return null; }
+            get { return -1; }
             set { /* We don't care about this value */ }
         }
 

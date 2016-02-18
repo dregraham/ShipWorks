@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Insurance;
@@ -34,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             BestRatePackageAdapter testObject = new BestRatePackageAdapter(shipment)
             {
-                PackagingType = new PackageTypeBinding() { PackageTypeID = 999999 },
+                PackagingType = 999999,
                 AdditionalWeight = 3.1,
                 ApplyAdditionalWeight = true,
                 DimsHeight = 2.2,
@@ -45,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             string firstTry = testObject.HashCode();
 
-            testObject.PackagingType = new PackageTypeBinding() { PackageTypeID = 0 };
+            testObject.PackagingType = 0;
             string secondTry = testObject.HashCode();
 
             // Make sure PackagingType WAS NOT PART OF THE HASH!
@@ -63,7 +59,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
-            Assert.Null(testObject.PackagingType);
             Assert.Equal(1, testObject.Index);
             Assert.Equal(shipment.BestRate.DimsLength, testObject.DimsLength);
             Assert.Equal(shipment.BestRate.DimsWidth, testObject.DimsWidth);
@@ -79,14 +74,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             testObject.Index = 3;
 
             Assert.Equal(1, testObject.Index);
-        }
-
-        [Fact]
-        public void Changing_PackagingType_IsStillNull_Test()
-        {
-            testObject.PackagingType = new PackageTypeBinding();
-
-            Assert.Null(testObject.PackagingType);
         }
 
         [Fact]
@@ -180,7 +167,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             {
                 ContentWeight = 3,
                 InsuranceProvider = (int) InsuranceProvider.ShipWorks,
-                Insurance = false, 
+                Insurance = false,
                 BestRate = new BestRateShipmentEntity()
                 {
                     DimsLength = 6,

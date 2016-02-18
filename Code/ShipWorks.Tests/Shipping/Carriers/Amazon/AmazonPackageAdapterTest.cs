@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Insurance;
@@ -34,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
             AmazonPackageAdapter testObject = new AmazonPackageAdapter(shipment)
             {
-                PackagingType = new PackageTypeBinding() { PackageTypeID = 999999 },
+                PackagingType = 999999,
                 AdditionalWeight = 3.1,
                 ApplyAdditionalWeight = true,
                 Height = 2.2,
@@ -45,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
             string firstTry = testObject.HashCode();
 
-            testObject.PackagingType = new PackageTypeBinding() { PackageTypeID = 0 };
+            testObject.PackagingType = 0;
             string secondTry = testObject.HashCode();
 
             // Make sure PackagingType WAS NOT PART OF THE HASH!
@@ -63,7 +59,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
         [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
-            Assert.Null(testObject.PackagingType);
             Assert.Equal(1, testObject.Index);
             Assert.Equal(shipment.Amazon.DimsLength, testObject.DimsLength);
             Assert.Equal(shipment.Amazon.DimsWidth, testObject.DimsWidth);
@@ -133,14 +128,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
         }
 
         [Fact]
-        public void Changing_PackagingType_IsStillNull_Test()
-        {
-            testObject.PackagingType = new PackageTypeBinding();
-
-            Assert.Null(testObject.PackagingType);
-        }
-
-        [Fact]
         public void Changing_DimsLength_UpdatesCorrectly_Test()
         {
             double newValue = shipment.Amazon.DimsLength + 2.1;
@@ -182,7 +169,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
             {
                 ContentWeight = 3,
                 Insurance = false,
-                InsuranceProvider = (int)InsuranceProvider.Carrier,
+                InsuranceProvider = (int) InsuranceProvider.Carrier,
                 Amazon = new AmazonShipmentEntity()
                 {
                     DimsLength = 6,

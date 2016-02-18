@@ -94,6 +94,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             {
                 suppressExternalChangeNotifications = true;
 
+                PackagingType = SelectedPackageAdapter.PackagingType;
                 ApplyAdditionalWeight = SelectedPackageAdapter.ApplyAdditionalWeight;
                 AdditionalWeight = SelectedPackageAdapter.AdditionalWeight;
                 DimsLength = SelectedPackageAdapter.DimsLength;
@@ -118,6 +119,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                 return;
             }
 
+            SelectedPackageAdapter.PackagingType = PackagingType;
             SelectedPackageAdapter.ApplyAdditionalWeight = ApplyAdditionalWeight;
             SelectedPackageAdapter.AdditionalWeight = AdditionalWeight;
             SelectedPackageAdapter.DimsLength = DimsLength;
@@ -339,7 +341,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         ///  Updates the Dimensions selected item.
         ///  There's an issue with the combo box when updating it's data source where the items in the drop down will be updated
         ///  but the text displayed as the selected item, when the drop down items are not show, is still the old value.
-        /// 
+        ///
         ///  The hack to get it updated is to switch the selected item, SelectedDimensionsProfile, and then switch it back to the
         ///  real selected item.
         ///  </summary>

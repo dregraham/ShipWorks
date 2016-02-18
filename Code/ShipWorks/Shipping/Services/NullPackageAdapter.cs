@@ -63,17 +63,13 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
-        public PackageTypeBinding PackagingType
+        [SuppressMessage("SonarQube", "S3237: \"value\" parameters should be used",
+            Justification = "Package type isn't supported for Amazon, so the setter is not necessary")]
+        [Obfuscation(Exclude = true)]
+        public int PackagingType
         {
-            get
-            {
-                return new PackageTypeBinding()
-                {
-                    PackageTypeID = 0,
-                    Name = "None"
-                };
-            }
-            set { }
+            get { return -1; }
+            set { /* Not applicable */ }
         }
 
         /// <summary>

@@ -7,7 +7,6 @@ using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
@@ -25,7 +24,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
         private readonly ShipmentEntity shipmentEntity;
         private readonly FedExPackageEntity packageEntity;
-        private PackageTypeBinding packagingType;
         private int index;
         private IInsuranceChoice insuranceChoice;
 
@@ -44,12 +42,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packageEntity = packageEntity;
             this.Index = packageIndex;
             this.insuranceChoice = new InsuranceChoice(shipmentEntity, packageEntity, packageEntity, packageEntity);
-
-            packagingType = new PackageTypeBinding()
-            {
-                PackageTypeID = shipmentEntity.FedEx.PackagingType,
-                Name = EnumHelper.GetDescription((FedExPackagingType) shipmentEntity.FedEx.PackagingType)
-            };
         }
 
         /// <summary>
@@ -128,23 +120,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Gets or sets the packaging type.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public PackageTypeBinding PackagingType
+        public int PackagingType
         {
-            get
-            {
-                return packagingType;
-            }
-            set
-            {
-                packagingType = value;
-
-                // value can be null when switching between shipments, so only update the underlying value
-                // if we have a valid packagingType.
-                if (packagingType != null)
-                {
-                    handler.Set(nameof(PackagingType), v => shipmentEntity.FedEx.PackagingType = packagingType.PackageTypeID, shipmentEntity.FedEx.PackagingType, packagingType.PackageTypeID);
-                }
-            }
+            get { return shipmentEntity.FedEx.PackagingType; }
+            set { shipmentEntity.FedEx.PackagingType = value; }
         }
 
         /// <summary>

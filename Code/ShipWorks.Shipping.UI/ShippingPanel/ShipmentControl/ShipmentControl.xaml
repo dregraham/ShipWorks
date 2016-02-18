@@ -153,9 +153,10 @@
 
             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}">Packaging:</TextBlock>
             <ComboBox Grid.Row="0" Grid.Column="1"
-                ItemsSource ="{Binding PackageTypes, UpdateSourceTrigger=PropertyChanged}"
-                SelectedValue="{Binding SelectedPackageAdapter.PackagingType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                DisplayMemberPath="Name" />
+                      ItemsSource ="{Binding PackageTypes}"
+                      SelectedValue="{Binding PackagingType}"
+                      SelectedValuePath="PackageTypeID"
+                      DisplayMemberPath="Name" />
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>

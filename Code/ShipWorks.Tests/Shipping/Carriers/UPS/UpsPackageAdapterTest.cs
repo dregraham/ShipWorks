@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -31,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         {
             testObject = new UpsPackageAdapter(shipment, package, 1)
             {
-                PackagingType = new PackageTypeBinding() { PackageTypeID = 999999 },
+                PackagingType = 999999,
                 AdditionalWeight = 3.1,
                 ApplyAdditionalWeight = true,
                 DimsHeight = 2.2,
@@ -42,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
             string firstTry = testObject.HashCode();
 
-            testObject.PackagingType = new PackageTypeBinding() { PackageTypeID = 0 };
+            testObject.PackagingType = 0;
             string secondTry = testObject.HashCode();
 
             // Make sure PackagingType WAS NOT PART OF THE HASH!
@@ -60,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
-            Assert.Equal(package.PackagingType, testObject.PackagingType.PackageTypeID);
+            Assert.Equal(package.PackagingType, testObject.PackagingType);
             Assert.Equal(1, testObject.Index);
             Assert.Equal(package.DimsLength, testObject.DimsLength);
             Assert.Equal(package.DimsWidth, testObject.DimsWidth);
@@ -85,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             double originalShipmentWeight = shipment.ContentWeight;
             UpsPackageEntity secondPackage = new UpsPackageEntity()
             {
-                PackagingType = (int)UpsPackagingType.Box25Kg,
+                PackagingType = (int) UpsPackagingType.Box25Kg,
                 Weight = 3,
                 DimsLength = 6,
                 DimsWidth = 4,
@@ -125,19 +121,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         public void Changing_PackagingType_UpdatesCorrectly_WhenNotNull_Test()
         {
             package.PackagingType = (int) UpsPackagingType.Box25Kg;
-            testObject.PackagingType = new PackageTypeBinding() { PackageTypeID = (int)UpsPackagingType.Custom };
+            testObject.PackagingType = (int) UpsPackagingType.Custom;
 
-            Assert.Equal(testObject.PackagingType.PackageTypeID, package.PackagingType);
-        }
-
-        [Fact]
-        public void Changing_PackagingType_UpdatesCorrectly_WhenNull_Test()
-        {
-            package.PackagingType = (int)UpsPackagingType.Box25Kg;
-            testObject.PackagingType = null;
-
-            Assert.Null(testObject.PackagingType);
-            Assert.Equal((int)UpsPackagingType.Box25Kg, package.PackagingType);
+            Assert.Equal((int) UpsPackagingType.Custom, package.PackagingType);
         }
 
         [Fact]
@@ -207,7 +193,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         {
             package = new UpsPackageEntity()
             {
-                PackagingType = (int)UpsPackagingType.Box25Kg,
+                PackagingType = (int) UpsPackagingType.Box25Kg,
                 Weight = 3,
                 DimsLength = 6,
                 DimsWidth = 4,
@@ -223,11 +209,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             shipment = new ShipmentEntity()
             {
                 ContentWeight = 3,
-                InsuranceProvider = (int)InsuranceProvider.Carrier,
+                InsuranceProvider = (int) InsuranceProvider.Carrier,
                 Insurance = package.Insurance,
                 Ups = new UpsShipmentEntity()
                 {
-                    Packages = { package}
+                    Packages = { package }
                 }
             };
 

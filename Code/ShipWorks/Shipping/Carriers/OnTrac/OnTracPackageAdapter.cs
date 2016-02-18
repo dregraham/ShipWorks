@@ -7,7 +7,6 @@ using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
@@ -24,7 +23,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         private readonly PropertyChangedHandler handler;
 
         private readonly ShipmentEntity shipment;
-        private PackageTypeBinding packagingType;
         private IInsuranceChoice insuranceChoice;
 
         /// <summary>
@@ -38,12 +36,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             this.shipment = shipment;
             this.insuranceChoice = new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac);
-
-            packagingType = new PackageTypeBinding()
-            {
-                PackageTypeID = shipment.OnTrac.PackagingType,
-                Name = EnumHelper.GetDescription((OnTracPackagingType) shipment.OnTrac.PackagingType)
-            };
         }
 
         /// <summary>
@@ -106,23 +98,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// Gets or sets the packaging type.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public PackageTypeBinding PackagingType
+        public int PackagingType
         {
-            get
-            {
-                return packagingType;
-            }
-            set
-            {
-                packagingType = value;
-
-                // value can be null when switching between shipments, so only update the underlying value
-                // if we have a valid packagingType.
-                if (packagingType != null)
-                {
-                    handler.Set(nameof(PackagingType), v => shipment.OnTrac.PackagingType = packagingType.PackageTypeID, shipment.OnTrac.PackagingType, packagingType.PackageTypeID, false);
-                }
-            }
+            get { return shipment.OnTrac.PackagingType; }
+            set { shipment.OnTrac.PackagingType = value; }
         }
 
         /// <summary>
