@@ -8,6 +8,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
@@ -155,6 +156,23 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 var result = testObject.Activate(new StoreEntity());
 
                 Assert.Equal(LicenseActivationState.OverChannelLimit, result.Value);
+            }
+        }
+
+        [Fact]
+        public void EnforceCapabilitiesWithOwner_RefreshesLicense()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseEnforcer> enforcer = mock.Mock<ILicenseEnforcer>();
+                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
+                mock.Provide(new List<ILicenseEnforcer> { enforcer.Object });
+
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                testObject.EnforceCapabilities(EnforcementContext.NotSpecified, null);
+
+                tangoWebClient.Verify(w => w.GetLicenseCapabilities(testObject), Times.AtLeastOnce);
             }
         }
 
