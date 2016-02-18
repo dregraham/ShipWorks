@@ -11,11 +11,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Creates the control
         /// </summary>
-        IChannelLimitControl CreateControl(ICustomerLicense customerLicense, EditionFeature feature);
-
-        /// <summary>
-        /// Creates the control
-        /// </summary>
         /// <remarks>
         /// This instance will take the store being added into account
         /// It shouldn't be available to delete and be counted against the customer's limit.

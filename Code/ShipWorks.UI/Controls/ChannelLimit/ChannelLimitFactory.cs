@@ -31,7 +31,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// <summary>
         /// Creates the ChannelLimitControl.
         /// </summary>
-        public IChannelLimitControl CreateControl(ICustomerLicense customerLicense, EditionFeature feature)
+        private IChannelLimitControl CreateControl(ICustomerLicense customerLicense, EditionFeature feature)
         {
             ChannelLimitControl channelLimitControl = channelLimitControlFactory();
             channelLimitControl.DataContext = viewModel;
