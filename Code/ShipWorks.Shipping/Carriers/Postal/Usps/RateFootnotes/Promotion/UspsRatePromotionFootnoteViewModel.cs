@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Reflection;
+using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Core.Messaging;
@@ -26,16 +27,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         /// <summary>
         /// Activate the discount
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ActivateDiscount { get; }
 
         /// <summary>
         /// Shipment associated with the promotion
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICarrierShipmentAdapter ShipmentAdapter { get; set; }
 
         /// <summary>
         /// Should the single account dialog be displayed
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool ShowSingleAccountDialog { get; set; }
 
         /// <summary>

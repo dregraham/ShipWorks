@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
@@ -26,16 +27,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// List of discounted rates
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public List<RateResult> DiscountedRates { get; set; }
 
         /// <summary>
         /// List or original rates
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public List<RateResult> OriginalRates { get; set; }
 
         /// <summary>
         /// View available savings
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ViewSavings { get; }
 
         /// <summary>

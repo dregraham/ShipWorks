@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Reflection;
+using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Core.Messaging;
@@ -32,16 +33,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// <summary>
         /// Can the store address be edited
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool CanEditStoreAddress { get; }
 
         /// <summary>
         /// Edit the store address
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand EditStoreAddress { get; }
 
         /// <summary>
         /// Shipment adapter associated with the current rates
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICarrierShipmentAdapter ShipmentAdapter { get; set; }
 
         /// <summary>

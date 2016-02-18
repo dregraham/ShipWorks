@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
@@ -24,16 +25,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// <summary>
         /// List of exceptions to display
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IEnumerable<BrokerException> BrokerExceptions { get; set; }
 
         /// <summary>
         /// Severity level of the exceptions
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public BrokerExceptionSeverityLevel SeverityLevel { get; set; }
 
         /// <summary>
         /// Show Exceptions command
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ShowExceptions { get; }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Shipping.Carriers.Amazon;
@@ -22,11 +23,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         /// <summary>
         /// Names of the carriers to show in the dialog box
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IEnumerable<string> CarrierNames { get; set; }
 
         /// <summary>
         /// Command to show the dialog
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ShowDialog { get; }
 
         /// <summary>

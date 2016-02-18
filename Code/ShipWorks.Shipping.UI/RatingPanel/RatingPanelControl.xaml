@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:sw="http://schemas.shipworks.com/sw"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.RatingPanel"
+             xmlns:amz="clr-namespace:ShipWorks.Shipping.UI.Carriers.Amazon"
              d:DataContext="{d:DesignInstance local:TestRatingPanelViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
              FontFamily="Tahoma"
@@ -146,6 +148,32 @@
                         </Setter>
                     </Style>
                 </ListBox.ItemContainerStyle>
+                <ui:TypeBasedTemplateSelector.Templates>
+                    <ui:Template Value="{x:Type amz:AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel}"
+                                 DataTemplate="{StaticResource AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type amz:AmazonNotLinkedFootnoteViewModel}"
+                                 DataTemplate="{StaticResource AmazonNotLinkedFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:BrokerExceptionsRateFootnoteViewModel}"
+                                 DataTemplate="{StaticResource BrokerExceptionsRateFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:CounterRatesInvalidStoreAddressFootnoteViewModel}"
+                                 DataTemplate="{StaticResource CounterRatesInvalidStoreAddressFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:ExceptionsRateFootnoteViewModel}"
+                                 DataTemplate="{StaticResource ExceptionsRateFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:Express1DiscountedRateFootnoteViewModel}"
+                                 DataTemplate="{StaticResource Express1DiscountedRateFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:Express1RateNotQualifiedFootnoteViewModel}"
+                                 DataTemplate="{StaticResource Express1RateNotQualifiedFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:Express1RatePromotionFootnoteViewModel}"
+                                 DataTemplate="{StaticResource Express1RatePromotionFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:InformationFootnoteViewModel}"
+                                 DataTemplate="{StaticResource InformationFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:UspsRateDiscountedFootnoteViewModel}"
+                                 DataTemplate="{StaticResource UspsRateDiscountedFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:UspsRateNotQualifiedFootnoteViewModel}"
+                                 DataTemplate="{StaticResource UspsRateNotQualifiedFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:UspsRatePromotionFootnoteViewModel}"
+                                 DataTemplate="{StaticResource UspsRatePromotionFootnoteViewModelTemplate}" />
+                </ui:TypeBasedTemplateSelector.Templates>
             </ListBox>
 
             <Border Background="White"

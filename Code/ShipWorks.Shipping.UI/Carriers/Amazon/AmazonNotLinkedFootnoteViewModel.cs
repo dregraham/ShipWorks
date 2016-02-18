@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Shipping.Carriers.Amazon;
@@ -24,11 +25,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         /// <summary>
         /// Shipment type
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ShipmentTypeCode ShipmentTypeCode { get; }
 
         /// <summary>
         /// Command to show the dialog
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ShowDialog { get; }
 
         /// <summary>
