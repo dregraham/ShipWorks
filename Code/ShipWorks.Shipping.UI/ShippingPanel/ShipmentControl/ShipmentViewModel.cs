@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reflection;
 using GalaSoft.MvvmLight.Command;
 using log4net;
 using ShipWorks.Core.Messaging;
@@ -486,11 +487,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Command to add a new package
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public RelayCommand AddPackageCommand { get; }
 
         /// <summary>
         /// Command to delete a package
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public RelayCommand DeletePackageCommand { get; }
 
         /// <summary>
