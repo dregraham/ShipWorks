@@ -21,10 +21,10 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
         [Description("Downloading orders")]
         Download, 
 
-        [Description("From StoreManagerDlg")]
-        StoreManagerDlg,
+        [Description("Before adding the store")]
+        BeforeAddStore,
 
-        [Description("From AddStoreWizard")]
-        AddStoreWizard,
+        [Description("Tango threw over channel limit while adding a store")]
+        AddingStoreOverLimitErrorThrown,
     }
 }
