@@ -71,7 +71,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
                     new StringBuilder(
                         $"You have exceeded your channel limit. Please upgrade your plan or delete {numberOfChannelsOverLimit} channel{plural} to continue ");
 
-                error.Append(context == EnforcementContext.BeforeAddStore
+                error.Append(context == EnforcementContext.BeforeAddStore || context == EnforcementContext.AddingStoreOverLimitErrorThrown
                     ? "to continue adding a new store."
                     : "downloading orders and creating shipment labels.");
 
