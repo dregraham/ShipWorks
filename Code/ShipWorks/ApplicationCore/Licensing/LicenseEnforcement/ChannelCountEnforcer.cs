@@ -62,7 +62,7 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
             int numberOfChannelsOverLimit = capabilities.ActiveChannels - capabilities.ChannelLimit;
 
             // We are over the channel limit, display an error stating how many channels need to be removed
-            if ((numberOfChannelsOverLimit >= 0) && !capabilities.IsInTrial)
+            if ((numberOfChannelsOverLimit > 0) && !capabilities.IsInTrial)
             {
                 // Determine if we should use the plural for of channel in our error message
                 string plural = numberOfChannelsOverLimit > 1 ? "s" : string.Empty;
@@ -71,22 +71,21 @@ namespace ShipWorks.ApplicationCore.Licensing.LicenseEnforcement
                     new StringBuilder(
                         $"You have exceeded your channel limit. Please upgrade your plan or delete {numberOfChannelsOverLimit} channel{plural} to continue ");
 
-                switch (context)
-                {
-                    case EnforcementContext.AddingStoreOverLimitErrorThrown:
-                        error.Replace(error.ToString(),
-                            "You have exceeded your channel limit. Please upgrade your plan or delete an existing channel to add a new channel");
-                        break;
-                    case EnforcementContext.BeforeAddStore:
-                        error.Append("to continue adding a new store.");
-                        break;
-                    default:
-                        error.Append("downloading orders and creating shipment labels.");
-                        break;
-                }
+                error.Append(context == EnforcementContext.BeforeAddStore
+                    ? "to continue adding a new store."
+                    : "downloading orders and creating shipment labels.");
 
                 // Return not compliant and an error to display to the user
                 return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant, error.ToString());
+            }
+
+            // We are not over the limit but we are trying to add a new channel which would put us over the limit
+            if (numberOfChannelsOverLimit == 0 && 
+                context == EnforcementContext.AddingStoreOverLimitErrorThrown && 
+                !capabilities.IsInTrial)
+            {
+                return new EnumResult<ComplianceLevel>(ComplianceLevel.NotCompliant,
+                    "You have exceeded your channel limit. Please upgrade your plan or delete an existing channel to add a new channel");
             }
 
             return new EnumResult<ComplianceLevel>(ComplianceLevel.Compliant, string.Empty);
