@@ -123,6 +123,11 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         }
 
         /// <summary>
+        /// Context of which the view model is being invoked in
+        /// </summary>
+        public EnforcementContext EnforcementContext { get; set; }
+
+        /// <summary>
         /// Gets or sets the title.
         /// </summary>
         public string Title => channelLimitBehavior.Title;
@@ -186,7 +191,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private void UpdateErrorMesssage()
         {
-            IEnumerable<EnumResult<ComplianceLevel>> channelCount = license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext.NotSpecified);
+            IEnumerable<EnumResult<ComplianceLevel>> channelCount = license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext);
 
             ErrorMessage = channelCount.FirstOrDefault()?.Message ?? "Please click next.";
         }
@@ -202,7 +207,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             Load();
 
-            if (license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext.NotSpecified).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
+            if (license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
             {
                 owner?.Close();
             }
@@ -262,7 +267,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
 
             IsDeleting = false;
 
-            if (license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext.NotSpecified).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
+            if (license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext).FirstOrDefault()?.Value == ComplianceLevel.Compliant)
             {
                 owner?.Close();
             }

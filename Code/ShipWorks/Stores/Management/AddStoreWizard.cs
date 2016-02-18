@@ -146,8 +146,9 @@ namespace ShipWorks.Stores.Management
                     license.EnforceCapabilities(EnforcementContext.BeforeAddStore);
                     return true;
                 }
-                catch (ShipWorksLicenseException)
+                catch (ShipWorksLicenseException ex)
                 {
+                    MessageHelper.ShowError(owner, ex.Message);
                     return false;
                 }
             }

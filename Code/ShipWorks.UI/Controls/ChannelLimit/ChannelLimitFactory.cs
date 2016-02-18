@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac.Features.Indexed;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
 
@@ -49,6 +50,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         public IChannelLimitControl CreateControl(ICustomerLicense customerLicense, StoreTypeCode channelToAdd, EditionFeature feature)
         {
             viewModel.ChannelToAdd = channelToAdd;
+            viewModel.EnforcementContext = EnforcementContext.AddingStoreOverLimitErrorThrown;
             return CreateControl(customerLicense, feature);
         }
     }
