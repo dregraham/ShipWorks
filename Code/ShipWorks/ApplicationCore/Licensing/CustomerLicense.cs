@@ -47,7 +47,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// The license key
         /// </summary>
-        public string Key { get; private set; }
+        public string Key { get; }
 
         /// <summary>
         /// Is the license legacy
@@ -216,6 +216,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             licenseEnforcers
                 .ToList()
                 .ForEach(e => e.Enforce(LicenseCapabilities, context, owner));
+
+            Refresh();
         }
 
         /// <summary>
