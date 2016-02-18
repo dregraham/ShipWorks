@@ -188,7 +188,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         {
             IEnumerable<EnumResult<ComplianceLevel>> channelCount = license.EnforceCapabilities(channelLimitBehavior.EditionFeature, EnforcementContext.NotSpecified);
 
-            ErrorMessage = channelCount.FirstOrDefault()?.Message ?? "";
+            ErrorMessage = channelCount.FirstOrDefault()?.Message ?? "Please click next.";
         }
 
         /// <summary>
